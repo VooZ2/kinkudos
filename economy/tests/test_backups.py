@@ -108,6 +108,19 @@ class BackupSettingsTests(TestCase):
         self.assertContains(response, "service-status-warning")
         self.assertNotContains(response, "Backup in progress")
 
+    def test_only_five_latest_backup_actions_are_shown(self):
+        for index in range(7):
+            BackupAuditEvent.objects.create(
+                actor=self.admin,
+                action=BackupAuditEvent.Action.CONFIGURED,
+                target=f"backup-target-{index}",
+            )
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertEqual(len(response.context["backup_audit_events"]), 5)
+
     @patch("economy.views.configure_backup")
     def test_admin_can_verify_and_save_configuration(self, configure):
         configure.return_value = {

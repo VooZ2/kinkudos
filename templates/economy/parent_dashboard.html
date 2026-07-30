@@ -64,19 +64,19 @@
     </p>
     <div class="child-quick-actions" aria-label="{{ child.name }} {% translate "actions" %}">
       <button class="quick-action" type="button" data-open-dialog="task-{{ child.pk }}" aria-label="{% translate "Completed task" %}" title="{% translate "Completed task" %}">
-        <svg class="action-icon"><use href="#icon-work"></use></svg><span>{% translate "Completed task" %}</span>
+        <svg class="action-icon"><use href="#icon-check-circle"></use></svg><span>{% translate "Completed task" %}</span>
       </button>
       <button class="quick-action" type="button" data-open-dialog="child-penalty-{{ child.pk }}" aria-label="{% translate "Assign penalty" %}" title="{% translate "Assign penalty" %}">
         <svg class="action-icon"><use href="#icon-penalty"></use></svg><span>{% translate "Assign penalty" %}</span>
       </button>
+      <button class="quick-action" type="button" data-open-dialog="assign-tasks-{{ child.pk }}" aria-label="{% translate "Assign tasks for today" %}" title="{% translate "Assign tasks for today" %}">
+        <svg class="action-icon"><use href="#icon-assign-task"></use></svg><span>{% translate "Assign tasks for today" %}</span>
+      </button>
+      <button class="quick-action" type="button" data-open-dialog="custom-{{ child.pk }}" aria-label="{% translate "Adjust points" %}" title="{% translate "Adjust points" %}">
+        <svg class="action-icon"><use href="#icon-adjust-points"></use></svg><span>{% translate "Adjust points" %}</span>
+      </button>
       <button class="quick-action" type="button" data-open-dialog="credit-{{ child.pk }}" aria-label="{% translate "Change credit" %}" title="{% translate "Change credit" %}">
         <svg class="action-icon"><use href="#icon-credit"></use></svg><span>{% translate "Change credit" %}</span>
-      </button>
-      <button class="quick-action" type="button" data-open-dialog="custom-{{ child.pk }}" aria-label="{% translate "Custom award" %}" title="{% translate "Custom award" %}">
-        <svg class="action-icon"><use href="#icon-custom"></use></svg><span>{% translate "Custom award" %}</span>
-      </button>
-      <button class="quick-action" type="button" data-open-dialog="assign-tasks-{{ child.pk }}" aria-label="{% translate "Assign tasks" %}" title="{% translate "Assign tasks" %}">
-        <svg class="action-icon"><use href="#icon-assign-task"></use></svg><span>{% translate "Assign tasks" %}</span>
       </button>
     </div>
     {% if child.is_locked %}
@@ -214,13 +214,13 @@
   </dialog>
   <dialog id="custom-{{ child.pk }}" class="action-dialog">
     <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-close"></use></svg></button>
-    <h2>{{ child.name }} – {% translate "custom award" %}</h2>
+    <h2>{{ child.name }} – {% translate "adjust points" %}</h2>
     <p>{% translate "Enter a positive or negative point amount and its purpose." %}</p>
     <form method="post" action="{% url 'parent_adjust_balance' child.pk %}" class="stack-form">
       {% csrf_token %}
       <label>{% translate "Point amount" %}:<input class="field-control" name="amount" type="number" required></label>
       <label>{% translate "Purpose" %}:<input class="field-control" name="description" maxlength="240" required></label>
-      <button class="button button-primary" type="submit">{% translate "Save award" %}</button>
+      <button class="button button-primary" type="submit">{% translate "Save adjustment" %}</button>
     </form>
   </dialog>
   {% endfor %}

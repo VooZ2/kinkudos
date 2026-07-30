@@ -464,10 +464,10 @@ class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
         ]
         labels = {
             "family_name": _("Family name"),
-            "photo_bonus_points": _("Extra points for a task photo"),
+            "photo_bonus_points": _("Points for a task photo"),
             "birthday_points": _("Birthday points"),
             "evidence_retention_days": _("Keep task photos for"),
-            "feedback_screenshot_retention_days": _("Keep feedback screenshots for"),
+            "feedback_screenshot_retention_days": _("Keep feedback images for"),
         }
         help_texts = {
             "family_name": _("Shown in family-facing headings and messages."),

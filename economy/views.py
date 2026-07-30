@@ -1054,6 +1054,7 @@ def parent_update_feedback_status(request, report_id):
 def parent_dashboard(request):
     children = list(ChildProfile.objects.filter(is_active=True))
     today = timezone.localdate()
+    history_cutoff = timezone.now() - timedelta(days=7)
     for child in children:
         child.assignment_unavailable_task_ids = unavailable_assignment_task_ids(child)
         child.assignment_batches = list(
@@ -1084,14 +1085,18 @@ def parent_dashboard(request):
         request.GET.get("feedback_page", 1)
     )
     history_child_id = request.GET.get("history_child", "").strip()
-    ledger_query = LedgerEntry.objects.select_related("child", "actor")
+    ledger_query = LedgerEntry.objects.filter(
+        created_at__gte=history_cutoff
+    ).select_related("child", "actor")
     reward_decisions = RewardRequest.objects.filter(
         status__in=[RequestStatus.APPROVED, RequestStatus.REJECTED],
         decided_at__isnull=False,
+        decided_at__gte=history_cutoff,
     ).select_related("child", "decided_by")
     task_decisions = TaskClaim.objects.filter(
         status=RequestStatus.REJECTED,
         decided_at__isnull=False,
+        decided_at__gte=history_cutoff,
     ).select_related("child", "decided_by", "task")
     if history_child_id.isdigit() and any(
         child.pk == int(history_child_id) for child in history_children
@@ -1135,7 +1140,7 @@ def parent_dashboard(request):
         ],
         key=lambda entry: (entry.history_timestamp, entry.pk),
         reverse=True,
-    )
+    )[:50]
     ledger_page = Paginator(history_entries, 10).get_page(
         request.GET.get("history_page", 1)
     )
@@ -1264,7 +1269,7 @@ def parent_dashboard(request):
                 initial=public_smtp_config(),
                 auto_id="id_smtp_settings_%s",
             ),
-            "backup_audit_events": BackupAuditEvent.objects.select_related("actor")[:10],
+            "backup_audit_events": BackupAuditEvent.objects.select_related("actor")[:5],
             "feedback_page": feedback_page,
             "feedback_status": feedback_status,
             "feedback_type": feedback_type,
@@ -1845,7 +1850,7 @@ def parent_update_family_preferences(request):
         messages.success(request, _("Family settings saved."))
     else:
         messages.error(request, _("Check the family settings."))
-    return redirect("parent_dashboard")
+    return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
 
 @parent_required

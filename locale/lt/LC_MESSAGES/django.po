@@ -85,6 +85,9 @@ msgstr "Veiksmų istorijos puslapiai"
 msgid "Add new"
 msgstr "Pridėti naują"
 
+msgid "Adjust points"
+msgstr "Koreguoti taškus"
+
 msgid "Adjustment"
 msgstr "Korekcija"
 
@@ -133,8 +136,8 @@ msgstr "Skirti nuobaudą"
 msgid "Assign selected penalties"
 msgstr "Skirti pažymėtas nuobaudas"
 
-msgid "Assign tasks"
-msgstr "Paskirti darbus"
+msgid "Assign tasks for today"
+msgstr "Paskirti darbus šiandienai"
 
 msgid "Assigned task"
 msgstr "Paskirtas darbas"
@@ -559,9 +562,6 @@ msgstr "Dabartinis PIN"
 msgid "Current version"
 msgstr "Dabartinė versija"
 
-msgid "Custom award"
-msgstr "Kitas įvertinimas"
-
 msgid "Custom task"
 msgstr "Individualus darbas"
 
@@ -708,9 +708,6 @@ msgstr "Išsikeisti galeonus"
 
 msgid "Expired"
 msgstr "Baigė galioti"
-
-msgid "Extra points for a task photo"
-msgstr "Papildomi taškai už darbą su nuotrauka"
 
 msgid "FIRST SIGN-IN"
 msgstr "PIRMAS PRISIJUNGIMAS"
@@ -883,8 +880,8 @@ msgstr "Smagu Tave matyti"
 msgid "JPEG, PNG, WebP, HEIC, or HEIF, up to 5 MB. The image will be cropped to a square."
 msgstr "JPEG, PNG, WebP, HEIC arba HEIF, iki 5 MB. Nuotrauka bus apkirpta kvadratu."
 
-msgid "Keep feedback screenshots for"
-msgstr "Atsiliepimų ekrano nuotraukas saugoti"
+msgid "Keep feedback images for"
+msgstr "Atsiliepimų nuotraukas saugoti"
 
 msgid "Keep indefinitely"
 msgstr "Saugoti neribotai"
@@ -1234,6 +1231,9 @@ msgstr "Taškų operacijų ištrinti negalima."
 msgid "Points"
 msgstr "Taškai"
 
+msgid "Points for a task photo"
+msgstr "Taškai už darbą su nuotrauka"
+
 msgid "Points to give"
 msgstr "Dovanojamų taškų skaičius"
 
@@ -1432,8 +1432,8 @@ msgstr "Išsaugoti"
 msgid "Save account"
 msgstr "Išsaugoti paskyrą"
 
-msgid "Save award"
-msgstr "Įrašyti įvertinimą"
+msgid "Save adjustment"
+msgstr "Išsaugoti korekciją"
 
 msgid "Save birthday"
 msgstr "Išsaugoti gimimo datą"
@@ -2095,6 +2095,9 @@ msgstr "Tavo pasaulis paruoštas."
 msgid "actions"
 msgstr "veiksmai"
 
+msgid "adjust points"
+msgstr "koreguoti taškus"
+
 msgid "assign penalties"
 msgstr "skirti nuobaudas"
 
@@ -2106,9 +2109,6 @@ msgstr "atliktas darbas"
 
 msgid "credit"
 msgstr "kreditas"
-
-msgid "custom award"
-msgstr "kitas įvertinimas"
 
 msgid "family"
 msgstr "šeima"

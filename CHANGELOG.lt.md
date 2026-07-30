@@ -7,6 +7,29 @@ schema.
 
 ## [Unreleased]
 
+## [26.2.2] - 2026-07-30
+
+### Pakeista
+
+- Tėvų katalogų skiltys dabar rikiuojamos vertikaliai, darbų pavadinimai
+  naudoja bendrą sistemos šriftą, o nustatymuose naudojami didesni laukų
+  pavadinimai ir palikti tik pavadinti grupių skirtukai.
+- Vaiko greitieji veiksmai turi aiškesnes ikonas ir rikiuojami tokia tvarka:
+  „Atliktas darbas“, „Skirti nuobaudą“, „Paskirti darbus šiandienai“,
+  „Koreguoti taškus“ ir „Keisti kreditą“.
+- Tėvų veiksmų istorijoje rodoma ne daugiau kaip 50 paskutinių septynių dienų
+  veiksmų, išsaugant nekintamus apskaitos įrašus.
+- Naujausių atsarginių kopijų veiksmų sąraše rodoma ne daugiau kaip penki
+  įrašai.
+- Sutrumpinti taškų už darbo nuotrauką ir saugomų atsiliepimų nuotraukų
+  nustatymų pavadinimai.
+
+### Pataisyta
+
+- Išsaugojus bendruosius šeimos nustatymus vėl atveriama nustatymų, o ne
+  pradžios skiltis.
+- Kredito limito informacinė ikona centruojama su jo pavadinimu.
+
 ## [26.2.1] - 2026-07-30
 
 ### Pataisyta

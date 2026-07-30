@@ -5,6 +5,27 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.2.2] - 2026-07-30
+
+### Changed
+
+- Parent catalog sections now stack vertically, task names use the shared
+  system font, and Settings uses larger field labels with only titled group
+  dividers.
+- Child quick actions now use clearer icons and the order Completed task,
+  Assign penalty, Assign tasks for today, Adjust points, and Change credit.
+- Parent activity history now shows at most 50 actions from the last seven
+  days, while append-only ledger records remain preserved.
+- Recent backup actions now show no more than the latest five entries.
+- Settings labels use shorter wording for task-photo points and retained
+  feedback images.
+
+### Fixed
+
+- Saving general family settings now returns to the Settings section instead
+  of opening the Home section.
+- The credit-limit information icon is centered with its label.
+
 ## [26.2.1] - 2026-07-30
 
 ### Fixed

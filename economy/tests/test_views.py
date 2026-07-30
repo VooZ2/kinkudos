@@ -20,6 +20,7 @@ from economy.forms import PenaltyForm, RewardForm, TaskForm
 from economy.models import (
     ChildProfile,
     FamilySettings,
+    LedgerEntry,
     LedgerKind,
     PenaltyTemplate,
     PushSubscription,
@@ -589,7 +590,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.2.1")
+        self.assertContains(response, "v26.2.2")
         self.assertContains(response, 'href="/pakeitimai/"', html=False)
         self.assertContains(response, "TAŠKAI")
         self.assertContains(response, "Kredito limitas -100")
@@ -641,7 +642,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Complete tasks, earn points")
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
-        self.assertContains(response, "KinKudos · v26.2.1")
+        self.assertContains(response, "KinKudos · v26.2.2")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_public_pages_share_the_product_header(self):
@@ -711,6 +712,47 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.context["ledger_page"].paginator.count, 1)
         self.assertContains(response, "Sibling private entry")
         self.assertNotContains(response, "First child history")
+
+    def test_parent_history_is_limited_to_fifty_entries_from_the_last_seven_days(self):
+        entries = [
+            post_ledger_entry(
+                child=self.child_one,
+                delta=index + 1,
+                kind=LedgerKind.ADJUSTMENT,
+                description=f"Recent history {index}",
+                actor=self.parent,
+            )
+            for index in range(52)
+        ]
+        old_entry = entries[0]
+        LedgerEntry.objects.filter(pk=old_entry.pk).update(
+            created_at=timezone.now() - timedelta(days=8)
+        )
+        self.client.login(username="tevai", password=self.parent_password)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertEqual(response.context["ledger_page"].paginator.count, 50)
+        self.assertNotContains(response, "Recent history 0")
+        self.assertNotContains(response, "Recent history 1")
+
+    def test_parent_quick_actions_use_clear_icons_and_requested_order(self):
+        self.client.login(username="tevai", password=self.parent_password)
+
+        response = self.client.get(reverse("parent_dashboard"))
+        html = response.content.decode()
+        action_markers = [
+            f'data-open-dialog="task-{self.child_one.pk}"',
+            f'data-open-dialog="child-penalty-{self.child_one.pk}"',
+            f'data-open-dialog="assign-tasks-{self.child_one.pk}"',
+            f'data-open-dialog="custom-{self.child_one.pk}"',
+            f'data-open-dialog="credit-{self.child_one.pk}"',
+        ]
+
+        positions = [html.index(marker) for marker in action_markers]
+        self.assertEqual(positions, sorted(positions))
+        self.assertContains(response, 'href="#icon-check-circle"', html=False)
+        self.assertContains(response, 'href="#icon-adjust-points"', html=False)
 
     def test_parent_history_shows_approved_and_rejected_reward_requests(self):
         approved_request = RewardRequest.objects.create(
@@ -791,7 +833,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.2.1")
+        self.assertContains(response, "v26.2.2")
         self.assertContains(response, "v0.12.2 BETA")
         self.assertContains(response, "v0.10.4 BETA")
         self.assertContains(response, "v0.10.1 BETA")
@@ -1246,10 +1288,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.2.1',
+            '/static/icons/favicon-32.png?v=26.2.2',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.2.1")
-        self.assertContains(home, "/static/js/app.js?v=26.2.1")
+        self.assertContains(home, "/static/css/app.css?v=26.2.2")
+        self.assertContains(home, "/static/js/app.js?v=26.2.2")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1257,11 +1299,11 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.2.1",
+            "/static/icons/icon-192.png?v=26.2.2",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.2.1")
-        self.assertContains(worker, 'kinkudos-app-shell-26.2.1')
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.2.2")
+        self.assertContains(worker, 'kinkudos-app-shell-26.2.2')
         self.assertEqual(worker["Service-Worker-Allowed"], "/")
         self.assertEqual(worker["Cache-Control"], "no-cache")

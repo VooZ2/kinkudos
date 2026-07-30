@@ -37,8 +37,20 @@ class ParentSettingsTests(TestCase):
             },
         )
 
-        self.assertRedirects(response, reverse("parent_dashboard"))
+        self.assertRedirects(
+            response,
+            f"{reverse('parent_dashboard')}#parent-settings",
+        )
         self.assertEqual(FamilySettings.load().family_name, "Aurora")
+
+    def test_family_settings_use_clear_labels_and_group_dividers(self):
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, "Points for a task photo")
+        self.assertContains(response, "Keep feedback images for")
+        self.assertContains(response, 'class="catalog-divider"', count=5)
 
     @patch("economy.views.verify_smtp")
     def test_admin_password_is_required_before_saving_smtp(self, verify):
