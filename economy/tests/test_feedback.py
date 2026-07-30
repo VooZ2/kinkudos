@@ -99,7 +99,7 @@ class FeedbackWorkflowTests(TestCase):
         self.assertEqual(report.reporter_role, "parent")
         self.assertEqual(report.family_name, "Aurora")
         self.assertEqual(report.page_path, "/tevai/")
-        self.assertEqual(report.app_version, "26.1.1")
+        self.assertEqual(report.app_version, "26.1.2")
         self.assertEqual(report.user_agent, "Feedback Browser")
         self.assertIsNotNone(report.email_notified_at)
         self.assertEqual(len(mail.outbox), 1)
@@ -283,7 +283,7 @@ class FeedbackWorkflowTests(TestCase):
             reporter_name=self.child.name,
             reporter_role="child",
             family_name="Aurora",
-            app_version="26.1.1",
+            app_version="26.1.2",
         )
         FeedbackReport.objects.create(
             description="Archived resolved report",
@@ -292,7 +292,7 @@ class FeedbackWorkflowTests(TestCase):
             reporter_name=self.child.name,
             reporter_role="child",
             family_name="Aurora",
-            app_version="26.1.1",
+            app_version="26.1.2",
         )
         self.client.login(username="parent", password="Safe-feedback-test-123!")
 

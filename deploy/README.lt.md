@@ -56,7 +56,7 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 norimo diegti leidimo reikšmėmis:
 
 ```bash
-version=26.1.1
+version=26.1.2
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -102,10 +102,13 @@ nepradėjus tikrinti prisijungimo duomenų. Patikrinkite, kad S3 adrese būtų t
 tiekėjo hostname (pavyzdžiui, `s3.eu-central-003.backblazeb2.com`), tada
 patikrinkite DNS ir kopijų agento žurnalą:
 
+Komandas paleiskite diegimo šakniniame kataloge, kuriame yra `deploy`
+katalogas:
+
 ```bash
-docker compose exec -T backup-agent python -c \
+docker compose -f deploy/compose.yml exec -T backup-agent python -c \
   "import socket; print(socket.getaddrinfo('s3.eu-central-003.backblazeb2.com', 443))"
-docker compose logs --tail=100 backup-agent
+docker compose -f deploy/compose.yml logs --tail=100 backup-agent
 ```
 
 Pavyzdžio hostname pakeiskite KinKudos įvestu adresu. Rezultatas

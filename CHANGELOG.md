@@ -5,6 +5,15 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.1.2] - 2026-07-30
+
+### Fixed
+
+- The backup agent now has a separate outbound Docker network for reaching S3
+  while retaining its isolated internal connection to the application.
+- Backup diagnostic commands now explicitly select `deploy/compose.yml`, so
+  they work when run from the deployment root.
+
 ## [26.1.1] - 2026-07-30
 
 ### Changed

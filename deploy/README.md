@@ -76,7 +76,7 @@ Run these commands from the deployment root (the directory containing
 version with the release you want to install:
 
 ```bash
-version=26.1.1
+version=26.1.2
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -122,10 +122,13 @@ an IP address. This happens before credentials are checked. Verify that the
 endpoint contains only the provider hostname (for example,
 `s3.eu-central-003.backblazeb2.com`) and then inspect DNS and agent logs:
 
+Run these commands from the deployment root that contains the `deploy`
+directory:
+
 ```bash
-docker compose exec -T backup-agent python -c \
+docker compose -f deploy/compose.yml exec -T backup-agent python -c \
   "import socket; print(socket.getaddrinfo('s3.eu-central-003.backblazeb2.com', 443))"
-docker compose logs --tail=100 backup-agent
+docker compose -f deploy/compose.yml logs --tail=100 backup-agent
 ```
 
 Replace the example hostname with the endpoint entered in KinKudos. A

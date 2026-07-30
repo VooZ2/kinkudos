@@ -7,7 +7,7 @@
 [![Docker Compose](https://img.shields.io/badge/Docker%20Compose-ready-2496ED?logo=docker&logoColor=white)](deploy/compose.yml)
 [![Architektūra](https://img.shields.io/badge/Linux-AMD64%20%7C%20ARM64-orange.svg)](docs/ARCHITECTURE.md)
 
-**Dabartinis leidimas:** 26.1.1 · **Kalbos:** lietuvių ir anglų
+**Dabartinis leidimas:** 26.1.2 · **Kalbos:** lietuvių ir anglų
 
 ## Kodėl KinKudos?
 

@@ -18,6 +18,18 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertIn("      - web", app_service)
         self.assertIn("      - backup", app_service)
 
+    def test_backup_agent_has_isolated_app_network_and_outbound_network(self):
+        compose = (ROOT / "deploy" / "compose.yml").read_text(encoding="utf-8")
+        backup_service = compose.split("  backup-agent:", 1)[1].split(
+            "\nnetworks:", 1
+        )[0]
+        networks = compose.split("\nnetworks:", 1)[1]
+
+        self.assertIn("      - backup", backup_service)
+        self.assertIn("      - backup-egress", backup_service)
+        self.assertIn("  backup:\n    internal: true", networks)
+        self.assertIn("  backup-egress:", networks)
+
     def test_updater_uses_runtime_uid_and_gid_for_backup_files(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)
@@ -52,7 +64,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.1.1",
+                    "26.1.2",
                     str(root),
                 ],
                 env=environment,

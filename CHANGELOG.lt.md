@@ -7,6 +7,15 @@ schema.
 
 ## [Unreleased]
 
+## [26.1.2] - 2026-07-30
+
+### Pataisyta
+
+- Kopijų agentui pridėtas atskiras išorinis Docker tinklas, leidžiantis
+  pasiekti S3 saugyklą, kartu išlaikant atskirą vidinį ryšį su programa.
+- Kopijų diagnostikos komandos dabar aiškiai nurodo `deploy/compose.yml`, todėl
+  veikia paleistos iš diegimo šakninio katalogo.
+
 ## [26.1.1] - 2026-07-30
 
 ### Pakeista

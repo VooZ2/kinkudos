@@ -7,7 +7,7 @@
 [![Docker Compose](https://img.shields.io/badge/Docker%20Compose-ready-2496ED?logo=docker&logoColor=white)](deploy/compose.yml)
 [![Architecture](https://img.shields.io/badge/Linux-AMD64%20%7C%20ARM64-orange.svg)](docs/ARCHITECTURE.md)
 
-**Current release:** 26.1.1 · **Languages:** English and Lithuanian<br>
+**Current release:** 26.1.2 · **Languages:** English and Lithuanian<br>
 [Lietuviška README versija](README.lt.md)
 
 ## Why KinKudos?
