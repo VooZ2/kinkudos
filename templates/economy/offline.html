@@ -1,0 +1,10 @@
+{% extends "economy/base.html" %}
+{% load i18n %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">{% translate "Offline" %}</p>
+  <h1>{% translate "The way to your treasure is temporarily closed." %}</h1>
+  <p>{% translate "Connect to your home network or VPN and try again." %}</p>
+  <button class="button button-primary" onclick="location.reload()">{% translate "Try again" %}</button>
+</section>
+{% endblock %}

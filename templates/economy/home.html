@@ -1,0 +1,15 @@
+{% extends "economy/base.html" %}
+{% load i18n %}
+{% block title %}{% blocktranslate with family_name=family_settings.family_name %}Welcome, {{ family_name }}{% endblocktranslate %} – {{ project_name }}{% endblock %}
+{% block body_class %}landing-page theme-neutral{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">{{ family_settings.header_name }} · {% translate "A shared family space" %}</p>
+  <h1>{% translate "Small tasks." %}<br>{% translate "Big achievements." %}</h1>
+  <p>{% translate "Complete tasks, earn points, and choose your reward." %}</p>
+  <div class="hero-actions">
+    <a class="button button-primary button-large" href="{% url 'child_select' %}">{% translate "I am a child" %}</a>
+    <a class="button button-secondary button-large" href="{% url 'parent_login' %}">{% translate "Parent area" %}</a>
+  </div>
+</section>
+{% endblock %}

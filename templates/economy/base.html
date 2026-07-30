@@ -1,0 +1,221 @@
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#5B3E96">
+  <meta name="color-scheme" content="light dark">
+  <title>{% block title %}{{ project_name }}{% endblock %}</title>
+  <link rel="manifest" href="{% url 'manifest' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/favicon-32.png' %}?v={{ app_version }}">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}?v={{ app_version }}">
+  <link rel="apple-touch-icon" href="{% static 'icons/icon-192.png' %}?v={{ app_version }}">
+</head>
+<body class="{% block body_class %}theme-neutral{% endblock %}">
+  <svg class="svg-sprite" aria-hidden="true">
+    <symbol id="icon-edit" viewBox="0 0 24 24">
+      <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25Zm17.71-10.21a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83Z"/>
+    </symbol>
+    <symbol id="icon-eye" viewBox="0 0 24 24">
+      <path d="M12 5c-5.5 0-9.5 5.1-10.5 7 1 1.9 5 7 10.5 7s9.5-5.1 10.5-7C21.5 10.1 17.5 5 12 5Zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/>
+    </symbol>
+    <symbol id="icon-eye-off" viewBox="0 0 24 24">
+      <path d="m3.27 2 18.73 18.73-1.27 1.27-3.08-3.08A10.8 10.8 0 0 1 12 20C6.5 20 2.5 14.9 1.5 13a18.4 18.4 0 0 1 4.15-4.92L2 4.27 3.27 2ZM8.1 10.52A4 4 0 0 0 13.48 15.9L8.1 10.52ZM12 6c5.5 0 9.5 5.1 10.5 7a17.7 17.7 0 0 1-2.38 3.25l-2.85-2.85A5.5 5.5 0 0 0 10.6 6.73 7.4 7.4 0 0 1 12 6Z"/>
+    </symbol>
+    <symbol id="icon-account-plus" viewBox="0 0 24 24">
+      <path d="M15 14c-2.67 0-8 1.33-8 4v2h10.35a6.5 6.5 0 0 1-.35-2c0-1.5.5-2.87 1.35-3.97A13.2 13.2 0 0 0 15 14Zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm6 4v-3h-2v3h-3v2h3v3h2v-3h3v-2h-3Z"/>
+    </symbol>
+    <symbol id="icon-work" viewBox="0 0 24 24">
+      <path d="M20 6h-4V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2H4a2 2 0 0 0-2 2v4h8v-1h4v1h8V8a2 2 0 0 0-2-2Zm-6 0h-4V4h4v2Zm0 8h8v5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-5h8v1h4v-1Z"/>
+    </symbol>
+    <symbol id="icon-penalty" viewBox="0 0 24 24">
+      <path d="m13 3 8 8-3 3-2-2-5 5 2 2-3 3-8-8 3-3 2 2 5-5-2-2 3-3Zm-4.6 11.4 1.2 1.2 5-5-1.2-1.2-5 5Z"/>
+    </symbol>
+    <symbol id="icon-credit" viewBox="0 0 24 24">
+      <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 14H4v-6h16v6Zm0-10H4V6h16v2Z"/>
+    </symbol>
+    <symbol id="icon-custom" viewBox="0 0 24 24">
+      <path d="M11 2h2v3h-2V2Zm0 17h2v3h-2v-3ZM2 11h3v2H2v-2Zm17 0h3v2h-3v-2ZM5.64 4.22l2.12 2.12-1.42 1.42-2.12-2.12 1.42-1.42Zm12.02 12.02 2.12 2.12-1.42 1.42-2.12-2.12 1.42-1.42Zm.7-12.02 1.42 1.42-2.12 2.12-1.42-1.42 2.12-2.12ZM6.34 16.24l1.42 1.42-2.12 2.12-1.42-1.42 2.12-2.12ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Z"/>
+    </symbol>
+    <symbol id="icon-delete" viewBox="0 0 24 24">
+      <path d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6v12Zm3-9h2v8H9v-8Zm4 0h2v8h-2v-8Zm2.5-6-1-1h-5l-1 1H5v2h14V4h-3.5Z"/>
+    </symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24">
+      <path d="m18.3 5.7-1.4-1.4L12 9.2 7.1 4.3 5.7 5.7l4.9 4.9-4.9 4.9 1.4 1.4 4.9-4.9 4.9 4.9 1.4-1.4-4.9-4.9 4.9-4.9Z"/>
+    </symbol>
+    <symbol id="icon-bell" viewBox="0 0 24 24">
+      <path d="M12 22a2.4 2.4 0 0 0 2.35-2h-4.7A2.4 2.4 0 0 0 12 22Zm7-6v-5a7 7 0 0 0-5-6.7V3a2 2 0 0 0-4 0v1.3A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2Z"/>
+    </symbol>
+    <symbol id="icon-sound-on" viewBox="0 0 24 24">
+      <path d="M3 9v6h4l5 4V5L7 9H3Zm11.5-.75v7.5a4.5 4.5 0 0 0 0-7.5Zm0-4.12v2.05a7 7 0 0 1 0 11.64v2.05a9 9 0 0 0 0-15.74Z"/>
+    </symbol>
+    <symbol id="icon-sound-off" viewBox="0 0 24 24">
+      <path d="M3 9v6h4l5 4V5L7 9H3Zm11.3.7 2.2 2.2 2.2-2.2 1.4 1.4-2.2 2.2 2.2 2.2-1.4 1.4-2.2-2.2-2.2 2.2-1.4-1.4 2.2-2.2-2.2-2.2 1.4-1.4Z"/>
+    </symbol>
+    <symbol id="icon-home" viewBox="0 0 24 24">
+      <path d="m12 3 9 8h-3v9h-5v-6h-2v6H6v-9H3l9-8Z"/>
+    </symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24">
+      <path d="m19.4 13 .1-1-.1-1 2.1-1.6-2-3.4-2.5 1a8 8 0 0 0-1.7-1L15 3.3h-4L10.6 6a8 8 0 0 0-1.7 1l-2.5-1-2 3.4L6.5 11l-.1 1 .1 1-2.1 1.6 2 3.4 2.5-1a8 8 0 0 0 1.7 1l.4 2.7h4l.4-2.7a8 8 0 0 0 1.7-1l2.5 1 2-3.4L19.4 13ZM13 15.5A3.5 3.5 0 1 1 13 8.5a3.5 3.5 0 0 1 0 7Z"/>
+    </symbol>
+    <symbol id="icon-history" viewBox="0 0 24 24">
+      <path d="M13 3a9 9 0 1 1-8.5 6H2l3.5-4L9 9H6.6A7 7 0 1 0 13 5V3Zm-1 4h2v5.2l3.2 1.8-1 1.7-4.2-2.4V7Z"/>
+    </symbol>
+    <symbol id="icon-info" viewBox="0 0 24 24">
+      <path d="M11 10h2v8h-2v-8Zm0-4h2v2h-2V6Zm1-4a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/>
+    </symbol>
+    <symbol id="icon-camera" viewBox="0 0 24 24">
+      <path d="M9 4 7.5 6H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3.5L15 4H9Zm3 13a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Zm0-2a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+    </symbol>
+    <symbol id="icon-bug" viewBox="0 0 24 24">
+      <path d="M14.8 5.2 17 3l1.4 1.4-2.2 2.2c.5.7.8 1.5.8 2.4h3v2h-3v2h3v2h-3c0 .9-.3 1.7-.8 2.4l2.2 2.2L17 21l-2.2-2.2c-.8.5-1.8.8-2.8.8s-2-.3-2.8-.8L7 21l-1.4-1.4 2.2-2.2A4.9 4.9 0 0 1 7 15H4v-2h3v-2H4V9h3c0-.9.3-1.7.8-2.4L5.6 4.4 7 3l2.2 2.2c.8-.5 1.8-.8 2.8-.8s2 .3 2.8.8ZM9 9v6a3 3 0 0 0 6 0V9H9Zm2 1h2v2h-2v-2Z"/>
+    </symbol>
+    <symbol id="icon-gift-box" viewBox="0 0 24 24">
+      <path d="M20 7h-2.2c.1-.3.2-.7.2-1a3 3 0 0 0-5.4-1.8L12 5l-.6-.8A3 3 0 0 0 6 6c0 .3.1.7.2 1H4a2 2 0 0 0-2 2v3h9V9h2v3h9V9a2 2 0 0 0-2-2Zm-11 0a1 1 0 1 1 .8-1.6L11 7H9Zm6 0h-2l1.2-1.6A1 1 0 1 1 15 7ZM3 14h8v8H5a2 2 0 0 1-2-2v-6Zm10 0h8v6a2 2 0 0 1-2 2h-6v-8Z"/>
+    </symbol>
+    <symbol id="icon-check-circle" viewBox="0 0 24 24">
+      <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm-1.4 14.4-4-4L8 11l2.6 2.6L16 8.2l1.4 1.4-6.8 6.8Z"/>
+    </symbol>
+    <symbol id="icon-stop" viewBox="0 0 24 24">
+      <path d="M7.8 2h8.4L22 7.8v8.4L16.2 22H7.8L2 16.2V7.8L7.8 2Zm1.1 5.5L7.5 8.9l3.1 3.1-3.1 3.1 1.4 1.4 3.1-3.1 3.1 3.1 1.4-1.4-3.1-3.1 3.1-3.1-1.4-1.4-3.1 3.1-3.1-3.1Z"/>
+    </symbol>
+    <symbol id="icon-revise" viewBox="0 0 24 24">
+      <path d="M12 5V2L7 7l5 5V8a6 6 0 1 1-5.65 8H3.26A9 9 0 1 0 12 5Z"/>
+    </symbol>
+    <symbol id="icon-logout" viewBox="0 0 24 24">
+      <path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5V3Zm7.6 4.6L16.2 9l2 2H9v2h9.2l-2 2 1.4 1.4L22 12l-4.4-4.4Z"/>
+    </symbol>
+  </svg>
+  <header class="topbar{% if public_header %} landing-topbar{% endif %}">
+    <div class="brand-wrap">
+      <a class="brand" href="{% url 'home' %}">
+        {% if public_header %}
+          <img class="brand-mark brand-logo" src="{% static 'icons/icon-192.png' %}?v={{ app_version }}" alt="">
+          <span class="brand-name">{{ project_name }}</span>
+        {% else %}
+          <img class="brand-mark brand-logo" src="{% static 'icons/icon-192.png' %}?v={{ app_version }}" alt="{{ project_name }}">
+        {% endif %}
+      </a>
+    </div>
+    <div class="topbar-actions">
+      <form class="language-switcher" action="{% url 'set_language' %}" method="post">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+        <label class="sr-only" for="language-select">{% translate "Language" %}</label>
+        <span class="language-switcher-face" aria-hidden="true">
+          <span>{% if LANGUAGE_CODE == "lt" %}🇱🇹 LT{% else %}🇬🇧 EN{% endif %}</span>
+          <svg viewBox="0 0 12 8"><path d="m1 1.25 5 5 5-5"/></svg>
+        </span>
+        <select id="language-select" name="language" aria-label="{% translate 'Language' %}" onchange="this.form.submit()">
+          <option value="en"{% if LANGUAGE_CODE == "en" %} selected{% endif %}>🇬🇧 EN</option>
+          <option value="lt"{% if LANGUAGE_CODE == "lt" %} selected{% endif %}>🇱🇹 LT</option>
+        </select>
+      </form>
+      {% block header_actions %}{% endblock %}
+    </div>
+  </header>
+
+  {% if messages %}
+    <div class="messages" aria-live="polite">
+      {% for message in messages %}
+        <div class="message message-{{ message.tags }}" data-message>
+          <span>{{ message }}</span>
+          <button class="message-close" type="button" data-dismiss-message aria-label="{% translate 'Close notification' %}">
+            <svg class="action-icon"><use href="#icon-close"></use></svg>
+          </button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <main class="page">
+    {% block content %}{% endblock %}
+  </main>
+  {% block site_footer %}
+    <footer class="site-footer">
+      <a href="{% url 'changelog' %}" aria-label="{% translate 'Open release notes' %}">
+        {{ project_name }} · v{{ app_version }} BETA
+      </a>
+    </footer>
+  {% endblock %}
+
+  {% if feedback_available %}
+    <button class="feedback-launcher" type="button" data-open-dialog="feedback-dialog" aria-label="{% translate 'Send feedback' %}">
+      <svg class="action-icon" aria-hidden="true"><use href="#icon-bug"></use></svg>
+      <span>{% translate "Feedback" %}</span>
+    </button>
+    <dialog id="feedback-dialog" class="action-dialog feedback-dialog">
+      <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}">
+        <svg class="action-icon"><use href="#icon-close"></use></svg>
+      </button>
+      <h2>{% translate "Send feedback" %}</h2>
+      <p>
+        {% if user.is_authenticated %}
+          {% translate "Describe a problem or suggest an improvement." %}
+        {% else %}
+          {% translate "Tell us what is not working or what you would like to add." %}
+        {% endif %}
+      </p>
+      <form method="post" action="{% url 'submit_feedback' %}" enctype="multipart/form-data" class="stack-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <input type="hidden" name="page_path" value="{{ request.path }}">
+        <label>{% translate "Type" %}
+          <select class="field-control" name="report_type" required>
+            {% if user.is_authenticated %}
+              <option value="bug">{% translate "Problem" %}</option>
+              <option value="idea">{% translate "Suggestion" %}</option>
+            {% else %}
+              <option value="bug">{% translate "Something is not working" %}</option>
+              <option value="idea">{% translate "I have an idea" %}</option>
+            {% endif %}
+          </select>
+        </label>
+        <label>
+          {% if user.is_authenticated %}{% translate "Description" %}{% else %}{% translate "What happened or what would you like?" %}{% endif %}
+          <textarea class="field-control" name="description" rows="5" minlength="5" maxlength="2000" required></textarea>
+        </label>
+        <label>{% translate "Screenshot (optional)" %}
+          <input class="field-control" name="screenshot" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif">
+        </label>
+        <small class="help-text">{% translate "Do not include passwords, PINs, or other private information." %}</small>
+        <button class="button button-primary" type="submit">{% translate "Send feedback" %}</button>
+      </form>
+    </dialog>
+  {% endif %}
+
+  <datalist id="emoji-options">
+    {% for emoji in emoji_suggestions %}<option value="{{ emoji }}">{% endfor %}
+  </datalist>
+
+  <script>
+    window.KINKUDOS = {
+      vapidPublicKey: "{{ vapid_public_key|escapejs }}",
+      pushUrl: "{% if user.is_authenticated %}{% url 'push_subscribe' %}{% else %}{% url 'child_push_subscribe' %}{% endif %}",
+      pushUnsubscribeUrl: "{% if user.is_authenticated %}{% url 'push_unsubscribe' %}{% else %}{% url 'child_push_unsubscribe' %}{% endif %}",
+      childStateUrl: "{% if request.session.child_id %}{% url 'child_state' %}{% endif %}",
+      childStateSignature: "{% block child_state_signature %}{% endblock %}",
+      csrfToken: "{{ csrf_token }}",
+      i18n: {
+        iosInstall: "{% translate "On iPhone and iPad, notifications only work in the installed app. In Safari tap Share, choose Add to Home Screen, enable Open as Web App, then launch the app from its icon." %}",
+        notificationsDenied: "{% translate "Notifications are blocked in the device settings. Allow this app's notifications and try again." %}",
+        notificationsUnsupportedHelp: "{% translate "This browser or device mode does not support web notifications." %}",
+        installForNotifications: "{% translate "Install for notifications" %}",
+        notificationsUnsupported: "{% translate "Notifications unavailable" %}",
+        notificationsBlocked: "{% translate "Notifications blocked" %}",
+        notificationsEnabled: "{% translate "Notifications on" %}",
+        notificationsDisabled: "{% translate "Notifications off" %}",
+        notificationsFailed: "{% translate "Could not change the notification setting." %}",
+        evidenceSelected: "{% translate "Photo selected" %}",
+        evidenceRemoved: "{% translate "Photo removed" %}",
+        turnSoundsOn: "{% translate "Turn sounds on" %}",
+        turnSoundsOff: "{% translate "Turn sounds off" %}",
+        giftConfirm: "{% translate "Send {amount} points to {recipient}?" %}"
+      }
+    };
+  </script>
+  <script src="{% static 'js/app.js' %}?v={{ app_version }}" defer></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+name: kinkudos
+
+services:
+  app:
+    build:
+      context: ../app
+    image: kinkudos:0.12.2
+    entrypoint:
+      - /bin/sh
+      - -c
+      - |
+        set -e
+        python manage.py migrate --noinput
+        exec gunicorn kinkudos.wsgi:application \
+          --bind=0.0.0.0:8000 \
+          --workers=2 \
+          --threads=2 \
+          --timeout=30 \
+          --access-logfile=- \
+          --error-logfile=- \
+          --no-control-socket
+    command: []
+    user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    environment:
+      KINKUDOS_DEBUG: "false"
+      KINKUDOS_DATABASE_PATH: /app/data/kinkudos.sqlite3
+      KINKUDOS_MEDIA_ROOT: /app/data/media
+      KINKUDOS_ALLOWED_HOSTS: "${KINKUDOS_HOSTNAME:-kinkudos.example.com},127.0.0.1,localhost"
+      KINKUDOS_CSRF_TRUSTED_ORIGINS: "https://${KINKUDOS_HOSTNAME:-kinkudos.example.com}"
+      KINKUDOS_SECRET_KEY_FILE: /run/secrets/django_secret_key
+      KINKUDOS_VAPID_PRIVATE_KEY_FILE: /run/secrets/vapid_private
+      KINKUDOS_VAPID_PUBLIC_KEY_FILE: /run/secrets/vapid_public
+      KINKUDOS_VAPID_SUBJECT: "https://${KINKUDOS_HOSTNAME:-kinkudos.example.com}"
+      KINKUDOS_EMAIL_ENABLED: "${KINKUDOS_EMAIL_ENABLED:-false}"
+      KINKUDOS_EMAIL_HOST: "${KINKUDOS_EMAIL_HOST:-localhost}"
+      KINKUDOS_EMAIL_PORT: "${KINKUDOS_EMAIL_PORT:-587}"
+      KINKUDOS_EMAIL_USE_TLS: "${KINKUDOS_EMAIL_USE_TLS:-true}"
+      KINKUDOS_EMAIL_USE_SSL: "${KINKUDOS_EMAIL_USE_SSL:-false}"
+      KINKUDOS_EMAIL_HOST_USER: "${KINKUDOS_EMAIL_HOST_USER:-}"
+      KINKUDOS_EMAIL_HOST_PASSWORD_FILE: /run/secrets/smtp_password
+      KINKUDOS_DEFAULT_FROM_EMAIL: "${KINKUDOS_DEFAULT_FROM_EMAIL:-KinKudos <noreply@example.invalid>}"
+      KINKUDOS_FEEDBACK_EMAIL: "${KINKUDOS_FEEDBACK_EMAIL:-}"
+      KINKUDOS_PASSWORD_RESET_TIMEOUT: "3600"
+      KINKUDOS_SECURE_COOKIES: "true"
+      KINKUDOS_SECURE_SSL_REDIRECT: "true"
+      KINKUDOS_HSTS_SECONDS: "31536000"
+      KINKUDOS_LOG_LEVEL: INFO
+      KINKUDOS_DEFAULT_LANGUAGE: "${KINKUDOS_DEFAULT_LANGUAGE:-en}"
+    secrets:
+      - django_secret_key
+      - vapid_private
+      - vapid_public
+      - smtp_password
+    volumes:
+      - ../data:/app/data
+      - ../backups:/app/backups
+    networks:
+      - web
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; r=urllib.request.Request('http://127.0.0.1:8000/health/', headers={'X-Forwarded-Proto':'https'}); urllib.request.urlopen(r, timeout=3)"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.kinkudos-http.entrypoints: web
+      traefik.http.routers.kinkudos-http.rule: "Host(`${KINKUDOS_HOSTNAME:-kinkudos.example.com}`)"
+      traefik.http.routers.kinkudos-http.middlewares: kinkudos-https-redirect
+      traefik.http.middlewares.kinkudos-https-redirect.redirectscheme.scheme: https
+      traefik.http.middlewares.kinkudos-https-redirect.redirectscheme.permanent: "true"
+      traefik.http.routers.kinkudos-https.entrypoints: websecure
+      traefik.http.routers.kinkudos-https.rule: "Host(`${KINKUDOS_HOSTNAME:-kinkudos.example.com}`)"
+      traefik.http.routers.kinkudos-https.tls: "true"
+      traefik.http.routers.kinkudos-https.tls.certresolver: letsencrypt
+      traefik.http.routers.kinkudos-https.middlewares: kinkudos-private-networks
+      traefik.http.middlewares.kinkudos-private-networks.ipallowlist.sourcerange: "${KINKUDOS_ALLOWED_NETWORKS:-192.168.0.0/16,10.0.0.0/8,172.16.0.0/12}"
+      traefik.http.services.kinkudos-app.loadbalancer.server.port: "8000"
+      com.centurylinklabs.watchtower.enable: "false"
+
+  restic:
+    image: restic/restic:0.19.1
+    profiles: ["backup"]
+    env_file:
+      - path: "${KINKUDOS_RESTIC_ENV_FILE:-../secrets/restic.env}"
+        required: false
+    environment:
+      RESTIC_PASSWORD_FILE: /run/secrets/restic_password
+    secrets:
+      - restic_password
+    volumes:
+      - ../backups:/backups:ro
+
+networks:
+  web:
+    external: true
+
+secrets:
+  django_secret_key:
+    file: ../secrets/django_secret_key
+  vapid_private:
+    file: ../secrets/vapid_private.pem
+  vapid_public:
+    file: ../secrets/vapid_public.txt
+  smtp_password:
+    file: ../secrets/smtp_password
+  restic_password:
+    file: ../secrets/restic_password

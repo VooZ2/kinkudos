@@ -1,0 +1,55 @@
+{% extends "economy/base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Changelog" %} – {{ project_name }}{% endblock %}
+{% block body_class %}theme-neutral{% endblock %}
+
+{% block content %}
+  <section class="section-heading changelog-heading">
+    <p class="eyebrow">{% translate "VERSIONS" %}</p>
+    <h1>{% translate "Changelog" %}</h1>
+    <p>{% translate "See what was added and fixed in every application version." %}</p>
+  </section>
+
+  <div class="release-list">
+    {% for release in releases %}
+      <article class="release-card">
+        <header class="release-header">
+          <div>
+            <h2>v{{ release.version }}</h2>
+            {% if release.date %}<time datetime="{{ release.date }}">{{ release.date }}</time>{% endif %}
+          </div>
+          {% if release.version == current_version %}
+            <span class="release-badge">{% translate "Current version" %}</span>
+          {% endif %}
+        </header>
+
+        <div class="release-columns">
+          <section>
+            <h3>{% translate "What's new?" %}</h3>
+            {% if release.new %}
+              <ul>
+                {% for item in release.new %}<li>{{ item }}</li>{% endfor %}
+              </ul>
+            {% else %}
+              <p class="empty-release-section">{% translate "No new features in this release." %}</p>
+            {% endif %}
+          </section>
+
+          <section>
+            <h3>{% translate "What's fixed?" %}</h3>
+            {% if release.fixed %}
+              <ul>
+                {% for item in release.fixed %}<li>{{ item }}</li>{% endfor %}
+              </ul>
+            {% else %}
+              <p class="empty-release-section">{% translate "No separate fixes in this release." %}</p>
+            {% endif %}
+          </section>
+        </div>
+      </article>
+    {% empty %}
+      <p class="empty-state">{% translate "The changelog is empty." %}</p>
+    {% endfor %}
+  </div>
+{% endblock %}

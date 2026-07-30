@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+
+if [ "$#" -ne 0 ]; then
+  echo "Ši komanda argumentų nepriima." >&2
+  exit 64
+fi
+
+container="kinkudos-app-1"
+
+echo "=== KinKudos būsena ==="
+/usr/bin/docker inspect "$container" \
+  --format 'status={{.State.Status}} health={{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}} started={{.State.StartedAt}}'
+
+echo "=== Paskutinės 300 žurnalo eilučių ==="
+exec /usr/bin/docker logs --timestamps --tail 300 "$container"

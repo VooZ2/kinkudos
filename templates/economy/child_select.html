@@ -1,0 +1,40 @@
+{% extends "economy/base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Choose a profile" %} – {{ project_name }}{% endblock %}
+{% block content %}
+<section class="section-heading profile-select-heading">
+  <p class="eyebrow">{% translate "Who is earning points today?" %}</p>
+  <h1>{% translate "Choose your profile" %}</h1>
+</section>
+<div class="profile-grid">
+  {% for child in children %}
+  <article class="profile-card {% if last_child_id == child.pk|stringformat:'s' %}is-last{% endif %}">
+    {% if child.avatar %}
+      <img class="profile-avatar profile-photo" src="{% url 'child_avatar' child.pk %}" alt="{% blocktranslate with name=child.name %}{{ name }}'s avatar{% endblocktranslate %}">
+    {% else %}
+      <div class="profile-avatar">{{ child.name|first }}</div>
+    {% endif %}
+    <h2>{{ child.name }}</h2>
+    {% if child.is_locked %}
+      <span class="status-pill status-danger">{% translate "Temporarily locked" %}</span>
+    {% else %}
+      <button class="button button-primary" type="button" data-open-pin="{{ child.pk }}">{% translate "Sign in" %}</button>
+    {% endif %}
+  </article>
+  {% empty %}
+    <p>{% translate "No child profiles have been created yet." %}</p>
+  {% endfor %}
+</div>
+
+<dialog id="pin-dialog" class="pin-dialog">
+  <form method="post" class="stack-form">
+    {% csrf_token %}
+    <input type="hidden" name="child_id" id="pin-child-id">
+    <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}">×</button>
+    <h2>{% translate "Enter your PIN" %}</h2>
+    <label for="id_pin">{% translate "4 digits" %}</label>
+    <input class="pin-input" id="id_pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" required>
+    <button class="button button-primary button-large" type="submit">{% translate "Open" %}</button>
+  </form>
+</dialog>
+{% endblock %}

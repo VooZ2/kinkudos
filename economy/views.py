@@ -1,0 +1,1784 @@
+import logging
+import hashlib
+import json
+from datetime import timedelta
+from urllib.parse import urlencode
+from uuid import uuid4
+
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import get_user_model, logout, update_session_auth_hash
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import (
+    LoginView,
+    PasswordResetCompleteView,
+    PasswordResetConfirmView,
+    PasswordResetDoneView,
+    PasswordResetView,
+)
+from django.core.files.base import ContentFile
+from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
+from django.core.paginator import Paginator
+from django.db import transaction
+from django.db.models import Q
+from django.http import FileResponse, Http404, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
+from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.text import slugify
+from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.views.decorators.http import require_POST
+
+from .auth import child_required, current_child, parent_required
+from .changelog import load_changelog
+from .forms import (
+    AdjustmentForm,
+    ApplyPenaltyForm,
+    AssignPenaltiesForm,
+    AwardTasksForm,
+    ApprovalCostForm,
+    AvatarForm,
+    BirthDateForm,
+    ChangePinForm,
+    ChildAccountForm,
+    ChildEditForm,
+    FirstThemeForm,
+    ChildPinForm,
+    FamilyPreferencesForm,
+    FeedbackReportForm,
+    FeedbackStatusForm,
+    MinBalanceForm,
+    ParentAccountForm,
+    ParentEditForm,
+    ParentPasswordResetForm,
+    ParentSetPasswordForm,
+    PenaltyForm,
+    PointGiftForm,
+    ProposalForm,
+    RejectForm,
+    RewardForm,
+    TaskForm,
+    TaskDecisionCommentForm,
+    TaskEvidenceForm,
+    ThemeForm,
+)
+from .images import (
+    ImageProcessingError,
+    process_avatar,
+    process_feedback_screenshot,
+    process_task_evidence,
+)
+from .models import (
+    BirthDateChangeRequest,
+    ChildProfile,
+    FeedbackReport,
+    FeedbackStatus,
+    FeedbackType,
+    FamilySettings,
+    LedgerEntry,
+    LedgerKind,
+    PenaltyTemplate,
+    Proposal,
+    PushSubscription,
+    RequestStatus,
+    Reward,
+    RewardRequest,
+    SavingsGoal,
+    Task,
+    TaskClaim,
+)
+from .push import (
+    notify_gift_received,
+    notify_reward_decision,
+    notify_task_claim,
+    notify_task_decision,
+    notify_task_revision,
+)
+from .services import (
+    approve_proposal,
+    approve_reward_request,
+    approve_task_claim,
+    post_ledger_entry,
+    reject_task_claim,
+    request_task_revision,
+    resubmit_task_claim,
+    reward_is_affordable,
+    reward_requests_blocked,
+    submit_reward_request,
+    submit_task,
+    transfer_points,
+)
+
+logger = logging.getLogger(__name__)
+
+
+def health(request):
+    return JsonResponse({"status": "ok", "version": settings.APP_VERSION})
+
+
+def changelog(request):
+    return render(
+        request,
+        "economy/changelog.html",
+        {
+            "releases": load_changelog(),
+            "current_version": f"{settings.APP_VERSION} BETA",
+        },
+    )
+
+
+def home(request):
+    if request.user.is_authenticated:
+        return redirect("parent_dashboard")
+    if current_child(request):
+        return redirect("child_dashboard")
+    return render(request, "economy/home.html")
+
+
+class ParentLoginView(LoginView):
+    template_name = "economy/parent_login.html"
+    authentication_form = AuthenticationForm
+    redirect_authenticated_user = True
+
+    def form_valid(self, form):
+        self.request.session.flush()
+        response = super().form_valid(form)
+        self.request.session.set_expiry(settings.PARENT_SESSION_SECONDS)
+        return response
+
+
+class EmailResetEnabledMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if not settings.EMAIL_ENABLED:
+            raise Http404
+        return super().dispatch(request, *args, **kwargs)
+
+
+class ParentPasswordResetView(EmailResetEnabledMixin, PasswordResetView):
+    template_name = "economy/password_reset_form.html"
+    form_class = ParentPasswordResetForm
+    email_template_name = "economy/password_reset_email.txt"
+    subject_template_name = "economy/password_reset_subject.txt"
+    success_url = reverse_lazy("password_reset_done")
+
+    def dispatch(self, request, *args, **kwargs):
+        self.extra_email_context = {
+            "family_display_name": FamilySettings.load().display_name,
+        }
+        return super().dispatch(request, *args, **kwargs)
+
+
+class ParentPasswordResetDoneView(EmailResetEnabledMixin, PasswordResetDoneView):
+    template_name = "economy/password_reset_done.html"
+
+
+class ParentPasswordResetConfirmView(EmailResetEnabledMixin, PasswordResetConfirmView):
+    template_name = "economy/password_reset_confirm.html"
+    form_class = ParentSetPasswordForm
+    success_url = reverse_lazy("password_reset_complete")
+
+
+class ParentPasswordResetCompleteView(EmailResetEnabledMixin, PasswordResetCompleteView):
+    template_name = "economy/password_reset_complete.html"
+
+
+@require_POST
+def session_logout(request):
+    logout(request)
+    request.session.flush()
+    return redirect("home")
+
+
+def child_select(request):
+    if request.method == "POST":
+        form = ChildPinForm(request.POST)
+        if form.is_valid():
+            child = get_object_or_404(
+                ChildProfile,
+                pk=form.cleaned_data["child_id"],
+                is_active=True,
+            )
+            if child.is_locked:
+                messages.error(request, _("The profile is temporarily locked. Try again later."))
+            elif child.verify_pin(form.cleaned_data["pin"]):
+                request.session.flush()
+                request.session["child_id"] = child.pk
+                request.session.set_expiry(settings.CHILD_SESSION_SECONDS)
+                response = redirect("child_dashboard")
+                response.set_cookie(
+                    "kinkudos_last_child",
+                    str(child.pk),
+                    max_age=60 * 60 * 24 * 30,
+                    httponly=True,
+                    samesite="Lax",
+                    secure=settings.SESSION_COOKIE_SECURE,
+                )
+                return response
+            else:
+                messages.error(request, _("Incorrect PIN."))
+    else:
+        form = ChildPinForm()
+    return render(
+        request,
+        "economy/child_select.html",
+        {
+            "children": ChildProfile.objects.filter(is_active=True),
+            "form": form,
+            "last_child_id": request.COOKIES.get("kinkudos_last_child", ""),
+        },
+    )
+
+
+@child_required
+def child_dashboard(request):
+    child = request.child
+    rewards = list(Reward.objects.filter(is_active=True, is_deleted=False))
+    for reward in rewards:
+        reward.is_affordable = reward_is_affordable(child, reward)
+    ledger_entries = list(child.ledger_entries.select_related("actor").all()[:20])
+    task_claims_by_id = {
+        claim.pk: claim
+        for claim in child.task_claims.filter(
+            pk__in=[
+                entry.source_id
+                for entry in ledger_entries
+                if entry.kind == LedgerKind.TASK and entry.source_id
+            ]
+        ).select_related("decided_by", "task")
+    }
+    reward_requests_by_id = {
+        reward_request.pk: reward_request
+        for reward_request in child.reward_requests.filter(
+            pk__in=[
+                entry.source_id
+                for entry in ledger_entries
+                if entry.kind == LedgerKind.REWARD and entry.source_id
+            ]
+        ).select_related("decided_by", "reward")
+    }
+    for entry in ledger_entries:
+        entry.history_type = "ledger"
+        entry.history_timestamp = entry.created_at
+        entry.task_claim = (
+            task_claims_by_id.get(entry.source_id)
+            if entry.kind == LedgerKind.TASK
+            else None
+        )
+        entry.reward_request = (
+            reward_requests_by_id.get(entry.source_id)
+            if entry.kind == LedgerKind.REWARD
+            else None
+        )
+    rejected_task_decisions = list(
+        child.task_claims.filter(
+            status=RequestStatus.REJECTED,
+            decided_at__isnull=False,
+        )
+        .select_related("decided_by", "task")
+        .order_by("-decided_at", "-pk")[:20]
+    )
+    for task_claim in rejected_task_decisions:
+        task_claim.history_type = "task_decision"
+        task_claim.history_timestamp = task_claim.decided_at
+    rejected_reward_decisions = list(
+        child.reward_requests.filter(
+            status=RequestStatus.REJECTED,
+            decided_at__isnull=False,
+        )
+        .select_related("decided_by", "reward")
+        .order_by("-decided_at", "-pk")[:20]
+    )
+    for reward_request in rejected_reward_decisions:
+        reward_request.history_type = "reward_decision"
+        reward_request.history_timestamp = reward_request.decided_at
+    history_entries = sorted(
+        [
+            *ledger_entries,
+            *rejected_task_decisions,
+            *rejected_reward_decisions,
+        ],
+        key=lambda entry: (entry.history_timestamp, entry.pk),
+        reverse=True,
+    )[:20]
+    pending_task_ids = set(
+        child.task_claims.filter(
+            status__in=[RequestStatus.PENDING, RequestStatus.NEEDS_CHANGES]
+        ).values_list("task_id", flat=True)
+    )
+    pending_reward_ids = set(
+        child.reward_requests.filter(status=RequestStatus.PENDING).values_list(
+            "reward_id", flat=True
+        )
+    )
+    return render(
+        request,
+        "economy/child_dashboard.html",
+        {
+            "child": child,
+            "tasks": Task.objects.filter(is_active=True, is_deleted=False),
+            "rewards": rewards,
+            "pending_task_ids": pending_task_ids,
+            "pending_reward_ids": pending_reward_ids,
+            "pending_requests": child.reward_requests.filter(status=RequestStatus.PENDING),
+            "revision_claims": child.task_claims.filter(
+                status=RequestStatus.NEEDS_CHANGES
+            ).select_related("task"),
+            "rejected_task_claims": child.task_claims.filter(
+                status=RequestStatus.REJECTED,
+                child_acknowledged_at__isnull=True,
+            )
+            .select_related("task", "decided_by")
+            .order_by("-decided_at")[:5],
+            "goals": child.goals.filter(status="active"),
+            "ledger": history_entries,
+            "reward_requests_blocked": reward_requests_blocked(child),
+            "proposal_form": ProposalForm(),
+            "task_evidence_form": TaskEvidenceForm(),
+            "theme_form": ThemeForm(
+                initial={
+                    "theme": child.theme,
+                    "randomize_theme_daily": child.randomize_theme_daily,
+                }
+            ),
+            "change_pin_form": ChangePinForm(),
+            "avatar_form": AvatarForm(),
+            "birth_date_form": BirthDateForm(instance=child),
+            "pending_birth_date_request": child.birth_date_change_requests.filter(
+                status=RequestStatus.PENDING
+            ).first(),
+            "child_state_signature": _child_state_signature(child),
+            "gift_form": PointGiftForm(sender=child),
+            "gift_recipients_available": ChildProfile.objects.filter(
+                is_active=True
+            ).exclude(pk=child.pk).exists(),
+        },
+    )
+
+
+@child_required
+def child_theme_onboarding(request):
+    form = FirstThemeForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        request.child.theme = form.cleaned_data["theme"]
+        request.child.theme_selected = True
+        request.child.save(update_fields=["theme", "theme_selected"])
+        messages.success(request, _("Your world is ready."))
+        return redirect("child_dashboard")
+    return render(
+        request,
+        "economy/child_theme_onboarding.html",
+        {"child": request.child, "form": form},
+    )
+
+
+def _child_action_response(request, *, ok, effect=None):
+    """Return JSON to enhanced child forms and preserve redirects as a fallback."""
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        payload = {
+            "ok": ok,
+            "redirect_url": reverse("child_dashboard"),
+        }
+        if effect:
+            payload["effect"] = effect
+        return JsonResponse(payload, status=200 if ok else 400)
+    return redirect("child_dashboard")
+
+
+@child_required
+@require_POST
+def child_submit_task(request, task_id):
+    task = get_object_or_404(Task, pk=task_id, is_active=True)
+    form = TaskEvidenceForm(request.POST, request.FILES)
+    if not form.is_valid():
+        error = next(iter(form.errors.values()))[0]
+        messages.error(request, str(error))
+        return _child_action_response(request, ok=False)
+
+    upload = form.cleaned_data.get("proof")
+    processed = None
+    if upload:
+        try:
+            processed = process_task_evidence(upload)
+        except ImageProcessingError:
+            messages.error(
+                request,
+                _("The image could not be processed. Choose another file."),
+            )
+            return _child_action_response(request, ok=False)
+
+    submitted = False
+    try:
+        bonus = FamilySettings.load().photo_bonus_points if processed else 0
+        claim = submit_task(
+            child=request.child,
+            task=task,
+            photo_bonus_snapshot=bonus,
+        )
+        if processed:
+            _replace_task_evidence(claim, processed)
+        notify_task_claim(claim)
+        if request.child.theme == "block_world":
+            success_message = _("Block sent to your parents for approval.")
+        elif request.child.theme == "magic_academy":
+            success_message = _("The owl carried your task to your parents.")
+        elif request.child.theme == "hero_hq":
+            success_message = _(
+                "Signal received! Mission evidence was delivered to HQ."
+            )
+        elif request.child.theme == "art_studio":
+            success_message = _("Your artwork was sent to the review gallery!")
+        elif request.child.theme == "panda_pet":
+            success_message = _("The bamboo was sent to your parents for approval!")
+        elif processed:
+            success_message = _("The task and its proof were sent to the parents for approval.")
+        else:
+            success_message = _("The task was sent to the parents for approval.")
+        messages.success(request, success_message, extra_tags="task-success")
+        submitted = True
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return _child_action_response(
+        request,
+        ok=submitted,
+        effect="task" if submitted else None,
+    )
+
+
+@child_required
+@require_POST
+def child_resubmit_task(request, claim_id):
+    claim = get_object_or_404(
+        TaskClaim,
+        pk=claim_id,
+        child=request.child,
+        status=RequestStatus.NEEDS_CHANGES,
+    )
+    form = TaskEvidenceForm(request.POST, request.FILES)
+    if not form.is_valid():
+        error = next(iter(form.errors.values()))[0]
+        messages.error(request, str(error))
+        return _child_action_response(request, ok=False)
+
+    upload = form.cleaned_data.get("proof")
+    submitted = False
+    try:
+        if form.cleaned_data.get("remove_evidence"):
+            _delete_task_evidence(claim)
+            claim.photo_bonus_snapshot = 0
+            claim.save(update_fields=["photo_bonus_snapshot"])
+        if upload:
+            processed = process_task_evidence(upload)
+            _replace_task_evidence(claim, processed)
+            claim.photo_bonus_snapshot = FamilySettings.load().photo_bonus_points
+            claim.save(update_fields=["photo_bonus_snapshot"])
+        resubmit_task_claim(claim=claim)
+        claim.refresh_from_db()
+        notify_task_claim(claim)
+        messages.success(
+            request,
+            _("The corrected task was sent for approval again."),
+            extra_tags="task-success",
+        )
+        submitted = True
+    except ImageProcessingError:
+        messages.error(request, _("The image could not be processed. Choose another file."))
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return _child_action_response(
+        request,
+        ok=submitted,
+        effect="task" if submitted else None,
+    )
+
+
+@child_required
+@require_POST
+def child_acknowledge_task_response(request, claim_id):
+    claim = get_object_or_404(
+        TaskClaim,
+        pk=claim_id,
+        child=request.child,
+        status=RequestStatus.REJECTED,
+    )
+    if claim.child_acknowledged_at is None:
+        claim.child_acknowledged_at = timezone.now()
+        claim.save(update_fields=["child_acknowledged_at"])
+    return redirect("child_dashboard")
+
+
+@child_required
+@require_POST
+def child_request_reward(request, reward_id):
+    reward = get_object_or_404(Reward, pk=reward_id, is_active=True)
+    submitted = False
+    try:
+        submit_reward_request(child=request.child, reward=reward)
+        messages.success(
+            request,
+            _("The reward request was sent to the parents."),
+            extra_tags="reward-success",
+        )
+        submitted = True
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return _child_action_response(
+        request,
+        ok=submitted,
+        effect="reward" if submitted else None,
+    )
+
+
+@child_required
+@require_POST
+def child_cancel_reward(request, request_id):
+    reward_request = get_object_or_404(
+        RewardRequest,
+        pk=request_id,
+        child=request.child,
+        status=RequestStatus.PENDING,
+    )
+    reward_request.status = RequestStatus.CANCELLED
+    reward_request.decided_at = timezone.now()
+    reward_request.save(update_fields=["status", "decided_at"])
+    messages.success(request, _("The reward request was cancelled."))
+    return redirect("child_dashboard")
+
+
+@child_required
+@require_POST
+def child_create_proposal(request):
+    form = ProposalForm(request.POST)
+    if form.is_valid():
+        proposal = form.save(commit=False)
+        proposal.child = request.child
+        proposal.save()
+        messages.success(request, _("The suggestion was sent to the parents."))
+    else:
+        messages.error(request, _("Check the suggestion details."))
+    return redirect("child_dashboard")
+
+
+@child_required
+@require_POST
+def child_set_theme(request):
+    form = ThemeForm(request.POST)
+    if form.is_valid():
+        request.child.theme = form.cleaned_data["theme"]
+        request.child.theme_selected = True
+        request.child.randomize_theme_daily = form.cleaned_data[
+            "randomize_theme_daily"
+        ]
+        request.child.save(
+            update_fields=["theme", "theme_selected", "randomize_theme_daily"]
+        )
+        messages.success(request, _("Theme changed."))
+    return redirect("child_dashboard")
+
+
+@child_required
+@require_POST
+def child_set_birth_date(request):
+    child = request.child
+    current_birth_date = child.birth_date
+    birth_date_initialized = child.birth_date_initialized
+    form = BirthDateForm(request.POST, instance=child)
+    if form.is_valid():
+        requested_birth_date = form.cleaned_data["birth_date"]
+        if not birth_date_initialized:
+            if requested_birth_date is None:
+                messages.error(request, _("Enter the birthday date."))
+            else:
+                child.birth_date = requested_birth_date
+                child.birth_date_initialized = True
+                child.save(update_fields=["birth_date", "birth_date_initialized"])
+                messages.success(request, _("Birthday saved."))
+        elif requested_birth_date == current_birth_date:
+            messages.info(request, _("The birthday date has not changed."))
+        elif child.birth_date_change_requests.filter(
+            status=RequestStatus.PENDING
+        ).exists():
+            messages.error(
+                request,
+                _("A birthday change is already waiting for parent approval."),
+            )
+        else:
+            BirthDateChangeRequest.objects.create(
+                child=child,
+                previous_birth_date=current_birth_date,
+                requested_birth_date=requested_birth_date,
+            )
+            messages.success(
+                request,
+                _("The birthday change was sent to the parents for approval."),
+            )
+    else:
+        messages.error(request, _("Check the birthday date."))
+    return redirect("child_dashboard")
+
+
+def _child_state_payload(child):
+    latest_ledger = child.ledger_entries.order_by("-pk").values_list(
+        "pk", "created_at"
+    ).first()
+    task_states = list(
+        child.task_claims.order_by("-submitted_at", "-pk")
+        .values_list("pk", "status", "submitted_at", "decided_at")[:20]
+    )
+    reward_states = list(
+        child.reward_requests.order_by("-submitted_at", "-pk")
+        .values_list("pk", "status", "submitted_at", "decided_at")[:20]
+    )
+    raw_state = json.dumps(
+        {
+            "balance": child.balance,
+            "ledger": latest_ledger,
+            "tasks": task_states,
+            "rewards": reward_states,
+        },
+        default=str,
+        sort_keys=True,
+    )
+    return {
+        "balance": child.balance,
+        "signature": hashlib.sha256(raw_state.encode("utf-8")).hexdigest(),
+    }
+
+
+def _child_state_signature(child):
+    return _child_state_payload(child)["signature"]
+
+
+@child_required
+def child_state(request):
+    response = JsonResponse(_child_state_payload(request.child))
+    response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response["Pragma"] = "no-cache"
+    return response
+
+
+@child_required
+@require_POST
+def child_give_points(request):
+    form = PointGiftForm(request.POST, sender=request.child)
+    if not form.is_valid():
+        error = next(iter(form.errors.values()))[0]
+        messages.error(request, str(error))
+        return redirect("child_dashboard")
+    try:
+        gift = transfer_points(
+            sender=request.child,
+            recipient=form.cleaned_data["recipient"],
+            amount=form.cleaned_data["amount"],
+        )
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    else:
+        notify_gift_received(gift)
+        messages.success(request, _("Your point gift was sent."))
+    return redirect("child_dashboard")
+
+
+@child_required
+@require_POST
+def child_change_pin(request):
+    form = ChangePinForm(request.POST)
+    if not form.is_valid():
+        messages.error(request, _("Check the PIN fields."))
+        return redirect("child_dashboard")
+    if not check_password(form.cleaned_data["current_pin"], request.child.pin_hash):
+        messages.error(request, _("The current PIN is incorrect."))
+        return redirect("child_dashboard")
+    request.child.set_pin(form.cleaned_data["new_pin"])
+    request.child.failed_pin_attempts = 0
+    request.child.locked_until = None
+    request.child.save(update_fields=["pin_hash", "failed_pin_attempts", "locked_until"])
+    messages.success(request, _("PIN changed."))
+    return redirect("child_dashboard")
+
+
+@child_required
+@require_POST
+def child_set_avatar(request):
+    form = AvatarForm(request.POST, request.FILES)
+    if not form.is_valid():
+        error = next(iter(form.errors.values()))[0]
+        messages.error(request, str(error))
+        return redirect("child_dashboard")
+
+    upload = form.cleaned_data["avatar"]
+    try:
+        avatar_bytes = process_avatar(upload)
+    except ImageProcessingError:
+        messages.error(request, _("The image could not be processed. Choose another file."))
+        return redirect("child_dashboard")
+
+    child = request.child
+    old_name = child.avatar.name
+    file_name = f"{slugify(child.name) or 'vaikas'}-{uuid4().hex}.webp"
+    child.avatar.save(file_name, ContentFile(avatar_bytes), save=False)
+    child.save(update_fields=["avatar"])
+    if old_name:
+        child.avatar.storage.delete(old_name)
+    messages.success(request, _("Avatar changed."))
+    return redirect("child_dashboard")
+
+
+def _delete_task_evidence(claim, *, mark_purged=False):
+    names = [
+        (claim.evidence_image.storage, claim.evidence_image.name)
+        if claim.evidence_image
+        else None,
+        (claim.evidence_thumbnail.storage, claim.evidence_thumbnail.name)
+        if claim.evidence_thumbnail
+        else None,
+    ]
+    claim.evidence_image = ""
+    claim.evidence_thumbnail = ""
+    if mark_purged:
+        claim.evidence_purged_at = timezone.now()
+    claim.save(
+        update_fields=[
+            "evidence_image",
+            "evidence_thumbnail",
+            *(["evidence_purged_at"] if mark_purged else []),
+        ]
+    )
+    for item in names:
+        if item:
+            storage, name = item
+            storage.delete(name)
+
+
+def _replace_task_evidence(claim, processed):
+    old_names = [
+        (claim.evidence_image.storage, claim.evidence_image.name)
+        if claim.evidence_image
+        else None,
+        (claim.evidence_thumbnail.storage, claim.evidence_thumbnail.name)
+        if claim.evidence_thumbnail
+        else None,
+    ]
+    identifier = uuid4().hex
+    claim.evidence_image.save(
+        f"{identifier}.webp",
+        ContentFile(processed.image),
+        save=False,
+    )
+    claim.evidence_thumbnail.save(
+        f"{identifier}-thumb.webp",
+        ContentFile(processed.thumbnail),
+        save=False,
+    )
+    claim.evidence_uploaded_at = timezone.now()
+    claim.evidence_purged_at = None
+    claim.save(
+        update_fields=[
+            "evidence_image",
+            "evidence_thumbnail",
+            "evidence_uploaded_at",
+            "evidence_purged_at",
+        ]
+    )
+    for item in old_names:
+        if item:
+            storage, name = item
+            storage.delete(name)
+
+
+def child_avatar(request, child_id):
+    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    if not child.avatar:
+        raise Http404
+    response = FileResponse(child.avatar.open("rb"), content_type="image/webp")
+    response["Cache-Control"] = "private, max-age=300"
+    response["X-Content-Type-Options"] = "nosniff"
+    return response
+
+
+def task_evidence(request, claim_id, size):
+    claim = get_object_or_404(TaskClaim.objects.select_related("child"), pk=claim_id)
+    child = current_child(request)
+    if not request.user.is_authenticated and (child is None or child.pk != claim.child_id):
+        raise Http404
+    field = claim.evidence_thumbnail if size == "thumbnail" else claim.evidence_image
+    if size not in {"thumbnail", "full"} or not field:
+        raise Http404
+    response = FileResponse(field.open("rb"), content_type="image/webp")
+    response["Cache-Control"] = "private, max-age=300"
+    response["X-Content-Type-Options"] = "nosniff"
+    response["Content-Disposition"] = "inline"
+    return response
+
+
+def _feedback_actor(request):
+    if request.user.is_authenticated:
+        return request.user, None
+    return None, current_child(request)
+
+
+def _feedback_redirect(request):
+    target = request.POST.get("next", "")
+    if (
+        target
+        and target.startswith("/")
+        and url_has_allowed_host_and_scheme(
+            target,
+            allowed_hosts={request.get_host()},
+            require_https=request.is_secure(),
+        )
+    ):
+        return target
+    return reverse("home")
+
+
+@require_POST
+def submit_feedback(request):
+    parent, child = _feedback_actor(request)
+    if parent is None and child is None:
+        raise Http404
+
+    recent_reports = FeedbackReport.objects.filter(
+        created_at__gte=timezone.now() - timedelta(minutes=1)
+    )
+    recent_reports = (
+        recent_reports.filter(parent=parent)
+        if parent is not None
+        else recent_reports.filter(child=child)
+    )
+    if recent_reports.count() >= 3:
+        messages.error(
+            request,
+            _("Too many reports were sent. Wait a minute and try again."),
+        )
+        return redirect(_feedback_redirect(request))
+
+    form = FeedbackReportForm(request.POST, request.FILES)
+    if not form.is_valid():
+        messages.error(
+            request,
+            _("Check the feedback description and screenshot."),
+        )
+        return redirect(_feedback_redirect(request))
+
+    screenshot = form.cleaned_data.get("screenshot")
+    screenshot_bytes = None
+    if screenshot:
+        try:
+            screenshot_bytes = process_feedback_screenshot(screenshot)
+        except ImageProcessingError:
+            messages.error(
+                request,
+                _("The image could not be processed. Choose another file."),
+            )
+            return redirect(_feedback_redirect(request))
+
+    family = FamilySettings.load()
+    report = form.save(commit=False)
+    report.parent = parent
+    report.child = child
+    report.reporter_name = parent.username if parent is not None else child.name
+    report.reporter_role = "parent" if parent is not None else "child"
+    report.family_name = family.family_name
+    page_path = request.POST.get("page_path", "")
+    report.page_path = (
+        page_path.split("?", 1)[0].split("#", 1)[0][:500]
+        if page_path.startswith("/")
+        else ""
+    )
+    report.app_version = settings.APP_VERSION
+    report.language = request.LANGUAGE_CODE[:16]
+    report.theme = child.theme if child is not None else ""
+    report.user_agent = request.META.get("HTTP_USER_AGENT", "")[:500]
+    report.save()
+    if screenshot_bytes:
+        report.screenshot.save(
+            f"{uuid4().hex}.webp",
+            ContentFile(screenshot_bytes),
+            save=True,
+        )
+
+    email_failed = False
+    if settings.EMAIL_ENABLED and settings.FEEDBACK_EMAIL:
+        try:
+            parent_url = request.build_absolute_uri(
+                f"{reverse('parent_dashboard')}#parent-settings"
+            )
+            send_mail(
+                _(
+                    "KinKudos feedback #%(report_id)s: %(report_type)s"
+                )
+                % {
+                    "report_id": report.pk,
+                    "report_type": report.get_report_type_display(),
+                },
+                "\n".join(
+                    [
+                        f"ID: {report.pk}",
+                        f"Type: {report.get_report_type_display()}",
+                        f"Reporter: {report.reporter_name} ({report.reporter_role})",
+                        f"Family: {report.family_name}",
+                        f"Version: {report.app_version}",
+                        f"Page: {report.page_path}",
+                        f"Language: {report.language}",
+                        f"Theme: {report.theme or '-'}",
+                        "",
+                        report.description,
+                        "",
+                        f"Review: {parent_url}",
+                    ]
+                ),
+                settings.DEFAULT_FROM_EMAIL,
+                [settings.FEEDBACK_EMAIL],
+                fail_silently=False,
+            )
+            report.email_notified_at = timezone.now()
+            report.email_error = ""
+            report.save(update_fields=["email_notified_at", "email_error"])
+        except Exception as exc:  # SMTP failures must not lose the saved report.
+            logger.warning("Feedback email notification failed", exc_info=True)
+            report.email_error = type(exc).__name__[:240]
+            report.save(update_fields=["email_error"])
+            email_failed = True
+
+    if email_failed:
+        messages.warning(
+            request,
+            _("Feedback was saved, but the email notification could not be sent."),
+        )
+    else:
+        messages.success(request, _("Thank you. Your feedback was sent."))
+    return redirect(_feedback_redirect(request))
+
+
+def feedback_screenshot(request, report_id):
+    report = get_object_or_404(FeedbackReport, pk=report_id)
+    child = current_child(request)
+    if not request.user.is_authenticated and (
+        child is None or report.child_id != child.pk
+    ):
+        raise Http404
+    if not report.screenshot:
+        raise Http404
+    response = FileResponse(report.screenshot.open("rb"), content_type="image/webp")
+    response["Cache-Control"] = "private, max-age=300"
+    response["X-Content-Type-Options"] = "nosniff"
+    response["Content-Disposition"] = "inline"
+    return response
+
+
+@parent_required
+@require_POST
+def parent_update_feedback_status(request, report_id):
+    report = get_object_or_404(FeedbackReport, pk=report_id)
+    form = FeedbackStatusForm(request.POST)
+    if form.is_valid():
+        report.status = form.cleaned_data["status"]
+        report.save(update_fields=["status", "updated_at"])
+        messages.success(request, _("Feedback status updated."))
+    else:
+        messages.error(request, _("Choose a valid feedback status."))
+    next_url = request.POST.get("next", "")
+    if next_url and url_has_allowed_host_and_scheme(
+        next_url,
+        allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        return redirect(next_url)
+    return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+
+
+@parent_required
+def parent_dashboard(request):
+    children = list(ChildProfile.objects.filter(is_active=True))
+    history_children = list(ChildProfile.objects.order_by("name"))
+    feedback_status = request.GET.get("feedback_status", "").strip()
+    feedback_type = request.GET.get("feedback_type", "").strip()
+    feedback_query = FeedbackReport.objects.select_related("parent", "child")
+    if feedback_status in FeedbackStatus.values:
+        feedback_query = feedback_query.filter(status=feedback_status)
+    else:
+        feedback_status = ""
+    if feedback_type in FeedbackType.values:
+        feedback_query = feedback_query.filter(report_type=feedback_type)
+    else:
+        feedback_type = ""
+    feedback_page = Paginator(feedback_query, 20).get_page(
+        request.GET.get("feedback_page", 1)
+    )
+    history_child_id = request.GET.get("history_child", "").strip()
+    ledger_query = LedgerEntry.objects.select_related("child", "actor")
+    reward_decisions = RewardRequest.objects.filter(
+        status__in=[RequestStatus.APPROVED, RequestStatus.REJECTED],
+        decided_at__isnull=False,
+    ).select_related("child", "decided_by")
+    task_decisions = TaskClaim.objects.filter(
+        status=RequestStatus.REJECTED,
+        decided_at__isnull=False,
+    ).select_related("child", "decided_by", "task")
+    if history_child_id.isdigit() and any(
+        child.pk == int(history_child_id) for child in history_children
+    ):
+        ledger_query = ledger_query.filter(child_id=int(history_child_id))
+        reward_decisions = reward_decisions.filter(child_id=int(history_child_id))
+        task_decisions = task_decisions.filter(child_id=int(history_child_id))
+    else:
+        history_child_id = ""
+    ledger_entries = list(ledger_query)
+    reward_decisions = list(reward_decisions)
+    reward_decisions_by_id = {
+        reward_request.pk: reward_request
+        for reward_request in reward_decisions
+    }
+    for entry in ledger_entries:
+        entry.history_type = "ledger"
+        entry.reward_request = (
+            reward_decisions_by_id.get(entry.source_id)
+            if entry.kind == LedgerKind.REWARD and entry.source_id
+            else None
+        )
+        entry.history_timestamp = entry.created_at
+    rejected_reward_decisions = []
+    for reward_request in reward_decisions:
+        if reward_request.status != RequestStatus.REJECTED:
+            continue
+        reward_request.history_type = "reward_decision"
+        reward_request.history_timestamp = reward_request.decided_at
+        rejected_reward_decisions.append(reward_request)
+    rejected_task_decisions = []
+    for task_claim in task_decisions:
+        task_claim.history_type = "task_decision"
+        task_claim.history_timestamp = task_claim.decided_at
+        rejected_task_decisions.append(task_claim)
+    history_entries = sorted(
+        [
+            *ledger_entries,
+            *rejected_reward_decisions,
+            *rejected_task_decisions,
+        ],
+        key=lambda entry: (entry.history_timestamp, entry.pk),
+        reverse=True,
+    )
+    ledger_page = Paginator(history_entries, 10).get_page(
+        request.GET.get("history_page", 1)
+    )
+    task_source_ids = [
+        entry.source_id
+        for entry in ledger_page.object_list
+        if (
+            entry.history_type == "ledger"
+            and entry.kind == LedgerKind.TASK
+            and entry.source_id
+        )
+    ]
+    history_claims = {
+        claim.pk: claim
+        for claim in TaskClaim.objects.filter(pk__in=task_source_ids).select_related(
+            "decided_by"
+        )
+    }
+    for entry in ledger_page.object_list:
+        if entry.history_type == "ledger":
+            entry.task_claim = history_claims.get(entry.source_id)
+    history_is_open = bool(
+        request.GET.get("history_child") or request.GET.get("history_page")
+    )
+    history_preserved_params = [
+        (key, value)
+        for key in request.GET
+        if key not in {"history_child", "history_page"}
+        for value in request.GET.getlist(key)
+    ]
+    history_pagination_params = [
+        *history_preserved_params,
+        ("history_child", history_child_id),
+    ]
+    history_pagination_query = urlencode(history_pagination_params)
+    if history_pagination_query:
+        history_pagination_query += "&"
+    pending_claims = list(
+        TaskClaim.objects.filter(status=RequestStatus.PENDING)
+        .select_related("child", "task")
+        .order_by("submitted_at")
+    )
+    pending_rewards = list(
+        RewardRequest.objects.filter(status=RequestStatus.PENDING)
+        .select_related("child", "reward")
+        .order_by("submitted_at")
+    )
+    pending_proposals = list(
+        Proposal.objects.filter(status=RequestStatus.PENDING)
+        .select_related("child")
+        .order_by("created_at")
+    )
+    pending_birth_date_changes = list(
+        BirthDateChangeRequest.objects.filter(status=RequestStatus.PENDING)
+        .select_related("child")
+        .order_by("requested_at")
+    )
+    pending_by_child = []
+    for child in children:
+        group = {
+            "child": child,
+            "claims": [claim for claim in pending_claims if claim.child_id == child.pk],
+            "rewards": [
+                reward_request
+                for reward_request in pending_rewards
+                if reward_request.child_id == child.pk
+            ],
+            "proposals": [
+                proposal for proposal in pending_proposals if proposal.child_id == child.pk
+            ],
+            "birth_date_changes": [
+                change
+                for change in pending_birth_date_changes
+                if change.child_id == child.pk
+            ],
+        }
+        if (
+            group["claims"]
+            or group["rewards"]
+            or group["proposals"]
+            or group["birth_date_changes"]
+        ):
+            pending_by_child.append(group)
+    parent_accounts = list(get_user_model().objects.filter(is_active=True).order_by("username"))
+
+    return render(
+        request,
+        "economy/parent_dashboard.html",
+        {
+            "children": children,
+            "pending_by_child": pending_by_child,
+            "pending_count": (
+                len(pending_claims)
+                + len(pending_rewards)
+                + len(pending_proposals)
+                + len(pending_birth_date_changes)
+            ),
+            "tasks": Task.objects.filter(is_deleted=False),
+            "active_tasks": Task.objects.filter(is_active=True, is_deleted=False),
+            "penalties": PenaltyTemplate.objects.filter(is_deleted=False),
+            "active_penalties": PenaltyTemplate.objects.filter(
+                is_active=True,
+                is_deleted=False,
+            ),
+            "rewards": Reward.objects.filter(is_deleted=False),
+            "ledger_page": ledger_page,
+            "history_children": history_children,
+            "history_child_id": history_child_id,
+            "history_is_open": history_is_open,
+            "history_preserved_params": history_preserved_params,
+            "history_pagination_query": history_pagination_query,
+            "task_form": TaskForm(auto_id="id_new_task_%s"),
+            "penalty_form": PenaltyForm(auto_id="id_new_penalty_%s"),
+            "reward_form": RewardForm(auto_id="id_new_reward_%s"),
+            "parent_account_form": ParentAccountForm(auto_id="id_new_parent_%s"),
+            "child_account_form": ChildAccountForm(auto_id="id_new_child_%s"),
+            "family_preferences_form": FamilyPreferencesForm(
+                instance=FamilySettings.load(),
+                auto_id="id_family_preferences_%s",
+            ),
+            "feedback_page": feedback_page,
+            "feedback_status": feedback_status,
+            "feedback_type": feedback_type,
+            "feedback_status_choices": FeedbackStatus.choices,
+            "feedback_type_choices": FeedbackType.choices,
+            "parent_account_items": [
+                {
+                    "account": account,
+                    "form": ParentEditForm(
+                        account=account,
+                        auto_id=f"id_parent_{account.pk}_%s",
+                    ),
+                }
+                for account in parent_accounts
+            ],
+            "child_account_items": [
+                {
+                    "child": child,
+                    "form": ChildEditForm(
+                        child=child,
+                        auto_id=f"id_child_{child.pk}_%s",
+                    ),
+                }
+                for child in children
+            ],
+        },
+    )
+
+
+@parent_required
+@require_POST
+def parent_create_catalog(request, kind):
+    forms = {"task": TaskForm, "penalty": PenaltyForm, "reward": RewardForm}
+    form_class = forms.get(kind)
+    if form_class is None:
+        raise Http404
+    form = form_class(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, _("Catalog item created."))
+    else:
+        messages.error(request, _("Check the entered data."))
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_create_parent_account(request):
+    form = ParentAccountForm(request.POST)
+    if form.is_valid():
+        user = form.save()
+        messages.success(request, _("Parent account “%(username)s” created.") % {"username": user.username})
+    else:
+        messages.error(request, _("Check the new parent account details."))
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_create_child_account(request):
+    form = ChildAccountForm(request.POST)
+    if form.is_valid():
+        child = form.save()
+        messages.success(request, _("Child profile “%(name)s” created.") % {"name": child.name})
+    else:
+        messages.error(request, _("Check the new child profile details."))
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_edit_parent_account(request, account_id):
+    account = get_object_or_404(get_user_model(), pk=account_id, is_active=True)
+    form = ParentEditForm(request.POST, account=account)
+    if form.is_valid():
+        form.save()
+        if account.pk == request.user.pk and form.cleaned_data.get("new_password"):
+            update_session_auth_hash(request, account)
+        messages.success(request, _("Parent account “%(username)s” updated.") % {"username": account.username})
+    else:
+        messages.error(request, _("Check the parent account details."))
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_remove_parent_account(request, account_id):
+    account = get_object_or_404(get_user_model(), pk=account_id, is_active=True)
+    if account.pk == request.user.pk:
+        messages.error(request, _("You cannot remove the account you are currently using."))
+    elif get_user_model().objects.filter(is_active=True).count() <= 1:
+        messages.error(request, _("You cannot remove the last active parent account."))
+    else:
+        account.is_active = False
+        account.save(update_fields=["is_active"])
+        messages.success(request, _("Parent account “%(username)s” removed.") % {"username": account.username})
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_edit_child_account(request, child_id):
+    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    form = ChildEditForm(request.POST, child=child)
+    if form.is_valid():
+        form.save(actor=request.user)
+        messages.success(request, _("Child profile “%(name)s” updated.") % {"name": child.name})
+    else:
+        messages.error(request, _("Check the child profile details."))
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_decide_birth_date(request, request_id, decision):
+    try:
+        with transaction.atomic():
+            change = (
+                BirthDateChangeRequest.objects.select_for_update()
+                .select_related("child")
+                .get(pk=request_id)
+            )
+            if change.status != RequestStatus.PENDING:
+                raise ValidationError(_("This request has already been resolved."))
+            if decision == "approve":
+                change.child.birth_date = change.requested_birth_date
+                change.child.birth_date_initialized = True
+                change.child.save(
+                    update_fields=["birth_date", "birth_date_initialized"]
+                )
+                change.status = RequestStatus.APPROVED
+                success_message = _("Birthday change approved.")
+            elif decision == "reject":
+                change.status = RequestStatus.REJECTED
+                success_message = _("Birthday change rejected.")
+            else:
+                raise Http404
+            change.decided_by = request.user
+            change.decided_at = timezone.now()
+            change.save(update_fields=["status", "decided_by", "decided_at"])
+        messages.success(request, success_message)
+    except BirthDateChangeRequest.DoesNotExist:
+        raise Http404
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_remove_child_account(request, child_id):
+    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    child.is_active = False
+    child.save(update_fields=["is_active"])
+    messages.success(request, _("Child profile “%(name)s” removed.") % {"name": child.name})
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_edit_catalog(request, kind, item_id):
+    forms = {"task": TaskForm, "penalty": PenaltyForm, "reward": RewardForm}
+    models = {"task": Task, "penalty": PenaltyTemplate, "reward": Reward}
+    form_class = forms.get(kind)
+    model = models.get(kind)
+    if form_class is None or model is None:
+        raise Http404
+    item = get_object_or_404(model, pk=item_id, is_deleted=False)
+    form = form_class(request.POST, instance=item)
+    if form.is_valid():
+        form.save()
+        messages.success(request, _("“%(title)s” updated.") % {"title": item.title})
+    else:
+        messages.error(request, _("Check the edited data."))
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_toggle_catalog(request, kind, item_id):
+    models = {"task": Task, "penalty": PenaltyTemplate, "reward": Reward}
+    model = models.get(kind)
+    if model is None:
+        raise Http404
+    item = get_object_or_404(model, pk=item_id, is_deleted=False)
+    item.is_active = not item.is_active
+    item.save(update_fields=["is_active"])
+    messages.success(
+        request,
+        _("“%(title)s” is now %(state)s.")
+        % {"title": item.title, "state": _("visible") if item.is_active else _("hidden")},
+    )
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_delete_catalog(request, kind, item_id):
+    models = {"task": Task, "penalty": PenaltyTemplate, "reward": Reward}
+    model = models.get(kind)
+    if model is None:
+        raise Http404
+    item = get_object_or_404(model, pk=item_id, is_deleted=False)
+    item.is_active = False
+    item.is_deleted = True
+    item.save(update_fields=["is_active", "is_deleted"])
+    messages.success(request, _("“%(title)s” deleted.") % {"title": item.title})
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_decide_task(request, claim_id, decision):
+    claim = get_object_or_404(TaskClaim, pk=claim_id)
+    try:
+        if decision == "approve":
+            approve_task_claim(claim=claim, actor=request.user)
+            claim.refresh_from_db()
+            notify_task_decision(claim, approved=True)
+            messages.success(request, _("Task approved."))
+        elif decision == "reject":
+            form = TaskDecisionCommentForm(request.POST)
+            if not form.is_valid():
+                raise ValidationError(_("Check the comment."))
+            claim = reject_task_claim(
+                claim=claim,
+                actor=request.user,
+                reason=form.cleaned_data["reason"],
+            )
+            notify_task_decision(claim, approved=False)
+            messages.success(request, _("Task rejected."))
+        elif decision == "revise":
+            form = TaskDecisionCommentForm(request.POST)
+            if not form.is_valid():
+                raise ValidationError(_("Check the comment."))
+            request_task_revision(
+                claim=claim,
+                actor=request.user,
+                reason=form.cleaned_data["reason"],
+            )
+            claim.refresh_from_db()
+            notify_task_revision(claim)
+            messages.success(request, _("The task was returned for improvements."))
+        else:
+            raise Http404
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_decide_reward(request, request_id, decision):
+    reward_request = get_object_or_404(RewardRequest, pk=request_id)
+    try:
+        if decision == "approve":
+            approve_reward_request(request=reward_request, actor=request.user)
+            reward_request.refresh_from_db()
+            notify_reward_decision(reward_request, approved=True)
+            messages.success(request, _("Reward approved."))
+        elif decision == "reject":
+            form = RejectForm(request.POST)
+            if not form.is_valid():
+                raise ValidationError(_("A rejection reason is required."))
+            with transaction.atomic():
+                locked = RewardRequest.objects.select_for_update().get(pk=reward_request.pk)
+                if locked.status != RequestStatus.PENDING:
+                    raise ValidationError(_("This request has already been resolved."))
+                locked.status = RequestStatus.REJECTED
+                locked.rejection_reason = form.cleaned_data["reason"]
+                locked.decided_by = request.user
+                locked.decided_at = timezone.now()
+                locked.save(
+                    update_fields=[
+                        "status",
+                        "rejection_reason",
+                        "decided_by",
+                        "decided_at",
+                    ]
+                )
+            notify_reward_decision(locked, approved=False)
+            messages.success(request, _("Reward request rejected."))
+        else:
+            raise Http404
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_decide_proposal(request, proposal_id, decision):
+    proposal = get_object_or_404(Proposal, pk=proposal_id)
+    try:
+        if decision == "approve":
+            form = ApprovalCostForm(request.POST)
+            if not form.is_valid():
+                raise ValidationError(_("Enter the final point amount."))
+            approve_proposal(
+                proposal=proposal,
+                actor=request.user,
+                final_cost=form.cleaned_data["final_cost"],
+            )
+            messages.success(request, _("Suggestion approved."))
+        elif decision == "reject":
+            form = RejectForm(request.POST)
+            if not form.is_valid():
+                raise ValidationError(_("A rejection reason is required."))
+            proposal.status = RequestStatus.REJECTED
+            proposal.parent_note = form.cleaned_data["reason"]
+            proposal.decided_by = request.user
+            proposal.decided_at = timezone.now()
+            proposal.save(
+                update_fields=["status", "parent_note", "decided_by", "decided_at"]
+            )
+            messages.success(request, _("Suggestion rejected."))
+        else:
+            raise Http404
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_adjust_balance(request, child_id):
+    child = get_object_or_404(ChildProfile, pk=child_id)
+    form = AdjustmentForm(request.POST)
+    if form.is_valid():
+        post_ledger_entry(
+            child=child,
+            delta=form.cleaned_data["amount"],
+            kind=LedgerKind.ADJUSTMENT,
+            description=form.cleaned_data["description"],
+            actor=request.user,
+        )
+        messages.success(request, _("Balance adjusted."))
+    else:
+        messages.error(request, _("Check the balance adjustment."))
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_apply_penalty(request, child_id):
+    child = get_object_or_404(ChildProfile, pk=child_id)
+    form = ApplyPenaltyForm(request.POST)
+    if form.is_valid():
+        penalty = get_object_or_404(
+            PenaltyTemplate,
+            pk=form.cleaned_data["penalty_id"],
+            is_active=True,
+        )
+        post_ledger_entry(
+            child=child,
+            delta=penalty.amount,
+            kind=LedgerKind.PENALTY,
+            description=f"{penalty.title}: {form.cleaned_data['reason']}",
+            actor=request.user,
+            source_id=penalty.pk,
+        )
+        messages.success(request, _("Penalty assigned."))
+    else:
+        messages.error(request, _("A reason is required."))
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_award_task(request, child_id):
+    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    form = AwardTasksForm(request.POST)
+    if not form.is_valid():
+        messages.error(request, _("Choose at least one active task."))
+        return redirect("parent_dashboard")
+
+    tasks = list(form.cleaned_data["task_ids"])
+    with transaction.atomic():
+        for task in tasks:
+            post_ledger_entry(
+                child=child,
+                delta=task.reward,
+                kind=LedgerKind.TASK,
+                description=task.title,
+                actor=request.user,
+                source_id=task.pk,
+            )
+    total = sum(task.reward for task in tasks)
+    messages.success(
+        request,
+        _("%(name)s received %(count)s task(s) (total +%(total)s).")
+        % {"name": child.name, "count": len(tasks), "total": total},
+    )
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_assign_child_penalty(request, child_id):
+    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    form = AssignPenaltiesForm(request.POST)
+    if not form.is_valid():
+        messages.error(request, _("Choose at least one active penalty."))
+        return redirect("parent_dashboard")
+
+    penalties = list(form.cleaned_data["penalty_ids"])
+    reason = form.cleaned_data["reason"].strip()
+    with transaction.atomic():
+        for penalty in penalties:
+            description = penalty.title if not reason else f"{penalty.title}: {reason}"
+            post_ledger_entry(
+                child=child,
+                delta=penalty.amount,
+                kind=LedgerKind.PENALTY,
+                description=description,
+                actor=request.user,
+                source_id=penalty.pk,
+            )
+    total = sum(penalty.amount for penalty in penalties)
+    messages.success(
+        request,
+        _("%(name)s received %(count)s penalty/penalties (total %(total)s).")
+        % {"name": child.name, "count": len(penalties), "total": total},
+    )
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_assign_penalty(request, penalty_id):
+    penalty = get_object_or_404(PenaltyTemplate, pk=penalty_id, is_active=True)
+    child = get_object_or_404(
+        ChildProfile,
+        pk=request.POST.get("child_id"),
+        is_active=True,
+    )
+    reason = request.POST.get("reason", "").strip()
+    if not reason:
+        messages.error(request, _("A reason is required."))
+        return redirect("parent_dashboard")
+    post_ledger_entry(
+        child=child,
+        delta=penalty.amount,
+        kind=LedgerKind.PENALTY,
+        description=f"{penalty.title}: {reason}",
+        actor=request.user,
+        source_id=penalty.pk,
+    )
+    messages.success(
+        request,
+        _("Penalty “%(penalty)s” assigned to %(name)s.")
+        % {"penalty": penalty.title, "name": child.name},
+    )
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_set_min_balance(request, child_id):
+    child = get_object_or_404(ChildProfile, pk=child_id)
+    form = MinBalanceForm(request.POST)
+    if form.is_valid():
+        child.min_balance = form.cleaned_data["min_balance"]
+        child.save(update_fields=["min_balance"])
+        messages.success(request, _("Credit limit changed."))
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_unlock_child(request, child_id):
+    child = get_object_or_404(ChildProfile, pk=child_id)
+    child.failed_pin_attempts = 0
+    child.locked_until = None
+    child.save(update_fields=["failed_pin_attempts", "locked_until"])
+    messages.success(request, _("%(name)s unlocked.") % {"name": child.name})
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_update_family_preferences(request):
+    family = FamilySettings.load()
+    form = FamilyPreferencesForm(request.POST, instance=family)
+    if form.is_valid():
+        form.save()
+        messages.success(request, _("Family settings saved."))
+    else:
+        messages.error(request, _("Check the family settings."))
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def push_subscribe(request):
+    import json
+
+    try:
+        payload = json.loads(request.body)
+        keys = payload["keys"]
+        PushSubscription.objects.update_or_create(
+            endpoint=payload["endpoint"],
+            defaults={
+                "user": request.user,
+                "child": None,
+                "p256dh": keys["p256dh"],
+                "auth": keys["auth"],
+                "user_agent": request.headers.get("User-Agent", "")[:255],
+            },
+        )
+    except (KeyError, TypeError, ValueError):
+        return JsonResponse({"ok": False}, status=400)
+    return JsonResponse({"ok": True})
+
+
+@parent_required
+@require_POST
+def push_unsubscribe(request):
+    import json
+
+    try:
+        endpoint = json.loads(request.body)["endpoint"]
+    except (KeyError, TypeError, ValueError):
+        return JsonResponse({"ok": False}, status=400)
+    PushSubscription.objects.filter(user=request.user, endpoint=endpoint).delete()
+    return JsonResponse({"ok": True})
+
+
+@child_required
+@require_POST
+def child_push_subscribe(request):
+    import json
+
+    try:
+        payload = json.loads(request.body)
+        keys = payload["keys"]
+        PushSubscription.objects.update_or_create(
+            endpoint=payload["endpoint"],
+            defaults={
+                "user": None,
+                "child": request.child,
+                "p256dh": keys["p256dh"],
+                "auth": keys["auth"],
+                "user_agent": request.headers.get("User-Agent", "")[:255],
+            },
+        )
+    except (KeyError, TypeError, ValueError):
+        return JsonResponse({"ok": False}, status=400)
+    return JsonResponse({"ok": True})
+
+
+@child_required
+@require_POST
+def child_push_unsubscribe(request):
+    import json
+
+    try:
+        endpoint = json.loads(request.body)["endpoint"]
+    except (KeyError, TypeError, ValueError):
+        return JsonResponse({"ok": False}, status=400)
+    PushSubscription.objects.filter(child=request.child, endpoint=endpoint).delete()
+    return JsonResponse({"ok": True})
+
+
+def manifest(request):
+    family = FamilySettings.load()
+    return JsonResponse(
+        {
+            "name": family.display_name,
+            "short_name": family.family_name or str(_("Family")),
+            "id": "/",
+            "start_url": "/",
+            "display": "standalone",
+            "background_color": "#FAF8F5",
+            "theme_color": "#5B3E96",
+            "icons": [
+                {
+                    "src": f"/static/icons/icon-192.png?v={settings.APP_VERSION}",
+                    "sizes": "192x192",
+                    "type": "image/png",
+                },
+                {
+                    "src": f"/static/icons/icon-512.png?v={settings.APP_VERSION}",
+                    "sizes": "512x512",
+                    "type": "image/png",
+                },
+            ],
+        },
+        content_type="application/manifest+json",
+    )
+
+
+def service_worker(request):
+    response = render(request, "economy/service-worker.js", content_type="application/javascript")
+    response["Service-Worker-Allowed"] = "/"
+    response["Cache-Control"] = "no-cache"
+    return response
+
+
+def offline(request):
+    return render(request, "economy/offline.html")

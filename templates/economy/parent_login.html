@@ -1,0 +1,18 @@
+{% extends "economy/base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Parent sign in" %} – {{ project_name }}{% endblock %}
+{% block content %}
+<section class="narrow-card">
+  <p class="eyebrow">{% translate "Parent area" %}</p>
+  <h1>{% translate "Sign in" %}</h1>
+  <form method="post" class="stack-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if form.errors %}<p class="form-error">{% translate "Check your sign-in details." %}</p>{% endif %}
+    <button class="button button-primary button-large" type="submit">{% translate "Sign in" %}</button>
+  </form>
+  {% if email_enabled %}
+    <p class="auth-help"><a href="{% url 'password_reset' %}">{% translate "Forgot password" %}</a></p>
+  {% endif %}
+</section>
+{% endblock %}

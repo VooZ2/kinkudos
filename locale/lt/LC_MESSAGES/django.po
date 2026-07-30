@@ -1,0 +1,1670 @@
+msgid ""
+msgstr "Project-Id-Version: KinKudos\nLanguage: lt\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=4; plural=(n%10==1 && (n%100>19 || n%100<11) ? 0 : (n%10>=2 && n%10<=9) && (n%100>19 || n%100<11) ? 1 : n%1!=0 ? 2: 3);\n"
+
+msgid "%(family_display_name)s – password reset"
+msgstr "%(family_display_name)s – slaptažodžio atkūrimas"
+
+msgid "%(name)s 4-digit PIN: "
+msgstr "%(name)s 4 skaitmenų PIN: "
+
+msgid "%(name)s gave you %(amount)s"
+msgstr "%(name)s padovanojo tau %(amount)s"
+
+msgid "%(name)s received %(count)s penalty/penalties (total %(total)s)."
+msgstr "Vaikui %(name)s skirta nuobaudų: %(count)s (iš viso %(total)s)."
+
+msgid "%(name)s received %(count)s task(s) (total +%(total)s)."
+msgstr "Vaikui %(name)s skirta darbų: %(count)s (iš viso +%(total)s)."
+
+msgid "%(name)s unlocked."
+msgstr "%(name)s atrakinta."
+
+msgid "%(name)s's avatar"
+msgstr "%(name)s avataras"
+
+msgid "%(task)s: +%(amount)s"
+msgstr "%(task)s: +%(amount)s"
+
+msgid "30 days"
+msgstr "30 dienų"
+
+msgid "4 digits"
+msgstr "4 skaitmenys"
+
+msgid "7 days"
+msgstr "7 dienas"
+
+msgid "90 days"
+msgstr "90 dienų"
+
+msgid "A birthday change is already waiting for parent approval."
+msgstr "Vienas gimimo datos pakeitimas jau laukia tėvų patvirtinimo."
+
+msgid "A child profile with this name already exists."
+msgstr "Toks vaiko profilis jau yra."
+
+msgid "A different theme will be selected automatically once a day."
+msgstr "Kartą per dieną automatiškai bus parinkta vis kita tema."
+
+msgid "A new task is awaiting approval"
+msgstr "Naujas darbas laukia patvirtinimo"
+
+msgid "A reason is required."
+msgstr "Paaiškinimas privalomas."
+
+msgid "A rejection reason is required."
+msgstr "Atmetimo priežastis privaloma."
+
+msgid "A shared family space"
+msgstr "Bendra šeimos erdvė"
+
+msgid "A task needs a little more work"
+msgstr "Darbą reikia šiek tiek pataisyti"
+
+msgid "Access"
+msgstr "Prisijungimai"
+
+msgid "Accounts"
+msgstr "Paskyros"
+
+msgid "Activate mission"
+msgstr "Aktyvuoti misiją"
+
+msgid "Active"
+msgstr "Aktyvus"
+
+msgid "Activity Log"
+msgstr "Darbų žurnalas"
+
+msgid "Activity history"
+msgstr "Veiksmų istorija"
+
+msgid "Activity history pages"
+msgstr "Veiksmų istorijos puslapiai"
+
+msgid "Add new"
+msgstr "Pridėti naują"
+
+msgid "Adjustment"
+msgstr "Korekcija"
+
+msgid "All children"
+msgstr "Visi vaikai"
+
+msgid "All statuses"
+msgstr "Visos būsenos"
+
+msgid "All types"
+msgstr "Visi tipai"
+
+msgid "Appearance"
+msgstr "Išvaizda"
+
+msgid "Approve"
+msgstr "Patvirtinti"
+
+msgid "Approve birthday change"
+msgstr "Patvirtinti gimimo datos pakeitimą"
+
+msgid "Approved"
+msgstr "Patvirtinta"
+
+msgid "Approved by"
+msgstr "Patvirtino"
+
+msgid "Art Studio"
+msgstr "Dizaino studija"
+
+msgid "Ask to improve"
+msgstr "Paprašyti pataisyti"
+
+msgid "Assign penalty"
+msgstr "Skirti nuobaudą"
+
+msgid "Assign selected penalties"
+msgstr "Skirti pažymėtas nuobaudas"
+
+msgid "Assignments"
+msgstr "Pareiškimai"
+
+msgid "At least 12 characters; cannot be similar to the username, commonly used, or entirely numeric."
+msgstr "Bent 12 simbolių; negali būti panašus į prisijungimo vardą, dažnai naudojamas arba sudarytas tik iš skaičių."
+
+msgid "Avatar"
+msgstr "Avataras"
+
+msgid "Avatar changed."
+msgstr "Avataras pakeistas."
+
+msgid "Awaiting approval"
+msgstr "Laukia patvirtinimo"
+
+msgid "Awaiting parent approval"
+msgstr "Laukia tėvų patvirtinimo"
+
+msgid "Award selected tasks"
+msgstr "Skirti pažymėtus taškus"
+
+msgid "Back to sign in"
+msgstr "Grįžti į prisijungimą"
+
+msgid "Balance adjusted."
+msgstr "Balansas pakoreguotas."
+
+msgid "Bamboo is ready!"
+msgstr "Bambukas paruoštas!"
+
+msgid "Big achievements."
+msgstr "Dideli pasiekimai."
+
+msgid "Birthday"
+msgstr "Gimimo data"
+
+msgid "Birthday change"
+msgstr "Gimimo datos pakeitimas"
+
+msgid "Birthday change approved."
+msgstr "Gimimo datos pakeitimas patvirtintas."
+
+msgid "Birthday change rejected."
+msgstr "Gimimo datos pakeitimas atmestas."
+
+msgid "Birthday gift"
+msgstr "Gimtadienio dovana"
+
+msgid "Birthday points"
+msgstr "Gimtadienio taškai"
+
+msgid "Birthday saved."
+msgstr "Gimimo data išsaugota."
+
+msgid "Block World"
+msgstr "Blokų pasaulis"
+
+msgid "Block sent to your parents for approval."
+msgstr "Blokas perduotas tėvams patvirtinti."
+
+msgid "Building Plan"
+msgstr "Kūrybos planas"
+
+msgid "Cancel"
+msgstr "Atšaukti"
+
+msgid "Cancelled"
+msgstr "Atšaukta"
+
+msgid "Catalog item created."
+msgstr "Katalogo įrašas sukurtas."
+
+msgid "Catalogs"
+msgstr "Katalogai"
+
+msgid "Change"
+msgstr "Pokytis"
+
+msgid "Change PIN"
+msgstr "Pakeisti PIN"
+
+msgid "Change credit"
+msgstr "Keisti kreditą"
+
+msgid "Change my theme randomly every day"
+msgstr "Kasdien atsitiktinai keisti mano temą"
+
+msgid "Change theme"
+msgstr "Pakeisti temą"
+
+msgid "Changelog"
+msgstr "Pakeitimų istorija"
+
+msgid "Check the PIN fields."
+msgstr "Patikrinkite PIN laukus."
+
+msgid "Check the balance adjustment."
+msgstr "Patikrinkite balanso korekciją."
+
+msgid "Check the birthday date."
+msgstr "Patikrink gimimo datą."
+
+msgid "Check the child profile details."
+msgstr "Patikrinkite redaguojamo vaiko profilio duomenis."
+
+msgid "Check the edited data."
+msgstr "Patikrinkite redaguojamus duomenis."
+
+msgid "Check the entered data."
+msgstr "Patikrinkite įvestus duomenis."
+
+msgid "Check the family settings."
+msgstr "Patikrinkite šeimos nustatymus."
+
+msgid "Check the feedback description and screenshot."
+msgstr "Patikrinkite atsiliepimo aprašymą ir ekrano nuotrauką."
+
+msgid "Check the new child profile details."
+msgstr "Patikrinkite naujo vaiko profilio duomenis."
+
+msgid "Check the new parent account details."
+msgstr "Patikrinkite naujos tėvų paskyros duomenis."
+
+msgid "Check the parent account details."
+msgstr "Patikrinkite redaguojamos tėvų paskyros duomenis."
+
+msgid "Check the suggestion details."
+msgstr "Patikrinkite pasiūlymo informaciją."
+
+msgid "Check your email"
+msgstr "Patikrinkite el. paštą"
+
+msgid "Check your sign-in details."
+msgstr "Patikrinkite prisijungimo duomenis."
+
+msgid "Checking notifications"
+msgstr "Tikrinami pranešimai"
+
+msgid "Child"
+msgstr "Vaikas"
+
+msgid "Child %(number)s name: "
+msgstr "%(number)s vaiko vardas: "
+
+msgid "Child profile “%(name)s” created."
+msgstr "Vaiko profilis „%(name)s“ sukurtas."
+
+msgid "Child profile “%(name)s” removed."
+msgstr "Vaiko profilis „%(name)s“ pašalintas."
+
+msgid "Child profile “%(name)s” updated."
+msgstr "Vaiko profilis „%(name)s“ atnaujintas."
+
+msgid "Child profiles"
+msgstr "Vaikų paskyros"
+
+msgid "Child's name"
+msgstr "Vaiko vardas"
+
+msgid "Choose a profile"
+msgstr "Pasirink profilį"
+
+msgid "Choose a reward"
+msgstr "Pasirink prizą"
+
+msgid "Choose a task"
+msgstr "Pasirink užduotį"
+
+msgid "Choose a valid feedback status."
+msgstr "Pasirinkite tinkamą atsiliepimo būseną."
+
+msgid "Choose an emoji or enter one using your device keyboard."
+msgstr "Pasirinkite emoji arba įveskite jį įrenginio klaviatūra."
+
+msgid "Choose an icon"
+msgstr "Pasirinkite ikoną"
+
+msgid "Choose at least one active penalty."
+msgstr "Pasirink bent vieną aktyvią nuobaudą."
+
+msgid "Choose at least one active task."
+msgstr "Pasirink bent vieną aktyvų darbą."
+
+msgid "Choose at least one penalty."
+msgstr "Pasirink bent vieną nuobaudą."
+
+msgid "Choose at least one task."
+msgstr "Pasirink bent vieną darbą."
+
+msgid "Choose between 1 and 20 child profiles."
+msgstr "Pasirinkite nuo 1 iki 20 vaikų profilių."
+
+msgid "Choose completed tasks"
+msgstr "Pasirinkite atliktus darbus"
+
+msgid "Choose from gallery"
+msgstr "Pasirinkti iš galerijos"
+
+msgid "Choose inspiration"
+msgstr "Rinktis įkvėpimą"
+
+msgid "Choose one short emoji."
+msgstr "Pasirinkite vieną trumpą emoji."
+
+msgid "Choose penalties"
+msgstr "Pasirinkite nuobaudas"
+
+msgid "Choose the world you want to use. You can change it later in Settings."
+msgstr "Pasirink pasaulį, kurį nori naudoti. Vėliau jį galėsi pakeisti nustatymuose."
+
+msgid "Choose who receives your points and how many to give."
+msgstr "Pasirink kam ir kiek dovanoji taškų."
+
+msgid "Choose your profile"
+msgstr "Pasirink savo profilį"
+
+msgid "Choose your world"
+msgstr "Pasirink savo pasaulį"
+
+msgid "Close"
+msgstr "Uždaryti"
+
+msgid "Close notification"
+msgstr "Uždaryti pranešimą"
+
+msgid "Comment"
+msgstr "Komentaras"
+
+msgid "Comment (optional)"
+msgstr "Komentaras (neprivalomas)"
+
+msgid "Complete tasks, earn points, and choose your reward."
+msgstr "Atlik darbus, rink taškus ir išsirink prizą."
+
+msgid "Complete tasks, earn tokens, and choose your reward."
+msgstr "Atlik darbus, rink tokenus ir išsirink prizą."
+
+msgid "Completed"
+msgstr "Pasiektas"
+
+msgid "Completed task"
+msgstr "Atliktas darbas"
+
+msgid "Connect to your home network or VPN and try again."
+msgstr "Prisijunkite prie namų tinklo arba VPN ir bandykite dar kartą."
+
+msgid "Cost"
+msgstr "Kaina"
+
+msgid "Could not change the notification setting."
+msgstr "Nepavyko pakeisti pranešimų nustatymo."
+
+msgid "Craft a recipe"
+msgstr "Sukurti receptą"
+
+msgid "Create child profile"
+msgstr "Sukurti vaiko profilį"
+
+msgid "Create new accounts"
+msgstr "Kurti naujas paskyras"
+
+msgid "Create parent account"
+msgstr "Sukurti tėvų paskyrą"
+
+msgid "Create penalty"
+msgstr "Sukurti nuobaudą"
+
+msgid "Create reward"
+msgstr "Sukurti prizą"
+
+msgid "Create task"
+msgstr "Sukurti darbą"
+
+msgid "Creative Journal"
+msgstr "Kūrybos dienoraštis"
+
+msgid "Creative Projects"
+msgstr "Kūrybos darbai"
+
+msgid "Credit"
+msgstr "Kreditas"
+
+msgid "Credit limit"
+msgstr "Kredito limitas"
+
+msgid "Credit limit changed."
+msgstr "Kredito limitas pakeistas."
+
+msgid "Currency name [%(default)s]: "
+msgstr "Valiutos pavadinimas [%(default)s]: "
+
+msgid "Current PIN"
+msgstr "Dabartinis PIN"
+
+msgid "Current version"
+msgstr "Dabartinė versija"
+
+msgid "Custom award"
+msgstr "Kitas įvertinimas"
+
+msgid "Delete"
+msgstr "Trinti"
+
+msgid "Delete penalty “%(title)s”? Earlier history entries will remain."
+msgstr "Ištrinti nuobaudą „%(title)s“? Ankstesni įrašai istorijoje išliks."
+
+msgid "Delete reward “%(title)s”? Earlier history entries will remain."
+msgstr "Ištrinti prizą „%(title)s“? Ankstesni įrašai istorijoje išliks."
+
+msgid "Delete task “%(title)s”? Earlier history entries will remain."
+msgstr "Ištrinti darbą „%(title)s“? Ankstesni įrašai istorijoje išliks."
+
+msgid "Describe a problem or suggest an improvement."
+msgstr "Aprašykite problemą arba pasiūlykite patobulinimą."
+
+msgid "Describe the problem or suggestion in a little more detail."
+msgstr "Aprašykite problemą arba pasiūlymą šiek tiek išsamiau."
+
+msgid "Description"
+msgstr "Aprašymas"
+
+msgid "Device"
+msgstr "Įrenginys"
+
+msgid "Do not include passwords, PINs, or other private information."
+msgstr "Nerašykite slaptažodžių, PIN kodų ar kitos privačios informacijos."
+
+msgid "Dream Enchantments"
+msgstr "Svajonių užkeitimai"
+
+msgid "Each child receives this many points once a year on their birthday. Use 0 to disable birthday gifts."
+msgstr "Kiekvienas vaikas kartą per metus per gimtadienį gauna tiek taškų. Įrašykite 0, jei gimtadienio dovanas norite išjungti."
+
+msgid "Edit"
+msgstr "Redaguoti"
+
+msgid "Edit accounts"
+msgstr "Redaguoti paskyras"
+
+msgid "Email address"
+msgstr "El. pašto adresas"
+
+msgid "Email address not provided"
+msgstr "El. paštas nenurodytas"
+
+msgid "English"
+msgstr "Anglų"
+
+msgid "Enter a positive or negative point amount and its purpose."
+msgstr "Įveskite teigiamą arba neigiamą taškų skaičių ir nurodykite paskirtį."
+
+msgid "Enter a positive or negative token amount and its purpose."
+msgstr "Įveskite teigiamą arba neigiamą tokenų kiekį ir nurodykite paskirtį."
+
+msgid "Enter a positive point amount."
+msgstr "Įveskite teigiamą taškų skaičių."
+
+msgid "Enter a positive token amount."
+msgstr "Įveskite teigiamą tokenų skaičių."
+
+msgid "Enter my world"
+msgstr "Įeiti į savo pasaulį"
+
+msgid "Enter the birthday date."
+msgstr "Įveskite gimimo datą."
+
+msgid "Enter the email address assigned to the parent account. If the account is active, we will send a link valid for one hour."
+msgstr "Įveskite tėvų paskyrai priskirtą el. pašto adresą. Jei paskyra aktyvi, išsiųsime vieną valandą galiojančią nuorodą."
+
+msgid "Enter the final point amount."
+msgstr "Įveskite galutinį taškų skaičių."
+
+msgid "Enter the final token amount."
+msgstr "Nurodykite galutinę tokenų sumą."
+
+msgid "Enter the same password again."
+msgstr "Pakartokite tą patį slaptažodį."
+
+msgid "Enter your PIN"
+msgstr "Įvesk PIN"
+
+msgid "Exchange galleons"
+msgstr "Išsikeisti galeonus"
+
+msgid "Extra points for a task photo"
+msgstr "Papildomi taškai už darbą su nuotrauka"
+
+msgid "FIRST SIGN-IN"
+msgstr "PIRMAS PRISIJUNGIMAS"
+
+msgid "Family"
+msgstr "Šeima"
+
+msgid "Family accounts and application settings"
+msgstr "Šeimos paskyros ir programos nustatymai"
+
+msgid "Family created."
+msgstr "Šeima sukurta."
+
+msgid "Family name or nickname: "
+msgstr "Šeimos pavadinimas arba slapyvardis: "
+
+msgid "Family settings saved."
+msgstr "Šeimos nustatymai išsaugoti."
+
+msgid "Feed the panda"
+msgstr "Pavaišinti pandą"
+
+msgid "Feedback"
+msgstr "Atsiliepimai"
+
+msgid "Feedback is saved in KinKudos, but email notifications are not configured."
+msgstr "Atsiliepimai išsaugomi KinKudos, tačiau el. pašto pranešimai nesukonfigūruoti."
+
+msgid "Feedback pages"
+msgstr "Atsiliepimų puslapiai"
+
+msgid "Feedback status updated."
+msgstr "Atsiliepimo būsena atnaujinta."
+
+msgid "Feedback was saved, but the email notification could not be sent."
+msgstr "Atsiliepimas išsaugotas, tačiau el. pašto pranešimo išsiųsti nepavyko."
+
+msgid "Filter"
+msgstr "Filtruoti"
+
+msgid "Final point amount"
+msgstr "Galutinis taškų skaičius"
+
+msgid "Final token amount"
+msgstr "Galutinė tokenų suma"
+
+msgid "Find a task"
+msgstr "Ieškoti darbo"
+
+msgid "Fix and resubmit"
+msgstr "Pataisyti ir pateikti iš naujo"
+
+msgid "Forgot password"
+msgstr "Pamiršote slaptažodį"
+
+msgid "Get a new link"
+msgstr "Gauti naują nuorodą"
+
+msgid "Gift"
+msgstr "Dovana"
+
+msgid "Gift from %(name)s"
+msgstr "Dovana nuo %(name)s"
+
+msgid "Gift to %(name)s"
+msgstr "Dovana vaikui %(name)s"
+
+msgid "Give bamboo"
+msgstr "Perduoti bambuką"
+
+msgid "Give points"
+msgstr "Dovanoti taškus"
+
+msgid "Goals"
+msgstr "Tikslai"
+
+msgid "Got it"
+msgstr "Supratau"
+
+msgid "HQ Arsenal"
+msgstr "Būstinės arsenalas"
+
+msgid "Happy birthday!"
+msgstr "Su gimtadieniu!"
+
+msgid "Hello, %(name)s"
+msgstr "Labas, %(name)s"
+
+msgid "Hero Missions"
+msgstr "Herojaus misijos"
+
+msgid "Hide"
+msgstr "Paslėpti"
+
+msgid "History"
+msgstr "Istorija"
+
+msgid "Home"
+msgstr "Pradžia"
+
+msgid "How do I enable notifications?"
+msgstr "Kaip įjungti pranešimus?"
+
+msgid "How does the credit limit work?"
+msgstr "Kaip veikia kredito limitas?"
+
+msgid "I am a child"
+msgstr "Esu vaikas"
+
+msgid "I have an idea"
+msgstr "Turiu idėją"
+
+msgid "I understand"
+msgstr "Supratau"
+
+msgid "Icon"
+msgstr "Ikona"
+
+msgid "If the address belongs to an active parent account, the reset email has been sent. Check your spam folder too."
+msgstr "Jei adresas priklauso aktyviai tėvų paskyrai, atkūrimo laiškas išsiųstas. Patikrinkite ir šlamšto aplanką."
+
+msgid "If you did not make this request, ignore this email; your password will not be changed."
+msgstr "Jei šio prašymo nepateikėte, laišką ignoruokite – slaptažodis nebus pakeistas."
+
+msgid "Incorrect PIN."
+msgstr "Neteisingas PIN."
+
+msgid "Initial credit"
+msgstr "Pradinis kreditas"
+
+msgid "Inspiration Shop"
+msgstr "Įkvėpimų parduotuvė"
+
+msgid "Install for notifications"
+msgstr "Įdiekite pranešimams"
+
+msgid "It's great to see you"
+msgstr "Smagu Tave matyti"
+
+msgid "JPEG, PNG, WebP, HEIC, or HEIF, up to 5 MB. The image will be cropped to a square."
+msgstr "JPEG, PNG, WebP, HEIC arba HEIF, iki 5 MB. Nuotrauka bus apkirpta kvadratu."
+
+msgid "Keep feedback screenshots for"
+msgstr "Atsiliepimų ekrano nuotraukas saugoti"
+
+msgid "Keep indefinitely"
+msgstr "Saugoti neribotai"
+
+msgid "Keep task photos for"
+msgstr "Darbų nuotraukas saugoti"
+
+msgid "KinKudos feedback #%(report_id)s: %(report_type)s"
+msgstr "KinKudos atsiliepimas #%(report_id)s: %(report_type)s"
+
+msgid "Language"
+msgstr "Kalba"
+
+msgid "Leave blank to keep the current PIN."
+msgstr "Palikite tuščią, jei PIN nekeičiate."
+
+msgid "Leave blank to keep the current password."
+msgstr "Palikite tuščią, jei slaptažodžio nekeičiate."
+
+msgid "Lithuanian"
+msgstr "Lietuvių"
+
+msgid "Log"
+msgstr "Žurnalas"
+
+msgid "Log out"
+msgstr "Atsijungti"
+
+msgid "Magic Academy"
+msgstr "Magijos akademija"
+
+msgid "Magic Chronicle"
+msgstr "Magijos metraštis"
+
+msgid "Magic Shop"
+msgstr "Magijos krautuvėlė"
+
+msgid "Make a panda wish"
+msgstr "Sugalvoti pandos svajonę"
+
+msgid "Management"
+msgstr "Valdymas"
+
+msgid "Minimum allowed balance"
+msgstr "Leidžiamas minimalus balansas"
+
+msgid "Minimum balance"
+msgstr "Leidžiamas minusas"
+
+msgid "Mission Log"
+msgstr "Misijų žurnalas"
+
+msgid "Missions"
+msgstr "Misijos"
+
+msgid "My Gallery"
+msgstr "Mano galerija"
+
+msgid "Needs a decision"
+msgstr "Reikia sprendimo"
+
+msgid "Needs changes"
+msgstr "Reikia pataisymų"
+
+msgid "Needs improvement"
+msgstr "Reikia pataisyti"
+
+msgid "Negative amount"
+msgstr "Neigiama suma"
+
+msgid "Neutral"
+msgstr "Neutrali"
+
+msgid "New"
+msgstr "Naujas"
+
+msgid "New PIN"
+msgstr "Naujas PIN"
+
+msgid "New avatar"
+msgstr "Naujas avataras"
+
+msgid "New child profile"
+msgstr "Naujas vaiko profilis"
+
+msgid "New parent account"
+msgstr "Nauja tėvų paskyra"
+
+msgid "New parent password: "
+msgstr "Naujas tėvų slaptažodis: "
+
+msgid "New password"
+msgstr "Naujas slaptažodis"
+
+msgid "New reward requests are paused after half of the credit limit is used. They will be available again when the balance improves."
+msgstr "Naujų prizų prašymai pristabdomi išnaudojus pusę kredito. Jie vėl bus prieinami pagerėjus balansui."
+
+msgid "New reward requests are paused because half of the available credit has been used. Earn more points to unlock them."
+msgstr "Naujų prizų prašymai pristabdyti, nes išnaudota pusė kredito. Uždirbk daugiau taškų ir juos vėl atrakinsi."
+
+msgid "Next"
+msgstr "Kitas"
+
+msgid "No child profiles have been created yet."
+msgstr "Vaikų profiliai dar nesukurti."
+
+msgid "No new features in this release."
+msgstr "Naujų funkcijų nebuvo."
+
+msgid "No separate fixes in this release."
+msgstr "Atskirų pataisymų nebuvo."
+
+msgid "No tasks match your search."
+msgstr "Pagal paiešką darbų nerasta."
+
+msgid "Not enough points"
+msgstr "Nepakanka taškų"
+
+msgid "Notifications"
+msgstr "Pranešimai"
+
+msgid "Notifications are blocked in the device settings. Allow this app's notifications and try again."
+msgstr "Pranešimai užblokuoti įrenginio nustatymuose. Leiskite šios programos pranešimus ir bandykite dar kartą."
+
+msgid "Notifications blocked"
+msgstr "Pranešimai užblokuoti"
+
+msgid "Notifications could not be enabled on this device."
+msgstr "Šiame įrenginyje pranešimų įjungti nepavyko."
+
+msgid "Notifications off"
+msgstr "Pranešimai išjungti"
+
+msgid "Notifications on"
+msgstr "Pranešimai įjungti"
+
+msgid "Notifications unavailable"
+msgstr "Pranešimai nepalaikomi"
+
+msgid "Number of child profiles [1]: "
+msgstr "Vaikų profilių skaičius [1]: "
+
+msgid "Offline"
+msgstr "Nėra ryšio"
+
+msgid "On iPhone and iPad, notifications only work in the installed app. In Safari tap Share, choose Add to Home Screen, enable Open as Web App, then launch the app from its icon."
+msgstr "iPhone ir iPad pranešimai veikia tik įdiegtoje programoje. Safari paspauskite „Dalintis“, pasirinkite „Įtraukti į pradžios ekraną“, įjunkite „Atidaryti kaip žiniatinklio programą“, tada paleiskite programą iš jos ikonos."
+
+msgid "One extra hour of screen time"
+msgstr "Papildoma valanda ekrano"
+
+msgid "One-time recovery code (save it in your password manager):"
+msgstr "Vienkartinis atkūrimo kodas (išsaugokite slaptažodžių tvarkyklėje):"
+
+msgid "Only screenshots from resolved feedback are removed automatically."
+msgstr "Automatiškai šalinamos tik išspręstų atsiliepimų ekrano nuotraukos."
+
+msgid "Open"
+msgstr "Atidaryti"
+
+msgid "Open release notes"
+msgstr "Atidaryti pakeitimų istoriją"
+
+msgid "Open screenshot"
+msgstr "Atidaryti ekrano nuotrauką"
+
+msgid "Open task photo"
+msgstr "Atidaryti darbo nuotrauką"
+
+msgid "Open treat chest"
+msgstr "Atidaryti skanėstų skrynelę"
+
+msgid "Order"
+msgstr "Užsisakyti"
+
+msgid "PIN changed."
+msgstr "PIN pakeistas."
+
+msgid "Page"
+msgstr "Puslapis"
+
+msgid "Page %(number)s of %(total)s"
+msgstr "%(number)s puslapis iš %(total)s"
+
+msgid "Panda Tasks"
+msgstr "Pandos užduotys"
+
+msgid "Panda Tracks"
+msgstr "Pandos pėdsakai"
+
+msgid "Panda World"
+msgstr "Pandos pasaulis"
+
+msgid "Panda's Dream"
+msgstr "Pandos svajonė"
+
+msgid "Parent"
+msgstr "Tėvai"
+
+msgid "Parent account"
+msgstr "Tėvų paskyra"
+
+msgid "Parent account “%(username)s” created."
+msgstr "Tėvų paskyra „%(username)s“ sukurta."
+
+msgid "Parent account “%(username)s” removed."
+msgstr "Tėvų paskyra „%(username)s“ pašalinta."
+
+msgid "Parent account “%(username)s” updated."
+msgstr "Tėvų paskyra „%(username)s“ atnaujinta."
+
+msgid "Parent accounts"
+msgstr "Tėvų paskyros"
+
+msgid "Parent area"
+msgstr "Tėvų erdvė"
+
+msgid "Parent area sections"
+msgstr "Tėvų erdvės skyriai"
+
+msgid "Parent email address (optional): "
+msgstr "Tėvų el. pašto adresas (nebūtina): "
+
+msgid "Parent response"
+msgstr "Tėvų atsakymas"
+
+msgid "Parent sign in"
+msgstr "Tėvų prisijungimas"
+
+msgid "Parent username [%(default)s]: "
+msgstr "Tėvų prisijungimo vardas [%(default)s]: "
+
+msgid "Parents may change this date without an additional approval."
+msgstr "Tėvai šią datą gali pakeisti be papildomo patvirtinimo."
+
+msgid "Password"
+msgstr "Slaptažodis"
+
+msgid "Password changed"
+msgstr "Slaptažodis pakeistas"
+
+msgid "Penalties"
+msgstr "Nuobaudos"
+
+msgid "Penalty"
+msgstr "Nuobauda"
+
+msgid "Penalty assigned."
+msgstr "Nuobauda skirta."
+
+msgid "Penalty “%(penalty)s” assigned to %(name)s."
+msgstr "Nuobauda „%(penalty)s“ skirta vaikui %(name)s."
+
+msgid "Pending"
+msgstr "Laukia"
+
+msgid "Pending and revision-requested task photos are never removed."
+msgstr "Laukiančių ir grąžintų pataisyti darbų nuotraukos nešalinamos."
+
+msgid "Pending requests"
+msgstr "Laukiantys prašymai"
+
+msgid "Photo for %(task)s"
+msgstr "Darbo „%(task)s“ nuotrauka"
+
+msgid "Photo removed"
+msgstr "Nuotrauka pašalinta"
+
+msgid "Photo removed according to the retention setting"
+msgstr "Nuotrauka pašalinta pagal saugojimo nustatymą"
+
+msgid "Photo selected"
+msgstr "Nuotrauka pasirinkta"
+
+msgid "Planned"
+msgstr "Planuojamas"
+
+msgid "Point amount"
+msgstr "Taškų skaičius"
+
+msgid "Point history"
+msgstr "Taškų istorija"
+
+msgid "Point history is empty."
+msgstr "Taškų istorija dar tuščia."
+
+msgid "Point transactions cannot be changed."
+msgstr "Taškų operacijų keisti negalima."
+
+msgid "Point transactions cannot be deleted."
+msgstr "Taškų operacijų ištrinti negalima."
+
+msgid "Points"
+msgstr "Taškai"
+
+msgid "Points to give"
+msgstr "Dovanojamų taškų skaičius"
+
+msgid "Present artwork"
+msgstr "Pristatyti kūrinį"
+
+msgid "Previous"
+msgstr "Ankstesnis"
+
+msgid "Problem"
+msgstr "Problema"
+
+msgid "Project ready for review"
+msgstr "Projektas paruoštas vertinimui"
+
+msgid "Project settings"
+msgstr "Projekto nustatymai"
+
+msgid "Propose a secret plan"
+msgstr "Siūlyti slaptą planą"
+
+msgid "Purpose"
+msgstr "Paskirtis"
+
+msgid "Reason"
+msgstr "Paaiškinimas"
+
+msgid "Recipient"
+msgstr "Kam dovanoji"
+
+msgid "Reject"
+msgstr "Atmesti"
+
+msgid "Reject birthday change"
+msgstr "Atmesti gimimo datos pakeitimą"
+
+msgid "Rejected"
+msgstr "Atmesta"
+
+msgid "Rejected by"
+msgstr "Atmetė"
+
+msgid "Rejection reason"
+msgstr "Atmetimo priežastis"
+
+msgid "Remove"
+msgstr "Pašalinti"
+
+msgid "Remove child profile “%(name)s”? History will be preserved."
+msgstr "Pašalinti vaiko profilį „%(name)s“? Istorija bus išsaugota."
+
+msgid "Remove parent account “%(username)s”?"
+msgstr "Pašalinti tėvų paskyrą „%(username)s“?"
+
+msgid "Remove photo"
+msgstr "Pašalinti nuotrauką"
+
+msgid "Repeat PIN"
+msgstr "Pakartokite PIN"
+
+msgid "Repeat new PIN"
+msgstr "Pakartokite naują PIN"
+
+msgid "Repeat new password"
+msgstr "Pakartokite naują slaptažodį"
+
+msgid "Repeat password"
+msgstr "Pakartokite slaptažodį"
+
+msgid "Repeat: "
+msgstr "Pakartokite: "
+
+msgid "Request a correction"
+msgstr "Paprašyti pataisyti"
+
+msgid "Request from arsenal"
+msgstr "Prašyti iš arsenalo"
+
+msgid "Requested birthday change: %(current)s → %(requested)s."
+msgstr "Prašomas gimimo datos pakeitimas: %(current)s → %(requested)s."
+
+msgid "Reset link"
+msgstr "Atkūrimo nuoroda"
+
+msgid "Reset password"
+msgstr "Atkurti slaptažodį"
+
+msgid "Resolved"
+msgstr "Išspręsta"
+
+msgid "Restored"
+msgstr "Atkurta"
+
+msgid "Reviewed"
+msgstr "Peržiūrėtas"
+
+msgid "Reward"
+msgstr "Prizas"
+
+msgid "Reward Chest"
+msgstr "Atlygių skrynia"
+
+msgid "Reward approved."
+msgstr "Prizas patvirtintas."
+
+msgid "Reward request"
+msgstr "Prizo prašymas"
+
+msgid "Reward request rejected."
+msgstr "Prizo prašymas atmestas."
+
+msgid "Rewards"
+msgstr "Prizai"
+
+msgid "Role"
+msgstr "Rolė"
+
+msgid "Save"
+msgstr "Išsaugoti"
+
+msgid "Save account"
+msgstr "Išsaugoti paskyrą"
+
+msgid "Save award"
+msgstr "Įrašyti įvertinimą"
+
+msgid "Save birthday"
+msgstr "Išsaugoti gimimo datą"
+
+msgid "Save credit"
+msgstr "Išsaugoti kreditą"
+
+msgid "Save for a dream"
+msgstr "Kaupk svajonei"
+
+msgid "Save new PIN"
+msgstr "Išsaugoti naują PIN"
+
+msgid "Save password"
+msgstr "Išsaugoti slaptažodį"
+
+msgid "Save profile"
+msgstr "Išsaugoti profilį"
+
+msgid "Save settings"
+msgstr "Išsaugoti nustatymus"
+
+msgid "Savings goal"
+msgstr "Taupymo tikslas"
+
+msgid "Screenshot"
+msgstr "Ekrano nuotrauka"
+
+msgid "Screenshot (optional)"
+msgstr "Ekrano nuotrauka (nebūtina)"
+
+msgid "Screenshot removed"
+msgstr "Ekrano nuotrauka pašalinta"
+
+msgid "Secret Plan"
+msgstr "Slaptasis planas"
+
+msgid "Sections"
+msgstr "Skyriai"
+
+msgid "See what was added and fixed in every application version."
+msgstr "Čia rasite, kas buvo pridėta ir pataisyta kiekvienoje programos versijoje."
+
+msgid "Send a signal to HQ"
+msgstr "Siųsti signalą būstinei"
+
+msgid "Send again"
+msgstr "Siųsti iš naujo"
+
+msgid "Send an owl"
+msgstr "Siųsti pelėdą"
+
+msgid "Send feedback"
+msgstr "Siųsti atsiliepimą"
+
+msgid "Send gift"
+msgstr "Siųsti dovaną"
+
+msgid "Send reset link"
+msgstr "Siųsti atkūrimo nuorodą"
+
+msgid "Send signal"
+msgstr "Siųsti signalą"
+
+msgid "Send {amount} points to {recipient}?"
+msgstr "Ar dovanoti {amount} taškų vaikui {recipient}?"
+
+msgid "Set a new password here:"
+msgstr "Naują slaptažodį nustatykite čia:"
+
+msgid "Set the lowest balance this child may spend down to."
+msgstr "Nurodykite, iki kokio minuso vaikas gali išleisti tokenus."
+
+msgid "Settings"
+msgstr "Nustatymai"
+
+msgid "Shared reason"
+msgstr "Bendras paaiškinimas"
+
+msgid "Shared reason (optional)"
+msgstr "Bendras paaiškinimas (nebūtina)"
+
+msgid "Show"
+msgstr "Rodyti"
+
+msgid "Sign in"
+msgstr "Prisijungti"
+
+msgid "Signal received! Mission evidence was delivered to HQ."
+msgstr "Signalas gautas! Misijos įrodymas perduotas vadovybei."
+
+msgid "Small tasks."
+msgstr "Maži darbai."
+
+msgid "Something is not working"
+msgstr "Kažkas neveikia"
+
+msgid "Status"
+msgstr "Būsena"
+
+msgid "Submit"
+msgstr "Pateikti"
+
+msgid "Submit block"
+msgstr "Priduoti bloką"
+
+msgid "Submit project"
+msgstr "Pateikti projektą"
+
+msgid "Submit task"
+msgstr "Atiduoti užduotį"
+
+msgid "Suggest"
+msgstr "Pasiūlyti"
+
+msgid "Suggest a reward or goal"
+msgstr "Pasiūlyk prizą ar tikslą"
+
+msgid "Suggest an idea"
+msgstr "Siūlyti idėją"
+
+msgid "Suggested"
+msgstr "Siūlo"
+
+msgid "Suggested point amount"
+msgstr "Siūloma taškų suma"
+
+msgid "Suggested token amount"
+msgstr "Siūloma tokenų suma"
+
+msgid "Suggestion"
+msgstr "Pasiūlymas"
+
+msgid "Suggestion approved."
+msgstr "Pasiūlymas patvirtintas."
+
+msgid "Suggestion rejected."
+msgstr "Pasiūlymas atmestas."
+
+msgid "Superhero HQ"
+msgstr "Superherojų būstinė"
+
+msgid "Switch profile"
+msgstr "Keisti profilį"
+
+msgid "Take from the chest"
+msgstr "Pasiimti iš skrynios"
+
+msgid "Take photo"
+msgstr "Fotografuoti"
+
+msgid "Task"
+msgstr "Darbas"
+
+msgid "Task approved."
+msgstr "Darbas patvirtintas."
+
+msgid "Task photo"
+msgstr "Darbo nuotrauka"
+
+msgid "Task photo settings"
+msgstr "Darbo nuotraukų nustatymai"
+
+msgid "Task rejected"
+msgstr "Darbas atmestas"
+
+msgid "Task rejected."
+msgstr "Darbas atmestas."
+
+msgid "Tasks"
+msgstr "Darbai"
+
+msgid "Tasks and rewards"
+msgstr "Darbai ir prizai"
+
+msgid "Tasks, penalties and rewards"
+msgstr "Darbai, nuobaudos ir prizai"
+
+msgid "Tell the child what should be improved."
+msgstr "Nurodykite vaikui, ką reikia pataisyti."
+
+msgid "Tell us what is not working or what you would like to add."
+msgstr "Parašykite, kas neveikia arba ką norėtumėte pridėti."
+
+msgid "Temporarily locked"
+msgstr "Laikinai užrakinta"
+
+msgid "Thank you. Your feedback was sent."
+msgstr "Ačiū. Jūsų atsiliepimas išsiųstas."
+
+msgid "The PIN must contain digits only."
+msgstr "PIN turi sudaryti tik skaitmenys."
+
+msgid "The PIN must contain exactly 4 digits."
+msgstr "PIN turi sudaryti tik 4 skaitmenys."
+
+msgid "The PINs do not match."
+msgstr "PIN nesutampa."
+
+msgid "The bamboo was sent to your parents for approval!"
+msgstr "Bambukas perduotas tėvams patvirtinti!"
+
+msgid "The birthday change was sent to the parents for approval."
+msgstr "Gimimo datos pakeitimas išsiųstas tėvams patvirtinti."
+
+msgid "The birthday date has not changed."
+msgstr "Gimimo data nepasikeitė."
+
+msgid "The changelog is empty."
+msgstr "Pakeitimų istorija dar tuščia."
+
+msgid "The child's name is required."
+msgstr "Vaiko vardas privalomas."
+
+msgid "The corrected task was sent for approval again."
+msgstr "Pataisytas darbas vėl išsiųstas patvirtinti."
+
+msgid "The cost must be greater than zero."
+msgstr "Kaina turi būti didesnė už nulį."
+
+msgid "The current PIN is incorrect."
+msgstr "Dabartinis PIN neteisingas."
+
+msgid "The family name or nickname is required."
+msgstr "Šeimos pavadinimas arba slapyvardis yra privalomas."
+
+msgid "The image cannot be larger than 12 MB."
+msgstr "Nuotrauka negali būti didesnė nei 12 MB."
+
+msgid "The image cannot be larger than 5 MB."
+msgstr "Nuotrauka negali būti didesnė nei 5 MB."
+
+msgid "The image could not be processed. Choose another file."
+msgstr "Nuotraukos apdoroti nepavyko. Pasirinkite kitą failą."
+
+msgid "The link is valid for one hour and can only be used once."
+msgstr "Nuoroda galioja vieną valandą ir gali būti panaudota tik vieną kartą."
+
+msgid "The new PINs do not match."
+msgstr "Nauji PIN nesutampa."
+
+msgid "The number of child profiles must be a number."
+msgstr "Vaikų profilių skaičius turi būti skaičius."
+
+msgid "The owl carried your task to your parents."
+msgstr "Pelėda nunešė tavo darbą tėvams."
+
+msgid "The password does not meet the security requirements."
+msgstr "Slaptažodis neatitinka saugumo reikalavimų."
+
+msgid "The password reset link will be sent to this address."
+msgstr "Šiuo adresu bus siunčiama slaptažodžio atkūrimo nuoroda."
+
+msgid "The passwords do not match."
+msgstr "Slaptažodžiai nesutampa."
+
+msgid "The penalty amount must be negative."
+msgstr "Nuobaudos suma turi būti neigiama."
+
+msgid "The point amount cannot be zero."
+msgstr "Taškų skaičius negali būti nulis."
+
+msgid "The point history is empty."
+msgstr "Taškų istorija dar tuščia."
+
+msgid "The profile is temporarily locked. Try again later."
+msgstr "Profilis trumpam užrakintas. Pabandykite vėliau."
+
+msgid "The reward request was cancelled."
+msgstr "Prizo prašymas atšauktas."
+
+msgid "The reward request was sent to the parents."
+msgstr "Prizo prašymas perduotas tėvams."
+
+msgid "The rewards catalog is empty."
+msgstr "Prizų katalogas dar tuščias."
+
+msgid "The suggestion was sent to the parents."
+msgstr "Pasiūlymas perduotas tėvams."
+
+msgid "The task and its proof were sent to the parents for approval."
+msgstr "Darbas ir jo nuotrauka išsiųsti tėvams patvirtinti."
+
+msgid "The task was returned for improvements."
+msgstr "Darbas grąžintas pataisyti."
+
+msgid "The task was sent to the parents for approval."
+msgstr "Darbas perduotas tėvams patvirtinti."
+
+msgid "The token amount cannot be zero."
+msgstr "Tokenų kiekis negali būti nulis."
+
+msgid "The token history is empty."
+msgstr "Tokenų istorija dar tuščia."
+
+msgid "The values do not match."
+msgstr "Reikšmės nesutampa."
+
+msgid "The way to your treasure is temporarily closed."
+msgstr "Kelias į tavo lobyną laikinai uždarytas."
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "Theme changed."
+msgstr "Tema pakeista."
+
+msgid "There are no active goals yet."
+msgstr "Aktyvių tikslų dar nėra."
+
+msgid "There are no active penalties."
+msgstr "Aktyvių nuobaudų nėra."
+
+msgid "There are no active tasks."
+msgstr "Aktyvių darbų nėra."
+
+msgid "There are no pending requests"
+msgstr "Nėra laukiančių prašymų"
+
+msgid "There are no requests."
+msgstr "Nėra prašymų."
+
+msgid "There are no tasks yet."
+msgstr "Kol kas darbų nėra."
+
+msgid "There is an update."
+msgstr "Yra naujienų."
+
+msgid "There is no feedback yet."
+msgstr "Atsiliepimų dar nėra."
+
+msgid "This browser or device mode does not support web notifications."
+msgstr "Ši naršyklė arba įrenginio režimas nepalaiko interneto pranešimų."
+
+msgid "This child may spend points down to %(limit)s. After half of the available credit is used, new reward requests are paused until the balance improves."
+msgstr "Vaikas gali išleisti taškus iki %(limit)s. Išnaudojus pusę kredito, naujų prizų prašymai pristabdomi, kol balansas pagerės."
+
+msgid "This child name is already in use."
+msgstr "Toks vaiko vardas jau naudojamas."
+
+msgid "This code will not be shown again."
+msgstr "Šis kodas daugiau nebus parodytas."
+
+msgid "This email address is already in use."
+msgstr "Šis el. pašto adresas jau naudojamas."
+
+msgid "This operation would exceed the allowed %(limit)s point limit."
+msgstr "Šis veiksmas viršytų leidžiamą %(limit)s taškų limitą."
+
+msgid "This operation would exceed the allowed %(limit)s token limit."
+msgstr "Operacija viršytų leidžiamą %(limit)s tokenų ribą."
+
+msgid "This proposal has already been resolved."
+msgstr "Pasiūlymas jau išspręstas."
+
+msgid "This request has already been resolved."
+msgstr "Prašymas jau išspręstas."
+
+msgid "This reset link is no longer valid or has already been used."
+msgstr "Ši atkūrimo nuoroda nebegalioja arba jau buvo panaudota."
+
+msgid "This reward is already awaiting approval."
+msgstr "Šis prizas jau laukia patvirtinimo."
+
+msgid "This reward is no longer active."
+msgstr "Šis prizas nebeaktyvus."
+
+msgid "This task is already awaiting approval."
+msgstr "Šis darbas jau laukia patvirtinimo."
+
+msgid "This task is no longer active."
+msgstr "Šis darbas nebeaktyvus."
+
+msgid "This task is not awaiting corrections."
+msgstr "Šis darbas nelaukia pataisymų."
+
+msgid "This username is already in use."
+msgstr "Toks prisijungimo vardas jau naudojamas."
+
+msgid "Tidy your room"
+msgstr "Sutvarkyti savo kambarį"
+
+msgid "Title"
+msgstr "Pavadinimas"
+
+msgid "Token amount"
+msgstr "Tokenų kiekis"
+
+msgid "Token history"
+msgstr "Tokenų istorija"
+
+msgid "Token history is empty."
+msgstr "Tokenų istorija dar tuščia."
+
+msgid "Token shop"
+msgstr "Tokenų parduotuvė"
+
+msgid "Token transactions cannot be changed."
+msgstr "Tokenų operacijų keisti negalima."
+
+msgid "Token transactions cannot be deleted."
+msgstr "Tokenų operacijų trinti negalima."
+
+msgid "Tokens"
+msgstr "Tokenai"
+
+msgid "Too many reports were sent. Wait a minute and try again."
+msgstr "Išsiųsta per daug atsiliepimų. Palaukite minutę ir bandykite dar kartą."
+
+msgid "Treat Chest"
+msgstr "Skanėstų skrynėlė"
+
+msgid "Try again"
+msgstr "Bandyti dar kartą"
+
+msgid "Turn sounds off"
+msgstr "Išjungti garsus"
+
+msgid "Turn sounds on"
+msgstr "Įjungti garsus"
+
+msgid "Type"
+msgstr "Tipas"
+
+msgid "Type a task name"
+msgstr "Įvesk darbo pavadinimą"
+
+msgid "Unlock profile"
+msgstr "Atrakinti profilį"
+
+msgid "Up to 150 characters. Letters, numbers, and @ . + - _ are allowed."
+msgstr "Iki 150 simbolių. Galima naudoti raides, skaičius ir ženklus @ . + - _."
+
+msgid "Upload avatar"
+msgstr "Įkelti avatarą"
+
+msgid "Use 0 to disable the photo bonus. The value is captured when a task is submitted."
+msgstr "Įrašykite 0, jei nenorite skirti papildomų taškų už nuotrauką. Reikšmė užfiksuojama pateikiant darbą."
+
+msgid "Use a JPEG, PNG, WebP, HEIC, or HEIF image."
+msgstr "Naudokite JPEG, PNG, WebP, HEIC arba HEIF nuotrauką."
+
+msgid "Used in Lithuanian greetings. Leave blank to generate it automatically."
+msgstr "Naudojama lietuviškuose kreipiniuose. Palikus tuščią bus parinkta automatiškai."
+
+msgid "Used only to award the yearly birthday gift."
+msgstr "Naudojama tik kasmetinei gimtadienio dovanai skirti."
+
+msgid "User %(username)s already exists."
+msgstr "Naudotojas %(username)s jau egzistuoja."
+
+msgid "Username"
+msgstr "Prisijungimo vardas"
+
+msgid "VERSIONS"
+msgstr "VERSIJOS"
+
+msgid "Version"
+msgstr "Versija"
+
+msgid "Vocative name"
+msgstr "Kreipinys"
+
+msgid "We received a request to reset the password for the %(family_display_name)s parent account."
+msgstr "Gavome prašymą pakeisti „%(family_display_name)s“ tėvų paskyros slaptažodį."
+
+msgid "Welcome – %(family_display_name)s"
+msgstr "Sveiki – %(family_display_name)s"
+
+msgid "Welcome, %(family_name)s"
+msgstr "Sveiki, %(family_name)s"
+
+msgid "Welcome, %(name)s!"
+msgstr "Labas, %(name)s!"
+
+msgid "What happened"
+msgstr "Kas nutiko"
+
+msgid "What happened or what would you like?"
+msgstr "Kas nutiko arba ko norėtumėte?"
+
+msgid "What should be improved?"
+msgstr "Ką reikia pataisyti?"
+
+msgid "What's fixed?"
+msgstr "Kas pataisyta?"
+
+msgid "What's new?"
+msgstr "Kas naujo?"
+
+msgid "Who is earning points today?"
+msgstr "Kas šiandien renka taškus?"
+
+msgid "Who is earning tokens today?"
+msgstr "Kas šiandien renka tokenus?"
+
+msgid "Write in the spellbook"
+msgstr "Užrašyti į burtų knygą"
+
+msgid "You can add a photo of the finished task."
+msgstr "Gali pridėti atlikto darbo nuotrauką."
+
+msgid "You can give only points you have already earned."
+msgstr "Gali dovanoti tik jau uždirbtus taškus."
+
+msgid "You can now sign in with your new password."
+msgstr "Dabar galite prisijungti naudodami naują slaptažodį."
+
+msgid "You cannot remove the account you are currently using."
+msgstr "Negalima pašalinti paskyros, kuria dabar esate prisijungę."
+
+msgid "You cannot remove the last active parent account."
+msgstr "Negalima pašalinti paskutinės aktyvios tėvų paskyros."
+
+msgid "You do not have enough points for this reward."
+msgstr "Šiam prizui nepakanka taškų."
+
+msgid "You may add a comment that the child will see."
+msgstr "Galite pridėti komentarą, kurį matys vaikas."
+
+msgid "You received %(amount)s for your birthday"
+msgstr "Gavai %(amount)s gimtadienio proga"
+
+msgid "You received a point gift"
+msgstr "Gavai taškų dovaną"
+
+msgid "Your artwork was sent to the review gallery!"
+msgstr "Tavo kūrinys išsiųstas į vertinimo galeriją!"
+
+msgid "Your point gift was sent."
+msgstr "Tavo taškų dovana išsiųsta."
+
+msgid "Your profile"
+msgstr "Tavo profilis"
+
+msgid "Your reward request was rejected"
+msgstr "Tavo prizo prašymas atmestas"
+
+msgid "Your reward was approved"
+msgstr "Tavo prizas patvirtintas"
+
+msgid "Your task was approved"
+msgstr "Tavo darbas patvirtintas"
+
+msgid "Your task was rejected"
+msgstr "Tavo darbas atmestas"
+
+msgid "Your world is ready."
+msgstr "Tavo pasaulis paruoštas."
+
+msgid "actions"
+msgstr "veiksmai"
+
+msgid "assign penalties"
+msgstr "skirti nuobaudas"
+
+msgid "completed task"
+msgstr "atliktas darbas"
+
+msgid "credit"
+msgstr "kreditas"
+
+msgid "custom award"
+msgstr "kitas įvertinimas"
+
+msgid "family"
+msgstr "šeima"
+
+msgid "family settings"
+msgstr "šeimos nustatymai"
+
+msgid "for a photo"
+msgstr "už nuotrauką"
+
+msgid "hidden"
+msgstr "paslėpta"
+
+msgid "photo bonus"
+msgstr "priedas už nuotrauką"
+
+msgid "visible"
+msgstr "įjungta"
+
+msgid "you"
+msgstr "jūs"
+
+msgid "“%(title)s” deleted."
+msgstr "„%(title)s“ ištrinta."
+
+msgid "“%(title)s” is now %(state)s."
+msgstr "„%(title)s“ dabar %(state)s."
+
+msgid "“%(title)s” updated."
+msgstr "„%(title)s“ atnaujinta."

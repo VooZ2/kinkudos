@@ -1,0 +1,17 @@
+.DS_Store
+.env
+.venv/
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.sqlite3-*
+*.log
+.coverage
+htmlcov/
+dist/
+build/
+staticfiles/
+media/
+secrets/
+backups/
+

@@ -1,0 +1,1 @@
+vaikuapp ALL=(root) NOPASSWD: /usr/local/sbin/kinkudos-diagnose ""

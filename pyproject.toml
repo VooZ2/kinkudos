@@ -1,0 +1,24 @@
+[project]
+name = "kinkudos"
+version = "0.12.2"
+description = "Self-hosted family tasks, points, and rewards PWA"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "KinKudos contributors" }]
+dependencies = [
+  "Django==5.2.16",
+  "argon2-cffi==25.1.0",
+  "gunicorn==26.0.0",
+  "Pillow==12.3.0",
+  "pillow-heif==1.5.0",
+  "pywebpush==2.3.0",
+  "whitenoise==6.12.0",
+]
+
+[project.urls]
+Repository = "https://github.com/example/kinkudos"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

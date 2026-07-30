@@ -1,0 +1,147 @@
+#!/bin/sh
+set -eu
+
+archive=${1:-}
+checksum_file=${2:-}
+version=${3:-}
+project_root=${4:-}
+
+if [ -z "$archive" ] || [ -z "$checksum_file" ] || [ -z "$version" ] || [ -z "$project_root" ]; then
+  echo "Usage: install-release.sh ARCHIVE SHA256_FILE VERSION PROJECT_ROOT" >&2
+  exit 2
+fi
+
+case "$version" in
+  *[!0-9.]*|.*|*..*|*.) echo "Invalid release version: $version" >&2; exit 2 ;;
+esac
+
+archive=$(realpath "$archive")
+checksum_file=$(realpath "$checksum_file")
+project_root=$(realpath "$project_root")
+deploy_dir="$project_root/deploy"
+releases_dir="$project_root/releases"
+release_dir="$releases_dir/$version"
+staging_dir="$releases_dir/.staging-$version-$$"
+image="kinkudos:$version"
+container="kinkudos-app-1"
+
+test -f "$archive"
+test -f "$checksum_file"
+test -d "$deploy_dir"
+test -f "$deploy_dir/compose.yml"
+
+expected_checksum=$(awk 'NR == 1 {print $1}' "$checksum_file")
+actual_checksum=$(sha256sum "$archive" | awk '{print $1}')
+if [ "$actual_checksum" != "$expected_checksum" ]; then
+  echo "Release checksum does not match." >&2
+  exit 1
+fi
+
+mkdir -p "$releases_dir"
+rm -rf -- "$staging_dir"
+mkdir "$staging_dir"
+cleanup() {
+  rm -rf -- "$staging_dir"
+}
+trap cleanup EXIT INT TERM
+
+python3 - "$archive" <<'PY'
+import sys
+import tarfile
+from pathlib import PurePosixPath
+
+with tarfile.open(sys.argv[1], "r:gz") as archive:
+    for member in archive.getmembers():
+        path = PurePosixPath(member.name)
+        if path.is_absolute() or ".." in path.parts or member.issym() or member.islnk():
+            raise SystemExit(f"Unsafe archive member: {member.name}")
+PY
+
+tar -xzf "$archive" --strip-components=1 -C "$staging_dir"
+
+release_version=$(
+  sed -n 's/^version = "\([^"]*\)"$/\1/p' "$staging_dir/pyproject.toml" | head -n 1
+)
+if [ "$release_version" != "$version" ]; then
+  echo "Archive version $release_version does not match requested version $version." >&2
+  exit 1
+fi
+
+python3 "$staging_dir/scripts/verify_release.py"
+
+docker build --pull --tag "$image" "$staging_dir"
+
+docker run --rm \
+  --network none \
+  --entrypoint /bin/sh \
+  --env KINKUDOS_DEBUG=true \
+  --env KINKUDOS_DATABASE_PATH=/tmp/kinkudos-smoke.sqlite3 \
+  "$image" \
+  -c 'python scripts/verify_release.py &&
+      python manage.py migrate --noinput &&
+      python manage.py check'
+
+cd "$deploy_dir"
+docker compose config --quiet
+if ! docker compose config --images | grep -Fx "$image" >/dev/null; then
+  echo "Compose does not reference the release image $image." >&2
+  exit 1
+fi
+
+old_image_id=$(
+  docker inspect "$container" --format '{{.Image}}' 2>/dev/null || true
+)
+
+docker compose exec -T app \
+  python manage.py backup_database --output-dir /app/backups
+
+rm -rf -- "$release_dir"
+mv "$staging_dir" "$release_dir"
+trap - EXIT INT TERM
+
+if ! docker compose up -d --no-build --force-recreate app; then
+  echo "Could not start KinKudos $version." >&2
+  exit 1
+fi
+
+healthy=false
+attempt=0
+while [ "$attempt" -lt 60 ]; do
+  status=$(
+    docker inspect "$container" \
+      --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' \
+      2>/dev/null || true
+  )
+  if [ "$status" = "healthy" ]; then
+    healthy=true
+    break
+  fi
+  attempt=$((attempt + 1))
+  sleep 2
+done
+
+if [ "$healthy" != "true" ]; then
+  docker compose logs --tail=100 app >&2 || true
+  if [ -n "$old_image_id" ]; then
+    docker tag "$old_image_id" "$image"
+    docker compose up -d --no-build --force-recreate app || true
+  fi
+  echo "Health check failed; the previous image was restored when available." >&2
+  exit 1
+fi
+
+ln -sfn "$release_dir" "$project_root/current"
+docker compose exec -T app python scripts/verify_release.py
+docker compose exec -T app python manage.py showmigrations economy
+docker compose ps
+
+# Keep only the successfully deployed source release. The running Docker image
+# and application data are unaffected by removing older source directories.
+for previous_release in "$releases_dir"/*; do
+  if [ ! -d "$previous_release" ] || [ "$previous_release" = "$release_dir" ]; then
+    continue
+  fi
+  rm -rf -- "$previous_release"
+done
+
+echo "KinKudos $version deployed successfully."
