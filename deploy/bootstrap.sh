@@ -60,6 +60,7 @@ fi
 
 mkdir -p \
   "$secrets_dir/backup" \
+  "$secrets_dir/smtp" \
   "$project_root/data" \
   "$project_root/backups" \
   "$project_root/backup-state"

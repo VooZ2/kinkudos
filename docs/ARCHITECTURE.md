@@ -100,9 +100,9 @@ optional screenshot and a review-status workflow.
 Seven built-in themes using KinKudos-authored CSS and no third-party logos or
 assets:
 `neutral`, `magic_academy`, `block_world`, `hero_hq`, `art_studio`,
-`panda_pet`, `robliux`. Themes change colors, typography character,
-illustrative CSS, icons, currency forms, sounds, and short UI copy. The
-game-styled `robliux` theme is not affiliated with or endorsed by Roblox.
+`panda_pet`, `blockville`. Themes change colors, typography character,
+illustrative CSS, icons, currency forms, sounds, and short UI copy. All theme
+names, currencies, and copy are KinKudos-authored and avoid third-party marks.
 
 ## PWA
 `manifest.webmanifest`, dedicated icons, `display: standalone`. The service
@@ -162,6 +162,10 @@ server-administrator operation and is never exposed as a web action. A backup
 configuration is not considered complete until a restore test has succeeded.
 Whole-server backup planning and an offline copy of the repository password
 remain operator responsibilities.
+
+SMTP settings are editable only by the parent administrator after password
+confirmation. The SMTP password is stored in a separately permissioned local
+file under `secrets/`, never in the database, logs, or repository.
 
 ## Versioning
 MIT license, calendar-based `YY.FEATURE.FIX` versioning, and `main` must always

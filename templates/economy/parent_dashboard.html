@@ -289,9 +289,9 @@
           </div>
           <form id="edit-task-{{ item.pk }}" method="post" action="{% url 'parent_edit_catalog' 'task' item.pk %}" class="catalog-edit-form stack-form" hidden>
             {% csrf_token %}
-            <label>{% translate "Task" %}<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
-            <label>{% translate "Points" %}<input class="field-control" name="reward" type="number" min="1" value="{{ item.reward }}" required></label>
-            <label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
+            <label>{% translate "Task" %}:<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
+            <label>{% translate "Points" %}:<input class="field-control" name="reward" type="number" min="1" value="{{ item.reward }}" required></label>
+            <label>{% translate "Icon" %}:<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
             <div class="form-actions">
               <button class="button button-primary" type="submit">{% translate "Save" %}</button>
               <button class="button button-danger" type="submit" formaction="{% url 'parent_delete_catalog' 'task' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete task “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
@@ -318,9 +318,9 @@
           </div>
           <form id="edit-penalty-{{ item.pk }}" method="post" action="{% url 'parent_edit_catalog' 'penalty' item.pk %}" class="catalog-edit-form stack-form" hidden>
             {% csrf_token %}
-            <label>{% translate "Penalty" %}<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
-            <label>{% translate "Points" %}<input class="field-control" name="amount" type="number" min="1" value="{{ item.amount|absolute }}" required></label>
-            <label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
+            <label>{% translate "Penalty" %}:<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
+            <label>{% translate "Points" %}:<input class="field-control" name="amount" type="number" min="1" value="{{ item.amount|absolute }}" required></label>
+            <label>{% translate "Icon" %}:<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
             <div class="form-actions">
               <button class="button button-primary" type="submit">{% translate "Save" %}</button>
               <button class="button button-danger" type="submit" formaction="{% url 'parent_delete_catalog' 'penalty' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete penalty “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
@@ -347,9 +347,9 @@
           </div>
           <form id="edit-reward-{{ item.pk }}" method="post" action="{% url 'parent_edit_catalog' 'reward' item.pk %}" class="catalog-edit-form stack-form" hidden>
             {% csrf_token %}
-            <label>{% translate "Reward" %}<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
-            <label>{% translate "Points" %}<input class="field-control" name="cost" type="number" min="1" value="{{ item.cost }}" required></label>
-            <label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
+            <label>{% translate "Reward" %}:<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
+            <label>{% translate "Points" %}:<input class="field-control" name="cost" type="number" min="1" value="{{ item.cost }}" required></label>
+            <label>{% translate "Icon" %}:<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
             <div class="form-actions">
               <button class="button button-primary" type="submit">{% translate "Save" %}</button>
               <button class="button button-danger" type="submit" formaction="{% url 'parent_delete_catalog' 'reward' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete reward “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
@@ -370,13 +370,59 @@
 <section id="parent-settings" class="parent-panel" data-parent-panel="settings" hidden>
 <section class="content-section">
   <div class="section-heading"><h2>{% translate "Settings" %}</h2></div>
+  <div class="section-heading subsection-heading"><h2>{% translate "Family settings" %}</h2></div>
   <article class="panel family-preferences">
-    <h3>{% translate "Project settings" %}</h3>
     <form method="post" action="{% url 'parent_update_family_preferences' %}" class="stack-form">
-      {% csrf_token %}{{ family_preferences_form.as_p }}
+      {% csrf_token %}
+      <fieldset class="settings-group">
+        <legend>{% translate "General" %}</legend>
+        <p>{{ family_preferences_form.family_name.label_tag }}{{ family_preferences_form.family_name }}{{ family_preferences_form.family_name.help_text }}</p>
+      </fieldset>
+      <fieldset class="settings-group">
+        <legend>{% translate "Children and points" %}</legend>
+        <p>{{ family_preferences_form.photo_bonus_points.label_tag }}{{ family_preferences_form.photo_bonus_points }}{{ family_preferences_form.photo_bonus_points.help_text }}</p>
+        <p>{{ family_preferences_form.birthday_points.label_tag }}{{ family_preferences_form.birthday_points }}{{ family_preferences_form.birthday_points.help_text }}</p>
+      </fieldset>
+      <fieldset class="settings-group">
+        <legend>{% translate "Privacy and retention" %}</legend>
+        <p>{{ family_preferences_form.evidence_retention_days.label_tag }}{{ family_preferences_form.evidence_retention_days }}{{ family_preferences_form.evidence_retention_days.help_text }}</p>
+        <p>{{ family_preferences_form.feedback_screenshot_retention_days.label_tag }}{{ family_preferences_form.feedback_screenshot_retention_days }}{{ family_preferences_form.feedback_screenshot_retention_days.help_text }}</p>
+      </fieldset>
       <button class="button button-primary" type="submit">{% translate "Save settings" %}</button>
     </form>
   </article>
+  <div class="section-heading subsection-heading"><h2>{% translate "Email" %}</h2></div>
+  <article class="panel email-panel">
+    <div class="backup-heading">
+      <div>
+        <h3>{% translate "Email notifications" %}</h3>
+        <p class="help-text">{% translate "SMTP is used for password recovery and optional feedback notifications." %}</p>
+      </div>
+      <span class="status-pill">{% if smtp_status.enabled %}{% translate "Enabled" %}{% else %}{% translate "Disabled" %}{% endif %}</span>
+    </div>
+    {% if smtp_status.enabled %}
+      <dl class="backup-status-grid">
+        <div><dt>{% translate "SMTP server" %}</dt><dd>{{ smtp_status.host }}:{{ smtp_status.port }}</dd></div>
+        <div><dt>{% translate "Sender email address" %}</dt><dd>{{ smtp_status.from_email }}</dd></div>
+        <div><dt>{% translate "Feedback recipient email address" %}</dt><dd>{{ smtp_status.feedback_email }}</dd></div>
+      </dl>
+    {% endif %}
+    {% if user.is_staff %}
+      <button class="button button-secondary" type="button" data-open-dialog="smtp-settings-dialog">{% translate "Edit email settings" %}</button>
+      <dialog id="smtp-settings-dialog" class="action-dialog backup-dialog">
+        <button class="dialog-close" type="button" data-close-dialog>×</button>
+        <h2>{% translate "Email setup" %}</h2>
+        <p class="danger-warning">{% translate "Email credentials are sensitive. Your parent password is required and the SMTP password is never displayed." %}</p>
+        <form method="post" action="{% url 'parent_configure_smtp' %}" class="stack-form">
+          {% csrf_token %}{{ smtp_settings_form.as_p }}
+          <button class="button button-primary" type="submit">{% translate "Verify and save" %}</button>
+        </form>
+      </dialog>
+    {% else %}
+      <p class="help-text">{% translate "Email setup can be changed only by a parent administrator." %}</p>
+    {% endif %}
+  </article>
+  <div class="section-heading subsection-heading"><h2>{% translate "Backup settings" %}</h2></div>
   <article class="panel backup-panel">
     <div class="backup-heading">
       <div>

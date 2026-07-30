@@ -123,7 +123,7 @@ class ThemeAndViewTests(TestCase):
                 Theme.HERO_HQ: ("ženklelis", "ženkleliai", "ženklelių"),
                 Theme.ART_STUDIO: ("perlas", "perlai", "perlų"),
                 Theme.PANDA_PET: ("bambukas", "bambukai", "bambukų"),
-                Theme.ROBLIUX: ("robliukas", "robliukai", "robliukų"),
+                Theme.BLOCKVILLE: ("kubelis", "kubeliai", "kubelių"),
             }.items():
                 self.assertEqual(currency_unit(1, theme), forms[0])
                 self.assertEqual(currency_unit(5, theme), forms[1])
@@ -150,11 +150,11 @@ class ThemeAndViewTests(TestCase):
         self.assertContains(response, reverse("child_set_birth_date"))
         self.assertContains(response, "Hero Missions")
 
-    def test_robliux_theme_has_currency_and_game_copy(self):
+    def test_blockville_theme_has_currency_and_game_copy(self):
         child = ChildProfile.objects.create(
             name="Theme tester",
             balance=12,
-            theme=Theme.ROBLIUX,
+            theme=Theme.BLOCKVILLE,
             theme_selected=True,
         )
         Task.objects.create(title="Test quest", reward=5)
@@ -162,7 +162,7 @@ class ThemeAndViewTests(TestCase):
         session["child_id"] = child.pk
         session.save()
         response = self.client.get(reverse("child_dashboard"))
-        self.assertContains(response, "theme-robliux")
-        self.assertContains(response, "Obby Quests")
-        self.assertContains(response, "Complete Obby!")
-        self.assertContains(response, "<strong>R$ 12</strong><span>Robliux</span>", html=True)
+        self.assertContains(response, "theme-blockville")
+        self.assertContains(response, "Block quests")
+        self.assertContains(response, "Complete challenge")
+        self.assertContains(response, "<strong>12</strong><span>cubes</span>", html=True)

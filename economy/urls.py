@@ -36,6 +36,7 @@ from .views import (
     parent_assign_penalty,
     parent_award_task,
     parent_configure_backup,
+    parent_configure_smtp,
     parent_create_catalog,
     parent_create_child_account,
     parent_create_parent_account,
@@ -255,6 +256,11 @@ urlpatterns = [
         "tevai/nustatymai/kopijos/",
         parent_configure_backup,
         name="parent_configure_backup",
+    ),
+    path(
+        "tevai/nustatymai/el-pastas/",
+        parent_configure_smtp,
+        name="parent_configure_smtp",
     ),
     path(
         "tevai/nustatymai/kopijos/paleisti/",

@@ -56,8 +56,8 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 norimo diegti leidimo reikšmėmis:
 
 ```bash
-version=26.0.0
-repository=OWNER/REPOSITORY
+version=26.1.0
+repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
 sha256sum -c "kinkudos-$version.tar.gz.sha256"
@@ -126,7 +126,12 @@ išsaugotus atsiliepimus. Slaptažodis saugomas
 `../secrets/smtp_password` faile su `0600` teisėmis, terminale nerodomas ir
 nepatenka į komandų istoriją.
 
-Kol SMTP nesukonfigūruotas, el. pašto funkcija yra išjungta.
+Kol SMTP nesukonfigūruotas, el. pašto funkcija yra išjungta. Vėliau tėvų
+administratorius tuos pačius duomenis gali patikrinti ir pakeisti skiltyje
+„Nustatymai“ → „El. paštas“, patvirtinęs pakeitimą dabartiniu savo
+slaptažodžiu. Iš UI valdomos reikšmės, įskaitant slaptažodį, saugomos
+`../secrets/smtp/settings.json` faile su `0600` teisėmis ir niekada
+neįrašomos į programos duomenų bazę.
 
 Prisijungę tėvai ir vaikai problemą arba pasiūlymą gali pateikti plaukiojančiu
 vabalo mygtuku. KinKudos pirmiausia išsaugo įrašą, o tik tada bando išsiųsti

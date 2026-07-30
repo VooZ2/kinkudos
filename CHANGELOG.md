@@ -5,6 +5,33 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.1.0] - 2026-07-30
+
+### Added
+
+- Parent administrators can verify and update SMTP settings from the Settings
+  page; the SMTP password remains in a local permission-restricted secret file.
+- The family name can now be edited from the general family settings.
+
+### Changed
+
+- Settings are organized into family, child and point, privacy, email, backup,
+  account, and feedback sections.
+- The seventh child theme is now the original Blockville theme with cube
+  currency and trademark-neutral interface copy.
+
+### Fixed
+
+- Backup storage verification retries temporary Docker DNS failures and replaces
+  low-level resolver output with an actionable endpoint message.
+- Task, penalty, and reward edit forms consistently show colons after labels.
+
+### Security
+
+- Sensitive SMTP and backup credential changes require the current password of
+  the parent administrator making the change. Account editing remains under its
+  existing authentication rules.
+
 ## [26.0.0] - 2026-07-30
 
 ### Changed
@@ -39,8 +66,8 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ### Added
 
-- Robliux World is a seventh child theme with a dark game-style interface,
-  Robliux currency forms, Obby and Gamepass wording, tactile controls,
+- Blockville World is a seventh child theme with a dark game-style interface,
+  cube currency forms, challenge and prize wording, tactile controls,
   neon confetti, and its own completion sound in English and Lithuanian.
 - Parent Settings now show backup provider, repository, last successful
   remote copy, integrity-check time, current activity, errors, and a

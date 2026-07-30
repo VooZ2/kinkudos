@@ -1,10 +1,10 @@
 import os
 from pathlib import Path
+
 from django.utils.translation import gettext_lazy as _
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
-APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "26.0.0")
+APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "26.1.0")
 
 
 def env_bool(name, default=False):
@@ -136,11 +136,7 @@ CHILD_SESSION_SECONDS = int(os.environ.get("KINKUDOS_CHILD_SESSION_SECONDS", "17
 PASSWORD_RESET_TIMEOUT = int(os.environ.get("KINKUDOS_PASSWORD_RESET_TIMEOUT", "3600"))
 
 EMAIL_ENABLED = env_bool("KINKUDOS_EMAIL_ENABLED", False)
-EMAIL_BACKEND = (
-    "django.core.mail.backends.smtp.EmailBackend"
-    if EMAIL_ENABLED
-    else "django.core.mail.backends.console.EmailBackend"
-)
+EMAIL_BACKEND = "economy.email_backend.EmailBackend"
 EMAIL_HOST = os.environ.get("KINKUDOS_EMAIL_HOST", "localhost")
 EMAIL_PORT = int(os.environ.get("KINKUDOS_EMAIL_PORT", "587"))
 EMAIL_USE_TLS = env_bool("KINKUDOS_EMAIL_USE_TLS", True)
@@ -154,6 +150,10 @@ DEFAULT_FROM_EMAIL = os.environ.get(
 )
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 FEEDBACK_EMAIL = os.environ.get("KINKUDOS_FEEDBACK_EMAIL", "").strip()
+SMTP_CONFIG_PATH = os.environ.get(
+    "KINKUDOS_SMTP_CONFIG_PATH",
+    str(BASE_DIR / "secrets" / "smtp" / "settings.json"),
+)
 BACKUP_AGENT_URL = os.environ.get("KINKUDOS_BACKUP_AGENT_URL", "").strip()
 BACKUP_AGENT_TOKEN = secret_value("KINKUDOS_BACKUP_AGENT_TOKEN")
 

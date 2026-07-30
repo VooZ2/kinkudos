@@ -68,7 +68,7 @@ class Theme(models.TextChoices):
     HERO_HQ = "hero_hq", _("Superhero HQ")
     ART_STUDIO = "art_studio", _("Art Studio")
     PANDA_PET = "panda_pet", _("Panda World")
-    ROBLIUX = "robliux", _("Robliux World")
+    BLOCKVILLE = "blockville", _("Blockville World")
 
 
 class BackupAuditEvent(models.Model):

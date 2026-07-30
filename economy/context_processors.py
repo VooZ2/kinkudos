@@ -1,7 +1,7 @@
 from django.conf import settings
 
+from .email_config import smtp_config
 from .models import EMOJI_SUGGESTIONS, FamilySettings
-
 
 PUBLIC_HEADER_ROUTES = {
     "home",
@@ -17,6 +17,7 @@ PUBLIC_HEADER_ROUTES = {
 
 
 def family_context(request):
+    email = smtp_config()
     url_name = request.resolver_match.url_name if request.resolver_match else ""
     public_header = (
         url_name in PUBLIC_HEADER_ROUTES
@@ -30,9 +31,9 @@ def family_context(request):
         "public_header": public_header,
         "emoji_suggestions": EMOJI_SUGGESTIONS,
         "vapid_public_key": settings.VAPID_PUBLIC_KEY,
-        "email_enabled": settings.EMAIL_ENABLED,
+        "email_enabled": bool(email.get("enabled")),
         "feedback_email_configured": bool(
-            settings.EMAIL_ENABLED and settings.FEEDBACK_EMAIL
+            email.get("enabled") and email.get("feedback_email")
         ),
         "feedback_available": bool(
             request.user.is_authenticated or request.session.get("child_id")
