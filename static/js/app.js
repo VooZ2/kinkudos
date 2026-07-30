@@ -244,8 +244,11 @@ function playThemeSound(effect = "task", preparedContext = null) {
       : document.body.classList.contains("theme-hero_hq") ? "hero"
         : document.body.classList.contains("theme-art_studio") ? "art"
           : document.body.classList.contains("theme-panda_pet") ? "panda" : "neutral";
+  const resolvedTheme = document.body.classList.contains("theme-robliux") ? "robliux" : theme;
   const isReward = effect === "reward";
-  const notes = theme === "hero"
+  const notes = resolvedTheme === "robliux"
+    ? [392, 523, 659, 784]
+    : theme === "hero"
     ? [196, 294, 392, 587]
     : theme === "art"
       ? [523, 659, 784]
@@ -261,7 +264,7 @@ function playThemeSound(effect = "task", preparedContext = null) {
   notes.forEach((frequency, index) => {
     const oscillator = context.createOscillator();
     const gain = context.createGain();
-    oscillator.type = ["block", "hero"].includes(theme) ? "square" : ["magic", "art", "panda"].includes(theme) ? "sine" : "triangle";
+    oscillator.type = ["block", "hero", "robliux"].includes(resolvedTheme) ? "square" : ["magic", "art", "panda"].includes(resolvedTheme) ? "sine" : "triangle";
     oscillator.frequency.value = frequency;
     gain.gain.setValueAtTime(0.0001, context.currentTime);
     const spacing = theme === "magic" && !isReward ? 0.16 : 0.1;

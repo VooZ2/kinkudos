@@ -18,6 +18,7 @@ EXCLUDED_PARTS = {
     ".venv",
     "__pycache__",
     "backups",
+    "backup-state",
     "data",
     "dist",
     "secrets",

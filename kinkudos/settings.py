@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "0.12.4")
+APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "0.13.0")
 
 
 def env_bool(name, default=False):
@@ -154,6 +154,8 @@ DEFAULT_FROM_EMAIL = os.environ.get(
 )
 SERVER_EMAIL = DEFAULT_FROM_EMAIL
 FEEDBACK_EMAIL = os.environ.get("KINKUDOS_FEEDBACK_EMAIL", "").strip()
+BACKUP_AGENT_URL = os.environ.get("KINKUDOS_BACKUP_AGENT_URL", "").strip()
+BACKUP_AGENT_TOKEN = secret_value("KINKUDOS_BACKUP_AGENT_TOKEN")
 
 VAPID_PRIVATE_KEY = os.environ.get("KINKUDOS_VAPID_PRIVATE_KEY_FILE") or os.environ.get(
     "KINKUDOS_VAPID_PRIVATE_KEY",

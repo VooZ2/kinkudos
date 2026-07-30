@@ -5,6 +5,44 @@ Keep a Changelog and the versions follow Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.13.0 BETA] - 2026-07-30
+
+### Added
+
+- Robliux World is a seventh child theme with a dark game-style interface,
+  Robliux currency forms, Obby and Gamepass wording, tactile controls,
+  neon confetti, and its own completion sound in English and Lithuanian.
+- Parent Settings now show backup provider, repository, last successful
+  remote copy, integrity-check time, current activity, errors, and a
+  seven-day health indicator.
+- Parent administrators can verify Backblaze B2 or generic S3-compatible
+  credentials and request an immediate encrypted backup from the web UI.
+- A daily isolated backup agent copies the consistent SQLite database and
+  private uploaded media, applies 31-day retention, and runs `restic check`.
+- Dedicated English and Lithuanian Orange Pi ARM64 installation guides cover
+  first-family setup, verification, backups, and upgrades.
+
+### Changed
+
+- The interactive installer now asks for language, hostname, allowed private
+  networks, first-parent credentials, family name, and child profiles without
+  embedding deployment-specific defaults.
+- Existing provider-neutral `restic.env` and repository passwords are
+  preserved and detected when upgrading from 0.12.4.
+- The Lithuanian TODO now contains only outstanding device checks, restore
+  tests, deferred providers, and newly identified work.
+
+### Security
+
+- Backup credentials are owned by an isolated container without a published
+  port or Docker socket; the web application receives only sanitized status
+  and never receives stored provider secrets.
+- Backup configuration and manual requests are limited to the first parent
+  administrator, require password confirmation for credential changes, and
+  are audited without secret values.
+- Family-specific names and a deployment-specific diagnostics username were
+  removed from the current repository tree and demo/test data is generic.
+
 ## [0.12.4 BETA] - 2026-07-30
 
 ### Changed

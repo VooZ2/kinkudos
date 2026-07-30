@@ -30,19 +30,19 @@ from economy.push import (
 class ChildDecisionPushTests(TestCase):
     def setUp(self):
         self.parent = get_user_model().objects.create_user("parent")
-        self.child = ChildProfile.objects.create(name="Gabija", theme_selected=True)
-        self.other_child = ChildProfile.objects.create(name="Augustas", theme_selected=True)
+        self.child = ChildProfile.objects.create(name="Child One", theme_selected=True)
+        self.other_child = ChildProfile.objects.create(name="Child Two", theme_selected=True)
         PushSubscription.objects.create(
             child=self.child,
-            endpoint="https://push.example/gabija",
-            p256dh="gabija-key",
-            auth="gabija-auth",
+            endpoint="https://push.example/child_one",
+            p256dh="child_one-key",
+            auth="child_one-auth",
         )
         PushSubscription.objects.create(
             child=self.other_child,
-            endpoint="https://push.example/augustas",
-            p256dh="augustas-key",
-            auth="augustas-auth",
+            endpoint="https://push.example/child_two",
+            p256dh="child_two-key",
+            auth="child_two-auth",
         )
         PushSubscription.objects.create(
             user=self.parent,
@@ -67,7 +67,7 @@ class ChildDecisionPushTests(TestCase):
         webpush.assert_called_once()
         self.assertEqual(
             webpush.call_args.kwargs["subscription_info"]["endpoint"],
-            "https://push.example/gabija",
+            "https://push.example/child_one",
         )
         payload = json.loads(webpush.call_args.kwargs["data"])
         self.assertEqual(payload["title"], "Tavo darbas patvirtintas")
@@ -107,7 +107,7 @@ class ChildDecisionPushTests(TestCase):
         webpush.assert_called_once()
         payload = json.loads(webpush.call_args.kwargs["data"])
         self.assertEqual(payload["title"], "Gavai dovanų!")
-        self.assertEqual(payload["body"], "Augustas tau padovanojo perlų.")
+        self.assertEqual(payload["body"], "Child Two tau padovanojo perlų.")
 
     @patch("economy.push.webpush")
     def test_reward_rejection_includes_reason_and_targets_only_child(self, webpush):

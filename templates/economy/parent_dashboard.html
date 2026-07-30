@@ -377,6 +377,57 @@
       <button class="button button-primary" type="submit">{% translate "Save settings" %}</button>
     </form>
   </article>
+  <article class="panel backup-panel">
+    <div class="backup-heading">
+      <div>
+        <h3>{% translate "Backups" %}</h3>
+        <p class="help-text">{% translate "Daily encrypted copies protect the family database and uploaded photos." %}</p>
+      </div>
+      <span class="backup-health {% if backup_status.is_fresh %}backup-health-good{% else %}backup-health-stale{% endif %}">
+        <span aria-hidden="true"></span>
+        {% if backup_status.is_fresh %}{% translate "Current" %}{% else %}{% translate "Attention needed" %}{% endif %}
+      </span>
+    </div>
+    {% if not backup_status.available %}
+      <p class="feedback-email-warning">{% translate "The backup service is unavailable. Ask the server administrator to check the backup container." %}</p>
+    {% else %}
+      <dl class="backup-status-grid">
+        <div><dt>{% translate "Provider" %}</dt><dd>{{ backup_status.provider|default:"—" }}</dd></div>
+        <div><dt>{% translate "Repository" %}</dt><dd>{{ backup_status.target|default:"—" }}</dd></div>
+        <div><dt>{% translate "Last successful backup" %}</dt><dd>{% if backup_status.last_success %}{{ backup_status.last_success|date:"Y-m-d H:i" }}{% else %}{% translate "No successful backup yet" %}{% endif %}</dd></div>
+        <div><dt>{% translate "Last integrity check" %}</dt><dd>{% if backup_status.last_check %}{{ backup_status.last_check|date:"Y-m-d H:i" }}{% else %}—{% endif %}</dd></div>
+      </dl>
+      {% if backup_status.running %}<p class="status-pill">{% translate "Backup in progress..." %}</p>{% endif %}
+      {% if backup_status.error %}<p class="feedback-email-warning">{{ backup_status.error }}</p>{% endif %}
+      {% if user.is_staff %}
+        <div class="backup-actions">
+          {% if backup_status.configured %}
+            <form method="post" action="{% url 'parent_run_backup' %}">{% csrf_token %}
+              <button class="button button-primary" type="submit"{% if backup_status.running %} disabled{% endif %}>{% translate "Back up now" %}</button>
+            </form>
+          {% endif %}
+          <button class="button button-secondary" type="button" data-open-dialog="backup-settings-dialog">{% translate "Edit backup setup" %}</button>
+        </div>
+        <dialog id="backup-settings-dialog" class="action-dialog backup-dialog">
+          <button class="dialog-close" type="button" data-close-dialog>×</button>
+          <h2>{% translate "Backup setup" %}</h2>
+          <p class="feedback-email-warning">{% translate "Incorrect changes can stop future backups. Continue only if you understand the storage credentials and have saved the repository password outside this server." %}</p>
+          <form method="post" action="{% url 'parent_configure_backup' %}" class="stack-form">
+            {% csrf_token %}{{ backup_settings_form.as_p }}
+            <button class="button button-primary" type="submit">{% translate "Verify and save" %}</button>
+          </form>
+        </dialog>
+      {% else %}
+        <p class="help-text">{% translate "Backup setup can be changed only by a parent administrator." %}</p>
+      {% endif %}
+    {% endif %}
+    {% if backup_audit_events %}
+      <details class="backup-audit">
+        <summary>{% translate "Recent backup actions" %}</summary>
+        <ul>{% for event in backup_audit_events %}<li>{{ event.created_at|date:"Y-m-d H:i" }} · {{ event.get_action_display }}{% if event.actor %} · {{ event.actor|user_display_name }}{% endif %}</li>{% endfor %}</ul>
+      </details>
+    {% endif %}
+  </article>
   <div class="section-heading subsection-heading"><h2>{% translate "Accounts" %}</h2></div>
   <h3 class="account-section-title">{% translate "Create new accounts" %}</h3>
   <div class="account-grid">

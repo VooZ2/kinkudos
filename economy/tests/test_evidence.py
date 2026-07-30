@@ -25,7 +25,7 @@ class TaskEvidenceWorkflowTests(TestCase):
             is_staff=True,
         )
         self.child = ChildProfile.objects.create(
-            name="Augustas",
+            name="Child Two",
             theme="block_world",
             theme_selected=True,
         )

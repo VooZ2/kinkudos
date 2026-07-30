@@ -6,6 +6,45 @@ Formatas paremtas „Keep a Changelog“, o versijos atitinka semantinį versija
 
 ## [Unreleased]
 
+## [0.13.0 BETA] - 2026-07-30
+
+### Pridėta
+
+- „Robliux Pasaulis“ tapo septintąja vaiko tema: pridėta tamsi žaidimo
+  sąsaja, robliukų linksniai, „Obby“ ir „Gamepass“ tekstai, paspaudžiami
+  mygtukai, neoninis konfeti bei atskiras garsas lietuvių ir anglų kalbomis.
+- Tėvų nustatymuose rodoma atsarginių kopijų saugykla, paskutinė sėkminga
+  nuotolinė kopija, vientisumo patikra, vykdomas darbas, klaidos ir septynių
+  dienų būsenos indikatorius.
+- Tėvų administratorius gali patikrinti „Backblaze B2“ arba bendrinės S3
+  saugyklos duomenis ir paleisti rankinę šifruotą kopiją.
+- Izoliuota kasdienė kopijų tarnyba kopijuoja nuoseklią SQLite DB ir privačias
+  nuotraukas, taiko 31 dienos saugojimą bei paleidžia `restic check`.
+- Pridėtos LT ir EN ARM64 „Orange Pi“ diegimo, pirmos šeimos, patikros, kopijų
+  ir atnaujinimo instrukcijos.
+
+### Pakeista
+
+- Diegimo vedlys dabar klausia kalbos, domeno, leidžiamų privačių tinklų,
+  pirmo tėvo duomenų, šeimos pavadinimo bei vaikų profilių ir nenaudoja
+  konkrečios instaliacijos numatytųjų reikšmių.
+- Atnaujinant iš 0.12.4 išsaugomi ir atpažįstami esami bendriniai
+  `restic.env` bei repozitorijos slaptažodžiai.
+- TODO paliktos tik neatliktos įrenginių ir atkūrimo patikros, atidėti
+  tiekėjai bei naujai aptikti darbai.
+
+### Saugumas
+
+- Kopijų paslaptis valdo izoliuotas konteineris be viešo prievado ir Docker
+  socket; žiniatinklio programa gauna tik išvalytą būseną ir neatgauna
+  išsaugotų tiekėjo paslapčių.
+- Kopijų konfigūraciją ir rankinį paleidimą gali valdyti tik pirmasis tėvų
+  administratorius, keičiant prisijungimus dar kartą tikrinamas slaptažodis,
+  o audite paslaptys nesaugomos.
+- Iš dabartinio repozitorijos medžio pašalinti šeimai būdingi vardai ir
+  konkrečios instaliacijos diagnostikos naudotojas; demo bei testų duomenys
+  tapo bendriniai.
+
 ## [0.12.4 BETA] - 2026-07-30
 
 ### Pakeista

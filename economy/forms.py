@@ -1,23 +1,22 @@
 from django import forms
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm, UserCreationForm
-from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 from django.utils.text import format_lazy
+from django.utils.translation import gettext_lazy as _
 from pillow_heif import register_heif_opener
 
 from .models import (
     BirthDateChangeRequest,
     ChildProfile,
+    FamilySettings,
     FeedbackReport,
     FeedbackStatus,
-    FamilySettings,
     PenaltyTemplate,
     Proposal,
-    Reward,
     RequestStatus,
+    Reward,
     Task,
     Theme,
 )
@@ -276,6 +275,7 @@ class FirstThemeForm(StyledFormMixin, forms.Form):
             (Theme.HERO_HQ, format_lazy("🛡️ {}", _("Superhero HQ"))),
             (Theme.ART_STUDIO, format_lazy("🎨 {}", _("Art Studio"))),
             (Theme.PANDA_PET, format_lazy("🐼 {}", _("Panda World"))),
+            (Theme.ROBLIUX, format_lazy("R$ {}", _("Robliux World"))),
         ],
         widget=forms.RadioSelect,
     )
@@ -436,6 +436,48 @@ class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
                 "Only screenshots from resolved feedback are removed automatically."
             ),
         }
+
+
+class BackupSettingsForm(StyledFormMixin, forms.Form):
+    provider = forms.ChoiceField(
+        label=_("Storage provider"),
+        choices=[
+            ("backblaze_s3", _("Backblaze B2 (recommended)")),
+            ("s3", _("S3-compatible storage")),
+        ],
+    )
+    endpoint = forms.CharField(
+        label=_("S3 endpoint"),
+        max_length=255,
+        help_text=_("For example: s3.eu-central-003.backblazeb2.com"),
+    )
+    bucket = forms.CharField(label=_("Bucket name"), max_length=128)
+    region = forms.CharField(
+        label=_("Region"),
+        max_length=64,
+        required=False,
+        help_text=_("Optional for providers that do not require a region."),
+    )
+    access_key_id = forms.CharField(label=_("Application key ID"), max_length=255)
+    secret_access_key = forms.CharField(
+        label=_("Application key"),
+        max_length=512,
+        widget=forms.PasswordInput(render_value=False),
+    )
+    current_password = forms.CharField(
+        label=_("Your current parent password"),
+        widget=forms.PasswordInput(render_value=False),
+        help_text=_("Required before changing backup credentials."),
+    )
+
+    def clean_endpoint(self):
+        return self.cleaned_data["endpoint"].strip().removeprefix("https://").rstrip("/")
+
+    def clean_bucket(self):
+        bucket = self.cleaned_data["bucket"].strip().strip("/")
+        if "/" in bucket or any(character.isspace() for character in bucket):
+            raise forms.ValidationError(_("Enter a valid bucket name."))
+        return bucket
 
 
 class BirthDateForm(StyledFormMixin, forms.ModelForm):

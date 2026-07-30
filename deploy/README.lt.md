@@ -11,8 +11,8 @@ kinkudos/
 
 ## Paslaptys
 
-`secrets` kataloge saugomi Django, VAPID, atsarginių kopijų ir, jei įjungtas
-el. paštas, SMTP slaptažodžiai. Failai turi priklausyti serverio
+`secrets` kataloge saugomi Django, VAPID, atsarginių kopijų tarnybos,
+`restic` ir, jei įjungtas el. paštas, SMTP slaptažodžiai. Failai turi priklausyti serverio
 administratoriui, turėti `0600` teises ir niekada nepatekti į Git.
 
 ## Diegimas
@@ -34,9 +34,10 @@ cd /kelias/iki/kinkudos/deploy
 ./bootstrap.sh
 ```
 
-Diegiklis paprašo pasirinkti anglų arba lietuvių kalbą, sugeneruoja trūkstamas
-paslaptis, sukuria `.env`, pastato atvaizdą ir gali sukurti pirmąją šeimą.
-Jau esančių paslapčių jis neperrašo.
+Diegiklis paprašo pasirinkti kalbą, domeną, leidžiamus privačius tinklus ir ar
+iš karto kurti šeimą. Šeimos vedlys paprašo pirmos tėvų paskyros, šeimos
+pavadinimo bei vaikų profilių. Sugeneruojamos trūkstamos paslaptys, sukuriamas
+`.env` ir pastatomi atvaizdai. Jau esančių paslapčių diegiklis neperrašo.
 
 Jei šeimos kūrimą praleidote:
 
@@ -47,21 +48,21 @@ docker compose exec app python manage.py setup_family --language lt
 Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tame
 įrenginyje.
 
-## Atnaujinimas į 0.12.4
+## Atnaujinimas į 0.13.0
 
 Šias komandas paleiskite diegimo šakniniame kataloge, kuriame yra `app`,
 `deploy`, `data` ir `secrets`:
 
 ```bash
-gh release download v0.12.4 --repo VooZ2/kinkudos \
-  --pattern 'kinkudos-0.12.4.tar.gz*'
-sha256sum -c kinkudos-0.12.4.tar.gz.sha256
-tar -xOf kinkudos-0.12.4.tar.gz \
-  kinkudos-0.12.4/deploy/compose.yml > deploy/compose.yml
+gh release download v0.13.0 --repo VooZ2/kinkudos \
+  --pattern 'kinkudos-0.13.0.tar.gz*'
+sha256sum -c kinkudos-0.13.0.tar.gz.sha256
+tar -xOf kinkudos-0.13.0.tar.gz \
+  kinkudos-0.13.0/deploy/compose.yml > deploy/compose.yml
 ./deploy/install-release.sh \
-  "$PWD/kinkudos-0.12.4.tar.gz" \
-  "$PWD/kinkudos-0.12.4.tar.gz.sha256" \
-  0.12.4 \
+  "$PWD/kinkudos-0.13.0.tar.gz" \
+  "$PWD/kinkudos-0.13.0.tar.gz.sha256" \
+  0.13.0 \
   "$PWD"
 ```
 
@@ -72,16 +73,27 @@ programą ir patikrina konteinerio būklę. Leidimo archyve nėra `deploy/.env`,
 
 ## Kopijos
 
-Prieš pirmą išorinę `restic` kopiją inicializuokite repozitoriją, tada
-paleiskite kopijos skriptą:
+Izoliuotas `backup-agent` sukuria nuoseklią SQLite kopiją, įtraukia įkeltas
+nuotraukas ir šifruotus snapshot siunčia į „Backblaze B2“ arba kitą su S3
+suderinamą saugyklą. Ją pirmoji tėvų administratoriaus paskyra nustato
+„Nustatymai → Atsarginės kopijos“. Atnaujinant esamas
+`secrets/restic.env` perkeliamas į `secrets/backup/restic.env`, o
+`secrets/restic_password` išsaugomas.
+
+Tą pačią patikrintą kopiją serveryje galima paleisti:
 
 ```bash
-docker compose --profile backup run --rm restic init
 ./backup.sh
 ```
 
-Kopijų saugojimo trukmę ir tvarkaraštį pasirenka serverio administratorius.
-Projektas nėra susietas su konkrečiu saugyklos tiekėju.
+Kopijos automatiškai kuriamos kartą per dieną po 03:00 serverio laiku.
+Kitą valandą galima nustatyti `deploy/.env` reikšme `KINKUDOS_BACKUP_HOUR`.
+Vietinės DB ir kasdienės nuotolinės kopijos laikomos 31 dieną; sėkminga būsena
+įrašoma tik praėjus `restic check`.
+
+`secrets/restic_password` kopiją laikykite atskirai nuo serverio. Atkūrimas
+sąmoningai paliktas serverio administratoriui ir turi būti išbandytas atskirame
+kataloge.
 
 ## Slaptažodžio atkūrimas el. paštu
 
@@ -123,3 +135,7 @@ sudo ./install-maintenance.sh
 Diagnostikos naudotojui nesuteikite narystės Docker grupėje. Administratorius
 gali įdiegti root valdomą `kinkudos-diagnose` komandą, kuri parodo tik KinKudos
 konteinerio būseną ir paskutines 300 žurnalo eilučių.
+
+```bash
+sudo ./install-diagnostics.sh SISTEMOS_NAUDOTOJAS
+```

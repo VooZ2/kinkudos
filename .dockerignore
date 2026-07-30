@@ -3,6 +3,7 @@
 .venv
 data
 backups
+backup-state
 secrets
 staticfiles
 release-*

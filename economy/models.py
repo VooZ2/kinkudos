@@ -7,7 +7,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
-from django.utils.translation import get_language, gettext_lazy as _
+from django.utils.translation import get_language
+from django.utils.translation import gettext_lazy as _
 
 
 class FamilySettings(models.Model):
@@ -67,6 +68,28 @@ class Theme(models.TextChoices):
     HERO_HQ = "hero_hq", _("Superhero HQ")
     ART_STUDIO = "art_studio", _("Art Studio")
     PANDA_PET = "panda_pet", _("Panda World")
+    ROBLIUX = "robliux", _("Robliux World")
+
+
+class BackupAuditEvent(models.Model):
+    class Action(models.TextChoices):
+        CONFIGURED = "configured", _("Backup settings configured")
+        MANUAL_RUN = "manual_run", _("Manual backup requested")
+
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="backup_audit_events",
+    )
+    action = models.CharField(max_length=32, choices=Action.choices)
+    provider = models.CharField(max_length=32, blank=True)
+    target = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at", "-pk"]
 
 
 class ChildProfile(models.Model):

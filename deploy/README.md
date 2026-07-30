@@ -20,6 +20,7 @@ The `secrets` directory contains:
 - `vapid_private.pem`;
 - `vapid_public.txt`;
 - `restic_password`;
+- `backup_agent_token`;
 - `restic.env` (only when external `restic` backups are used);
 - `smtp_password` (only when email is enabled).
 
@@ -46,10 +47,11 @@ cd /path/to/kinkudos/deploy
 ./bootstrap.sh
 ```
 
-The installer asks whether the installation language is English or Lithuanian,
-generates missing Django, VAPID, and `restic` secrets, creates `.env`, builds
-the image, and optionally creates the first family. Existing secrets are not
-overwritten.
+The installer asks for English or Lithuanian, hostname, allowed private
+networks, and whether to create the first family. Family setup asks for the
+first parent credentials, family name, and child profiles. It generates
+missing Django, VAPID, backup-agent, and `restic` secrets, creates `.env`, and
+builds the images. Existing secrets are not overwritten.
 
 For an unattended English installation, set:
 
@@ -66,21 +68,21 @@ If initial family creation was skipped:
 docker compose exec app python manage.py setup_family --language en
 ```
 
-## Updating to 0.12.4
+## Updating to 0.13.0
 
 Run these commands from the deployment root (the directory containing
 `app`, `deploy`, `data`, and `secrets`):
 
 ```bash
-gh release download v0.12.4 --repo VooZ2/kinkudos \
-  --pattern 'kinkudos-0.12.4.tar.gz*'
-sha256sum -c kinkudos-0.12.4.tar.gz.sha256
-tar -xOf kinkudos-0.12.4.tar.gz \
-  kinkudos-0.12.4/deploy/compose.yml > deploy/compose.yml
+gh release download v0.13.0 --repo VooZ2/kinkudos \
+  --pattern 'kinkudos-0.13.0.tar.gz*'
+sha256sum -c kinkudos-0.13.0.tar.gz.sha256
+tar -xOf kinkudos-0.13.0.tar.gz \
+  kinkudos-0.13.0/deploy/compose.yml > deploy/compose.yml
 ./deploy/install-release.sh \
-  "$PWD/kinkudos-0.12.4.tar.gz" \
-  "$PWD/kinkudos-0.12.4.tar.gz.sha256" \
-  0.12.4 \
+  "$PWD/kinkudos-0.13.0.tar.gz" \
+  "$PWD/kinkudos-0.13.0.tar.gz.sha256" \
+  0.13.0 \
   "$PWD"
 ```
 
@@ -91,21 +93,26 @@ pass, and verifies container health. The release archive never contains
 
 ## Backups
 
-Initialize the `restic` repository before the first external backup:
+The isolated `backup-agent` creates a consistent SQLite backup, includes
+uploaded media, and sends encrypted snapshots to Backblaze B2 or another
+S3-compatible repository. Configure it as the first parent under
+Settings → Backups. During an upgrade, an existing valid
+`secrets/restic.env` is migrated to `secrets/backup/restic.env`;
+`secrets/restic_password` is preserved.
 
-```bash
-docker compose --profile backup run --rm restic init
-```
-
-Then run:
+To request the same verified backup from the server:
 
 ```bash
 ./backup.sh
 ```
 
-The retention policy and scheduler should be selected by the server
-administrator. The project scripts are provider-neutral and use a standard
-`restic` repository.
+Backups run automatically once per day after 03:00 server time. Set
+`KINKUDOS_BACKUP_HOUR` in `deploy/.env` to choose another hour. Local database
+copies and remote daily snapshots are retained for 31 days. A successful run
+includes `restic check`.
+
+Keep an offline copy of `secrets/restic_password`. Restore is intentionally a
+server-administrator procedure and must be tested in a separate directory.
 
 ## Password reset email
 
@@ -165,3 +172,7 @@ docker compose exec -T app python manage.py purge_task_evidence
 Do not add a diagnostics-only account to the Docker group. An administrator
 can instead install the root-owned `kinkudos-diagnose` command, which exposes only
 the KinKudos container state and its latest 300 log lines.
+
+```bash
+sudo ./install-diagnostics.sh SYSTEM_USER
+```

@@ -5,7 +5,7 @@ theme-based points, and exchange them for rewards. Parents manage the shared
 task, penalty, and reward catalogs and approve requests from a phone, tablet,
 or desktop browser.
 
-- **Current release:** 0.12.4 BETA
+- **Current release:** 0.13.0 BETA
 - **Languages:** English and Lithuanian
 - **Platforms:** ARM64 and AMD64 Linux hosts with Docker
 
@@ -16,9 +16,10 @@ Lithuanian documentation: [README.lt.md](README.lt.md)
 - PIN-based child profiles and password-protected parent accounts.
 - Tasks with an approval workflow and optional private photo evidence.
 - Rewards, penalties, savings goals, point gifts, and birthday awards.
-- Six child themes with their own names, visuals, sounds, and point units.
+- Seven child themes with their own names, visuals, sounds, and point units.
 - Per-device language, sound, and Web Push notification controls.
-- Append-only point history, private local data, and backup helpers.
+- Append-only point history, private local data, and encrypted backup setup
+  with health reporting.
 - Installable PWA support for current desktop and mobile browsers.
 
 KinKudos is currently BETA and is used by one family. Existing installations
@@ -40,6 +41,7 @@ kinkudos/
 ├── deploy/    # active Compose configuration
 ├── data/      # database and uploaded media
 ├── backups/   # local database backups
+├── backup-state/ # backup health state
 └── secrets/   # generated credentials and optional SMTP/restic secrets
 ```
 
@@ -47,10 +49,12 @@ Family data, uploads, databases, backups, `.env` files, and secrets must never
 be committed to Git.
 
 For initial installation and configuration details, see
-[deploy/README.md](deploy/README.md). To install release 0.12.4 on an existing
+[deploy/README.md](deploy/README.md). To install release 0.13.0 on an existing
 KinKudos host, download its archive and checksum from
-[GitHub Releases](https://github.com/VooZ2/kinkudos/releases/tag/v0.12.4), then
+[GitHub Releases](https://github.com/VooZ2/kinkudos/releases/tag/v0.13.0), then
 run the bundled `deploy/install-release.sh` as documented there.
+
+ARM64 Orange Pi instructions: [docs/ORANGE_PI_INSTALL.md](docs/ORANGE_PI_INSTALL.md).
 
 ## Local development
 

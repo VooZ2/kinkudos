@@ -90,6 +90,25 @@ THEME_TEXT = {
         "nav_goals": _("Panda's Dream"),
         "nav_history": _("Panda Tracks"),
     },
+    "robliux": {
+        "submit": _("Complete Obby!"),
+        "task_button": _("Complete Obby!"),
+        "task_modal_title": _("Complete Obby!"),
+        "task_modal_submit": _("Complete Obby!"),
+        "task_photo": _("Attach Proof"),
+        "pending": _("Pending Verification..."),
+        "revision": _("Obby Returned: Fix Issues"),
+        "reward": _("Claim Gamepass"),
+        "reward_pending": _("Gamepass Claimed!"),
+        "proposal": _("Create a Gamepass idea"),
+        "gift": _("Send R$ to Sibling"),
+        "birthday": _("Annual Robliux Gift!"),
+        "nav_home": _("HQ"),
+        "nav_tasks": _("Obby Quests"),
+        "nav_rewards": _("Gamepass Store"),
+        "nav_goals": _("Gamepass Plans"),
+        "nav_history": _("Mission Log"),
+    },
 }
 
 
@@ -146,6 +165,7 @@ def currency_unit(value, theme="neutral"):
             "hero_hq": ("ženklelis", "ženkleliai", "ženklelių"),
             "art_studio": ("perlas", "perlai", "perlų"),
             "panda_pet": ("bambukas", "bambukai", "bambukų"),
+            "robliux": ("robliukas", "robliukai", "robliukų"),
         }
         return _lithuanian_form(number, *units.get(theme, units["neutral"]))
 
@@ -156,6 +176,7 @@ def currency_unit(value, theme="neutral"):
         "hero_hq": ("badge", "badges"),
         "art_studio": ("pearl", "pearls"),
         "panda_pet": ("bamboo", "bamboo"),
+        "robliux": ("Robliux", "Robliux"),
     }
     singular, plural = units.get(theme, units["neutral"])
     return singular if number == 1 else plural

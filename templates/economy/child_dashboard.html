@@ -14,7 +14,7 @@
 {% block content %}
 <section class="child-hero">
   <div class="child-identity">{% if child.avatar %}<img class="hero-avatar" src="{% url 'child_avatar' child.pk %}" alt="">{% endif %}<div><p class="eyebrow">{% blocktranslate with name=child.address_name %}Hello, {{ name }}{% endblocktranslate %}</p><h1>{% translate "It's great to see you" %}</h1></div></div>
-  <div class="balance-orb"><strong>{{ child.balance }}</strong><span>{{ child.balance|currency_unit:child.theme }}</span></div>
+  <div class="balance-orb"><strong>{% if child.theme == "robliux" %}R$ {% endif %}{{ child.balance }}</strong><span>{{ child.balance|currency_unit:child.theme }}</span></div>
 </section>
 
 <nav class="tabbar" aria-label="{% translate 'Sections' %}">
@@ -23,7 +23,7 @@
 
 <section id="darbai" class="content-section">
   <div class="section-heading"><p class="eyebrow">{% translate "Choose a task" %}</p><h2>{{ child.theme|theme_text:"nav_tasks" }}</h2></div>
-  {% if revision_claims %}<div class="revision-list"><h3>{% translate "Needs improvement" %}</h3>{% for claim in revision_claims %}
+  {% if revision_claims %}<div class="revision-list"><h3>{% if child.theme == "robliux" %}{{ child.theme|theme_text:"revision" }}{% else %}{% translate "Needs improvement" %}{% endif %}</h3>{% for claim in revision_claims %}
     <article class="revision-card"><div><strong>{{ claim.task_title }}</strong>{% if claim.revision_note %}<p>{{ claim.revision_note }}</p>{% endif %}</div><button class="button button-secondary" type="button" data-open-dialog="resubmit-task-{{ claim.pk }}">{% translate "Fix and resubmit" %}</button></article>
     <dialog id="resubmit-task-{{ claim.pk }}" class="action-dialog evidence-dialog"><button class="dialog-close" type="button" data-close-dialog>×</button><h2>{{ claim.task_title }}</h2><p class="revision-note">{{ claim.revision_note }}</p>
       <form method="post" action="{% url 'child_resubmit_task' claim.pk %}" enctype="multipart/form-data" class="stack-form evidence-form" data-success-effect="task">{% csrf_token %}
@@ -66,14 +66,14 @@
     <div id="task-search-results" class="task-search-results" role="listbox" hidden data-task-search-results></div>
   </div>
   <div class="item-grid">{% for task in tasks %}
-    <article id="task-card-{{ task.pk }}" class="item-card" data-task-card data-task-search-text="{{ task.title }}"><span class="item-icon">{{ task.icon|icon_symbol }}</span><div><h3>{{ task.title }}</h3><p class="amount positive">+{{ task.reward }} {{ task.reward|currency_unit:child.theme }}</p></div>
-    {% if task.pk in pending_task_ids %}<span class="status-pill">{% translate "Awaiting approval" %}</span>{% else %}<button class="button button-primary" type="button" data-open-dialog="submit-task-{{ task.pk }}">{{ child.theme|theme_text:"task_button" }}</button>{% endif %}</article>
+    <article id="task-card-{{ task.pk }}" class="item-card" data-task-card data-task-search-text="{{ task.title }}"><span class="item-icon">{{ task.icon|icon_symbol }}</span><div><h3>{{ task.title }}</h3><p class="amount positive">+{{ task.reward }} {% if child.theme == "robliux" %}R${% else %}{{ task.reward|currency_unit:child.theme }}{% endif %}</p></div>
+    {% if task.pk in pending_task_ids %}<span class="status-pill">{% if child.theme == "robliux" %}{{ child.theme|theme_text:"pending" }}{% else %}{% translate "Awaiting approval" %}{% endif %}</span>{% else %}<button class="button button-primary" type="button" data-open-dialog="submit-task-{{ task.pk }}">{{ child.theme|theme_text:"task_button" }}</button>{% endif %}</article>
     <dialog id="submit-task-{{ task.pk }}" class="action-dialog evidence-dialog"><button class="dialog-close" type="button" data-close-dialog>×</button><h2>{{ child.theme|theme_text:"task_modal_title" }}</h2><h3>{{ task.title }}</h3><p>{% translate "You can add a photo of the finished task." %}</p>
-      {% if family_settings.photo_bonus_points %}<p class="photo-bonus">+{{ family_settings.photo_bonus_points }} {{ family_settings.photo_bonus_points|currency_unit:child.theme }} {% translate "for a photo" %}</p>{% endif %}
+      {% if family_settings.photo_bonus_points %}<p class="photo-bonus">+{{ family_settings.photo_bonus_points }} {% if child.theme == "robliux" %}R${% else %}{{ family_settings.photo_bonus_points|currency_unit:child.theme }}{% endif %} {% translate "for a photo" %}</p>{% endif %}
       <form method="post" action="{% url 'child_submit_task' task.pk %}" enctype="multipart/form-data" class="stack-form evidence-form" data-success-effect="task">{% csrf_token %}
         <input type="file" name="proof" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" data-evidence-input hidden>
         <img class="evidence-preview" alt="" data-evidence-preview hidden>
-        <div class="evidence-actions"><button type="button" class="button button-secondary" data-evidence-camera><svg class="action-icon"><use href="#icon-camera"></use></svg>{% translate "Take photo" %}</button><button type="button" class="button button-secondary" data-evidence-gallery>{% translate "Choose from gallery" %}</button><button type="button" class="text-button danger" data-evidence-remove hidden>{% translate "Remove photo" %}</button></div>
+        <div class="evidence-actions"><button type="button" class="button button-secondary" data-evidence-camera><svg class="action-icon"><use href="#icon-camera"></use></svg>{% if child.theme == "robliux" %}{{ child.theme|theme_text:"task_photo" }}{% else %}{% translate "Take photo" %}{% endif %}</button><button type="button" class="button button-secondary" data-evidence-gallery>{% translate "Choose from gallery" %}</button><button type="button" class="text-button danger" data-evidence-remove hidden>{% translate "Remove photo" %}</button></div>
         <button class="button button-primary" type="submit">{{ child.theme|theme_text:"task_modal_submit" }}</button>
       </form>
     </dialog>
@@ -84,12 +84,12 @@
 <section id="prizai" class="content-section">
   <div class="section-heading"><p class="eyebrow">{% translate "Choose a reward" %}</p><h2>{{ child.theme|theme_text:"nav_rewards" }}</h2></div>
   {% if reward_requests_blocked %}<div class="credit-warning"><svg class="action-icon"><use href="#icon-info"></use></svg><p>{% translate "New reward requests are paused because half of the available credit has been used. Earn more points to unlock them." %}</p></div>{% endif %}
-  <div class="item-grid">{% for reward in rewards %}<article class="item-card reward-card"><span class="item-icon">{{ reward.icon|icon_symbol }}</span><div><h3>{{ reward.title }}</h3><p class="amount negative">−{{ reward.cost }} {{ reward.cost|currency_unit:child.theme }}</p></div>
-  {% if reward.pk in pending_reward_ids %}<span class="status-pill">{% translate "Awaiting approval" %}</span>{% elif reward_requests_blocked %}<button class="button button-secondary" type="button" disabled>{{ child.theme|theme_text:"reward" }}</button>{% elif not reward.is_affordable %}<button class="button button-secondary" type="button" disabled title="{% translate "Not enough points" %}">{{ child.theme|theme_text:"reward" }}</button>{% else %}<form method="post" action="{% url 'child_request_reward' reward.pk %}" data-success-effect="reward">{% csrf_token %}<button class="button button-secondary" type="submit">{{ child.theme|theme_text:"reward" }}</button></form>{% endif %}</article>{% empty %}<p>{% translate "The rewards catalog is empty." %}</p>{% endfor %}</div>
+  <div class="item-grid">{% for reward in rewards %}<article class="item-card reward-card"><span class="item-icon">{{ reward.icon|icon_symbol }}</span><div><h3>{{ reward.title }}</h3><p class="amount negative">−{{ reward.cost }} {% if child.theme == "robliux" %}R${% else %}{{ reward.cost|currency_unit:child.theme }}{% endif %}</p></div>
+  {% if reward.pk in pending_reward_ids %}<span class="status-pill">{% if child.theme == "robliux" %}{{ child.theme|theme_text:"reward_pending" }}{% else %}{% translate "Awaiting approval" %}{% endif %}</span>{% elif reward_requests_blocked %}<button class="button button-secondary" type="button" disabled>{{ child.theme|theme_text:"reward" }}</button>{% elif not reward.is_affordable %}<button class="button button-secondary" type="button" disabled title="{% translate "Not enough points" %}">{% if child.theme == "robliux" %}{% blocktranslate with amount=reward.missing_amount %}Need {{ amount }} R$ more{% endblocktranslate %}{% else %}{{ child.theme|theme_text:"reward" }}{% endif %}</button>{% else %}<form method="post" action="{% url 'child_request_reward' reward.pk %}" data-success-effect="reward">{% csrf_token %}<button class="button button-secondary" type="submit">{{ child.theme|theme_text:"reward" }}</button></form>{% endif %}</article>{% empty %}<p>{% translate "The rewards catalog is empty." %}</p>{% endfor %}</div>
   {% if pending_requests %}<div class="pending-list"><h3>{% translate "Pending requests" %}</h3>{% for reward_request in pending_requests %}<div class="list-row"><span>{{ reward_request.reward_title }}</span><form method="post" action="{% url 'child_cancel_reward' reward_request.pk %}">{% csrf_token %}<button class="text-button danger" type="submit">{% translate "Cancel" %}</button></form></div>{% endfor %}</div>{% endif %}
 </section>
 
-<section id="tikslai" class="content-section two-column"><div><div class="section-heading"><p class="eyebrow">{% translate "Save for a dream" %}</p><h2>{{ child.theme|theme_text:"nav_goals" }}</h2></div>{% for goal in goals %}<article class="goal-card"><div class="list-row"><strong>{{ goal.title }}</strong><span>{{ child.balance }} {{ child.balance|currency_unit:child.theme }} / {{ goal.target_amount }} {{ goal.target_amount|currency_unit:child.theme }}</span></div><div class="progress"><span style="width: {{ goal.progress_percent }}%"></span></div></article>{% empty %}<p>{% translate "There are no active goals yet." %}</p>{% endfor %}</div>
+<section id="tikslai" class="content-section two-column"><div><div class="section-heading"><p class="eyebrow">{% translate "Save for a dream" %}</p><h2>{{ child.theme|theme_text:"nav_goals" }}</h2></div>{% for goal in goals %}<article class="goal-card"><div class="list-row"><strong>{{ goal.title }}</strong><span>{% if child.theme == "robliux" %}R$ {{ child.balance }} / R$ {{ goal.target_amount }}{% else %}{{ child.balance }} {{ child.balance|currency_unit:child.theme }} / {{ goal.target_amount }} {{ goal.target_amount|currency_unit:child.theme }}{% endif %}</span></div><div class="progress"><span style="width: {{ goal.progress_percent }}%"></span></div></article>{% empty %}<p>{% translate "There are no active goals yet." %}</p>{% endfor %}</div>
 <div class="panel"><h3>{% translate "Suggest a reward or goal" %}</h3><form method="post" action="{% url 'child_create_proposal' %}" class="stack-form">{% csrf_token %}{{ proposal_form.as_p }}<button class="button button-primary" type="submit">{{ child.theme|theme_text:"proposal" }}</button></form></div></section>
 
 <section id="istorija" class="content-section">
@@ -148,7 +148,7 @@
           {% if entry.task_claim.evidence_thumbnail %}
             <button class="photo-history-button" type="button" data-evidence-full="{% url 'task_evidence' entry.task_claim.pk 'full' %}" aria-label="{% translate 'Open task photo' %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></button>
           {% endif %}
-          <span class="amount {% if entry.delta > 0 %}positive{% elif entry.delta < 0 %}negative{% endif %}">{{ entry.delta|stringformat:"+d" }} {{ entry.delta|currency_unit:child.theme }}</span>
+          <span class="amount {% if entry.delta > 0 %}positive{% elif entry.delta < 0 %}negative{% endif %}">{{ entry.delta|stringformat:"+d" }} {% if child.theme == "robliux" %}R${% else %}{{ entry.delta|currency_unit:child.theme }}{% endif %}</span>
         {% endif %}
       </div>
     {% empty %}

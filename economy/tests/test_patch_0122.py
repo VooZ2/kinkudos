@@ -21,7 +21,7 @@ from economy.services import randomize_daily_themes
 class Patch0122ParentResponseTests(TestCase):
     def setUp(self):
         self.child = ChildProfile.objects.create(
-            name="Augustas",
+            name="Child Two",
             theme_selected=True,
         )
         self.other_child = ChildProfile.objects.create(

@@ -1,15 +1,15 @@
-import logging
 import hashlib
 import json
+import logging
 from datetime import timedelta
 from urllib.parse import urlencode
 from uuid import uuid4
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import get_user_model, logout, update_session_auth_hash
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth import authenticate, get_user_model, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.hashers import check_password
 from django.contrib.auth.views import (
     LoginView,
     PasswordResetCompleteView,
@@ -17,39 +17,40 @@ from django.contrib.auth.views import (
     PasswordResetDoneView,
     PasswordResetView,
 )
-from django.core.files.base import ContentFile
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.db import transaction
-from django.db.models import Q
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.text import slugify
-from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
 from .auth import child_required, current_child, parent_required
+from .backups import backup_status, configure_backup, request_manual_backup
 from .changelog import load_changelog
 from .forms import (
     AdjustmentForm,
     ApplyPenaltyForm,
-    AssignPenaltiesForm,
-    AwardTasksForm,
     ApprovalCostForm,
+    AssignPenaltiesForm,
     AvatarForm,
+    AwardTasksForm,
+    BackupSettingsForm,
     BirthDateForm,
     ChangePinForm,
     ChildAccountForm,
     ChildEditForm,
-    FirstThemeForm,
     ChildPinForm,
     FamilyPreferencesForm,
     FeedbackReportForm,
     FeedbackStatusForm,
+    FirstThemeForm,
     MinBalanceForm,
     ParentAccountForm,
     ParentEditForm,
@@ -60,9 +61,9 @@ from .forms import (
     ProposalForm,
     RejectForm,
     RewardForm,
-    TaskForm,
     TaskDecisionCommentForm,
     TaskEvidenceForm,
+    TaskForm,
     ThemeForm,
 )
 from .images import (
@@ -72,12 +73,13 @@ from .images import (
     process_task_evidence,
 )
 from .models import (
+    BackupAuditEvent,
     BirthDateChangeRequest,
     ChildProfile,
+    FamilySettings,
     FeedbackReport,
     FeedbackStatus,
     FeedbackType,
-    FamilySettings,
     LedgerEntry,
     LedgerKind,
     PenaltyTemplate,
@@ -86,7 +88,6 @@ from .models import (
     RequestStatus,
     Reward,
     RewardRequest,
-    SavingsGoal,
     Task,
     TaskClaim,
 )
@@ -238,6 +239,7 @@ def child_dashboard(request):
     rewards = list(Reward.objects.filter(is_active=True, is_deleted=False))
     for reward in rewards:
         reward.is_affordable = reward_is_affordable(child, reward)
+        reward.missing_amount = max(reward.cost - (child.balance - child.min_balance), 0)
     ledger_entries = list(child.ledger_entries.select_related("actor").all()[:5])
     task_claims_by_id = {
         claim.pk: claim
@@ -432,6 +434,8 @@ def child_submit_task(request, task_id):
             success_message = _("Your artwork was sent to the review gallery!")
         elif request.child.theme == "panda_pet":
             success_message = _("The bamboo was sent to your parents for approval!")
+        elif request.child.theme == "robliux":
+            success_message = _("Obby complete! Pending parent verification.")
         elif processed:
             success_message = _("The task and its proof were sent to the parents for approval.")
         else:
@@ -1181,6 +1185,9 @@ def parent_dashboard(request):
                 instance=FamilySettings.load(),
                 auto_id="id_family_preferences_%s",
             ),
+            "backup_status": backup_status(),
+            "backup_settings_form": BackupSettingsForm(),
+            "backup_audit_events": BackupAuditEvent.objects.select_related("actor")[:10],
             "feedback_page": feedback_page,
             "feedback_status": feedback_status,
             "feedback_type": feedback_type,
@@ -1671,6 +1678,61 @@ def parent_update_family_preferences(request):
     else:
         messages.error(request, _("Check the family settings."))
     return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_configure_backup(request):
+    if not request.user.is_staff:
+        messages.error(request, _("Only a parent administrator can change backup settings."))
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    form = BackupSettingsForm(request.POST)
+    if not form.is_valid():
+        messages.error(request, _("Check the backup settings."))
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    authenticated = authenticate(
+        request,
+        username=request.user.get_username(),
+        password=form.cleaned_data["current_password"],
+    )
+    if authenticated is None:
+        messages.error(request, _("The current parent password is incorrect."))
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    try:
+        status = configure_backup(form.cleaned_data)
+    except RuntimeError as exc:
+        messages.error(request, _("Backup settings were not saved: %(error)s") % {"error": exc})
+    else:
+        BackupAuditEvent.objects.create(
+            actor=request.user,
+            action=BackupAuditEvent.Action.CONFIGURED,
+            provider=status.get("provider", ""),
+            target=status.get("target", ""),
+        )
+        messages.success(request, _("Backup storage was verified and saved."))
+    return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+
+
+@parent_required
+@require_POST
+def parent_run_backup(request):
+    if not request.user.is_staff:
+        messages.error(request, _("Only a parent administrator can start a backup."))
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    try:
+        request_manual_backup()
+    except RuntimeError as exc:
+        messages.error(request, _("The backup could not be started: %(error)s") % {"error": exc})
+    else:
+        status = backup_status()
+        BackupAuditEvent.objects.create(
+            actor=request.user,
+            action=BackupAuditEvent.Action.MANUAL_RUN,
+            provider=status.get("provider", ""),
+            target=status.get("target", ""),
+        )
+        messages.success(request, _("Backup started. Refresh this page to see its status."))
+    return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
 
 @parent_required

@@ -97,8 +97,17 @@ msgstr "Visos būsenos"
 msgid "All types"
 msgstr "Visi tipai"
 
+msgid "Annual Robliux Gift!"
+msgstr "Metinė Robliux dovana!"
+
 msgid "Appearance"
 msgstr "Išvaizda"
+
+msgid "Application key"
+msgstr "Programos raktas"
+
+msgid "Application key ID"
+msgstr "Programos rakto ID"
 
 msgid "Approve"
 msgstr "Patvirtinti"
@@ -130,6 +139,12 @@ msgstr "Pareiškimai"
 msgid "At least 12 characters; cannot be similar to the username, commonly used, or entirely numeric."
 msgstr "Bent 12 simbolių; negali būti panašus į prisijungimo vardą, dažnai naudojamas arba sudarytas tik iš skaičių."
 
+msgid "Attach Proof"
+msgstr "Segti foto įrodymą"
+
+msgid "Attention needed"
+msgstr "Reikia dėmesio"
+
 msgid "Avatar"
 msgstr "Avataras"
 
@@ -147,6 +162,36 @@ msgstr "Skirti pažymėtus taškus"
 
 msgid "Back to sign in"
 msgstr "Grįžti į prisijungimą"
+
+msgid "Back up now"
+msgstr "Kurti kopiją dabar"
+
+msgid "Backblaze B2 (recommended)"
+msgstr "Backblaze B2 (rekomenduojama)"
+
+msgid "Backup in progress..."
+msgstr "Kuriama atsarginė kopija..."
+
+msgid "Backup settings configured"
+msgstr "Atsarginių kopijų nustatymai pakeisti"
+
+msgid "Backup settings were not saved: %(error)s"
+msgstr "Atsarginių kopijų nustatymai neišsaugoti: %(error)s"
+
+msgid "Backup setup"
+msgstr "Atsarginių kopijų nustatymai"
+
+msgid "Backup setup can be changed only by a parent administrator."
+msgstr "Atsarginių kopijų nustatymus gali keisti tik tėvų administratorius."
+
+msgid "Backup started. Refresh this page to see its status."
+msgstr "Atsarginė kopija pradėta. Atnaujinkite puslapį jos būsenai pamatyti."
+
+msgid "Backup storage was verified and saved."
+msgstr "Atsarginių kopijų saugykla patikrinta ir išsaugota."
+
+msgid "Backups"
+msgstr "Atsarginės kopijos"
 
 msgid "Balance adjusted."
 msgstr "Balansas pakoreguotas."
@@ -184,6 +229,9 @@ msgstr "Blokų pasaulis"
 msgid "Block sent to your parents for approval."
 msgstr "Blokas perduotas tėvams patvirtinti."
 
+msgid "Bucket name"
+msgstr "Bucket pavadinimas"
+
 msgid "Building Plan"
 msgstr "Kūrybos planas"
 
@@ -219,6 +267,9 @@ msgstr "Pakeitimų istorija"
 
 msgid "Check the PIN fields."
 msgstr "Patikrinkite PIN laukus."
+
+msgid "Check the backup settings."
+msgstr "Patikrinkite atsarginių kopijų nustatymus."
 
 msgid "Check the balance adjustment."
 msgstr "Patikrinkite balanso korekciją."
@@ -343,6 +394,9 @@ msgstr "Pasirink savo profilį"
 msgid "Choose your world"
 msgstr "Pasirink savo pasaulį"
 
+msgid "Claim Gamepass"
+msgstr "Atrakinti Gamepass"
+
 msgid "Close"
 msgstr "Uždaryti"
 
@@ -354,6 +408,9 @@ msgstr "Komentaras"
 
 msgid "Comment (optional)"
 msgstr "Komentaras (neprivalomas)"
+
+msgid "Complete Obby!"
+msgstr "Įveikiau Obby!"
 
 msgid "Complete tasks, earn points, and choose your reward."
 msgstr "Atlik darbus, rink taškus ir išsirink prizą."
@@ -378,6 +435,9 @@ msgstr "Nepavyko pakeisti pranešimų nustatymo."
 
 msgid "Craft a recipe"
 msgstr "Sukurti receptą"
+
+msgid "Create a Gamepass idea"
+msgstr "Sukurti Gamepass idėją"
 
 msgid "Create child profile"
 msgstr "Sukurti vaiko profilį"
@@ -415,6 +475,9 @@ msgstr "Kredito limitas pakeistas."
 msgid "Currency name [%(default)s]: "
 msgstr "Valiutos pavadinimas [%(default)s]: "
 
+msgid "Current"
+msgstr "Tvarkinga"
+
 msgid "Current PIN"
 msgstr "Dabartinis PIN"
 
@@ -423,6 +486,9 @@ msgstr "Dabartinė versija"
 
 msgid "Custom award"
 msgstr "Kitas įvertinimas"
+
+msgid "Daily encrypted copies protect the family database and uploaded photos."
+msgstr "Kasdienės šifruotos kopijos apsaugo šeimos duomenų bazę ir įkeltas nuotraukas."
 
 msgid "Delete"
 msgstr "Trinti"
@@ -463,6 +529,9 @@ msgstr "Redaguoti"
 msgid "Edit accounts"
 msgstr "Redaguoti paskyras"
 
+msgid "Edit backup setup"
+msgstr "Keisti kopijų nustatymus"
+
 msgid "Email address"
 msgstr "El. pašto adresas"
 
@@ -483,6 +552,9 @@ msgstr "Įveskite teigiamą taškų skaičių."
 
 msgid "Enter a positive token amount."
 msgstr "Įveskite teigiamą tokenų skaičių."
+
+msgid "Enter a valid bucket name."
+msgstr "Įveskite tinkamą bucket pavadinimą."
 
 msgid "Enter my world"
 msgstr "Įeiti į savo pasaulį"
@@ -562,8 +634,20 @@ msgstr "Ieškoti darbo"
 msgid "Fix and resubmit"
 msgstr "Pataisyti ir pateikti iš naujo"
 
+msgid "For example: s3.eu-central-003.backblazeb2.com"
+msgstr "Pavyzdžiui: s3.eu-central-003.backblazeb2.com"
+
 msgid "Forgot password"
 msgstr "Pamiršote slaptažodį"
+
+msgid "Gamepass Claimed!"
+msgstr "Gamepass užsakytas!"
+
+msgid "Gamepass Plans"
+msgstr "Gamepass planai"
+
+msgid "Gamepass Store"
+msgstr "Gamepass prizai"
 
 msgid "Get a new link"
 msgstr "Gauti naują nuorodą"
@@ -588,6 +672,9 @@ msgstr "Tikslai"
 
 msgid "Got it"
 msgstr "Supratau"
+
+msgid "HQ"
+msgstr "Būstinė"
 
 msgid "HQ Arsenal"
 msgstr "Būstinės arsenalas"
@@ -637,6 +724,9 @@ msgstr "Jei šio prašymo nepateikėte, laišką ignoruokite – slaptažodis ne
 msgid "Incorrect PIN."
 msgstr "Neteisingas PIN."
 
+msgid "Incorrect changes can stop future backups. Continue only if you understand the storage credentials and have saved the repository password outside this server."
+msgstr "Neteisingi pakeitimai gali sustabdyti būsimas kopijas. Tęskite tik suprasdami saugyklos prisijungimo duomenis ir išsaugoję repozitorijos slaptažodį už šio serverio ribų."
+
 msgid "Initial credit"
 msgstr "Pradinis kreditas"
 
@@ -666,6 +756,12 @@ msgstr "KinKudos atsiliepimas #%(report_id)s: %(report_type)s"
 
 msgid "Language"
 msgstr "Kalba"
+
+msgid "Last integrity check"
+msgstr "Paskutinė vientisumo patikra"
+
+msgid "Last successful backup"
+msgstr "Paskutinė sėkminga kopija"
 
 msgid "Leave blank to keep the current PIN."
 msgstr "Palikite tuščią, jei PIN nekeičiate."
@@ -697,6 +793,9 @@ msgstr "Sugalvoti pandos svajonę"
 msgid "Management"
 msgstr "Valdymas"
 
+msgid "Manual backup requested"
+msgstr "Paprašyta rankinės atsarginės kopijos"
+
 msgid "Minimum allowed balance"
 msgstr "Leidžiamas minimalus balansas"
 
@@ -711,6 +810,9 @@ msgstr "Misijos"
 
 msgid "My Gallery"
 msgstr "Mano galerija"
+
+msgid "Need %(amount)s R$ more"
+msgstr "Trūksta %(amount)s R$"
 
 msgid "Needs a decision"
 msgstr "Reikia sprendimo"
@@ -766,6 +868,9 @@ msgstr "Naujų funkcijų nebuvo."
 msgid "No separate fixes in this release."
 msgstr "Atskirų pataisymų nebuvo."
 
+msgid "No successful backup yet"
+msgstr "Sėkmingų kopijų dar nėra"
+
 msgid "No tasks match your search."
 msgstr "Pagal paiešką darbų nerasta."
 
@@ -796,6 +901,15 @@ msgstr "Pranešimai nepalaikomi"
 msgid "Number of child profiles [1]: "
 msgstr "Vaikų profilių skaičius [1]: "
 
+msgid "Obby Quests"
+msgstr "Obby iššūkiai"
+
+msgid "Obby Returned: Fix Issues"
+msgstr "Obby grąžintas: pataisyk klaidas"
+
+msgid "Obby complete! Pending parent verification."
+msgstr "Obby įveiktas! Laukiama tėvų patvirtinimo."
+
 msgid "Offline"
 msgstr "Nėra ryšio"
 
@@ -807,6 +921,12 @@ msgstr "Papildoma valanda ekrano"
 
 msgid "One-time recovery code (save it in your password manager):"
 msgstr "Vienkartinis atkūrimo kodas (išsaugokite slaptažodžių tvarkyklėje):"
+
+msgid "Only a parent administrator can change backup settings."
+msgstr "Atsarginių kopijų nustatymus gali keisti tik tėvų administratorius."
+
+msgid "Only a parent administrator can start a backup."
+msgstr "Atsarginę kopiją gali paleisti tik tėvų administratorius."
 
 msgid "Only screenshots from resolved feedback are removed automatically."
 msgstr "Automatiškai šalinamos tik išspręstų atsiliepimų ekrano nuotraukos."
@@ -825,6 +945,9 @@ msgstr "Atidaryti darbo nuotrauką"
 
 msgid "Open treat chest"
 msgstr "Atidaryti skanėstų skrynelę"
+
+msgid "Optional for providers that do not require a region."
+msgstr "Nebūtina tiekėjams, kuriems regionas nereikalingas."
 
 msgid "Order"
 msgstr "Užsisakyti"
@@ -910,6 +1033,9 @@ msgstr "Nuobauda „%(penalty)s“ skirta vaikui %(name)s."
 msgid "Pending"
 msgstr "Laukia"
 
+msgid "Pending Verification..."
+msgstr "Laukiama tėvų patvirtinimo..."
+
 msgid "Pending and revision-requested task photos are never removed."
 msgstr "Laukiančių ir grąžintų pataisyti darbų nuotraukos nešalinamos."
 
@@ -970,14 +1096,23 @@ msgstr "Projekto nustatymai"
 msgid "Propose a secret plan"
 msgstr "Siūlyti slaptą planą"
 
+msgid "Provider"
+msgstr "Tiekėjas"
+
 msgid "Purpose"
 msgstr "Paskirtis"
 
 msgid "Reason"
 msgstr "Paaiškinimas"
 
+msgid "Recent backup actions"
+msgstr "Naujausi atsarginių kopijų veiksmai"
+
 msgid "Recipient"
 msgstr "Kam dovanoji"
+
+msgid "Region"
+msgstr "Regionas"
 
 msgid "Reject"
 msgstr "Atmesti"
@@ -1021,6 +1156,9 @@ msgstr "Pakartokite slaptažodį"
 msgid "Repeat: "
 msgstr "Pakartokite: "
 
+msgid "Repository"
+msgstr "Saugykla"
+
 msgid "Request a correction"
 msgstr "Paprašyti pataisyti"
 
@@ -1029,6 +1167,9 @@ msgstr "Prašyti iš arsenalo"
 
 msgid "Requested birthday change: %(current)s → %(requested)s."
 msgstr "Prašomas gimimo datos pakeitimas: %(current)s → %(requested)s."
+
+msgid "Required before changing backup credentials."
+msgstr "Privalomas prieš keičiant atsarginių kopijų prisijungimo duomenis."
 
 msgid "Reset link"
 msgstr "Atkūrimo nuoroda"
@@ -1063,8 +1204,17 @@ msgstr "Prizo prašymas atmestas."
 msgid "Rewards"
 msgstr "Prizai"
 
+msgid "Robliux World"
+msgstr "Robliux Pasaulis"
+
 msgid "Role"
 msgstr "Rolė"
+
+msgid "S3 endpoint"
+msgstr "S3 adresas"
+
+msgid "S3-compatible storage"
+msgstr "Su S3 suderinama saugykla"
 
 msgid "Save"
 msgstr "Išsaugoti"
@@ -1116,6 +1266,9 @@ msgstr "Skyriai"
 
 msgid "See what was added and fixed in every application version."
 msgstr "Čia rasite, kas buvo pridėta ir pataisyta kiekvienoje programos versijoje."
+
+msgid "Send R$ to Sibling"
+msgstr "Pervesti R$ broliui ar sesei"
 
 msgid "Send a signal to HQ"
 msgstr "Siųsti signalą būstinei"
@@ -1173,6 +1326,9 @@ msgstr "Kažkas neveikia"
 
 msgid "Status"
 msgstr "Būsena"
+
+msgid "Storage provider"
+msgstr "Saugyklos tiekėjas"
 
 msgid "Submit"
 msgstr "Pateikti"
@@ -1273,6 +1429,12 @@ msgstr "PIN turi sudaryti tik 4 skaitmenys."
 msgid "The PINs do not match."
 msgstr "PIN nesutampa."
 
+msgid "The backup could not be started: %(error)s"
+msgstr "Atsarginės kopijos paleisti nepavyko: %(error)s"
+
+msgid "The backup service is unavailable. Ask the server administrator to check the backup container."
+msgstr "Atsarginių kopijų tarnyba nepasiekiama. Paprašykite serverio administratoriaus patikrinti kopijų konteinerį."
+
 msgid "The bamboo was sent to your parents for approval!"
 msgstr "Bambukas perduotas tėvams patvirtinti!"
 
@@ -1296,6 +1458,9 @@ msgstr "Kaina turi būti didesnė už nulį."
 
 msgid "The current PIN is incorrect."
 msgstr "Dabartinis PIN neteisingas."
+
+msgid "The current parent password is incorrect."
+msgstr "Dabartinis tėvų paskyros slaptažodis neteisingas."
 
 msgid "The family name or nickname is required."
 msgstr "Šeimos pavadinimas arba slapyvardis yra privalomas."
@@ -1531,6 +1696,9 @@ msgstr "Prisijungimo vardas"
 msgid "VERSIONS"
 msgstr "VERSIJOS"
 
+msgid "Verify and save"
+msgstr "Patikrinti ir išsaugoti"
+
 msgid "Version"
 msgstr "Versija"
 
@@ -1602,6 +1770,9 @@ msgstr "Gavai dovanų!"
 
 msgid "Your artwork was sent to the review gallery!"
 msgstr "Tavo kūrinys išsiųstas į vertinimo galeriją!"
+
+msgid "Your current parent password"
+msgstr "Dabartinis jūsų tėvų paskyros slaptažodis"
 
 msgid "Your point gift was sent."
 msgstr "Tavo taškų dovana išsiųsta."

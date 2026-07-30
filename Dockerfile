@@ -7,7 +7,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-RUN groupadd --gid 10001 familyapp \
+RUN apt-get update \
+    && apt-get install --no-install-recommends --yes restic \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd --gid 10001 familyapp \
     && useradd --uid 10001 --gid familyapp --home-dir /app --no-create-home familyapp
 
 COPY requirements.lock ./

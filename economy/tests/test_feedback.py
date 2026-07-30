@@ -47,12 +47,12 @@ class FeedbackWorkflowTests(TestCase):
             password="Safe-feedback-test-123!",
         )
         self.child = ChildProfile.objects.create(
-            name="Augustas",
+            name="Child Two",
             theme="block_world",
             theme_selected=True,
         )
         self.other_child = ChildProfile.objects.create(
-            name="Gabija",
+            name="Child One",
             theme="magic_academy",
             theme_selected=True,
         )
@@ -99,7 +99,7 @@ class FeedbackWorkflowTests(TestCase):
         self.assertEqual(report.reporter_role, "parent")
         self.assertEqual(report.family_name, "Aurora")
         self.assertEqual(report.page_path, "/tevai/")
-        self.assertEqual(report.app_version, "0.12.4")
+        self.assertEqual(report.app_version, "0.13.0")
         self.assertEqual(report.user_agent, "Feedback Browser")
         self.assertIsNotNone(report.email_notified_at)
         self.assertEqual(len(mail.outbox), 1)

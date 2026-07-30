@@ -28,7 +28,7 @@ from economy.services import (
 class EconomyServiceTests(TestCase):
     def setUp(self):
         self.parent = get_user_model().objects.create_user("tevai", password="Very-safe-pass-123!")
-        self.child = ChildProfile(name="Gabija", min_balance=-100)
+        self.child = ChildProfile(name="Child One", min_balance=-100)
         self.child.set_pin("1234")
         self.child.save()
         self.task = Task.objects.create(title="Testas", reward=50)

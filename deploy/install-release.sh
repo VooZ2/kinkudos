@@ -19,6 +19,7 @@ archive=$(realpath "$archive")
 checksum_file=$(realpath "$checksum_file")
 project_root=$(realpath "$project_root")
 deploy_dir="$project_root/deploy"
+secrets_dir="$project_root/secrets"
 releases_dir="$project_root/releases"
 release_dir="$releases_dir/$version"
 staging_dir="$releases_dir/.staging-$version-$$"
@@ -29,6 +30,32 @@ test -f "$archive"
 test -f "$checksum_file"
 test -d "$deploy_dir"
 test -f "$deploy_dir/compose.yml"
+
+umask 077
+mkdir -p \
+  "$secrets_dir/backup" \
+  "$project_root/data" \
+  "$project_root/backups" \
+  "$project_root/backup-state"
+if [ ! -s "$secrets_dir/backup_agent_token" ]; then
+  openssl rand -base64 48 | tr -d '\n' > "$secrets_dir/backup_agent_token"
+fi
+if [ ! -s "$secrets_dir/restic_password" ]; then
+  openssl rand -base64 48 | tr -d '\n' > "$secrets_dir/restic_password"
+fi
+if [ ! -f "$secrets_dir/backup/restic.env" ] && [ -f "$secrets_dir/restic.env" ]; then
+  cp "$secrets_dir/restic.env" "$secrets_dir/backup/restic.env"
+fi
+if [ ! -f "$secrets_dir/backup/restic.env" ]; then
+  {
+    echo "# Choose any repository type supported by restic."
+    echo "RESTIC_REPOSITORY=REPLACE_WITH_REPOSITORY"
+  } > "$secrets_dir/backup/restic.env"
+fi
+chmod 0600 \
+  "$secrets_dir/backup_agent_token" \
+  "$secrets_dir/restic_password" \
+  "$secrets_dir/backup/restic.env"
 
 expected_checksum=$(awk 'NR == 1 {print $1}' "$checksum_file")
 actual_checksum=$(sha256sum "$archive" | awk '{print $1}')
@@ -99,7 +126,7 @@ rm -rf -- "$release_dir"
 mv "$staging_dir" "$release_dir"
 trap - EXIT INT TERM
 
-if ! docker compose up -d --no-build --force-recreate app; then
+if ! docker compose up -d --no-build --force-recreate app backup-agent; then
   echo "Could not start KinKudos $version." >&2
   exit 1
 fi

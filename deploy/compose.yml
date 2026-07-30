@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: ../app
-    image: kinkudos:0.12.4
+    image: kinkudos:0.13.0
     entrypoint:
       - /bin/sh
       - -c
@@ -44,6 +44,8 @@ services:
       KINKUDOS_EMAIL_HOST_PASSWORD_FILE: /run/secrets/smtp_password
       KINKUDOS_DEFAULT_FROM_EMAIL: "${KINKUDOS_DEFAULT_FROM_EMAIL:-KinKudos <noreply@example.invalid>}"
       KINKUDOS_FEEDBACK_EMAIL: "${KINKUDOS_FEEDBACK_EMAIL:-}"
+      KINKUDOS_BACKUP_AGENT_URL: "http://backup-agent:8090"
+      KINKUDOS_BACKUP_AGENT_TOKEN_FILE: /run/secrets/backup_agent_token
       KINKUDOS_PASSWORD_RESET_TIMEOUT: "3600"
       KINKUDOS_SECURE_COOKIES: "true"
       KINKUDOS_SECURE_SSL_REDIRECT: "true"
@@ -55,11 +57,13 @@ services:
       - vapid_private
       - vapid_public
       - smtp_password
+      - backup_agent_token
     volumes:
       - ../data:/app/data
       - ../backups:/app/backups
     networks:
       - web
+      - backup
     healthcheck:
       test:
         - CMD
@@ -86,22 +90,41 @@ services:
       traefik.http.services.kinkudos-app.loadbalancer.server.port: "8000"
       com.centurylinklabs.watchtower.enable: "false"
 
-  restic:
-    image: restic/restic:0.19.1
-    profiles: ["backup"]
-    env_file:
-      - path: "${KINKUDOS_RESTIC_ENV_FILE:-../secrets/restic.env}"
-        required: false
+  backup-agent:
+    image: kinkudos:0.13.0
+    entrypoint: ["python", "/app/scripts/backup_agent.py"]
+    command: []
+    user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
     environment:
-      RESTIC_PASSWORD_FILE: /run/secrets/restic_password
+      KINKUDOS_BACKUP_AGENT_TOKEN_FILE: /run/secrets/backup_agent_token
+      KINKUDOS_RESTIC_PASSWORD_FILE: /run/secrets/restic_password
+      KINKUDOS_RESTIC_ENV_FILE: /run/backup/restic.env
+      KINKUDOS_BACKUP_DATABASE_PATH: /source/kinkudos.sqlite3
+      KINKUDOS_BACKUP_MEDIA_PATH: /source/media
+      KINKUDOS_BACKUP_OUTPUT_DIR: /backups
+      KINKUDOS_BACKUP_STATE_PATH: /state/status.json
+      KINKUDOS_BACKUP_HOUR: "${KINKUDOS_BACKUP_HOUR:-3}"
+      TZ: "${TZ:-Europe/Vilnius}"
     secrets:
       - restic_password
+      - backup_agent_token
     volumes:
-      - ../backups:/backups:ro
+      - ../data:/source:ro
+      - ../backups:/backups
+      - ../backup-state:/state
+      - ../secrets/backup:/run/backup
+    networks:
+      - backup
 
 networks:
   web:
     external: true
+  backup:
+    internal: true
 
 secrets:
   django_secret_key:
@@ -114,3 +137,5 @@ secrets:
     file: ../secrets/smtp_password
   restic_password:
     file: ../secrets/restic_password
+  backup_agent_token:
+    file: ../secrets/backup_agent_token

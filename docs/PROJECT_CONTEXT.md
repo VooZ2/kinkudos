@@ -10,7 +10,8 @@ Check `CHANGELOG.md` for the current released version and
 `docs/TODO.lt.md` for current open work.
 
 ## Stack
-Django 5.2, SQLite, Whitenoise, single Docker container. Server-rendered
+Django 5.2, SQLite, Whitenoise, one web application container and one isolated
+backup-agent container. Server-rendered
 templates, with small internal JSON endpoints where needed (e.g. child
 balance polling) — no separate public API, SPA, Node.js, or frontend
 framework. Single-tenant: one deployment = one family, no multi-tenancy

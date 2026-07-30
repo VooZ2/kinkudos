@@ -14,4 +14,4 @@ staticfiles/
 media/
 secrets/
 backups/
-
+backup-state/

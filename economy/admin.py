@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import (
+    BackupAuditEvent,
     BirthDateChangeRequest,
     ChildProfile,
     FamilySettings,
@@ -44,3 +45,4 @@ admin.site.register(Proposal)
 admin.site.register(SavingsGoal)
 admin.site.register(PushSubscription)
 admin.site.register(BirthDateChangeRequest)
+admin.site.register(BackupAuditEvent)

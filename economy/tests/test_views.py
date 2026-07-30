@@ -82,19 +82,19 @@ class AccessAndWorkflowTests(TestCase):
             email="tevai@example.com",
             password=self.parent_password,
         )
-        self.gabija = ChildProfile(name="Gabija", min_balance=-100, theme_selected=True)
-        self.gabija.set_pin("1234")
-        self.gabija.save()
-        self.augustas = ChildProfile(name="Augustas", min_balance=-100, theme_selected=True)
-        self.augustas.set_pin("5678")
-        self.augustas.save()
+        self.child_one = ChildProfile(name="Child One", min_balance=-100, theme_selected=True)
+        self.child_one.set_pin("1234")
+        self.child_one.save()
+        self.child_two = ChildProfile(name="Child Two", min_balance=-100, theme_selected=True)
+        self.child_two.set_pin("5678")
+        self.child_two.save()
         self.task = Task.objects.create(title="Testas", reward=50)
         self.reward = Reward.objects.create(title="Ekranas", cost=100)
         post_ledger_entry(
-            child=self.augustas,
+            child=self.child_two,
             delta=999,
             kind=LedgerKind.ADJUSTMENT,
-            description="Tik Augusto paslaptis",
+            description="Sibling private entry",
             actor=self.parent,
         )
 
@@ -106,34 +106,34 @@ class AccessAndWorkflowTests(TestCase):
         )
 
     def test_child_dashboard_does_not_expose_sibling_data(self):
-        response = self.login_child(self.gabija, "1234")
+        response = self.login_child(self.child_one, "1234")
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Gabija")
-        self.assertNotContains(response, "Tik Augusto paslaptis")
+        self.assertContains(response, "Child One")
+        self.assertNotContains(response, "Sibling private entry")
         self.assertNotContains(response, ">999<", html=True)
 
     def test_child_dashboard_shows_only_five_latest_history_entries(self):
         for index in range(7):
             post_ledger_entry(
-                child=self.gabija,
+                child=self.child_one,
                 delta=1,
                 kind=LedgerKind.ADJUSTMENT,
-                description=f"Gabijos veiksmas {index}",
+                description=f"First child action {index}",
                 actor=self.parent,
             )
 
-        response = self.login_child(self.gabija, "1234")
+        response = self.login_child(self.child_one, "1234")
 
         self.assertEqual(len(response.context["ledger"]), 5)
-        self.assertContains(response, "Gabijos veiksmas 6")
-        self.assertNotContains(response, "Gabijos veiksmas 0")
+        self.assertContains(response, "First child action 6")
+        self.assertNotContains(response, "First child action 0")
 
     def test_child_must_choose_a_world_on_first_sign_in(self):
-        self.gabija.theme = "neutral"
-        self.gabija.theme_selected = False
-        self.gabija.save(update_fields=["theme", "theme_selected"])
+        self.child_one.theme = "neutral"
+        self.child_one.theme_selected = False
+        self.child_one.save(update_fields=["theme", "theme_selected"])
 
-        response = self.login_child(self.gabija, "1234")
+        response = self.login_child(self.child_one, "1234")
         self.assertEqual(response.resolver_match.url_name, "child_theme_onboarding")
         self.assertContains(response, "Pasirink savo pasaulį")
         self.assertNotContains(response, "Neutrali")
@@ -144,14 +144,14 @@ class AccessAndWorkflowTests(TestCase):
             follow=True,
         )
         self.assertEqual(response.resolver_match.url_name, "child_dashboard")
-        self.gabija.refresh_from_db()
-        self.assertTrue(self.gabija.theme_selected)
-        self.assertEqual(self.gabija.theme, "magic_academy")
+        self.child_one.refresh_from_db()
+        self.assertTrue(self.child_one.theme_selected)
+        self.assertEqual(self.child_one.theme, "magic_academy")
 
     def test_unselected_child_cannot_skip_world_onboarding(self):
-        self.gabija.theme_selected = False
-        self.gabija.save(update_fields=["theme_selected"])
-        self.login_child(self.gabija, "1234")
+        self.child_one.theme_selected = False
+        self.child_one.save(update_fields=["theme_selected"])
+        self.login_child(self.child_one, "1234")
 
         response = self.client.post(reverse("child_submit_task", args=[self.task.pk]))
         self.assertRedirects(
@@ -159,22 +159,22 @@ class AccessAndWorkflowTests(TestCase):
             reverse("child_theme_onboarding"),
             fetch_redirect_response=False,
         )
-        self.assertFalse(self.gabija.task_claims.exists())
+        self.assertFalse(self.child_one.task_claims.exists())
 
     def test_child_cannot_open_parent_dashboard(self):
-        self.login_child(self.gabija, "1234")
+        self.login_child(self.child_one, "1234")
         response = self.client.get(reverse("parent_dashboard"))
         self.assertEqual(response.status_code, 302)
         self.assertIn(reverse("parent_login"), response.url)
 
     def test_child_can_submit_task_but_not_duplicate(self):
-        self.login_child(self.gabija, "1234")
+        self.login_child(self.child_one, "1234")
         response = self.client.post(reverse("child_submit_task", args=[self.task.pk]), follow=True)
         self.assertContains(response, "perduotas tėvams")
-        self.assertEqual(self.gabija.task_claims.filter(status=RequestStatus.PENDING).count(), 1)
+        self.assertEqual(self.child_one.task_claims.filter(status=RequestStatus.PENDING).count(), 1)
         response = self.client.post(reverse("child_submit_task", args=[self.task.pk]), follow=True)
         self.assertContains(response, "jau laukia")
-        self.assertEqual(self.gabija.task_claims.filter(status=RequestStatus.PENDING).count(), 1)
+        self.assertEqual(self.child_one.task_claims.filter(status=RequestStatus.PENDING).count(), 1)
 
     @override_settings(VAPID_PRIVATE_KEY="configured")
     @patch("economy.push.webpush", side_effect=ValueError("push error"))
@@ -185,23 +185,23 @@ class AccessAndWorkflowTests(TestCase):
             p256dh="test-p256dh",
             auth="test-auth",
         )
-        self.login_child(self.gabija, "1234")
+        self.login_child(self.child_one, "1234")
         response = self.client.post(
             reverse("child_submit_task", args=[self.task.pk]),
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "perduotas tėvams")
-        self.assertEqual(self.gabija.task_claims.count(), 1)
+        self.assertEqual(self.child_one.task_claims.count(), 1)
         webpush_mock.assert_called_once()
 
     def test_child_cannot_cancel_sibling_reward_request(self):
-        sibling_request = self.augustas.reward_requests.create(
+        sibling_request = self.child_two.reward_requests.create(
             reward=self.reward,
             reward_title=self.reward.title,
             cost_snapshot=self.reward.cost,
         )
-        self.login_child(self.gabija, "1234")
+        self.login_child(self.child_one, "1234")
         response = self.client.post(
             reverse("child_cancel_reward", args=[sibling_request.pk])
         )
@@ -211,7 +211,7 @@ class AccessAndWorkflowTests(TestCase):
 
     def test_child_only_sees_request_action_for_affordable_rewards(self):
         post_ledger_entry(
-            child=self.gabija,
+            child=self.child_one,
             delta=50,
             kind=LedgerKind.ADJUSTMENT,
             description="Prizų biudžetas",
@@ -219,7 +219,7 @@ class AccessAndWorkflowTests(TestCase):
         )
         affordable = Reward.objects.create(title="Prizas už 150", cost=150)
         too_expensive = Reward.objects.create(title="Prizas už 151", cost=151)
-        response = self.login_child(self.gabija, "1234")
+        response = self.login_child(self.child_one, "1234")
 
         rewards = {reward.pk: reward for reward in response.context["rewards"]}
         self.assertTrue(rewards[affordable.pk].is_affordable)
@@ -236,14 +236,14 @@ class AccessAndWorkflowTests(TestCase):
 
     def test_child_cannot_post_unaffordable_reward_request(self):
         post_ledger_entry(
-            child=self.gabija,
+            child=self.child_one,
             delta=50,
             kind=LedgerKind.ADJUSTMENT,
             description="Prizų biudžetas",
             actor=self.parent,
         )
         too_expensive = Reward.objects.create(title="Per brangus", cost=151)
-        self.login_child(self.gabija, "1234")
+        self.login_child(self.child_one, "1234")
 
         response = self.client.post(
             reverse("child_request_reward", args=[too_expensive.pk]),
@@ -252,11 +252,11 @@ class AccessAndWorkflowTests(TestCase):
 
         self.assertContains(response, "Šiam prizui nepakanka taškų.")
         self.assertFalse(
-            self.gabija.reward_requests.filter(reward=too_expensive).exists()
+            self.child_one.reward_requests.filter(reward=too_expensive).exists()
         )
 
     def test_enhanced_reward_request_returns_server_confirmed_effect(self):
-        self.login_child(self.gabija, "1234")
+        self.login_child(self.child_one, "1234")
 
         response = self.client.post(
             reverse("child_request_reward", args=[self.reward.pk]),
@@ -274,7 +274,7 @@ class AccessAndWorkflowTests(TestCase):
             },
         )
         self.assertTrue(
-            self.gabija.reward_requests.filter(
+            self.child_one.reward_requests.filter(
                 reward=self.reward,
                 status=RequestStatus.PENDING,
             ).exists()
@@ -288,33 +288,33 @@ class AccessAndWorkflowTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Tėvų erdvė")
-        claim = self.gabija.task_claims.create(
+        claim = self.child_one.task_claims.create(
             task=self.task,
             task_title=self.task.title,
             reward_snapshot=self.task.reward,
         )
         self.client.post(reverse("parent_decide_task", args=[claim.pk, "approve"]))
-        self.gabija.refresh_from_db()
-        self.assertEqual(self.gabija.balance, 50)
+        self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.balance, 50)
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, "Veiksmų istorija")
-        self.assertContains(response, "Gabija · Testas")
+        self.assertContains(response, "Child One · Testas")
 
     @patch("economy.views.notify_task_decision")
     def test_task_approval_and_rejection_notify_the_affected_child(self, notify):
         self.client.login(username="tevai", password=self.parent_password)
-        approved = self.gabija.task_claims.create(
+        approved = self.child_one.task_claims.create(
             task=self.task,
             task_title=self.task.title,
             reward_snapshot=self.task.reward,
         )
         self.client.post(reverse("parent_decide_task", args=[approved.pk, "approve"]))
         notify.assert_called_once()
-        self.assertEqual(notify.call_args.args[0].child, self.gabija)
+        self.assertEqual(notify.call_args.args[0].child, self.child_one)
         self.assertTrue(notify.call_args.kwargs["approved"])
 
         notify.reset_mock()
-        rejected = self.gabija.task_claims.create(
+        rejected = self.child_one.task_claims.create(
             task=self.task,
             task_title=self.task.title,
             reward_snapshot=self.task.reward,
@@ -324,13 +324,13 @@ class AccessAndWorkflowTests(TestCase):
             {"reason": "Pabandyk dar kartą."},
         )
         notify.assert_called_once()
-        self.assertEqual(notify.call_args.args[0].child, self.gabija)
+        self.assertEqual(notify.call_args.args[0].child, self.child_one)
         self.assertFalse(notify.call_args.kwargs["approved"])
 
     @patch("economy.views.notify_reward_decision")
     def test_reward_approval_and_rejection_notify_the_affected_child(self, notify):
         post_ledger_entry(
-            child=self.gabija,
+            child=self.child_one,
             delta=300,
             kind=LedgerKind.ADJUSTMENT,
             description="Pradinis balansas",
@@ -338,19 +338,19 @@ class AccessAndWorkflowTests(TestCase):
         )
         self.client.login(username="tevai", password=self.parent_password)
         approved = RewardRequest.objects.create(
-            child=self.gabija,
+            child=self.child_one,
             reward=self.reward,
             reward_title=self.reward.title,
             cost_snapshot=self.reward.cost,
         )
         self.client.post(reverse("parent_decide_reward", args=[approved.pk, "approve"]))
         notify.assert_called_once()
-        self.assertEqual(notify.call_args.args[0].child, self.gabija)
+        self.assertEqual(notify.call_args.args[0].child, self.child_one)
         self.assertTrue(notify.call_args.kwargs["approved"])
 
         notify.reset_mock()
         rejected = RewardRequest.objects.create(
-            child=self.gabija,
+            child=self.child_one,
             reward=self.reward,
             reward_title=self.reward.title,
             cost_snapshot=self.reward.cost,
@@ -360,11 +360,11 @@ class AccessAndWorkflowTests(TestCase):
             {"reason": "Pirmiausia atlik darbus."},
         )
         notify.assert_called_once()
-        self.assertEqual(notify.call_args.args[0].child, self.gabija)
+        self.assertEqual(notify.call_args.args[0].child, self.child_one)
         self.assertFalse(notify.call_args.kwargs["approved"])
 
     def test_task_decision_dialog_is_fully_lithuanian(self):
-        self.gabija.task_claims.create(
+        self.child_one.task_claims.create(
             task=self.task,
             task_title=self.task.title,
             reward_snapshot=self.task.reward,
@@ -431,18 +431,18 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(self.client.get(reverse("password_reset")).status_code, 404)
 
     def test_parent_can_unlock_child_profile(self):
-        self.gabija.locked_until = timezone.now() + timedelta(minutes=5)
-        self.gabija.failed_pin_attempts = 3
-        self.gabija.save(update_fields=["locked_until", "failed_pin_attempts"])
+        self.child_one.locked_until = timezone.now() + timedelta(minutes=5)
+        self.child_one.failed_pin_attempts = 3
+        self.child_one.save(update_fields=["locked_until", "failed_pin_attempts"])
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.post(
-            reverse("parent_unlock_child", args=[self.gabija.pk]),
+            reverse("parent_unlock_child", args=[self.child_one.pk]),
             follow=True,
         )
         self.assertContains(response, "atrakinta")
-        self.gabija.refresh_from_db()
-        self.assertIsNone(self.gabija.locked_until)
-        self.assertEqual(self.gabija.failed_pin_attempts, 0)
+        self.child_one.refresh_from_db()
+        self.assertIsNone(self.child_one.locked_until)
+        self.assertEqual(self.child_one.failed_pin_attempts, 0)
 
     def test_parent_can_hide_catalog_item_from_child(self):
         self.client.login(username="tevai", password=self.parent_password)
@@ -450,7 +450,7 @@ class AccessAndWorkflowTests(TestCase):
         self.task.refresh_from_db()
         self.assertFalse(self.task.is_active)
         self.client.logout()
-        response = self.login_child(self.gabija, "1234")
+        response = self.login_child(self.child_one, "1234")
         self.assertNotContains(response, "Testas")
 
     def test_parent_can_edit_catalog_item_and_choose_emoji(self):
@@ -508,18 +508,18 @@ class AccessAndWorkflowTests(TestCase):
             amount=-20,
             icon="📵",
         )
-        claim = self.gabija.task_claims.create(
+        claim = self.child_one.task_claims.create(
             task=self.task,
             task_title=self.task.title,
             reward_snapshot=self.task.reward,
         )
-        reward_request = self.gabija.reward_requests.create(
+        reward_request = self.child_one.reward_requests.create(
             reward=self.reward,
             reward_title=self.reward.title,
             cost_snapshot=self.reward.cost,
         )
         penalty_entry = post_ledger_entry(
-            child=self.gabija,
+            child=self.child_one,
             delta=penalty.amount,
             kind=LedgerKind.PENALTY,
             description=penalty.title,
@@ -558,13 +558,15 @@ class AccessAndWorkflowTests(TestCase):
         )
 
     def test_child_dashboard_uses_lithuanian_vocative(self):
-        response = self.login_child(self.augustas, "5678")
-        self.assertContains(response, "Labas, Augustai")
+        self.child_two.vocative_name = "Second child"
+        self.child_two.save(update_fields=["vocative_name"])
+        response = self.login_child(self.child_two, "5678")
+        self.assertContains(response, "Labas, Second child")
 
     def test_magic_theme_uses_correct_owl_accusative(self):
-        self.gabija.theme = "magic_academy"
-        self.gabija.save(update_fields=["theme"])
-        response = self.login_child(self.gabija, "1234")
+        self.child_one.theme = "magic_academy"
+        self.child_one.save(update_fields=["theme"])
+        response = self.login_child(self.child_one, "1234")
         self.assertContains(response, "Siųsti pelėdą")
         self.assertNotContains(response, "Siųsti pelėda")
         self.assertContains(response, 'id="sound-toggle"', html=False)
@@ -573,8 +575,8 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, ">♪</button>", html=False)
 
     def test_child_selector_is_neutral_and_hides_themes(self):
-        self.gabija.theme = "magic_academy"
-        self.gabija.save(update_fields=["theme"])
+        self.child_one.theme = "magic_academy"
+        self.child_one.save(update_fields=["theme"])
         response = self.client.get(reverse("child_select"))
         self.assertContains(response, "Prisijungti", count=2)
         self.assertContains(response, "profile-select-heading")
@@ -587,7 +589,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v0.12.4 BETA")
+        self.assertContains(response, "v0.13.0 BETA")
         self.assertContains(response, 'href="/pakeitimai/"', html=False)
         self.assertContains(response, "TAŠKAI")
         self.assertContains(response, "Kredito limitas -100")
@@ -632,7 +634,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Complete tasks, earn points")
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
-        self.assertContains(response, "KinKudos · v0.12.4 BETA")
+        self.assertContains(response, "KinKudos · v0.13.0 BETA")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_public_pages_share_the_product_header(self):
@@ -670,10 +672,10 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_history_is_collapsed_paginated_and_filterable(self):
         for index in range(12):
             post_ledger_entry(
-                child=self.gabija,
+                child=self.child_one,
                 delta=index + 1,
                 kind=LedgerKind.ADJUSTMENT,
-                description=f"Gabijos istorija {index}",
+                description=f"First child history {index}",
                 actor=self.parent,
             )
         self.client.login(username="tevai", password=self.parent_password)
@@ -683,35 +685,35 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.context["ledger_page"].paginator.num_pages, 2)
         self.assertContains(response, 'class="history-panel"', html=False)
         self.assertNotContains(response, 'class="history-panel" open', html=False)
-        self.assertContains(response, "Gabijos istorija 11")
-        self.assertNotContains(response, "Gabijos istorija 0")
+        self.assertContains(response, "First child history 11")
+        self.assertNotContains(response, "First child history 0")
 
         response = self.client.get(
             reverse("parent_dashboard"),
-            {"history_child": self.gabija.pk, "history_page": 2},
+            {"history_child": self.child_one.pk, "history_page": 2},
         )
         self.assertTrue(response.context["history_is_open"])
         self.assertEqual(len(response.context["ledger_page"]), 2)
-        self.assertContains(response, "Gabijos istorija 0")
-        self.assertNotContains(response, "Tik Augusto paslaptis")
+        self.assertContains(response, "First child history 0")
+        self.assertNotContains(response, "Sibling private entry")
 
         response = self.client.get(
             reverse("parent_dashboard"),
-            {"history_child": self.augustas.pk},
+            {"history_child": self.child_two.pk},
         )
         self.assertEqual(response.context["ledger_page"].paginator.count, 1)
-        self.assertContains(response, "Tik Augusto paslaptis")
-        self.assertNotContains(response, "Gabijos istorija")
+        self.assertContains(response, "Sibling private entry")
+        self.assertNotContains(response, "First child history")
 
     def test_parent_history_shows_approved_and_rejected_reward_requests(self):
         approved_request = RewardRequest.objects.create(
-            child=self.gabija,
+            child=self.child_one,
             reward=self.reward,
             reward_title="Patvirtintas prizas",
             cost_snapshot=100,
         )
         rejected_request = RewardRequest.objects.create(
-            child=self.augustas,
+            child=self.child_two,
             reward=self.reward,
             reward_title="Atmestas prizas",
             cost_snapshot=100,
@@ -733,7 +735,7 @@ class AccessAndWorkflowTests(TestCase):
 
         response = self.client.get(
             reverse("parent_dashboard"),
-            {"history_child": self.augustas.pk},
+            {"history_child": self.child_two.pk},
         )
         self.assertContains(response, "Atmestas prizas")
         self.assertContains(response, "Pirmiausia užbaik sutartus darbus.")
@@ -743,7 +745,7 @@ class AccessAndWorkflowTests(TestCase):
 
         response = self.client.get(
             reverse("parent_dashboard"),
-            {"history_child": self.gabija.pk},
+            {"history_child": self.child_one.pk},
         )
         self.assertContains(response, "Patvirtintas prizas")
         self.assertContains(response, 'href="#icon-check-circle"', html=False)
@@ -751,13 +753,13 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Atmestas prizas")
 
     def test_parent_history_shows_rejected_task_without_changing_balance(self):
-        claim = self.augustas.task_claims.create(
+        claim = self.child_two.task_claims.create(
             task=self.task,
             task_title="Atmestas darbas",
             reward_snapshot=75,
         )
-        self.augustas.refresh_from_db()
-        balance_before = self.augustas.balance
+        self.child_two.refresh_from_db()
+        balance_before = self.child_two.balance
         self.client.login(username="tevai", password=self.parent_password)
         self.client.post(
             reverse("parent_decide_task", args=[claim.pk, "reject"]),
@@ -766,11 +768,11 @@ class AccessAndWorkflowTests(TestCase):
 
         response = self.client.get(
             reverse("parent_dashboard"),
-            {"history_child": self.augustas.pk},
+            {"history_child": self.child_two.pk},
         )
 
-        self.augustas.refresh_from_db()
-        self.assertEqual(self.augustas.balance, balance_before)
+        self.child_two.refresh_from_db()
+        self.assertEqual(self.child_two.balance, balance_before)
         self.assertContains(response, "Atmestas darbas")
         self.assertContains(response, "Dar liko nesutvarkyta.")
         self.assertContains(response, 'href="#icon-stop"', html=False)
@@ -782,7 +784,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v0.12.4 BETA")
+        self.assertContains(response, "v0.13.0 BETA")
         self.assertContains(response, "v0.12.2 BETA")
         self.assertContains(response, "v0.10.4 BETA")
         self.assertContains(response, "v0.10.1 BETA")
@@ -878,7 +880,7 @@ class AccessAndWorkflowTests(TestCase):
             password="Another-safe-pass-456!",
         )
         post_ledger_entry(
-            child=self.gabija,
+            child=self.child_one,
             delta=5,
             kind=LedgerKind.ADJUSTMENT,
             description="Mamos įrašas",
@@ -888,15 +890,15 @@ class AccessAndWorkflowTests(TestCase):
         self.client.post(reverse("parent_remove_parent_account", args=[other.pk]))
         other.refresh_from_db()
         self.assertFalse(other.is_active)
-        self.assertTrue(self.gabija.ledger_entries.filter(actor=other).exists())
+        self.assertTrue(self.child_one.ledger_entries.filter(actor=other).exists())
 
     def test_parent_can_edit_and_deactivate_child_without_losing_history(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.post(
-            reverse("parent_edit_child_account", args=[self.gabija.pk]),
+            reverse("parent_edit_child_account", args=[self.child_one.pk]),
             {
-                "name": "Gabrielė",
-                "vocative_name": "Gabriele",
+                "name": "Updated Child",
+                "vocative_name": "Updated Child",
                 "theme": "magic_academy",
                 "min_balance": "-80",
                 "new_pin": "2468",
@@ -905,22 +907,22 @@ class AccessAndWorkflowTests(TestCase):
             follow=True,
         )
         self.assertContains(response, "atnaujintas")
-        self.gabija.refresh_from_db()
-        self.assertEqual(self.gabija.name, "Gabrielė")
-        self.assertEqual(self.gabija.address_name, "Gabriele")
-        self.assertEqual(self.gabija.min_balance, -80)
-        self.assertTrue(self.gabija.verify_pin("2468"))
+        self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.name, "Updated Child")
+        self.assertEqual(self.child_one.address_name, "Updated Child")
+        self.assertEqual(self.child_one.min_balance, -80)
+        self.assertTrue(self.child_one.verify_pin("2468"))
         post_ledger_entry(
-            child=self.gabija,
+            child=self.child_one,
             delta=10,
             kind=LedgerKind.ADJUSTMENT,
             description="Istorinis įrašas",
             actor=self.parent,
         )
-        self.client.post(reverse("parent_remove_child_account", args=[self.gabija.pk]))
-        self.gabija.refresh_from_db()
-        self.assertFalse(self.gabija.is_active)
-        self.assertTrue(self.gabija.ledger_entries.filter(description="Istorinis įrašas").exists())
+        self.client.post(reverse("parent_remove_child_account", args=[self.child_one.pk]))
+        self.child_one.refresh_from_db()
+        self.assertFalse(self.child_one.is_active)
+        self.assertTrue(self.child_one.ledger_entries.filter(description="Istorinis įrašas").exists())
 
     def test_parent_can_assign_penalty_from_catalog(self):
         penalty = PenaltyTemplate.objects.create(
@@ -931,38 +933,38 @@ class AccessAndWorkflowTests(TestCase):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.post(
             reverse("parent_assign_penalty", args=[penalty.pk]),
-            {"child_id": self.gabija.pk, "reason": "Nesilaikė susitarimo"},
+            {"child_id": self.child_one.pk, "reason": "Nesilaikė susitarimo"},
             follow=True,
         )
         self.assertContains(response, "Nuobauda „Ekrano nuoboda“ skirta")
-        self.gabija.refresh_from_db()
-        self.assertEqual(self.gabija.balance, -20)
-        self.assertEqual(self.gabija.ledger_entries.first().kind, LedgerKind.PENALTY)
+        self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.balance, -20)
+        self.assertEqual(self.child_one.ledger_entries.first().kind, LedgerKind.PENALTY)
 
     def test_parent_can_award_catalog_task_from_child_card(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.post(
-            reverse("parent_award_task", args=[self.gabija.pk]),
+            reverse("parent_award_task", args=[self.child_one.pk]),
             {"task_ids": [self.task.pk]},
             follow=True,
         )
         self.assertContains(response, "darbų: 1 (iš viso +50)")
-        self.gabija.refresh_from_db()
-        self.assertEqual(self.gabija.balance, 50)
+        self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.balance, 50)
 
     def test_parent_can_award_multiple_tasks_from_child_card(self):
         second_task = Task.objects.create(title="Antras darbas", reward=25)
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.post(
-            reverse("parent_award_task", args=[self.gabija.pk]),
+            reverse("parent_award_task", args=[self.child_one.pk]),
             {"task_ids": [self.task.pk, second_task.pk]},
             follow=True,
         )
         self.assertContains(response, "darbų: 2 (iš viso +75)")
-        self.gabija.refresh_from_db()
-        self.assertEqual(self.gabija.balance, 75)
+        self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.balance, 75)
         self.assertEqual(
-            self.gabija.ledger_entries.filter(kind=LedgerKind.TASK).count(),
+            self.child_one.ledger_entries.filter(kind=LedgerKind.TASK).count(),
             2,
         )
 
@@ -984,32 +986,32 @@ class AccessAndWorkflowTests(TestCase):
         ):
             with self.assertRaises(RuntimeError):
                 self.client.post(
-                    reverse("parent_award_task", args=[self.gabija.pk]),
+                    reverse("parent_award_task", args=[self.child_one.pk]),
                     {"task_ids": [self.task.pk, second_task.pk]},
                 )
 
-        self.gabija.refresh_from_db()
-        self.assertEqual(self.gabija.balance, 0)
-        self.assertFalse(self.gabija.ledger_entries.exists())
+        self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.balance, 0)
+        self.assertFalse(self.child_one.ledger_entries.exists())
 
     def test_parent_can_assign_penalty_from_child_card(self):
         penalty = PenaltyTemplate.objects.create(title="Nuoboda", amount=-15)
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.post(
-            reverse("parent_assign_child_penalty", args=[self.gabija.pk]),
+            reverse("parent_assign_child_penalty", args=[self.child_one.pk]),
             {"penalty_ids": [penalty.pk], "reason": "Susitarimas"},
             follow=True,
         )
         self.assertContains(response, "nuobaudų: 1 (iš viso -15)")
-        self.gabija.refresh_from_db()
-        self.assertEqual(self.gabija.balance, -15)
+        self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.balance, -15)
 
     def test_parent_can_assign_multiple_penalties_from_child_card(self):
         first = PenaltyTemplate.objects.create(title="Pirma", amount=-15)
         second = PenaltyTemplate.objects.create(title="Antra", amount=-10)
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.post(
-            reverse("parent_assign_child_penalty", args=[self.gabija.pk]),
+            reverse("parent_assign_child_penalty", args=[self.child_one.pk]),
             {
                 "penalty_ids": [first.pk, second.pk],
                 "reason": "Susitarimas",
@@ -1017,9 +1019,9 @@ class AccessAndWorkflowTests(TestCase):
             follow=True,
         )
         self.assertContains(response, "nuobaudų: 2 (iš viso -25)")
-        self.gabija.refresh_from_db()
-        self.assertEqual(self.gabija.balance, -25)
-        entries = self.gabija.ledger_entries.filter(kind=LedgerKind.PENALTY)
+        self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.balance, -25)
+        entries = self.child_one.ledger_entries.filter(kind=LedgerKind.PENALTY)
         self.assertEqual(entries.count(), 2)
         self.assertTrue(
             all(entry.description.endswith(": Susitarimas") for entry in entries)
@@ -1028,33 +1030,33 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_must_select_at_least_one_quick_action_item(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.post(
-            reverse("parent_award_task", args=[self.gabija.pk]),
+            reverse("parent_award_task", args=[self.child_one.pk]),
             {},
             follow=True,
         )
         self.assertContains(response, "Pasirink bent vieną aktyvų darbą")
-        self.gabija.refresh_from_db()
-        self.assertEqual(self.gabija.balance, 0)
+        self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.balance, 0)
 
     def test_parent_can_add_custom_evaluation_from_child_card(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.post(
-            reverse("parent_adjust_balance", args=[self.gabija.pk]),
+            reverse("parent_adjust_balance", args=[self.child_one.pk]),
             {"amount": 17, "description": "Papildoma pagalba"},
             follow=True,
         )
         self.assertContains(response, "Balansas pakoreguotas")
-        self.gabija.refresh_from_db()
-        self.assertEqual(self.gabija.balance, 17)
+        self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.balance, 17)
 
     def test_pending_requests_are_grouped_and_oldest_first(self):
-        older = self.gabija.task_claims.create(
+        older = self.child_one.task_claims.create(
             task=self.task,
             task_title="Pirmas prašymas",
             reward_snapshot=10,
         )
         second_task = Task.objects.create(title="Antras", reward=20)
-        newer = self.gabija.task_claims.create(
+        newer = self.child_one.task_claims.create(
             task=second_task,
             task_title="Antras prašymas",
             reward_snapshot=20,
@@ -1070,7 +1072,7 @@ class AccessAndWorkflowTests(TestCase):
 
     def test_parent_dashboard_colors_positive_and_negative_balances(self):
         post_ledger_entry(
-            child=self.gabija,
+            child=self.child_one,
             delta=-10,
             kind=LedgerKind.ADJUSTMENT,
             description="Testinis minusas",
@@ -1115,7 +1117,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, reverse("push_unsubscribe"))
 
     def test_child_can_change_own_pin(self):
-        self.login_child(self.gabija, "1234")
+        self.login_child(self.child_one, "1234")
         response = self.client.post(
             reverse("child_change_pin"),
             {
@@ -1126,12 +1128,12 @@ class AccessAndWorkflowTests(TestCase):
             follow=True,
         )
         self.assertContains(response, "PIN pakeistas")
-        self.gabija.refresh_from_db()
-        self.assertTrue(self.gabija.verify_pin("2468"))
-        self.assertFalse(self.gabija.verify_pin("1234"))
+        self.child_one.refresh_from_db()
+        self.assertTrue(self.child_one.verify_pin("2468"))
+        self.assertFalse(self.child_one.verify_pin("1234"))
 
     def test_child_cannot_change_pin_without_current_pin(self):
-        self.login_child(self.gabija, "1234")
+        self.login_child(self.child_one, "1234")
         response = self.client.post(
             reverse("child_change_pin"),
             {
@@ -1142,8 +1144,8 @@ class AccessAndWorkflowTests(TestCase):
             follow=True,
         )
         self.assertContains(response, "Dabartinis PIN neteisingas")
-        self.gabija.refresh_from_db()
-        self.assertTrue(self.gabija.verify_pin("1234"))
+        self.child_one.refresh_from_db()
+        self.assertTrue(self.child_one.verify_pin("1234"))
 
     def test_child_avatar_is_cropped_and_served_as_webp(self):
         image_bytes = BytesIO()
@@ -1155,21 +1157,21 @@ class AccessAndWorkflowTests(TestCase):
         )
         with tempfile.TemporaryDirectory() as media_root:
             with override_settings(MEDIA_ROOT=media_root):
-                self.login_child(self.gabija, "1234")
+                self.login_child(self.child_one, "1234")
                 response = self.client.post(
                     reverse("child_set_avatar"),
                     {"avatar": upload},
                     follow=True,
                 )
                 self.assertContains(response, "Avataras pakeistas")
-                self.gabija.refresh_from_db()
-                self.assertTrue(self.gabija.avatar.name.endswith(".webp"))
-                with self.gabija.avatar.open("rb") as stored_avatar:
+                self.child_one.refresh_from_db()
+                self.assertTrue(self.child_one.avatar.name.endswith(".webp"))
+                with self.child_one.avatar.open("rb") as stored_avatar:
                     with Image.open(stored_avatar) as processed:
                         self.assertEqual(processed.format, "WEBP")
                         self.assertEqual(processed.size, (512, 512))
                 avatar_response = self.client.get(
-                    reverse("child_avatar", args=[self.gabija.pk])
+                    reverse("child_avatar", args=[self.child_one.pk])
                 )
                 self.assertEqual(avatar_response.status_code, 200)
                 self.assertEqual(avatar_response["Content-Type"], "image/webp")
@@ -1184,21 +1186,21 @@ class AccessAndWorkflowTests(TestCase):
         )
         with tempfile.TemporaryDirectory() as media_root:
             with override_settings(MEDIA_ROOT=media_root):
-                self.login_child(self.gabija, "1234")
+                self.login_child(self.child_one, "1234")
                 response = self.client.post(
                     reverse("child_set_avatar"),
                     {"avatar": upload},
                     follow=True,
                 )
                 self.assertContains(response, "Avataras pakeistas")
-                self.gabija.refresh_from_db()
-                with self.gabija.avatar.open("rb") as stored_avatar:
+                self.child_one.refresh_from_db()
+                with self.child_one.avatar.open("rb") as stored_avatar:
                     with Image.open(stored_avatar) as processed:
                         self.assertEqual(processed.format, "WEBP")
                         self.assertEqual(processed.size, (512, 512))
 
     def test_child_session_uses_configured_expiry(self):
-        response = self.login_child(self.gabija, "1234")
+        response = self.login_child(self.child_one, "1234")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.client.session.get_expiry_age(), 172800)
 
@@ -1213,12 +1215,12 @@ class AccessAndWorkflowTests(TestCase):
         csrf_client = Client(enforce_csrf_checks=True)
         csrf_client.force_login(self.parent)
         response = csrf_client.post(
-            reverse("parent_adjust_balance", args=[self.gabija.pk]),
+            reverse("parent_adjust_balance", args=[self.child_one.pk]),
             {"amount": 10, "description": "Be CSRF"},
         )
         self.assertEqual(response.status_code, 403)
-        self.gabija.refresh_from_db()
-        self.assertEqual(self.gabija.balance, 0)
+        self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.balance, 0)
 
     @override_settings(SESSION_COOKIE_SECURE=True, CSRF_COOKIE_SECURE=True)
     def test_production_session_cookie_is_secure(self):
@@ -1229,7 +1231,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertTrue(response.cookies["kinkudos_session"]["secure"])
 
     def test_mutating_endpoints_reject_get(self):
-        self.login_child(self.gabija, "1234")
+        self.login_child(self.child_one, "1234")
         response = self.client.get(reverse("child_submit_task", args=[self.task.pk]))
         self.assertEqual(response.status_code, 405)
 
@@ -1237,10 +1239,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=0.12.4',
+            '/static/icons/favicon-32.png?v=0.13.0',
         )
-        self.assertContains(home, "/static/css/app.css?v=0.12.4")
-        self.assertContains(home, "/static/js/app.js?v=0.12.4")
+        self.assertContains(home, "/static/css/app.css?v=0.13.0")
+        self.assertContains(home, "/static/js/app.js?v=0.13.0")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1248,10 +1250,10 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#5B3E96")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=0.12.4",
+            "/static/icons/icon-192.png?v=0.13.0",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=0.12.4")
-        self.assertContains(worker, 'kinkudos-app-shell-0.12.4')
+        self.assertContains(worker, "/static/icons/icon-192.png?v=0.13.0")
+        self.assertContains(worker, 'kinkudos-app-shell-0.13.0')
         self.assertEqual(worker["Service-Worker-Allowed"], "/")

@@ -26,6 +26,9 @@ Passwords are hashed with Argon2. Parent sessions last 24 hours
 and requires SMTP configuration. Removing a parent account deactivates it
 (`is_active=False`); it is not physically deleted, and the last active
 parent account cannot be removed.
+The first parent created by the installer is the parent administrator
+(`is_staff=True`). All parents may see backup health, but only the parent
+administrator may change backup credentials or request a manual backup.
 
 **Children** — multiple `ChildProfile` records managed by parents. Children
 sign in with a four-digit PIN hashed with Argon2, never stored raw. Five
@@ -94,10 +97,12 @@ and reward decisions, point gifts, and birthday awards.
 optional screenshot and a review-status workflow.
 
 ## Themes
-Six built-in themes, all original names/assets, no third-party trademarks:
+Seven built-in themes using KinKudos-authored CSS and no third-party logos or
+assets:
 `neutral`, `magic_academy`, `block_world`, `hero_hq`, `art_studio`,
-`panda_pet`. Themes change colors, typography character, illustrative CSS,
-icons, and short UI copy.
+`panda_pet`, `robliux`. Themes change colors, typography character,
+illustrative CSS, icons, currency forms, sounds, and short UI copy. The
+game-styled `robliux` theme is not affiliated with or endorsed by Roblox.
 
 ## PWA
 `manifest.webmanifest`, dedicated icons, `display: standalone`. The service
@@ -124,17 +129,39 @@ kinkudos/
 ├── deploy/    # shared Compose + Traefik config, no secrets
 ├── data/      # SQLite + uploaded media
 ├── backups/   # local backup copies
+├── backup-state/ # sanitized backup health state
 └── secrets/   # Django, VAPID, SMTP, backup secrets
 ```
 The deployment service account may modify only `app` and `deploy`; runtime
 data, backups, and secrets remain separately permissioned.
 
 ## Backups
-SQLite online-backup mechanism; local copies kept 31 days; encrypted
-`restic` copy to any restic-compatible repository, using credentials scoped
-to that repository. A backup configuration is not considered complete
-until a restore test has been performed successfully. Whole-server backup
-planning is a separate operational concern.
+An isolated `backup-agent` container owns the remote-storage credentials and
+has no published port or Docker socket. The application reaches it only over
+an internal Compose network authenticated with a generated service token.
+The application never receives stored provider secrets back from the agent.
+
+The agent creates a consistent SQLite online backup, includes private uploaded
+media, keeps local database copies for 31 days, and sends encrypted snapshots
+through `restic`. Backblaze B2 through its S3-compatible API and generic
+S3-compatible storage are configurable in the parent UI. Existing
+provider-neutral `restic.env` repositories remain usable after an upgrade.
+Only provider, repository target, timestamps, health, and masked key metadata
+are exposed to parents.
+
+Backups run once daily after the configured hour and can be requested manually
+by a parent administrator. Only one run can execute at a time. A run is
+successful only after the remote upload, retention/prune operation, and
+`restic check` all succeed. Green health means the latest successful remote
+copy is no older than seven days; an error is shown separately.
+
+Provider credentials, the `restic` repository password, and agent token remain
+in separately permissioned files under `secrets/`. Configuration changes and
+manual requests are audited without secret values. Restore remains an explicit
+server-administrator operation and is never exposed as a web action. A backup
+configuration is not considered complete until a restore test has succeeded.
+Whole-server backup planning and an offline copy of the repository password
+remain operator responsibilities.
 
 ## Versioning
 MIT license, semantic versioning, `main` must always pass its test suite.

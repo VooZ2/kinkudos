@@ -5,7 +5,7 @@ gauna teminius taškus ir keičia juos į prizus. Tėvai telefone, planšetėje 
 kompiuteryje valdo bendrus darbų, bausmių ir prizų sąrašus bei tvirtina vaikų
 prašymus.
 
-- **Dabartinis leidimas:** 0.12.4 BETA
+- **Dabartinis leidimas:** 0.13.0 BETA
 - **Kalbos:** lietuvių ir anglų
 - **Platformos:** ARM64 ir AMD64 Linux serveriai su Docker
 
@@ -14,9 +14,10 @@ prašymus.
 - Vaikų profiliai su PIN ir slaptažodžiu apsaugotos tėvų paskyros.
 - Tvirtinami darbai ir pasirinktinės privačios atlikto darbo nuotraukos.
 - Prizai, bausmės, taupymo tikslai, taškų dovanos ir gimtadienio dovanos.
-- Šešios vaikų temos su savais pavadinimais, vaizdais, garsais ir taškais.
+- Septynios vaikų temos su savais pavadinimais, vaizdais, garsais ir taškais.
 - Atskirai kiekviename įrenginyje pasirenkama kalba, garsas ir pranešimai.
-- Nekeičiamas taškų žurnalas, vietinis duomenų saugojimas ir kopijų įrankiai.
+- Nekeičiamas taškų žurnalas, vietinis duomenų saugojimas, šifruotų kopijų
+  nustatymai ir jų būsenos rodymas.
 - Įdiegiama PWA šiuolaikinėms kompiuterių ir mobiliųjų įrenginių naršyklėms.
 
 KinKudos vis dar yra BETA ir kasdien naudojamas vienoje šeimoje. Esamas
@@ -36,6 +37,7 @@ kinkudos/
 ├── deploy/    # aktyvi Compose konfigūracija
 ├── data/      # duomenų bazė ir įkeltos nuotraukos
 ├── backups/   # vietinės duomenų bazės kopijos
+├── backup-state/ # kopijų būsenos duomenys
 └── secrets/   # sugeneruotos paslaptys ir pasirinktiniai SMTP/restic duomenys
 ```
 
@@ -44,10 +46,12 @@ negalima kelti į Git.
 
 Pirmojo diegimo ir konfigūravimo instrukcijos pateiktos
 [deploy/README.lt.md](deploy/README.lt.md). Norint esamame KinKudos serveryje
-įdiegti 0.12.4, reikia iš
-[GitHub Releases](https://github.com/VooZ2/kinkudos/releases/tag/v0.12.4)
+įdiegti 0.13.0, reikia iš
+[GitHub Releases](https://github.com/VooZ2/kinkudos/releases/tag/v0.13.0)
 atsisiųsti leidimo archyvą bei jo kontrolinę sumą ir paleisti pridėtą
 `deploy/install-release.sh`.
+
+ARM64 „Orange Pi“ instrukcija: [docs/ORANGE_PI_INSTALL.lt.md](docs/ORANGE_PI_INSTALL.lt.md).
 
 ## Vietinis kūrimas
 
