@@ -22,6 +22,8 @@ Reikalavimai:
 - 64 bitų ARM arba x86 Linux serveris su Docker Engine ir Docker Compose;
 - jau veikiantis Traefik, prijungtas prie išorinio Docker tinklo `web`;
 - į serverį nukreiptas domeno vardas.
+- kol repozitorija privati, GitHub CLI, prijungtas prie paskyros, kuri gali
+  skaityti `VooZ2/kinkudos`.
 
 Leidimo programos kodą laikykite `app`, o šį katalogą – greta jo, kaip parodyta
 aukščiau. `deploy/.env` faile nustatykite `KINKUDOS_HOSTNAME` ir, jei reikia,
@@ -51,8 +53,8 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 `deploy`, `data` ir `secrets`:
 
 ```bash
-curl -fLO https://github.com/VooZ2/kinkudos/releases/download/v0.12.4/kinkudos-0.12.4.tar.gz
-curl -fLO https://github.com/VooZ2/kinkudos/releases/download/v0.12.4/kinkudos-0.12.4.tar.gz.sha256
+gh release download v0.12.4 --repo VooZ2/kinkudos \
+  --pattern 'kinkudos-0.12.4.tar.gz*'
 sha256sum -c kinkudos-0.12.4.tar.gz.sha256
 tar -xOf kinkudos-0.12.4.tar.gz \
   kinkudos-0.12.4/deploy/compose.yml > deploy/compose.yml

@@ -34,6 +34,8 @@ Prerequisites:
 - an existing Traefik instance attached to an external Docker network named
   `web`;
 - a hostname routed to the host.
+- while the repository is private, GitHub CLI authenticated with an account
+  that can read `VooZ2/kinkudos`.
 
 Place the release source in `app` and this directory beside it as shown above.
 Set `KINKUDOS_HOSTNAME` and, when needed, `KINKUDOS_ALLOWED_NETWORKS` in
@@ -70,8 +72,8 @@ Run these commands from the deployment root (the directory containing
 `app`, `deploy`, `data`, and `secrets`):
 
 ```bash
-curl -fLO https://github.com/VooZ2/kinkudos/releases/download/v0.12.4/kinkudos-0.12.4.tar.gz
-curl -fLO https://github.com/VooZ2/kinkudos/releases/download/v0.12.4/kinkudos-0.12.4.tar.gz.sha256
+gh release download v0.12.4 --repo VooZ2/kinkudos \
+  --pattern 'kinkudos-0.12.4.tar.gz*'
 sha256sum -c kinkudos-0.12.4.tar.gz.sha256
 tar -xOf kinkudos-0.12.4.tar.gz \
   kinkudos-0.12.4/deploy/compose.yml > deploy/compose.yml
