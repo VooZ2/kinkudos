@@ -1,54 +1,89 @@
-# KinKudos
+# 👨‍👩‍👧‍👦 KinKudos
 
-KinKudos – savarankiškai talpinama šeimos PWA, kurioje vaikai atlieka darbus,
-gauna teminius taškus ir keičia juos į prizus. Tėvai telefone, planšetėje ar
-kompiuteryje valdo bendrus darbų, bausmių ir prizų sąrašus bei tvirtina vaikų
-prašymus.
+> Savarankiškai talpinama šeimos PWA, kasdienius darbus paverčianti bendrais pasiekimais.
 
-- **Dabartinis leidimas:** 26.1.0
-- **Kalbos:** lietuvių ir anglų
-- **Platformos:** ARM64 ir AMD64 Linux serveriai su Docker
+[![Leidimas](https://img.shields.io/github/v/release/VooZ2/kinkudos?label=release)](https://github.com/VooZ2/kinkudos/releases)
+[![Licencija](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Docker Compose](https://img.shields.io/badge/Docker%20Compose-ready-2496ED?logo=docker&logoColor=white)](deploy/compose.yml)
+[![Architektūra](https://img.shields.io/badge/Linux-AMD64%20%7C%20ARM64-orange.svg)](docs/ARCHITECTURE.md)
 
-## Kas įtraukta
+**Dabartinis leidimas:** 26.1.1 · **Kalbos:** lietuvių ir anglų
 
-- Vaikų profiliai su PIN ir slaptažodžiu apsaugotos tėvų paskyros.
-- Tvirtinami darbai ir pasirinktinės privačios atlikto darbo nuotraukos.
-- Prizai, bausmės, taupymo tikslai, taškų dovanos ir gimtadienio dovanos.
-- Septynios vaikų temos su savais pavadinimais, vaizdais, garsais ir taškais.
-- Atskirai kiekviename įrenginyje pasirenkama kalba, garsas ir pranešimai.
-- Nekeičiamas taškų žurnalas, vietinis duomenų saugojimas, šifruotų kopijų
-  nustatymai ir jų būsenos rodymas.
-- Įdiegiama PWA šiuolaikinėms kompiuterių ir mobiliųjų įrenginių naršyklėms.
+## Kodėl KinKudos?
 
-KinKudos paruoštas produkciniam savarankiškam vienos šeimos naudojimui. Esamos
-instaliacijos išlieka atnaujinamos, tačiau prieš diegiant leidimą reikia turėti
-patikrintą atsarginę kopiją ir perskaityti pakeitimų sąrašą.
+KinKudos vaikams suteikia aiškų ciklą: pasirinkti darbą, jį atlikti, gauti
+teminių taškų ir siekti norimo prizo. Tėvai telefone, planšetėje ar
+kompiuteryje valdo patvirtinimus, prizus, bausmes, kredito limitus ir bendrus
+šeimos nustatymus.
 
-## Diegimo modelis
+Viena instaliacija skirta vienai šeimai. Programoje nėra reklamų ar integruotos
+analitikos, o šeimos duomenys lieka savame serveryje, išskyrus operatoriaus
+aiškiai įjungtas paslaugas, pavyzdžiui, Web Push, SMTP ar šifruotas nuotolines
+kopijas.
 
-Viena KinKudos instaliacija skirta vienai šeimai. Produkcinėje aplinkoje
-naudojami Docker Compose, SQLite, Gunicorn ir jau veikiantis Traefik reverse
-proxy su išoriniu Docker tinklu `web`. TLS ir prieigą tik iš patikimų privačių
-tinklų valdo Traefik.
+## Kaip tai atrodo
 
-```text
-kinkudos/
-├── app/       # leidimo programos kodas
-├── deploy/    # aktyvi Compose konfigūracija
-├── data/      # duomenų bazė ir įkeltos nuotraukos
-├── backups/   # vietinės duomenų bazės kopijos
-├── backup-state/ # kopijų būsenos duomenys
-└── secrets/   # sugeneruotos paslaptys ir pasirinktiniai SMTP/restic duomenys
-```
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/welcome.jpg" alt="KinKudos pradžios ekranas"></td>
+    <td width="50%"><img src="docs/screenshots/parent-dashboard.jpg" alt="KinKudos tėvų erdvė"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Paprastas įėjimas vaikams ir tėvams</sub></td>
+    <td align="center"><sub>Tėvų suvestinė ir patvirtinimų eiga</sub></td>
+  </tr>
+</table>
 
-Šeimos duomenų, nuotraukų, duomenų bazių, kopijų, `.env` failų ir paslapčių
-negalima kelti į Git.
+Ekrano nuotraukose naudojami išgalvoti demonstraciniai duomenys.
 
-Pirmojo diegimo ir konfigūravimo instrukcijos pateiktos
-[deploy/README.lt.md](deploy/README.lt.md). Norint atnaujinti esamą KinKudos
-serverį, iš repozitorijos „GitHub Releases“ puslapio reikia atsisiųsti norimo
-leidimo archyvą bei jo kontrolinę sumą ir paleisti pridėtą
-`deploy/install-release.sh`.
+## Svarbiausios galimybės
+
+- **Septynios vaikų temos** su originaliais vaizdais, garsais, tekstais ir
+  taškų vienetais.
+- **Tėvų valdoma šeimos ekonomika:** darbai, patvirtinimai, prizai, bausmės,
+  taupymo tikslai, kiekvieno vaiko kredito limitas, dovanos ir gimtadienio
+  taškai.
+- **Privačios darbų nuotraukos**, kurios sumažinamos, konvertuojamos į WebP ir
+  prieš saugojimą išvalomos nuo EXIF metaduomenų.
+- **Įdiegiama PWA** su atskirais kiekvieno įrenginio kalbos, garso ir
+  pasirinktinių Web Push pranešimų nustatymais. Neprisijungus pasiekiamas tik
+  programos karkasas – privatūs balansai ir prašymai nekaupiami.
+- **Lietuviška ir angliška sąsaja** tėvų bei vaikų veiksmuose.
+- **Šifruotų kopijų integracija** su „Backblaze B2“ arba bendrine
+  S3 suderinama saugykla per izoliuotą `restic` agentą, rodant kopijų būseną ir
+  vientisumo patikrą.
+
+## Privatumo ir saugumo modelis
+
+- Tėvai jungiasi slaptažodžiais, o vaikų PIN kodai yra maišomi ir saugomi nuo
+  pakartotinių bandymų.
+- Konteineriai veikia be `root` teisių, programos konteinerio failų sistema yra
+  tik skaitoma.
+- Taškų operacijos yra transakcinės, o žurnalo įrašai nekeičiami.
+- Įkeltos nuotraukos yra privačios ir šalinamos pagal pasirinktą saugojimo
+  laiką.
+- Prisijungimai, DB, nuotraukos, kopijos ir šeimos duomenys laikomi už leidimo
+  kodo katalogo ribų.
+
+KinKudos skirtas naudoti už jau veikiančio „Traefik“ reverse proxy su TLS ir
+patikimų tinklų prieigos sąrašu. Už saugų serverį, patikrintą duomenų atkūrimą,
+atnaujinimus ir prieigą prie hosto atsako operatorius.
+
+## Diegimas
+
+Palaikomoje produkcinėje schemoje naudojami Docker Compose, SQLite, Gunicorn,
+izoliuotas kopijų agentas ir esamas `web` pavadintas „Traefik“ tinklas.
+Palaikomi ARM64 ir AMD64 Linux serveriai.
+
+- [Diegimas ir atnaujinimas](deploy/README.lt.md)
+- [Orange Pi / ARM64 instrukcija](docs/ORANGE_PI_INSTALL.lt.md)
+- [Architektūra ir saugumas](docs/ARCHITECTURE.md)
+- [Pakeitimų istorija](CHANGELOG.lt.md)
+
+Leidimų archyvai ir jų kontrolinės sumos skelbiami
+[GitHub Releases puslapyje](https://github.com/VooZ2/kinkudos/releases).
+Repozitorija neskelbia iš anksto sukonfigūruoto konteinerio atvaizdo ar vienos
+komandos viešojo debesies diegimo.
 
 ## Vietinis kūrimas
 
@@ -62,13 +97,11 @@ python manage.py test economy.tests
 python manage.py runserver
 ```
 
-## Projekto dokumentai
+`seed_demo` skirta tik kūrimui ir atsisako keisti netuščią duomenų bazę.
 
-- [Architektūra ir saugumas](docs/ARCHITECTURE.md)
-- [Diegimas](deploy/README.lt.md)
-- [Leidimų taisyklės](docs/RELEASING.md)
-- [Pakeitimai](CHANGELOG.lt.md) · [angliškai](CHANGELOG.md)
-- [MIT licencija](LICENSE)
+## Licencija
+
+Platinama pagal [MIT licenciją](LICENSE).
 
 ## Atsakomybės apribojimas
 

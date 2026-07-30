@@ -76,7 +76,7 @@ Run these commands from the deployment root (the directory containing
 version with the release you want to install:
 
 ```bash
-version=26.1.0
+version=26.1.1
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -115,6 +115,23 @@ hosting-provider backup. The web interface reports only snapshots created by
 the KinKudos backup agent. For Backblaze B2, use a dedicated bucket and an
 application key restricted to that bucket; use a separate bucket and test data
 for release verification.
+
+If saving the configuration reports that the storage server cannot be
+resolved, the backup container could not translate the S3 endpoint hostname to
+an IP address. This happens before credentials are checked. Verify that the
+endpoint contains only the provider hostname (for example,
+`s3.eu-central-003.backblazeb2.com`) and then inspect DNS and agent logs:
+
+```bash
+docker compose exec -T backup-agent python -c \
+  "import socket; print(socket.getaddrinfo('s3.eu-central-003.backblazeb2.com', 443))"
+docker compose logs --tail=100 backup-agent
+```
+
+Replace the example hostname with the endpoint entered in KinKudos. A
+`Name or service not known` result usually means a misspelled/nonexistent
+endpoint; a timeout or `server misbehaving` result points to Docker daemon or
+host DNS/network configuration.
 
 To request the same verified backup from the server:
 

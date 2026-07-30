@@ -5,6 +5,27 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.1.1] - 2026-07-30
+
+### Changed
+
+- The Settings page now uses one clear heading hierarchy, centered dividers,
+  consistent field typography, styled select controls, primary action buttons,
+  and matching green/red service status indicators.
+- The project README now presents verified capabilities, privacy boundaries,
+  deployment expectations, and screenshots made with fictional demo data.
+- Backup documentation now distinguishes an invalid S3 hostname from Docker or
+  host DNS failures and provides direct diagnostic commands.
+
+### Fixed
+
+- Sensitive settings ask for “Your account password” instead of the longer,
+  account-type-specific wording.
+- The activity-history filter no longer repeats a separate “Child” label next
+  to the self-explanatory selector.
+- Service-worker cache behavior is covered by a regression test that requires
+  `Cache-Control: no-cache` on the worker script.
+
 ## [26.1.0] - 2026-07-30
 
 ### Added

@@ -56,7 +56,7 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 norimo diegti leidimo reikšmėmis:
 
 ```bash
-version=26.1.0
+version=26.1.1
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -95,6 +95,23 @@ hostingo tiekėjo kopija. Programos sąsajoje rodoma tik KinKudos kopijų
 tarnybos sukurta būsena. „Backblaze B2“ naudokite atskirą bucket ir tik jam
 apribotą Application Key; leidimo patikrai naudokite atskirą testinį bucket
 bei tik bandymų duomenis.
+
+Jei išsaugant nustatymus pranešama, kad nepavyko rasti saugyklos serverio,
+kopijų konteineriui nepavyko S3 adreso paversti IP adresu. Tai įvyksta dar
+nepradėjus tikrinti prisijungimo duomenų. Patikrinkite, kad S3 adrese būtų tik
+tiekėjo hostname (pavyzdžiui, `s3.eu-central-003.backblazeb2.com`), tada
+patikrinkite DNS ir kopijų agento žurnalą:
+
+```bash
+docker compose exec -T backup-agent python -c \
+  "import socket; print(socket.getaddrinfo('s3.eu-central-003.backblazeb2.com', 443))"
+docker compose logs --tail=100 backup-agent
+```
+
+Pavyzdžio hostname pakeiskite KinKudos įvestu adresu. Rezultatas
+`Name or service not known` paprastai reiškia neteisingą arba neegzistuojantį
+adresą; timeout ar `server misbehaving` rodo Docker daemon arba serverio
+DNS / tinklo problemą.
 
 Tą pačią patikrintą kopiją serveryje galima paleisti:
 

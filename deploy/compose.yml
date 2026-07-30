@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: ../app
-    image: kinkudos:26.1.0
+    image: kinkudos:26.1.1
     entrypoint:
       - /bin/sh
       - -c
@@ -94,7 +94,7 @@ services:
       com.centurylinklabs.watchtower.enable: "false"
 
   backup-agent:
-    image: kinkudos:26.1.0
+    image: kinkudos:26.1.1
     entrypoint: ["python", "/app/scripts/backup_agent.py"]
     command: []
     user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"

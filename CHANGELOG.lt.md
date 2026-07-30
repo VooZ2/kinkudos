@@ -7,6 +7,27 @@ schema.
 
 ## [Unreleased]
 
+## [26.1.1] - 2026-07-30
+
+### Pakeista
+
+- „Nustatymuose“ palikta viena aiški antraščių hierarchija, centruoti skirtukai,
+  atskirta laukų tipografika, stilizuoti pasirinkimo laukai, pagrindinio
+  stiliaus veiksmų mygtukai ir vienodos žalios / raudonos tarnybų būsenos.
+- Projekto README dabar patraukliau pateikia patikrintas galimybes, privatumo
+  ribas, diegimo modelį ir išgalvotų demonstracinių duomenų ekrano nuotraukas.
+- Kopijų dokumentacijoje atskirta neteisingo S3 hostname ir Docker ar serverio
+  DNS klaida bei pridėtos tiesioginės diagnostikos komandos.
+
+### Pataisyta
+
+- Jautriuose nustatymuose prašoma „Jūsų paskyros slaptažodžio“ vietoje ilgesnio
+  paskyros tipą kartojančio teksto.
+- Veiksmų istorijos filtre prie savaime aiškaus pasirinkimo nebekartojamas
+  atskiras užrašas „Vaikas“.
+- Regresinis testas užtikrina, kad `service-worker.js` visada būtų pateikiamas
+  su `Cache-Control: no-cache`.
+
 ## [26.1.0] - 2026-07-30
 
 ### Pridėta

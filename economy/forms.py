@@ -468,7 +468,7 @@ class BackupSettingsForm(StyledFormMixin, forms.Form):
         widget=forms.PasswordInput(render_value=False),
     )
     current_password = forms.CharField(
-        label=_("Your current parent password"),
+        label=_("Your account password"),
         widget=forms.PasswordInput(render_value=False),
         help_text=_("Required before changing backup credentials."),
     )
@@ -505,7 +505,7 @@ class SmtpSettingsForm(StyledFormMixin, forms.Form):
     from_email = forms.EmailField(label=_("Sender email address"))
     feedback_email = forms.EmailField(label=_("Feedback recipient email address"))
     current_password = forms.CharField(
-        label=_("Your current parent password"),
+        label=_("Your account password"),
         widget=forms.PasswordInput(render_value=False),
         help_text=_("Required before changing sensitive email settings."),
     )

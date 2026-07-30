@@ -580,6 +580,9 @@ msgstr "El. pašto prisijungimo duomenys yra jautrūs. Būtinas jūsų tėvų pa
 msgid "Email notifications"
 msgstr "El. pašto pranešimai"
 
+msgid "Email settings"
+msgstr "El. pašto nustatymai"
+
 msgid "Email settings were not saved. Check the server details and credentials."
 msgstr "El. pašto nustatymai neišsaugoti. Patikrinkite serverio ir prisijungimo duomenis."
 
@@ -1870,11 +1873,11 @@ msgstr "Gavai %(amount)s gimtadienio proga"
 msgid "You received a gift!"
 msgstr "Gavai dovanų!"
 
+msgid "Your account password"
+msgstr "Jūsų paskyros slaptažodis"
+
 msgid "Your artwork was sent to the review gallery!"
 msgstr "Tavo kūrinys išsiųstas į vertinimo galeriją!"
-
-msgid "Your current parent password"
-msgstr "Dabartinis jūsų tėvų paskyros slaptažodis"
 
 msgid "Your point gift was sent."
 msgstr "Tavo taškų dovana išsiųsta."

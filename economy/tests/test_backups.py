@@ -42,7 +42,7 @@ class BackupSettingsTests(TestCase):
         self.assertNotContains(response, "Back up now")
 
     @patch("economy.views.backup_status")
-    def test_unconfigured_backup_uses_neutral_values_and_orange_status(self, status):
+    def test_unconfigured_backup_uses_neutral_values_and_negative_status(self, status):
         status.return_value = {
             "available": True,
             "configured": False,
@@ -59,10 +59,12 @@ class BackupSettingsTests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
 
         self.assertContains(response, "Not configured")
-        self.assertContains(response, "backup-health-unset")
+        self.assertContains(response, "service-status-bad")
         self.assertNotContains(response, "REPLACE_WITH_REPOSITORY")
         self.assertNotContains(response, "Backups not completed")
         self.assertContains(response, "Edit settings")
+        self.assertContains(response, "Your account password", count=2)
+        self.assertNotContains(response, "Your current parent password")
 
     @patch("economy.views.backup_status")
     def test_configured_backup_without_success_uses_attention_status(self, status):
