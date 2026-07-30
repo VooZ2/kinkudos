@@ -1,13 +1,8 @@
-# 👨‍👩‍👧‍👦 KinKudos
+# KinKudos
 
 > A self-hosted family PWA that turns everyday tasks into shared progress.
 
-[![Release](https://img.shields.io/github/v/release/VooZ2/kinkudos?label=release)](https://github.com/VooZ2/kinkudos/releases)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Docker Compose](https://img.shields.io/badge/Docker%20Compose-ready-2496ED?logo=docker&logoColor=white)](deploy/compose.yml)
-[![Architecture](https://img.shields.io/badge/Linux-AMD64%20%7C%20ARM64-orange.svg)](docs/ARCHITECTURE.md)
-
-**Current release:** 26.1.2 · **Languages:** English and Lithuanian<br>
+**Current release:** 26.1.3 · **Languages:** English and Lithuanian<br>
 [Lietuviška README versija](README.lt.md)
 
 ## Why KinKudos?
@@ -32,6 +27,22 @@ backups.
   <tr>
     <td align="center"><sub>Simple entry for children and parents</sub></td>
     <td align="center"><sub>Parent overview and approval workflow</sub></td>
+  </tr>
+</table>
+
+<p>
+  <img src="docs/screenshots/settings.png" alt="KinKudos parent settings">
+</p>
+<p align="center"><sub>Family, privacy, service, account, and feedback settings in one parent workspace</sub></p>
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/child-magic-academy.png" alt="KinKudos Magic Academy child view"></td>
+    <td width="50%"><img src="docs/screenshots/child-block-world.png" alt="KinKudos Block World child view"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Magic Academy child theme</sub></td>
+    <td align="center"><sub>Block World child theme</sub></td>
   </tr>
 </table>
 
@@ -76,7 +87,6 @@ isolated backup agent, and an existing Traefik network named `web`. It runs on
 ARM64 and AMD64 Linux hosts.
 
 - [Installation and upgrades](deploy/README.md)
-- [Orange Pi / ARM64 guide](docs/ORANGE_PI_INSTALL.md)
 - [Architecture and security](docs/ARCHITECTURE.md)
 - [Release history](CHANGELOG.md)
 

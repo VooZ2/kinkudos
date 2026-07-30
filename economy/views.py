@@ -1873,8 +1873,8 @@ def manifest(request):
             "id": "/",
             "start_url": "/",
             "display": "standalone",
-            "background_color": "#FAF8F5",
-            "theme_color": "#5B3E96",
+            "background_color": "#F9FAFB",
+            "theme_color": "#4C1D95",
             "icons": [
                 {
                     "src": f"/static/icons/icon-192.png?v={settings.APP_VERSION}",

@@ -454,6 +454,9 @@ msgstr "Atliktas darbas"
 msgid "Connect to your home network or VPN and try again."
 msgstr "Prisijunkite prie namų tinklo arba VPN ir bandykite dar kartą."
 
+msgid "Copying"
+msgstr "Kopijuojama"
+
 msgid "Cost"
 msgstr "Kaina"
 
@@ -945,6 +948,9 @@ msgstr "Pagal paiešką darbų nerasta."
 
 msgid "Not configured"
 msgstr "Nenustatyta"
+
+msgid "Not enabled"
+msgstr "Neįjungta"
 
 msgid "Not enough points"
 msgstr "Nepakanka taškų"

@@ -1,13 +1,8 @@
-# 👨‍👩‍👧‍👦 KinKudos
+# KinKudos
 
 > Savarankiškai talpinama šeimos PWA, kasdienius darbus paverčianti bendrais pasiekimais.
 
-[![Leidimas](https://img.shields.io/github/v/release/VooZ2/kinkudos?label=release)](https://github.com/VooZ2/kinkudos/releases)
-[![Licencija](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Docker Compose](https://img.shields.io/badge/Docker%20Compose-ready-2496ED?logo=docker&logoColor=white)](deploy/compose.yml)
-[![Architektūra](https://img.shields.io/badge/Linux-AMD64%20%7C%20ARM64-orange.svg)](docs/ARCHITECTURE.md)
-
-**Dabartinis leidimas:** 26.1.2 · **Kalbos:** lietuvių ir anglų
+**Dabartinis leidimas:** 26.1.3 · **Kalbos:** lietuvių ir anglų
 
 ## Kodėl KinKudos?
 
@@ -31,6 +26,22 @@ kopijas.
   <tr>
     <td align="center"><sub>Paprastas įėjimas vaikams ir tėvams</sub></td>
     <td align="center"><sub>Tėvų suvestinė ir patvirtinimų eiga</sub></td>
+  </tr>
+</table>
+
+<p>
+  <img src="docs/screenshots/settings.png" alt="KinKudos tėvų nustatymai">
+</p>
+<p align="center"><sub>Šeimos, privatumo, tarnybų, paskyrų ir atsiliepimų nustatymai vienoje tėvų erdvėje</sub></p>
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/screenshots/child-magic-academy.png" alt="KinKudos Magijos akademijos vaiko vaizdas"></td>
+    <td width="50%"><img src="docs/screenshots/child-block-world.png" alt="KinKudos Blokų pasaulio vaiko vaizdas"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>„Magijos akademijos“ vaiko tema</sub></td>
+    <td align="center"><sub>„Blokų pasaulio“ vaiko tema</sub></td>
   </tr>
 </table>
 
@@ -76,7 +87,6 @@ izoliuotas kopijų agentas ir esamas `web` pavadintas „Traefik“ tinklas.
 Palaikomi ARM64 ir AMD64 Linux serveriai.
 
 - [Diegimas ir atnaujinimas](deploy/README.lt.md)
-- [Orange Pi / ARM64 instrukcija](docs/ORANGE_PI_INSTALL.lt.md)
 - [Architektūra ir saugumas](docs/ARCHITECTURE.md)
 - [Pakeitimų istorija](CHANGELOG.lt.md)
 

@@ -7,6 +7,27 @@ schema.
 
 ## [Unreleased]
 
+## [26.1.3] - 2026-07-30
+
+### Pakeista
+
+- Tėvų, pradžios ir bendroje sistemos sąsajoje naudojama dokumentuota anglies,
+  pagalbinė pilka, kreminė, slyvų, šalavijo, gintarinė ir švelniai raudona
+  paletė bei vienoda laukų ir paaiškinimų tipografika.
+- El. pašto ir kopijų konfigūracijos suvestinės pateikiamos kompaktiškais
+  sąrašais įprastu raidžių registru, sutrumpinti nustatymų veiksmai ir
+  suvienodintas mygtukų lygiavimas.
+- Lietuviškame ir angliškame README pašalintos dekoratyvinės ikonos bei
+  ženkleliai, pridėtos nustatymų ir dviejų vaiko temų ekrano nuotraukos,
+  pašalinta pasenusi „Orange Pi“ instrukcijos nuoroda.
+
+### Pataisyta
+
+- Nesukonfigūruotos kopijos būsena rodoma kaip „Neįjungta“, vykdoma kopija –
+  kaip „Kopijuojama“ pagrindiniame indikatoriuje, o tvarkinga kopija – žalia
+  būsena „Įjungta“, nekartojant atskiro progreso ženklelio.
+- PWA temos ir fono metaduomenų spalvos suderintos su bendra sąsajos palete.
+
 ## [26.1.2] - 2026-07-30
 
 ### Pataisyta

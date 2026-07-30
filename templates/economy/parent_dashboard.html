@@ -399,14 +399,14 @@
       </span>
     </div>
     {% if smtp_status.enabled %}
-      <dl class="backup-status-grid">
+      <dl class="service-details">
         <div><dt>{% translate "SMTP server" %}</dt><dd>{{ smtp_status.host }}:{{ smtp_status.port }}</dd></div>
         <div><dt>{% translate "Sender email address" %}</dt><dd>{{ smtp_status.from_email }}</dd></div>
         <div><dt>{% translate "Feedback recipient email address" %}</dt><dd>{{ smtp_status.feedback_email }}</dd></div>
       </dl>
     {% endif %}
     {% if user.is_staff %}
-      <button class="button button-primary" type="button" data-open-dialog="smtp-settings-dialog">{% translate "Edit email settings" %}</button>
+      <button class="button button-primary" type="button" data-open-dialog="smtp-settings-dialog">{% translate "Edit settings" %}</button>
       <dialog id="smtp-settings-dialog" class="action-dialog backup-dialog">
         <button class="dialog-close" type="button" data-close-dialog>×</button>
         <h2>{% translate "Email setup" %}</h2>
@@ -424,14 +424,16 @@
   <article class="panel backup-panel">
     <div class="backup-heading">
       <p class="settings-description">{% translate "Daily encrypted copies protect the family database and uploaded photos." %}</p>
-      <span class="service-status {% if backup_status.available and backup_status.configured and backup_status.is_fresh %}service-status-good{% else %}service-status-bad{% endif %}">
+      <span class="service-status {% if backup_status.running %}service-status-warning{% elif backup_status.available and backup_status.configured and backup_status.is_fresh %}service-status-good{% else %}service-status-bad{% endif %}">
         <span aria-hidden="true"></span>
-        {% if not backup_status.available %}
+        {% if backup_status.running %}
+          {% translate "Copying" %}
+        {% elif not backup_status.available %}
           {% translate "Attention needed" %}
         {% elif not backup_status.configured %}
-          {% translate "Not configured" %}
+          {% translate "Not enabled" %}
         {% elif backup_status.is_fresh %}
-          {% translate "Current" %}
+          {% translate "Enabled" %}
         {% else %}
           {% translate "Attention needed" %}
         {% endif %}
@@ -440,13 +442,12 @@
     {% if not backup_status.available %}
       <p class="danger-warning">{% translate "The backup service is unavailable. Ask the server administrator to check the backup container." %}</p>
     {% else %}
-      <dl class="backup-status-grid">
+      <dl class="service-details">
         <div><dt>{% translate "Provider" %}</dt><dd>{{ backup_status.provider|default:"—" }}</dd></div>
         <div><dt>{% translate "Repository" %}</dt><dd>{{ backup_status.target|default:"—" }}</dd></div>
         <div><dt>{% translate "Last successful backup" %}</dt><dd>{% if backup_status.last_success %}{{ backup_status.last_success|date:"Y-m-d H:i" }}{% elif backup_status.configured %}{% translate "Backups not completed" %}{% else %}—{% endif %}</dd></div>
         <div><dt>{% translate "Last integrity check" %}</dt><dd>{% if backup_status.last_check %}{{ backup_status.last_check|date:"Y-m-d H:i" }}{% else %}—{% endif %}</dd></div>
       </dl>
-      {% if backup_status.running %}<p class="status-pill">{% translate "Backup in progress..." %}</p>{% endif %}
       {% if backup_status.error %}<p class="danger-warning">{{ backup_status.error }}</p>{% endif %}
       {% if user.is_staff %}
         <div class="backup-actions">

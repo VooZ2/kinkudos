@@ -111,6 +111,16 @@ and pending requests are never cached long-term. Push subscriptions
 available to both parent and child sessions. iOS requires the app to be
 added to the home screen for Web Push to work.
 
+## Parent interface palette
+The shared parent, landing, and system interface uses a fixed semantic palette:
+charcoal `#1F2937` for primary text, headings, and icons; muted gray `#6B7280`
+for explanations, dates, inactive controls, and footer text; off-white
+`#F9FAFB` for the background; warm plum `#4C1D95` for primary actions and
+navigation; sage green `#10B981` for success; amber `#F59E0B` for attention
+and pending states; and soft red `#EF4444` for errors, penalties, negative
+balances, rejected work, and destructive actions. Pure black is not part of
+the shared parent palette.
+
 ## Security
 - Traefik `ipAllowList` via `KINKUDOS_ALLOWED_NETWORKS`; TLS via the
   existing `letsencrypt` resolver with `tlsChallenge`.

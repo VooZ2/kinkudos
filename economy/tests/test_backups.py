@@ -37,7 +37,7 @@ class BackupSettingsTests(TestCase):
         self.client.force_login(self.parent)
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, "Backups")
-        self.assertContains(response, "Current")
+        self.assertContains(response, "Enabled")
         self.assertNotContains(response, "Edit settings")
         self.assertNotContains(response, "Back up now")
 
@@ -58,7 +58,7 @@ class BackupSettingsTests(TestCase):
 
         response = self.client.get(reverse("parent_dashboard"))
 
-        self.assertContains(response, "Not configured")
+        self.assertContains(response, "Not enabled")
         self.assertContains(response, "service-status-bad")
         self.assertNotContains(response, "REPLACE_WITH_REPOSITORY")
         self.assertNotContains(response, "Backups not completed")
@@ -86,6 +86,27 @@ class BackupSettingsTests(TestCase):
         self.assertContains(response, "Attention needed")
         self.assertContains(response, "Backups not completed")
         self.assertContains(response, "danger-warning")
+
+    @patch("economy.views.backup_status")
+    def test_running_backup_uses_the_main_status_indicator(self, status):
+        status.return_value = {
+            "available": True,
+            "configured": True,
+            "provider": "s3",
+            "target": "s3.example.invalid/test/kinkudos",
+            "is_fresh": True,
+            "running": True,
+            "last_success": None,
+            "last_check": None,
+            "error": "",
+        }
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, "Copying")
+        self.assertContains(response, "service-status-warning")
+        self.assertNotContains(response, "Backup in progress")
 
     @patch("economy.views.configure_backup")
     def test_admin_can_verify_and_save_configuration(self, configure):

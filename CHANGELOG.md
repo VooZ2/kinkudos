@@ -5,6 +5,26 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.1.3] - 2026-07-30
+
+### Changed
+
+- The parent, landing, and shared system interface now uses the documented
+  charcoal, muted gray, off-white, plum, sage, amber, and soft-red palette,
+  with consistent field and helper typography.
+- Email and backup configuration summaries use compact sentence-case lists,
+  shorter settings actions, and consistently aligned buttons.
+- The English and Lithuanian READMEs no longer use decorative icons or badges,
+  include parent settings and two child-theme screenshots, and no longer link
+  to the obsolete Orange Pi guide.
+
+### Fixed
+
+- An unconfigured backup now reports “Not enabled”, a running backup reports
+  “Copying” in the main status indicator, and a healthy backup reports
+  “Enabled” in green without a duplicate progress badge.
+- PWA theme and background metadata now match the shared interface palette.
+
 ## [26.1.2] - 2026-07-30
 
 ### Fixed

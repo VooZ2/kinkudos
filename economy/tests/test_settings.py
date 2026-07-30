@@ -96,6 +96,26 @@ class ParentSettingsTests(TestCase):
         self.assertContains(response, "Reward:<input", count=1)
         self.assertContains(response, "Icon:<input", count=3)
 
+    def test_email_status_uses_compact_details_and_short_edit_label(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "settings.json"
+            path.write_text(
+                (
+                    '{"enabled": true, "host": "smtp.example.test", "port": 587, '
+                    '"from_email": "sender@example.test", '
+                    '"feedback_email": "family@example.test"}'
+                ),
+                encoding="utf-8",
+            )
+            with override_settings(SMTP_CONFIG_PATH=path):
+                self.client.force_login(self.admin)
+                response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, 'class="service-details"', count=1)
+        self.assertContains(response, ">Edit settings</button>", count=1)
+        self.assertNotContains(response, "Edit email settings")
+        self.assertNotContains(response, 'class="backup-status-grid"')
+
     def smtp_payload(self, **overrides):
         payload = {
             "enabled": "on",
