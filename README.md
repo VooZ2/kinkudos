@@ -1,42 +1,81 @@
 # KinKudos
 
-A self-hosted family PWA where children earn points for tasks and achievements,
-then exchange them for rewards.
+KinKudos is a self-hosted family PWA where children complete tasks, earn
+theme-based points, and exchange them for rewards. Parents manage the shared
+task, penalty, and reward catalogs and approve requests from a phone, tablet,
+or desktop browser.
 
-The application supports English and Lithuanian. English is the default for new
-installations; the browser language is detected automatically and every device
-can save a different choice.
-
-KinKudos runs on ARM64 and AMD64 Docker hosts. Family data and secrets are
-never stored in the Git repository.
+- **Current release:** 0.12.4 BETA
+- **Languages:** English and Lithuanian
+- **Platforms:** ARM64 and AMD64 Linux hosts with Docker
 
 Lithuanian documentation: [README.lt.md](README.lt.md)
 
-## Development
+## What it includes
 
-After creating a virtual environment and installing `requirements.txt`:
+- PIN-based child profiles and password-protected parent accounts.
+- Tasks with an approval workflow and optional private photo evidence.
+- Rewards, penalties, savings goals, point gifts, and birthday awards.
+- Six child themes with their own names, visuals, sounds, and point units.
+- Per-device language, sound, and Web Push notification controls.
+- Append-only point history, private local data, and backup helpers.
+- Installable PWA support for current desktop and mobile browsers.
+
+KinKudos is currently BETA and is used by one family. Existing installations
+are expected to remain upgradeable, but operators should keep tested backups
+and review release notes before updating.
+
+## Deployment model
+
+One KinKudos installation serves one family. The production configuration uses
+Docker Compose, SQLite, Gunicorn, and an existing Traefik reverse proxy with an
+external Docker network named `web`. TLS and access to trusted private networks
+are handled by Traefik.
+
+Application source is kept separately from runtime state:
+
+```text
+kinkudos/
+├── app/       # release source
+├── deploy/    # active Compose configuration
+├── data/      # database and uploaded media
+├── backups/   # local database backups
+└── secrets/   # generated credentials and optional SMTP/restic secrets
+```
+
+Family data, uploads, databases, backups, `.env` files, and secrets must never
+be committed to Git.
+
+For initial installation and configuration details, see
+[deploy/README.md](deploy/README.md). To install release 0.12.4 on an existing
+KinKudos host, download its archive and checksum from
+[GitHub Releases](https://github.com/VooZ2/kinkudos/releases/tag/v0.12.4), then
+run the bundled `deploy/install-release.sh` as documented there.
+
+## Local development
+
+Python 3.12 is required. After creating a virtual environment and installing
+`requirements.txt`:
 
 ```bash
 python scripts/compile_translations.py
 python manage.py migrate
-python manage.py test
+python manage.py test economy.tests
 python manage.py runserver
 ```
 
 `seed_demo` is development-only and refuses to modify a non-empty database.
 
-## Docker installation
+## Project documentation
 
-```bash
-cp deploy/.env.example deploy/.env
-cd deploy
-./bootstrap.sh
-```
+- [Architecture and security](docs/ARCHITECTURE.md)
+- [Deployment](deploy/README.md)
+- [Release policy](docs/RELEASING.md)
+- [Changelog](CHANGELOG.md) · [Lithuanian](CHANGELOG.lt.md)
+- [MIT license](LICENSE)
 
-The installer asks for English or Lithuanian, builds the image, starts the
-service, and can create generic parent and child accounts. See
-[deploy/README.md](deploy/README.md) for deployment and SMTP details.
+## Disclaimer
 
-Architecture: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)  
-Release policy: [docs/RELEASING.md](docs/RELEASING.md)  
-Changelog: [CHANGELOG.md](CHANGELOG.md) · [Lithuanian](CHANGELOG.lt.md)
+KinKudos is an AI-created personal project made solely to experiment with
+OpenAI Codex. It is provided as-is, without warranty or a promise of support,
+fitness, or security for any particular use.

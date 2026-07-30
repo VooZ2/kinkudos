@@ -105,8 +105,7 @@
         <input name="next" type="hidden" value="{{ request.get_full_path }}">
         <label class="sr-only" for="language-select">{% translate "Language" %}</label>
         <span class="language-switcher-face" aria-hidden="true">
-          <span>{% if LANGUAGE_CODE == "lt" %}🇱🇹 LT{% else %}🇬🇧 EN{% endif %}</span>
-          <svg viewBox="0 0 12 8"><path d="m1 1.25 5 5 5-5"/></svg>
+          <span>{% if LANGUAGE_CODE == "lt" %}🇱🇹{% else %}🇬🇧{% endif %}</span>
         </span>
         <select id="language-select" name="language" aria-label="{% translate 'Language' %}" onchange="this.form.submit()">
           <option value="en"{% if LANGUAGE_CODE == "en" %} selected{% endif %}>🇬🇧 EN</option>

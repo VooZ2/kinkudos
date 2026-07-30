@@ -1,6 +1,6 @@
 [project]
 name = "kinkudos"
-version = "0.12.2"
+version = "0.12.4"
 description = "Self-hosted family tasks, points, and rewards PWA"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/example/kinkudos"
+Repository = "https://github.com/VooZ2/kinkudos"
 
 [tool.ruff]
 line-length = 100

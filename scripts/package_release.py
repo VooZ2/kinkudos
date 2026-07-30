@@ -7,11 +7,9 @@ import hashlib
 import os
 import re
 import subprocess
-import sys
 import tarfile
 import tempfile
 from pathlib import Path
-
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
@@ -52,9 +50,18 @@ def project_version() -> str:
 
 
 def included_files() -> list[Path]:
+    tracked = subprocess.run(
+        ("git", "ls-files", "-z"),
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+    ).stdout.split(b"\0")
     files = []
-    for path in ROOT.rglob("*"):
-        relative = path.relative_to(ROOT)
+    for encoded_relative in tracked:
+        if not encoded_relative:
+            continue
+        relative = Path(os.fsdecode(encoded_relative))
+        path = ROOT / relative
         if (
             any(part in EXCLUDED_PARTS for part in relative.parts)
             and relative not in REQUIRED_DEPLOY_FILES

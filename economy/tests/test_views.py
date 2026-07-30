@@ -41,6 +41,8 @@ class LanguageSelectionTests(TestCase):
         response = self.client.get(reverse("home"), HTTP_ACCEPT_LANGUAGE="lt-LT,lt;q=0.9")
         self.assertContains(response, "Bendra šeimos erdvė")
         self.assertContains(response, '<html lang="lt">', html=False)
+        self.assertContains(response, ">🇱🇹</span>", html=False)
+        self.assertNotContains(response, "🇱🇹 LT</span>", html=False)
 
     def test_saved_language_overrides_browser_and_persists(self):
         response = self.client.post(
@@ -109,6 +111,22 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, "Gabija")
         self.assertNotContains(response, "Tik Augusto paslaptis")
         self.assertNotContains(response, ">999<", html=True)
+
+    def test_child_dashboard_shows_only_five_latest_history_entries(self):
+        for index in range(7):
+            post_ledger_entry(
+                child=self.gabija,
+                delta=1,
+                kind=LedgerKind.ADJUSTMENT,
+                description=f"Gabijos veiksmas {index}",
+                actor=self.parent,
+            )
+
+        response = self.login_child(self.gabija, "1234")
+
+        self.assertEqual(len(response.context["ledger"]), 5)
+        self.assertContains(response, "Gabijos veiksmas 6")
+        self.assertNotContains(response, "Gabijos veiksmas 0")
 
     def test_child_must_choose_a_world_on_first_sign_in(self):
         self.gabija.theme = "neutral"
@@ -449,6 +467,15 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(self.task.reward, 75)
         self.assertEqual(self.task.icon, "🧹")
 
+    def test_catalog_edit_forms_use_localized_icon_label(self):
+        PenaltyTemplate.objects.create(title="Vėlavimas", amount=-5)
+        self.client.login(username="tevai", password=self.parent_password)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, "<label>Ikona", count=3, html=False)
+        self.assertNotContains(response, "<label>Emoji", html=False)
+
     def test_new_catalog_forms_have_no_default_icon(self):
         for form_class in (TaskForm, PenaltyForm, RewardForm):
             with self.subTest(form=form_class.__name__):
@@ -560,7 +587,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v0.12.2 BETA")
+        self.assertContains(response, "v0.12.4 BETA")
         self.assertContains(response, 'href="/pakeitimai/"', html=False)
         self.assertContains(response, "TAŠKAI")
         self.assertContains(response, "Kredito limitas -100")
@@ -605,7 +632,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Complete tasks, earn points")
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
-        self.assertContains(response, "KinKudos · v0.12.2 BETA")
+        self.assertContains(response, "KinKudos · v0.12.4 BETA")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_public_pages_share_the_product_header(self):
@@ -755,6 +782,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
+        self.assertContains(response, "v0.12.4 BETA")
         self.assertContains(response, "v0.12.2 BETA")
         self.assertContains(response, "v0.10.4 BETA")
         self.assertContains(response, "v0.10.1 BETA")
@@ -1209,10 +1237,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=0.12.2',
+            '/static/icons/favicon-32.png?v=0.12.4',
         )
-        self.assertContains(home, "/static/css/app.css?v=0.12.2")
-        self.assertContains(home, "/static/js/app.js?v=0.12.2")
+        self.assertContains(home, "/static/css/app.css?v=0.12.4")
+        self.assertContains(home, "/static/js/app.js?v=0.12.4")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1220,10 +1248,10 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#5B3E96")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=0.12.2",
+            "/static/icons/icon-192.png?v=0.12.4",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=0.12.2")
-        self.assertContains(worker, 'kinkudos-app-shell-0.12.2')
+        self.assertContains(worker, "/static/icons/icon-192.png?v=0.12.4")
+        self.assertContains(worker, 'kinkudos-app-shell-0.12.4')
         self.assertEqual(worker["Service-Worker-Allowed"], "/")

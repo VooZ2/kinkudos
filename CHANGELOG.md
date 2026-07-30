@@ -5,6 +5,26 @@ Keep a Changelog and the versions follow Semantic Versioning.
 
 ## [Unreleased]
 
+## [0.12.4 BETA] - 2026-07-30
+
+### Changed
+
+- Child activity history now shows only the five most recent actions.
+- Gift notifications use shorter wording and the recipient's themed point
+  name without exposing the transferred amount in the notification text.
+- Catalog create and edit forms consistently call the emoji field “Icon”.
+- The project README now reflects the current BETA feature set, deployment
+  model, supported platforms, and AI-project disclaimer.
+
+### Fixed
+
+- Language controls now show only the flag in a compact 44 px circular control,
+  without the code or dropdown arrow that was misaligned on iPad.
+- Notification controls now show only the bell in the same 44 px frame as the
+  sign-out control, while keeping accessible state text.
+- Release archives are built only from Git-tracked files, so ignored local
+  caches and configuration cannot be included accidentally.
+
 ## [0.12.2 BETA] - 2026-07-29
 
 ### Added

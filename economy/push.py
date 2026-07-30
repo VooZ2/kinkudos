@@ -120,10 +120,10 @@ def notify_reward_decision(reward_request, *, approved):
 def notify_gift_received(gift):
     _send(
         {
-            "title": _("You received a point gift"),
-            "body": _("%(name)s gave you %(amount)s") % {
+            "title": _("You received a gift!"),
+            "body": _("%(name)s gave you %(currency)s.") % {
                 "name": gift.sender.name,
-                "amount": _currency_amount(gift.amount, gift.recipient),
+                "currency": currency_unit(10, gift.recipient.theme),
             },
             "url": "/vaikas/mano/#istorija",
             "tag": f"point-gift-{gift.pk}",

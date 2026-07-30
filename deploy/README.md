@@ -28,6 +28,17 @@ permissions. Never commit `.env` or the `secrets` directory.
 
 ## Installation
 
+Prerequisites:
+
+- a 64-bit ARM or x86 Linux host with Docker Engine and Docker Compose;
+- an existing Traefik instance attached to an external Docker network named
+  `web`;
+- a hostname routed to the host.
+
+Place the release source in `app` and this directory beside it as shown above.
+Set `KINKUDOS_HOSTNAME` and, when needed, `KINKUDOS_ALLOWED_NETWORKS` in
+`deploy/.env`, then run:
+
 ```bash
 cd /path/to/kinkudos/deploy
 ./bootstrap.sh
@@ -52,6 +63,29 @@ If initial family creation was skipped:
 ```bash
 docker compose exec app python manage.py setup_family --language en
 ```
+
+## Updating to 0.12.4
+
+Run these commands from the deployment root (the directory containing
+`app`, `deploy`, `data`, and `secrets`):
+
+```bash
+curl -fLO https://github.com/VooZ2/kinkudos/releases/download/v0.12.4/kinkudos-0.12.4.tar.gz
+curl -fLO https://github.com/VooZ2/kinkudos/releases/download/v0.12.4/kinkudos-0.12.4.tar.gz.sha256
+sha256sum -c kinkudos-0.12.4.tar.gz.sha256
+tar -xOf kinkudos-0.12.4.tar.gz \
+  kinkudos-0.12.4/deploy/compose.yml > deploy/compose.yml
+./deploy/install-release.sh \
+  "$PWD/kinkudos-0.12.4.tar.gz" \
+  "$PWD/kinkudos-0.12.4.tar.gz.sha256" \
+  0.12.4 \
+  "$PWD"
+```
+
+The updater validates the checksum and release metadata, builds and smoke-tests
+the image, backs up the live database, switches the app only after those checks
+pass, and verifies container health. The release archive never contains
+`deploy/.env`, runtime data, uploads, backups, or secrets.
 
 ## Backups
 

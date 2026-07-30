@@ -5,8 +5,7 @@
 {% block header_actions %}
 <button id="enable-push" class="push-control push-checking" type="button">
   <svg class="push-icon" aria-hidden="true"><use href="#icon-bell"></use></svg>
-  <span class="push-dot" aria-hidden="true"></span>
-  <span data-push-label>{% translate "Checking notifications" %}</span>
+  <span class="sr-only" data-push-label>{% translate "Checking notifications" %}</span>
 </button>
 <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="topbar-icon-button" type="submit" aria-label="{% translate "Log out" %}" title="{% translate "Log out" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-logout"></use></svg></button></form>
 {% endblock %}
@@ -292,7 +291,7 @@
             {% csrf_token %}
             <label>{% translate "Task" %}<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
             <label>{% translate "Points" %}<input class="field-control" name="reward" type="number" min="1" value="{{ item.reward }}" required></label>
-            <label>Emoji<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
+            <label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
             <div class="form-actions">
               <button class="button button-primary" type="submit">{% translate "Save" %}</button>
               <button class="button button-danger" type="submit" formaction="{% url 'parent_delete_catalog' 'task' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete task “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
@@ -321,7 +320,7 @@
             {% csrf_token %}
             <label>{% translate "Penalty" %}<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
             <label>{% translate "Points" %}<input class="field-control" name="amount" type="number" min="1" value="{{ item.amount|absolute }}" required></label>
-            <label>Emoji<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
+            <label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
             <div class="form-actions">
               <button class="button button-primary" type="submit">{% translate "Save" %}</button>
               <button class="button button-danger" type="submit" formaction="{% url 'parent_delete_catalog' 'penalty' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete penalty “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
@@ -350,7 +349,7 @@
             {% csrf_token %}
             <label>{% translate "Reward" %}<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
             <label>{% translate "Points" %}<input class="field-control" name="cost" type="number" min="1" value="{{ item.cost }}" required></label>
-            <label>Emoji<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
+            <label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
             <div class="form-actions">
               <button class="button button-primary" type="submit">{% translate "Save" %}</button>
               <button class="button button-danger" type="submit" formaction="{% url 'parent_delete_catalog' 'reward' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete reward “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>

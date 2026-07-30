@@ -7,8 +7,8 @@ msgstr "%(family_display_name)s – slaptažodžio atkūrimas"
 msgid "%(name)s 4-digit PIN: "
 msgstr "%(name)s 4 skaitmenų PIN: "
 
-msgid "%(name)s gave you %(amount)s"
-msgstr "%(name)s padovanojo tau %(amount)s"
+msgid "%(name)s gave you %(currency)s."
+msgstr "%(name)s tau padovanojo %(currency)s."
 
 msgid "%(name)s received %(count)s penalty/penalties (total %(total)s)."
 msgstr "Vaikui %(name)s skirta nuobaudų: %(count)s (iš viso %(total)s)."
@@ -1597,8 +1597,8 @@ msgstr "Galite pridėti komentarą, kurį matys vaikas."
 msgid "You received %(amount)s for your birthday"
 msgstr "Gavai %(amount)s gimtadienio proga"
 
-msgid "You received a point gift"
-msgstr "Gavai taškų dovaną"
+msgid "You received a gift!"
+msgstr "Gavai dovanų!"
 
 msgid "Your artwork was sent to the review gallery!"
 msgstr "Tavo kūrinys išsiųstas į vertinimo galeriją!"

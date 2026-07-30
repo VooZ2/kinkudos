@@ -17,6 +17,16 @@ administratoriui, turėti `0600` teises ir niekada nepatekti į Git.
 
 ## Diegimas
 
+Reikalavimai:
+
+- 64 bitų ARM arba x86 Linux serveris su Docker Engine ir Docker Compose;
+- jau veikiantis Traefik, prijungtas prie išorinio Docker tinklo `web`;
+- į serverį nukreiptas domeno vardas.
+
+Leidimo programos kodą laikykite `app`, o šį katalogą – greta jo, kaip parodyta
+aukščiau. `deploy/.env` faile nustatykite `KINKUDOS_HOSTNAME` ir, jei reikia,
+`KINKUDOS_ALLOWED_NETWORKS`, tada paleiskite:
+
 ```bash
 cd /kelias/iki/kinkudos/deploy
 ./bootstrap.sh
@@ -34,6 +44,29 @@ docker compose exec app python manage.py setup_family --language lt
 
 Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tame
 įrenginyje.
+
+## Atnaujinimas į 0.12.4
+
+Šias komandas paleiskite diegimo šakniniame kataloge, kuriame yra `app`,
+`deploy`, `data` ir `secrets`:
+
+```bash
+curl -fLO https://github.com/VooZ2/kinkudos/releases/download/v0.12.4/kinkudos-0.12.4.tar.gz
+curl -fLO https://github.com/VooZ2/kinkudos/releases/download/v0.12.4/kinkudos-0.12.4.tar.gz.sha256
+sha256sum -c kinkudos-0.12.4.tar.gz.sha256
+tar -xOf kinkudos-0.12.4.tar.gz \
+  kinkudos-0.12.4/deploy/compose.yml > deploy/compose.yml
+./deploy/install-release.sh \
+  "$PWD/kinkudos-0.12.4.tar.gz" \
+  "$PWD/kinkudos-0.12.4.tar.gz.sha256" \
+  0.12.4 \
+  "$PWD"
+```
+
+Atnaujintojas patikrina kontrolinę sumą ir leidimo duomenis, pastato ir
+išbando atvaizdą, sukuria veikiančios duomenų bazės kopiją, tik tada perjungia
+programą ir patikrina konteinerio būklę. Leidimo archyve nėra `deploy/.env`,
+šeimos duomenų, nuotraukų, kopijų ar paslapčių.
 
 ## Kopijos
 

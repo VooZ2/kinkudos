@@ -238,7 +238,7 @@ def child_dashboard(request):
     rewards = list(Reward.objects.filter(is_active=True, is_deleted=False))
     for reward in rewards:
         reward.is_affordable = reward_is_affordable(child, reward)
-    ledger_entries = list(child.ledger_entries.select_related("actor").all()[:20])
+    ledger_entries = list(child.ledger_entries.select_related("actor").all()[:5])
     task_claims_by_id = {
         claim.pk: claim
         for claim in child.task_claims.filter(
@@ -278,7 +278,7 @@ def child_dashboard(request):
             decided_at__isnull=False,
         )
         .select_related("decided_by", "task")
-        .order_by("-decided_at", "-pk")[:20]
+        .order_by("-decided_at", "-pk")[:5]
     )
     for task_claim in rejected_task_decisions:
         task_claim.history_type = "task_decision"
@@ -289,7 +289,7 @@ def child_dashboard(request):
             decided_at__isnull=False,
         )
         .select_related("decided_by", "reward")
-        .order_by("-decided_at", "-pk")[:20]
+        .order_by("-decided_at", "-pk")[:5]
     )
     for reward_request in rejected_reward_decisions:
         reward_request.history_type = "reward_decision"
@@ -302,7 +302,7 @@ def child_dashboard(request):
         ],
         key=lambda entry: (entry.history_timestamp, entry.pk),
         reverse=True,
-    )[:20]
+    )[:5]
     pending_task_ids = set(
         child.task_claims.filter(
             status__in=[RequestStatus.PENDING, RequestStatus.NEEDS_CHANGES]

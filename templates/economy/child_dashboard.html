@@ -7,7 +7,7 @@
 <button id="sound-toggle" class="sound-toggle" type="button" aria-label="{% translate 'Turn sounds off' %}" aria-pressed="true">
   <svg class="action-icon" aria-hidden="true"><use href="#icon-sound-on"></use></svg>
 </button>
-<button id="enable-push" class="push-control push-checking" type="button"><svg class="action-icon"><use href="#icon-bell"></use></svg><span data-push-label>{% translate "Checking notifications" %}</span></button>
+<button id="enable-push" class="push-control push-checking" type="button"><svg class="action-icon" aria-hidden="true"><use href="#icon-bell"></use></svg><span class="sr-only" data-push-label>{% translate "Checking notifications" %}</span></button>
 <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="topbar-icon-button" type="submit" aria-label="{% translate "Switch profile" %}" title="{% translate "Switch profile" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-logout"></use></svg></button></form>
 <dialog id="push-help-dialog" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog>×</button><h2>{% translate "Notifications" %}</h2><p data-push-help-text>{% translate "Notifications could not be enabled on this device." %}</p></dialog>
 {% endblock %}

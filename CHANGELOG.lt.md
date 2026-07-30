@@ -6,6 +6,27 @@ Formatas paremtas „Keep a Changelog“, o versijos atitinka semantinį versija
 
 ## [Unreleased]
 
+## [0.12.4 BETA] - 2026-07-30
+
+### Pakeista
+
+- Vaiko veiksmų žurnale dabar rodomi tik penki naujausi veiksmai.
+- Dovanų pranešimuose naudojamas trumpesnis tekstas ir gavėjo temos taškų
+  pavadinimas, o padovanotas kiekis pranešimo tekste neberodomas.
+- Prizų, bausmių ir darbų kūrimo bei redagavimo formose emoji laukas visur
+  vadinamas „Ikona“.
+- Projekto README atnaujintas pagal dabartines BETA funkcijas, diegimo modelį,
+  palaikomas platformas ir papildytas AI projekto atsakomybės apribojimu.
+
+### Pataisyta
+
+- Kalbos valdiklyje palikta tik vėliava kompaktiškame 44 px apskritame rėmelyje;
+  pašalinti „LT“ / „EN“ užrašai ir „iPad“ kreivai rodoma rodyklė.
+- Pranešimų valdiklyje paliktas tik varpelis tokiame pačiame 44 px rėmelyje
+  kaip atsijungimo mygtukas, išlaikant prieinamą būsenos tekstą.
+- Leidimų archyvai kuriami tik iš Git sekamų failų, todėl į juos negali netyčia
+  patekti ignoruojamos vietinės talpyklos ar konfigūracija.
+
 ## [0.12.2 BETA] - 2026-07-29
 
 ### Pridėta

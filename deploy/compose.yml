@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: ../app
-    image: kinkudos:0.12.2
+    image: kinkudos:0.12.4
     entrypoint:
       - /bin/sh
       - -c

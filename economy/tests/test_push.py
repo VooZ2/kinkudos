@@ -5,8 +5,22 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 from django.utils.translation import override
 
-from economy.models import ChildProfile, PushSubscription, Reward, RewardRequest, Task, TaskClaim
-from economy.push import _currency_amount, notify_reward_decision, notify_task_decision
+from economy.models import (
+    ChildProfile,
+    PointGift,
+    PushSubscription,
+    Reward,
+    RewardRequest,
+    Task,
+    TaskClaim,
+    Theme,
+)
+from economy.push import (
+    _currency_amount,
+    notify_gift_received,
+    notify_reward_decision,
+    notify_task_decision,
+)
 
 
 @override_settings(
@@ -76,6 +90,24 @@ class ChildDecisionPushTests(TestCase):
             self.assertEqual(_currency_amount(2, self.child), "2 smaragdai")
             self.child.theme = "magic_academy"
             self.assertEqual(_currency_amount(1, self.child), "1 galeonas")
+
+    @patch("economy.push.webpush")
+    def test_gift_notification_uses_recipient_theme_without_amount(self, webpush):
+        self.child.theme = Theme.ART_STUDIO
+        self.child.save(update_fields=["theme"])
+        gift = PointGift.objects.create(
+            sender=self.other_child,
+            recipient=self.child,
+            amount=7,
+        )
+
+        with override("lt"):
+            notify_gift_received(gift)
+
+        webpush.assert_called_once()
+        payload = json.loads(webpush.call_args.kwargs["data"])
+        self.assertEqual(payload["title"], "Gavai dovanų!")
+        self.assertEqual(payload["body"], "Augustas tau padovanojo perlų.")
 
     @patch("economy.push.webpush")
     def test_reward_rejection_includes_reason_and_targets_only_child(self, webpush):
