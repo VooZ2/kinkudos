@@ -5,6 +5,14 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.1.7] - 2026-07-30
+
+### Fixed
+
+- Family settings now use compact label, field, and helper-text rows matching
+  the email and backup summaries, with properly reduced helper text and a
+  responsive single-column mobile layout.
+
 ## [26.1.6] - 2026-07-30
 
 ### Changed

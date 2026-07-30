@@ -7,6 +7,15 @@ schema.
 
 ## [Unreleased]
 
+## [26.1.7] - 2026-07-30
+
+### Pataisyta
+
+- Šeimos nustatymuose naudojamos kompaktiškos etiketės, lauko ir paaiškinimo
+  eilutės, derančios su el. pašto bei kopijų suvestinėmis; paaiškinimai
+  tinkamai sumažinti, o mobiliajame ekrane eilutės persirikiuoja į vieną
+  stulpelį.
+
 ## [26.1.6] - 2026-07-30
 
 ### Pakeista

@@ -374,17 +374,37 @@
     <form method="post" action="{% url 'parent_update_family_preferences' %}" class="stack-form settings-form">
       {% csrf_token %}
       <div class="settings-group">
-        <p>{{ family_preferences_form.family_name.label_tag }}{{ family_preferences_form.family_name }}{{ family_preferences_form.family_name.help_text }}</p>
+        <p class="settings-row">
+          {{ family_preferences_form.family_name.label_tag }}
+          {{ family_preferences_form.family_name }}
+          <small class="helptext">{{ family_preferences_form.family_name.help_text }}</small>
+        </p>
       </div>
       <div class="settings-group">
         <div class="catalog-divider"><span>{% translate "Children and points" %}</span></div>
-        <p>{{ family_preferences_form.photo_bonus_points.label_tag }}{{ family_preferences_form.photo_bonus_points }}{{ family_preferences_form.photo_bonus_points.help_text }}</p>
-        <p>{{ family_preferences_form.birthday_points.label_tag }}{{ family_preferences_form.birthday_points }}{{ family_preferences_form.birthday_points.help_text }}</p>
+        <p class="settings-row">
+          {{ family_preferences_form.photo_bonus_points.label_tag }}
+          {{ family_preferences_form.photo_bonus_points }}
+          <small class="helptext">{{ family_preferences_form.photo_bonus_points.help_text }}</small>
+        </p>
+        <p class="settings-row">
+          {{ family_preferences_form.birthday_points.label_tag }}
+          {{ family_preferences_form.birthday_points }}
+          <small class="helptext">{{ family_preferences_form.birthday_points.help_text }}</small>
+        </p>
       </div>
       <div class="settings-group">
         <div class="catalog-divider"><span>{% translate "Privacy and retention" %}</span></div>
-        <p>{{ family_preferences_form.evidence_retention_days.label_tag }}{{ family_preferences_form.evidence_retention_days }}{{ family_preferences_form.evidence_retention_days.help_text }}</p>
-        <p>{{ family_preferences_form.feedback_screenshot_retention_days.label_tag }}{{ family_preferences_form.feedback_screenshot_retention_days }}{{ family_preferences_form.feedback_screenshot_retention_days.help_text }}</p>
+        <p class="settings-row">
+          {{ family_preferences_form.evidence_retention_days.label_tag }}
+          {{ family_preferences_form.evidence_retention_days }}
+          <small class="helptext">{{ family_preferences_form.evidence_retention_days.help_text }}</small>
+        </p>
+        <p class="settings-row">
+          {{ family_preferences_form.feedback_screenshot_retention_days.label_tag }}
+          {{ family_preferences_form.feedback_screenshot_retention_days }}
+          <small class="helptext">{{ family_preferences_form.feedback_screenshot_retention_days.help_text }}</small>
+        </p>
       </div>
       <button class="button button-primary" type="submit">{% translate "Save settings" %}</button>
     </form>

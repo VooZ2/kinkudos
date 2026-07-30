@@ -422,11 +422,14 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .feedback-email-warning { margin: 0 0 18px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--accent) 10%, var(--surface-solid)); line-height: 1.45; }
 .danger-warning { margin: 0 0 18px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--danger) 42%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--danger) 9%, var(--surface-solid)); line-height: 1.45; }
 .backup-panel { margin-top: 18px; }
-.settings-form { gap: 24px; }
-.settings-group { display: grid; gap: 16px; }
-.settings-group > p { gap: 9px; }
-.settings-group > p > label { color: var(--text); font-size: 1rem; font-weight: 750; }
-.settings-group .catalog-divider { margin: 2px 0 0; }
+.settings-form { gap: 20px; }
+.settings-group { display: grid; gap: 0; }
+.settings-group > .settings-row { grid-template-columns: minmax(170px, .42fr) minmax(0, 1fr); align-items: center; column-gap: 16px; row-gap: 4px; padding: 12px 0; border-top: 1px solid var(--line); }
+.settings-group > .settings-row:last-child { border-bottom: 1px solid var(--line); }
+.settings-group > .settings-row > label { display: block; color: var(--muted); font-size: .82rem; font-weight: 600; line-height: 1.45; }
+.settings-group > .settings-row > .field-control { grid-column: 2; min-width: 0; }
+.settings-group > .settings-row > .helptext { grid-column: 2; color: var(--muted); font-size: .76rem; font-weight: 450; line-height: 1.45; }
+.settings-group .catalog-divider { margin: 2px 0 8px; }
 .backup-heading, .backup-actions { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
 .settings-description { flex: 1 1 420px; margin: 0; color: var(--muted); font-size: .9rem; font-weight: 500; line-height: 1.55; }
 .service-status { display: inline-flex; align-items: center; gap: 8px; border-radius: 99px; padding: 7px 11px; font-size: .78rem; font-weight: 850; }
@@ -593,5 +596,8 @@ details .stack-form, details .inline-form { margin-top: 14px; }
   .feedback-summary time { margin-right: 24px; }
   .feedback-actions form { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; }
   .service-details div { grid-template-columns: 1fr; gap: 3px; }
+  .settings-group > .settings-row { grid-template-columns: 1fr; row-gap: 6px; }
+  .settings-group > .settings-row > .field-control,
+  .settings-group > .settings-row > .helptext { grid-column: 1; }
   .feedback-actions form:not(:has(.feedback-screenshot-button)) { grid-template-columns: minmax(0, 1fr) auto; }
 }

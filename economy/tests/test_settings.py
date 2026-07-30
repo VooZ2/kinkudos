@@ -116,6 +116,18 @@ class ParentSettingsTests(TestCase):
         self.assertNotContains(response, "Edit email settings")
         self.assertNotContains(response, 'class="backup-status-grid"')
 
+    def test_family_preferences_use_compact_rows_and_wrapped_help_text(self):
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, 'class="settings-row"', count=5, html=False)
+        self.assertContains(
+            response,
+            '<small class="helptext">Shown in family-facing headings and messages.</small>',
+            html=False,
+        )
+
     def smtp_payload(self, **overrides):
         payload = {
             "enabled": "on",
