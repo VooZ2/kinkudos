@@ -56,7 +56,7 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 norimo diegti leidimo reikšmėmis:
 
 ```bash
-version=26.1.5
+version=26.3.0
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -161,15 +161,24 @@ el. laišką. Todėl tėvai atsiliepimą matys ir jo būseną galės keisti
 saugomos privačiai WebP formatu; pasibaigus nustatytam terminui automatiškai
 šalinamos tik išspręstų atsiliepimų nuotraukos.
 
-## Kasdienis nuotraukų valymas
+## Periodinė priežiūra ir loterijos priminimai
 
 KinKudos darbų nuotraukas ir išspręstų atsiliepimų ekrano nuotraukas saugo
-tėvų nustatymuose pasirinktą laiką. `systemd` naudojančiame Docker serveryje
-po diegimo įjunkite kasdienį valymą:
+tėvų nustatymuose pasirinktą laiką. Sistema taip pat kas 30 minučių patikrina,
+ar jau reikia siųsti savaitinį loterijos priminimą. `systemd` naudojančiame
+Docker serveryje po diegimo arba atnaujinimo į 26.3.0 įjunkite abu laikmačius:
 
 ```bash
 cd /kelias/iki/kinkudos/deploy
 sudo ./install-maintenance.sh
+```
+
+Bendriniame `cron` diegime naktinę priežiūrą paleiskite kartą per parą, o
+priminimų komandą – kas 30 minučių:
+
+```cron
+15 2 * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py purge_task_evidence
+*/30 * * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py send_lottery_reminders
 ```
 
 ## Ribota diagnostikos prieiga

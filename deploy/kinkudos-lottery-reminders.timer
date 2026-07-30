@@ -1,0 +1,10 @@
+[Unit]
+Description=Check KinKudos lottery reminders every 30 minutes
+
+[Timer]
+OnCalendar=*:0/30
+Persistent=true
+RandomizedDelaySec=2m
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Send due KinKudos lottery reminders
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=@@KINKUDOS_DEPLOY_DIR@@
+ExecStart=/usr/bin/docker compose exec -T app python manage.py send_lottery_reminders

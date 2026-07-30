@@ -90,6 +90,21 @@ reason and immediately creates the corresponding ledger entry.
 child can cancel their own request while pending. Approval checks the
 resulting balance against that child's floor.
 
+**LotteryTicket** — built-in, non-parent-configurable system reward. A purchase
+atomically deducts 15 earned points and stores a server-generated 3×3 board
+with a preselected positive, negative, or no-prize result. Only one ticket may
+remain open per child, at most three may be purchased per Monday–Sunday week,
+and a negative reveal is clamped to the child's balance floor. Purchase and
+reveal use separate append-only ledger entries. The standard 50/30/20 outcome
+draw is overridden only by the per-child jackpot guarantee after eleven
+tickets without a +101…+150 result.
+
+**LotteryReminder** — per-child weekly schedule and delivery audit for the
+optional Web Push reminder. A dedicated idempotent management command checks
+due reminders every 30 minutes. It sends at most once in the second half of a
+week, only when the subscribed child has at least 50 points, has bought no
+ticket that week, and is not blocked from rewards.
+
 **Proposal** — a child proposes a new shared reward or personal savings
 goal; a parent approves/rejects and sets the final cost.
 
@@ -134,6 +149,10 @@ worker caches only static assets and the offline fallback page — balances
 and pending requests are never cached long-term. Push subscriptions
 available to both parent and child sessions. iOS requires the app to be
 added to the home screen for Web Push to work.
+
+The systemd deployment installs a daily maintenance timer and a separate
+30-minute lottery-reminder timer. Generic deployments must schedule the
+corresponding Django commands themselves.
 
 ## Parent interface palette
 The shared parent, landing, and system interface uses a fixed semantic palette:

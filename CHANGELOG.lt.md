@@ -7,6 +7,24 @@ schema.
 
 ## [Unreleased]
 
+## [26.3.0] - 2026-07-30
+
+### Pridėta
+
+- Vaikas už 15 uždirbtų taškų gali pirkti prie temos pritaikytą nutrinamą
+  loterijos bilietą, atidengti sidabrinę 3×3 skaičių lentelę ir gauti vieną
+  sutampantį teigiamą, neigiamą arba tuščią rezultatą. Bilietas išlieka iki
+  užbaigimo, per pirmadienio–sekmadienio savaitę galima pirkti ne daugiau kaip
+  tris, o praradimas niekada neperžengia vaiko kredito ribos.
+- Įprastiems traukimams taikoma 50 % teigiamo, 30 % neigiamo ir 20 % tuščio
+  rezultato tikimybė, dažniau parenkant −20…+67 reikšmes. Jei vienuolika
+  bilietų iš eilės nedavė +101…+150 prizo, dvyliktasis jį garantuoja.
+- Bent 50 taškų turintis ir tą savaitę bilieto nepirkęs vaikas su aktyviais
+  pranešimais gali gauti vieną aiškiai riziką nurodantį priminimą atsitiktiniu
+  saugiu laiku antroje savaitės pusėje.
+- Tėvai mato nekeičiamą savaitės bilietų būseną ir atskirus bilieto kainos bei
+  galutinio rezultato apskaitos įrašus, tačiau sisteminio prizo nevaldo.
+
 ## [26.2.2] - 2026-07-30
 
 ### Pakeista

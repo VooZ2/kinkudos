@@ -46,6 +46,9 @@ msgstr "Toks vaiko profilis jau yra."
 msgid "A different theme will be selected automatically once a day."
 msgstr "Kartą per dieną automatiškai bus parinkta vis kita tema."
 
+msgid "A lottery ticket can be bought only with 15 points you have earned."
+msgstr "Loterijos bilietą galima pirkti tik už 15 uždirbtų taškų."
+
 msgid "A new task is awaiting approval"
 msgstr "Naujas darbas laukia patvirtinimo"
 
@@ -214,6 +217,9 @@ msgstr "Kopijos neatliktos"
 msgid "Balance adjusted."
 msgstr "Balansas pakoreguotas."
 
+msgid "Bamboo Surprise"
+msgstr "Bambukų staigmena"
+
 msgid "Bamboo is ready!"
 msgstr "Bambukas paruoštas!"
 
@@ -267,6 +273,12 @@ msgstr "Kūrybos planas"
 
 msgid "Building plans"
 msgstr "Statybų planai"
+
+msgid "Buy for 15 points"
+msgstr "Pirkti už 15 taškų"
+
+msgid "Buy ticket for 15 points"
+msgstr "Pirkti bilietą už 15 taškų"
 
 msgid "Cancel"
 msgstr "Atšaukti"
@@ -451,6 +463,9 @@ msgstr "Pasirink savo pasaulį"
 msgid "Claim prize"
 msgstr "Užsisakyti prizą"
 
+msgid "Classified Chance Card"
+msgstr "Įslaptinta sėkmės kortelė"
+
 msgid "Close"
 msgstr "Uždaryti"
 
@@ -487,6 +502,9 @@ msgstr "Atlik darbus, rink taškus ir išsirink prizą."
 msgid "Complete tasks, earn tokens, and choose your reward."
 msgstr "Atlik darbus, rink tokenus ir išsirink prizą."
 
+msgid "Complete the assigned tasks before buying a lottery ticket."
+msgstr "Prieš pirkdamas loterijos bilietą atlik paskirtus darbus."
+
 msgid "Complete the assigned tasks before requesting a new reward."
 msgstr "Prieš prašydamas naujo prizo atlik paskirtus darbus."
 
@@ -501,6 +519,9 @@ msgstr "Atliktas darbas"
 
 msgid "Connect to your home network or VPN and try again."
 msgstr "Prisijunkite prie namų tinklo arba VPN ir bandykite dar kartą."
+
+msgid "Continue scratching"
+msgstr "Tęsti trynimą"
 
 msgid "Copying"
 msgstr "Kopijuojama"
@@ -561,6 +582,9 @@ msgstr "Dabartinis PIN"
 
 msgid "Current version"
 msgstr "Dabartinė versija"
+
+msgid "Currently unavailable"
+msgstr "Dabar nepasiekiama"
 
 msgid "Custom task"
 msgstr "Individualus darbas"
@@ -654,6 +678,9 @@ msgstr "Įjungti el. paštą"
 
 msgid "Enabled"
 msgstr "Įjungta"
+
+msgid "Enchanted Prophecy"
+msgstr "Užburta pranašystė"
 
 msgid "Encryption"
 msgstr "Šifravimas"
@@ -769,6 +796,9 @@ msgstr "Ieškoti darbo"
 msgid "Finish every project before the studio closes at midnight."
 msgstr "Užbaik visus projektus, kol studija užsidarys vidurnaktį."
 
+msgid "Finish your open lottery ticket before buying another."
+msgstr "Prieš pirkdamas kitą užbaik pradėtą loterijos bilietą."
+
 msgid "Fix and resubmit"
 msgstr "Pataisyti ir pateikti iš naujo"
 
@@ -823,6 +853,9 @@ msgstr "Padėk pandai atlikti visus darbus iki miego vidurnaktį."
 msgid "Hero Missions"
 msgstr "Herojaus misijos"
 
+msgid "Hidden Emerald Grid"
+msgstr "Paslėptų smaragdų lentelė"
+
 msgid "Hide"
 msgstr "Paslėpti"
 
@@ -874,6 +907,9 @@ msgstr "Įkvėpimų parduotuvė"
 msgid "Install for notifications"
 msgstr "Įdiekite pranešimams"
 
+msgid "It costs 15 earned points. You may win up to 150 points, get nothing, or lose up to 50 points. The result cannot reduce your balance below your credit limit."
+msgstr "Jis kainuoja 15 uždirbtų taškų. Gali laimėti iki 150 taškų, nieko negauti arba prarasti iki 50 taškų. Rezultatas negali sumažinti balanso žemiau tavo kredito limito."
+
 msgid "It's great to see you"
 msgstr "Smagu Tave matyti"
 
@@ -915,6 +951,24 @@ msgstr "Žurnalas"
 
 msgid "Log out"
 msgstr "Atsijungti"
+
+msgid "Lottery"
+msgstr "Loterija"
+
+msgid "Lottery result"
+msgstr "Loterijos rezultatas"
+
+msgid "Lottery ticket"
+msgstr "Loterijos bilietas"
+
+msgid "Lottery tickets are paused until your point balance improves."
+msgstr "Loterijos bilietai neprieinami, kol nepagerės tavo taškų balansas."
+
+msgid "Lottery tickets this week: %(used)s of 3"
+msgstr "Loterijos bilietų šią savaitę: %(used)s iš 3"
+
+msgid "Lucky Ticket"
+msgstr "Laimės bilietas"
 
 msgid "Magic Academy"
 msgstr "Magijos akademija"
@@ -958,6 +1012,9 @@ msgstr "Misijos"
 msgid "My Gallery"
 msgstr "Mano galerija"
 
+msgid "Mystery Prize Crate"
+msgstr "Paslaptinga prizų dėžė"
+
 msgid "Need %(amount)s %(unit)s more"
 msgstr "Trūksta %(amount)s %(unit)s"
 
@@ -984,6 +1041,9 @@ msgstr "Naujas PIN"
 
 msgid "New avatar"
 msgstr "Naujas avataras"
+
+msgid "New balance: {balance}."
+msgstr "Naujas balansas: {balance}."
 
 msgid "New child profile"
 msgstr "Naujas vaiko profilis"
@@ -1012,6 +1072,12 @@ msgstr "Vaikų profiliai dar nesukurti."
 msgid "No new features in this release."
 msgstr "Naujų funkcijų nebuvo."
 
+msgid "No points were lost."
+msgstr "Taškų nepraradai."
+
+msgid "No prize this time."
+msgstr "Šį kartą be prizo."
+
 msgid "No separate fixes in this release."
 msgstr "Atskirų pataisymų nebuvo."
 
@@ -1026,6 +1092,9 @@ msgstr "Neįjungta"
 
 msgid "Not enough points"
 msgstr "Nepakanka taškų"
+
+msgid "Not now"
+msgstr "Ne dabar"
 
 msgid "Notifications"
 msgstr "Pranešimai"
@@ -1082,7 +1151,7 @@ msgid "Only screenshots from resolved feedback are removed automatically."
 msgstr "Automatiškai šalinamos tik išspręstų atsiliepimų ekrano nuotraukos."
 
 msgid "Open"
-msgstr "Atidaryti"
+msgstr "Neužbaigtas"
 
 msgid "Open feedback"
 msgstr "Neišspręsti atsiliepimai"
@@ -1375,6 +1444,9 @@ msgstr "Išspręsta"
 msgid "Restored"
 msgstr "Atkurta"
 
+msgid "Revealed"
+msgstr "Atidengtas"
+
 msgid "Reviewed"
 msgstr "Peržiūrėtas"
 
@@ -1398,6 +1470,9 @@ msgstr "Prizai"
 
 msgid "Role"
 msgstr "Rolė"
+
+msgid "Rub the silver surface with your finger. Three matching numbers reveal the result."
+msgstr "Trink sidabrinį paviršių pirštu. Trys vienodi skaičiai parodys rezultatą."
 
 msgid "S3 endpoint"
 msgstr "S3 adresas"
@@ -1458,6 +1533,15 @@ msgstr "Išsaugoti nustatymus"
 
 msgid "Savings goal"
 msgstr "Taupymo tikslas"
+
+msgid "Scratch all nine fields"
+msgstr "Nutrink visus devynis langelius"
+
+msgid "Scratch every field to reveal the result."
+msgstr "Nutrink kiekvieną langelį, kad pamatytum rezultatą."
+
+msgid "Scratch-off surface"
+msgstr "Nutrinamas paviršius"
 
 msgid "Screenshot"
 msgstr "Ekrano nuotrauka"
@@ -1537,6 +1621,9 @@ msgstr "Prisijungti"
 msgid "Signal received! Mission evidence was delivered to HQ."
 msgstr "Signalas gautas! Misijos įrodymas perduotas vadovybei."
 
+msgid "Silver Mystery Canvas"
+msgstr "Sidabrinė paslapčių drobė"
+
 msgid "Small tasks."
 msgstr "Maži darbai."
 
@@ -1599,6 +1686,9 @@ msgstr "Superherojų būstinė"
 
 msgid "Switch profile"
 msgstr "Keisti profilį"
+
+msgid "System reward"
+msgstr "Sisteminis prizas"
 
 msgid "Take from the chest"
 msgstr "Pasiimti iš skrynios"
@@ -1762,6 +1852,9 @@ msgstr "Profilis trumpam užrakintas. Pabandykite vėliau."
 msgid "The remaining assigned tasks were cancelled."
 msgstr "Likę paskirti darbai atšaukti."
 
+msgid "The result could not be saved. Reopen the ticket and try again."
+msgstr "Rezultato nepavyko išsaugoti. Atidaryk bilietą iš naujo ir bandyk dar kartą."
+
 msgid "The reward chest unlocks after today's assigned missions are complete."
 msgstr "Prizų skrynia atsivers atlikus šiandien paskirtas misijas."
 
@@ -1888,8 +1981,14 @@ msgstr "Šis darbas nebeaktyvus."
 msgid "This task is not awaiting corrections."
 msgstr "Šis darbas nelaukia pataisymų."
 
+msgid "This ticket is a game of chance."
+msgstr "Šis bilietas yra sėkmės žaidimas."
+
 msgid "This username is already in use."
 msgstr "Toks prisijungimo vardas jau naudojamas."
+
+msgid "Tickets left this week: %(remaining)s of 3."
+msgstr "Šią savaitę liko bilietų: %(remaining)s iš 3."
 
 msgid "Tidy your room"
 msgstr "Sutvarkyti savo kambarį"
@@ -2005,6 +2104,9 @@ msgstr "Laukia"
 msgid "We received a request to reset the password for the %(family_display_name)s parent account."
 msgstr "Gavome prašymą pakeisti „%(family_display_name)s“ tėvų paskyros slaptažodį."
 
+msgid "Weekly limit reached"
+msgstr "Savaitės limitas pasiektas"
+
 msgid "Welcome – %(family_display_name)s"
 msgstr "Sveiki – %(family_display_name)s"
 
@@ -2056,8 +2158,23 @@ msgstr "Negalima pašalinti paskutinės aktyvios tėvų paskyros."
 msgid "You do not have enough points for this reward."
 msgstr "Šiam prizui nepakanka taškų."
 
+msgid "You have already used all three lottery tickets this week."
+msgstr "Šią savaitę jau panaudojai visus tris loterijos bilietus."
+
+msgid "You have not bought a ticket this week. It costs 15 points and you may win, get nothing, or lose points."
+msgstr "Šią savaitę dar nepirkai bilieto. Jis kainuoja 15 taškų – gali laimėti, nieko negauti arba prarasti taškų."
+
+msgid "You lost {amount}."
+msgstr "Praradai {amount}."
+
 msgid "You may add a comment that the child will see."
 msgstr "Galite pridėti komentarą, kurį matys vaikas."
+
+msgid "You may win up to 150 points, get nothing, or lose up to 50 points."
+msgstr "Gali laimėti iki 150 taškų, nieko negauti arba prarasti iki 50 taškų."
+
+msgid "You need 15 earned points"
+msgstr "Reikia 15 uždirbtų taškų"
 
 msgid "You received %(amount)s for your birthday"
 msgstr "Gavai %(amount)s gimtadienio proga"
@@ -2065,11 +2182,20 @@ msgstr "Gavai %(amount)s gimtadienio proga"
 msgid "You received a gift!"
 msgstr "Gavai dovanų!"
 
+msgid "You won {amount}!"
+msgstr "Laimėjai {amount}!"
+
 msgid "Your account password"
 msgstr "Jūsų paskyros slaptažodis"
 
 msgid "Your artwork was sent to the review gallery!"
 msgstr "Tavo kūrinys išsiųstas į vertinimo galeriją!"
+
+msgid "Your credit limit protected part of the loss."
+msgstr "Kredito limitas apsaugojo nuo dalies praradimo."
+
+msgid "Your lottery ticket is ready."
+msgstr "Tavo loterijos bilietas paruoštas."
 
 msgid "Your point gift was sent."
 msgstr "Tavo taškų dovana išsiųsta."
@@ -2122,6 +2248,9 @@ msgstr "už nuotrauką"
 msgid "hidden"
 msgstr "paslėpta"
 
+msgid "one ticket is unfinished"
+msgstr "vienas bilietas neužbaigtas"
+
 msgid "photo bonus"
 msgstr "priedas už nuotrauką"
 
@@ -2130,6 +2259,9 @@ msgstr "įjungta"
 
 msgid "you"
 msgstr "jūs"
+
+msgid "{count} of 9 fields scratched."
+msgstr "Nutrinta {count} iš 9 langelių."
 
 msgid "“%(title)s” deleted."
 msgstr "„%(title)s“ ištrinta."

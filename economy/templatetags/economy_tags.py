@@ -34,6 +34,7 @@ THEME_TEXT = {
         "assigned_help": _("Complete each duty before the magic fades at midnight."),
         "assigned_complete": _("Spell complete"),
         "assigned_reward_block": _("The magic shop opens after today's enchanted duties are complete."),
+        "lottery_title": _("Enchanted Prophecy"),
     },
     "block_world": {
         "submit": _("Submit block"),
@@ -51,6 +52,7 @@ THEME_TEXT = {
         "assigned_help": _("Complete every mission before the world resets at midnight."),
         "assigned_complete": _("Mission complete"),
         "assigned_reward_block": _("The reward chest unlocks after today's assigned missions are complete."),
+        "lottery_title": _("Hidden Emerald Grid"),
     },
     "neutral": {
         "submit": _("Submit"),
@@ -68,6 +70,7 @@ THEME_TEXT = {
         "assigned_help": _("Complete each task today. They expire at midnight."),
         "assigned_complete": _("Completed"),
         "assigned_reward_block": _("Complete the assigned tasks to unlock new reward requests."),
+        "lottery_title": _("Lucky Ticket"),
     },
     "hero_hq": {
         "submit": _("Activate mission"),
@@ -85,6 +88,7 @@ THEME_TEXT = {
         "assigned_help": _("Complete every mission before midnight."),
         "assigned_complete": _("Mission accomplished"),
         "assigned_reward_block": _("The HQ arsenal unlocks after today's priority missions are complete."),
+        "lottery_title": _("Classified Chance Card"),
     },
     "art_studio": {
         "submit": _("Present artwork"),
@@ -102,6 +106,7 @@ THEME_TEXT = {
         "assigned_help": _("Finish every project before the studio closes at midnight."),
         "assigned_complete": _("Project finished"),
         "assigned_reward_block": _("The inspiration shop opens after today's commissioned projects are finished."),
+        "lottery_title": _("Silver Mystery Canvas"),
     },
     "panda_pet": {
         "submit": _("Feed the panda"),
@@ -119,6 +124,7 @@ THEME_TEXT = {
         "assigned_help": _("Help the panda finish every task before bedtime at midnight."),
         "assigned_complete": _("Task finished"),
         "assigned_reward_block": _("The treat chest opens after today's bamboo tasks are finished."),
+        "lottery_title": _("Bamboo Surprise"),
     },
     "blockville": {
         "submit": _("Complete challenge"),
@@ -143,6 +149,7 @@ THEME_TEXT = {
         "assigned_help": _("Complete every quest before the day resets at midnight."),
         "assigned_complete": _("Quest complete"),
         "assigned_reward_block": _("The prize shop unlocks after today's assigned quests are complete."),
+        "lottery_title": _("Mystery Prize Crate"),
     },
 }
 

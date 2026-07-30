@@ -5,6 +5,23 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.3.0] - 2026-07-30
+
+### Added
+
+- Children can buy a theme-aware scratch lottery ticket for 15 earned points,
+  reveal a silver 3×3 number grid, and receive one matching positive, negative,
+  or no-prize result. Tickets persist until completed, are limited to three per
+  Monday–Sunday week, and never apply a loss below the child's credit floor.
+- Standard draws use 50% positive, 30% negative, and 20% no-prize outcomes,
+  weighted toward −20…+67. A +101…+150 jackpot is guaranteed by the twelfth
+  ticket after eleven without one.
+- Eligible subscribed children who have at least 50 points and bought no ticket
+  that week can receive one risk-transparent reminder at a random safe time in
+  the second half of the week.
+- Parents see read-only weekly ticket status plus separate ticket-cost and
+  final-result ledger entries, without controls for the system reward.
+
 ## [26.2.2] - 2026-07-30
 
 ### Changed

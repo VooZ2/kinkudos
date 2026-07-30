@@ -40,6 +40,8 @@ class ReleaseDeploymentTests(SimpleTestCase):
 
         self.assertIn('"$release_dir/deploy/$helper" "$deploy_dir/$helper"', installer)
         self.assertIn("  backup.sh \\", installer)
+        self.assertIn("  kinkudos-lottery-reminders.service \\", installer)
+        self.assertIn("  kinkudos-lottery-reminders.timer \\", installer)
         self.assertNotIn("docker compose run --rm restic", backup_script)
         self.assertIn("python manage.py run_backup", backup_script)
 
@@ -77,7 +79,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.2.2",
+                    "26.3.0",
                     str(root),
                 ],
                 env=environment,

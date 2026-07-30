@@ -359,6 +359,288 @@ soundToggle?.addEventListener("click", () => {
 });
 refreshSoundToggle();
 
+const lotteryDialog = document.querySelector("[data-lottery-dialog]");
+if (lotteryDialog) {
+  const ticket = lotteryDialog.querySelector("[data-scratch-ticket]");
+  const canvas = lotteryDialog.querySelector("[data-scratch-surface]");
+  const particles = lotteryDialog.querySelector("[data-scratch-particles]");
+  const progress = lotteryDialog.querySelector("[data-scratch-progress]");
+  const result = lotteryDialog.querySelector("[data-lottery-result]");
+  const resultTitle = lotteryDialog.querySelector("[data-lottery-result-title]");
+  const resultCopy = lotteryDialog.querySelector("[data-lottery-result-copy]");
+  const values = [...lotteryDialog.querySelectorAll("[data-lottery-value]")];
+  const storageKey = `kinkudos-lottery-${lotteryDialog.dataset.ticketId}`;
+  const revealed = new Set();
+  let drawing = false;
+  let completed = false;
+  let lastPoint = null;
+  let scratchSoundAt = 0;
+
+  try {
+    JSON.parse(localStorage.getItem(storageKey) || "[]").forEach(index => revealed.add(index));
+  } catch (_) {}
+
+  function saveScratchState() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify([...revealed]));
+    } catch (_) {}
+  }
+
+  function canvasPoint(event) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+    };
+  }
+
+  function scratchSound() {
+    if (localStorage.getItem("kinkudos-sound") === "off") return;
+    const now = performance.now();
+    if (now - scratchSoundAt < 65) return;
+    scratchSoundAt = now;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const context = new AudioContext();
+    const length = Math.max(1, Math.floor(context.sampleRate * 0.045));
+    const buffer = context.createBuffer(1, length, context.sampleRate);
+    const samples = buffer.getChannelData(0);
+    for (let index = 0; index < length; index += 1) {
+      samples[index] = (Math.random() * 2 - 1) * (1 - index / length);
+    }
+    const source = context.createBufferSource();
+    const filter = context.createBiquadFilter();
+    const gain = context.createGain();
+    source.buffer = buffer;
+    filter.type = "bandpass";
+    filter.frequency.value = 1700;
+    gain.gain.value = 0.025;
+    source.connect(filter).connect(gain).connect(context.destination);
+    source.start();
+    source.onended = () => context.close();
+  }
+
+  function shedParticle(point) {
+    if (!particles || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const particle = document.createElement("i");
+    particle.style.left = `${point.x}px`;
+    particle.style.top = `${point.y}px`;
+    particle.style.setProperty("--particle-x", `${Math.random() * 30 - 15}px`);
+    particle.style.setProperty("--particle-y", `${Math.random() * 24 + 8}px`);
+    particles.append(particle);
+    window.setTimeout(() => particle.remove(), 480);
+  }
+
+  function eraseLine(from, to) {
+    const context = canvas.getContext("2d");
+    context.save();
+    context.globalCompositeOperation = "destination-out";
+    context.lineCap = "round";
+    context.lineJoin = "round";
+    context.lineWidth = Math.max(30, canvas.clientWidth / 10);
+    context.beginPath();
+    context.moveTo(from.x, from.y);
+    context.lineTo(to.x, to.y);
+    context.stroke();
+    context.restore();
+    scratchSound();
+    shedParticle(to);
+  }
+
+  function cellBounds(index, physical = false) {
+    const column = index % 3;
+    const row = Math.floor(index / 3);
+    const width = physical ? canvas.width : canvas.clientWidth;
+    const height = physical ? canvas.height : canvas.clientHeight;
+    return {
+      x: column * width / 3,
+      y: row * height / 3,
+      width: width / 3,
+      height: height / 3,
+    };
+  }
+
+  function clearCell(index) {
+    const context = canvas.getContext("2d");
+    const bounds = cellBounds(index);
+    context.clearRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    values[index]?.classList.add("scratch-revealed");
+  }
+
+  function coveredRatio(index) {
+    const context = canvas.getContext("2d", { willReadFrequently: true });
+    const bounds = cellBounds(index, true);
+    const image = context.getImageData(
+      Math.floor(bounds.x),
+      Math.floor(bounds.y),
+      Math.max(1, Math.floor(bounds.width)),
+      Math.max(1, Math.floor(bounds.height)),
+    );
+    let erased = 0;
+    let sampled = 0;
+    for (let pixel = 3; pixel < image.data.length; pixel += 32) {
+      sampled += 1;
+      if (image.data[pixel] < 80) erased += 1;
+    }
+    return sampled ? erased / sampled : 0;
+  }
+
+  function updateProgress() {
+    if (progress) {
+      progress.textContent = lotteryDialog.dataset.progressText.replace(
+        "{count}",
+        String(revealed.size),
+      );
+    }
+  }
+
+  async function finishTicket() {
+    if (completed || revealed.size !== 9) return;
+    completed = true;
+    canvas.classList.add("scratch-finished");
+    try {
+      const response = await fetch(lotteryDialog.dataset.revealUrl, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+          "X-CSRFToken": window.KINKUDOS.csrfToken,
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      });
+      const payload = await response.json();
+      if (!response.ok || !payload.ok) throw new Error("Lottery reveal failed");
+      values.forEach(value => {
+        if (Number(value.dataset.lotteryValue) === payload.matching_value && payload.matching_value !== 0) {
+          value.classList.add("scratch-match");
+        }
+      });
+      let title = lotteryDialog.dataset.resultNone;
+      if (payload.delta > 0) {
+        title = lotteryDialog.dataset.resultWin.replace("{amount}", `+${payload.delta}`);
+        celebrate();
+        playThemeSound("reward");
+      } else if (payload.delta < 0) {
+        title = lotteryDialog.dataset.resultLoss.replace("{amount}", String(Math.abs(payload.delta)));
+      } else if (payload.matching_value < 0) {
+        title = lotteryDialog.dataset.resultProtected;
+      }
+      resultTitle.textContent = title;
+      resultCopy.textContent = lotteryDialog.dataset.resultBalance.replace(
+        "{balance}",
+        String(payload.balance),
+      );
+      if (payload.matching_value < 0 && payload.delta !== payload.matching_value) {
+        resultCopy.textContent += ` ${lotteryDialog.dataset.resultLimited}`;
+      }
+      result.hidden = false;
+      progress.hidden = true;
+      document.querySelector(".balance-orb strong").textContent = payload.balance;
+      try {
+        localStorage.removeItem(storageKey);
+      } catch (_) {}
+    } catch (_) {
+      completed = false;
+      resultTitle.textContent = lotteryDialog.dataset.resultError;
+      resultCopy.textContent = "";
+      result.hidden = false;
+    }
+  }
+
+  function checkCells() {
+    values.forEach((_value, index) => {
+      if (!revealed.has(index) && coveredRatio(index) >= 0.55) {
+        revealed.add(index);
+        clearCell(index);
+        navigator.vibrate?.(8);
+      }
+    });
+    saveScratchState();
+    updateProgress();
+    finishTicket();
+  }
+
+  function paintSurface() {
+    const rect = ticket.getBoundingClientRect();
+    const ratio = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.max(1, Math.round(rect.width * ratio));
+    canvas.height = Math.max(1, Math.round(rect.height * ratio));
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
+    const context = canvas.getContext("2d");
+    context.scale(ratio, ratio);
+    const gradient = context.createLinearGradient(0, 0, rect.width, rect.height);
+    gradient.addColorStop(0, "#8d949b");
+    gradient.addColorStop(0.45, "#e6eaed");
+    gradient.addColorStop(1, "#777f87");
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, rect.width, rect.height);
+    for (let index = 0; index < Math.floor(rect.width * rect.height / 38); index += 1) {
+      const shade = 125 + Math.floor(Math.random() * 100);
+      context.fillStyle = `rgba(${shade},${shade},${shade},${Math.random() * 0.26})`;
+      context.fillRect(Math.random() * rect.width, Math.random() * rect.height, 1.5, 1.5);
+    }
+    context.strokeStyle = "rgba(48, 55, 61, .34)";
+    context.lineWidth = 2;
+    for (let index = 1; index < 3; index += 1) {
+      context.beginPath();
+      context.moveTo(index * rect.width / 3, 0);
+      context.lineTo(index * rect.width / 3, rect.height);
+      context.stroke();
+      context.beginPath();
+      context.moveTo(0, index * rect.height / 3);
+      context.lineTo(rect.width, index * rect.height / 3);
+      context.stroke();
+    }
+    revealed.forEach(clearCell);
+    updateProgress();
+    finishTicket();
+  }
+
+  canvas.addEventListener("pointerdown", event => {
+    if (completed) return;
+    drawing = true;
+    lastPoint = canvasPoint(event);
+    canvas.setPointerCapture(event.pointerId);
+    eraseLine(lastPoint, lastPoint);
+  });
+  canvas.addEventListener("pointermove", event => {
+    if (!drawing || completed) return;
+    const point = canvasPoint(event);
+    eraseLine(lastPoint, point);
+    lastPoint = point;
+  });
+  const stopDrawing = event => {
+    if (!drawing) return;
+    drawing = false;
+    if (event.pointerId !== undefined && canvas.hasPointerCapture(event.pointerId)) {
+      canvas.releasePointerCapture(event.pointerId);
+    }
+    checkCells();
+  };
+  canvas.addEventListener("pointerup", stopDrawing);
+  canvas.addEventListener("pointercancel", stopDrawing);
+  canvas.addEventListener("keydown", event => {
+    if (!["Enter", " "].includes(event.key) || completed) return;
+    event.preventDefault();
+    const next = values.findIndex((_value, index) => !revealed.has(index));
+    if (next >= 0) {
+      revealed.add(next);
+      clearCell(next);
+      saveScratchState();
+      updateProgress();
+      finishTicket();
+    }
+  });
+  canvas.tabIndex = 0;
+  document.querySelectorAll('[data-open-dialog="lottery-ticket-dialog"]').forEach(button => {
+    button.addEventListener("click", () => window.requestAnimationFrame(paintSurface));
+  });
+  if (window.location.hash === "#prizai") {
+    lotteryDialog.showModal();
+    window.requestAnimationFrame(paintSurface);
+  }
+}
+
 function dismissMessage(message) {
   if (!message || message.classList.contains("is-hiding")) return;
   message.classList.add("is-hiding");

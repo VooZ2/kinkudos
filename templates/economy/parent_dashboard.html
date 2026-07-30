@@ -62,6 +62,10 @@
         <svg class="action-icon" aria-hidden="true"><use href="#icon-info"></use></svg>
       </button>
     </p>
+    <p class="lottery-parent-status">
+      {% blocktranslate with used=child.lottery_tickets_used %}Lottery tickets this week: {{ used }} of 3{% endblocktranslate %}
+      {% if child.lottery_ticket_open %} · {% translate "one ticket is unfinished" %}{% endif %}
+    </p>
     <div class="child-quick-actions" aria-label="{{ child.name }} {% translate "actions" %}">
       <button class="quick-action" type="button" data-open-dialog="task-{{ child.pk }}" aria-label="{% translate "Completed task" %}" title="{% translate "Completed task" %}">
         <svg class="action-icon"><use href="#icon-check-circle"></use></svg><span>{% translate "Completed task" %}</span>

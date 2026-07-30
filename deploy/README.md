@@ -76,7 +76,7 @@ Run these commands from the deployment root (the directory containing
 version with the release you want to install:
 
 ```bash
-version=26.1.5
+version=26.3.0
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -178,11 +178,12 @@ SMTP is unavailable. Optional screenshots are private WebP files; only
 screenshots from resolved reports are removed after the retention period
 selected in Settings.
 
-## Daily image cleanup
+## Scheduled maintenance and lottery reminders
 
 KinKudos keeps task photos and resolved-feedback screenshots for the periods
-selected in the parent settings. On a systemd-based Docker host, enable the
-daily cleanup job after deployment:
+selected in the parent settings. It also checks every 30 minutes whether a due
+weekly lottery reminder should be sent. On a systemd-based Docker host, enable
+both timers after installation or upgrading to 26.3.0:
 
 ```bash
 cd /path/to/kinkudos/deploy
@@ -195,17 +196,19 @@ family-specific or server-specific path is embedded in the service.
 Only expired images from resolved task requests are removed. Text history,
 balances, pending photos, and photos returned for improvement remain intact.
 
-For a generic cron installation, run the same provider-neutral Django command
-inside the application container once per night:
+For a generic cron installation, run the provider-neutral maintenance command
+once per night and the reminder command every 30 minutes:
 
 ```cron
 15 2 * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py purge_task_evidence
+*/30 * * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py send_lottery_reminders
 ```
 
 It can also be run manually on any Docker Compose host:
 
 ```bash
 docker compose exec -T app python manage.py purge_task_evidence
+docker compose exec -T app python manage.py send_lottery_reminders
 ```
 
 ## Limited diagnostics access

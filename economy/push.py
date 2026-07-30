@@ -156,3 +156,20 @@ def notify_birthday_award(award):
         },
         PushSubscription.objects.filter(child=award.child),
     )
+
+
+def notify_lottery_reminder(child):
+    _send(
+        {
+            "title": str(theme_text(child.theme, "lottery_title")),
+            "body": str(
+                _(
+                    "You have not bought a ticket this week. It costs 15 points "
+                    "and you may win, get nothing, or lose points."
+                )
+            ),
+            "url": "/vaikas/mano/#prizai",
+            "tag": f"lottery-reminder-{child.pk}",
+        },
+        PushSubscription.objects.filter(child=child),
+    )

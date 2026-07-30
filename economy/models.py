@@ -445,6 +445,7 @@ class LedgerKind(models.TextChoices):
     ASSIGNED_TASK = "assigned_task", _("Assigned task")
     PENALTY = "penalty", _("Penalty")
     REWARD = "reward", _("Reward")
+    LOTTERY = "lottery", _("Lottery")
     ADJUSTMENT = "adjustment", _("Adjustment")
     GIFT = "gift", _("Gift")
     BIRTHDAY = "birthday", _("Birthday")
@@ -476,6 +477,81 @@ class LedgerEntry(models.Model):
 
     def delete(self, *args, **kwargs):
         raise ValidationError(_("Point transactions cannot be deleted."))
+
+
+class LotteryTicketStatus(models.TextChoices):
+    OPEN = "open", _("Open")
+    REVEALED = "revealed", _("Revealed")
+
+
+class LotteryTicket(models.Model):
+    child = models.ForeignKey(
+        ChildProfile,
+        on_delete=models.PROTECT,
+        related_name="lottery_tickets",
+    )
+    week_start = models.DateField()
+    values = models.JSONField()
+    prize_amount = models.IntegerField()
+    applied_delta = models.IntegerField(null=True, blank=True)
+    status = models.CharField(
+        max_length=12,
+        choices=LotteryTicketStatus.choices,
+        default=LotteryTicketStatus.OPEN,
+    )
+    purchase_ledger_entry = models.OneToOneField(
+        LedgerEntry,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="lottery_ticket_purchase",
+    )
+    result_ledger_entry = models.OneToOneField(
+        LedgerEntry,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="lottery_ticket_result",
+    )
+    purchased_at = models.DateTimeField(auto_now_add=True)
+    revealed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering: ClassVar = ["-purchased_at", "-pk"]
+        constraints: ClassVar = [
+            models.UniqueConstraint(
+                fields=["child"],
+                condition=Q(status=LotteryTicketStatus.OPEN),
+                name="one_open_lottery_ticket_per_child",
+            )
+        ]
+        indexes: ClassVar = [
+            models.Index(
+                fields=["child", "week_start"],
+                name="lottery_child_week_idx",
+            )
+        ]
+
+
+class LotteryReminder(models.Model):
+    child = models.ForeignKey(
+        ChildProfile,
+        on_delete=models.CASCADE,
+        related_name="lottery_reminders",
+    )
+    week_start = models.DateField()
+    scheduled_for = models.DateTimeField()
+    handled_at = models.DateTimeField(null=True, blank=True)
+    sent = models.BooleanField(default=False)
+
+    class Meta:
+        ordering: ClassVar = ["-week_start", "-pk"]
+        constraints: ClassVar = [
+            models.UniqueConstraint(
+                fields=["child", "week_start"],
+                name="one_lottery_reminder_per_child_week",
+            )
+        ]
 
 
 class PointGift(models.Model):

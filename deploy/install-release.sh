@@ -200,6 +200,8 @@ done
 for support_file in \
   README.lt.md \
   README.md \
+  kinkudos-lottery-reminders.service \
+  kinkudos-lottery-reminders.timer \
   kinkudos-maintenance.service \
   kinkudos-maintenance.timer \
   restic.env.example

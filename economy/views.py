@@ -76,6 +76,11 @@ from .images import (
     process_feedback_screenshot,
     process_task_evidence,
 )
+from .lottery import (
+    lottery_state,
+    purchase_lottery_ticket,
+    reveal_lottery_ticket,
+)
 from .models import (
     AssignedTask,
     AssignedTaskBatch,
@@ -89,6 +94,7 @@ from .models import (
     FeedbackType,
     LedgerEntry,
     LedgerKind,
+    LotteryTicket,
     PenaltyTemplate,
     Proposal,
     PushSubscription,
@@ -263,6 +269,7 @@ def child_dashboard(request):
         .order_by("batch__created_at", "pk")
     )
     assigned_reward_block = assigned_tasks_block_rewards(child)
+    child_lottery = lottery_state(child)
     rewards = list(Reward.objects.filter(is_active=True, is_deleted=False))
     for reward in rewards:
         reward.is_affordable = reward_is_affordable(child, reward)
@@ -385,6 +392,7 @@ def child_dashboard(request):
             "reward_requests_blocked": (
                 assigned_reward_block or reward_requests_blocked(child)
             ),
+            "lottery": child_lottery,
             "proposal_form": ProposalForm(),
             "task_evidence_form": TaskEvidenceForm(),
             "theme_form": ThemeForm(
@@ -585,6 +593,37 @@ def child_request_reward(request, reward_id):
 
 @child_required
 @require_POST
+def child_purchase_lottery_ticket(request):
+    try:
+        purchase_lottery_ticket(child=request.child)
+        messages.success(request, _("Your lottery ticket is ready."))
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect(f"{reverse('child_dashboard')}#prizai")
+
+
+@child_required
+@require_POST
+def child_reveal_lottery_ticket(request, ticket_id):
+    ticket = get_object_or_404(
+        LotteryTicket,
+        pk=ticket_id,
+        child=request.child,
+    )
+    revealed = reveal_lottery_ticket(ticket=ticket, child=request.child)
+    revealed.refresh_from_db()
+    return JsonResponse(
+        {
+            "ok": True,
+            "delta": revealed.applied_delta,
+            "balance": revealed.result_ledger_entry.balance_after,
+            "matching_value": revealed.prize_amount,
+        }
+    )
+
+
+@child_required
+@require_POST
 def child_cancel_reward(request, request_id):
     reward_request = get_object_or_404(
         RewardRequest,
@@ -688,6 +727,15 @@ def _child_state_payload(child):
         .order_by("-batch__created_at", "-pk")
         .values_list("pk", "status", "batch__assigned_on", "completed_at")[:20]
     )
+    lottery_states = list(
+        child.lottery_tickets.order_by("-purchased_at", "-pk").values_list(
+            "pk",
+            "status",
+            "week_start",
+            "purchased_at",
+            "revealed_at",
+        )[:12]
+    )
     raw_state = json.dumps(
         {
             "local_date": timezone.localdate(),
@@ -696,6 +744,7 @@ def _child_state_payload(child):
             "tasks": task_states,
             "rewards": reward_states,
             "assigned_tasks": assigned_task_states,
+            "lottery": lottery_states,
         },
         default=str,
         sort_keys=True,
@@ -1056,6 +1105,9 @@ def parent_dashboard(request):
     today = timezone.localdate()
     history_cutoff = timezone.now() - timedelta(days=7)
     for child in children:
+        child_lottery = lottery_state(child)
+        child.lottery_tickets_used = child_lottery["tickets_used"]
+        child.lottery_ticket_open = bool(child_lottery["open_ticket"])
         child.assignment_unavailable_task_ids = unavailable_assignment_task_ids(child)
         child.assignment_batches = list(
             child.assigned_task_batches.filter(assigned_on__lte=today)
