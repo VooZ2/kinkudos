@@ -1,6 +1,7 @@
 import hashlib
 import json
 import logging
+import smtplib
 from datetime import timedelta
 from urllib.parse import urlencode
 from uuid import uuid4
@@ -34,6 +35,7 @@ from django.views.decorators.http import require_POST
 from .auth import child_required, current_child, parent_required
 from .backups import backup_status, configure_backup, request_manual_backup
 from .changelog import load_changelog
+from .email_config import public_smtp_config, save_smtp_config, smtp_config, verify_smtp
 from .forms import (
     AdjustmentForm,
     ApplyPenaltyForm,
@@ -61,6 +63,7 @@ from .forms import (
     ProposalForm,
     RejectForm,
     RewardForm,
+    SmtpSettingsForm,
     TaskDecisionCommentForm,
     TaskEvidenceForm,
     TaskForm,
@@ -153,7 +156,7 @@ class ParentLoginView(LoginView):
 
 class EmailResetEnabledMixin:
     def dispatch(self, request, *args, **kwargs):
-        if not settings.EMAIL_ENABLED:
+        if not smtp_config().get("enabled"):
             raise Http404
         return super().dispatch(request, *args, **kwargs)
 
@@ -166,6 +169,7 @@ class ParentPasswordResetView(EmailResetEnabledMixin, PasswordResetView):
     success_url = reverse_lazy("password_reset_done")
 
     def dispatch(self, request, *args, **kwargs):
+        self.from_email = smtp_config().get("from_email")
         self.extra_email_context = {
             "family_display_name": FamilySettings.load().display_name,
         }
@@ -434,8 +438,8 @@ def child_submit_task(request, task_id):
             success_message = _("Your artwork was sent to the review gallery!")
         elif request.child.theme == "panda_pet":
             success_message = _("The bamboo was sent to your parents for approval!")
-        elif request.child.theme == "robliux":
-            success_message = _("Obby complete! Pending parent verification.")
+        elif request.child.theme == "blockville":
+            success_message = _("Challenge complete! Pending parent verification.")
         elif processed:
             success_message = _("The task and its proof were sent to the parents for approval.")
         else:
@@ -905,7 +909,8 @@ def submit_feedback(request):
         )
 
     email_failed = False
-    if settings.EMAIL_ENABLED and settings.FEEDBACK_EMAIL:
+    email = smtp_config()
+    if email.get("enabled") and email.get("feedback_email"):
         try:
             parent_url = request.build_absolute_uri(
                 f"{reverse('parent_dashboard')}#parent-settings"
@@ -934,8 +939,8 @@ def submit_feedback(request):
                         f"Review: {parent_url}",
                     ]
                 ),
-                settings.DEFAULT_FROM_EMAIL,
-                [settings.FEEDBACK_EMAIL],
+                email.get("from_email"),
+                [email.get("feedback_email")],
                 fail_silently=False,
             )
             report.email_notified_at = timezone.now()
@@ -1189,6 +1194,11 @@ def parent_dashboard(request):
             ),
             "backup_status": backup_status(),
             "backup_settings_form": BackupSettingsForm(),
+            "smtp_status": public_smtp_config(),
+            "smtp_settings_form": SmtpSettingsForm(
+                initial=public_smtp_config(),
+                auto_id="id_smtp_settings_%s",
+            ),
             "backup_audit_events": BackupAuditEvent.objects.select_related("actor")[:10],
             "feedback_page": feedback_page,
             "feedback_status": feedback_status,
@@ -1680,6 +1690,51 @@ def parent_update_family_preferences(request):
     else:
         messages.error(request, _("Check the family settings."))
     return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_configure_smtp(request):
+    if not request.user.is_staff:
+        messages.error(request, _("Only a parent administrator can change email settings."))
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    form = SmtpSettingsForm(request.POST)
+    if not form.is_valid():
+        messages.error(request, _("Check the email settings."))
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    authenticated = authenticate(
+        request,
+        username=request.user.get_username(),
+        password=form.cleaned_data["current_password"],
+    )
+    if authenticated is None:
+        messages.error(request, _("The current parent password is incorrect."))
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    config = {
+        key: form.cleaned_data[key]
+        for key in (
+            "enabled",
+            "host",
+            "port",
+            "security",
+            "username",
+            "password",
+            "from_email",
+            "feedback_email",
+        )
+    }
+    try:
+        verify_smtp(config)
+        save_smtp_config(config)
+    except (OSError, ValueError, smtplib.SMTPException):
+        logger.warning("SMTP settings verification failed", exc_info=True)
+        messages.error(
+            request,
+            _("Email settings were not saved. Check the server details and credentials."),
+        )
+    else:
+        messages.success(request, _("Email settings were verified and saved."))
+    return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
 
 @parent_required

@@ -7,6 +7,36 @@ schema.
 
 ## [Unreleased]
 
+## [26.1.0] - 2026-07-30
+
+### Pridėta
+
+- Tėvų administratorius „Nustatymuose“ gali patikrinti ir pakeisti SMTP
+  nustatymus; SMTP slaptažodis lieka tik lokaliame ribotų teisių paslapčių
+  faile.
+- Bendruosiuose šeimos nustatymuose galima pakeisti šeimos pavadinimą.
+
+### Pakeista
+
+- Nustatymai logiškai suskirstyti į šeimos, vaikų ir taškų, privatumo,
+  el. pašto, kopijų, paskyrų bei atsiliepimų blokus.
+- Septintoji vaiko tema pervadinta į originalią „Blockville“ temą su kubelių
+  valiuta ir su trečiųjų šalių ženklais nesusietais sąsajos tekstais.
+
+### Pataisyta
+
+- Tikrinant kopijų saugyklą pakartojamas bandymas po laikinos „Docker“ DNS
+  klaidos, o techninis resolverio tekstas pakeistas aiškiu patarimu patikrinti
+  S3 adresą.
+- Darbų, nuobaudų ir prizų redagavimo formose po laukų pavadinimų visur rodomi
+  dvitaškiai.
+
+### Saugumas
+
+- Keičiant jautrius SMTP ar kopijų prisijungimo duomenis būtinas pakeitimą
+  atliekančio tėvų administratoriaus slaptažodis. Paskyrų redagavimui paliktos
+  esamos autentifikavimo taisyklės.
+
 ## [26.0.0] - 2026-07-30
 
 ### Pakeista
@@ -41,8 +71,8 @@ schema.
 
 ### Pridėta
 
-- „Robliux Pasaulis“ tapo septintąja vaiko tema: pridėta tamsi žaidimo
-  sąsaja, robliukų linksniai, „Obby“ ir „Gamepass“ tekstai, paspaudžiami
+- „Blockville Pasaulis“ tapo septintąja vaiko tema: pridėta tamsi žaidimo
+  sąsaja, kubelių linksniai, iššūkių ir prizų tekstai, paspaudžiami
   mygtukai, neoninis konfeti bei atskiras garsas lietuvių ir anglų kalbomis.
 - Tėvų nustatymuose rodoma atsarginių kopijų saugykla, paskutinė sėkminga
   nuotolinė kopija, vientisumo patikra, vykdomas darbas, klaidos ir septynių

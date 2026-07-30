@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: ../app
-    image: kinkudos:26.0.0
+    image: kinkudos:26.1.0
     entrypoint:
       - /bin/sh
       - -c
@@ -42,6 +42,7 @@ services:
       KINKUDOS_EMAIL_USE_SSL: "${KINKUDOS_EMAIL_USE_SSL:-false}"
       KINKUDOS_EMAIL_HOST_USER: "${KINKUDOS_EMAIL_HOST_USER:-}"
       KINKUDOS_EMAIL_HOST_PASSWORD_FILE: /run/secrets/smtp_password
+      KINKUDOS_SMTP_CONFIG_PATH: /run/smtp/settings.json
       KINKUDOS_DEFAULT_FROM_EMAIL: "${KINKUDOS_DEFAULT_FROM_EMAIL:-KinKudos <noreply@example.invalid>}"
       KINKUDOS_FEEDBACK_EMAIL: "${KINKUDOS_FEEDBACK_EMAIL:-}"
       KINKUDOS_BACKUP_AGENT_URL: "http://backup-agent:8090"
@@ -61,6 +62,7 @@ services:
     volumes:
       - ../data:/app/data
       - ../backups:/app/backups
+      - ../secrets/smtp:/run/smtp
     networks:
       - web
       - backup
@@ -92,7 +94,7 @@ services:
       com.centurylinklabs.watchtower.enable: "false"
 
   backup-agent:
-    image: kinkudos:26.0.0
+    image: kinkudos:26.1.0
     entrypoint: ["python", "/app/scripts/backup_agent.py"]
     command: []
     user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"

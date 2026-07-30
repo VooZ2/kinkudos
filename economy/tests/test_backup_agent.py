@@ -68,6 +68,43 @@ class BackupAgentTests(TestCase):
             self.assertNotIn("never-return-this", repository)
             run_command.assert_called_once()
 
+    def test_repository_command_retries_temporary_dns_failure(self):
+        failed = CompletedProcess(
+            [],
+            1,
+            "",
+            "dial tcp: lookup example.test: server misbehaving",
+        )
+        succeeded = CompletedProcess([], 0, "[]", "")
+        with (
+            patch.object(
+                backup_agent,
+                "run_command",
+                side_effect=[failed, succeeded],
+            ) as run_command,
+            patch.object(backup_agent.time, "sleep"),
+        ):
+            result = backup_agent.run_repository_command(
+                ["restic", "snapshots"],
+                env={},
+            )
+
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(run_command.call_count, 2)
+
+    def test_dns_error_is_replaced_with_actionable_message(self):
+        result = CompletedProcess(
+            [],
+            1,
+            "",
+            "dial tcp: lookup example.test on 127.0.0.11:53: server misbehaving",
+        )
+
+        self.assertEqual(
+            backup_agent.repository_error(result),
+            "Could not resolve the storage server. Check the S3 endpoint and try again.",
+        )
+
     def test_database_backup_is_consistent_and_removes_expired_local_copy(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)

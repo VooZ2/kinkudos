@@ -5,7 +5,7 @@ gauna teminius taškus ir keičia juos į prizus. Tėvai telefone, planšetėje 
 kompiuteryje valdo bendrus darbų, bausmių ir prizų sąrašus bei tvirtina vaikų
 prašymus.
 
-- **Dabartinis leidimas:** 26.0.0
+- **Dabartinis leidimas:** 26.1.0
 - **Kalbos:** lietuvių ir anglų
 - **Platformos:** ARM64 ir AMD64 Linux serveriai su Docker
 
@@ -49,8 +49,6 @@ Pirmojo diegimo ir konfigūravimo instrukcijos pateiktos
 serverį, iš repozitorijos „GitHub Releases“ puslapio reikia atsisiųsti norimo
 leidimo archyvą bei jo kontrolinę sumą ir paleisti pridėtą
 `deploy/install-release.sh`.
-
-ARM64 „Orange Pi“ instrukcija: [docs/ORANGE_PI_INSTALL.lt.md](docs/ORANGE_PI_INSTALL.lt.md).
 
 ## Vietinis kūrimas
 

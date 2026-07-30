@@ -52,7 +52,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.0.0",
+                    "26.1.0",
                     str(root),
                 ],
                 env=environment,
@@ -68,3 +68,4 @@ class ReleaseDeploymentTests(SimpleTestCase):
             self.assertIn(str(root / "backups"), ownership)
             self.assertIn(str(root / "backup-state"), ownership)
             self.assertIn(str(root / "secrets" / "backup" / "restic.env"), ownership)
+            self.assertIn(str(root / "secrets" / "smtp"), ownership)

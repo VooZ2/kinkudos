@@ -76,8 +76,8 @@ Run these commands from the deployment root (the directory containing
 version with the release you want to install:
 
 ```bash
-version=26.0.0
-repository=OWNER/REPOSITORY
+version=26.1.0
+repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
 sha256sum -c "kinkudos-$version.tar.gz.sha256"
@@ -144,7 +144,11 @@ sender address, and the address that should receive saved feedback
 notifications. The password is written to `../secrets/smtp_password` with
 `0600` permissions and is never echoed or placed in shell history.
 
-Email is disabled by default until SMTP is configured.
+Email is disabled by default until SMTP is configured. A parent administrator
+can later verify and change the same settings in Settings → Email after
+confirming their current parent password. UI-managed values, including the
+password, are stored in `../secrets/smtp/settings.json` with `0600`
+permissions and are never stored in the application database.
 
 Signed-in parents and children can submit a problem or suggestion from the
 floating bug button. KinKudos saves the report before attempting email

@@ -275,7 +275,7 @@ class FirstThemeForm(StyledFormMixin, forms.Form):
             (Theme.HERO_HQ, format_lazy("🛡️ {}", _("Superhero HQ"))),
             (Theme.ART_STUDIO, format_lazy("🎨 {}", _("Art Studio"))),
             (Theme.PANDA_PET, format_lazy("🐼 {}", _("Panda World"))),
-            (Theme.ROBLIUX, format_lazy("R$ {}", _("Robliux World"))),
+            (Theme.BLOCKVILLE, format_lazy("◆ {}", _("Blockville World"))),
         ],
         widget=forms.RadioSelect,
     )
@@ -411,18 +411,21 @@ class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = FamilySettings
         fields = [
+            "family_name",
             "photo_bonus_points",
             "birthday_points",
             "evidence_retention_days",
             "feedback_screenshot_retention_days",
         ]
         labels = {
+            "family_name": _("Family name"),
             "photo_bonus_points": _("Extra points for a task photo"),
             "birthday_points": _("Birthday points"),
             "evidence_retention_days": _("Keep task photos for"),
             "feedback_screenshot_retention_days": _("Keep feedback screenshots for"),
         }
         help_texts = {
+            "family_name": _("Shown in family-facing headings and messages."),
             "photo_bonus_points": _(
                 "Use 0 to disable the photo bonus. The value is captured when a task is submitted."
             ),
@@ -478,6 +481,34 @@ class BackupSettingsForm(StyledFormMixin, forms.Form):
         if "/" in bucket or any(character.isspace() for character in bucket):
             raise forms.ValidationError(_("Enter a valid bucket name."))
         return bucket
+
+
+class SmtpSettingsForm(StyledFormMixin, forms.Form):
+    enabled = forms.BooleanField(label=_("Enable email"), required=False)
+    host = forms.CharField(label=_("SMTP server"), max_length=255)
+    port = forms.IntegerField(label=_("SMTP port"), min_value=1, max_value=65535)
+    security = forms.ChoiceField(
+        label=_("Encryption"),
+        choices=[
+            ("tls", _("STARTTLS")),
+            ("ssl", _("SSL/TLS")),
+            ("none", _("None")),
+        ],
+    )
+    username = forms.CharField(label=_("SMTP username"), max_length=255)
+    password = forms.CharField(
+        label=_("SMTP password"),
+        max_length=512,
+        widget=forms.PasswordInput(render_value=False),
+        help_text=_("Enter the SMTP password again whenever you save these settings."),
+    )
+    from_email = forms.EmailField(label=_("Sender email address"))
+    feedback_email = forms.EmailField(label=_("Feedback recipient email address"))
+    current_password = forms.CharField(
+        label=_("Your current parent password"),
+        widget=forms.PasswordInput(render_value=False),
+        help_text=_("Required before changing sensitive email settings."),
+    )
 
 
 class BirthDateForm(StyledFormMixin, forms.ModelForm):

@@ -133,6 +133,31 @@ def run_command(command, *, env=None):
     )
 
 
+def run_repository_command(command, *, env):
+    result = run_command(command, env=env)
+    for _attempt in range(2):
+        detail = (result.stderr or result.stdout).lower()
+        if result.returncode == 0 or not any(
+            marker in detail
+            for marker in ("server misbehaving", "temporary failure in name resolution")
+        ):
+            break
+        time.sleep(1)
+        result = run_command(command, env=env)
+    return result
+
+
+def repository_error(result):
+    detail = (result.stderr or result.stdout or "Repository check failed.").strip()
+    lowered = detail.lower()
+    if any(
+        marker in lowered
+        for marker in ("server misbehaving", "temporary failure in name resolution", "dial tcp")
+    ):
+        return "Could not resolve the storage server. Check the S3 endpoint and try again."
+    return detail[-500:]
+
+
 def write_config(payload):
     provider = payload.get("provider")
     endpoint = str(payload.get("endpoint", "")).strip().removeprefix("https://")
@@ -164,17 +189,16 @@ def write_config(payload):
     os.chmod(temp_path, 0o600)
     temp_path.replace(ENV_PATH)
     environment = restic_environment()
-    probe = run_command(["restic", "snapshots", "--json"], env=environment)
+    probe = run_repository_command(["restic", "snapshots", "--json"], env=environment)
     if probe.returncode != 0:
-        initialized = run_command(["restic", "init"], env=environment)
+        initialized = run_repository_command(["restic", "init"], env=environment)
         if initialized.returncode != 0:
             if previous is None:
                 ENV_PATH.unlink(missing_ok=True)
             else:
                 ENV_PATH.write_bytes(previous)
                 os.chmod(ENV_PATH, 0o600)
-            detail = (initialized.stderr or probe.stderr or "Repository check failed.").strip()
-            raise ValueError(detail[-500:])
+            raise ValueError(repository_error(initialized))
     return repository, access_key_id[-4:]
 
 

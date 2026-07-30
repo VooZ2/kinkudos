@@ -125,7 +125,7 @@ class Patch0121Tests(TestCase):
         self.client.force_login(self.parent)
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, 'class="brand-mark brand-logo"', html=False)
-        self.assertContains(response, "KinKudos · v26.0.0")
+        self.assertContains(response, "KinKudos · v26.1.0")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_child_history_identifies_reward_approver_and_rejector(self):

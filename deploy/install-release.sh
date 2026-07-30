@@ -34,6 +34,7 @@ test -f "$deploy_dir/compose.yml"
 umask 077
 mkdir -p \
   "$secrets_dir/backup" \
+  "$secrets_dir/smtp" \
   "$project_root/data" \
   "$project_root/backups" \
   "$project_root/backup-state"
@@ -71,6 +72,7 @@ chown "$runtime_uid:$runtime_gid" \
   "$project_root/backups" \
   "$project_root/backup-state" \
   "$secrets_dir/backup" \
+  "$secrets_dir/smtp" \
   "$secrets_dir/backup_agent_token" \
   "$secrets_dir/restic_password" \
   "$secrets_dir/backup/restic.env"

@@ -97,8 +97,8 @@ msgstr "Visos būsenos"
 msgid "All types"
 msgstr "Visi tipai"
 
-msgid "Annual Robliux Gift!"
-msgstr "Metinė Robliux dovana!"
+msgid "Annual Blockville Gift!"
+msgstr "Metinė Blockville dovana!"
 
 msgid "Appearance"
 msgstr "Išvaizda"
@@ -172,6 +172,9 @@ msgstr "Backblaze B2 (rekomenduojama)"
 msgid "Backup in progress..."
 msgstr "Kuriama atsarginė kopija..."
 
+msgid "Backup settings"
+msgstr "Atsarginių kopijų nustatymai"
+
 msgid "Backup settings configured"
 msgstr "Atsarginių kopijų nustatymai pakeisti"
 
@@ -229,14 +232,23 @@ msgstr "Gimimo data išsaugota."
 msgid "Block World"
 msgstr "Blokų pasaulis"
 
+msgid "Block quests"
+msgstr "Kubelių iššūkiai"
+
 msgid "Block sent to your parents for approval."
 msgstr "Blokas perduotas tėvams patvirtinti."
+
+msgid "Blockville World"
+msgstr "Blockville Pasaulis"
 
 msgid "Bucket name"
 msgstr "Bucket pavadinimas"
 
 msgid "Building Plan"
 msgstr "Kūrybos planas"
+
+msgid "Building plans"
+msgstr "Statybų planai"
 
 msgid "Cancel"
 msgstr "Atšaukti"
@@ -249,6 +261,12 @@ msgstr "Katalogo įrašas sukurtas."
 
 msgid "Catalogs"
 msgstr "Katalogai"
+
+msgid "Challenge complete! Pending parent verification."
+msgstr "Iššūkis įveiktas! Laukiama tėvų patvirtinimo."
+
+msgid "Challenge returned: fix issues"
+msgstr "Iššūkis grąžintas: pataisyk klaidas"
 
 msgid "Change"
 msgstr "Pokytis"
@@ -285,6 +303,9 @@ msgstr "Patikrinkite redaguojamo vaiko profilio duomenis."
 
 msgid "Check the edited data."
 msgstr "Patikrinkite redaguojamus duomenis."
+
+msgid "Check the email settings."
+msgstr "Patikrinkite el. pašto nustatymus."
 
 msgid "Check the entered data."
 msgstr "Patikrinkite įvestus duomenis."
@@ -336,6 +357,9 @@ msgstr "Vaikų paskyros"
 
 msgid "Child's name"
 msgstr "Vaiko vardas"
+
+msgid "Children and points"
+msgstr "Vaikai ir taškai"
 
 msgid "Choose a profile"
 msgstr "Pasirink profilį"
@@ -397,8 +421,8 @@ msgstr "Pasirink savo profilį"
 msgid "Choose your world"
 msgstr "Pasirink savo pasaulį"
 
-msgid "Claim Gamepass"
-msgstr "Atrakinti Gamepass"
+msgid "Claim prize"
+msgstr "Užsisakyti prizą"
 
 msgid "Close"
 msgstr "Uždaryti"
@@ -412,8 +436,8 @@ msgstr "Komentaras"
 msgid "Comment (optional)"
 msgstr "Komentaras (neprivalomas)"
 
-msgid "Complete Obby!"
-msgstr "Įveikiau Obby!"
+msgid "Complete challenge"
+msgstr "Įveikiau iššūkį"
 
 msgid "Complete tasks, earn points, and choose your reward."
 msgstr "Atlik darbus, rink taškus ir išsirink prizą."
@@ -439,8 +463,8 @@ msgstr "Nepavyko pakeisti pranešimų nustatymo."
 msgid "Craft a recipe"
 msgstr "Sukurti receptą"
 
-msgid "Create a Gamepass idea"
-msgstr "Sukurti Gamepass idėją"
+msgid "Create a prize idea"
+msgstr "Sukurti prizo idėją"
 
 msgid "Create child profile"
 msgstr "Sukurti vaiko profilį"
@@ -517,6 +541,9 @@ msgstr "Aprašymas"
 msgid "Device"
 msgstr "Įrenginys"
 
+msgid "Disabled"
+msgstr "Išjungta"
+
 msgid "Do not include passwords, PINs, or other private information."
 msgstr "Nerašykite slaptažodžių, PIN kodų ar kitos privačios informacijos."
 
@@ -532,14 +559,47 @@ msgstr "Redaguoti"
 msgid "Edit accounts"
 msgstr "Redaguoti paskyras"
 
+msgid "Edit email settings"
+msgstr "Keisti el. pašto nustatymus"
+
 msgid "Edit settings"
 msgstr "Keisti nustatymus"
+
+msgid "Email"
+msgstr "El. paštas"
 
 msgid "Email address"
 msgstr "El. pašto adresas"
 
 msgid "Email address not provided"
 msgstr "El. paštas nenurodytas"
+
+msgid "Email credentials are sensitive. Your parent password is required and the SMTP password is never displayed."
+msgstr "El. pašto prisijungimo duomenys yra jautrūs. Būtinas jūsų tėvų paskyros slaptažodis, o SMTP slaptažodis niekada nerodomas."
+
+msgid "Email notifications"
+msgstr "El. pašto pranešimai"
+
+msgid "Email settings were not saved. Check the server details and credentials."
+msgstr "El. pašto nustatymai neišsaugoti. Patikrinkite serverio ir prisijungimo duomenis."
+
+msgid "Email settings were verified and saved."
+msgstr "El. pašto nustatymai patikrinti ir išsaugoti."
+
+msgid "Email setup"
+msgstr "El. pašto nustatymai"
+
+msgid "Email setup can be changed only by a parent administrator."
+msgstr "El. pašto nustatymus gali keisti tik tėvų administratorius."
+
+msgid "Enable email"
+msgstr "Įjungti el. paštą"
+
+msgid "Enabled"
+msgstr "Įjungta"
+
+msgid "Encryption"
+msgstr "Šifravimas"
 
 msgid "English"
 msgstr "Anglų"
@@ -561,6 +621,9 @@ msgstr "Įveskite tinkamą bucket pavadinimą."
 
 msgid "Enter my world"
 msgstr "Įeiti į savo pasaulį"
+
+msgid "Enter the SMTP password again whenever you save these settings."
+msgstr "Kaskart išsaugodami šiuos nustatymus iš naujo įveskite SMTP slaptažodį."
 
 msgid "Enter the birthday date."
 msgstr "Įveskite gimimo datą."
@@ -598,8 +661,14 @@ msgstr "Šeimos paskyros ir programos nustatymai"
 msgid "Family created."
 msgstr "Šeima sukurta."
 
+msgid "Family name"
+msgstr "Šeimos pavadinimas"
+
 msgid "Family name or nickname: "
 msgstr "Šeimos pavadinimas arba slapyvardis: "
+
+msgid "Family settings"
+msgstr "Šeimos nustatymai"
 
 msgid "Family settings saved."
 msgstr "Šeimos nustatymai išsaugoti."
@@ -615,6 +684,9 @@ msgstr "Atsiliepimai išsaugomi KinKudos, tačiau el. pašto pranešimai nesukon
 
 msgid "Feedback pages"
 msgstr "Atsiliepimų puslapiai"
+
+msgid "Feedback recipient email address"
+msgstr "Atsiliepimų gavėjo el. pašto adresas"
 
 msgid "Feedback status updated."
 msgstr "Atsiliepimo būsena atnaujinta."
@@ -643,14 +715,8 @@ msgstr "Pavyzdžiui: s3.eu-central-003.backblazeb2.com"
 msgid "Forgot password"
 msgstr "Pamiršote slaptažodį"
 
-msgid "Gamepass Claimed!"
-msgstr "Gamepass užsakytas!"
-
-msgid "Gamepass Plans"
-msgstr "Gamepass planai"
-
-msgid "Gamepass Store"
-msgstr "Gamepass prizai"
+msgid "General"
+msgstr "Bendrieji"
 
 msgid "Get a new link"
 msgstr "Gauti naują nuorodą"
@@ -814,8 +880,8 @@ msgstr "Misijos"
 msgid "My Gallery"
 msgstr "Mano galerija"
 
-msgid "Need %(amount)s R$ more"
-msgstr "Trūksta %(amount)s R$"
+msgid "Need %(amount)s %(unit)s more"
+msgstr "Trūksta %(amount)s %(unit)s"
 
 msgid "Needs a decision"
 msgstr "Reikia sprendimo"
@@ -904,15 +970,6 @@ msgstr "Pranešimai nepalaikomi"
 msgid "Number of child profiles [1]: "
 msgstr "Vaikų profilių skaičius [1]: "
 
-msgid "Obby Quests"
-msgstr "Obby iššūkiai"
-
-msgid "Obby Returned: Fix Issues"
-msgstr "Obby grąžintas: pataisyk klaidas"
-
-msgid "Obby complete! Pending parent verification."
-msgstr "Obby įveiktas! Laukiama tėvų patvirtinimo."
-
 msgid "Offline"
 msgstr "Nėra ryšio"
 
@@ -927,6 +984,9 @@ msgstr "Vienkartinis atkūrimo kodas (išsaugokite slaptažodžių tvarkyklėje)
 
 msgid "Only a parent administrator can change backup settings."
 msgstr "Atsarginių kopijų nustatymus gali keisti tik tėvų administratorius."
+
+msgid "Only a parent administrator can change email settings."
+msgstr "El. pašto nustatymus gali keisti tik tėvų administratorius."
 
 msgid "Only a parent administrator can start a backup."
 msgstr "Atsarginę kopiją gali paleisti tik tėvų administratorius."
@@ -1090,6 +1150,15 @@ msgstr "Pristatyti kūrinį"
 msgid "Previous"
 msgstr "Ankstesnis"
 
+msgid "Privacy and retention"
+msgstr "Privatumas ir saugojimas"
+
+msgid "Prize requested!"
+msgstr "Prizas užsakytas!"
+
+msgid "Prize shop"
+msgstr "Prizų parduotuvė"
+
 msgid "Problem"
 msgstr "Problema"
 
@@ -1177,6 +1246,9 @@ msgstr "Prašomas gimimo datos pakeitimas: %(current)s → %(requested)s."
 msgid "Required before changing backup credentials."
 msgstr "Privalomas prieš keičiant atsarginių kopijų prisijungimo duomenis."
 
+msgid "Required before changing sensitive email settings."
+msgstr "Privalomas prieš keičiant jautrius el. pašto nustatymus."
+
 msgid "Reset link"
 msgstr "Atkūrimo nuoroda"
 
@@ -1210,9 +1282,6 @@ msgstr "Prizo prašymas atmestas."
 msgid "Rewards"
 msgstr "Prizai"
 
-msgid "Robliux World"
-msgstr "Robliux Pasaulis"
-
 msgid "Role"
 msgstr "Rolė"
 
@@ -1221,6 +1290,27 @@ msgstr "S3 adresas"
 
 msgid "S3-compatible storage"
 msgstr "Su S3 suderinama saugykla"
+
+msgid "SMTP is used for password recovery and optional feedback notifications."
+msgstr "SMTP naudojamas slaptažodžiui atkurti ir pasirinktiniams atsiliepimų pranešimams."
+
+msgid "SMTP password"
+msgstr "SMTP slaptažodis"
+
+msgid "SMTP port"
+msgstr "SMTP prievadas"
+
+msgid "SMTP server"
+msgstr "SMTP serveris"
+
+msgid "SMTP username"
+msgstr "SMTP naudotojo vardas"
+
+msgid "SSL/TLS"
+msgstr "SSL/TLS"
+
+msgid "STARTTLS"
+msgstr "STARTTLS"
 
 msgid "Save"
 msgstr "Išsaugoti"
@@ -1273,9 +1363,6 @@ msgstr "Skyriai"
 msgid "See what was added and fixed in every application version."
 msgstr "Čia rasite, kas buvo pridėta ir pataisyta kiekvienoje programos versijoje."
 
-msgid "Send R$ to Sibling"
-msgstr "Pervesti R$ broliui ar sesei"
-
 msgid "Send a signal to HQ"
 msgstr "Siųsti signalą būstinei"
 
@@ -1284,6 +1371,9 @@ msgstr "Siųsti iš naujo"
 
 msgid "Send an owl"
 msgstr "Siųsti pelėdą"
+
+msgid "Send cubes to sibling"
+msgstr "Pervesti kubelius broliui ar sesei"
 
 msgid "Send feedback"
 msgstr "Siųsti atsiliepimą"
@@ -1299,6 +1389,9 @@ msgstr "Siųsti signalą"
 
 msgid "Send {amount} points to {recipient}?"
 msgstr "Ar dovanoti {amount} taškų vaikui {recipient}?"
+
+msgid "Sender email address"
+msgstr "Siuntėjo el. pašto adresas"
 
 msgid "Set a new password here:"
 msgstr "Naują slaptažodį nustatykite čia:"
@@ -1317,6 +1410,9 @@ msgstr "Bendras paaiškinimas (nebūtina)"
 
 msgid "Show"
 msgstr "Rodyti"
+
+msgid "Shown in family-facing headings and messages."
+msgstr "Rodomas šeimai skirtose antraštėse ir žinutėse."
 
 msgid "Sign in"
 msgstr "Prisijungti"

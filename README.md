@@ -5,7 +5,7 @@ theme-based points, and exchange them for rewards. Parents manage the shared
 task, penalty, and reward catalogs and approve requests from a phone, tablet,
 or desktop browser.
 
-- **Current release:** 26.0.0
+- **Current release:** 26.1.0
 - **Languages:** English and Lithuanian
 - **Platforms:** ARM64 and AMD64 Linux hosts with Docker
 
@@ -53,8 +53,6 @@ For initial installation and configuration details, see
 download the desired archive and checksum from the repository's GitHub
 Releases page, then run the bundled `deploy/install-release.sh` as documented
 there.
-
-ARM64 Orange Pi instructions: [docs/ORANGE_PI_INSTALL.md](docs/ORANGE_PI_INSTALL.md).
 
 ## Local development
 
