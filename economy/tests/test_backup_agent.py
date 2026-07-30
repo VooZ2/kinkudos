@@ -131,3 +131,42 @@ class BackupAgentTests(TestCase):
                 value = connection.execute("SELECT value FROM sample").fetchone()[0]
             self.assertEqual(value, "kept")
             self.assertFalse(expired.exists())
+
+    def test_database_source_is_opened_query_only(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            database = root / "kinkudos.sqlite3"
+            output = root / "backups"
+            output.mkdir()
+            with sqlite3.connect(database) as connection:
+                connection.execute("CREATE TABLE sample (value TEXT)")
+            real_connect = sqlite3.connect
+            connections = []
+
+            def recorded_connect(database_path, *args, **kwargs):
+                connections.append((database_path, kwargs.copy()))
+                return real_connect(database_path, *args, **kwargs)
+
+            with (
+                patch.object(backup_agent, "DATABASE_PATH", database),
+                patch.object(backup_agent, "OUTPUT_DIR", output),
+                patch.object(
+                    backup_agent.sqlite3,
+                    "connect",
+                    side_effect=recorded_connect,
+                ),
+            ):
+                backup_agent.create_database_backup()
+
+            self.assertEqual(
+                connections[0],
+                (f"{database.resolve().as_uri()}?mode=ro", {"uri": True}),
+            )
+            with sqlite3.connect(
+                f"{database.resolve().as_uri()}?mode=ro",
+                uri=True,
+            ) as source:
+                source.execute("PRAGMA query_only = ON")
+                self.assertEqual(source.execute("PRAGMA query_only").fetchone()[0], 1)
+                with self.assertRaises(sqlite3.OperationalError):
+                    source.execute("INSERT INTO sample VALUES ('blocked')")

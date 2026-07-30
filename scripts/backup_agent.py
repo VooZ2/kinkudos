@@ -10,6 +10,7 @@ import sqlite3
 import subprocess
 import threading
 import time
+from contextlib import closing
 from datetime import UTC, datetime, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -208,7 +209,20 @@ def create_database_backup():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     local_now = datetime.now().astimezone()
     destination = OUTPUT_DIR / f"kinkudos-{local_now:%Y%m%d-%H%M%S}.sqlite3"
-    with sqlite3.connect(DATABASE_PATH) as source, sqlite3.connect(destination) as target:
+    source_uri = f"{DATABASE_PATH.resolve().as_uri()}?mode=ro"
+    try:
+        source = sqlite3.connect(source_uri, uri=True)
+        source.execute("PRAGMA query_only = ON")
+    except sqlite3.OperationalError as exc:
+        raise RuntimeError(
+            "Could not open the KinKudos database for backup."
+        ) from exc
+    try:
+        target = sqlite3.connect(destination)
+    except sqlite3.OperationalError as exc:
+        source.close()
+        raise RuntimeError("Could not create the local database backup.") from exc
+    with closing(source), closing(target):
         source.backup(target)
         result = target.execute("PRAGMA integrity_check").fetchone()[0]
     if result != "ok":

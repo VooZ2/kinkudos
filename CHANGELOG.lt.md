@@ -7,6 +7,16 @@ schema.
 
 ## [Unreleased]
 
+## [26.1.5] - 2026-07-30
+
+### Pataisyta
+
+- Kopijų agentas aktyvią SQLite duomenų bazę atidaro aiškiu `mode=ro` ir
+  `query_only` režimu, o duomenų katalogo prijungimas leidžia SQLite valdyti
+  saugiai internetinei kopijai reikalingus užrakinimo bei WAL failus.
+- Vietinės duomenų bazės atidarymo ir kopijos failo sukūrimo klaidos dabar
+  atskiriamos aiškesniais diagnostiniais pranešimais.
+
 ## [26.1.4] - 2026-07-30
 
 ### Pataisyta

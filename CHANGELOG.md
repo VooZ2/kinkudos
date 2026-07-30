@@ -5,6 +5,16 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.1.5] - 2026-07-30
+
+### Fixed
+
+- The backup agent opens the live SQLite database with explicit `mode=ro` and
+  `query_only`, while the data mount now permits SQLite to coordinate the
+  locking and WAL files required for a safe online backup.
+- Opening the source database and creating the local copy now produce distinct,
+  actionable errors.
+
 ## [26.1.4] - 2026-07-30
 
 ### Fixed

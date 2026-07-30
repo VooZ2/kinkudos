@@ -27,6 +27,8 @@ class ReleaseDeploymentTests(SimpleTestCase):
 
         self.assertIn("      - backup", backup_service)
         self.assertIn("      - backup-egress", backup_service)
+        self.assertIn("      - ../data:/source", backup_service)
+        self.assertNotIn("../data:/source:ro", backup_service)
         self.assertIn("  backup:\n    internal: true", networks)
         self.assertIn("  backup-egress:", networks)
 
@@ -75,7 +77,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.1.4",
+                    "26.1.5",
                     str(root),
                 ],
                 env=environment,
