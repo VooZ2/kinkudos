@@ -6,6 +6,9 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from .models import (
+    AssignedTask,
+    AssignedTaskBatch,
+    AssignedTaskStatus,
     BirthdayAward,
     ChildProfile,
     FamilySettings,
@@ -19,8 +22,8 @@ from .models import (
     Reward,
     RewardRequest,
     SavingsGoal,
-    Task,
     TaskClaim,
+    TaskCompletion,
     Theme,
 )
 
@@ -212,6 +215,7 @@ def approve_task_claim(*, claim, actor):
     locked.decided_by = actor
     locked.decided_at = timezone.now()
     locked.save(update_fields=["status", "decided_by", "decided_at"])
+    TaskCompletion.objects.create(child=locked.child, task=locked.task)
     return entry
 
 
@@ -280,6 +284,139 @@ def reward_requests_blocked(child):
     return used_credit * 2 >= credit_limit
 
 
+def assigned_tasks_block_rewards(child):
+    return AssignedTask.objects.filter(
+        batch__child=child,
+        batch__blocks_rewards=True,
+        batch__assigned_on=timezone.localdate(),
+        status=AssignedTaskStatus.PENDING,
+    ).exists()
+
+
+def unavailable_assignment_task_ids(child):
+    today = timezone.localdate()
+    pending_claim_ids = child.task_claims.filter(
+        status__in=[RequestStatus.PENDING, RequestStatus.NEEDS_CHANGES]
+    ).values_list("task_id", flat=True)
+    active_assignment_ids = AssignedTask.objects.filter(
+        batch__child=child,
+        batch__assigned_on=today,
+        status=AssignedTaskStatus.PENDING,
+        task__isnull=False,
+    ).values_list("task_id", flat=True)
+    completed_ids = child.task_completions.filter(
+        completed_on=today
+    ).values_list("task_id", flat=True)
+    return set(pending_claim_ids) | set(active_assignment_ids) | set(completed_ids)
+
+
+@transaction.atomic
+def assign_tasks(
+    *,
+    child,
+    actor,
+    tasks,
+    custom_title="",
+    custom_points=None,
+    blocks_rewards=False,
+):
+    child = ChildProfile.objects.select_for_update().get(
+        pk=child.pk,
+        is_active=True,
+    )
+    task_ids = [task.pk for task in tasks]
+    unavailable = unavailable_assignment_task_ids(child)
+    if unavailable.intersection(task_ids):
+        raise ValidationError(
+            _("One or more selected tasks are no longer available today.")
+        )
+    batch = AssignedTaskBatch.objects.create(
+        child=child,
+        assigned_by=actor,
+        blocks_rewards=blocks_rewards,
+    )
+    AssignedTask.objects.bulk_create(
+        [
+            AssignedTask(
+                batch=batch,
+                task=task,
+                title_snapshot=task.title,
+                icon_snapshot=task.icon,
+                reward_snapshot=task.reward,
+            )
+            for task in tasks
+        ]
+    )
+    if custom_title:
+        AssignedTask.objects.create(
+            batch=batch,
+            title_snapshot=custom_title,
+            icon_snapshot="🧹",
+            reward_snapshot=custom_points,
+        )
+    return batch
+
+
+@transaction.atomic
+def complete_assigned_task(*, assigned_task, child):
+    locked = (
+        AssignedTask.objects.select_for_update()
+        .select_related("batch", "task")
+        .get(pk=assigned_task.pk, batch__child=child)
+    )
+    if locked.status != AssignedTaskStatus.PENDING:
+        raise ValidationError(_("This assigned task is no longer waiting."))
+    if locked.batch.assigned_on != timezone.localdate():
+        raise ValidationError(_("This assigned task has expired."))
+    entry = post_ledger_entry(
+        child=child,
+        delta=locked.reward_snapshot,
+        kind=LedgerKind.ASSIGNED_TASK,
+        description=locked.title_snapshot,
+        source_id=locked.pk,
+    )
+    locked.status = AssignedTaskStatus.COMPLETED
+    locked.completed_at = timezone.now()
+    locked.ledger_entry = entry
+    locked.save(update_fields=["status", "completed_at", "ledger_entry"])
+    if locked.task_id:
+        TaskCompletion.objects.create(child=child, task=locked.task)
+    return entry
+
+
+@transaction.atomic
+def cancel_assigned_task(*, assigned_task, actor):
+    locked = (
+        AssignedTask.objects.select_for_update()
+        .select_related("batch")
+        .get(pk=assigned_task.pk)
+    )
+    if locked.status != AssignedTaskStatus.PENDING:
+        raise ValidationError(_("Only a waiting assigned task can be cancelled."))
+    if locked.batch.assigned_on != timezone.localdate():
+        raise ValidationError(_("This assigned task has expired."))
+    locked.status = AssignedTaskStatus.CANCELLED
+    locked.cancelled_at = timezone.now()
+    locked.cancelled_by = actor
+    locked.save(update_fields=["status", "cancelled_at", "cancelled_by"])
+    return locked
+
+
+@transaction.atomic
+def cancel_assigned_task_batch(*, batch, actor):
+    if batch.assigned_on != timezone.localdate():
+        return 0
+    now = timezone.now()
+    return AssignedTask.objects.select_for_update().filter(
+        batch=batch,
+        status=AssignedTaskStatus.PENDING,
+    ).update(
+        status=AssignedTaskStatus.CANCELLED,
+        cancelled_at=now,
+        cancelled_by=actor,
+    )
+
+
 def reward_is_affordable(child, reward):
     return child.balance - reward.cost >= child.min_balance
 
@@ -290,6 +427,12 @@ def submit_reward_request(*, child, reward):
     try:
         with transaction.atomic():
             locked_child = ChildProfile.objects.select_for_update().get(pk=child.pk)
+            if assigned_tasks_block_rewards(locked_child):
+                raise ValidationError(
+                    _(
+                        "Complete the assigned tasks before requesting a new reward."
+                    )
+                )
             if reward_requests_blocked(locked_child):
                 raise ValidationError(
                     _(

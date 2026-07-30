@@ -589,7 +589,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.1.7")
+        self.assertContains(response, "v26.2.0")
         self.assertContains(response, 'href="/pakeitimai/"', html=False)
         self.assertContains(response, "TAŠKAI")
         self.assertContains(response, "Kredito limitas -100")
@@ -641,7 +641,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Complete tasks, earn points")
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
-        self.assertContains(response, "KinKudos · v26.1.7")
+        self.assertContains(response, "KinKudos · v26.2.0")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_public_pages_share_the_product_header(self):
@@ -791,7 +791,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.1.7")
+        self.assertContains(response, "v26.2.0")
         self.assertContains(response, "v0.12.2 BETA")
         self.assertContains(response, "v0.10.4 BETA")
         self.assertContains(response, "v0.10.1 BETA")
@@ -1246,10 +1246,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.1.7',
+            '/static/icons/favicon-32.png?v=26.2.0',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.1.7")
-        self.assertContains(home, "/static/js/app.js?v=26.1.7")
+        self.assertContains(home, "/static/css/app.css?v=26.2.0")
+        self.assertContains(home, "/static/js/app.js?v=26.2.0")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1257,11 +1257,11 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.1.7",
+            "/static/icons/icon-192.png?v=26.2.0",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.1.7")
-        self.assertContains(worker, 'kinkudos-app-shell-26.1.7')
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.2.0")
+        self.assertContains(worker, 'kinkudos-app-shell-26.2.0')
         self.assertEqual(worker["Service-Worker-Allowed"], "/")
         self.assertEqual(worker["Cache-Control"], "no-cache")

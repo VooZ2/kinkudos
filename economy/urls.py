@@ -11,6 +11,7 @@ from .views import (
     child_avatar,
     child_cancel_reward,
     child_change_pin,
+    child_complete_assigned_task,
     child_create_proposal,
     child_dashboard,
     child_give_points,
@@ -34,7 +35,10 @@ from .views import (
     parent_apply_penalty,
     parent_assign_child_penalty,
     parent_assign_penalty,
+    parent_assign_tasks,
     parent_award_task,
+    parent_cancel_assigned_task,
+    parent_cancel_assigned_task_batch,
     parent_configure_backup,
     parent_configure_smtp,
     parent_create_catalog,
@@ -110,6 +114,11 @@ urlpatterns = [
     ),
     path("vaikas/avataras/<int:child_id>/", child_avatar, name="child_avatar"),
     path("vaikas/darbas/<int:task_id>/", child_submit_task, name="child_submit_task"),
+    path(
+        "vaikas/paskirtas-darbas/<int:assigned_task_id>/atlikta/",
+        child_complete_assigned_task,
+        name="child_complete_assigned_task",
+    ),
     path(
         "vaikas/darbo-prasymas/<int:claim_id>/pateikti-is-naujo/",
         child_resubmit_task,
@@ -226,6 +235,21 @@ urlpatterns = [
         "tevai/vaikas/<int:child_id>/atliktas-darbas/",
         parent_award_task,
         name="parent_award_task",
+    ),
+    path(
+        "tevai/vaikas/<int:child_id>/paskirti-darbus/",
+        parent_assign_tasks,
+        name="parent_assign_tasks",
+    ),
+    path(
+        "tevai/paskirtas-darbas/<int:assigned_task_id>/atsaukti/",
+        parent_cancel_assigned_task,
+        name="parent_cancel_assigned_task",
+    ),
+    path(
+        "tevai/paskirtu-darbu-sarasas/<int:batch_id>/atsaukti/",
+        parent_cancel_assigned_task_batch,
+        name="parent_cancel_assigned_task_batch",
     ),
     path(
         "tevai/vaikas/<int:child_id>/skirti-nuoboda/",

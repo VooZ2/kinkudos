@@ -7,6 +7,27 @@ schema.
 
 ## [Unreleased]
 
+## [26.2.0] - 2026-07-30
+
+### Pridėta
+
+- Tėvai nauju penktuoju greituoju veiksmu gali vaikui paskirti šiandienos
+  katalogo darbų sąrašą ir vieną individualų darbą. Darbų reikšmės
+  užfiksuojamos, vidurnaktį jie nebegalioja, juos galima atšaukti, o istorija
+  išlieka tėvų erdvėje.
+- Vaikas visose septyniose temose paskirtus darbus mato kaip svarbiausią
+  sąrašą ir kiekvieną pažymėjęs atliktu taškus gauna iškart.
+- Tėvai pasirinktinai gali blokuoti naujus prizų prašymus, kol bus atlikti
+  visi galiojantys paskirti darbai; esami prašymai ir kiti vaiko veiksmai
+  lieka pasiekiami.
+- Apie naujai paskirtus darbus vaiko įrenginiams siunčiamas prie temos
+  pritaikytas „Web Push“ pranešimas.
+
+### Pakeista
+
+- Katalogo darbo negalima paskirti, kol jis laukia patvirtinimo, jau yra
+  paskirtas arba tam vaikui šiandien jau buvo užskaitytas.
+
 ## [26.1.7] - 2026-07-30
 
 ### Pataisyta

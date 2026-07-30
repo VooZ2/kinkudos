@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 from pywebpush import WebPushException, webpush
 
 from .models import PushSubscription
-from .templatetags.economy_tags import currency_unit
+from .templatetags.economy_tags import currency_unit, theme_text
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +52,18 @@ def notify_task_claim(claim):
             "tag": f"task-claim-{claim.pk}",
         },
         PushSubscription.objects.filter(user__isnull=False),
+    )
+
+
+def notify_assigned_tasks(batch):
+    _send(
+        {
+            "title": str(theme_text(batch.child.theme, "assigned_title")),
+            "body": str(theme_text(batch.child.theme, "assigned_help")),
+            "url": "/vaikas/mano/#paskirti-darbai",
+            "tag": f"assigned-tasks-{batch.pk}",
+        },
+        PushSubscription.objects.filter(child=batch.child),
     )
 
 

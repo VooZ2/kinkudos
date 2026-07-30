@@ -212,6 +212,51 @@ class AwardTasksForm(forms.Form):
         )
 
 
+class AssignTasksForm(forms.Form):
+    task_ids = forms.ModelMultipleChoiceField(
+        label=_("Tasks"),
+        queryset=Task.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+    custom_title = forms.CharField(
+        label=_("Custom task"),
+        max_length=120,
+        required=False,
+    )
+    custom_points = forms.IntegerField(
+        label=_("Points"),
+        min_value=1,
+        required=False,
+    )
+    blocks_rewards = forms.BooleanField(
+        label=_("Block reward purchases"),
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["task_ids"].queryset = Task.objects.filter(
+            is_active=True,
+            is_deleted=False,
+        )
+
+    def clean(self):
+        cleaned = super().clean()
+        title = (cleaned.get("custom_title") or "").strip()
+        points = cleaned.get("custom_points")
+        if bool(title) != bool(points):
+            raise forms.ValidationError(
+                _("Enter both the custom task name and its point amount.")
+            )
+        if not cleaned.get("task_ids") and not title:
+            raise forms.ValidationError(
+                _("Choose at least one task or add a custom task.")
+            )
+        cleaned["custom_title"] = title
+        return cleaned
+
+
 class AssignPenaltiesForm(forms.Form):
     penalty_ids = forms.ModelMultipleChoiceField(
         label=_("Penalties"),

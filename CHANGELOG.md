@@ -5,6 +5,26 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.2.0] - 2026-07-30
+
+### Added
+
+- Parents can assign a daily list of catalog tasks and one custom task to a
+  child from a new fifth quick action. Assigned values are snapshotted, expire
+  at midnight, can be cancelled, and remain visible in parent history.
+- Children see assigned work as the top priority in all seven themes and earn
+  its points immediately by completing each item separately.
+- Parents can optionally block new reward requests until all active assigned
+  work is completed; existing reward requests and all other child actions
+  remain available.
+- New assigned work sends a theme-aware Web Push notification to the affected
+  child's subscribed devices.
+
+### Changed
+
+- A catalog task is unavailable for assignment while it awaits approval, is
+  already assigned, or has already been completed for that child today.
+
 ## [26.1.7] - 2026-07-30
 
 ### Fixed

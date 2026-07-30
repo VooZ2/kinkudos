@@ -41,6 +41,7 @@ from .forms import (
     ApplyPenaltyForm,
     ApprovalCostForm,
     AssignPenaltiesForm,
+    AssignTasksForm,
     AvatarForm,
     AwardTasksForm,
     BackupSettingsForm,
@@ -76,6 +77,9 @@ from .images import (
     process_task_evidence,
 )
 from .models import (
+    AssignedTask,
+    AssignedTaskBatch,
+    AssignedTaskStatus,
     BackupAuditEvent,
     BirthDateChangeRequest,
     ChildProfile,
@@ -93,8 +97,10 @@ from .models import (
     RewardRequest,
     Task,
     TaskClaim,
+    TaskCompletion,
 )
 from .push import (
+    notify_assigned_tasks,
     notify_gift_received,
     notify_reward_decision,
     notify_task_claim,
@@ -105,6 +111,11 @@ from .services import (
     approve_proposal,
     approve_reward_request,
     approve_task_claim,
+    assign_tasks,
+    assigned_tasks_block_rewards,
+    cancel_assigned_task,
+    cancel_assigned_task_batch,
+    complete_assigned_task,
     post_ledger_entry,
     reject_task_claim,
     request_task_revision,
@@ -114,6 +125,7 @@ from .services import (
     submit_reward_request,
     submit_task,
     transfer_points,
+    unavailable_assignment_task_ids,
 )
 
 logger = logging.getLogger(__name__)
@@ -240,6 +252,17 @@ def child_select(request):
 @child_required
 def child_dashboard(request):
     child = request.child
+    today = timezone.localdate()
+    active_assigned_tasks = (
+        AssignedTask.objects.filter(
+            batch__child=child,
+            batch__assigned_on=today,
+            status=AssignedTaskStatus.PENDING,
+        )
+        .select_related("batch", "task")
+        .order_by("batch__created_at", "pk")
+    )
+    assigned_reward_block = assigned_tasks_block_rewards(child)
     rewards = list(Reward.objects.filter(is_active=True, is_deleted=False))
     for reward in rewards:
         reward.is_affordable = reward_is_affordable(child, reward)
@@ -265,6 +288,17 @@ def child_dashboard(request):
             ]
         ).select_related("decided_by", "reward")
     }
+    assigned_tasks_by_id = {
+        assigned_task.pk: assigned_task
+        for assigned_task in AssignedTask.objects.filter(
+            pk__in=[
+                entry.source_id
+                for entry in ledger_entries
+                if entry.kind == LedgerKind.ASSIGNED_TASK and entry.source_id
+            ],
+            batch__child=child,
+        ).select_related("task")
+    }
     for entry in ledger_entries:
         entry.history_type = "ledger"
         entry.history_timestamp = entry.created_at
@@ -276,6 +310,11 @@ def child_dashboard(request):
         entry.reward_request = (
             reward_requests_by_id.get(entry.source_id)
             if entry.kind == LedgerKind.REWARD
+            else None
+        )
+        entry.assigned_task_item = (
+            assigned_tasks_by_id.get(entry.source_id)
+            if entry.kind == LedgerKind.ASSIGNED_TASK
             else None
         )
     rejected_task_decisions = list(
@@ -340,7 +379,12 @@ def child_dashboard(request):
             .order_by("-decided_at")[:5],
             "goals": child.goals.filter(status="active"),
             "ledger": history_entries,
-            "reward_requests_blocked": reward_requests_blocked(child),
+            "active_assigned_tasks": active_assigned_tasks,
+            "assigned_tasks_block_rewards": assigned_reward_block,
+            "credit_reward_requests_blocked": reward_requests_blocked(child),
+            "reward_requests_blocked": (
+                assigned_reward_block or reward_requests_blocked(child)
+            ),
             "proposal_form": ProposalForm(),
             "task_evidence_form": TaskEvidenceForm(),
             "theme_form": ThemeForm(
@@ -639,12 +683,19 @@ def _child_state_payload(child):
         child.reward_requests.order_by("-submitted_at", "-pk")
         .values_list("pk", "status", "submitted_at", "decided_at")[:20]
     )
+    assigned_task_states = list(
+        AssignedTask.objects.filter(batch__child=child)
+        .order_by("-batch__created_at", "-pk")
+        .values_list("pk", "status", "batch__assigned_on", "completed_at")[:20]
+    )
     raw_state = json.dumps(
         {
+            "local_date": timezone.localdate(),
             "balance": child.balance,
             "ledger": latest_ledger,
             "tasks": task_states,
             "rewards": reward_states,
+            "assigned_tasks": assigned_task_states,
         },
         default=str,
         sort_keys=True,
@@ -1002,6 +1053,14 @@ def parent_update_feedback_status(request, report_id):
 @parent_required
 def parent_dashboard(request):
     children = list(ChildProfile.objects.filter(is_active=True))
+    today = timezone.localdate()
+    for child in children:
+        child.assignment_unavailable_task_ids = unavailable_assignment_task_ids(child)
+        child.assignment_batches = list(
+            child.assigned_task_batches.filter(assigned_on__lte=today)
+            .select_related("assigned_by")
+            .prefetch_related("items__task", "items__cancelled_by")[:10]
+        )
     history_children = list(ChildProfile.objects.order_by("name"))
     feedback_status = request.GET.get("feedback_status", "active").strip()
     feedback_type = request.GET.get("feedback_type", "").strip()
@@ -1162,6 +1221,7 @@ def parent_dashboard(request):
         "economy/parent_dashboard.html",
         {
             "children": children,
+            "today": today,
             "pending_by_child": pending_by_child,
             "pending_count": (
                 len(pending_claims)
@@ -1587,6 +1647,7 @@ def parent_award_task(request, child_id):
                 actor=request.user,
                 source_id=task.pk,
             )
+            TaskCompletion.objects.create(child=child, task=task)
     total = sum(task.reward for task in tasks)
     messages.success(
         request,
@@ -1594,6 +1655,96 @@ def parent_award_task(request, child_id):
         % {"name": child.name, "count": len(tasks), "total": total},
     )
     return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_assign_tasks(request, child_id):
+    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    form = AssignTasksForm(request.POST)
+    if not form.is_valid():
+        error = next(iter(form.errors.values()))[0]
+        messages.error(request, str(error))
+        return redirect("parent_dashboard")
+    try:
+        batch = assign_tasks(
+            child=child,
+            actor=request.user,
+            tasks=list(form.cleaned_data["task_ids"]),
+            custom_title=form.cleaned_data["custom_title"],
+            custom_points=form.cleaned_data["custom_points"],
+            blocks_rewards=form.cleaned_data["blocks_rewards"],
+        )
+        notify_assigned_tasks(batch)
+        messages.success(
+            request,
+            _("Tasks were assigned to %(name)s for today.")
+            % {"name": child.name},
+        )
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_cancel_assigned_task(request, assigned_task_id):
+    assigned_task = get_object_or_404(
+        AssignedTask.objects.select_related("batch"),
+        pk=assigned_task_id,
+        batch__child__is_active=True,
+    )
+    try:
+        cancel_assigned_task(assigned_task=assigned_task, actor=request.user)
+        messages.success(request, _("The assigned task was cancelled."))
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_cancel_assigned_task_batch(request, batch_id):
+    batch = get_object_or_404(
+        AssignedTaskBatch,
+        pk=batch_id,
+        child__is_active=True,
+    )
+    cancelled = cancel_assigned_task_batch(batch=batch, actor=request.user)
+    if cancelled:
+        messages.success(request, _("The remaining assigned tasks were cancelled."))
+    else:
+        messages.info(request, _("There are no waiting tasks to cancel."))
+    return redirect("parent_dashboard")
+
+
+@child_required
+@require_POST
+def child_complete_assigned_task(request, assigned_task_id):
+    assigned_task = get_object_or_404(
+        AssignedTask,
+        pk=assigned_task_id,
+        batch__child=request.child,
+    )
+    completed = False
+    try:
+        complete_assigned_task(
+            assigned_task=assigned_task,
+            child=request.child,
+        )
+        messages.success(
+            request,
+            _("Assigned task completed. You received your points."),
+            extra_tags="task-success",
+        )
+        completed = True
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return _child_action_response(
+        request,
+        ok=completed,
+        effect="task" if completed else None,
+    )
 
 
 @parent_required

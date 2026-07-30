@@ -75,6 +75,9 @@
       <button class="quick-action" type="button" data-open-dialog="custom-{{ child.pk }}" aria-label="{% translate "Custom award" %}" title="{% translate "Custom award" %}">
         <svg class="action-icon"><use href="#icon-custom"></use></svg><span>{% translate "Custom award" %}</span>
       </button>
+      <button class="quick-action" type="button" data-open-dialog="assign-tasks-{{ child.pk }}" aria-label="{% translate "Assign tasks" %}" title="{% translate "Assign tasks" %}">
+        <svg class="action-icon"><use href="#icon-assign-task"></use></svg><span>{% translate "Assign tasks" %}</span>
+      </button>
     </div>
     {% if child.is_locked %}
     <form method="post" action="{% url 'parent_unlock_child' child.pk %}">
@@ -104,6 +107,68 @@
       </fieldset>
       <button class="button button-primary" type="submit"{% if not active_tasks %} disabled{% endif %}>{% translate "Award selected tasks" %}</button>
     </form>
+  </dialog>
+  <dialog id="assign-tasks-{{ child.pk }}" class="action-dialog assigned-tasks-dialog">
+    <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-close"></use></svg></button>
+    <h2>{{ child.name }} – {% translate "assign tasks for today" %}</h2>
+    <p>{% translate "The tasks expire at midnight. Completed tasks award points immediately." %}</p>
+    <form method="post" action="{% url 'parent_assign_tasks' child.pk %}" class="stack-form">
+      {% csrf_token %}
+      <fieldset class="choice-fieldset">
+        <legend>{% translate "Choose tasks" %}:</legend>
+        <div class="choice-list">
+          {% for task in active_tasks %}
+            <label class="choice-option{% if task.pk in child.assignment_unavailable_task_ids %} choice-option-disabled{% endif %}">
+              <input type="checkbox" name="task_ids" value="{{ task.pk }}"{% if task.pk in child.assignment_unavailable_task_ids %} disabled{% endif %}>
+              <span class="choice-icon">{{ task.icon|icon_symbol }}</span>
+              <span class="choice-title">{{ task.title }}{% if task.pk in child.assignment_unavailable_task_ids %}<small>{% translate "Unavailable today" %}</small>{% endif %}</span>
+              <strong class="choice-value">+{{ task.reward }} {{ task.reward|currency_unit:"neutral" }}</strong>
+            </label>
+          {% empty %}
+            <p class="empty-state">{% translate "There are no active tasks." %}</p>
+          {% endfor %}
+        </div>
+      </fieldset>
+      <div class="custom-assigned-task">
+        <h3>{% translate "Custom task (optional)" %}</h3>
+        <label>{% translate "Task name" %}:<input class="field-control" name="custom_title" maxlength="120"></label>
+        <label>{% translate "Points" %}:<input class="field-control" name="custom_points" type="number" min="1"></label>
+      </div>
+      <label class="checkbox-field">
+        <input name="blocks_rewards" type="checkbox">
+        <span>{% translate "Block reward purchases until these tasks are finished" %}</span>
+      </label>
+      <button class="button button-primary" type="submit">{% translate "Send tasks" %}</button>
+    </form>
+    {% if child.assignment_batches %}
+      <div class="assigned-task-history">
+        <h3>{% translate "Recent assigned tasks" %}</h3>
+        {% for batch in child.assignment_batches %}
+          <section class="assigned-task-batch">
+            <div class="list-row">
+              <span><strong>{{ batch.assigned_on|date:"Y-m-d" }}</strong> · {{ batch.assigned_by|user_display_name }}{% if batch.blocks_rewards %} · {% translate "Purchases blocked" %}{% endif %}</span>
+              {% if batch.assigned_on == today %}
+                <form method="post" action="{% url 'parent_cancel_assigned_task_batch' batch.pk %}">{% csrf_token %}<button class="text-button danger" type="submit">{% translate "Cancel remaining" %}</button></form>
+              {% endif %}
+            </div>
+            {% for item in batch.items.all %}
+              <div class="assigned-task-history-row">
+                <span>{{ item.icon_snapshot|icon_symbol }} {{ item.title_snapshot }}</span>
+                <span>
+                  {% if item.status == "completed" %}{% translate "Completed" %}
+                  {% elif item.status == "cancelled" %}{% translate "Cancelled" %}
+                  {% elif item.is_expired %}{% translate "Expired" %}
+                  {% else %}
+                    {% translate "Waiting" %}
+                    <form method="post" action="{% url 'parent_cancel_assigned_task' item.pk %}">{% csrf_token %}<button class="text-button danger" type="submit">{% translate "Cancel" %}</button></form>
+                  {% endif %}
+                </span>
+              </div>
+            {% endfor %}
+          </section>
+        {% endfor %}
+      </div>
+    {% endif %}
   </dialog>
   <dialog id="credit-info-{{ child.pk }}" class="action-dialog">
     <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-close"></use></svg></button>

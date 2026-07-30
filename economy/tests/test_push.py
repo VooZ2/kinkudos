@@ -6,6 +6,8 @@ from django.test import TestCase, override_settings
 from django.utils.translation import override
 
 from economy.models import (
+    AssignedTask,
+    AssignedTaskBatch,
     ChildProfile,
     PointGift,
     PushSubscription,
@@ -17,6 +19,7 @@ from economy.models import (
 )
 from economy.push import (
     _currency_amount,
+    notify_assigned_tasks,
     notify_gift_received,
     notify_reward_decision,
     notify_task_decision,
@@ -50,6 +53,29 @@ class ChildDecisionPushTests(TestCase):
             p256dh="parent-key",
             auth="parent-auth",
         )
+
+    @patch("economy.push.webpush")
+    def test_assigned_task_notification_uses_child_theme(self, webpush):
+        self.child.theme = Theme.MAGIC_ACADEMY
+        self.child.save(update_fields=["theme"])
+        batch = AssignedTaskBatch.objects.create(
+            child=self.child,
+            assigned_by=self.parent,
+        )
+        AssignedTask.objects.create(
+            batch=batch,
+            title_snapshot="Pakloti lovą",
+            reward_snapshot=10,
+        )
+
+        with override("lt"):
+            notify_assigned_tasks(batch)
+
+        webpush.assert_called_once()
+        payload = json.loads(webpush.call_args.kwargs["data"])
+        self.assertEqual(payload["title"], "Šiandienos užburti darbai")
+        self.assertIn("vidurnaktį", payload["body"])
+        self.assertEqual(payload["url"], "/vaikas/mano/#paskirti-darbai")
 
     @patch("economy.push.webpush")
     def test_task_decision_targets_only_the_affected_child(self, webpush):

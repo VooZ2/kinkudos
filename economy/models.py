@@ -1,4 +1,5 @@
 from datetime import timedelta
+from typing import ClassVar
 
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
@@ -261,6 +262,104 @@ class TaskClaim(models.Model):
         return bool(self.evidence_image and self.evidence_thumbnail)
 
 
+class AssignedTaskBatch(models.Model):
+    child = models.ForeignKey(
+        ChildProfile,
+        on_delete=models.PROTECT,
+        related_name="assigned_task_batches",
+    )
+    assigned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="assigned_task_batches",
+    )
+    blocks_rewards = models.BooleanField(default=False)
+    assigned_on = models.DateField(default=timezone.localdate)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering: ClassVar = ["-created_at", "-pk"]
+
+
+class AssignedTaskStatus(models.TextChoices):
+    PENDING = "pending", _("Pending")
+    COMPLETED = "completed", _("Completed")
+    CANCELLED = "cancelled", _("Cancelled")
+
+
+class AssignedTask(models.Model):
+    batch = models.ForeignKey(
+        AssignedTaskBatch,
+        on_delete=models.PROTECT,
+        related_name="items",
+    )
+    task = models.ForeignKey(
+        Task,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="assignments",
+    )
+    title_snapshot = models.CharField(max_length=120)
+    icon_snapshot = models.CharField(max_length=32, default="🧹")
+    reward_snapshot = models.PositiveIntegerField()
+    status = models.CharField(
+        max_length=16,
+        choices=AssignedTaskStatus.choices,
+        default=AssignedTaskStatus.PENDING,
+    )
+    completed_at = models.DateTimeField(null=True, blank=True)
+    cancelled_at = models.DateTimeField(null=True, blank=True)
+    cancelled_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="cancelled_assigned_tasks",
+    )
+    ledger_entry = models.OneToOneField(
+        "LedgerEntry",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="assigned_task",
+    )
+
+    class Meta:
+        ordering: ClassVar = ["pk"]
+
+    @property
+    def is_expired(self):
+        return (
+            self.status == AssignedTaskStatus.PENDING
+            and self.batch.assigned_on < timezone.localdate()
+        )
+
+
+class TaskCompletion(models.Model):
+    child = models.ForeignKey(
+        ChildProfile,
+        on_delete=models.PROTECT,
+        related_name="task_completions",
+    )
+    task = models.ForeignKey(
+        Task,
+        on_delete=models.PROTECT,
+        related_name="completions",
+    )
+    completed_on = models.DateField(default=timezone.localdate)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering: ClassVar = ["-created_at", "-pk"]
+        indexes: ClassVar = [
+            models.Index(
+                fields=["child", "task", "completed_on"],
+                name="task_done_child_day_idx",
+            )
+        ]
+
+
 class RewardRequest(models.Model):
     child = models.ForeignKey(ChildProfile, on_delete=models.PROTECT, related_name="reward_requests")
     reward = models.ForeignKey(Reward, on_delete=models.PROTECT, related_name="requests")
@@ -343,6 +442,7 @@ class SavingsGoal(models.Model):
 
 class LedgerKind(models.TextChoices):
     TASK = "task", _("Task")
+    ASSIGNED_TASK = "assigned_task", _("Assigned task")
     PENALTY = "penalty", _("Penalty")
     REWARD = "reward", _("Reward")
     ADJUSTMENT = "adjustment", _("Adjustment")
