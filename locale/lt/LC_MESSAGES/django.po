@@ -982,8 +982,8 @@ msgstr "Loterijos bilietai išjungti"
 msgid "Lottery tickets per child each week"
 msgstr "Loterijos bilietų vienam vaikui per savaitę"
 
-msgid "Lottery tickets this week: %(used)s of %(limit)s"
-msgstr "Loterijos bilietų šią savaitę: %(used)s iš %(limit)s"
+msgid "Lottery tickets this week: %(remaining)s of %(limit)s"
+msgstr "Loterijos bilietų šią savaitę: %(remaining)s iš %(limit)s"
 
 msgid "Lucky Ticket"
 msgstr "Laimės bilietas"

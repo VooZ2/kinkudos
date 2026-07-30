@@ -64,7 +64,7 @@
     </p>
     <p class="lottery-parent-status">
       {% if child.lottery_feature_enabled or child.lottery_ticket_open %}
-        {% blocktranslate with used=child.lottery_tickets_used limit=child.lottery_weekly_limit %}Lottery tickets this week: {{ used }} of {{ limit }}{% endblocktranslate %}
+        {% blocktranslate with remaining=child.lottery_tickets_remaining limit=child.lottery_weekly_limit %}Lottery tickets this week: {{ remaining }} of {{ limit }}{% endblocktranslate %}
         {% if child.lottery_ticket_open %} · {% translate "one ticket is unfinished" %}{% endif %}
       {% else %}
         {% translate "Lottery tickets disabled" %}

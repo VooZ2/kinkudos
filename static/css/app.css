@@ -200,7 +200,7 @@ select.field-control, .stack-form select {
 .parent-title { margin-bottom: 28px; }
 .child-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
 .child-card-header h2 { margin: 0; }
-.credit-caption { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: .94rem; font-weight: 720; line-height: 1.2; letter-spacing: .01em; }
+.credit-caption { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; color: var(--muted); font-size: .94rem; font-weight: 720; line-height: 1.2; letter-spacing: .01em; }
 .credit-caption > span { display: flex; align-items: center; min-height: 28px; }
 .credit-caption .info-button { align-self: center; }
 .stat-card > .button, .stat-card > form .button { width: 100%; }

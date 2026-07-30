@@ -766,7 +766,7 @@
   "Your credit limit protected part of the loss.": "Kredito limitas apsaugojo nuo dalies praradimo.",
   "{count} of 9 fields scratched.": "Nutrinta {count} iš 9 langelių.",
   "The result could not be saved. Reopen the ticket and try again.": "Rezultato nepavyko išsaugoti. Atidaryk bilietą iš naujo ir bandyk dar kartą.",
-  "Lottery tickets this week: %(used)s of %(limit)s": "Loterijos bilietų šią savaitę: %(used)s iš %(limit)s",
+  "Lottery tickets this week: %(remaining)s of %(limit)s": "Loterijos bilietų šią savaitę: %(remaining)s iš %(limit)s",
   "Lottery tickets disabled": "Loterijos bilietai išjungti",
   "one ticket is unfinished": "vienas bilietas neužbaigtas"
 }

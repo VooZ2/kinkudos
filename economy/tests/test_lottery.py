@@ -423,6 +423,17 @@ class LotteryViewTests(TestCase):
         self.assertNotContains(response, "Enchanted Prophecy")
         self.assertNotContains(response, 'data-lottery-card')
 
+    def test_parent_sees_all_weekly_tickets_available_before_purchase(self):
+        parent = get_user_model().objects.create_user(
+            "parent-with-unused-tickets",
+            password="test-password",
+        )
+        self.client.force_login(parent)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, "Lottery tickets this week: 3 of 3")
+
     def test_all_seven_themes_have_distinct_lottery_titles(self):
         with override("en"):
             titles = {
@@ -473,7 +484,7 @@ class LotteryViewTests(TestCase):
 
         response = self.client.get(reverse("parent_dashboard"))
 
-        self.assertContains(response, "Lottery tickets this week: 1 of 3")
+        self.assertContains(response, "Lottery tickets this week: 2 of 3")
         self.assertContains(response, "Lottery ticket")
         self.assertContains(response, "Lottery result")
         self.assertNotContains(response, "data-lottery-value")

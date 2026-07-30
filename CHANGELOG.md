@@ -18,6 +18,8 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Task and reward catalog names plus parent action-dialog explanations now use
   the shared interface font consistently.
+- Parent child cards show remaining weekly lottery tickets and use tighter
+  spacing below the credit limit.
 - The Lithuanian feedback email label uses shorter wording.
 
 ## [26.3.0] - 2026-07-30

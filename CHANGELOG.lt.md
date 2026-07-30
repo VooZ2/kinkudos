@@ -20,6 +20,8 @@ schema.
 
 - Darbų ir prizų katalogų pavadinimams bei tėvų veiksmų dialogų paaiškinimams
   nuosekliai naudojamas bendras sąsajos šriftas.
+- Tėvų vaikų kortelėse rodomas likusių savaitės loterijos bilietų skaičius ir
+  sumažintas tarpas po kredito limitu.
 - Sutrumpintas lietuviškas atsiliepimų el. pašto adreso pavadinimas.
 
 ## [26.3.0] - 2026-07-30
