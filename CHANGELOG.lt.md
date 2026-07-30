@@ -7,6 +7,16 @@ schema.
 
 ## [Unreleased]
 
+## [26.1.4] - 2026-07-30
+
+### Pataisyta
+
+- Leidimo atnaujintojas po sėkmingos būklės patikros atnaujina versijuojamus
+  `deploy` valdymo scenarijus. Tai pašalina serveryje galėjusį likti seną
+  `backup.sh`, kuris kvietė nebeegzistuojantį `restic` servisą.
+- Atnaujinant ir toliau neliečiami vietinis `deploy/.env`, šeimos duomenys,
+  kopijos bei paslaptys.
+
 ## [26.1.3] - 2026-07-30
 
 ### Pakeista

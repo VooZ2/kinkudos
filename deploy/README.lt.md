@@ -56,7 +56,7 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 norimo diegti leidimo reikšmėmis:
 
 ```bash
-version=26.1.3
+version=26.1.4
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -78,8 +78,9 @@ rm -f "$install_script" "$compose_file"
 
 Atnaujintojas patikrina kontrolinę sumą ir leidimo duomenis, pastato ir
 išbando atvaizdą, sukuria veikiančios duomenų bazės kopiją, tik tada perjungia
-programą ir patikrina konteinerio būklę. Leidimo archyve nėra `deploy/.env`,
-šeimos duomenų, nuotraukų, kopijų ar paslapčių.
+programą, patikrina konteinerio būklę ir atnaujina versijuojamus `deploy`
+valdymo scenarijus. Vietinis `deploy/.env`, šeimos duomenys, nuotraukos,
+kopijos ir paslaptys nekeičiami bei nepatenka į leidimo archyvą.
 
 ## Kopijos
 

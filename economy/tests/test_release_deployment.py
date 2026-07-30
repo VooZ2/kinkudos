@@ -30,6 +30,17 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertIn("  backup:\n    internal: true", networks)
         self.assertIn("  backup-egress:", networks)
 
+    def test_release_updater_refreshes_versioned_deployment_helpers(self):
+        installer = (ROOT / "deploy" / "install-release.sh").read_text(
+            encoding="utf-8"
+        )
+        backup_script = (ROOT / "deploy" / "backup.sh").read_text(encoding="utf-8")
+
+        self.assertIn('"$release_dir/deploy/$helper" "$deploy_dir/$helper"', installer)
+        self.assertIn("  backup.sh \\", installer)
+        self.assertNotIn("docker compose run --rm restic", backup_script)
+        self.assertIn("python manage.py run_backup", backup_script)
+
     def test_updater_uses_runtime_uid_and_gid_for_backup_files(self):
         with TemporaryDirectory() as directory:
             root = Path(directory)
@@ -64,7 +75,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.1.3",
+                    "26.1.4",
                     str(root),
                 ],
                 env=environment,

@@ -76,7 +76,7 @@ Run these commands from the deployment root (the directory containing
 version with the release you want to install:
 
 ```bash
-version=26.1.3
+version=26.1.4
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -98,8 +98,9 @@ rm -f "$install_script" "$compose_file"
 
 The updater validates the checksum and release metadata, builds and smoke-tests
 the image, backs up the live database, switches the app only after those checks
-pass, and verifies container health. The release archive never contains
-`deploy/.env`, runtime data, uploads, backups, or secrets.
+pass, verifies container health, and refreshes versioned `deploy` management
+scripts. The local `deploy/.env`, runtime data, uploads, backups, and secrets
+remain untouched and are never included in the release archive.
 
 ## Backups
 

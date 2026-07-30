@@ -182,6 +182,32 @@ docker compose exec -T app python scripts/verify_release.py
 docker compose exec -T app python manage.py showmigrations economy
 docker compose ps
 
+# Refresh versioned deployment helpers only after the new application has
+# passed its health and release checks. Local .env files and secrets are not
+# part of this list and therefore remain untouched.
+for helper in \
+  backup.sh \
+  bootstrap.sh \
+  configure-email.sh \
+  configure-feedback.sh \
+  install-diagnostics.sh \
+  install-maintenance.sh \
+  install-release.sh \
+  kinkudos-diagnose
+do
+  install -m 0755 "$release_dir/deploy/$helper" "$deploy_dir/$helper"
+done
+for support_file in \
+  README.lt.md \
+  README.md \
+  kinkudos-maintenance.service \
+  kinkudos-maintenance.timer \
+  restic.env.example
+do
+  install -m 0644 "$release_dir/deploy/$support_file" "$deploy_dir/$support_file"
+done
+install -m 0644 "$release_dir/deploy/.env.example" "$deploy_dir/.env.example"
+
 # Keep only the successfully deployed source release. The running Docker image
 # and application data are unaffected by removing older source directories.
 for previous_release in "$releases_dir"/*; do

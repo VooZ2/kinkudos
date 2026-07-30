@@ -5,6 +5,16 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.1.4] - 2026-07-30
+
+### Fixed
+
+- After a successful health check, the release updater now refreshes versioned
+  `deploy` management scripts. This replaces stale server copies of
+  `backup.sh` that still invoked the removed `restic` service.
+- Updates continue to leave the local `deploy/.env`, family data, backups, and
+  secrets untouched.
+
 ## [26.1.3] - 2026-07-30
 
 ### Changed
