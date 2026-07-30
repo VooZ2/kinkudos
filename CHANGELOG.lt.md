@@ -7,6 +7,23 @@ schema.
 
 ## [Unreleased]
 
+## [26.1.6] - 2026-07-30
+
+### Pakeista
+
+- Formų etiketėms, pagalbiniam tekstui, laukų užpildams, sekcijų skirtukams ir
+  laukų tipografikai pritaikyta aiškesnė bei nuoseklesnė vaizdinė hierarchija.
+- Tėvų ir vaikų paskyrų kūrimo veiksmų tekstai sutrumpinti.
+- El. pašto ir kopijų suvestinėse prislopinti pavadinimai atskirti nuo
+  paryškintų reikšmių, o sąrašai pritaikyti siauram ekranui.
+
+### Pataisyta
+
+- Prizų patvirtinimo veiksmuose naudojamos tokios pačios patvirtinimo ir
+  atmetimo ikonos kaip darbų patvirtinime.
+- Siaurame ekrane tėvų ir vaikų veiksmų istorijos taškų reikšmės lygiuojamos su
+  būsenos bei nuotraukos valdikliais.
+
 ## [26.1.5] - 2026-07-30
 
 ### Pataisyta

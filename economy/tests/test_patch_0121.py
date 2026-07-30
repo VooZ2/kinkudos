@@ -116,6 +116,7 @@ class Patch0121Tests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, "Approved by")
         self.assertContains(response, self.parent.username)
+        self.assertContains(response, 'class="history-row-actions"', html=False)
         self.assertEqual(
             self.child.ledger_entries.get(kind=LedgerKind.TASK).actor,
             self.parent,
@@ -125,8 +126,41 @@ class Patch0121Tests(TestCase):
         self.client.force_login(self.parent)
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, 'class="brand-mark brand-logo"', html=False)
-        self.assertContains(response, "KinKudos · v26.1.5")
+        self.assertContains(response, "KinKudos · v26.1.6")
         self.assertNotContains(response, 'class="app-version"', html=False)
+
+    def test_reward_approval_uses_task_decision_icons(self):
+        reward = Reward.objects.create(title="Reward", cost=10)
+        RewardRequest.objects.create(
+            child=self.child,
+            reward=reward,
+            reward_title=reward.title,
+            cost_snapshot=reward.cost,
+        )
+        self.client.force_login(self.parent)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(
+            response,
+            'class="approval-card reward-approval-card"',
+            html=False,
+        )
+        self.assertContains(response, 'href="#icon-check-circle"', html=False)
+        self.assertContains(response, 'href="#icon-stop"', html=False)
+        self.assertContains(response, 'aria-label="Approve"', html=False)
+        self.assertContains(response, 'aria-label="Reject"', html=False)
+
+    def test_account_creation_actions_use_short_lithuanian_labels(self):
+        self.client.cookies["django_language"] = "lt"
+        self.client.force_login(self.parent)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, ">Sukurti paskyrą</button>", html=False)
+        self.assertContains(response, ">Sukurti profilį</button>", html=False)
+        self.assertNotContains(response, ">Sukurti tėvų paskyrą</button>", html=False)
+        self.assertNotContains(response, ">Sukurti vaiko profilį</button>", html=False)
 
     def test_child_history_identifies_reward_approver_and_rejector(self):
         self.child.balance = 100
@@ -158,3 +192,4 @@ class Patch0121Tests(TestCase):
         self.assertContains(response, "Rejected reward")
         self.assertContains(response, "Rejected by")
         self.assertContains(response, self.parent.username, count=2)
+        self.assertContains(response, 'class="history-row-actions"', html=False)

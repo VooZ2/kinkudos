@@ -5,6 +5,23 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.1.6] - 2026-07-30
+
+### Changed
+
+- Form labels, helper text, placeholders, section dividers, and field typography
+  now use a clearer and more consistent visual hierarchy.
+- Parent and child account creation actions use shorter wording.
+- Email and backup summaries now separate muted labels from emphasized values
+  in responsive definition lists.
+
+### Fixed
+
+- Reward approval actions now use the same approve and reject icons as task
+  approvals.
+- Child and parent activity history keeps point amounts aligned with status and
+  photo controls on narrow screens.
+
 ## [26.1.5] - 2026-07-30
 
 ### Fixed

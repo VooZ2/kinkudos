@@ -161,7 +161,7 @@
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ request.get_full_path }}">
         <input type="hidden" name="page_path" value="{{ request.path }}">
-        <label>{% translate "Type" %}
+        <label>{% translate "Type" %}:
           <select class="field-control" name="report_type" required>
             {% if user.is_authenticated %}
               <option value="bug">{% translate "Problem" %}</option>
@@ -173,10 +173,10 @@
           </select>
         </label>
         <label>
-          {% if user.is_authenticated %}{% translate "Description" %}{% else %}{% translate "What happened or what would you like?" %}{% endif %}
+          {% if user.is_authenticated %}{% translate "Description" %}{% else %}{% translate "What happened or what would you like?" %}{% endif %}:
           <textarea class="field-control" name="description" rows="5" minlength="5" maxlength="2000" required></textarea>
         </label>
-        <label>{% translate "Screenshot (optional)" %}
+        <label>{% translate "Screenshot (optional)" %}:
           <input class="field-control" name="screenshot" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif">
         </label>
         <small class="help-text">{% translate "Do not include passwords, PINs, or other private information." %}</small>

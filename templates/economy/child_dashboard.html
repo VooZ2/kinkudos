@@ -50,7 +50,7 @@
     </article>
   {% endfor %}</div>{% endif %}
   <div class="task-search">
-    <label for="task-search-input">{% translate "Find a task" %}</label>
+    <label for="task-search-input">{% translate "Find a task" %}:</label>
     <input
       id="task-search-input"
       class="field-control"
@@ -108,9 +108,11 @@
             {% if entry.decided_by %}<small class="history-actor">{% translate "Rejected by" %}: {{ entry.decided_by|user_display_name }}</small>{% endif %}
             {% if entry.rejection_reason %}<small class="history-rejection-reason">{% translate "Reason" %}: {{ entry.rejection_reason }}</small>{% endif %}
           </div>
-          <span class="history-decision history-decision-rejected">
-            <svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg>
-            {% translate "Rejected" %}
+          <span class="history-row-actions">
+            <span class="history-decision history-decision-rejected">
+              <svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg>
+              {% translate "Rejected" %}
+            </span>
           </span>
         {% elif entry.history_type == "reward_decision" %}
           <span class="ledger-icon">{{ entry.reward.icon|icon_symbol }}</span>
@@ -120,9 +122,11 @@
             {% if entry.decided_by %}<small class="history-actor">{% translate "Rejected by" %}: {{ entry.decided_by|user_display_name }}</small>{% endif %}
             {% if entry.rejection_reason %}<small class="history-rejection-reason">{% translate "Reason" %}: {{ entry.rejection_reason }}</small>{% endif %}
           </div>
-          <span class="history-decision history-decision-rejected">
-            <svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg>
-            {% translate "Rejected" %}
+          <span class="history-row-actions">
+            <span class="history-decision history-decision-rejected">
+              <svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg>
+              {% translate "Rejected" %}
+            </span>
           </span>
         {% else %}
           <span class="ledger-icon">
@@ -145,10 +149,12 @@
               <small class="history-actor">{% translate "Approved by" %}: {{ entry.reward_request.decided_by|user_display_name }}</small>
             {% endif %}
           </div>
-          {% if entry.task_claim.evidence_thumbnail %}
-            <button class="photo-history-button" type="button" data-evidence-full="{% url 'task_evidence' entry.task_claim.pk 'full' %}" aria-label="{% translate 'Open task photo' %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></button>
-          {% endif %}
-          <span class="amount {% if entry.delta > 0 %}positive{% elif entry.delta < 0 %}negative{% endif %}">{{ entry.delta|stringformat:"+d" }} {{ entry.delta|currency_unit:child.theme }}</span>
+          <span class="history-row-actions">
+            {% if entry.task_claim.evidence_thumbnail %}
+              <button class="photo-history-button" type="button" data-evidence-full="{% url 'task_evidence' entry.task_claim.pk 'full' %}" aria-label="{% translate 'Open task photo' %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></button>
+            {% endif %}
+            <span class="amount {% if entry.delta > 0 %}positive{% elif entry.delta < 0 %}negative{% endif %}">{{ entry.delta|stringformat:"+d" }} {{ entry.delta|currency_unit:child.theme }}</span>
+          </span>
         {% endif %}
       </div>
     {% empty %}

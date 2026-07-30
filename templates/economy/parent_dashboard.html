@@ -88,7 +88,7 @@
     <form method="post" action="{% url 'parent_award_task' child.pk %}" class="stack-form">
       {% csrf_token %}
       <fieldset class="choice-fieldset">
-        <legend>{% translate "Choose completed tasks" %}</legend>
+        <legend>{% translate "Choose completed tasks" %}:</legend>
         <div class="choice-list">
           {% for task in active_tasks %}
             <label class="choice-option">
@@ -117,7 +117,7 @@
     <form method="post" action="{% url 'parent_assign_child_penalty' child.pk %}" class="stack-form">
       {% csrf_token %}
       <fieldset class="choice-fieldset">
-        <legend>{% translate "Choose penalties" %}</legend>
+        <legend>{% translate "Choose penalties" %}:</legend>
         <div class="choice-list">
           {% for penalty in active_penalties %}
             <label class="choice-option">
@@ -131,7 +131,7 @@
           {% endfor %}
         </div>
       </fieldset>
-      <label>{% translate "Shared reason (optional)" %}<input class="field-control" name="reason" maxlength="240"></label>
+      <label>{% translate "Shared reason (optional)" %}:<input class="field-control" name="reason" maxlength="240"></label>
       <button class="button button-primary" type="submit"{% if not active_penalties %} disabled{% endif %}>{% translate "Assign selected penalties" %}</button>
     </form>
   </dialog>
@@ -141,7 +141,7 @@
     <p>{% translate "Set the lowest balance this child may spend down to." %}</p>
     <form method="post" action="{% url 'parent_set_min_balance' child.pk %}" class="stack-form">
       {% csrf_token %}
-      <label>{% translate "Minimum balance" %}
+      <label>{% translate "Minimum balance" %}:
         <input class="field-control" name="min_balance" type="number" max="0" value="{{ child.min_balance }}" required>
       </label>
       <button class="button button-primary" type="submit">{% translate "Save credit" %}</button>
@@ -153,8 +153,8 @@
     <p>{% translate "Enter a positive or negative point amount and its purpose." %}</p>
     <form method="post" action="{% url 'parent_adjust_balance' child.pk %}" class="stack-form">
       {% csrf_token %}
-      <label>{% translate "Point amount" %}<input class="field-control" name="amount" type="number" required></label>
-      <label>{% translate "Purpose" %}<input class="field-control" name="description" maxlength="240" required></label>
+      <label>{% translate "Point amount" %}:<input class="field-control" name="amount" type="number" required></label>
+      <label>{% translate "Purpose" %}:<input class="field-control" name="description" maxlength="240" required></label>
       <button class="button button-primary" type="submit">{% translate "Save award" %}</button>
     </form>
   </dialog>
@@ -200,7 +200,7 @@
           <h2>{% translate "Ask to improve" %}</h2>
           <p>{% translate "You may add a comment that the child will see." %}</p>
           <form method="post" action="{% url 'parent_decide_task' claim.pk 'revise' %}" class="stack-form">{% csrf_token %}
-            <label for="revise-reason-{{ claim.pk }}">{% translate "Comment (optional)" %}</label>
+            <label for="revise-reason-{{ claim.pk }}">{% translate "Comment (optional)" %}:</label>
             <textarea class="field-control" id="revise-reason-{{ claim.pk }}" name="reason" maxlength="500" rows="3" placeholder="{% translate "What should be improved?" %}"></textarea>
             <button class="button button-secondary" type="submit"><svg class="action-icon" aria-hidden="true"><use href="#icon-revise"></use></svg>{% translate "Ask to improve" %}</button>
           </form>
@@ -210,19 +210,19 @@
           <h2>{% translate "Reject task" %}</h2>
           <p>{% translate "You may add a comment that the child will see." %}</p>
           <form method="post" action="{% url 'parent_decide_task' claim.pk 'reject' %}" class="stack-form">{% csrf_token %}
-            <label for="reject-reason-{{ claim.pk }}">{% translate "Comment (optional)" %}</label>
+            <label for="reject-reason-{{ claim.pk }}">{% translate "Comment (optional)" %}:</label>
             <textarea class="field-control" id="reject-reason-{{ claim.pk }}" name="reason" maxlength="500" rows="3" placeholder="{% translate "Why was the task rejected?" %}"></textarea>
             <button class="button button-danger" type="submit"><svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg>{% translate "Reject" %}</button>
           </form>
         </dialog>
         {% endfor %}
         {% for reward_request in group.rewards %}
-        <article class="approval-card">
+        <article class="approval-card reward-approval-card">
           <span class="item-icon">{{ reward_request.reward.icon|icon_symbol }}</span>
           <div><p class="eyebrow">{% translate "Reward" %}</p><h3>{{ reward_request.reward_title }}</h3><p class="amount">−{{ reward_request.cost_snapshot }} {{ reward_request.cost_snapshot|currency_unit:"neutral" }}</p></div>
           <div class="approval-actions">
-            <form method="post" action="{% url 'parent_decide_reward' reward_request.pk 'approve' %}">{% csrf_token %}<button class="button button-primary" type="submit">{% translate "Approve" %}</button></form>
-            <form method="post" action="{% url 'parent_decide_reward' reward_request.pk 'reject' %}" class="inline-reject">{% csrf_token %}<input class="field-control" name="reason" placeholder="{% translate "Rejection reason" %}" required><button class="button button-danger" type="submit">{% translate "Reject" %}</button></form>
+            <form method="post" action="{% url 'parent_decide_reward' reward_request.pk 'approve' %}">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg></button></form>
+            <form method="post" action="{% url 'parent_decide_reward' reward_request.pk 'reject' %}" class="inline-reject">{% csrf_token %}<input class="field-control" name="reason" placeholder="{% translate "Rejection reason" %}" aria-label="{% translate "Rejection reason" %}" required><button class="decision-icon-button decision-reject" type="submit" aria-label="{% translate "Reject" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg></button></form>
           </div>
         </article>
         {% endfor %}
@@ -485,14 +485,14 @@
       <summary>{% translate "New parent account" %}</summary>
       <form method="post" action="{% url 'parent_create_parent_account' %}" class="stack-form">
         {% csrf_token %}{{ parent_account_form.as_p }}
-        <button class="button button-primary" type="submit">{% translate "Create parent account" %}</button>
+        <button class="button button-primary" type="submit">{% translate "Create account" %}</button>
       </form>
     </details>
     <details class="panel">
       <summary>{% translate "New child profile" %}</summary>
       <form method="post" action="{% url 'parent_create_child_account' %}" class="stack-form">
         {% csrf_token %}{{ child_account_form.as_p }}
-        <button class="button button-primary" type="submit">{% translate "Create child profile" %}</button>
+        <button class="button button-primary" type="submit">{% translate "Create profile" %}</button>
       </form>
     </details>
   </div>
@@ -562,7 +562,7 @@
       <p class="feedback-email-warning">{% translate "Feedback is saved in KinKudos, but email notifications are not configured." %}</p>
     {% endif %}
     <form class="feedback-filter" method="get" action="{% url 'parent_dashboard' %}#parent-settings">
-      <label>{% translate "Type" %}
+      <label>{% translate "Type" %}:
         <select class="field-control" name="feedback_type">
           <option value="">{% translate "All types" %}</option>
           {% for value, label in feedback_type_choices %}
@@ -570,7 +570,7 @@
           {% endfor %}
         </select>
       </label>
-      <label>{% translate "Status" %}
+      <label>{% translate "Status" %}:
         <select class="field-control" name="feedback_status">
           <option value="">{% translate "All statuses" %}</option>
           <option value="active"{% if feedback_status == "active" %} selected{% endif %}>{% translate "Open feedback" %}</option>
@@ -678,14 +678,16 @@
             {% if entry.decided_by %}<small class="history-actor">{% translate "Rejected by" %}: {{ entry.decided_by|user_display_name }}</small>{% endif %}
             {% if entry.rejection_reason %}<small class="history-rejection-reason">{% translate "Reason" %}: {{ entry.rejection_reason }}</small>{% endif %}
           </div>
-          {% if entry.has_evidence %}
-            <button class="history-photo-button" type="button" data-evidence-full="{% url 'task_evidence' entry.pk 'full' %}" aria-label="{% translate "Open task photo" %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></button>
-          {% elif entry.evidence_purged_at %}
-            <span class="history-photo-expired" title="{% translate "Photo removed according to the retention setting" %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></span>
-          {% endif %}
-          <span class="history-decision history-decision-rejected">
-            <svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg>
-            {% translate "Rejected" %}
+          <span class="history-row-actions">
+            {% if entry.has_evidence %}
+              <button class="history-photo-button" type="button" data-evidence-full="{% url 'task_evidence' entry.pk 'full' %}" aria-label="{% translate "Open task photo" %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></button>
+            {% elif entry.evidence_purged_at %}
+              <span class="history-photo-expired" title="{% translate "Photo removed according to the retention setting" %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></span>
+            {% endif %}
+            <span class="history-decision history-decision-rejected">
+              <svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg>
+              {% translate "Rejected" %}
+            </span>
           </span>
         {% elif entry.history_type == "reward_decision" %}
           <div>
@@ -694,9 +696,11 @@
             {% if entry.decided_by %}<small class="history-actor">{% translate "Rejected by" %}: {{ entry.decided_by|user_display_name }}</small>{% endif %}
             <small class="history-rejection-reason">{% translate "Reason" %}: {{ entry.rejection_reason }}</small>
           </div>
-          <span class="history-decision history-decision-rejected">
-            <svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg>
-            {% translate "Rejected" %}
+          <span class="history-row-actions">
+            <span class="history-decision history-decision-rejected">
+              <svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg>
+              {% translate "Rejected" %}
+            </span>
           </span>
         {% else %}
           <div>
@@ -708,18 +712,20 @@
               <small class="history-actor">{% translate "Approved by" %}: {{ entry.reward_request.decided_by|user_display_name }}</small>
             {% endif %}
           </div>
-          {% if entry.task_claim and entry.task_claim.has_evidence %}
-            <button class="history-photo-button" type="button" data-evidence-full="{% url 'task_evidence' entry.task_claim.pk 'full' %}" aria-label="{% translate "Open task photo" %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></button>
-          {% elif entry.task_claim and entry.task_claim.evidence_purged_at %}
-            <span class="history-photo-expired" title="{% translate "Photo removed according to the retention setting" %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></span>
-          {% endif %}
-          {% if entry.reward_request %}
-            <span class="history-decision history-decision-approved">
-              <svg class="action-icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg>
-              {% translate "Approved" %}
-            </span>
-          {% endif %}
-          <span class="amount {% if entry.delta > 0 %}positive{% endif %}">{{ entry.delta|stringformat:"+d" }} {{ entry.delta|currency_unit:"neutral" }}</span>
+          <span class="history-row-actions">
+            {% if entry.task_claim and entry.task_claim.has_evidence %}
+              <button class="history-photo-button" type="button" data-evidence-full="{% url 'task_evidence' entry.task_claim.pk 'full' %}" aria-label="{% translate "Open task photo" %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></button>
+            {% elif entry.task_claim and entry.task_claim.evidence_purged_at %}
+              <span class="history-photo-expired" title="{% translate "Photo removed according to the retention setting" %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></span>
+            {% endif %}
+            {% if entry.reward_request %}
+              <span class="history-decision history-decision-approved">
+                <svg class="action-icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg>
+                {% translate "Approved" %}
+              </span>
+            {% endif %}
+            <span class="amount {% if entry.delta > 0 %}positive{% endif %}">{{ entry.delta|stringformat:"+d" }} {{ entry.delta|currency_unit:"neutral" }}</span>
+          </span>
         {% endif %}
       </div>
       {% empty %}<p class="empty-state">{% translate "The point history is empty." %}</p>{% endfor %}

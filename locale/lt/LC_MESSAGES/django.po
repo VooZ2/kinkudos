@@ -469,17 +469,17 @@ msgstr "Sukurti receptą"
 msgid "Create a prize idea"
 msgstr "Sukurti prizo idėją"
 
-msgid "Create child profile"
-msgstr "Sukurti vaiko profilį"
+msgid "Create account"
+msgstr "Sukurti paskyrą"
 
 msgid "Create new accounts"
 msgstr "Kurti naujas paskyras"
 
-msgid "Create parent account"
-msgstr "Sukurti tėvų paskyrą"
-
 msgid "Create penalty"
 msgstr "Sukurti nuobaudą"
+
+msgid "Create profile"
+msgstr "Sukurti profilį"
 
 msgid "Create reward"
 msgstr "Sukurti prizą"
