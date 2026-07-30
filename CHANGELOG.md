@@ -5,6 +5,13 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.2.1] - 2026-07-30
+
+### Fixed
+
+- Completed, cancelled, and expired assigned-task batches no longer show a
+  misleading “Cancel remaining” action in parent history.
+
 ## [26.2.0] - 2026-07-30
 
 ### Added

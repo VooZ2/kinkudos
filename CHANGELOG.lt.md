@@ -7,6 +7,13 @@ schema.
 
 ## [Unreleased]
 
+## [26.2.1] - 2026-07-30
+
+### Pataisyta
+
+- Atliktų, atšauktų ir nebegaliojančių paskirtų darbų siuntų istorijoje
+  neberodomas klaidinantis veiksmas „Atšaukti likusius“.
+
 ## [26.2.0] - 2026-07-30
 
 ### Pridėta

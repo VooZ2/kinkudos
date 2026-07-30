@@ -1061,6 +1061,11 @@ def parent_dashboard(request):
             .select_related("assigned_by")
             .prefetch_related("items__task", "items__cancelled_by")[:10]
         )
+        for batch in child.assignment_batches:
+            batch.has_pending_items = batch.assigned_on == today and any(
+                item.status == AssignedTaskStatus.PENDING
+                for item in batch.items.all()
+            )
     history_children = list(ChildProfile.objects.order_by("name"))
     feedback_status = request.GET.get("feedback_status", "active").strip()
     feedback_type = request.GET.get("feedback_type", "").strip()

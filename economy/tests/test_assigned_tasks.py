@@ -23,6 +23,7 @@ from economy.services import (
     approve_task_claim,
     assign_tasks,
     assigned_tasks_block_rewards,
+    cancel_assigned_task,
     complete_assigned_task,
     submit_reward_request,
     unavailable_assignment_task_ids,
@@ -116,6 +117,12 @@ class AssignedTaskServiceTests(TestCase):
         request = submit_reward_request(child=self.child, reward=reward)
         self.assertEqual(request.status, RequestStatus.PENDING)
 
+    def test_unblocked_assignment_does_not_block_reward_requests(self):
+        self.create_batch(blocks_rewards=False)
+        reward = Reward.objects.create(title="Movie", cost=1)
+        request = submit_reward_request(child=self.child, reward=reward)
+        self.assertEqual(request.status, RequestStatus.PENDING)
+
     def test_existing_reward_request_can_still_be_approved_while_blocked(self):
         reward = Reward.objects.create(title="Movie", cost=1)
         request = submit_reward_request(child=self.child, reward=reward)
@@ -151,6 +158,28 @@ class AssignedTaskServiceTests(TestCase):
         )
         approve_task_claim(claim=claim, actor=self.parent)
         self.assertIn(self.task.pk, unavailable_assignment_task_ids(self.child))
+
+    def test_cancelled_catalog_task_can_be_assigned_again_same_day(self):
+        batch = self.create_batch(blocks_rewards=False)
+        cancel_assigned_task(
+            assigned_task=batch.items.get(task=self.task),
+            actor=self.parent,
+        )
+        self.assertNotIn(self.task.pk, unavailable_assignment_task_ids(self.child))
+
+    def test_completed_catalog_task_is_available_again_next_day(self):
+        batch = self.create_batch(blocks_rewards=False)
+        complete_assigned_task(
+            assigned_task=batch.items.get(task=self.task),
+            child=self.child,
+        )
+        yesterday = timezone.localdate() - timedelta(days=1)
+        batch.assigned_on = yesterday
+        batch.save(update_fields=["assigned_on"])
+        TaskCompletion.objects.filter(child=self.child, task=self.task).update(
+            completed_on=yesterday
+        )
+        self.assertNotIn(self.task.pk, unavailable_assignment_task_ids(self.child))
 
 
 class AssignedTaskViewTests(TestCase):
@@ -275,6 +304,43 @@ class AssignedTaskViewTests(TestCase):
         self.assertEqual(item.status, AssignedTaskStatus.CANCELLED)
         self.assertFalse(assigned_tasks_block_rewards(self.child))
 
+    def test_parent_can_cancel_all_remaining_tasks_in_batch(self):
+        batch = assign_tasks(
+            child=self.child,
+            actor=self.parent,
+            tasks=[self.task],
+            custom_title="Feed the cat",
+            custom_points=7,
+            blocks_rewards=True,
+        )
+        self.client.login(username="parent", password=self.parent_password)
+        response = self.client.post(
+            reverse("parent_cancel_assigned_task_batch", args=[batch.pk]),
+            follow=True,
+        )
+        self.assertContains(response, "remaining assigned tasks were cancelled")
+        self.assertEqual(
+            set(batch.items.values_list("status", flat=True)),
+            {AssignedTaskStatus.CANCELLED},
+        )
+        self.assertFalse(assigned_tasks_block_rewards(self.child))
+
+    def test_cancel_remaining_button_only_appears_for_waiting_batch(self):
+        batch = assign_tasks(
+            child=self.child,
+            actor=self.parent,
+            tasks=[self.task],
+        )
+        self.client.login(username="parent", password=self.parent_password)
+        response = self.client.get(reverse("parent_dashboard"))
+        self.assertContains(response, "Cancel remaining")
+        complete_assigned_task(
+            assigned_task=batch.items.get(),
+            child=self.child,
+        )
+        response = self.client.get(reverse("parent_dashboard"))
+        self.assertNotContains(response, "Cancel remaining")
+
     def test_direct_parent_award_disables_assignment_for_today(self):
         self.client.login(username="parent", password=self.parent_password)
         self.client.post(
@@ -298,3 +364,23 @@ class AssignedTaskViewTests(TestCase):
             today_response["signature"],
             tomorrow_response["signature"],
         )
+
+    def test_two_child_sessions_both_detect_new_assignment(self):
+        first_client = self.client_class()
+        second_client = self.client_class()
+        for client in (first_client, second_client):
+            session = client.session
+            session["child_id"] = self.child.pk
+            session.save()
+        first_before = first_client.get(reverse("child_state")).json()["signature"]
+        second_before = second_client.get(reverse("child_state")).json()["signature"]
+        assign_tasks(
+            child=self.child,
+            actor=self.parent,
+            tasks=[self.task],
+        )
+        first_after = first_client.get(reverse("child_state")).json()["signature"]
+        second_after = second_client.get(reverse("child_state")).json()["signature"]
+        self.assertNotEqual(first_before, first_after)
+        self.assertNotEqual(second_before, second_after)
+        self.assertEqual(first_after, second_after)

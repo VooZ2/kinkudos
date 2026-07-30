@@ -59,6 +59,29 @@ Approval and its ledger entry are created in one database transaction.
 Optional photo evidence is validated, resized, EXIF-stripped, and retained
 per its configured period (`economy/images.py`).
 
+**AssignedTaskBatch** / **AssignedTask** / **TaskCompletion** — a parent may
+send one child a list of catalog tasks plus one optional custom task for the
+current calendar day. The batch stores the assigning parent, assignment date,
+and whether new reward requests are blocked while any item is waiting. Each
+item snapshots its title, icon, and point value so later catalog edits do not
+change work that was already sent.
+
+Assigned items have `pending`, `completed`, or `cancelled` status. A child
+completes each item separately and receives its points immediately in the
+same database transaction that closes the item and creates its
+`assigned_task` ledger entry. Catalog-backed completion also creates a
+`TaskCompletion` record for that child and calendar day. This prevents a
+catalog task from being assigned while it awaits approval, is already
+assigned, or has already been credited that day. Cancelled items can be
+assigned again; completed catalog tasks become available on the next day.
+
+Pending items are active only when `AssignedTaskBatch.assigned_on` equals the
+server-local calendar date. At midnight they disappear from the child's
+priority list, stop blocking new reward requests, and remain visible as
+expired in parent history. Blocking applies only to new reward purchases:
+existing pending reward requests can still be approved or rejected, and all
+other child actions remain available.
+
 **PenaltyTemplate** — penalty catalog entry storing a negative amount
 directly (enforced at the field level). Applying it to a child requires a
 reason and immediately creates the corresponding ledger entry.
@@ -91,7 +114,8 @@ parent-approved; one pending request per child at a time.
 **PushSubscription** — Web Push subscription for either a parent user or a
 child device (exactly one owner, enforced by a DB constraint). Parents are
 notified of new/revised task submissions; children are notified of task
-and reward decisions, point gifts, and birthday awards.
+and reward decisions, newly assigned daily work, point gifts, and birthday
+awards.
 
 **FeedbackReport** — in-app bug/idea report from a parent or child, with an
 optional screenshot and a review-status workflow.

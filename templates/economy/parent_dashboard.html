@@ -147,7 +147,7 @@
           <section class="assigned-task-batch">
             <div class="list-row">
               <span><strong>{{ batch.assigned_on|date:"Y-m-d" }}</strong> · {{ batch.assigned_by|user_display_name }}{% if batch.blocks_rewards %} · {% translate "Purchases blocked" %}{% endif %}</span>
-              {% if batch.assigned_on == today %}
+              {% if batch.has_pending_items %}
                 <form method="post" action="{% url 'parent_cancel_assigned_task_batch' batch.pk %}">{% csrf_token %}<button class="text-button danger" type="submit">{% translate "Cancel remaining" %}</button></form>
               {% endif %}
             </div>
