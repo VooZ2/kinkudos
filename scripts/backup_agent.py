@@ -75,7 +75,7 @@ def initial_status():
         "available": True,
         "configured": configured,
         "provider": provider_from_repository(repository),
-        "target": public_target(repository),
+        "target": public_target(repository) if configured else "",
         "key_hint": env.get("AWS_ACCESS_KEY_ID", "")[-4:],
         "running": False,
         "health": "unknown" if configured else "not_configured",

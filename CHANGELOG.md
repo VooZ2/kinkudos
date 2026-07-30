@@ -1,9 +1,39 @@
 # Changelog
 
 All notable project changes are documented in this file. The format follows
-Keep a Changelog and the versions follow Semantic Versioning.
+Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
+
+## [26.0.0] - 2026-07-30
+
+### Changed
+
+- KinKudos is now a production release and no longer displays the BETA label.
+- Version numbers now use `YY.FEATURE.FIX`: the year changes the first number,
+  new functionality increments the second, and fixes, design work, or
+  extensions of existing functionality increment the third.
+- Feedback settings show unresolved reports by default and retain pagination;
+  resolved reports remain available through the status filter.
+- Backup settings distinguish an unconfigured orange state, a red stale or
+  error state, and a green current state. Empty technical placeholders are
+  replaced with concise human-readable values.
+- Installation and upgrade documentation is repository-neutral, distinguishes
+  KinKudos remote snapshots from whole-server backups, and recommends a
+  dedicated restricted bucket for backup verification.
+
+### Fixed
+
+- Traefik is permanently instructed to reach the application through the
+  external `web` network when the app also joins its internal backup network.
+- The release updater assigns backup directories, agent credentials, and
+  `restic` configuration to the configured application UID and GID even when
+  the updater is run with `sudo`.
+- Compose and updater regression tests protect the network selection and
+  backup-file ownership fixes.
+- The backup settings page no longer exposes
+  `REPLACE_WITH_REPOSITORY`, and its destructive-change warning uses a
+  softly red background.
 
 ## [0.13.0 BETA] - 2026-07-30
 

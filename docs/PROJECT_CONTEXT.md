@@ -1,10 +1,9 @@
 # Project Context
 
 ## Status
-KinKudos is live and used daily by one family. Currently BETA: small bugs,
-UI details, and EN/LT wording are being refined before a stable release.
-Not a prototype — real usage, real family data, so changes must be
-conservative and backward-compatible.
+KinKudos is a production self-hosted application used daily by one family.
+It is not a prototype: changes must remain conservative and backward-compatible
+because installations contain real family data.
 
 Check `CHANGELOG.md` for the current released version and
 `docs/TODO.lt.md` for current open work.
@@ -45,9 +44,8 @@ code paths exist or are needed.
   refactoring target.
 
 ## Repository intent
-Currently private/personal. May be made public later — keep secrets, family
-data, and deployment specifics out of the repo now so that going public
-later requires no history cleanup.
+The repository is intended to be safe for public access. Keep secrets, family
+data, and deployment-specific values out of Git.
 
 ## Test status
 The full `economy` test suite is expected to pass on `main`.

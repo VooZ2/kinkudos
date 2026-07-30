@@ -164,7 +164,10 @@ Whole-server backup planning and an offline copy of the repository password
 remain operator responsibilities.
 
 ## Versioning
-MIT license, semantic versioning, `main` must always pass its test suite.
+MIT license, calendar-based `YY.FEATURE.FIX` versioning, and `main` must always
+pass its test suite. `YY` is the release year's final two digits, `FEATURE`
+increments for new functionality, and `FIX` increments for bug fixes, design
+changes, and extensions of existing functionality.
 Current released version: the latest versioned entry in `CHANGELOG.md`
 (entries under `[Unreleased]` are not yet released). Family data is
 created at install time, never shipped in the repo.

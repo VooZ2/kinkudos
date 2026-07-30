@@ -383,22 +383,30 @@
         <h3>{% translate "Backups" %}</h3>
         <p class="help-text">{% translate "Daily encrypted copies protect the family database and uploaded photos." %}</p>
       </div>
-      <span class="backup-health {% if backup_status.is_fresh %}backup-health-good{% else %}backup-health-stale{% endif %}">
+      <span class="backup-health {% if not backup_status.available %}backup-health-stale{% elif not backup_status.configured %}backup-health-unset{% elif backup_status.is_fresh %}backup-health-good{% else %}backup-health-stale{% endif %}">
         <span aria-hidden="true"></span>
-        {% if backup_status.is_fresh %}{% translate "Current" %}{% else %}{% translate "Attention needed" %}{% endif %}
+        {% if not backup_status.available %}
+          {% translate "Attention needed" %}
+        {% elif not backup_status.configured %}
+          {% translate "Not configured" %}
+        {% elif backup_status.is_fresh %}
+          {% translate "Current" %}
+        {% else %}
+          {% translate "Attention needed" %}
+        {% endif %}
       </span>
     </div>
     {% if not backup_status.available %}
-      <p class="feedback-email-warning">{% translate "The backup service is unavailable. Ask the server administrator to check the backup container." %}</p>
+      <p class="danger-warning">{% translate "The backup service is unavailable. Ask the server administrator to check the backup container." %}</p>
     {% else %}
       <dl class="backup-status-grid">
         <div><dt>{% translate "Provider" %}</dt><dd>{{ backup_status.provider|default:"—" }}</dd></div>
         <div><dt>{% translate "Repository" %}</dt><dd>{{ backup_status.target|default:"—" }}</dd></div>
-        <div><dt>{% translate "Last successful backup" %}</dt><dd>{% if backup_status.last_success %}{{ backup_status.last_success|date:"Y-m-d H:i" }}{% else %}{% translate "No successful backup yet" %}{% endif %}</dd></div>
+        <div><dt>{% translate "Last successful backup" %}</dt><dd>{% if backup_status.last_success %}{{ backup_status.last_success|date:"Y-m-d H:i" }}{% elif backup_status.configured %}{% translate "Backups not completed" %}{% else %}—{% endif %}</dd></div>
         <div><dt>{% translate "Last integrity check" %}</dt><dd>{% if backup_status.last_check %}{{ backup_status.last_check|date:"Y-m-d H:i" }}{% else %}—{% endif %}</dd></div>
       </dl>
       {% if backup_status.running %}<p class="status-pill">{% translate "Backup in progress..." %}</p>{% endif %}
-      {% if backup_status.error %}<p class="feedback-email-warning">{{ backup_status.error }}</p>{% endif %}
+      {% if backup_status.error %}<p class="danger-warning">{{ backup_status.error }}</p>{% endif %}
       {% if user.is_staff %}
         <div class="backup-actions">
           {% if backup_status.configured %}
@@ -406,12 +414,12 @@
               <button class="button button-primary" type="submit"{% if backup_status.running %} disabled{% endif %}>{% translate "Back up now" %}</button>
             </form>
           {% endif %}
-          <button class="button button-secondary" type="button" data-open-dialog="backup-settings-dialog">{% translate "Edit backup setup" %}</button>
+          <button class="button button-secondary" type="button" data-open-dialog="backup-settings-dialog">{% translate "Edit settings" %}</button>
         </div>
         <dialog id="backup-settings-dialog" class="action-dialog backup-dialog">
           <button class="dialog-close" type="button" data-close-dialog>×</button>
           <h2>{% translate "Backup setup" %}</h2>
-          <p class="feedback-email-warning">{% translate "Incorrect changes can stop future backups. Continue only if you understand the storage credentials and have saved the repository password outside this server." %}</p>
+          <p class="danger-warning">{% translate "Incorrect changes can stop future backups. Continue only if you understand the storage credentials and have saved the repository password outside this server." %}</p>
           <form method="post" action="{% url 'parent_configure_backup' %}" class="stack-form">
             {% csrf_token %}{{ backup_settings_form.as_p }}
             <button class="button button-primary" type="submit">{% translate "Verify and save" %}</button>
@@ -523,6 +531,7 @@
       <label>{% translate "Status" %}
         <select class="field-control" name="feedback_status">
           <option value="">{% translate "All statuses" %}</option>
+          <option value="active"{% if feedback_status == "active" %} selected{% endif %}>{% translate "Open feedback" %}</option>
           {% for value, label in feedback_status_choices %}
             <option value="{{ value }}"{% if feedback_status == value %} selected{% endif %}>{{ label }}</option>
           {% endfor %}
@@ -690,7 +699,7 @@
 </section>
   <footer class="parent-version-footer">
     <a href="{% url 'changelog' %}" aria-label="{% translate 'Open release notes' %}">
-      {{ project_name }} · v{{ app_version }} BETA
+      {{ project_name }} · v{{ app_version }}
     </a>
   </footer>
   </div>

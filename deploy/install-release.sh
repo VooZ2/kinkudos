@@ -57,6 +57,24 @@ chmod 0600 \
   "$secrets_dir/restic_password" \
   "$secrets_dir/backup/restic.env"
 
+runtime_uid=$(
+  sed -n 's/^KINKUDOS_UID=\([0-9][0-9]*\)$/\1/p' "$deploy_dir/.env" 2>/dev/null |
+    tail -n 1
+)
+runtime_gid=$(
+  sed -n 's/^KINKUDOS_GID=\([0-9][0-9]*\)$/\1/p' "$deploy_dir/.env" 2>/dev/null |
+    tail -n 1
+)
+runtime_uid=${runtime_uid:-${SUDO_UID:-$(id -u)}}
+runtime_gid=${runtime_gid:-${SUDO_GID:-$(id -g)}}
+chown "$runtime_uid:$runtime_gid" \
+  "$project_root/backups" \
+  "$project_root/backup-state" \
+  "$secrets_dir/backup" \
+  "$secrets_dir/backup_agent_token" \
+  "$secrets_dir/restic_password" \
+  "$secrets_dir/backup/restic.env"
+
 expected_checksum=$(awk 'NR == 1 {print $1}' "$checksum_file")
 actual_checksum=$(sha256sum "$archive" | awk '{print $1}')
 if [ "$actual_checksum" != "$expected_checksum" ]; then

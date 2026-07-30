@@ -4,7 +4,7 @@ services:
   app:
     build:
       context: ../app
-    image: kinkudos:0.13.0
+    image: kinkudos:26.0.0
     entrypoint:
       - /bin/sh
       - -c
@@ -76,6 +76,7 @@ services:
       start_period: 30s
     labels:
       traefik.enable: "true"
+      traefik.docker.network: web
       traefik.http.routers.kinkudos-http.entrypoints: web
       traefik.http.routers.kinkudos-http.rule: "Host(`${KINKUDOS_HOSTNAME:-kinkudos.example.com}`)"
       traefik.http.routers.kinkudos-http.middlewares: kinkudos-https-redirect
@@ -91,7 +92,7 @@ services:
       com.centurylinklabs.watchtower.enable: "false"
 
   backup-agent:
-    image: kinkudos:0.13.0
+    image: kinkudos:26.0.0
     entrypoint: ["python", "/app/scripts/backup_agent.py"]
     command: []
     user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"

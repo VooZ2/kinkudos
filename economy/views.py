@@ -126,7 +126,7 @@ def changelog(request):
         "economy/changelog.html",
         {
             "releases": load_changelog(),
-            "current_version": f"{settings.APP_VERSION} BETA",
+            "current_version": settings.APP_VERSION,
         },
     )
 
@@ -998,10 +998,12 @@ def parent_update_feedback_status(request, report_id):
 def parent_dashboard(request):
     children = list(ChildProfile.objects.filter(is_active=True))
     history_children = list(ChildProfile.objects.order_by("name"))
-    feedback_status = request.GET.get("feedback_status", "").strip()
+    feedback_status = request.GET.get("feedback_status", "active").strip()
     feedback_type = request.GET.get("feedback_type", "").strip()
     feedback_query = FeedbackReport.objects.select_related("parent", "child")
-    if feedback_status in FeedbackStatus.values:
+    if feedback_status == "active":
+        feedback_query = feedback_query.exclude(status=FeedbackStatus.RESOLVED)
+    elif feedback_status in FeedbackStatus.values:
         feedback_query = feedback_query.filter(status=feedback_status)
     else:
         feedback_status = ""

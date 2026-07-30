@@ -1,4 +1,4 @@
-# KinKudos 0.13.0 diegimas į „Orange Pi“
+# KinKudos diegimas į „Orange Pi“
 
 Instrukcija skirta 64 bitų ARM „Orange Pi“ su „Armbian“, „Debian“ arba
 „Ubuntu“. Komanda `uname -m` turi rodyti `aarch64`.
@@ -13,7 +13,7 @@ Reikia:
 - jau veikiančio „Traefik“ su išoriniu Docker tinklu `web`, `web` ir
   `websecure` įėjimais bei `letsencrypt` sertifikatų resolveriu;
 - pakankamai vietos `data`, `backups` ir Docker atvaizdams;
-- prisijungimo prie privataus `VooZ2/kinkudos` repozitorijos, kol jis privatus.
+- prieigos prie pasirinkto leidimo archyvo ir jo kontrolinės sumos.
 
 Patikrinkite aplinką:
 
@@ -22,7 +22,6 @@ uname -m
 docker version
 docker compose version
 docker network inspect web
-gh auth status
 ```
 
 Jei `web` tinklo dar nėra, jį sukurkite prieš paleisdami „Traefik“ ir
@@ -39,12 +38,14 @@ sudo mkdir -p /opt/kinkudos
 sudo chown "$USER":"$USER" /opt/kinkudos
 cd /opt/kinkudos
 
-gh release download v0.13.0 --repo VooZ2/kinkudos \
-  --pattern 'kinkudos-0.13.0.tar.gz*'
-sha256sum -c kinkudos-0.13.0.tar.gz.sha256
+version=26.0.0
+repository=OWNER/REPOSITORY
+gh release download "v$version" --repo "$repository" \
+  --pattern "kinkudos-$version.tar.gz*"
+sha256sum -c "kinkudos-$version.tar.gz.sha256"
 
 mkdir -p app deploy data backups backup-state secrets
-tar -xzf kinkudos-0.13.0.tar.gz --strip-components=1 -C app
+tar -xzf "kinkudos-$version.tar.gz" --strip-components=1 -C app
 cp -a app/deploy/. deploy/
 ```
 
@@ -104,11 +105,10 @@ Failą `/opt/kinkudos/secrets/restic_password` išsaugokite atskiroje
 slaptažodžių tvarkyklėje ar neprisijungus laikomoje laikmenoje. Be jo
 atsarginės kopijos po visiško serverio praradimo neatkursite.
 
-## Atnaujinimas iš 0.12.4
+## Atnaujinimas
 
 Naudokite `deploy/README.lt.md` pateiktą `install-release.sh` eigą.
 Atnaujintojas išsaugo `data`, nuotraukas, `.env`, SMTP, VAPID ir esamus
-`restic` failus, sukuria trūkstamą kopijų tarnybos raktą bei paleidžia naują
-`backup-agent` konteinerį.
+`restic` failus.
 
 Prieš atnaujinimą vis tiek pasidarykite ir patikrinkite nepriklausomą kopiją.

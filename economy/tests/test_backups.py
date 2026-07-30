@@ -38,8 +38,52 @@ class BackupSettingsTests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, "Backups")
         self.assertContains(response, "Current")
-        self.assertNotContains(response, "Edit backup setup")
+        self.assertNotContains(response, "Edit settings")
         self.assertNotContains(response, "Back up now")
+
+    @patch("economy.views.backup_status")
+    def test_unconfigured_backup_uses_neutral_values_and_orange_status(self, status):
+        status.return_value = {
+            "available": True,
+            "configured": False,
+            "provider": "",
+            "target": "",
+            "is_fresh": False,
+            "running": False,
+            "last_success": None,
+            "last_check": None,
+            "error": "",
+        }
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, "Not configured")
+        self.assertContains(response, "backup-health-unset")
+        self.assertNotContains(response, "REPLACE_WITH_REPOSITORY")
+        self.assertNotContains(response, "Backups not completed")
+        self.assertContains(response, "Edit settings")
+
+    @patch("economy.views.backup_status")
+    def test_configured_backup_without_success_uses_attention_status(self, status):
+        status.return_value = {
+            "available": True,
+            "configured": True,
+            "provider": "s3",
+            "target": "s3.example.invalid/test/kinkudos",
+            "is_fresh": False,
+            "running": False,
+            "last_success": None,
+            "last_check": None,
+            "error": "",
+        }
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, "Attention needed")
+        self.assertContains(response, "Backups not completed")
+        self.assertContains(response, "danger-warning")
 
     @patch("economy.views.configure_backup")
     def test_admin_can_verify_and_save_configuration(self, configure):

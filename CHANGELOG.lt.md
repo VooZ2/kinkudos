@@ -2,9 +2,40 @@
 
 Visi reikšmingi projekto pakeitimai dokumentuojami šiame faile.
 
-Formatas paremtas „Keep a Changelog“, o versijos atitinka semantinį versijavimą.
+Formatas paremtas „Keep a Changelog“, o versijoms naudojama `YY.FEATURE.FIX`
+schema.
 
 ## [Unreleased]
+
+## [26.0.0] - 2026-07-30
+
+### Pakeista
+
+- KinKudos tapo produkciniu leidimu ir vartotojo sąsajoje neberodomas BETA
+  prierašas.
+- Versijos numeruojamos pagal `YY.FEATURE.FIX`: pirmą skaičių keičia metai,
+  antrą – naujas funkcionalumas, o trečią – klaidų taisymai, dizaino darbai
+  arba esamo funkcionalumo plėtra.
+- Atsiliepimų nustatymuose pagal nutylėjimą rodomi neišspręsti įrašai ir
+  išlaikomas puslapiavimas; išspręsti įrašai lieka pasiekiami per būsenos
+  filtrą.
+- Kopijų nustatymuose atskirtos oranžinė nenustatytos saugyklos, raudona
+  pasenusios ar klaidingos kopijos ir žalia tvarkingos kopijos būsenos.
+  Tuščios techninės reikšmės pakeistos trumpais suprantamais tekstais.
+- Diegimo ir atnaujinimo dokumentacija tapo neutrali repozitorijos atžvilgiu,
+  atskiria KinKudos nuotolines kopijas nuo viso serverio kopijų ir patikrai
+  rekomenduoja atskirą ribotų teisių bucket.
+
+### Pataisyta
+
+- „Traefik“ visada nurodoma programą pasiekti per išorinį `web` tinklą, kai
+  programa taip pat prijungta prie vidinio kopijų tinklo.
+- Su `sudo` paleistas leidimo atnaujintojas kopijų katalogams, tarnybos
+  raktams ir `restic` konfigūracijai priskiria nustatytą programos UID ir GID.
+- „Compose“ ir atnaujintojo regresiniai testai saugo tinklo pasirinkimo bei
+  kopijų failų nuosavybės pataisas.
+- Kopijų nustatymuose neberodoma `REPLACE_WITH_REPOSITORY`, o perspėjimas apie
+  pavojingus nustatymų pakeitimus pateikiamas švelniai raudoname fone.
 
 ## [0.13.0 BETA] - 2026-07-30
 

@@ -34,9 +34,10 @@ Prerequisites:
 - a 64-bit ARM or x86 Linux host with Docker Engine and Docker Compose;
 - an existing Traefik instance attached to an external Docker network named
   `web`;
-- a hostname routed to the host.
-- while the repository is private, GitHub CLI authenticated with an account
-  that can read `VooZ2/kinkudos`.
+- a hostname routed to the host;
+- access to the chosen release archive and its SHA256 checksum. When using
+  GitHub CLI with a private repository, authenticate an account that can read
+  that repository.
 
 Place the release source in `app` and this directory beside it as shown above.
 Set `KINKUDOS_HOSTNAME` and, when needed, `KINKUDOS_ALLOWED_NETWORKS` in
@@ -68,22 +69,31 @@ If initial family creation was skipped:
 docker compose exec app python manage.py setup_family --language en
 ```
 
-## Updating to 0.13.0
+## Updating from a release archive
 
 Run these commands from the deployment root (the directory containing
-`app`, `deploy`, `data`, and `secrets`):
+`app`, `deploy`, `data`, and `secrets`). Replace `OWNER/REPOSITORY` and the
+version with the release you want to install:
 
 ```bash
-gh release download v0.13.0 --repo VooZ2/kinkudos \
-  --pattern 'kinkudos-0.13.0.tar.gz*'
-sha256sum -c kinkudos-0.13.0.tar.gz.sha256
-tar -xOf kinkudos-0.13.0.tar.gz \
-  kinkudos-0.13.0/deploy/compose.yml > deploy/compose.yml
-./deploy/install-release.sh \
-  "$PWD/kinkudos-0.13.0.tar.gz" \
-  "$PWD/kinkudos-0.13.0.tar.gz.sha256" \
-  0.13.0 \
+version=26.0.0
+repository=OWNER/REPOSITORY
+gh release download "v$version" --repo "$repository" \
+  --pattern "kinkudos-$version.tar.gz*"
+sha256sum -c "kinkudos-$version.tar.gz.sha256"
+install_script="$(mktemp)"
+compose_file="$(mktemp)"
+tar -xOf "kinkudos-$version.tar.gz" \
+  "kinkudos-$version/deploy/install-release.sh" > "$install_script"
+tar -xOf "kinkudos-$version.tar.gz" \
+  "kinkudos-$version/deploy/compose.yml" > "$compose_file"
+sudo install -m 0644 "$compose_file" deploy/compose.yml
+sudo sh "$install_script" \
+  "$PWD/kinkudos-$version.tar.gz" \
+  "$PWD/kinkudos-$version.tar.gz.sha256" \
+  "$version" \
   "$PWD"
+rm -f "$install_script" "$compose_file"
 ```
 
 The updater validates the checksum and release metadata, builds and smoke-tests
@@ -99,6 +109,12 @@ S3-compatible repository. Configure it as the first parent under
 Settings → Backups. During an upgrade, an existing valid
 `secrets/restic.env` is migrated to `secrets/backup/restic.env`;
 `secrets/restic_password` is preserved.
+
+This KinKudos-managed remote backup is separate from any whole-server or
+hosting-provider backup. The web interface reports only snapshots created by
+the KinKudos backup agent. For Backblaze B2, use a dedicated bucket and an
+application key restricted to that bucket; use a separate bucket and test data
+for release verification.
 
 To request the same verified backup from the server:
 

@@ -4,16 +4,17 @@
 ir naujai aptiktos problemos. Užbaigti leidimų pakeitimai aprašomi
 `CHANGELOG.lt.md`.
 
-## 0.13.0 BETA rankinės patikros
+## 26.0.0 likusios rankinės patikros
 
 - [ ] Švariai įdiegti leidimą ARM64 „Orange Pi“ serveryje ir patikrinti
   interaktyvius kalbos, domeno, tinklų, šeimos, pirmo tėvo ir vaikų profilių
   klausimus.
-- [ ] Atnaujinti esamą 0.12.4 instaliaciją ir patvirtinti, kad duomenų bazė,
+- [ ] Atnaujinti esamą 0.13.0 instaliaciją į 26.0.0 ir patvirtinti, kad duomenų bazė,
   nuotraukos, `.env`, SMTP, VAPID ir esami `restic` duomenys išliko.
 - [ ] Su tikra ribotų teisių „Backblaze B2“ programos rakto pora patikrinti
-  saugyklos išsaugojimą, automatinę ir rankinę kopiją, 7 dienų indikatorių,
-  klaidos būseną ir kopijos vientisumo patikrą.
+  atskirą testinį bucket, saugyklos išsaugojimą, automatinę ir rankinę kopiją,
+  oranžinę nenustatytos saugyklos, raudoną pasenusios kopijos, žalią
+  tvarkingos kopijos būseną ir kopijos vientisumo patikrą.
 - [ ] Atskirame bandymų kataloge atlikti dokumentuotą DB ir nuotraukų atkūrimą
   iš `restic` kopijos. Produkcijos duomenų neatkurti bandymo metu.
 - [ ] Patikrinti „Robliux Pasaulio“ temą LT ir EN kalbomis kompiuteryje,

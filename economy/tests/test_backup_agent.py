@@ -11,6 +11,20 @@ from scripts import backup_agent
 
 
 class BackupAgentTests(TestCase):
+    def test_placeholder_repository_is_not_exposed_as_a_configured_target(self):
+        with TemporaryDirectory() as directory:
+            env_path = Path(directory) / "restic.env"
+            env_path.write_text(
+                "RESTIC_REPOSITORY=REPLACE_WITH_REPOSITORY\n",
+                encoding="utf-8",
+            )
+            with patch.object(backup_agent, "ENV_PATH", env_path):
+                status = backup_agent.initial_status()
+
+        self.assertFalse(status["configured"])
+        self.assertEqual(status["provider"], "")
+        self.assertEqual(status["target"], "")
+
     def test_provider_and_public_target_do_not_expose_embedded_credentials(self):
         repository = "s3:https://secret@example.invalid/family/kinkudos"
 

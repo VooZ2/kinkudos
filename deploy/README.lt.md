@@ -21,9 +21,10 @@ Reikalavimai:
 
 - 64 bitų ARM arba x86 Linux serveris su Docker Engine ir Docker Compose;
 - jau veikiantis Traefik, prijungtas prie išorinio Docker tinklo `web`;
-- į serverį nukreiptas domeno vardas.
-- kol repozitorija privati, GitHub CLI, prijungtas prie paskyros, kuri gali
-  skaityti `VooZ2/kinkudos`.
+- į serverį nukreiptas domeno vardas;
+- prieiga prie pasirinkto leidimo archyvo ir jo SHA256 kontrolinės sumos. Jei
+  privačiai repozitorijai naudojamas GitHub CLI, jame turi būti prijungta tą
+  repozitoriją galinti skaityti paskyra.
 
 Leidimo programos kodą laikykite `app`, o šį katalogą – greta jo, kaip parodyta
 aukščiau. `deploy/.env` faile nustatykite `KINKUDOS_HOSTNAME` ir, jei reikia,
@@ -48,22 +49,31 @@ docker compose exec app python manage.py setup_family --language lt
 Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tame
 įrenginyje.
 
-## Atnaujinimas į 0.13.0
+## Atnaujinimas iš leidimo archyvo
 
 Šias komandas paleiskite diegimo šakniniame kataloge, kuriame yra `app`,
-`deploy`, `data` ir `secrets`:
+`deploy`, `data` ir `secrets`. `OWNER/REPOSITORY` bei versiją pakeiskite
+norimo diegti leidimo reikšmėmis:
 
 ```bash
-gh release download v0.13.0 --repo VooZ2/kinkudos \
-  --pattern 'kinkudos-0.13.0.tar.gz*'
-sha256sum -c kinkudos-0.13.0.tar.gz.sha256
-tar -xOf kinkudos-0.13.0.tar.gz \
-  kinkudos-0.13.0/deploy/compose.yml > deploy/compose.yml
-./deploy/install-release.sh \
-  "$PWD/kinkudos-0.13.0.tar.gz" \
-  "$PWD/kinkudos-0.13.0.tar.gz.sha256" \
-  0.13.0 \
+version=26.0.0
+repository=OWNER/REPOSITORY
+gh release download "v$version" --repo "$repository" \
+  --pattern "kinkudos-$version.tar.gz*"
+sha256sum -c "kinkudos-$version.tar.gz.sha256"
+install_script="$(mktemp)"
+compose_file="$(mktemp)"
+tar -xOf "kinkudos-$version.tar.gz" \
+  "kinkudos-$version/deploy/install-release.sh" > "$install_script"
+tar -xOf "kinkudos-$version.tar.gz" \
+  "kinkudos-$version/deploy/compose.yml" > "$compose_file"
+sudo install -m 0644 "$compose_file" deploy/compose.yml
+sudo sh "$install_script" \
+  "$PWD/kinkudos-$version.tar.gz" \
+  "$PWD/kinkudos-$version.tar.gz.sha256" \
+  "$version" \
   "$PWD"
+rm -f "$install_script" "$compose_file"
 ```
 
 Atnaujintojas patikrina kontrolinę sumą ir leidimo duomenis, pastato ir
@@ -79,6 +89,12 @@ suderinamą saugyklą. Ją pirmoji tėvų administratoriaus paskyra nustato
 „Nustatymai → Atsarginės kopijos“. Atnaujinant esamas
 `secrets/restic.env` perkeliamas į `secrets/backup/restic.env`, o
 `secrets/restic_password` išsaugomas.
+
+Ši KinKudos valdoma nuotolinė kopija nėra tas pats, kas viso serverio arba
+hostingo tiekėjo kopija. Programos sąsajoje rodoma tik KinKudos kopijų
+tarnybos sukurta būsena. „Backblaze B2“ naudokite atskirą bucket ir tik jam
+apribotą Application Key; leidimo patikrai naudokite atskirą testinį bucket
+bei tik bandymų duomenis.
 
 Tą pačią patikrintą kopiją serveryje galima paleisti:
 

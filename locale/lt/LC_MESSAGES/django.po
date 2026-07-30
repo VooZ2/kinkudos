@@ -193,6 +193,9 @@ msgstr "Atsarginių kopijų saugykla patikrinta ir išsaugota."
 msgid "Backups"
 msgstr "Atsarginės kopijos"
 
+msgid "Backups not completed"
+msgstr "Kopijos neatliktos"
+
 msgid "Balance adjusted."
 msgstr "Balansas pakoreguotas."
 
@@ -529,8 +532,8 @@ msgstr "Redaguoti"
 msgid "Edit accounts"
 msgstr "Redaguoti paskyras"
 
-msgid "Edit backup setup"
-msgstr "Keisti kopijų nustatymus"
+msgid "Edit settings"
+msgstr "Keisti nustatymus"
 
 msgid "Email address"
 msgstr "El. pašto adresas"
@@ -868,11 +871,11 @@ msgstr "Naujų funkcijų nebuvo."
 msgid "No separate fixes in this release."
 msgstr "Atskirų pataisymų nebuvo."
 
-msgid "No successful backup yet"
-msgstr "Sėkmingų kopijų dar nėra"
-
 msgid "No tasks match your search."
 msgstr "Pagal paiešką darbų nerasta."
+
+msgid "Not configured"
+msgstr "Nenustatyta"
 
 msgid "Not enough points"
 msgstr "Nepakanka taškų"
@@ -933,6 +936,9 @@ msgstr "Automatiškai šalinamos tik išspręstų atsiliepimų ekrano nuotraukos
 
 msgid "Open"
 msgstr "Atidaryti"
+
+msgid "Open feedback"
+msgstr "Neišspręsti atsiliepimai"
 
 msgid "Open release notes"
 msgstr "Atidaryti pakeitimų istoriją"

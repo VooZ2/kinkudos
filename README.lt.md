@@ -5,7 +5,7 @@ gauna teminius taškus ir keičia juos į prizus. Tėvai telefone, planšetėje 
 kompiuteryje valdo bendrus darbų, bausmių ir prizų sąrašus bei tvirtina vaikų
 prašymus.
 
-- **Dabartinis leidimas:** 0.13.0 BETA
+- **Dabartinis leidimas:** 26.0.0
 - **Kalbos:** lietuvių ir anglų
 - **Platformos:** ARM64 ir AMD64 Linux serveriai su Docker
 
@@ -20,9 +20,9 @@ prašymus.
   nustatymai ir jų būsenos rodymas.
 - Įdiegiama PWA šiuolaikinėms kompiuterių ir mobiliųjų įrenginių naršyklėms.
 
-KinKudos vis dar yra BETA ir kasdien naudojamas vienoje šeimoje. Esamas
-instaliacijas siekiama išlaikyti atnaujinamas, tačiau prieš diegiant leidimą
-reikia turėti patikrintą atsarginę kopiją ir perskaityti pakeitimų sąrašą.
+KinKudos paruoštas produkciniam savarankiškam vienos šeimos naudojimui. Esamos
+instaliacijos išlieka atnaujinamos, tačiau prieš diegiant leidimą reikia turėti
+patikrintą atsarginę kopiją ir perskaityti pakeitimų sąrašą.
 
 ## Diegimo modelis
 
@@ -45,10 +45,9 @@ kinkudos/
 negalima kelti į Git.
 
 Pirmojo diegimo ir konfigūravimo instrukcijos pateiktos
-[deploy/README.lt.md](deploy/README.lt.md). Norint esamame KinKudos serveryje
-įdiegti 0.13.0, reikia iš
-[GitHub Releases](https://github.com/VooZ2/kinkudos/releases/tag/v0.13.0)
-atsisiųsti leidimo archyvą bei jo kontrolinę sumą ir paleisti pridėtą
+[deploy/README.lt.md](deploy/README.lt.md). Norint atnaujinti esamą KinKudos
+serverį, iš repozitorijos „GitHub Releases“ puslapio reikia atsisiųsti norimo
+leidimo archyvą bei jo kontrolinę sumą ir paleisti pridėtą
 `deploy/install-release.sh`.
 
 ARM64 „Orange Pi“ instrukcija: [docs/ORANGE_PI_INSTALL.lt.md](docs/ORANGE_PI_INSTALL.lt.md).

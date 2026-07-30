@@ -5,27 +5,22 @@ Kiekvienas vartotojui matomas pakeitimas turi būti įtrauktas į
 
 ## Versijos numerio parinkimas
 
-Naudojama `MAJOR.MINOR.PATCH` schema:
+Naudojama `YY.FEATURE.FIX` schema:
 
-- `MAJOR` – architektūriniai, esminiai logikos arba atgal nesuderinami
-  pakeitimai;
-- `MINOR` – naujos, su esama versija suderinamos funkcijos;
-- `PATCH` – klaidų taisymai, dizaino pataisos ir smulkūs esamų funkcijų
-  patobulinimai.
+- `YY` – leidimo metų paskutiniai du skaitmenys, pvz. `26` reiškia 2026 m.;
+- `FEATURE` – tais pačiais metais didinamas pridedant naują funkcionalumą;
+- `FIX` – didinamas taisant klaidas, leidžiant pataisas, keičiant dizainą
+  arba išplečiant jau esamą funkcionalumą.
 
-Kol produktas yra `0.x BETA`, naujos funkcijos didina `MINOR`, o pataisymai –
-`PATCH`. `1.0.0` yra pirmas stabilus produkto leidimas ir nuo jo pašalinama
-`BETA` žyma. Po stabilaus leidimo esminiai nesuderinami pakeitimai didina
-`MAJOR`.
+Prasidėjus naujiems metams `YY` pakeičiamas, o kiti du skaičiai pradedami nuo
+`0`. Produkciniai leidimai neturi `BETA` prierašo.
 
 Pavyzdžiai:
 
-- `0.8.0` klaidos pataisa tampa `0.8.1`;
-- nauja beta funkcija tampa `0.9.0`;
-- patvirtintas stabilus produktas tampa `1.0.0`;
-- `1.0.0` pataisa tampa `1.0.1`;
-- nauja suderinama funkcija tampa `1.1.0`;
-- esminis nesuderinamas pakeitimas tampa `2.0.0`.
+- pirmas 2026 m. produkcinis leidimas yra `26.0.0`;
+- `26.0.0` klaidos ar dizaino pataisa tampa `26.0.1`;
+- naujas funkcionalumas po `26.0.1` tampa `26.1.0`;
+- pirmas 2027 m. leidimas tampa `27.0.0`.
 
 Vien dokumentacijos ar kūrimo proceso pakeitimas, kuris nekeičia įdiegtos
 programos, naujos produkto versijos nereikalauja.
@@ -43,6 +38,9 @@ Kiekvienai versijai privaloma:
 5. Patikrinti, kad `/pakeitimai/` visa tai parodo kaip „Kas naujo?“ ir
    „Kas pataisyta?“.
 6. Paleisti visus testus ir `python manage.py check`.
+7. GitHub Release notes rašyti tik angliškai, išlaikant tokią pačią struktūrą
+   kaip atitinkamas `CHANGELOG.md` leidimo įrašas. Leidimo tekstą galima
+   tiesiogiai kopijuoti iš `CHANGELOG.md`.
 
 Versijos numeris programos antraštėje visada turi likti nuoroda į
 `/pakeitimai/`.

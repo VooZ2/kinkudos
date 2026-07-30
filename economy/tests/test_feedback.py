@@ -99,7 +99,7 @@ class FeedbackWorkflowTests(TestCase):
         self.assertEqual(report.reporter_role, "parent")
         self.assertEqual(report.family_name, "Aurora")
         self.assertEqual(report.page_path, "/tevai/")
-        self.assertEqual(report.app_version, "0.13.0")
+        self.assertEqual(report.app_version, "26.0.0")
         self.assertEqual(report.user_agent, "Feedback Browser")
         self.assertIsNotNone(report.email_notified_at)
         self.assertEqual(len(mail.outbox), 1)
@@ -275,6 +275,38 @@ class FeedbackWorkflowTests(TestCase):
         )
         self.assertContains(dashboard, "A saved suggestion")
         self.assertContains(dashboard, "feedback-launcher")
+
+    def test_resolved_feedback_is_hidden_by_default_and_available_by_filter(self):
+        FeedbackReport.objects.create(
+            description="Open report",
+            child=self.child,
+            reporter_name=self.child.name,
+            reporter_role="child",
+            family_name="Aurora",
+            app_version="26.0.0",
+        )
+        FeedbackReport.objects.create(
+            description="Archived resolved report",
+            status=FeedbackStatus.RESOLVED,
+            child=self.child,
+            reporter_name=self.child.name,
+            reporter_role="child",
+            family_name="Aurora",
+            app_version="26.0.0",
+        )
+        self.client.login(username="parent", password="Safe-feedback-test-123!")
+
+        dashboard = self.client.get(reverse("parent_dashboard"))
+        self.assertContains(dashboard, "Open report")
+        self.assertNotContains(dashboard, "Archived resolved report")
+        self.assertContains(dashboard, 'option value="active" selected')
+
+        resolved = self.client.get(
+            reverse("parent_dashboard"),
+            {"feedback_status": FeedbackStatus.RESOLVED},
+        )
+        self.assertNotContains(resolved, "Open report")
+        self.assertContains(resolved, "Archived resolved report")
 
     def test_only_old_resolved_feedback_screenshots_are_removed(self):
         old_report = FeedbackReport.objects.create(
