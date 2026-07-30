@@ -30,6 +30,15 @@ class FamilySettings(models.Model):
         default=0,
         validators=[MaxValueValidator(10000)],
     )
+    lottery_enabled = models.BooleanField(default=True)
+    lottery_ticket_cost = models.PositiveSmallIntegerField(
+        default=15,
+        validators=[MinValueValidator(1), MaxValueValidator(10000)],
+    )
+    lottery_weekly_limit = models.PositiveSmallIntegerField(
+        default=3,
+        validators=[MinValueValidator(1), MaxValueValidator(100)],
+    )
     evidence_retention_days = models.PositiveSmallIntegerField(
         choices=EvidenceRetention.choices,
         default=EvidenceRetention.THIRTY_DAYS,
@@ -106,6 +115,7 @@ class ChildProfile(models.Model):
     pin_hash = models.CharField(max_length=255)
     balance = models.IntegerField(default=0)
     min_balance = models.IntegerField(default=-100)
+    lottery_enabled = models.BooleanField(default=True)
     failed_pin_attempts = models.PositiveSmallIntegerField(default=0)
     locked_until = models.DateTimeField(null=True, blank=True)
     is_active = models.BooleanField(default=True)

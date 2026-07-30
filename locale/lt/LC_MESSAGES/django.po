@@ -46,8 +46,8 @@ msgstr "Toks vaiko profilis jau yra."
 msgid "A different theme will be selected automatically once a day."
 msgstr "Kartą per dieną automatiškai bus parinkta vis kita tema."
 
-msgid "A lottery ticket can be bought only with 15 points you have earned."
-msgstr "Loterijos bilietą galima pirkti tik už 15 uždirbtų taškų."
+msgid "A lottery ticket can be bought only with %(cost)s points you have earned."
+msgstr "Loterijos bilietą galima pirkti tik už %(cost)s uždirbtų taškų."
 
 msgid "A new task is awaiting approval"
 msgstr "Naujas darbas laukia patvirtinimo"
@@ -274,11 +274,11 @@ msgstr "Kūrybos planas"
 msgid "Building plans"
 msgstr "Statybų planai"
 
-msgid "Buy for 15 points"
-msgstr "Pirkti už 15 taškų"
+msgid "Buy for %(cost)s %(unit)s"
+msgstr "Pirkti už %(cost)s %(unit)s"
 
-msgid "Buy ticket for 15 points"
-msgstr "Pirkti bilietą už 15 taškų"
+msgid "Buy ticket for %(cost)s %(unit)s"
+msgstr "Pirkti bilietą už %(cost)s %(unit)s"
 
 msgid "Cancel"
 msgstr "Atšaukti"
@@ -676,6 +676,12 @@ msgstr "El. pašto nustatymus gali keisti tik tėvų administratorius."
 msgid "Enable email"
 msgstr "Įjungti el. paštą"
 
+msgid "Enable lottery tickets"
+msgstr "Įjungti loterijos bilietus"
+
+msgid "Enable lottery tickets for this child"
+msgstr "Įjungti loterijos bilietus šiam vaikui"
+
 msgid "Enabled"
 msgstr "Įjungta"
 
@@ -773,7 +779,7 @@ msgid "Feedback pages"
 msgstr "Atsiliepimų puslapiai"
 
 msgid "Feedback recipient email address"
-msgstr "Atsiliepimų gavėjo el. pašto adresas"
+msgstr "Atsiliepimų el. pašto adresas"
 
 msgid "Feedback status updated."
 msgstr "Atsiliepimo būsena atnaujinta."
@@ -907,8 +913,8 @@ msgstr "Įkvėpimų parduotuvė"
 msgid "Install for notifications"
 msgstr "Įdiekite pranešimams"
 
-msgid "It costs 15 earned points. You may win up to 150 points, get nothing, or lose up to 50 points. The result cannot reduce your balance below your credit limit."
-msgstr "Jis kainuoja 15 uždirbtų taškų. Gali laimėti iki 150 taškų, nieko negauti arba prarasti iki 50 taškų. Rezultatas negali sumažinti balanso žemiau tavo kredito limito."
+msgid "It costs %(cost)s earned %(unit)s. You may win up to 150 points, get nothing, or lose up to 50 points. The result cannot reduce your balance below your credit limit."
+msgstr "Jis kainuoja %(cost)s uždirbtų %(unit)s. Gali laimėti iki 150 taškų, nieko negauti arba prarasti iki 50 taškų. Rezultatas negali sumažinti balanso žemiau tavo kredito limito."
 
 msgid "It's great to see you"
 msgstr "Smagu Tave matyti"
@@ -961,11 +967,23 @@ msgstr "Loterijos rezultatas"
 msgid "Lottery ticket"
 msgstr "Loterijos bilietas"
 
+msgid "Lottery ticket price"
+msgstr "Loterijos bilieto kaina"
+
+msgid "Lottery tickets are disabled."
+msgstr "Loterijos bilietai išjungti."
+
 msgid "Lottery tickets are paused until your point balance improves."
 msgstr "Loterijos bilietai neprieinami, kol nepagerės tavo taškų balansas."
 
-msgid "Lottery tickets this week: %(used)s of 3"
-msgstr "Loterijos bilietų šią savaitę: %(used)s iš 3"
+msgid "Lottery tickets disabled"
+msgstr "Loterijos bilietai išjungti"
+
+msgid "Lottery tickets per child each week"
+msgstr "Loterijos bilietų vienam vaikui per savaitę"
+
+msgid "Lottery tickets this week: %(used)s of %(limit)s"
+msgstr "Loterijos bilietų šią savaitę: %(used)s iš %(limit)s"
 
 msgid "Lucky Ticket"
 msgstr "Laimės bilietas"
@@ -1798,6 +1816,9 @@ msgstr "Dabartinis tėvų paskyros slaptažodis neteisingas."
 msgid "The family name or nickname is required."
 msgstr "Šeimos pavadinimas arba slapyvardis yra privalomas."
 
+msgid "The family-wide lottery switch must also be enabled."
+msgstr "Taip pat turi būti įjungtas bendras šeimos loterijos nustatymas."
+
 msgid "The image cannot be larger than 12 MB."
 msgstr "Nuotrauka negali būti didesnė nei 12 MB."
 
@@ -1810,6 +1831,9 @@ msgstr "Nuotraukos apdoroti nepavyko. Pasirinkite kitą failą."
 msgid "The inspiration shop opens after today's commissioned projects are finished."
 msgstr "Įkvėpimo parduotuvė atsivers užbaigus šiandien užsakytus projektus."
 
+msgid "The limit resets every Monday. The default is 3."
+msgstr "Limitas atnaujinamas kiekvieną pirmadienį. Numatytoji reikšmė – 3."
+
 msgid "The link is valid for one hour and can only be used once."
 msgstr "Nuoroda galioja vieną valandą ir gali būti panaudota tik vieną kartą."
 
@@ -1818,6 +1842,9 @@ msgstr "Magijos krautuvė atsivers atlikus šiandienos užburtus darbus."
 
 msgid "The new PINs do not match."
 msgstr "Nauji PIN nesutampa."
+
+msgid "The new price is used for every future ticket purchase."
+msgstr "Nauja kaina taikoma kiekvienam būsimam bilieto pirkimui."
 
 msgid "The number of child profiles must be a number."
 msgstr "Vaikų profilių skaičius turi būti skaičius."
@@ -1987,8 +2014,8 @@ msgstr "Šis bilietas yra sėkmės žaidimas."
 msgid "This username is already in use."
 msgstr "Toks prisijungimo vardas jau naudojamas."
 
-msgid "Tickets left this week: %(remaining)s of 3."
-msgstr "Šią savaitę liko bilietų: %(remaining)s iš 3."
+msgid "Tickets left this week: %(remaining)s of %(limit)s."
+msgstr "Šią savaitę liko bilietų: %(remaining)s iš %(limit)s."
 
 msgid "Tidy your room"
 msgstr "Sutvarkyti savo kambarį"
@@ -2043,6 +2070,9 @@ msgstr "Skanėstų skrynėlė"
 
 msgid "Try again"
 msgstr "Bandyti dar kartą"
+
+msgid "Turn lottery tickets on or off for every child."
+msgstr "Įjunkite arba išjunkite loterijos bilietus visiems vaikams."
 
 msgid "Turn sounds off"
 msgstr "Išjungti garsus"
@@ -2158,11 +2188,11 @@ msgstr "Negalima pašalinti paskutinės aktyvios tėvų paskyros."
 msgid "You do not have enough points for this reward."
 msgstr "Šiam prizui nepakanka taškų."
 
-msgid "You have already used all three lottery tickets this week."
-msgstr "Šią savaitę jau panaudojai visus tris loterijos bilietus."
+msgid "You have already used all %(limit)s lottery tickets this week."
+msgstr "Šią savaitę jau panaudojai visus %(limit)s loterijos bilietus."
 
-msgid "You have not bought a ticket this week. It costs 15 points and you may win, get nothing, or lose points."
-msgstr "Šią savaitę dar nepirkai bilieto. Jis kainuoja 15 taškų – gali laimėti, nieko negauti arba prarasti taškų."
+msgid "You have not bought a ticket this week. It costs %(cost)s and you may win, get nothing, or lose points."
+msgstr "Šią savaitę dar nepirkai bilieto. Jis kainuoja %(cost)s – gali laimėti, nieko negauti arba prarasti taškų."
 
 msgid "You lost {amount}."
 msgstr "Praradai {amount}."
@@ -2173,8 +2203,8 @@ msgstr "Galite pridėti komentarą, kurį matys vaikas."
 msgid "You may win up to 150 points, get nothing, or lose up to 50 points."
 msgstr "Gali laimėti iki 150 taškų, nieko negauti arba prarasti iki 50 taškų."
 
-msgid "You need 15 earned points"
-msgstr "Reikia 15 uždirbtų taškų"
+msgid "You need %(cost)s earned %(unit)s"
+msgstr "Reikia %(cost)s uždirbtų %(unit)s"
 
 msgid "You received %(amount)s for your birthday"
 msgstr "Gavai %(amount)s gimtadienio proga"

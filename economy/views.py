@@ -1108,6 +1108,8 @@ def parent_dashboard(request):
         child_lottery = lottery_state(child)
         child.lottery_tickets_used = child_lottery["tickets_used"]
         child.lottery_ticket_open = bool(child_lottery["open_ticket"])
+        child.lottery_feature_enabled = child_lottery["feature_enabled"]
+        child.lottery_weekly_limit = child_lottery["weekly_limit"]
         child.assignment_unavailable_task_ids = unavailable_assignment_task_ids(child)
         child.assignment_batches = list(
             child.assigned_task_batches.filter(assigned_on__lte=today)

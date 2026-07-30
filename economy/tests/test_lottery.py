@@ -12,7 +12,6 @@ from django.utils import timezone
 from django.utils.translation import override
 
 from economy.lottery import (
-    LOTTERY_COST,
     _draw_board,
     _draw_prize,
     lottery_state,
@@ -25,6 +24,7 @@ from economy.models import (
     AssignedTask,
     AssignedTaskBatch,
     ChildProfile,
+    FamilySettings,
     LedgerKind,
     LotteryReminder,
     LotteryTicket,
@@ -53,6 +53,7 @@ class OutcomeRng:
 
 class LotteryServiceTests(TestCase):
     def setUp(self):
+        self.family = FamilySettings.load()
         self.child = ChildProfile.objects.create(
             name="Child",
             balance=100,
@@ -90,9 +91,15 @@ class LotteryServiceTests(TestCase):
         )
 
         self.child.refresh_from_db()
-        self.assertEqual(self.child.balance, 100 - LOTTERY_COST)
+        self.assertEqual(
+            self.child.balance,
+            100 - self.family.lottery_ticket_cost,
+        )
         self.assertEqual(ticket.status, LotteryTicketStatus.OPEN)
-        self.assertEqual(ticket.purchase_ledger_entry.delta, -LOTTERY_COST)
+        self.assertEqual(
+            ticket.purchase_ledger_entry.delta,
+            -self.family.lottery_ticket_cost,
+        )
         self.assertEqual(ticket.purchase_ledger_entry.kind, LedgerKind.LOTTERY)
         self.assertEqual(Counter(ticket.values)[ticket.prize_amount], 3)
 
@@ -144,7 +151,7 @@ class LotteryServiceTests(TestCase):
             )
             reveal_lottery_ticket(ticket=ticket, child=self.child)
             self.child.refresh_from_db()
-            if self.child.balance < LOTTERY_COST:
+            if self.child.balance < self.family.lottery_ticket_cost:
                 self.child.balance = 100
                 self.child.save(update_fields=["balance"])
 
@@ -153,9 +160,63 @@ class LotteryServiceTests(TestCase):
         self.assertEqual(state["tickets_remaining"], 0)
         with self.assertRaisesMessage(
             ValidationError,
-            "You have already used all three lottery tickets this week.",
+            "You have already used all 3 lottery tickets this week.",
         ):
             purchase_lottery_ticket(child=self.child)
+
+    def test_configured_cost_and_weekly_limit_are_enforced(self):
+        self.family.lottery_ticket_cost = 25
+        self.family.lottery_weekly_limit = 1
+        self.family.save(
+            update_fields=["lottery_ticket_cost", "lottery_weekly_limit"]
+        )
+
+        ticket = purchase_lottery_ticket(child=self.child, rng=random.Random(1))
+        revealed = reveal_lottery_ticket(ticket=ticket, child=self.child)
+        self.child.refresh_from_db()
+
+        state = lottery_state(self.child)
+        self.assertEqual(ticket.purchase_ledger_entry.delta, -25)
+        self.assertEqual(self.child.balance, 75 + revealed.applied_delta)
+        self.assertEqual(state["ticket_cost"], 25)
+        self.assertEqual(state["weekly_limit"], 1)
+        self.assertEqual(state["tickets_remaining"], 0)
+        with self.assertRaisesMessage(
+            ValidationError,
+            "You have already used all 1 lottery tickets this week.",
+        ):
+            purchase_lottery_ticket(child=self.child)
+
+    def test_family_switch_has_priority_over_child_switch(self):
+        self.family.lottery_enabled = False
+        self.family.save(update_fields=["lottery_enabled"])
+
+        state = lottery_state(self.child)
+
+        self.assertFalse(state["feature_enabled"])
+        self.assertFalse(state["is_visible"])
+        with self.assertRaisesMessage(ValidationError, "Lottery tickets are disabled."):
+            purchase_lottery_ticket(child=self.child)
+
+    def test_child_switch_disables_only_that_child(self):
+        self.child.lottery_enabled = False
+        self.child.save(update_fields=["lottery_enabled"])
+        other = ChildProfile.objects.create(name="Other", balance=100)
+
+        self.assertFalse(lottery_state(self.child)["feature_enabled"])
+        self.assertTrue(lottery_state(other)["feature_enabled"])
+
+    def test_open_ticket_remains_visible_and_can_be_revealed_after_disabling(self):
+        ticket = purchase_lottery_ticket(child=self.child, rng=random.Random(4))
+        self.family.lottery_enabled = False
+        self.family.save(update_fields=["lottery_enabled"])
+
+        state = lottery_state(self.child)
+        revealed = reveal_lottery_ticket(ticket=ticket, child=self.child)
+
+        self.assertTrue(state["is_visible"])
+        self.assertEqual(state["open_ticket"], ticket)
+        self.assertEqual(revealed.status, LotteryTicketStatus.REVEALED)
 
     def test_weekly_limit_resets_on_monday(self):
         monday = timezone.localdate() - timedelta(days=timezone.localdate().weekday())
@@ -236,6 +297,7 @@ class LotteryServiceTests(TestCase):
 )
 class LotteryReminderTests(TestCase):
     def setUp(self):
+        self.family = FamilySettings.load()
         self.child = ChildProfile.objects.create(
             name="Child",
             balance=50,
@@ -293,6 +355,16 @@ class LotteryReminderTests(TestCase):
         self.assertIsNotNone(self.reminder.handled_at)
         notify.assert_not_called()
 
+    @patch("economy.push.notify_lottery_reminder")
+    def test_reminder_respects_switches_and_configured_cost(self, notify):
+        self.family.lottery_ticket_cost = 60
+        self.family.save(update_fields=["lottery_ticket_cost"])
+
+        sent = send_due_lottery_reminders(current_time=self.now)
+
+        self.assertEqual(sent, [])
+        notify.assert_not_called()
+
     @patch("economy.push.webpush")
     def test_reminder_push_uses_theme_title_and_risk_copy(self, webpush):
         from economy.push import notify_lottery_reminder
@@ -309,6 +381,7 @@ class LotteryReminderTests(TestCase):
 
 class LotteryViewTests(TestCase):
     def setUp(self):
+        self.family = FamilySettings.load()
         self.child = ChildProfile.objects.create(
             name="Child",
             balance=80,
@@ -325,8 +398,30 @@ class LotteryViewTests(TestCase):
 
         self.assertContains(response, "Enchanted Prophecy")
         self.assertContains(response, "System reward")
-        self.assertContains(response, "Buy for 15 points")
+        self.assertContains(response, "Buy for 15 galleons")
         self.assertContains(response, "lose up to 50 points")
+
+    def test_dashboard_uses_configured_cost_and_limit(self):
+        self.family.lottery_ticket_cost = 22
+        self.family.lottery_weekly_limit = 5
+        self.family.save(
+            update_fields=["lottery_ticket_cost", "lottery_weekly_limit"]
+        )
+
+        response = self.client.get(reverse("child_dashboard"))
+
+        self.assertContains(response, "Buy for 22 galleons")
+        self.assertContains(response, "Tickets left this week: 5 of 5.")
+        self.assertContains(response, "It costs 22 earned galleons.")
+
+    def test_disabled_lottery_is_hidden_without_an_open_ticket(self):
+        self.family.lottery_enabled = False
+        self.family.save(update_fields=["lottery_enabled"])
+
+        response = self.client.get(reverse("child_dashboard"))
+
+        self.assertNotContains(response, "Enchanted Prophecy")
+        self.assertNotContains(response, 'data-lottery-card')
 
     def test_all_seven_themes_have_distinct_lottery_titles(self):
         with override("en"):

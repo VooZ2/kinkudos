@@ -9,6 +9,7 @@ from django.utils.translation import gettext as _
 
 from .models import (
     ChildProfile,
+    FamilySettings,
     LedgerKind,
     LotteryReminder,
     LotteryTicket,
@@ -21,8 +22,6 @@ from .services import (
     reward_requests_blocked,
 )
 
-LOTTERY_COST = 15
-LOTTERY_WEEKLY_LIMIT = 3
 LOTTERY_JACKPOT_AFTER = 11
 
 
@@ -102,7 +101,11 @@ def _draw_board(prize_amount, rng):
     return values
 
 
-def lottery_state(child, current_date=None):
+def lottery_state(child, current_date=None, family_settings=None):
+    family_settings = family_settings or FamilySettings.load()
+    ticket_cost = family_settings.lottery_ticket_cost
+    weekly_limit = family_settings.lottery_weekly_limit
+    feature_enabled = family_settings.lottery_enabled and child.lottery_enabled
     week_start = lottery_week_start(current_date)
     tickets_used = child.lottery_tickets.filter(week_start=week_start).count()
     open_ticket = child.lottery_tickets.filter(
@@ -111,18 +114,24 @@ def lottery_state(child, current_date=None):
     block_reason = ""
     if open_ticket:
         block_reason = "open"
-    elif tickets_used >= LOTTERY_WEEKLY_LIMIT:
+    elif not feature_enabled:
+        block_reason = "disabled"
+    elif tickets_used >= weekly_limit:
         block_reason = "weekly_limit"
     elif assigned_tasks_block_rewards(child):
         block_reason = "assigned_tasks"
     elif reward_requests_blocked(child):
         block_reason = "credit_paused"
-    elif child.balance < LOTTERY_COST:
+    elif child.balance < ticket_cost:
         block_reason = "balance"
     return {
         "open_ticket": open_ticket,
         "tickets_used": tickets_used,
-        "tickets_remaining": max(LOTTERY_WEEKLY_LIMIT - tickets_used, 0),
+        "tickets_remaining": max(weekly_limit - tickets_used, 0),
+        "ticket_cost": ticket_cost,
+        "weekly_limit": weekly_limit,
+        "feature_enabled": feature_enabled,
+        "is_visible": feature_enabled or bool(open_ticket),
         "can_purchase": not block_reason,
         "block_reason": block_reason,
         "week_start": week_start,
@@ -139,7 +148,11 @@ def purchase_lottery_ticket(*, child, rng=None, current_date=None):
     state = lottery_state(locked_child, current_date)
     errors = {
         "open": _("Finish your open lottery ticket before buying another."),
-        "weekly_limit": _("You have already used all three lottery tickets this week."),
+        "disabled": _("Lottery tickets are disabled."),
+        "weekly_limit": _(
+            "You have already used all %(limit)s lottery tickets this week."
+        )
+        % {"limit": state["weekly_limit"]},
         "assigned_tasks": _(
             "Complete the assigned tasks before buying a lottery ticket."
         ),
@@ -147,8 +160,9 @@ def purchase_lottery_ticket(*, child, rng=None, current_date=None):
             "Lottery tickets are paused until your point balance improves."
         ),
         "balance": _(
-            "A lottery ticket can be bought only with 15 points you have earned."
-        ),
+            "A lottery ticket can be bought only with %(cost)s points you have earned."
+        )
+        % {"cost": state["ticket_cost"]},
     }
     if state["block_reason"]:
         raise ValidationError(errors[state["block_reason"]])
@@ -162,7 +176,7 @@ def purchase_lottery_ticket(*, child, rng=None, current_date=None):
     )
     purchase_entry = post_ledger_entry(
         child=locked_child,
-        delta=-LOTTERY_COST,
+        delta=-state["ticket_cost"],
         kind=LedgerKind.LOTTERY,
         description=_("Lottery ticket"),
         source_id=ticket.pk,
@@ -235,9 +249,13 @@ def send_due_lottery_reminders(*, current_time=None, rng=None):
     rng = rng or random.SystemRandom()
     local_date = timezone.localtime(current_time).date()
     week_start = lottery_week_start(local_date)
+    family_settings = FamilySettings.load()
+    if not family_settings.lottery_enabled:
+        return []
     child_ids = (
         ChildProfile.objects.filter(
             is_active=True,
+            lottery_enabled=True,
             push_subscriptions__isnull=False,
         )
         .distinct()
@@ -261,7 +279,7 @@ def send_due_lottery_reminders(*, current_time=None, rng=None):
                 continue
             child = ChildProfile.objects.select_for_update().get(pk=child_id)
             eligible = (
-                child.balance >= 50
+                child.balance >= max(50, family_settings.lottery_ticket_cost)
                 and not child.lottery_tickets.filter(week_start=week_start).exists()
                 and not assigned_tasks_block_rewards(child)
                 and not reward_requests_blocked(child)

@@ -159,14 +159,18 @@ def notify_birthday_award(award):
 
 
 def notify_lottery_reminder(child):
+    from .models import FamilySettings
+
+    ticket_cost = FamilySettings.load().lottery_ticket_cost
     _send(
         {
             "title": str(theme_text(child.theme, "lottery_title")),
             "body": str(
                 _(
-                    "You have not bought a ticket this week. It costs 15 points "
+                    "You have not bought a ticket this week. It costs %(cost)s "
                     "and you may win, get nothing, or lose points."
                 )
+                % {"cost": _currency_amount(ticket_cost, child)}
             ),
             "url": "/vaikas/mano/#prizai",
             "tag": f"lottery-reminder-{child.pk}",

@@ -104,28 +104,31 @@
 <section id="prizai" class="content-section">
   <div class="section-heading"><p class="eyebrow">{% translate "Choose a reward" %}</p><h2>{{ child.theme|theme_text:"nav_rewards" }}</h2></div>
   {% if assigned_tasks_block_rewards %}<div class="credit-warning assigned-task-warning"><svg class="action-icon"><use href="#icon-info"></use></svg><p>{{ child.theme|theme_text:"assigned_reward_block" }}</p></div>{% elif credit_reward_requests_blocked %}<div class="credit-warning"><svg class="action-icon"><use href="#icon-info"></use></svg><p>{% translate "New reward requests are paused because half of the available credit has been used. Earn more points to unlock them." %}</p></div>{% endif %}
+  {% if lottery.is_visible %}
   <article class="system-lottery-card" data-lottery-card>
     <div class="lottery-card-art" aria-hidden="true"><span>?</span><span>?</span><span>?</span></div>
     <div class="lottery-card-copy">
       <p class="lottery-system-label">{% translate "System reward" %}</p>
       <h3>{{ child.theme|theme_text:"lottery_title" }}</h3>
-      <p class="lottery-price">15 {{ 15|currency_unit:child.theme }}</p>
+      <p class="lottery-price">{{ lottery.ticket_cost }} {{ lottery.ticket_cost|currency_unit:child.theme }}</p>
       <p>{% translate "You may win up to 150 points, get nothing, or lose up to 50 points." %}</p>
       <p class="lottery-weekly-status">
-        {% blocktranslate with remaining=lottery.tickets_remaining %}Tickets left this week: {{ remaining }} of 3.{% endblocktranslate %}
+        {% blocktranslate with remaining=lottery.tickets_remaining limit=lottery.weekly_limit %}Tickets left this week: {{ remaining }} of {{ limit }}.{% endblocktranslate %}
       </p>
     </div>
     <div class="lottery-card-action">
       {% if lottery.open_ticket %}
         <button class="button button-primary" type="button" data-open-dialog="lottery-ticket-dialog">{% translate "Continue scratching" %}</button>
       {% elif lottery.can_purchase %}
-        <button class="button button-primary" type="button" data-open-dialog="lottery-purchase-dialog">{% translate "Buy for 15 points" %}</button>
+        <button class="button button-primary" type="button" data-open-dialog="lottery-purchase-dialog">
+          {% blocktranslate with cost=lottery.ticket_cost unit=lottery.ticket_cost|currency_unit:child.theme %}Buy for {{ cost }} {{ unit }}{% endblocktranslate %}
+        </button>
       {% else %}
         <button class="button button-secondary" type="button" disabled>
           {% if lottery.block_reason == "weekly_limit" %}
             {% translate "Weekly limit reached" %}
           {% elif lottery.block_reason == "balance" %}
-            {% translate "You need 15 earned points" %}
+            {% blocktranslate with cost=lottery.ticket_cost unit=lottery.ticket_cost|currency_unit:child.theme %}You need {{ cost }} earned {{ unit }}{% endblocktranslate %}
           {% else %}
             {% translate "Currently unavailable" %}
           {% endif %}
@@ -139,11 +142,13 @@
     <h2>{{ child.theme|theme_text:"lottery_title" }}</h2>
     <div class="lottery-risk-warning">
       <strong>{% translate "This ticket is a game of chance." %}</strong>
-      <p>{% translate "It costs 15 earned points. You may win up to 150 points, get nothing, or lose up to 50 points. The result cannot reduce your balance below your credit limit." %}</p>
+      <p>{% blocktranslate with cost=lottery.ticket_cost unit=lottery.ticket_cost|currency_unit:child.theme %}It costs {{ cost }} earned {{ unit }}. You may win up to 150 points, get nothing, or lose up to 50 points. The result cannot reduce your balance below your credit limit.{% endblocktranslate %}</p>
     </div>
     <form method="post" action="{% url 'child_purchase_lottery_ticket' %}" class="stack-form">
       {% csrf_token %}
-      <button class="button button-primary" type="submit">{% translate "Buy ticket for 15 points" %}</button>
+      <button class="button button-primary" type="submit">
+        {% blocktranslate with cost=lottery.ticket_cost unit=lottery.ticket_cost|currency_unit:child.theme %}Buy ticket for {{ cost }} {{ unit }}{% endblocktranslate %}
+      </button>
       <button class="button button-secondary" type="button" data-close-dialog>{% translate "Not now" %}</button>
     </form>
   </dialog>
@@ -182,6 +187,7 @@
         <p data-lottery-result-copy></p>
       </div>
     </dialog>
+  {% endif %}
   {% endif %}
   <div class="item-grid">{% for reward in rewards %}<article class="item-card reward-card"><span class="item-icon">{{ reward.icon|icon_symbol }}</span><div><h3>{{ reward.title }}</h3><p class="amount negative">−{{ reward.cost }} {{ reward.cost|currency_unit:child.theme }}</p></div>
   {% if reward.pk in pending_reward_ids %}<span class="status-pill">{% if child.theme == "blockville" %}{{ child.theme|theme_text:"reward_pending" }}{% else %}{% translate "Awaiting approval" %}{% endif %}</span>{% elif reward_requests_blocked %}<button class="button button-secondary" type="button" disabled>{{ child.theme|theme_text:"reward" }}</button>{% elif not reward.is_affordable %}<button class="button button-secondary" type="button" disabled title="{% translate "Not enough points" %}">{% blocktranslate with amount=reward.missing_amount unit=reward.missing_amount|currency_unit:child.theme %}Need {{ amount }} {{ unit }} more{% endblocktranslate %}</button>{% else %}<form method="post" action="{% url 'child_request_reward' reward.pk %}" data-success-effect="reward">{% csrf_token %}<button class="button button-secondary" type="submit">{{ child.theme|theme_text:"reward" }}</button></form>{% endif %}</article>{% empty %}<p>{% translate "The rewards catalog is empty." %}</p>{% endfor %}</div>

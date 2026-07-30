@@ -590,7 +590,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.3.0")
+        self.assertContains(response, "v26.3.1")
         self.assertContains(response, 'href="/pakeitimai/"', html=False)
         self.assertContains(response, "TAŠKAI")
         self.assertContains(response, "Kredito limitas -100")
@@ -642,7 +642,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Complete tasks, earn points")
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
-        self.assertContains(response, "KinKudos · v26.3.0")
+        self.assertContains(response, "KinKudos · v26.3.1")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_public_pages_share_the_product_header(self):
@@ -833,7 +833,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.3.0")
+        self.assertContains(response, "v26.3.1")
         self.assertContains(response, "v0.12.2 BETA")
         self.assertContains(response, "v0.10.4 BETA")
         self.assertContains(response, "v0.10.1 BETA")
@@ -950,6 +950,7 @@ class AccessAndWorkflowTests(TestCase):
                 "vocative_name": "Updated Child",
                 "theme": "magic_academy",
                 "min_balance": "-80",
+                "lottery_enabled": "on",
                 "new_pin": "2468",
                 "confirm_pin": "2468",
             },
@@ -960,6 +961,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(self.child_one.name, "Updated Child")
         self.assertEqual(self.child_one.address_name, "Updated Child")
         self.assertEqual(self.child_one.min_balance, -80)
+        self.assertTrue(self.child_one.lottery_enabled)
         self.assertTrue(self.child_one.verify_pin("2468"))
         post_ledger_entry(
             child=self.child_one,
@@ -972,6 +974,23 @@ class AccessAndWorkflowTests(TestCase):
         self.child_one.refresh_from_db()
         self.assertFalse(self.child_one.is_active)
         self.assertTrue(self.child_one.ledger_entries.filter(description="Istorinis įrašas").exists())
+
+    def test_parent_can_disable_lottery_for_one_child(self):
+        self.client.login(username="tevai", password=self.parent_password)
+
+        self.client.post(
+            reverse("parent_edit_child_account", args=[self.child_one.pk]),
+            {
+                "name": self.child_one.name,
+                "vocative_name": self.child_one.vocative_name,
+                "min_balance": self.child_one.min_balance,
+                "new_pin": "",
+                "confirm_pin": "",
+            },
+        )
+
+        self.child_one.refresh_from_db()
+        self.assertFalse(self.child_one.lottery_enabled)
 
     def test_parent_can_assign_penalty_from_catalog(self):
         penalty = PenaltyTemplate.objects.create(
@@ -1288,10 +1307,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.3.0',
+            '/static/icons/favicon-32.png?v=26.3.1',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.3.0")
-        self.assertContains(home, "/static/js/app.js?v=26.3.0")
+        self.assertContains(home, "/static/css/app.css?v=26.3.1")
+        self.assertContains(home, "/static/js/app.js?v=26.3.1")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1299,11 +1318,11 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.3.0",
+            "/static/icons/icon-192.png?v=26.3.1",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.3.0")
-        self.assertContains(worker, 'kinkudos-app-shell-26.3.0')
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.3.1")
+        self.assertContains(worker, 'kinkudos-app-shell-26.3.1')
         self.assertEqual(worker["Service-Worker-Allowed"], "/")
         self.assertEqual(worker["Cache-Control"], "no-cache")

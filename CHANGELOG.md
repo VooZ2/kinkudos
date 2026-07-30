@@ -5,6 +5,21 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.3.1] - 2026-07-31
+
+### Changed
+
+- Parents can configure the lottery ticket price and per-child weekly purchase
+  limit, disable the lottery family-wide, and disable it for individual
+  children. The family-wide switch has priority, while an already-open ticket
+  remains available to finish.
+
+### Fixed
+
+- Task and reward catalog names plus parent action-dialog explanations now use
+  the shared interface font consistently.
+- The Lithuanian feedback email label uses shorter wording.
+
 ## [26.3.0] - 2026-07-30
 
 ### Added
@@ -13,9 +28,6 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
   reveal a silver 3×3 number grid, and receive one matching positive, negative,
   or no-prize result. Tickets persist until completed, are limited to three per
   Monday–Sunday week, and never apply a loss below the child's credit floor.
-- Standard draws use 50% positive, 30% negative, and 20% no-prize outcomes,
-  weighted toward −20…+67. A +101…+150 jackpot is guaranteed by the twelfth
-  ticket after eleven without one.
 - Eligible subscribed children who have at least 50 points and bought no ticket
   that week can receive one risk-transparent reminder at a random safe time in
   the second half of the week.

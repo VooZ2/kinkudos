@@ -63,8 +63,12 @@
       </button>
     </p>
     <p class="lottery-parent-status">
-      {% blocktranslate with used=child.lottery_tickets_used %}Lottery tickets this week: {{ used }} of 3{% endblocktranslate %}
-      {% if child.lottery_ticket_open %} · {% translate "one ticket is unfinished" %}{% endif %}
+      {% if child.lottery_feature_enabled or child.lottery_ticket_open %}
+        {% blocktranslate with used=child.lottery_tickets_used limit=child.lottery_weekly_limit %}Lottery tickets this week: {{ used }} of {{ limit }}{% endblocktranslate %}
+        {% if child.lottery_ticket_open %} · {% translate "one ticket is unfinished" %}{% endif %}
+      {% else %}
+        {% translate "Lottery tickets disabled" %}
+      {% endif %}
     </p>
     <div class="child-quick-actions" aria-label="{{ child.name }} {% translate "actions" %}">
       <button class="quick-action" type="button" data-open-dialog="task-{{ child.pk }}" aria-label="{% translate "Completed task" %}" title="{% translate "Completed task" %}">
@@ -460,6 +464,21 @@
           {{ family_preferences_form.birthday_points.label_tag }}
           {{ family_preferences_form.birthday_points }}
           <small class="helptext">{{ family_preferences_form.birthday_points.help_text }}</small>
+        </p>
+        <p class="settings-row checkbox-field">
+          {{ family_preferences_form.lottery_enabled }}
+          {{ family_preferences_form.lottery_enabled.label_tag }}
+          <small class="helptext">{{ family_preferences_form.lottery_enabled.help_text }}</small>
+        </p>
+        <p class="settings-row">
+          {{ family_preferences_form.lottery_ticket_cost.label_tag }}
+          {{ family_preferences_form.lottery_ticket_cost }}
+          <small class="helptext">{{ family_preferences_form.lottery_ticket_cost.help_text }}</small>
+        </p>
+        <p class="settings-row">
+          {{ family_preferences_form.lottery_weekly_limit.label_tag }}
+          {{ family_preferences_form.lottery_weekly_limit }}
+          <small class="helptext">{{ family_preferences_form.lottery_weekly_limit.help_text }}</small>
         </p>
       </div>
       <div class="settings-group">

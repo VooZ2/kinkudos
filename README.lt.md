@@ -2,7 +2,7 @@
 
 > Savarankiškai talpinama šeimos PWA, kasdienius darbus paverčianti bendrais pasiekimais.
 
-**Dabartinis leidimas:** 26.3.0 · **Kalbos:** lietuvių ir anglų
+**Dabartinis leidimas:** 26.3.1 · **Kalbos:** lietuvių ir anglų
 
 ## Kodėl KinKudos?
 
@@ -55,8 +55,9 @@ Ekrano nuotraukose naudojami išgalvoti demonstraciniai duomenys.
   taupymo tikslai, kiekvieno vaiko kredito limitas, dovanos ir gimtadienio
   taškai.
 - **Prie temos pritaikyta nutrinama loterija** su aiškiomis laimėjimo ir
-  praradimo tikimybėmis, pirkimu tik už uždirbtus taškus, savaitės limitu,
-  išliekančiais bilietais ir tėvams matoma taškų istorija.
+  praradimo tikimybėmis, keičiama pirkimo kaina bei savaitės limitu, bendrais
+  ir kiekvieno vaiko valdikliais, išliekančiais bilietais ir tėvams matoma
+  taškų istorija.
 - **Privačios darbų nuotraukos**, kurios sumažinamos, konvertuojamos į WebP ir
   prieš saugojimą išvalomos nuo EXIF metaduomenų.
 - **Įdiegiama PWA** su atskirais kiekvieno įrenginio kalbos, garso ir

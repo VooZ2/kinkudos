@@ -43,6 +43,7 @@ rewards, themes). Cross-child access is forbidden.
 ## Core data
 **FamilySettings** — singleton: family display name, currency name, default
 per-child negative balance floor, photo-bonus points, birthday points,
+family-wide lottery availability, ticket price and weekly purchase limit,
 evidence/screenshot retention periods, password-recovery code hash. Not a
 source of app versioning or general PWA configuration.
 
@@ -90,20 +91,24 @@ reason and immediately creates the corresponding ledger entry.
 child can cancel their own request while pending. Approval checks the
 resulting balance against that child's floor.
 
-**LotteryTicket** — built-in, non-parent-configurable system reward. A purchase
-atomically deducts 15 earned points and stores a server-generated 3×3 board
-with a preselected positive, negative, or no-prize result. Only one ticket may
-remain open per child, at most three may be purchased per Monday–Sunday week,
-and a negative reveal is clamped to the child's balance floor. Purchase and
-reveal use separate append-only ledger entries. The standard 50/30/20 outcome
-draw is overridden only by the per-child jackpot guarantee after eleven
-tickets without a +101…+150 result.
+**LotteryTicket** — built-in system reward with a family-configurable purchase
+price and per-child Monday–Sunday purchase limit. A family-wide master switch
+has priority over the per-child availability switch. Disabling the lottery
+blocks new purchases and reminders, while an already-open ticket remains
+available to finish. A purchase atomically deducts the configured number of
+earned points and stores a server-generated 3×3 board with a preselected
+positive, negative, or no-prize result. Only one ticket may remain open per
+child, and a negative reveal is clamped to the child's balance floor. Purchase
+and reveal use separate append-only ledger entries. The standard 50/30/20
+outcome draw is overridden only by the per-child jackpot guarantee after
+eleven tickets without a +101…+150 result.
 
 **LotteryReminder** — per-child weekly schedule and delivery audit for the
 optional Web Push reminder. A dedicated idempotent management command checks
 due reminders every 30 minutes. It sends at most once in the second half of a
-week, only when the subscribed child has at least 50 points, has bought no
-ticket that week, and is not blocked from rewards.
+week, only when the lottery is available to that child, the subscribed child
+has at least 50 points and enough for the configured ticket price, has bought
+no ticket that week, and is not blocked from rewards.
 
 **Proposal** — a child proposes a new shared reward or personal savings
 goal; a parent approves/rejects and sets the final cost.

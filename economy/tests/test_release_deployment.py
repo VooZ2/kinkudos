@@ -79,7 +79,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.3.0",
+                    "26.3.1",
                     str(root),
                 ],
                 env=environment,

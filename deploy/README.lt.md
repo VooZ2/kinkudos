@@ -56,7 +56,7 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 norimo diegti leidimo reikšmėmis:
 
 ```bash
-version=26.3.0
+version=26.3.1
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -166,7 +166,7 @@ saugomos privačiai WebP formatu; pasibaigus nustatytam terminui automatiškai
 KinKudos darbų nuotraukas ir išspręstų atsiliepimų ekrano nuotraukas saugo
 tėvų nustatymuose pasirinktą laiką. Sistema taip pat kas 30 minučių patikrina,
 ar jau reikia siųsti savaitinį loterijos priminimą. `systemd` naudojančiame
-Docker serveryje po diegimo arba atnaujinimo į 26.3.0 įjunkite abu laikmačius:
+Docker serveryje po diegimo arba atnaujinimo į 26.3.1 įjunkite abu laikmačius:
 
 ```bash
 cd /kelias/iki/kinkudos/deploy

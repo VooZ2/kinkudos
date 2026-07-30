@@ -2,7 +2,7 @@
 
 > A self-hosted family PWA that turns everyday tasks into shared progress.
 
-**Current release:** 26.3.0 · **Languages:** English and Lithuanian<br>
+**Current release:** 26.3.1 · **Languages:** English and Lithuanian<br>
 [Lietuviška README versija](README.lt.md)
 
 ## Why KinKudos?
@@ -55,9 +55,9 @@ The screenshots use fictional demonstration data.
 - **Parent-controlled family economy** with tasks, approvals, rewards,
   penalties, savings goals, per-child credit limits, gifts, and birthday
   awards.
-- **Theme-aware scratch lottery** with transparent win/loss odds, earned-point
-  purchases, weekly limits, persistent tickets, and parent-visible ledger
-  history.
+- **Theme-aware scratch lottery** with transparent win/loss odds, configurable
+  earned-point purchases and weekly limits, family and per-child controls,
+  persistent tickets, and parent-visible ledger history.
 - **Private photo evidence** that is resized, converted to WebP, and stripped
   of EXIF metadata before storage.
 - **Installable PWA** with per-device language, sound, and optional Web Push

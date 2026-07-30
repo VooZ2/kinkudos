@@ -32,6 +32,9 @@ class ParentSettingsTests(TestCase):
                 "family_name": "Aurora",
                 "photo_bonus_points": 2,
                 "birthday_points": 10,
+                "lottery_enabled": "on",
+                "lottery_ticket_cost": 25,
+                "lottery_weekly_limit": 4,
                 "evidence_retention_days": 30,
                 "feedback_screenshot_retention_days": 90,
             },
@@ -41,7 +44,11 @@ class ParentSettingsTests(TestCase):
             response,
             f"{reverse('parent_dashboard')}#parent-settings",
         )
-        self.assertEqual(FamilySettings.load().family_name, "Aurora")
+        family = FamilySettings.load()
+        self.assertEqual(family.family_name, "Aurora")
+        self.assertTrue(family.lottery_enabled)
+        self.assertEqual(family.lottery_ticket_cost, 25)
+        self.assertEqual(family.lottery_weekly_limit, 4)
 
     def test_family_settings_use_clear_labels_and_group_dividers(self):
         self.client.force_login(self.admin)
@@ -49,8 +56,49 @@ class ParentSettingsTests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
 
         self.assertContains(response, "Points for a task photo")
+        self.assertContains(response, "Lottery ticket price")
+        self.assertContains(response, "Lottery tickets per child each week")
         self.assertContains(response, "Keep feedback images for")
         self.assertContains(response, 'class="catalog-divider"', count=5)
+
+    def test_family_lottery_switch_can_be_disabled(self):
+        self.client.force_login(self.admin)
+
+        self.client.post(
+            reverse("parent_update_family_preferences"),
+            {
+                "family_name": "",
+                "photo_bonus_points": 0,
+                "birthday_points": 0,
+                "lottery_ticket_cost": 15,
+                "lottery_weekly_limit": 3,
+                "evidence_retention_days": 30,
+                "feedback_screenshot_retention_days": 90,
+            },
+        )
+
+        self.assertFalse(FamilySettings.load().lottery_enabled)
+
+    def test_lottery_price_and_weekly_limit_must_be_positive(self):
+        self.client.force_login(self.admin)
+
+        self.client.post(
+            reverse("parent_update_family_preferences"),
+            {
+                "family_name": "",
+                "photo_bonus_points": 0,
+                "birthday_points": 0,
+                "lottery_enabled": "on",
+                "lottery_ticket_cost": 0,
+                "lottery_weekly_limit": 0,
+                "evidence_retention_days": 30,
+                "feedback_screenshot_retention_days": 90,
+            },
+        )
+
+        family = FamilySettings.load()
+        self.assertEqual(family.lottery_ticket_cost, 15)
+        self.assertEqual(family.lottery_weekly_limit, 3)
 
     @patch("economy.views.verify_smtp")
     def test_admin_password_is_required_before_saving_smtp(self, verify):
@@ -133,7 +181,8 @@ class ParentSettingsTests(TestCase):
 
         response = self.client.get(reverse("parent_dashboard"))
 
-        self.assertContains(response, 'class="settings-row"', count=5, html=False)
+        self.assertContains(response, 'class="settings-row"', count=7, html=False)
+        self.assertContains(response, 'class="settings-row checkbox-field"', count=1)
         self.assertContains(
             response,
             '<small class="helptext">Shown in family-facing headings and messages.</small>',

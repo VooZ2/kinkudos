@@ -453,12 +453,24 @@ class FeedbackStatusForm(StyledFormMixin, forms.Form):
 
 
 class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["lottery_ticket_cost"].widget.attrs.update(
+            {"min": 1, "max": 10000}
+        )
+        self.fields["lottery_weekly_limit"].widget.attrs.update(
+            {"min": 1, "max": 100}
+        )
+
     class Meta:
         model = FamilySettings
         fields = [
             "family_name",
             "photo_bonus_points",
             "birthday_points",
+            "lottery_enabled",
+            "lottery_ticket_cost",
+            "lottery_weekly_limit",
             "evidence_retention_days",
             "feedback_screenshot_retention_days",
         ]
@@ -466,6 +478,9 @@ class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
             "family_name": _("Family name"),
             "photo_bonus_points": _("Points for a task photo"),
             "birthday_points": _("Birthday points"),
+            "lottery_enabled": _("Enable lottery tickets"),
+            "lottery_ticket_cost": _("Lottery ticket price"),
+            "lottery_weekly_limit": _("Lottery tickets per child each week"),
             "evidence_retention_days": _("Keep task photos for"),
             "feedback_screenshot_retention_days": _("Keep feedback images for"),
         }
@@ -476,6 +491,15 @@ class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
             ),
             "birthday_points": _(
                 "Each child receives this many points once a year on their birthday. Use 0 to disable birthday gifts."
+            ),
+            "lottery_enabled": _(
+                "Turn lottery tickets on or off for every child."
+            ),
+            "lottery_ticket_cost": _(
+                "The new price is used for every future ticket purchase."
+            ),
+            "lottery_weekly_limit": _(
+                "The limit resets every Monday. The default is 3."
             ),
             "evidence_retention_days": _(
                 "Pending and revision-requested task photos are never removed."
@@ -764,6 +788,13 @@ class ChildEditForm(StyledFormMixin, forms.Form):
         help_text=_("Used in Lithuanian greetings. Leave blank to generate it automatically."),
     )
     min_balance = forms.IntegerField(label=_("Credit"), max_value=0)
+    lottery_enabled = forms.BooleanField(
+        label=_("Enable lottery tickets for this child"),
+        required=False,
+        help_text=_(
+            "The family-wide lottery switch must also be enabled."
+        ),
+    )
     birth_date = forms.DateField(
         label=_("Birthday"),
         required=False,
@@ -794,6 +825,7 @@ class ChildEditForm(StyledFormMixin, forms.Form):
                 "name": child.name,
                 "vocative_name": child.vocative_name,
                 "min_balance": child.min_balance,
+                "lottery_enabled": child.lottery_enabled,
                 "birth_date": child.birth_date,
             },
         )
@@ -820,7 +852,8 @@ class ChildEditForm(StyledFormMixin, forms.Form):
         self.child.name = self.cleaned_data["name"]
         self.child.vocative_name = self.cleaned_data["vocative_name"].strip()
         self.child.min_balance = self.cleaned_data["min_balance"]
-        update_fields = ["name", "vocative_name", "min_balance"]
+        self.child.lottery_enabled = self.cleaned_data["lottery_enabled"]
+        update_fields = ["name", "vocative_name", "min_balance", "lottery_enabled"]
         if requested_birth_date != previous_birth_date:
             self.child.birth_date = requested_birth_date
             self.child.birth_date_initialized = True
