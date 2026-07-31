@@ -5,6 +5,10 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+### Added
+
+- Public English-first user documentation now covers getting started, parent workflows, settings, security, maintenance, and quick help; Lithuanian equivalents are available from every section.
+
 ## [26.4.9] - 2026-07-31
 
 ### Fixed

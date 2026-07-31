@@ -88,6 +88,11 @@ KinKudos skirta diegti nuosavame serveryje, už pasirinkto HTTPS reverse proxy.
 
 Plačiau skaitykite [architektūros ir saugumo apžvalgoje](docs/ARCHITECTURE.md).
 
+## 📚 Kaip naudotis KinKudos
+
+- **[Atidaryti dokumentaciją](docs/index.lt.md)** — pradėkite nuo pirmų 15
+  minučių, tada raskite tėvų vadovus, saugumą, priežiūrą ir pagalbą.
+
 ## ⚡ Greitas diegimas
 
 KinKudos diegiama su Docker Compose ARM64 arba AMD64 Linux serveryje.

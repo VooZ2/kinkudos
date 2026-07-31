@@ -88,6 +88,11 @@ KinKudos is designed to run on your own server, behind your own HTTPS reverse pr
 
 Read more in the [architecture and security overview](docs/ARCHITECTURE.md).
 
+## 📚 Using KinKudos
+
+- **[Open the documentation](docs/index.md)** — start with the first 15
+  minutes, then find parent guidance, security, maintenance, and help.
+
 ## ⚡ Quick setup
 
 KinKudos is deployed with Docker Compose on an ARM64 or AMD64 Linux server.

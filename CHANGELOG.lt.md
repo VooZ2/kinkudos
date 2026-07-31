@@ -7,6 +7,10 @@ schema.
 
 ## [Unreleased]
 
+### Pridėta
+
+- Vieša angliška naudotojo dokumentacija dabar apima pradžią, tėvų veiksmus, nustatymus, saugumą, priežiūrą ir greitą pagalbą; iš kiekvienos skilties pasiekiami lietuviški atitikmenys.
+
 ## [26.4.9] - 2026-07-31
 
 ### Pataisyta
