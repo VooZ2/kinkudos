@@ -740,6 +740,13 @@ class AccessAndWorkflowTests(TestCase):
                 self.assertNotContains(response, "Aurora šeima")
                 self.assertNotContains(response, 'class="app-version"', html=False)
 
+    @override_settings(EMAIL_ENABLED=True)
+    def test_auth_pages_use_the_shared_auth_design_shell(self):
+        for url_name in ("parent_login", "password_reset", "password_reset_done"):
+            with self.subTest(url_name=url_name):
+                response = self.client.get(reverse(url_name))
+                self.assertContains(response, '<body class="auth-page theme-neutral">', html=False)
+
     def test_parent_history_is_collapsed_paginated_and_filterable(self):
         for index in range(12):
             post_ledger_entry(

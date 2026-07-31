@@ -37,6 +37,20 @@ class BackupAgentTests(TestCase):
             "example.invalid/family/kinkudos",
         )
 
+    def test_provider_uses_s3_repository_hostname(self):
+        self.assertEqual(
+            backup_agent.provider_from_repository(
+                "s3:https://s3.eu-test.backblazeb2.com/family/kinkudos"
+            ),
+            "backblaze_s3",
+        )
+        self.assertEqual(
+            backup_agent.provider_from_repository(
+                "s3:https://example.invalid/backblazeb2.com/family/kinkudos"
+            ),
+            "s3",
+        )
+
     def test_write_config_verifies_repository_and_keeps_secrets_out_of_result(self):
         with TemporaryDirectory() as directory:
             env_path = Path(directory) / "restic.env"

@@ -5,6 +5,14 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+### Changed
+
+- Landing, parent sign-in, and password-reset screens now share a lighter,
+  gradient-based visual design without additional image assets.
+- The GitHub README now offers a visual product overview, demo-first onboarding,
+  concise deployment guidance, and an optional VPS recommendation.
+- The child lottery card and purchase dialog now use the clearer “Lottery tickets” label.
+
 ## [26.4.6] - 2026-07-31
 
 ### Changed

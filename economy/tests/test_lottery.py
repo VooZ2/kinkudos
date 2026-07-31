@@ -396,11 +396,11 @@ class LotteryViewTests(TestCase):
         session["child_id"] = self.child.pk
         session.save()
 
-    def test_child_dashboard_shows_themed_system_reward_and_risk(self):
+    def test_child_dashboard_shows_themed_lottery_tickets_and_risk(self):
         response = self.client.get(reverse("child_dashboard"))
 
         self.assertContains(response, "Enchanted Prophecy")
-        self.assertContains(response, "System reward")
+        self.assertContains(response, "Lottery tickets")
         self.assertContains(response, "Buy for 15 galleons")
         self.assertContains(response, "lose up to 50 points")
 

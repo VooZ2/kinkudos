@@ -7,6 +7,14 @@ schema.
 
 ## [Unreleased]
 
+### Pakeista
+
+- Pagrindinis, tėvų prisijungimo ir slaptažodžio atkūrimo ekranai dabar turi
+  bendrą šviesesnį, CSS gradientais sukurtą dizainą be papildomų paveikslėlių.
+- GitHub README dabar pateikia vaizdinę produkto apžvalgą, kviečia pirmiausia
+  išbandyti demonstraciją, glaustai paaiškina diegimą ir nurodo pasirenkamą VPS alternatyvą.
+- Vaiko loterijos kortelėje ir pirkimo dialoge dabar rodoma aiškesnė „Loterijos bilietų“ etiketė.
+
 ## [26.4.6] - 2026-07-31
 
 ### Pakeista

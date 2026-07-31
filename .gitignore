@@ -17,6 +17,7 @@ backups/
 backup-state/
 
 # Maintainer-only local documentation
+AGENTS.md
 docs/TODO.lt.md
 docs/ORANGE_PI_INSTALL.md
 docs/ORANGE_PI_INSTALL.lt.md

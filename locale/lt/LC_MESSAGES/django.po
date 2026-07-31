@@ -1135,6 +1135,9 @@ msgstr "Loterijos bilietas"
 msgid "Lottery ticket price"
 msgstr "Loterijos bilieto kaina"
 
+msgid "Lottery tickets"
+msgstr "Loterijos bilietai"
+
 msgid "Lottery tickets are disabled."
 msgstr "Loterijos bilietai išjungti."
 
@@ -1977,9 +1980,6 @@ msgstr "Superherojų būstinė"
 
 msgid "Switch profile"
 msgstr "Keisti profilį"
-
-msgid "System reward"
-msgstr "Sisteminis prizas"
 
 msgid "Take from the chest"
 msgstr "Pasiimti iš skrynios"

@@ -15,6 +15,7 @@ from datetime import UTC, datetime, timedelta
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from urllib.parse import urlsplit
 
 STATE_PATH = Path(os.environ.get("KINKUDOS_BACKUP_STATE_PATH", "/state/status.json"))
 ENV_PATH = Path(os.environ.get("KINKUDOS_RESTIC_ENV_FILE", "/run/backup/restic.env"))
@@ -53,11 +54,14 @@ def read_env(path):
 def provider_from_repository(repository):
     if not repository or repository == "REPLACE_WITH_REPOSITORY":
         return ""
-    if "backblazeb2.com" in repository:
-        return "backblaze_s3"
     if repository.startswith("b2:"):
         return "backblaze_legacy"
     if repository.startswith("s3:"):
+        hostname = urlsplit(repository.removeprefix("s3:")).hostname
+        if hostname and (
+            hostname == "backblazeb2.com" or hostname.endswith(".backblazeb2.com")
+        ):
+            return "backblaze_s3"
         return "s3"
     return "custom"
 
