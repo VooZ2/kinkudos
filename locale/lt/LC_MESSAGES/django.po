@@ -728,7 +728,7 @@ msgid "Disabled"
 msgstr "Išjungta"
 
 msgid "Do not include passwords, PINs, or other private information."
-msgstr "Nerašykite slaptažodžių, PIN kodų ar kitos privačios informacijos."
+msgstr "Nerašykite slaptažodžių, PIN kodų ar privačių duomenų."
 
 msgid "Dream Enchantments"
 msgstr "Svajonių užkeitimai"
@@ -860,7 +860,7 @@ msgid "Family"
 msgstr "Šeima"
 
 msgid "Family accounts and application settings"
-msgstr "Šeimos paskyros ir programos nustatymai"
+msgstr "Paskyrų ir programos nustatymai"
 
 msgid "Family created."
 msgstr "Šeima sukurta."
@@ -1325,7 +1325,7 @@ msgid "Only paired devices can see child profiles or enter a child PIN."
 msgstr "Vaikų profilius matyti ir PIN įvesti gali tik susieti įrenginiai."
 
 msgid "Only screenshots from resolved feedback are removed automatically."
-msgstr "Automatiškai šalinamos tik išspręstų atsiliepimų ekrano nuotraukos."
+msgstr "Šalinamos tik išspręstų atsiliepimų nuotraukos"
 
 msgid "Open"
 msgstr "Neužbaigtas"
@@ -1991,7 +1991,7 @@ msgid "Tell the child what should be improved."
 msgstr "Nurodykite vaikui, ką reikia pataisyti."
 
 msgid "Tell us what is not working or what you would like to add."
-msgstr "Parašykite, kas neveikia arba ką norėtumėte pridėti."
+msgstr "Parašykite, kas neveikia ar ką norite pridėti."
 
 msgid "Temporarily locked"
 msgstr "Laikinai užrakinta"

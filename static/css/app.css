@@ -262,6 +262,11 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .decision-approve { color: var(--success); background: color-mix(in srgb, var(--success) 10%, var(--surface-solid)); }
 .decision-revise { color: var(--primary); background: color-mix(in srgb, var(--primary) 9%, var(--surface-solid)); }
 .decision-reject { color: var(--danger); background: color-mix(in srgb, var(--danger) 9%, var(--surface-solid)); }
+.compact-decision-button { width: 42px; height: 42px; border-radius: 13px; }
+.compact-decision-button .action-icon { width: 22px; height: 22px; }
+.dialog-decision-action { justify-self: end; }
+.workflow-card-button { justify-self: end; }
+.item-card > form.workflow-card-action { display: flex; width: 100%; margin: 0; justify-content: flex-end; }
 .task-decision-dialog .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 .task-decision-dialog .button .action-icon { width: 21px; height: 21px; }
 .inline-reject { display: flex; flex: 1; min-width: min(320px, 100%); gap: 8px; }
@@ -392,11 +397,10 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .task-response-status { color: var(--danger); font-size: .78rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
 .task-response-card p { margin: 4px 0 0; color: var(--muted); line-height: 1.45; overflow-wrap: anywhere; }
 .task-response-card > form { flex: 0 0 auto; margin-left: auto; }
-.task-response-acknowledge { min-height: 42px; padding: 8px 16px; }
+.task-response-acknowledge { flex: 0 0 auto; }
 @media (max-width: 640px) {
   .task-response-card { align-items: flex-start; flex-wrap: wrap; }
-  .task-response-card > form { width: 100%; margin-left: 35px; }
-  .task-response-acknowledge { width: 100%; }
+  .task-response-card > form { margin-left: auto; }
 }
 .photo-bonus { color: var(--success) !important; font-weight: 800; }
 .empty-state { max-width: 100%; margin: 0; overflow-wrap: anywhere; }
@@ -443,7 +447,9 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .feedback-actions form { display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 0; }
 .feedback-screenshot-button { flex: 0 0 44px; width: 44px; height: 44px; color: var(--primary); }
 .feedback-email-warning { margin: 0 0 18px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--accent) 10%, var(--surface-solid)); line-height: 1.45; }
+.feedback-description { margin-bottom: 10px; }
 .danger-warning { margin: 0 0 18px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--danger) 42%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--danger) 9%, var(--surface-solid)); line-height: 1.45; }
+.feedback-admin .danger-warning { margin-bottom: 14px; padding: 9px 11px; border-radius: 11px; background: color-mix(in srgb, var(--danger) 7%, var(--surface-solid)); font-size: .82rem; line-height: 1.4; overflow-wrap: anywhere; }
 .backup-panel { margin-top: 18px; }
 .settings-form { gap: 20px; }
 .settings-group { display: grid; gap: 0; }
@@ -472,6 +478,11 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .service-details dt::after { content: ":"; }
 .service-details dd { min-width: 0; margin: 0; color: var(--text); font-family: inherit; font-size: .9rem; font-weight: 650; line-height: 1.45; overflow-wrap: anywhere; }
 .backup-actions { justify-content: flex-start; }
+.device-pairing-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; align-items: end; }
+.device-pairing-actions form { display: contents; }
+.device-pairing-actions label { display: grid; grid-column: 1 / -1; gap: 7px; font-weight: 750; }
+.device-pairing-actions .button { width: 100%; height: 100%; min-height: 48px; display: grid; place-items: center; line-height: 1.2; }
+.device-pairing-actions.pairing-link-only .button { grid-column: 1 / -1; }
 .backup-audit { margin-top: 18px; }
 .backup-audit ul { padding-left: 20px; color: var(--muted); font-family: inherit; font-size: .86rem; line-height: 1.5; }
 .backup-dialog { width: min(620px, calc(100% - 24px)); max-height: calc(100dvh - 24px); overflow-y: auto; }

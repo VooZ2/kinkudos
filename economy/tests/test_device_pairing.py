@@ -55,6 +55,15 @@ class DevicePairingTests(TestCase):
         self.assertRedirects(response, reverse("child_dashboard"))
         self.assertEqual(self.client.session["child_device_id"], device.pk)
 
+    def test_pairing_actions_share_a_two_column_row(self):
+        self.client.force_login(self.parent)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, 'class="device-pairing-actions"', html=False)
+        self.assertContains(response, "Allow children on this device")
+        self.assertContains(response, "Create private pairing link")
+
     def test_pairing_link_is_single_use_and_expires(self):
         link, raw_token = DevicePairingLink.issue(created_by=self.parent)
 

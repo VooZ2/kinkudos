@@ -21,6 +21,8 @@ from economy.models import (
     LedgerEntry,
     LedgerKind,
     PenaltyTemplate,
+    Proposal,
+    ProposalType,
     PushSubscription,
     RequestStatus,
     Reward,
@@ -110,6 +112,47 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, "Child One")
         self.assertNotContains(response, "Sibling private entry")
         self.assertNotContains(response, ">999<", html=True)
+
+    def test_child_request_workflows_use_state_colored_icon_actions(self):
+        response = self.login_child(self.child_one, "1234")
+
+        self.assertContains(
+            response,
+            'class="decision-icon-button decision-approve workflow-card-button"',
+            html=False,
+        )
+        self.assertContains(response, 'class="workflow-card-action"', html=False)
+        self.assertContains(response, 'href="#icon-check-circle"', html=False)
+        self.assertNotContains(response, ">Pateikti</button>", html=False)
+
+    def test_parent_proposal_decisions_use_one_icon_row_and_dialogs(self):
+        proposal = Proposal.objects.create(
+            child=self.child_one,
+            proposal_type=ProposalType.GOAL,
+            title="Dviratis",
+            suggested_cost=500,
+        )
+        self.client.force_login(self.parent)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(
+            response,
+            f'data-open-dialog="approve-proposal-{proposal.pk}"',
+            html=False,
+        )
+        self.assertContains(
+            response,
+            f'data-open-dialog="reject-proposal-{proposal.pk}"',
+            html=False,
+        )
+        self.assertContains(
+            response,
+            f'id="proposal-final-cost-{proposal.pk}"',
+            html=False,
+        )
+        self.assertNotContains(response, ">Patvirtinti</button>", html=False)
+        self.assertNotContains(response, ">Atmesti</button>", html=False)
 
     def test_child_dashboard_shows_only_five_latest_history_entries(self):
         for index in range(7):
@@ -588,7 +631,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.4.0")
+        self.assertContains(response, "v26.4.1")
         self.assertContains(response, 'href="/pakeitimai/"', html=False)
         self.assertContains(response, "TAŠKAI")
         self.assertContains(response, "Kredito limitas: -100")
@@ -624,6 +667,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, "El. pašto nustatymai")
         self.assertNotContains(response, "El. pašto pranešimai")
         self.assertContains(response, ">Atsarginės kopijos<", html=False)
+        self.assertContains(response, ">Paskyrų ir programos nustatymai<", html=False)
         self.assertNotContains(response, "Dabartinis jūsų tėvų paskyros slaptažodis")
         self.assertNotContains(response, '<label for="history-child">', html=False)
         self.assertContains(response, ">Išsaugoti</button>", html=False)
@@ -650,7 +694,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Complete tasks, earn points")
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
-        self.assertContains(response, "KinKudos · v26.4.0")
+        self.assertContains(response, "KinKudos · v26.4.1")
         self.assertContains(response, "https://github.com/VooZ2/kinkudos")
         self.assertContains(response, 'href="#icon-github"', html=False)
         self.assertNotContains(response, 'class="app-version"', html=False)
@@ -843,7 +887,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.4.0")
+        self.assertContains(response, "v26.4.1")
         self.assertContains(response, "v0.12.2 BETA")
         self.assertContains(response, "v0.10.4 BETA")
         self.assertContains(response, "v0.10.1 BETA")
@@ -1317,10 +1361,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.4.0',
+            '/static/icons/favicon-32.png?v=26.4.1',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.4.0")
-        self.assertContains(home, "/static/js/app.js?v=26.4.0")
+        self.assertContains(home, "/static/css/app.css?v=26.4.1")
+        self.assertContains(home, "/static/js/app.js?v=26.4.1")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1328,11 +1372,11 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.4.0",
+            "/static/icons/icon-192.png?v=26.4.1",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.4.0")
-        self.assertContains(worker, 'kinkudos-app-shell-26.4.0')
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.4.1")
+        self.assertContains(worker, 'kinkudos-app-shell-26.4.1')
         self.assertEqual(worker["Service-Worker-Allowed"], "/")
         self.assertEqual(worker["Cache-Control"], "no-cache")

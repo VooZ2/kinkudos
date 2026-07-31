@@ -99,7 +99,7 @@ class FeedbackWorkflowTests(TestCase):
         self.assertEqual(report.reporter_role, "parent")
         self.assertEqual(report.family_name, "Aurora")
         self.assertEqual(report.page_path, "/tevai/")
-        self.assertEqual(report.app_version, "26.4.0")
+        self.assertEqual(report.app_version, "26.4.1")
         self.assertEqual(report.user_agent, "Feedback Browser")
         self.assertIsNotNone(report.email_notified_at)
         self.assertEqual(len(mail.outbox), 1)
@@ -168,6 +168,8 @@ class FeedbackWorkflowTests(TestCase):
 
         self.assertEqual(content.count('class="parent-version-footer"'), 1)
         self.assertNotIn('class="site-footer"', content)
+        self.assertNotIn("Report a KinKudos bug", content)
+        self.assertIn('href="https://github.com/VooZ2/kinkudos"', content)
 
     @patch("economy.views.send_mail", side_effect=RuntimeError("SMTP unavailable"))
     def test_smtp_failure_does_not_lose_feedback(self, _send_mail):
@@ -360,3 +362,5 @@ class FeedbackWorkflowTests(TestCase):
             css,
         )
         self.assertIn("max-height: calc(100dvh - 24px)", css)
+        self.assertIn(".feedback-description { margin-bottom: 10px; }", css)
+        self.assertIn(".feedback-admin .danger-warning", css)

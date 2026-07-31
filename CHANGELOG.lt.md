@@ -7,6 +7,27 @@ schema.
 
 ## [Unreleased]
 
+## [26.4.1] - 2026-07-31
+
+### Pakeista
+
+- Tėvų ir vaikų prašymų srautuose patvirtinimo, atlikimo, taisymo, atmetimo,
+  atšaukimo, prizo prašymo bei prizo ar tikslo siūlymo veiksmai rodomi
+  nuosekliomis ikonomis be teksto.
+- Sutrumpinti ir patikslinti lietuviški nustatymų bei atsiliepimų tekstai.
+- Diegimo reikalavimuose nebeliko konkretaus prižiūrėtojo registro prisijungimo
+  komandos ir su vienu leidimu susieto migracijos pranešimo.
+
+### Pataisyta
+
+- Veiksmų ikonų spalvos atitinka jų būseną, o tėvų ir vaikų ekranuose ikonos
+  išlieka vienoje eilėje.
+- Vaikų įrenginio susiejimo veiksmai telpa vienoje adaptyvioje dviejų stulpelių
+  eilėje ir nebesidengia.
+- Tėvų atsiliepimų skiltyje rodomas kompaktiškas privatumo įspėjimas, o vietoje
+  didelio pasikartojančio klaidos pranešimo mygtuko naudojama esama GitHub
+  nuoroda poraštėje.
+
 ## [26.4.0] - 2026-07-31
 
 ### Pridėta

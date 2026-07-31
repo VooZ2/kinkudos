@@ -30,15 +30,15 @@ Reikalavimai:
 - prieiga prie pasirinkto leidimo archyvo ir jo SHA256 kontrolinės sumos. Jei
   privačiai repozitorijai naudojamas GitHub CLI, jame turi būti prijungta tą
   repozitoriją galinti skaityti paskyra;
-- kol konteinerio paketas privatus, prieiga prie `ghcr.io/vooz2/kinkudos`:
-  `gh auth token | docker login ghcr.io -u VooZ2 --password-stdin`.
+- prieiga prie paskelbto konteinerio paketo. Jei paketas privatus, prie
+  „Docker“ prisijunkite „GitHub“ paskyra, turinčia teisę jį parsisiųsti.
 
 Naujame tuščiame diegimo šakniniame kataloge parsisiųskite ir patikrinkite
 leidimą, jo kodą palikite kaip `app`, iškelkite diegimo katalogą ir paleiskite
 vedlį:
 
 ```bash
-version=26.4.0
+version=26.4.1
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -72,7 +72,7 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 norimo diegti leidimo reikšmėmis:
 
 ```bash
-version=26.4.0
+version=26.4.1
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -98,11 +98,6 @@ veikiančios duomenų bazės kopiją, tik tada perjungia programą, patikrina
 konteinerio būklę ir atnaujina versijuojamus `deploy` valdymo scenarijus.
 Vietinis `deploy/.env`, šeimos duomenys, nuotraukos, kopijos ir paslaptys
 nekeičiami bei nepatenka į leidimo archyvą.
-
-Atnaujinus į 26.4.0 esami tėvai, vaikai, PIN, taškai ir šeimos duomenys išlieka.
-Kiekvieną vaiko naršyklę arba įdiegtą PWA tėvai turės vieną kartą susieti, tik
-tada joje vėl bus galima pasirinkti vaiką. Senos vaikų „Web Push“ prenumeratos
-sąmoningai pašalinamos, todėl po susiejimo pranešimus reikės įjungti iš naujo.
 
 ## Reverse proxy ir kliento IP
 
@@ -247,7 +242,7 @@ automatiškai šalinamos tik išspręstų atsiliepimų nuotraukos.
 KinKudos darbų nuotraukas ir išspręstų atsiliepimų ekrano nuotraukas saugo
 tėvų nustatymuose pasirinktą laiką. Sistema taip pat kas 30 minučių patikrina,
 ar jau reikia siųsti savaitinį loterijos priminimą. `systemd` naudojančiame
-Docker serveryje po diegimo arba atnaujinimo į 26.4.0 įjunkite abu laikmačius:
+Docker serveryje po diegimo arba atnaujinimo į 26.4.1 įjunkite abu laikmačius:
 
 ```bash
 cd /kelias/iki/kinkudos/deploy

@@ -42,14 +42,14 @@ Prerequisites:
 - access to the chosen release archive and its SHA256 checksum. When using
   GitHub CLI with a private repository, authenticate an account that can read
   that repository;
-- access to `ghcr.io/vooz2/kinkudos` while the package is private:
-  `gh auth token | docker login ghcr.io -u VooZ2 --password-stdin`.
+- access to the published container package. If the package is private,
+  authenticate Docker with a GitHub account that has permission to download it.
 
 From a new empty deployment root, download and verify the release, keep its
 source as `app`, copy out the deployment directory, and start the installer:
 
 ```bash
-version=26.4.0
+version=26.4.1
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -90,7 +90,7 @@ Run these commands from the deployment root (the directory containing
 version with the release you want to install:
 
 ```bash
-version=26.4.0
+version=26.4.1
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -116,12 +116,6 @@ database, switches the app only after those checks pass, verifies container
 health, and refreshes versioned `deploy` management scripts. The local
 `deploy/.env`, runtime data, uploads, backups, and secrets remain untouched and
 are never included in the release archive.
-
-After upgrading to 26.4.0, existing parents, children, PINs, points, and family
-data remain valid. Each child browser or installed PWA must be paired once by a
-parent before the child can select a profile again. Existing child push
-subscriptions are deliberately removed, so notifications must be enabled
-again after pairing.
 
 ## Reverse proxy and client IPs
 
@@ -263,7 +257,7 @@ selected in Settings.
 KinKudos keeps task photos and resolved-feedback screenshots for the periods
 selected in the parent settings. It also checks every 30 minutes whether a due
 weekly lottery reminder should be sent. On a systemd-based Docker host, enable
-both timers after installation or upgrading to 26.4.0:
+both timers after installation or upgrading to 26.4.1:
 
 ```bash
 cd /path/to/kinkudos/deploy

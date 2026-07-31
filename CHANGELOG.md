@@ -5,6 +5,26 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.4.1] - 2026-07-31
+
+### Changed
+
+- Parent and child request workflows use consistent icon-only actions for
+  approval, completion, revision, rejection, cancellation, reward requests,
+  and reward or goal proposals.
+- Lithuanian settings and feedback wording is shorter and clearer.
+- Deployment prerequisites no longer include a maintainer-specific registry
+  login command or a release-specific migration notice.
+
+### Fixed
+
+- Workflow action icons keep matching state colors and stay on one row across
+  parent and child layouts.
+- Child-device pairing actions share one responsive two-column row without
+  overlapping.
+- The parent feedback panel uses compact privacy guidance and relies on the
+  existing footer GitHub link instead of a large duplicate bug-report button.
+
 ## [26.4.0] - 2026-07-31
 
 ### Added
