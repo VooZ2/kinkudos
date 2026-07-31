@@ -2,7 +2,12 @@
 
 > Savarankiškai talpinama šeimos PWA, kasdienius darbus paverčianti bendrais pasiekimais.
 
-**Dabartinis leidimas:** 26.4.5 · **Kalbos:** lietuvių ir anglų
+**Dabartinis leidimas:** 26.4.6 · **Kalbos:** lietuvių ir anglų
+
+## Išbandykite demonstraciją
+
+Apsilankykite [kinkudos.app](https://kinkudos.app). Tėvų paskyros
+prisijungimai: `demo` / `demo`; vaiko paskyrų PIN: `1234`.
 
 ## Kodėl KinKudos?
 

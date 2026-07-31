@@ -7,6 +7,18 @@ schema.
 
 ## [Unreleased]
 
+## [26.4.6] - 2026-07-31
+
+### Pakeista
+
+- README dabar pateikiama viešos demonstracijos nuoroda ir tėvų bei vaikų
+  prisijungimo duomenys.
+
+### Pataisyta
+
+- Lietuviškame atsiliepimų nustatymų tekste nebeliko bereikalingos priešpriešos
+  tarp atsiliepimų išsaugojimo ir nesukonfigūruotų el. pašto pranešimų.
+
 ## [26.4.5] - 2026-07-31
 
 ### Pataisyta

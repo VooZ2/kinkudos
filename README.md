@@ -2,8 +2,13 @@
 
 > A self-hosted family PWA that turns everyday tasks into shared progress.
 
-**Current release:** 26.4.5 · **Languages:** English and Lithuanian<br>
+**Current release:** 26.4.6 · **Languages:** English and Lithuanian<br>
 [Lietuviška README versija](README.lt.md)
+
+## Try the demo
+
+Visit [kinkudos.app](https://kinkudos.app). Use `demo` / `demo` for a parent
+account; child profiles use PIN `1234`.
 
 ## Why KinKudos?
 

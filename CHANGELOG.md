@@ -5,6 +5,18 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.4.6] - 2026-07-31
+
+### Changed
+
+- The README now links to the public demo and provides its parent and child
+  sign-in details.
+
+### Fixed
+
+- Lithuanian feedback settings no longer imply a contrast between saving
+  feedback and unavailable email notifications.
+
 ## [26.4.5] - 2026-07-31
 
 ### Fixed

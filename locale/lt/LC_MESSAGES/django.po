@@ -911,7 +911,7 @@ msgid "Feedback"
 msgstr "Atsiliepimai"
 
 msgid "Feedback is saved in KinKudos, but email notifications are not configured."
-msgstr "Atsiliepimai išsaugomi KinKudos, tačiau el. pašto pranešimai nesukonfigūruoti."
+msgstr "Atsiliepimai išsaugomi KinKudos, el. pašto pranešimai nesukonfigūruoti."
 
 msgid "Feedback pages"
 msgstr "Atsiliepimų puslapiai"
