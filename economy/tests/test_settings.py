@@ -57,7 +57,7 @@ class ParentSettingsTests(TestCase):
 
         self.assertContains(response, "Points for a task photo")
         self.assertContains(response, "Lottery ticket price")
-        self.assertContains(response, "Lottery tickets per child each week")
+        self.assertContains(response, "Weekly ticket limit")
         self.assertContains(response, "Keep feedback images for")
         self.assertContains(response, 'class="catalog-divider"', count=5)
 
@@ -183,6 +183,11 @@ class ParentSettingsTests(TestCase):
 
         self.assertContains(response, 'class="settings-row"', count=7, html=False)
         self.assertContains(response, 'class="settings-row checkbox-field"', count=1)
+        self.assertContains(response, "Weekly ticket limit")
+        self.assertContains(
+            response,
+            "The limit resets every Monday for each child. The default is 3.",
+        )
         self.assertContains(
             response,
             '<small class="helptext">Shown in family-facing headings and messages.</small>',

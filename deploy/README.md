@@ -76,7 +76,7 @@ Run these commands from the deployment root (the directory containing
 version with the release you want to install:
 
 ```bash
-version=26.3.1
+version=26.3.2
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -183,7 +183,7 @@ selected in Settings.
 KinKudos keeps task photos and resolved-feedback screenshots for the periods
 selected in the parent settings. It also checks every 30 minutes whether a due
 weekly lottery reminder should be sent. On a systemd-based Docker host, enable
-both timers after installation or upgrading to 26.3.1:
+both timers after installation or upgrading to 26.3.2:
 
 ```bash
 cd /path/to/kinkudos/deploy

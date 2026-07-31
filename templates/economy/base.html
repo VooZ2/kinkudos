@@ -72,6 +72,9 @@
     <symbol id="icon-info" viewBox="0 0 24 24">
       <path d="M11 10h2v8h-2v-8Zm0-4h2v2h-2V6Zm1-4a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z"/>
     </symbol>
+    <symbol id="icon-github" viewBox="0 0 24 24">
+      <path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.69c-2.78.6-3.37-1.18-3.37-1.18-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.53 2.34 1.09 2.91.83.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.58 9.58 0 0 1 12 7c.85 0 1.71.11 2.51.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.59c0 .27.18.58.69.48A10 10 0 0 0 12 2Z"/>
+    </symbol>
     <symbol id="icon-camera" viewBox="0 0 24 24">
       <path d="M9 4 7.5 6H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3.5L15 4H9Zm3 13a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Zm0-2a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
     </symbol>
@@ -142,6 +145,11 @@
     <footer class="site-footer">
       <a href="{% url 'changelog' %}" aria-label="{% translate 'Open release notes' %}">
         {{ project_name }} · v{{ app_version }}
+      </a>
+      <span aria-hidden="true">·</span>
+      <a class="github-link" href="https://github.com/VooZ2/kinkudos" aria-label="GitHub">
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-github"></use></svg>
+        <span>GitHub</span>
       </a>
     </footer>
   {% endblock %}

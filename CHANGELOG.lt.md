@@ -7,6 +7,21 @@ schema.
 
 ## [Unreleased]
 
+## [26.3.2] - 2026-07-31
+
+### Pakeista
+
+- Nustatymuose naudojami trumpesni skilčių, laukų ir išsaugojimo veiksmų
+  pavadinimai lietuvių ir anglų kalbomis.
+- Programos poraštėje pridėta nuoroda į „KinKudos“ GitHub repozitoriją.
+
+### Pataisyta
+
+- Bendras šeimos ir atskirų vaikų loterijos žymimieji langeliai išlaiko vienodą
+  kompaktišką dydį ir tinkamai lygiuojami kompiuterio bei mobiliajame vaizde.
+- Vaikų kortelėse suvienodinta kredito limito ir savaitės loterijos būsenos
+  skyryba, o kredito limito informacinė ikona pristumta arčiau pavadinimo.
+
 ## [26.3.1] - 2026-07-31
 
 ### Pakeista

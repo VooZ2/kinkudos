@@ -590,10 +590,10 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.3.1")
+        self.assertContains(response, "v26.3.2")
         self.assertContains(response, 'href="/pakeitimai/"', html=False)
         self.assertContains(response, "TAŠKAI")
-        self.assertContains(response, "Kredito limitas -100")
+        self.assertContains(response, "Kredito limitas: -100")
         self.assertContains(response, 'class="push-icon"', html=False)
         self.assertContains(response, "Kaip įjungti pranešimus?")
         self.assertNotContains(response, '<details class="panel" open>', html=False)
@@ -615,13 +615,23 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, ">Nustatymai<", html=False)
         self.assertNotContains(response, "Šeimos nustatymai")
         self.assertNotContains(response, ">Bendrieji<", html=False)
-        self.assertContains(response, "Vaikai ir taškai")
+        self.assertContains(response, "Privilegijos")
+        self.assertContains(response, "Saugojimas")
+        self.assertContains(response, "Bilietų limitas per savaitę")
+        self.assertContains(
+            response,
+            "Limitas atnaujinamas kiekvieną pirmadienį, kiekvienam vaikui. "
+            "Numatytoji reikšmė – 3.",
+        )
         self.assertContains(response, "El. pašto nustatymai")
         self.assertNotContains(response, "El. pašto pranešimai")
         self.assertContains(response, ">Atsarginės kopijos<", html=False)
         self.assertNotContains(response, "Dabartinis jūsų tėvų paskyros slaptažodis")
         self.assertNotContains(response, '<label for="history-child">', html=False)
-        self.assertContains(response, "Išsaugoti nustatymus")
+        self.assertContains(response, ">Išsaugoti</button>", html=False)
+        self.assertNotContains(response, "Išsaugoti nustatymus")
+        self.assertNotContains(response, "Išsaugoti paskyrą")
+        self.assertNotContains(response, "Išsaugoti profilį")
         self.assertNotContains(response, "Tasks, penalties and rewards")
         self.assertNotContains(response, "Family accounts and application settings")
         self.assertNotContains(response, "Task photo settings")
@@ -642,7 +652,9 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Complete tasks, earn points")
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
-        self.assertContains(response, "KinKudos · v26.3.1")
+        self.assertContains(response, "KinKudos · v26.3.2")
+        self.assertContains(response, "https://github.com/VooZ2/kinkudos")
+        self.assertContains(response, 'href="#icon-github"', html=False)
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_public_pages_share_the_product_header(self):
@@ -833,7 +845,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.3.1")
+        self.assertContains(response, "v26.3.2")
         self.assertContains(response, "v0.12.2 BETA")
         self.assertContains(response, "v0.10.4 BETA")
         self.assertContains(response, "v0.10.1 BETA")
@@ -1307,10 +1319,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.3.1',
+            '/static/icons/favicon-32.png?v=26.3.2',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.3.1")
-        self.assertContains(home, "/static/js/app.js?v=26.3.1")
+        self.assertContains(home, "/static/css/app.css?v=26.3.2")
+        self.assertContains(home, "/static/js/app.js?v=26.3.2")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1318,11 +1330,11 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.3.1",
+            "/static/icons/icon-192.png?v=26.3.2",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.3.1")
-        self.assertContains(worker, 'kinkudos-app-shell-26.3.1')
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.3.2")
+        self.assertContains(worker, 'kinkudos-app-shell-26.3.2')
         self.assertEqual(worker["Service-Worker-Allowed"], "/")
         self.assertEqual(worker["Cache-Control"], "no-cache")

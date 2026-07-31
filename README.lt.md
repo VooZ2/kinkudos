@@ -2,7 +2,7 @@
 
 > Savarankiškai talpinama šeimos PWA, kasdienius darbus paverčianti bendrais pasiekimais.
 
-**Dabartinis leidimas:** 26.3.1 · **Kalbos:** lietuvių ir anglų
+**Dabartinis leidimas:** 26.3.2 · **Kalbos:** lietuvių ir anglų
 
 ## Kodėl KinKudos?
 

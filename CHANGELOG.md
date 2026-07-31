@@ -5,6 +5,21 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.3.2] - 2026-07-31
+
+### Changed
+
+- Settings use shorter section, field, and save-action wording in English and
+  Lithuanian.
+- The application footer links to the KinKudos GitHub repository.
+
+### Fixed
+
+- Family and per-child lottery checkboxes keep a consistent compact size and
+  align correctly on desktop and mobile layouts.
+- Child cards use consistent punctuation for the credit limit and weekly
+  lottery status, with the credit-limit information icon closer to its label.
+
 ## [26.3.1] - 2026-07-31
 
 ### Changed

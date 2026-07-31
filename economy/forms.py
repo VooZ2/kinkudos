@@ -480,7 +480,7 @@ class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
             "birthday_points": _("Birthday points"),
             "lottery_enabled": _("Enable lottery tickets"),
             "lottery_ticket_cost": _("Lottery ticket price"),
-            "lottery_weekly_limit": _("Lottery tickets per child each week"),
+            "lottery_weekly_limit": _("Weekly ticket limit"),
             "evidence_retention_days": _("Keep task photos for"),
             "feedback_screenshot_retention_days": _("Keep feedback images for"),
         }
@@ -499,7 +499,7 @@ class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
                 "The new price is used for every future ticket purchase."
             ),
             "lottery_weekly_limit": _(
-                "The limit resets every Monday. The default is 3."
+                "The limit resets every Monday for each child. The default is 3."
             ),
             "evidence_retention_days": _(
                 "Pending and revision-requested task photos are never removed."

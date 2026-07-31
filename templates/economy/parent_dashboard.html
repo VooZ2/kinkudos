@@ -57,7 +57,7 @@
       {{ child.balance }} <small>{{ child.balance|currency_unit:"neutral"|upper }}</small>
     </p>
     <p class="credit-caption">
-      <span>{% translate "Credit limit" %} {{ child.min_balance }}</span>
+      <span>{% translate "Credit limit" %}: {{ child.min_balance }}</span>
       <button class="info-button" type="button" data-open-dialog="credit-info-{{ child.pk }}" aria-label="{% translate "How does the credit limit work?" %}">
         <svg class="action-icon" aria-hidden="true"><use href="#icon-info"></use></svg>
       </button>
@@ -454,7 +454,7 @@
         </p>
       </div>
       <div class="settings-group">
-        <div class="catalog-divider"><span>{% translate "Children and points" %}</span></div>
+        <div class="catalog-divider"><span>{% translate "Privileges" %}</span></div>
         <p class="settings-row">
           {{ family_preferences_form.photo_bonus_points.label_tag }}
           {{ family_preferences_form.photo_bonus_points }}
@@ -466,8 +466,8 @@
           <small class="helptext">{{ family_preferences_form.birthday_points.help_text }}</small>
         </p>
         <p class="settings-row checkbox-field">
-          {{ family_preferences_form.lottery_enabled }}
           {{ family_preferences_form.lottery_enabled.label_tag }}
+          {{ family_preferences_form.lottery_enabled }}
           <small class="helptext">{{ family_preferences_form.lottery_enabled.help_text }}</small>
         </p>
         <p class="settings-row">
@@ -482,7 +482,7 @@
         </p>
       </div>
       <div class="settings-group">
-        <div class="catalog-divider"><span>{% translate "Privacy and retention" %}</span></div>
+        <div class="catalog-divider"><span>{% translate "Retention" %}</span></div>
         <p class="settings-row">
           {{ family_preferences_form.evidence_retention_days.label_tag }}
           {{ family_preferences_form.evidence_retention_days }}
@@ -494,7 +494,7 @@
           <small class="helptext">{{ family_preferences_form.feedback_screenshot_retention_days.help_text }}</small>
         </p>
       </div>
-      <button class="button button-primary" type="submit">{% translate "Save settings" %}</button>
+      <button class="button button-primary" type="submit">{% translate "Save" %}</button>
     </form>
   </article>
   <div class="section-heading subsection-heading"><h2>{% translate "Email settings" %}</h2></div>
@@ -629,7 +629,7 @@
           </div>
           <form id="edit-parent-account-{{ item.account.pk }}" method="post" action="{% url 'parent_edit_parent_account' item.account.pk %}" class="account-edit-form stack-form" hidden>
             {% csrf_token %}{{ item.form.as_p }}
-            <button class="button button-primary" type="submit">{% translate "Save account" %}</button>
+            <button class="button button-primary" type="submit">{% translate "Save" %}</button>
           </form>
         </div>
         {% endfor %}
@@ -657,7 +657,7 @@
           </div>
           <form id="edit-child-account-{{ item.child.pk }}" method="post" action="{% url 'parent_edit_child_account' item.child.pk %}" class="account-edit-form stack-form" hidden>
             {% csrf_token %}{{ item.form.as_p }}
-            <button class="button button-primary" type="submit">{% translate "Save profile" %}</button>
+            <button class="button button-primary" type="submit">{% translate "Save" %}</button>
           </form>
         </div>
         {% endfor %}
@@ -855,6 +855,11 @@
   <footer class="parent-version-footer">
     <a href="{% url 'changelog' %}" aria-label="{% translate 'Open release notes' %}">
       {{ project_name }} · v{{ app_version }}
+    </a>
+    <span aria-hidden="true">·</span>
+    <a class="github-link" href="https://github.com/VooZ2/kinkudos" aria-label="GitHub">
+      <svg class="action-icon" aria-hidden="true"><use href="#icon-github"></use></svg>
+      <span>GitHub</span>
     </a>
   </footer>
   </div>

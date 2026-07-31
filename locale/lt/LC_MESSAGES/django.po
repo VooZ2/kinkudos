@@ -391,9 +391,6 @@ msgstr "Vaikų paskyros"
 msgid "Child's name"
 msgstr "Vaiko vardas"
 
-msgid "Children and points"
-msgstr "Vaikai ir taškai"
-
 msgid "Choose a profile"
 msgstr "Pasirink profilį"
 
@@ -979,9 +976,6 @@ msgstr "Loterijos bilietai neprieinami, kol nepagerės tavo taškų balansas."
 msgid "Lottery tickets disabled"
 msgstr "Loterijos bilietai išjungti"
 
-msgid "Lottery tickets per child each week"
-msgstr "Loterijos bilietų vienam vaikui per savaitę"
-
 msgid "Lottery tickets this week: %(remaining)s of %(limit)s"
 msgstr "Loterijos bilietų šią savaitę: %(remaining)s iš %(limit)s"
 
@@ -1339,8 +1333,8 @@ msgstr "Svarbiausia statyba"
 msgid "Priority challenge"
 msgstr "Svarbiausias iššūkis"
 
-msgid "Privacy and retention"
-msgstr "Privatumas ir saugojimas"
+msgid "Privileges"
+msgstr "Privilegijos"
 
 msgid "Prize requested!"
 msgstr "Prizas užsakytas!"
@@ -1461,6 +1455,9 @@ msgstr "Išspręsta"
 
 msgid "Restored"
 msgstr "Atkurta"
+
+msgid "Retention"
+msgstr "Saugojimas"
 
 msgid "Revealed"
 msgstr "Atidengtas"
@@ -1831,8 +1828,8 @@ msgstr "Nuotraukos apdoroti nepavyko. Pasirinkite kitą failą."
 msgid "The inspiration shop opens after today's commissioned projects are finished."
 msgstr "Įkvėpimo parduotuvė atsivers užbaigus šiandien užsakytus projektus."
 
-msgid "The limit resets every Monday. The default is 3."
-msgstr "Limitas atnaujinamas kiekvieną pirmadienį. Numatytoji reikšmė – 3."
+msgid "The limit resets every Monday for each child. The default is 3."
+msgstr "Limitas atnaujinamas kiekvieną pirmadienį, kiekvienam vaikui. Numatytoji reikšmė – 3."
 
 msgid "The link is valid for one hour and can only be used once."
 msgstr "Nuoroda galioja vieną valandą ir gali būti panaudota tik vieną kartą."
@@ -2136,6 +2133,9 @@ msgstr "Gavome prašymą pakeisti „%(family_display_name)s“ tėvų paskyros 
 
 msgid "Weekly limit reached"
 msgstr "Savaitės limitas pasiektas"
+
+msgid "Weekly ticket limit"
+msgstr "Bilietų limitas per savaitę"
 
 msgid "Welcome – %(family_display_name)s"
 msgstr "Sveiki – %(family_display_name)s"
