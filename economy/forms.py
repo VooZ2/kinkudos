@@ -20,6 +20,7 @@ from .models import (
     Task,
     Theme,
 )
+from .net import parse_allowed_networks
 
 register_heif_opener()
 
@@ -508,6 +509,63 @@ class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
                 "Only screenshots from resolved feedback are removed automatically."
             ),
         }
+
+
+class NetworkAccessForm(StyledFormMixin, forms.ModelForm):
+    current_password = forms.CharField(
+        label=_("Your account password"),
+        widget=forms.PasswordInput(render_value=False),
+        help_text=_("Required before changing network access."),
+    )
+
+    def __init__(self, *args, current_ip="", **kwargs):
+        super().__init__(*args, **kwargs)
+        self.current_ip = current_ip
+
+    class Meta:
+        model = FamilySettings
+        fields = ["network_access_mode", "allowed_networks"]
+        labels = {
+            "network_access_mode": _("Network access"),
+            "allowed_networks": _("Allowed IP addresses and networks"),
+        }
+        help_texts = {
+            "network_access_mode": _(
+                "IP restrictions are optional and add another layer on top of device pairing."
+            ),
+            "allowed_networks": _(
+                "Enter one IPv4, IPv6, or CIDR network per line."
+            ),
+        }
+        widgets = {"allowed_networks": forms.Textarea(attrs={"rows": 5})}
+
+    def clean_allowed_networks(self):
+        value = self.cleaned_data["allowed_networks"].strip()
+        networks, errors = parse_allowed_networks(value)
+        mode = self.cleaned_data.get("network_access_mode")
+        if errors:
+            raise forms.ValidationError(
+                _("Invalid IP address or network: %(value)s")
+                % {"value": errors[0]}
+            )
+        if mode != FamilySettings.NetworkAccessMode.OPEN and not networks:
+            raise forms.ValidationError(
+                _("Add at least one allowed IP address or network.")
+            )
+        if mode == FamilySettings.NetworkAccessMode.ALL:
+            import ipaddress
+
+            try:
+                current = ipaddress.ip_address(self.current_ip)
+            except ValueError as exc:
+                raise forms.ValidationError(
+                    _("The current IP address could not be verified.")
+                ) from exc
+            if not any(current in network for network in networks):
+                raise forms.ValidationError(
+                    _("Include your current IP address before restricting all access.")
+                )
+        return "\n".join(str(network) for network in networks)
 
 
 class BackupSettingsForm(StyledFormMixin, forms.Form):

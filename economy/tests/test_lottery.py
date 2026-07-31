@@ -24,6 +24,7 @@ from economy.models import (
     AssignedTask,
     AssignedTaskBatch,
     ChildProfile,
+    DeviceToken,
     FamilySettings,
     LedgerKind,
     LotteryReminder,
@@ -304,8 +305,10 @@ class LotteryReminderTests(TestCase):
             theme=Theme.PANDA_PET,
             theme_selected=True,
         )
+        self.device, _ = DeviceToken.issue(created_by=None, label="Lottery")
         PushSubscription.objects.create(
             child=self.child,
+            device=self.device,
             endpoint="https://push.example/lottery",
             p256dh="key",
             auth="auth",

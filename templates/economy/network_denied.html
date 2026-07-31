@@ -1,0 +1,10 @@
+{% extends "economy/base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Access restricted" %} – {{ project_name }}{% endblock %}
+{% block content %}
+<section class="narrow-card">
+  <p class="eyebrow">{% translate "Network access" %}</p>
+  <h1>{% translate "Access is not allowed from this network" %}</h1>
+  <p>{% translate "Connect through an allowed home or VPN network and try again." %}</p>
+</section>
+{% endblock %}

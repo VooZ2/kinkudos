@@ -2,7 +2,7 @@
 
 > A self-hosted family PWA that turns everyday tasks into shared progress.
 
-**Current release:** 26.3.2 · **Languages:** English and Lithuanian<br>
+**Current release:** 26.4.0 · **Languages:** English and Lithuanian<br>
 [Lietuviška README versija](README.lt.md)
 
 ## Why KinKudos?
@@ -70,7 +70,9 @@ The screenshots use fictional demonstration data.
 
 ## Privacy and security model
 
-- Parent accounts use passwords; child profiles use rate-limited, hashed PINs.
+- Parent accounts use rate-limited passwords. A parent-approved, revocable
+  device token is required before a device can see child profiles or enter a
+  rate-limited, hashed child PIN.
 - Containers run without root privileges and the application container has a
   read-only filesystem.
 - Point-changing operations are transactional and the ledger is append-only.
@@ -79,24 +81,26 @@ The screenshots use fictional demonstration data.
 - Credentials, databases, uploads, backups, and family data live outside the
   release source tree.
 
-KinKudos is designed for access through an existing Traefik reverse proxy with
-TLS and a trusted-network allowlist. Operators remain responsible for secure
-hosting, tested restores, updates, and access to the host itself.
+KinKudos is designed for access through a TLS reverse proxy. Nginx, Caddy,
+Traefik, and container-based proxies such as Nginx Proxy Manager are supported.
+An optional application-level IP allowlist can restrict child access or the
+whole installation. Operators remain responsible for secure hosting, tested
+restores, updates, and access to the host itself.
 
 ## Deployment
 
-The supported production layout uses Docker Compose, SQLite, Gunicorn, an
-isolated backup agent, and an existing Traefik network named `web`. It runs on
-ARM64 and AMD64 Linux hosts.
+The supported production layout uses a versioned multi-architecture container
+image, Docker Compose, SQLite, Gunicorn, an isolated backup agent, and the
+operator's chosen TLS reverse proxy. It runs on ARM64 and AMD64 Linux hosts.
 
 - [Installation and upgrades](deploy/README.md)
 - [Architecture and security](docs/ARCHITECTURE.md)
 - [Release history](CHANGELOG.md)
 
 Release archives and checksums are published on the
-[GitHub Releases page](https://github.com/VooZ2/kinkudos/releases). The
-repository does not publish a preconfigured container image or a one-command
-public-cloud deployment.
+[GitHub Releases page](https://github.com/VooZ2/kinkudos/releases), together
+with the versioned `ghcr.io/vooz2/kinkudos` container image. The repository
+does not publish a one-command public-cloud deployment.
 
 ## Local development
 

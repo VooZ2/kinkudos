@@ -4,8 +4,12 @@
 
 ```text
 kinkudos/
-├── app/
+├── app/                 # nebūtinas išsaugotas leidimo kodas
 ├── deploy/
+├── data/
+├── backups/
+├── backup-state/
+├── uploads/
 └── secrets/
 ```
 
@@ -20,25 +24,37 @@ administratoriui, turėti `0600` teises ir niekada nepatekti į Git.
 Reikalavimai:
 
 - 64 bitų ARM arba x86 Linux serveris su Docker Engine ir Docker Compose;
-- jau veikiantis Traefik, prijungtas prie išorinio Docker tinklo `web`;
+- HTTPS reverse proxy: „Nginx“, „Caddy“, „Nginx Proxy Manager“, „Traefik“ arba
+  lygiavertis sprendimas;
 - į serverį nukreiptas domeno vardas;
 - prieiga prie pasirinkto leidimo archyvo ir jo SHA256 kontrolinės sumos. Jei
   privačiai repozitorijai naudojamas GitHub CLI, jame turi būti prijungta tą
-  repozitoriją galinti skaityti paskyra.
+  repozitoriją galinti skaityti paskyra;
+- kol konteinerio paketas privatus, prieiga prie `ghcr.io/vooz2/kinkudos`:
+  `gh auth token | docker login ghcr.io -u VooZ2 --password-stdin`.
 
-Leidimo programos kodą laikykite `app`, o šį katalogą – greta jo, kaip parodyta
-aukščiau. `deploy/.env` faile nustatykite `KINKUDOS_HOSTNAME` ir, jei reikia,
-`KINKUDOS_ALLOWED_NETWORKS`, tada paleiskite:
+Naujame tuščiame diegimo šakniniame kataloge parsisiųskite ir patikrinkite
+leidimą, jo kodą palikite kaip `app`, iškelkite diegimo katalogą ir paleiskite
+vedlį:
 
 ```bash
-cd /kelias/iki/kinkudos/deploy
+version=26.4.0
+repository=VooZ2/kinkudos
+gh release download "v$version" --repo "$repository" \
+  --pattern "kinkudos-$version.tar.gz*"
+sha256sum -c "kinkudos-$version.tar.gz.sha256"
+tar -xzf "kinkudos-$version.tar.gz"
+mv "kinkudos-$version" app
+cp -a app/deploy ./deploy
+cd deploy
 ./bootstrap.sh
 ```
 
-Diegiklis paprašo pasirinkti kalbą, domeną, leidžiamus privačius tinklus ir ar
-iš karto kurti šeimą. Šeimos vedlys paprašo pirmos tėvų paskyros, šeimos
-pavadinimo bei vaikų profilių. Sugeneruojamos trūkstamos paslaptys, sukuriamas
-`.env` ir pastatomi atvaizdai. Jau esančių paslapčių diegiklis neperrašo.
+Diegiklis paprašo pasirinkti kalbą, domeną, reverse proxy režimą ir ar iš karto
+kurti šeimą. Šeimos vedlys paprašo pirmos tėvų paskyros, šeimos pavadinimo bei
+vaikų profilių. Sugeneruojamos trūkstamos paslaptys, sukuriamas `.env`,
+patikrinama serverio katalogų nuosavybė ir parsiunčiamas paskelbtas programos
+atvaizdas. Jau esančių paslapčių diegiklis neperrašo.
 
 Jei šeimos kūrimą praleidote:
 
@@ -56,7 +72,7 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 norimo diegti leidimo reikšmėmis:
 
 ```bash
-version=26.3.2
+version=26.4.0
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -76,11 +92,74 @@ sudo sh "$install_script" \
 rm -f "$install_script" "$compose_file"
 ```
 
-Atnaujintojas patikrina kontrolinę sumą ir leidimo duomenis, pastato ir
-išbando atvaizdą, sukuria veikiančios duomenų bazės kopiją, tik tada perjungia
-programą, patikrina konteinerio būklę ir atnaujina versijuojamus `deploy`
-valdymo scenarijus. Vietinis `deploy/.env`, šeimos duomenys, nuotraukos,
-kopijos ir paslaptys nekeičiami bei nepatenka į leidimo archyvą.
+Atnaujintojas patikrina kontrolinę sumą ir leidimo duomenis, parsiunčia bei
+išbando paskelbtą atvaizdą, patikrina serverio katalogų nuosavybę, sukuria
+veikiančios duomenų bazės kopiją, tik tada perjungia programą, patikrina
+konteinerio būklę ir atnaujina versijuojamus `deploy` valdymo scenarijus.
+Vietinis `deploy/.env`, šeimos duomenys, nuotraukos, kopijos ir paslaptys
+nekeičiami bei nepatenka į leidimo archyvą.
+
+Atnaujinus į 26.4.0 esami tėvai, vaikai, PIN, taškai ir šeimos duomenys išlieka.
+Kiekvieną vaiko naršyklę arba įdiegtą PWA tėvai turės vieną kartą susieti, tik
+tada joje vėl bus galima pasirinkti vaiką. Senos vaikų „Web Push“ prenumeratos
+sąmoningai pašalinamos, todėl po susiejimo pranešimus reikės įjungti iš naujo.
+
+## Reverse proxy ir kliento IP
+
+Bazinis Compose failas neviešina programos prievado ir nėra susietas su vienu
+proxy produktu. `bootstrap.sh` sukuria vietinį `compose.override.yml`:
+
+- `compose.host-proxy.yml` paskelbia `127.0.0.1:8000` serveryje įdiegtam
+  „Nginx“ arba „Caddy“;
+- `compose.container-proxy.yml` prijungia programą prie pasirenkamo išorinio
+  Docker tinklo „Nginx Proxy Manager“ ar kitam konteineriniam proxy;
+- `compose.traefik.yml` prideda KinKudos „Traefik“ maršrutą ir pasirinktą
+  išorinį Docker tinklą.
+
+Serveryje veikiančiame „Nginx“ nukreipkite į `http://127.0.0.1:8000` ir
+perduokite pradinius `Host`, `X-Forwarded-Proto` bei `X-Forwarded-For`
+antraščių duomenis:
+
+```nginx
+location / {
+    proxy_pass http://127.0.0.1:8000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+```
+
+Minimalus „Caddy“ aprašas:
+
+```caddyfile
+family.example.com {
+    reverse_proxy 127.0.0.1:8000
+}
+```
+
+„Nginx Proxy Manager“ pasirinkite Docker tarnybą `app`, prievadą `8000`,
+įjunkite „WebSocket“ palaikymą ir naudokite tą patį išorinį tinklą, kuris
+nurodytas `KINKUDOS_PROXY_NETWORK`.
+
+KinKudos pasitiki persiųsta kliento IP antrašte tik jei tiesioginis ryšys
+ateina iš `KINKUDOS_TRUSTED_PROXIES` nurodyto adreso ar potinklio. Nurodykite
+tikslų proxy adresą arba Docker potinklį, o ne visą internetą. Pasirenkamas tėvų
+nustatymas „Nustatymai → Tinklo prieiga“ gali papildomai apriboti vaikų
+puslapius arba visą programą konkrečiais IP/CIDR tinklais. Pagal nutylėjimą jis
+išjungtas ir nepakeičia HTTPS, įrenginių susiejimo ar stiprių tėvų
+slaptažodžių. Jei taisyklė užrakino visus tėvus, paleiskite:
+
+```bash
+docker compose exec -T app python manage.py disable_network_restrictions
+```
+
+„Django“ administravimo maršrutas pagal nutylėjimą išjungtas. Įprastas šeimos
+administravimas lieka tėvų sąsajoje.
+
+Prieš diegimą arba atnaujinimą `check-ownership.sh` patikrina, ar prijungtus
+katalogus gali rašyti `APP_UID` ir `APP_GID` naudotojas. Jei randamas
+neatitikimas, peržiūrėkite konkretų kelią ir vykdykite parodytą `chown`
+komandą; nekeiskite viso diegimo šakninio katalogo nuosavybės rekursyviai.
 
 ## Kopijos
 
@@ -154,19 +233,21 @@ slaptažodžiu. Iš UI valdomos reikšmės, įskaitant slaptažodį, saugomos
 `../secrets/smtp/settings.json` faile su `0600` teisėmis ir niekada
 neįrašomos į programos duomenų bazę.
 
-Prisijungę tėvai ir vaikai problemą arba pasiūlymą gali pateikti plaukiojančiu
-vabalo mygtuku. KinKudos pirmiausia išsaugo įrašą, o tik tada bando išsiųsti
-el. laišką. Todėl tėvai atsiliepimą matys ir jo būseną galės keisti
-„Nustatymuose“, net jei SMTP laikinai neveikia. Pasirinktinės ekrano nuotraukos
-saugomos privačiai WebP formatu; pasibaigus nustatytam terminui automatiškai
-šalinamos tik išspręstų atsiliepimų nuotraukos.
+Prisijungę tėvai ir vaikai privačią šeimos problemą arba pasiūlymą gali pateikti
+plaukiojančiu vabalo mygtuku. KinKudos pirmiausia išsaugo įrašą, o tik tada
+bando išsiųsti el. laišką. Todėl tėvai atsiliepimą matys ir jo būseną galės
+keisti „Nustatymuose“, net jei SMTP laikinai neveikia. Programos klaidos
+registruojamos pateiktoje GitHub Issues nuorodoje; ten negalima siųsti vardų,
+ekrano nuotraukų ar kitų šeimos duomenų. Pasirinktinės vidinės ekrano
+nuotraukos saugomos privačiai WebP formatu; pasibaigus nustatytam terminui
+automatiškai šalinamos tik išspręstų atsiliepimų nuotraukos.
 
 ## Periodinė priežiūra ir loterijos priminimai
 
 KinKudos darbų nuotraukas ir išspręstų atsiliepimų ekrano nuotraukas saugo
 tėvų nustatymuose pasirinktą laiką. Sistema taip pat kas 30 minučių patikrina,
 ar jau reikia siųsti savaitinį loterijos priminimą. `systemd` naudojančiame
-Docker serveryje po diegimo arba atnaujinimo į 26.3.2 įjunkite abu laikmačius:
+Docker serveryje po diegimo arba atnaujinimo į 26.4.0 įjunkite abu laikmačius:
 
 ```bash
 cd /kelias/iki/kinkudos/deploy
@@ -177,8 +258,15 @@ Bendriniame `cron` diegime naktinę priežiūrą paleiskite kartą per parą, o
 priminimų komandą – kas 30 minučių:
 
 ```cron
-15 2 * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py purge_task_evidence
+15 2 * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py run_maintenance
 */30 * * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py send_lottery_reminders
+```
+
+Rankinis paleidimas:
+
+```bash
+docker compose exec -T app python manage.py run_maintenance
+docker compose exec -T app python manage.py send_lottery_reminders
 ```
 
 ## Ribota diagnostikos prieiga

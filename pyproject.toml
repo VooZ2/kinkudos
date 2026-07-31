@@ -1,6 +1,6 @@
 [project]
 name = "kinkudos"
-version = "26.3.2"
+version = "26.4.0"
 description = "Self-hosted family tasks, points, and rewards PWA"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -22,3 +22,11 @@ Repository = "https://github.com/VooZ2/kinkudos"
 [tool.ruff]
 line-length = 100
 target-version = "py312"
+
+[tool.ruff.lint]
+# Keep the project lint contract explicit across Ruff releases.
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+# Historical migrations are immutable generated artifacts.
+"economy/migrations/*.py" = ["I"]

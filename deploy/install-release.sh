@@ -23,7 +23,7 @@ secrets_dir="$project_root/secrets"
 releases_dir="$project_root/releases"
 release_dir="$releases_dir/$version"
 staging_dir="$releases_dir/.staging-$version-$$"
-image="kinkudos:$version"
+image="ghcr.io/vooz2/kinkudos:$version"
 container="kinkudos-app-1"
 
 test -f "$archive"
@@ -116,7 +116,7 @@ fi
 
 python3 "$staging_dir/scripts/verify_release.py"
 
-docker build --pull --tag "$image" "$staging_dir"
+docker pull "$image"
 
 docker run --rm \
   --network none \
@@ -129,6 +129,11 @@ docker run --rm \
       python manage.py check'
 
 cd "$deploy_dir"
+if [ ! -f "$deploy_dir/compose.override.yml" ]; then
+  cp "$staging_dir/deploy/compose.traefik.yml" "$deploy_dir/compose.override.yml"
+  echo "Created compose.override.yml for the existing Traefik deployment."
+fi
+"$staging_dir/deploy/check-ownership.sh" "$project_root"
 docker compose config --quiet
 if ! docker compose config --images | grep -Fx "$image" >/dev/null; then
   echo "Compose does not reference the release image $image." >&2
@@ -188,6 +193,7 @@ docker compose ps
 for helper in \
   backup.sh \
   bootstrap.sh \
+  check-ownership.sh \
   configure-email.sh \
   configure-feedback.sh \
   install-diagnostics.sh \
@@ -200,6 +206,9 @@ done
 for support_file in \
   README.lt.md \
   README.md \
+  compose.container-proxy.yml \
+  compose.host-proxy.yml \
+  compose.traefik.yml \
   kinkudos-lottery-reminders.service \
   kinkudos-lottery-reminders.timer \
   kinkudos-maintenance.service \

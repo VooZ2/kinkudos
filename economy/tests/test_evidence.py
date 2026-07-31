@@ -3,8 +3,8 @@ import tempfile
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
-from django.core.management import call_command
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.management import call_command
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone

@@ -6,7 +6,6 @@ import ast
 import re
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -39,7 +38,7 @@ versions = {
     ),
     "deploy/compose.yml": version_from(
         ROOT / "deploy" / "compose.yml",
-        r'(?m)^\s*image: kinkudos:([0-9]+\.[0-9]+\.[0-9]+)\s*$',
+        r"(?m)^\s*image: ghcr\.io/vooz2/kinkudos:([0-9]+\.[0-9]+\.[0-9]+)\s*$",
     ),
 }
 if len(set(versions.values())) != 1:

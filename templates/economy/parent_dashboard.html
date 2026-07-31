@@ -497,6 +497,79 @@
       <button class="button button-primary" type="submit">{% translate "Save" %}</button>
     </form>
   </article>
+  <div class="section-heading subsection-heading"><h2>{% translate "Child devices" %}</h2></div>
+  <article class="panel">
+    <p class="settings-description">{% translate "Only paired devices can see child profiles or enter a child PIN." %}</p>
+    {% if not current_device %}
+      <form method="post" action="{% url 'parent_pair_device' %}" class="stack-form">
+        {% csrf_token %}
+        <label>{% translate "Device name" %}
+          <input class="field-control" name="label" maxlength="80" placeholder="{% translate 'For example, kitchen tablet' %}">
+        </label>
+        <button class="button button-primary" type="submit">{% translate "Allow children on this device" %}</button>
+      </form>
+    {% endif %}
+    <div class="backup-actions">
+      <form method="post" action="{% url 'parent_generate_pairing_link' %}">
+        {% csrf_token %}
+        <button class="button button-secondary" type="submit">{% translate "Create private pairing link" %}</button>
+      </form>
+    </div>
+    <div class="account-list">
+      {% for device in paired_devices %}
+        <div class="account-row">
+          <div class="account-summary">
+            <span class="profile-mini">{{ device.label|default:"D"|first|upper }}</span>
+            <span class="account-name">
+              <strong>{% if device.label %}{{ device.label }}{% else %}{% translate "Child device" %}{% endif %}{% if current_device.pk == device.pk %} <small>({% translate "this device" %})</small>{% endif %}</strong>
+              <small>{% translate "Last used" %}: {{ device.last_used_at|default:device.created_at|date:"Y-m-d H:i" }}</small>
+            </span>
+          </div>
+          <div class="catalog-actions">
+            <button class="icon-button" type="button" data-toggle-edit="device-{{ device.pk }}" aria-label="{% translate 'Rename device' %}" title="{% translate 'Rename device' %}"><svg class="action-icon"><use href="#icon-edit"></use></svg></button>
+            <form method="post" action="{% url 'parent_revoke_device' device.pk %}">
+              {% csrf_token %}
+              <button class="button button-danger" type="submit" data-confirm="{% translate 'Revoke child access for this device?' %}">{% translate "Revoke" %}</button>
+            </form>
+          </div>
+          <form id="edit-device-{{ device.pk }}" method="post" action="{% url 'parent_rename_device' device.pk %}" class="account-edit-form stack-form" hidden>
+            {% csrf_token %}
+            <label>{% translate "Device name" %}
+              <input class="field-control" name="label" maxlength="80" value="{{ device.label }}" required>
+            </label>
+            <button class="button button-primary" type="submit">{% translate "Save" %}</button>
+          </form>
+        </div>
+      {% empty %}
+        <p class="empty-state">{% translate "No child devices are paired yet." %}</p>
+      {% endfor %}
+    </div>
+    {% if user.is_staff and paired_devices %}
+      <details>
+        <summary>{% translate "Revoke all child devices" %}</summary>
+        <form method="post" action="{% url 'parent_revoke_all_devices' %}" class="stack-form">
+          {% csrf_token %}
+          <label>{% translate "Your account password" %}
+            <input class="field-control" type="password" name="current_password" required>
+          </label>
+          <button class="button button-danger" type="submit">{% translate "Revoke all devices" %}</button>
+        </form>
+      </details>
+    {% endif %}
+  </article>
+  <div class="section-heading subsection-heading"><h2>{% translate "Network access" %}</h2></div>
+  <article class="panel">
+    <p class="settings-description">{% translate "Optional IP restrictions add another layer on top of device pairing and sign-in limits." %}</p>
+    <p class="help-text">{% translate "Current IP address" %}: <strong>{{ current_client_ip }}</strong></p>
+    {% if user.is_staff %}
+      <form method="post" action="{% url 'parent_update_network_access' %}" class="stack-form settings-form">
+        {% csrf_token %}{{ network_access_form.as_p }}
+        <button class="button button-primary" type="submit">{% translate "Save" %}</button>
+      </form>
+    {% else %}
+      <p class="help-text">{% translate "Network access can be changed only by a parent administrator." %}</p>
+    {% endif %}
+  </article>
   <div class="section-heading subsection-heading"><h2>{% translate "Email settings" %}</h2></div>
   <article class="panel email-panel">
     <div class="backup-heading">
@@ -664,8 +737,13 @@
       </div>
     </details>
   </div>
-  <div class="section-heading subsection-heading"><h2>{% translate "Feedback" %}</h2></div>
+  <div class="section-heading subsection-heading"><h2>{% translate "Family feedback" %}</h2></div>
   <section class="panel feedback-admin">
+    <div class="backup-heading">
+      <p class="settings-description">{% translate "Family feedback stays on this server and can be reviewed by parents." %}</p>
+      <a class="button button-secondary" href="https://github.com/VooZ2/kinkudos/issues" target="_blank" rel="noreferrer">{% translate "Report a KinKudos bug" %}</a>
+    </div>
+    <p class="danger-warning">{% translate "Before posting on GitHub, remove names, PINs, screenshots, email addresses, server details, and other family information." %}</p>
     {% if not feedback_email_configured %}
       <p class="feedback-email-warning">{% translate "Feedback is saved in KinKudos, but email notifications are not configured." %}</p>
     {% endif %}

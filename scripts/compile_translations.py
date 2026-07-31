@@ -5,7 +5,6 @@ import json
 import struct
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "locale" / "lt" / "messages.json"
 OUTPUT_DIR = ROOT / "locale" / "lt" / "LC_MESSAGES"

@@ -1,0 +1,72 @@
+import ipaddress
+
+from django.http import HttpResponseForbidden
+from django.shortcuts import render
+
+from .models import AttemptCounter, FamilySettings
+from .net import FORWARDED_HEADERS, client_ip, direct_peer_is_trusted, parse_allowed_networks
+from .rate_limit import register_attempt
+
+
+class TrustedProxyMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if not direct_peer_is_trusted(request):
+            for header in FORWARDED_HEADERS:
+                request.META.pop(header, None)
+        return self.get_response(request)
+
+
+class NetworkAccessMiddleware:
+    always_public_prefixes = (
+        "/health/",
+        "/static/",
+        "/manifest.webmanifest",
+        "/service-worker.js",
+        "/offline/",
+    )
+    child_prefixes = (
+        "/vaikas/",
+        "/susieti-irengini/",
+    )
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.path.startswith(self.always_public_prefixes):
+            return self.get_response(request)
+        family = FamilySettings.load()
+        mode = family.network_access_mode
+        restricted = mode == FamilySettings.NetworkAccessMode.ALL or (
+            mode == FamilySettings.NetworkAccessMode.CHILDREN
+            and request.path.startswith(self.child_prefixes)
+        )
+        if restricted:
+            networks, _errors = parse_allowed_networks(family.allowed_networks)
+            address = client_ip(request)
+            if not any(
+                address != "invalid" and ipaddress.ip_address(address) in network
+                for network in networks
+            ):
+                return render(request, "economy/network_denied.html", status=403)
+        return self.get_response(request)
+
+
+class AdminRateLimitMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.path == "/admin/login/" and request.method == "POST":
+            allowed = register_attempt(
+                AttemptCounter.Scope.ADMIN_LOGIN_IP,
+                client_ip(request),
+                window_seconds=300,
+                limit=10,
+            )
+            if not allowed:
+                return HttpResponseForbidden("Too many sign-in attempts.")
+        return self.get_response(request)

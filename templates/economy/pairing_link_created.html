@@ -1,0 +1,24 @@
+{% extends "economy/base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Pairing link" %} – {{ project_name }}{% endblock %}
+{% block content %}
+<section class="narrow-card">
+  <p class="eyebrow">{% translate "Paired devices" %}</p>
+  <h1>{% translate "Private pairing link" %}</h1>
+  <p>{% translate "Open this link on the child's device. It can be used once and expires in 10 minutes." %}</p>
+  <label>{% translate "Pairing link" %}
+    <textarea class="field-control" rows="4" readonly data-pairing-link>{{ pairing_url }}</textarea>
+  </label>
+  <p class="danger-warning">{% translate "Anyone with this link can pair one device until it expires. Send it privately." %}</p>
+  <div class="hero-actions">
+    <button class="button button-primary" type="button" data-copy-pairing>{% translate "Copy link" %}</button>
+    <a class="button button-secondary" href="{% url 'parent_dashboard' %}#parent-settings">{% translate "Back to settings" %}</a>
+  </div>
+</section>
+<script>
+document.querySelector("[data-copy-pairing]").addEventListener("click", async (event) => {
+  await navigator.clipboard.writeText(document.querySelector("[data-pairing-link]").value);
+  event.currentTarget.textContent = "{% translate 'Copied' %}";
+});
+</script>
+{% endblock %}

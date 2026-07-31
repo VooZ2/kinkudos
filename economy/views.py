@@ -32,7 +32,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
-from .auth import child_required, current_child, parent_required
+from .auth import child_required, current_child, current_device, parent_required
 from .backups import backup_status, configure_backup, request_manual_backup
 from .changelog import load_changelog
 from .email_config import public_smtp_config, save_smtp_config, smtp_config, verify_smtp
@@ -55,6 +55,7 @@ from .forms import (
     FeedbackStatusForm,
     FirstThemeForm,
     MinBalanceForm,
+    NetworkAccessForm,
     ParentAccountForm,
     ParentEditForm,
     ParentPasswordResetForm,
@@ -85,9 +86,12 @@ from .models import (
     AssignedTask,
     AssignedTaskBatch,
     AssignedTaskStatus,
+    AttemptCounter,
     BackupAuditEvent,
     BirthDateChangeRequest,
     ChildProfile,
+    DevicePairingLink,
+    DeviceToken,
     FamilySettings,
     FeedbackReport,
     FeedbackStatus,
@@ -101,10 +105,12 @@ from .models import (
     RequestStatus,
     Reward,
     RewardRequest,
+    SecurityAuditEvent,
     Task,
     TaskClaim,
     TaskCompletion,
 )
+from .net import client_ip
 from .push import (
     notify_assigned_tasks,
     notify_gift_received,
@@ -113,6 +119,7 @@ from .push import (
     notify_task_decision,
     notify_task_revision,
 )
+from .rate_limit import register_attempt, reset_attempts
 from .services import (
     approve_proposal,
     approve_reward_request,
@@ -165,7 +172,35 @@ class ParentLoginView(LoginView):
     authentication_form = AuthenticationForm
     redirect_authenticated_user = True
 
+    def post(self, request, *args, **kwargs):
+        username = request.POST.get("username", "").strip().casefold()
+        permitted = register_attempt(
+            AttemptCounter.Scope.PARENT_LOGIN_IP,
+            client_ip(request),
+            window_seconds=300,
+            limit=20,
+        )
+        if username:
+            permitted = (
+                register_attempt(
+                    AttemptCounter.Scope.PARENT_LOGIN_ACCOUNT,
+                    username,
+                    window_seconds=300,
+                    limit=10,
+                )
+                and permitted
+            )
+        if not permitted:
+            form = self.get_form()
+            form.add_error(None, _("Too many sign-in attempts. Try again later."))
+            return self.form_invalid(form)
+        return super().post(request, *args, **kwargs)
+
     def form_valid(self, form):
+        reset_attempts(
+            AttemptCounter.Scope.PARENT_LOGIN_ACCOUNT,
+            form.get_user().get_username().strip().casefold(),
+        )
         self.request.session.flush()
         response = super().form_valid(form)
         self.request.session.set_expiry(settings.PARENT_SESSION_SECONDS)
@@ -185,6 +220,30 @@ class ParentPasswordResetView(EmailResetEnabledMixin, PasswordResetView):
     email_template_name = "economy/password_reset_email.txt"
     subject_template_name = "economy/password_reset_subject.txt"
     success_url = reverse_lazy("password_reset_done")
+
+    def post(self, request, *args, **kwargs):
+        email = request.POST.get("email", "").strip().casefold()
+        permitted = register_attempt(
+            AttemptCounter.Scope.PASSWORD_RESET_IP,
+            client_ip(request),
+            window_seconds=900,
+            limit=5,
+        )
+        if email:
+            permitted = (
+                register_attempt(
+                    AttemptCounter.Scope.PASSWORD_RESET_ACCOUNT,
+                    email,
+                    window_seconds=900,
+                    limit=3,
+                )
+                and permitted
+            )
+        if not permitted:
+            form = self.get_form()
+            form.add_error(None, _("Too many requests. Try again later."))
+            return self.form_invalid(form)
+        return super().post(request, *args, **kwargs)
 
     def dispatch(self, request, *args, **kwargs):
         self.from_email = smtp_config().get("from_email")
@@ -216,6 +275,9 @@ def session_logout(request):
 
 
 def child_select(request):
+    device = current_device(request)
+    if settings.DEVICE_PAIRING_REQUIRED and device is None:
+        return render(request, "economy/device_not_paired.html")
     if request.method == "POST":
         form = ChildPinForm(request.POST)
         if form.is_valid():
@@ -224,11 +286,53 @@ def child_select(request):
                 pk=form.cleaned_data["child_id"],
                 is_active=True,
             )
-            if child.is_locked:
+            device_key = str(device.pk) if device else f"dev:{client_ip(request)}"
+            attempt_checks = (
+                (
+                    AttemptCounter.Scope.CHILD_PIN_DEVICE,
+                    device_key,
+                    300,
+                    15,
+                ),
+                (
+                    AttemptCounter.Scope.CHILD_PIN_PROFILE,
+                    str(child.pk),
+                    300,
+                    10,
+                ),
+                (
+                    AttemptCounter.Scope.CHILD_PIN_IP,
+                    client_ip(request),
+                    300,
+                    30,
+                ),
+                (
+                    AttemptCounter.Scope.CHILD_PIN_SITE,
+                    "site",
+                    300,
+                    60,
+                ),
+            )
+            attempts_allowed = all(
+                register_attempt(
+                    scope,
+                    value,
+                    window_seconds=seconds,
+                    limit=limit,
+                )
+                for scope, value, seconds, limit in attempt_checks
+            )
+            if not attempts_allowed:
+                messages.error(request, _("Too many PIN attempts. Try again later."))
+            elif child.is_locked:
                 messages.error(request, _("The profile is temporarily locked. Try again later."))
             elif child.verify_pin(form.cleaned_data["pin"]):
+                reset_attempts(AttemptCounter.Scope.CHILD_PIN_DEVICE, device_key)
+                reset_attempts(AttemptCounter.Scope.CHILD_PIN_PROFILE, str(child.pk))
                 request.session.flush()
                 request.session["child_id"] = child.pk
+                if device:
+                    request.session["child_device_id"] = device.pk
                 request.session.set_expiry(settings.CHILD_SESSION_SECONDS)
                 response = redirect("child_dashboard")
                 response.set_cookie(
@@ -253,6 +357,134 @@ def child_select(request):
             "last_child_id": request.COOKIES.get("kinkudos_last_child", ""),
         },
     )
+
+
+@parent_required
+@require_POST
+def parent_pair_device(request):
+    label = request.POST.get("label", "").strip() or _("Child device")
+    actor = request.user
+    device, raw_token = DeviceToken.issue(created_by=actor, label=label)
+    SecurityAuditEvent.objects.create(
+        actor=actor,
+        action=SecurityAuditEvent.Action.DEVICE_PAIRED,
+        detail=device.label,
+    )
+    request.session.flush()
+    response = redirect("child_select")
+    response.set_cookie(
+        settings.DEVICE_COOKIE_NAME,
+        raw_token,
+        max_age=settings.DEVICE_COOKIE_MAX_AGE,
+        secure=settings.SESSION_COOKIE_SECURE,
+        httponly=True,
+        samesite="Lax",
+        path="/",
+    )
+    return response
+
+
+@parent_required
+@require_POST
+def parent_generate_pairing_link(request):
+    if not register_attempt(
+        AttemptCounter.Scope.DEVICE_PAIRING,
+        f"parent:{request.user.pk}",
+        window_seconds=600,
+        limit=10,
+    ):
+        messages.error(request, _("Too many pairing attempts. Try again later."))
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    link, raw_token = DevicePairingLink.issue(created_by=request.user)
+    pairing_url = request.build_absolute_uri(reverse("pair_device_via_link"))
+    return render(
+        request,
+        "economy/pairing_link_created.html",
+        {
+            "pairing_url": f"{pairing_url}#{raw_token}",
+            "pairing_expires_at": link.expires_at,
+        },
+    )
+
+
+def pair_device_via_link(request):
+    if request.method == "GET":
+        response = render(request, "economy/pair_device.html")
+        response["Cache-Control"] = "no-store"
+        response["Referrer-Policy"] = "no-referrer"
+        return response
+    if not register_attempt(
+        AttemptCounter.Scope.DEVICE_PAIRING,
+        client_ip(request),
+        window_seconds=600,
+        limit=20,
+    ):
+        messages.error(request, _("Too many pairing attempts. Try again later."))
+        return redirect("pair_device_via_link")
+    raw_token = request.POST.get("token", "")
+    with transaction.atomic():
+        link = (
+            DevicePairingLink.objects.select_for_update()
+            .filter(token_hash=DeviceToken.digest(raw_token))
+            .first()
+        )
+        if link is None or link.used_at is not None or link.expires_at <= timezone.now():
+            messages.error(request, _("This pairing link is invalid or has expired."))
+            return redirect("pair_device_via_link")
+        device, device_token = DeviceToken.issue(
+            created_by=link.created_by,
+            label=_("Child device"),
+        )
+        link.used_at = timezone.now()
+        link.save(update_fields=["used_at"])
+        SecurityAuditEvent.objects.create(
+            actor=link.created_by,
+            action=SecurityAuditEvent.Action.DEVICE_PAIRED,
+            detail=device.label,
+        )
+    request.session.flush()
+    response = redirect("child_select")
+    response.set_cookie(
+        settings.DEVICE_COOKIE_NAME,
+        device_token,
+        max_age=settings.DEVICE_COOKIE_MAX_AGE,
+        secure=settings.SESSION_COOKIE_SECURE,
+        httponly=True,
+        samesite="Lax",
+        path="/",
+    )
+    return response
+
+
+@parent_required
+@require_POST
+def parent_revoke_device(request, device_id):
+    device = get_object_or_404(DeviceToken, pk=device_id, revoked_at__isnull=True)
+    with transaction.atomic():
+        device.revoked_at = timezone.now()
+        device.save(update_fields=["revoked_at"])
+        device.push_subscriptions.all().delete()
+        SecurityAuditEvent.objects.create(
+            actor=request.user,
+            action=SecurityAuditEvent.Action.DEVICE_REVOKED,
+            detail=device.label,
+        )
+    messages.success(request, _("Device access revoked."))
+    return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+
+
+@parent_required
+@require_POST
+def parent_rename_device(request, device_id):
+    device = get_object_or_404(DeviceToken, pk=device_id, revoked_at__isnull=True)
+    label = request.POST.get("label", "").strip()
+    if not label:
+        messages.error(request, _("Enter a device name."))
+    else:
+        device.label = label[:80]
+        device.save(update_fields=["label"])
+        messages.success(request, _("Device name saved."))
+    return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
 
 @child_required
@@ -1317,6 +1549,16 @@ def parent_dashboard(request):
                 instance=FamilySettings.load(),
                 auto_id="id_family_preferences_%s",
             ),
+            "network_access_form": NetworkAccessForm(
+                instance=FamilySettings.load(),
+                current_ip=client_ip(request),
+                auto_id="id_network_access_%s",
+            ),
+            "current_client_ip": client_ip(request),
+            "paired_devices": DeviceToken.objects.filter(
+                revoked_at__isnull=True
+            ).select_related("created_by"),
+            "current_device": current_device(request),
             "backup_status": backup_status(),
             "backup_settings_form": BackupSettingsForm(),
             "smtp_status": public_smtp_config(),
@@ -1910,6 +2152,71 @@ def parent_update_family_preferences(request):
 
 @parent_required
 @require_POST
+def parent_update_network_access(request):
+    if not request.user.is_staff:
+        messages.error(
+            request,
+            _("Only a parent administrator can change network access."),
+        )
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    family = FamilySettings.load()
+    form = NetworkAccessForm(
+        request.POST,
+        instance=family,
+        current_ip=client_ip(request),
+    )
+    if not form.is_valid():
+        messages.error(request, _("Check the network access settings."))
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    authenticated = authenticate(
+        request,
+        username=request.user.get_username(),
+        password=form.cleaned_data["current_password"],
+    )
+    if authenticated is None:
+        messages.error(request, _("The current parent password is incorrect."))
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    family = form.save()
+    SecurityAuditEvent.objects.create(
+        actor=request.user,
+        action=SecurityAuditEvent.Action.NETWORK_POLICY_CHANGED,
+        detail=family.network_access_mode,
+    )
+    messages.success(request, _("Network access settings saved."))
+    return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+
+
+@parent_required
+@require_POST
+def parent_revoke_all_devices(request):
+    if not request.user.is_staff:
+        messages.error(
+            request,
+            _("Only a parent administrator can revoke all devices."),
+        )
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    authenticated = authenticate(
+        request,
+        username=request.user.get_username(),
+        password=request.POST.get("current_password", ""),
+    )
+    if authenticated is None:
+        messages.error(request, _("The current parent password is incorrect."))
+        return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+    with transaction.atomic():
+        devices = DeviceToken.objects.filter(revoked_at__isnull=True)
+        PushSubscription.objects.filter(device__in=devices).delete()
+        devices.update(revoked_at=timezone.now())
+        SecurityAuditEvent.objects.create(
+            actor=request.user,
+            action=SecurityAuditEvent.Action.ALL_DEVICES_REVOKED,
+        )
+    messages.success(request, _("All child devices were revoked."))
+    return redirect(f"{reverse('parent_dashboard')}#parent-settings")
+
+
+@parent_required
+@require_POST
 def parent_configure_smtp(request):
     if not request.user.is_staff:
         messages.error(request, _("Only a parent administrator can change email settings."))
@@ -2021,6 +2328,7 @@ def push_subscribe(request):
             defaults={
                 "user": request.user,
                 "child": None,
+                "device": None,
                 "p256dh": keys["p256dh"],
                 "auth": keys["auth"],
                 "user_agent": request.headers.get("User-Agent", "")[:255],
@@ -2052,11 +2360,20 @@ def child_push_subscribe(request):
     try:
         payload = json.loads(request.body)
         keys = payload["keys"]
+        device = current_device(request)
+        if device is None and settings.DEVICE_PAIRING_REQUIRED:
+            return JsonResponse({"ok": False}, status=403)
+        if device is None:
+            device, _unused_token = DeviceToken.issue(
+                created_by=None,
+                label=_("Development device"),
+            )
         PushSubscription.objects.update_or_create(
             endpoint=payload["endpoint"],
             defaults={
                 "user": None,
                 "child": request.child,
+                "device": device,
                 "p256dh": keys["p256dh"],
                 "auth": keys["auth"],
                 "user_agent": request.headers.get("User-Agent", "")[:255],
@@ -2076,7 +2393,11 @@ def child_push_unsubscribe(request):
         endpoint = json.loads(request.body)["endpoint"]
     except (KeyError, TypeError, ValueError):
         return JsonResponse({"ok": False}, status=400)
-    PushSubscription.objects.filter(child=request.child, endpoint=endpoint).delete()
+    PushSubscription.objects.filter(
+        child=request.child,
+        device=current_device(request),
+        endpoint=endpoint,
+    ).delete()
     return JsonResponse({"ok": True})
 
 

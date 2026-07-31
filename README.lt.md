@@ -2,7 +2,7 @@
 
 > Savarankiškai talpinama šeimos PWA, kasdienius darbus paverčianti bendrais pasiekimais.
 
-**Dabartinis leidimas:** 26.3.2 · **Kalbos:** lietuvių ir anglų
+**Dabartinis leidimas:** 26.4.0 · **Kalbos:** lietuvių ir anglų
 
 ## Kodėl KinKudos?
 
@@ -70,8 +70,9 @@ Ekrano nuotraukose naudojami išgalvoti demonstraciniai duomenys.
 
 ## Privatumo ir saugumo modelis
 
-- Tėvai jungiasi slaptažodžiais, o vaikų PIN kodai yra maišomi ir saugomi nuo
-  pakartotinių bandymų.
+- Tėvai jungiasi ribojamų bandymų slaptažodžiais. Prieš parodant vaikų
+  profilius ar leidžiant įvesti ribojamų bandymų maišomą PIN, įrenginį turi
+  patvirtinti tėvai; jo prieigą galima bet kada atšaukti.
 - Konteineriai veikia be `root` teisių, programos konteinerio failų sistema yra
   tik skaitoma.
 - Taškų operacijos yra transakcinės, o žurnalo įrašai nekeičiami.
@@ -80,15 +81,18 @@ Ekrano nuotraukose naudojami išgalvoti demonstraciniai duomenys.
 - Prisijungimai, DB, nuotraukos, kopijos ir šeimos duomenys laikomi už leidimo
   kodo katalogo ribų.
 
-KinKudos skirtas naudoti už jau veikiančio „Traefik“ reverse proxy su TLS ir
-patikimų tinklų prieigos sąrašu. Už saugų serverį, patikrintą duomenų atkūrimą,
+KinKudos skirtas naudoti už TLS reverse proxy. Palaikomi „Nginx“, „Caddy“,
+„Traefik“ ir konteineriniai proxy, tokie kaip „Nginx Proxy Manager“.
+Pasirenkamas programos IP leidžiamų tinklų sąrašas gali riboti vaikų arba visos
+instaliacijos prieigą. Už saugų serverį, patikrintą duomenų atkūrimą,
 atnaujinimus ir prieigą prie hosto atsako operatorius.
 
 ## Diegimas
 
-Palaikomoje produkcinėje schemoje naudojami Docker Compose, SQLite, Gunicorn,
-izoliuotas kopijų agentas ir esamas `web` pavadintas „Traefik“ tinklas.
-Palaikomi ARM64 ir AMD64 Linux serveriai.
+Palaikomoje produkcinėje schemoje naudojamas versijuotas kelių architektūrų
+konteinerio atvaizdas, Docker Compose, SQLite, Gunicorn, izoliuotas kopijų
+agentas ir operatoriaus pasirinktas TLS reverse proxy. Palaikomi ARM64 ir AMD64
+Linux serveriai.
 
 - [Diegimas ir atnaujinimas](deploy/README.lt.md)
 - [Architektūra ir saugumas](docs/ARCHITECTURE.md)
@@ -96,8 +100,8 @@ Palaikomi ARM64 ir AMD64 Linux serveriai.
 
 Leidimų archyvai ir jų kontrolinės sumos skelbiami
 [GitHub Releases puslapyje](https://github.com/VooZ2/kinkudos/releases).
-Repozitorija neskelbia iš anksto sukonfigūruoto konteinerio atvaizdo ar vienos
-komandos viešojo debesies diegimo.
+Kartu skelbiamas versijuotas `ghcr.io/vooz2/kinkudos` konteinerio atvaizdas.
+Repozitorija neskelbia vienos komandos viešojo debesies diegimo.
 
 ## Vietinis kūrimas
 

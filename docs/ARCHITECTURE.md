@@ -12,8 +12,8 @@ outside the repository.
 ## Stack
 Python 3.12 · Django 5.2 LTS · SQLite with WAL · server-rendered templates ·
 small vanilla-JavaScript PWA layer · Web Push with VAPID · Gunicorn · one
-ARM64/AMD64-compatible application container · an existing external Traefik
-reverse proxy.
+published ARM64/AMD64 application image · a supported Nginx, Caddy, Traefik,
+or container-based TLS reverse proxy.
 
 There is no Node.js toolchain, SPA, or public API. Small internal JSON
 endpoints are used where necessary, such as child-state polling for
@@ -30,10 +30,13 @@ The first parent created by the installer is the parent administrator
 (`is_staff=True`). All parents may see backup health, but only the parent
 administrator may change backup credentials or request a manual backup.
 
-**Children** — multiple `ChildProfile` records managed by parents. Children
-sign in with a four-digit PIN hashed with Argon2, never stored raw. Five
-failed attempts lock the profile for five minutes; a parent can unlock it
-immediately. Child sessions last 48 hours
+**Children** — multiple `ChildProfile` records managed by parents. Before a
+device can see child names or submit a PIN, a parent pairs it with a
+high-entropy, revocable `DeviceToken`. Children then sign in with a four-digit
+PIN hashed with Argon2, never stored raw. Device, profile, IP, and site-wide
+attempt limits protect the PIN flow; five failed profile attempts also lock
+the profile for five minutes, and a parent can unlock it immediately. Child
+sessions are bound to the paired device and last 48 hours
 (`KINKUDOS_CHILD_SESSION_SECONDS`). A device may remember the last selected
 child. Removing a child profile deactivates it, same as parent accounts.
 
@@ -44,8 +47,19 @@ rewards, themes). Cross-child access is forbidden.
 **FamilySettings** — singleton: family display name, currency name, default
 per-child negative balance floor, photo-bonus points, birthday points,
 family-wide lottery availability, ticket price and weekly purchase limit,
-evidence/screenshot retention periods, password-recovery code hash. Not a
+evidence/screenshot retention periods, optional application-level network
+access mode and allowed IPv4/IPv6 CIDRs, password-recovery code hash. Not a
 source of app versioning or general PWA configuration.
+
+**DeviceToken** / **DevicePairingLink** — a paired child browser/PWA and its
+short-lived, single-use bootstrap link. Only SHA-256 token digests are stored.
+Child sessions and child Web Push subscriptions are bound to a non-revoked
+device. Revocation removes that device's child push subscriptions immediately.
+
+**AttemptCounter** — shared fixed-window authentication counters stored in
+SQLite so limits remain consistent across Gunicorn workers. Keys are HMAC
+digests of IP, account, profile, or device dimensions and old rows are removed
+by daily maintenance.
 
 **Task** / **TaskClaim** — shared task catalog, positive point reward. A
 child may hold several claims for different tasks at once, but only one
@@ -132,7 +146,7 @@ calendar year, linked to its ledger entry.
 parent-approved; one pending request per child at a time.
 
 **PushSubscription** — Web Push subscription for either a parent user or a
-child device (exactly one owner, enforced by a DB constraint). Parents are
+paired child device (exactly one owner, enforced by a DB constraint). Parents are
 notified of new/revised task submissions; children are notified of task
 and reward decisions, newly assigned daily work, point gifts, and birthday
 awards.
@@ -170,8 +184,19 @@ balances, rejected work, and destructive actions. Pure black is not part of
 the shared parent palette.
 
 ## Security
-- Traefik `ipAllowList` via `KINKUDOS_ALLOWED_NETWORKS`; TLS via the
-  existing `letsencrypt` resolver with `tlsChallenge`.
+- TLS terminates at the operator's supported reverse proxy; Gunicorn is never
+  published directly to the internet.
+- Forwarded client IP and scheme headers are honored only from configured
+  trusted proxy networks. Authentication limits use the resolved address.
+- Parent login, password recovery, device pairing, child PIN, and optional
+  Django admin endpoints have shared database-backed attempt limits.
+- Child profiles are hidden until a parent pairs the device. Pairing links are
+  single-use, expire after ten minutes, and pass their secret in the URL
+  fragment so it is not written to normal HTTP access logs.
+- An optional Django-level IPv4/IPv6 allowlist can restrict child routes or
+  the whole application independently of the chosen proxy. A server-side
+  management command provides recovery from an accidental lockout.
+- Django admin is disabled in production unless explicitly enabled.
 - Django `SECURE_PROXY_SSL_HEADER`; `HttpOnly`, `SameSite=Lax` cookies.
 - CSRF protection on all mutating requests. No CORS — same-origin only.
 - Every parent/child request is authorized server-side.
@@ -183,8 +208,8 @@ the shared parent palette.
 ## Deployment layout
 ```text
 kinkudos/
-├── app/       # publishable application code
-├── deploy/    # shared Compose + Traefik config, no secrets
+├── app/       # optional checked-out application source
+├── deploy/    # shared Compose + selected proxy overlay, no secrets
 ├── data/      # SQLite + uploaded media
 ├── backups/   # local backup copies
 ├── backup-state/ # sanitized backup health state

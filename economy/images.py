@@ -1,6 +1,6 @@
+import warnings
 from dataclasses import dataclass
 from io import BytesIO
-import warnings
 
 from PIL import Image, ImageOps
 from pillow_heif import register_heif_opener

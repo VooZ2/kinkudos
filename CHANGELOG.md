@@ -5,6 +5,47 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.4.0] - 2026-07-31
+
+### Added
+
+- Parents can pair each child browser or installed PWA with a one-time,
+  short-lived link, review paired devices, rename them, and revoke one or all
+  devices. A child PIN remains a second authentication step.
+- Parents can optionally restrict child pages or the entire application to
+  explicit IP addresses and CIDR networks. A server command can disable the
+  restriction after accidental lockout.
+- Production deployment supports host Nginx/Caddy, container-based proxies
+  such as Nginx Proxy Manager, and Traefik without coupling the base Compose
+  configuration to one proxy.
+- Release tags publish one multi-platform GHCR application image for AMD64 and
+  ARM64 installations.
+
+### Changed
+
+- Existing child profiles and PINs remain valid after upgrade, but every child
+  browser or PWA must be paired once. Existing child push subscriptions are
+  removed and must be enabled again on a paired device.
+- In-app feedback is explicitly private family feedback, while software
+  defects link to GitHub Issues with a warning not to include family data.
+- Installation and updates validate the configured UID/GID ownership of
+  writable host directories and pull the versioned application image.
+- Scheduled maintenance also expires stale security counters, pairing links,
+  and sessions.
+
+### Security
+
+- Parent login, password-reset, and child-PIN attempts are rate-limited using
+  server-side database counters.
+- Forwarded client IP headers are accepted only from configured trusted
+  proxies, and the optional network allowlist uses the resulting verified
+  client address.
+- Child push subscriptions are bound to an approved device, pairing links are
+  one-use and short-lived, and stored device credentials are hashed.
+- The Django administration route is disabled by default in production.
+- A regression test verifies that the generated VAPID private key is an actual
+  usable EC private key.
+
 ## [26.3.2] - 2026-07-31
 
 ### Changed

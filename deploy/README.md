@@ -5,8 +5,12 @@ The suggested layout is:
 
 ```text
 kinkudos/
-├── app/
+├── app/                 # optional retained release source
 ├── deploy/
+├── data/
+├── backups/
+├── backup-state/
+├── uploads/
 └── secrets/
 ```
 
@@ -32,27 +36,37 @@ permissions. Never commit `.env` or the `secrets` directory.
 Prerequisites:
 
 - a 64-bit ARM or x86 Linux host with Docker Engine and Docker Compose;
-- an existing Traefik instance attached to an external Docker network named
-  `web`;
+- an HTTPS reverse proxy: Nginx, Caddy, Nginx Proxy Manager, Traefik, or an
+  equivalent product;
 - a hostname routed to the host;
 - access to the chosen release archive and its SHA256 checksum. When using
   GitHub CLI with a private repository, authenticate an account that can read
-  that repository.
+  that repository;
+- access to `ghcr.io/vooz2/kinkudos` while the package is private:
+  `gh auth token | docker login ghcr.io -u VooZ2 --password-stdin`.
 
-Place the release source in `app` and this directory beside it as shown above.
-Set `KINKUDOS_HOSTNAME` and, when needed, `KINKUDOS_ALLOWED_NETWORKS` in
-`deploy/.env`, then run:
+From a new empty deployment root, download and verify the release, keep its
+source as `app`, copy out the deployment directory, and start the installer:
 
 ```bash
-cd /path/to/kinkudos/deploy
+version=26.4.0
+repository=VooZ2/kinkudos
+gh release download "v$version" --repo "$repository" \
+  --pattern "kinkudos-$version.tar.gz*"
+sha256sum -c "kinkudos-$version.tar.gz.sha256"
+tar -xzf "kinkudos-$version.tar.gz"
+mv "kinkudos-$version" app
+cp -a app/deploy ./deploy
+cd deploy
 ./bootstrap.sh
 ```
 
-The installer asks for English or Lithuanian, hostname, allowed private
-networks, and whether to create the first family. Family setup asks for the
-first parent credentials, family name, and child profiles. It generates
-missing Django, VAPID, backup-agent, and `restic` secrets, creates `.env`, and
-builds the images. Existing secrets are not overwritten.
+The installer asks for English or Lithuanian, hostname, reverse-proxy mode,
+and whether to create the first family. Family setup asks for the first parent
+credentials, family name, and child profiles. It generates missing Django,
+VAPID, backup-agent, and `restic` secrets, creates `.env`, checks host-directory
+ownership, and pulls the published application image. Existing secrets are not
+overwritten.
 
 For an unattended English installation, set:
 
@@ -76,7 +90,7 @@ Run these commands from the deployment root (the directory containing
 version with the release you want to install:
 
 ```bash
-version=26.3.2
+version=26.4.0
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -96,11 +110,75 @@ sudo sh "$install_script" \
 rm -f "$install_script" "$compose_file"
 ```
 
-The updater validates the checksum and release metadata, builds and smoke-tests
-the image, backs up the live database, switches the app only after those checks
-pass, verifies container health, and refreshes versioned `deploy` management
-scripts. The local `deploy/.env`, runtime data, uploads, backups, and secrets
-remain untouched and are never included in the release archive.
+The updater validates the checksum and release metadata, pulls and smoke-tests
+the published image, checks host-directory ownership, backs up the live
+database, switches the app only after those checks pass, verifies container
+health, and refreshes versioned `deploy` management scripts. The local
+`deploy/.env`, runtime data, uploads, backups, and secrets remain untouched and
+are never included in the release archive.
+
+After upgrading to 26.4.0, existing parents, children, PINs, points, and family
+data remain valid. Each child browser or installed PWA must be paired once by a
+parent before the child can select a profile again. Existing child push
+subscriptions are deliberately removed, so notifications must be enabled
+again after pairing.
+
+## Reverse proxy and client IPs
+
+The base Compose file does not publish the application port and is independent
+of a particular reverse proxy. `bootstrap.sh` creates one local
+`compose.override.yml`:
+
+- `compose.host-proxy.yml` publishes `127.0.0.1:8000` for host-installed Nginx
+  or Caddy;
+- `compose.container-proxy.yml` connects the app to a configurable external
+  Docker network for Nginx Proxy Manager or another container proxy;
+- `compose.traefik.yml` adds the KinKudos Traefik router and the selected
+  external Docker network.
+
+For host Nginx, proxy to `http://127.0.0.1:8000` and pass the original
+`Host`, `X-Forwarded-Proto`, and `X-Forwarded-For` headers:
+
+```nginx
+location / {
+    proxy_pass http://127.0.0.1:8000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+```
+
+A minimal Caddy site is:
+
+```caddyfile
+family.example.com {
+    reverse_proxy 127.0.0.1:8000
+}
+```
+
+For Nginx Proxy Manager, select the Docker service `app`, port `8000`, enable
+WebSocket support, and use the same external network configured by
+`KINKUDOS_PROXY_NETWORK`.
+
+KinKudos trusts forwarded client-IP headers only when the direct peer belongs
+to `KINKUDOS_TRUSTED_PROXIES`. Set this to the exact proxy address or Docker
+subnet, not to the entire internet. The optional parent setting
+Settings → Network access can then restrict child pages or the entire
+application to explicit IP/CIDR networks. It is disabled by default and is an
+additional layer, not a replacement for HTTPS, device pairing, or strong
+parent passwords. If a rule locks out every parent, run:
+
+```bash
+docker compose exec -T app python manage.py disable_network_restrictions
+```
+
+The Django administration route is disabled by default. Normal family
+administration remains in the parent interface.
+
+Before installation or update, `check-ownership.sh` verifies that bind-mounted
+directories are writable by the configured `APP_UID` and `APP_GID`. If it
+reports a mismatch, review the exact path and apply the shown `chown` command;
+do not recursively change ownership of the deployment root.
 
 ## Backups
 
@@ -171,10 +249,12 @@ confirming their current parent password. UI-managed values, including the
 password, are stored in `../secrets/smtp/settings.json` with `0600`
 permissions and are never stored in the application database.
 
-Signed-in parents and children can submit a problem or suggestion from the
-floating bug button. KinKudos saves the report before attempting email
-delivery. Parents can review and update report statuses in Settings even if
-SMTP is unavailable. Optional screenshots are private WebP files; only
+Signed-in parents and children can submit a private family problem or
+suggestion from the floating bug button. KinKudos saves the report before
+attempting email delivery. Parents can review and update report statuses in
+Settings even if SMTP is unavailable. Software defects belong in the linked
+GitHub issue tracker; reports sent there must not contain names, screenshots,
+or other family data. Optional in-app screenshots are private WebP files; only
 screenshots from resolved reports are removed after the retention period
 selected in Settings.
 
@@ -183,7 +263,7 @@ selected in Settings.
 KinKudos keeps task photos and resolved-feedback screenshots for the periods
 selected in the parent settings. It also checks every 30 minutes whether a due
 weekly lottery reminder should be sent. On a systemd-based Docker host, enable
-both timers after installation or upgrading to 26.3.2:
+both timers after installation or upgrading to 26.4.0:
 
 ```bash
 cd /path/to/kinkudos/deploy
@@ -200,14 +280,14 @@ For a generic cron installation, run the provider-neutral maintenance command
 once per night and the reminder command every 30 minutes:
 
 ```cron
-15 2 * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py purge_task_evidence
+15 2 * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py run_maintenance
 */30 * * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py send_lottery_reminders
 ```
 
 It can also be run manually on any Docker Compose host:
 
 ```bash
-docker compose exec -T app python manage.py purge_task_evidence
+docker compose exec -T app python manage.py run_maintenance
 docker compose exec -T app python manage.py send_lottery_reminders
 ```
 

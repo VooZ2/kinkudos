@@ -17,21 +17,38 @@ case "$install_language" in
 esac
 
 install_hostname=${KINKUDOS_HOSTNAME:-kinkudos.example.com}
-allowed_networks=${KINKUDOS_ALLOWED_NETWORKS:-192.168.0.0/16,10.0.0.0/8,172.16.0.0/12}
+proxy_mode=${KINKUDOS_PROXY_MODE:-host}
+proxy_network=${KINKUDOS_PROXY_NETWORK:-web}
 if [ -t 0 ]; then
   if [ "$install_language" = "lt" ]; then
     printf 'KinKudos domeno vardas [%s]: ' "$install_hostname"
     read -r selected_hostname
-    printf 'Leidžiami privatūs tinklai [%s]: ' "$allowed_networks"
-    read -r selected_networks
+    printf 'Proxy režimas: host, traefik arba container [%s]: ' "$proxy_mode"
+    read -r selected_proxy_mode
   else
     printf 'KinKudos hostname [%s]: ' "$install_hostname"
     read -r selected_hostname
-    printf 'Allowed private networks [%s]: ' "$allowed_networks"
-    read -r selected_networks
+    printf 'Proxy mode: host, traefik, or container [%s]: ' "$proxy_mode"
+    read -r selected_proxy_mode
   fi
   install_hostname=${selected_hostname:-$install_hostname}
-  allowed_networks=${selected_networks:-$allowed_networks}
+  proxy_mode=${selected_proxy_mode:-$proxy_mode}
+fi
+case "$proxy_mode" in
+  host|traefik|container) ;;
+  *) echo "Proxy mode must be host, traefik, or container." >&2; exit 1 ;;
+esac
+
+runtime_uid=$(id -u)
+runtime_gid=$(id -g)
+if [ "$runtime_uid" -eq 0 ]; then
+  if [ -n "${SUDO_UID:-}" ] && [ -n "${SUDO_GID:-}" ]; then
+    runtime_uid=$SUDO_UID
+    runtime_gid=$SUDO_GID
+  else
+    echo "Do not run bootstrap directly as root; use a deployment user." >&2
+    exit 1
+  fi
 fi
 
 if ! command -v docker >/dev/null 2>&1; then
@@ -49,9 +66,10 @@ umask 077
 if [ ! -f "$deploy_dir/.env" ]; then
   {
     echo "KINKUDOS_HOSTNAME=$install_hostname"
-    echo "KINKUDOS_ALLOWED_NETWORKS=$allowed_networks"
-    echo "KINKUDOS_UID=$(id -u)"
-    echo "KINKUDOS_GID=$(id -g)"
+    echo "KINKUDOS_PROXY_MODE=$proxy_mode"
+    echo "KINKUDOS_PROXY_NETWORK=$proxy_network"
+    echo "KINKUDOS_UID=$runtime_uid"
+    echo "KINKUDOS_GID=$runtime_gid"
     echo "KINKUDOS_DEFAULT_LANGUAGE=$install_language"
   } > "$deploy_dir/.env"
 elif ! grep -q '^KINKUDOS_DEFAULT_LANGUAGE=' "$deploy_dir/.env"; then
@@ -64,6 +82,16 @@ mkdir -p \
   "$project_root/data" \
   "$project_root/backups" \
   "$project_root/backup-state"
+
+for runtime_dir in \
+  "$project_root/data" \
+  "$project_root/backups" \
+  "$project_root/backup-state"
+do
+  if [ -z "$(find "$runtime_dir" -mindepth 1 -print -quit)" ]; then
+    chown "$runtime_uid:$runtime_gid" "$runtime_dir"
+  fi
+done
 
 if [ ! -s "$secrets_dir/django_secret_key" ]; then
   openssl rand -base64 64 | tr -d '\n' > "$secrets_dir/django_secret_key"
@@ -108,8 +136,14 @@ chmod 0600 \
   "$secrets_dir/backup/restic.env"
 
 cd "$deploy_dir"
+case "$proxy_mode" in
+  host) cp "$deploy_dir/compose.host-proxy.yml" "$deploy_dir/compose.override.yml" ;;
+  traefik) cp "$deploy_dir/compose.traefik.yml" "$deploy_dir/compose.override.yml" ;;
+  container) cp "$deploy_dir/compose.container-proxy.yml" "$deploy_dir/compose.override.yml" ;;
+esac
+"$deploy_dir/check-ownership.sh"
 docker compose config >/dev/null
-docker compose build --pull
+docker compose pull
 docker compose up -d
 docker compose ps
 

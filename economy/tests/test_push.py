@@ -1,14 +1,20 @@
 import json
+import tempfile
+from pathlib import Path
 from unittest.mock import patch
 
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import ec
 from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 from django.utils.translation import override
+from py_vapid import Vapid
 
 from economy.models import (
     AssignedTask,
     AssignedTaskBatch,
     ChildProfile,
+    DeviceToken,
     PointGift,
     PushSubscription,
     Reward,
@@ -26,6 +32,29 @@ from economy.push import (
 )
 
 
+class VapidFilePathTests(TestCase):
+    def test_docker_secret_pem_path_is_accepted_by_vapid_library(self):
+        key = ec.generate_private_key(ec.SECP256R1())
+        pem = key.private_bytes(
+            serialization.Encoding.PEM,
+            serialization.PrivateFormat.TraditionalOpenSSL,
+            serialization.NoEncryption(),
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "vapid_private.pem"
+            path.write_bytes(pem)
+
+            vapid = Vapid.from_file(str(path))
+            headers = vapid.sign(
+                {
+                    "sub": "mailto:test@example.com",
+                    "aud": "https://push.example",
+                }
+            )
+
+        self.assertIn("Authorization", headers)
+
+
 @override_settings(
     VAPID_PRIVATE_KEY="test-private-key",
     VAPID_SUBJECT="mailto:test@example.com",
@@ -35,14 +64,18 @@ class ChildDecisionPushTests(TestCase):
         self.parent = get_user_model().objects.create_user("parent")
         self.child = ChildProfile.objects.create(name="Child One", theme_selected=True)
         self.other_child = ChildProfile.objects.create(name="Child Two", theme_selected=True)
+        self.child_device, _ = DeviceToken.issue(created_by=self.parent, label="One")
+        self.other_device, _ = DeviceToken.issue(created_by=self.parent, label="Two")
         PushSubscription.objects.create(
             child=self.child,
+            device=self.child_device,
             endpoint="https://push.example/child_one",
             p256dh="child_one-key",
             auth="child_one-auth",
         )
         PushSubscription.objects.create(
             child=self.other_child,
+            device=self.other_device,
             endpoint="https://push.example/child_two",
             p256dh="child_two-key",
             auth="child_two-auth",

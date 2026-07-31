@@ -1,0 +1,9 @@
+services:
+  app:
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
+    name: "${KINKUDOS_PROXY_NETWORK:-proxy}"

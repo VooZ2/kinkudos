@@ -1,0 +1,22 @@
+services:
+  app:
+    networks:
+      - proxy
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "${KINKUDOS_PROXY_NETWORK:-web}"
+      traefik.http.routers.kinkudos-http.entrypoints: web
+      traefik.http.routers.kinkudos-http.rule: "Host(`${KINKUDOS_HOSTNAME:-kinkudos.example.com}`)"
+      traefik.http.routers.kinkudos-http.middlewares: kinkudos-https-redirect
+      traefik.http.middlewares.kinkudos-https-redirect.redirectscheme.scheme: https
+      traefik.http.middlewares.kinkudos-https-redirect.redirectscheme.permanent: "true"
+      traefik.http.routers.kinkudos-https.entrypoints: websecure
+      traefik.http.routers.kinkudos-https.rule: "Host(`${KINKUDOS_HOSTNAME:-kinkudos.example.com}`)"
+      traefik.http.routers.kinkudos-https.tls: "true"
+      traefik.http.routers.kinkudos-https.tls.certresolver: letsencrypt
+      traefik.http.services.kinkudos-app.loadbalancer.server.port: "8000"
+
+networks:
+  proxy:
+    external: true
+    name: "${KINKUDOS_PROXY_NETWORK:-web}"

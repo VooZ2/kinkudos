@@ -10,13 +10,30 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class ReleaseDeploymentTests(SimpleTestCase):
-    def test_compose_pins_traefik_to_public_web_network(self):
+    def test_base_compose_is_proxy_neutral_and_does_not_publish_gunicorn(self):
         compose = (ROOT / "deploy" / "compose.yml").read_text(encoding="utf-8")
 
-        self.assertIn("traefik.docker.network: web", compose)
         app_service = compose.split("  backup-agent:", 1)[0]
-        self.assertIn("      - web", app_service)
         self.assertIn("      - backup", app_service)
+        self.assertNotIn("traefik.", app_service)
+        self.assertNotIn("ports:", app_service)
+        self.assertIn("image: ghcr.io/vooz2/kinkudos:", app_service)
+
+    def test_proxy_overlays_keep_direct_port_private(self):
+        host = (ROOT / "deploy" / "compose.host-proxy.yml").read_text(
+            encoding="utf-8"
+        )
+        container = (ROOT / "deploy" / "compose.container-proxy.yml").read_text(
+            encoding="utf-8"
+        )
+        traefik = (ROOT / "deploy" / "compose.traefik.yml").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("127.0.0.1:${KINKUDOS_HTTP_PORT:-8000}:8000", host)
+        self.assertIn('name: "${KINKUDOS_PROXY_NETWORK:-proxy}"', container)
+        self.assertIn("traefik.http.routers.kinkudos-https.tls", traefik)
+        self.assertNotIn("ipallowlist", traefik.lower())
 
     def test_backup_agent_has_isolated_app_network_and_outbound_network(self):
         compose = (ROOT / "deploy" / "compose.yml").read_text(encoding="utf-8")
@@ -79,7 +96,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.3.2",
+                    "26.4.0",
                     str(root),
                 ],
                 env=environment,

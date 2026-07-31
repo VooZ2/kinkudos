@@ -63,7 +63,7 @@ class BackupSettingsTests(TestCase):
         self.assertNotContains(response, "REPLACE_WITH_REPOSITORY")
         self.assertNotContains(response, "Backups not completed")
         self.assertContains(response, "Edit settings")
-        self.assertContains(response, "Your account password", count=2)
+        self.assertContains(response, "Your account password", count=3)
         self.assertNotContains(response, "Your current parent password")
 
     @patch("economy.views.backup_status")

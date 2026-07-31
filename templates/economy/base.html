@@ -163,14 +163,20 @@
       <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}">
         <svg class="action-icon"><use href="#icon-close"></use></svg>
       </button>
-      <h2>{% translate "Send feedback" %}</h2>
+      <h2>{% if user.is_authenticated %}{% translate "Send family feedback" %}{% else %}{% translate "Send feedback" %}{% endif %}</h2>
       <p>
         {% if user.is_authenticated %}
-          {% translate "Describe a problem or suggest an improvement." %}
+          {% translate "This message stays on your family server and is reviewed by parents." %}
         {% else %}
           {% translate "Tell us what is not working or what you would like to add." %}
         {% endif %}
       </p>
+      {% if user.is_authenticated %}
+        <p>
+          <a href="https://github.com/VooZ2/kinkudos/issues" target="_blank" rel="noreferrer">{% translate "Report a KinKudos software bug on GitHub" %}</a>
+        </p>
+        <small class="help-text">{% translate "Remove names, PINs, screenshots, email addresses, server details, and other family information before posting publicly." %}</small>
+      {% endif %}
       <form method="post" action="{% url 'submit_feedback' %}" enctype="multipart/form-data" class="stack-form">
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ request.get_full_path }}">

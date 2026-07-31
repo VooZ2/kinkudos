@@ -2,24 +2,7 @@ name: kinkudos
 
 services:
   app:
-    build:
-      context: ../app
-    image: kinkudos:26.3.2
-    entrypoint:
-      - /bin/sh
-      - -c
-      - |
-        set -e
-        python manage.py migrate --noinput
-        exec gunicorn kinkudos.wsgi:application \
-          --bind=0.0.0.0:8000 \
-          --workers=2 \
-          --threads=2 \
-          --timeout=30 \
-          --access-logfile=- \
-          --error-logfile=- \
-          --no-control-socket
-    command: []
+    image: ghcr.io/vooz2/kinkudos:26.4.0
     user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"
     restart: unless-stopped
     read_only: true
@@ -53,6 +36,8 @@ services:
       KINKUDOS_HSTS_SECONDS: "31536000"
       KINKUDOS_LOG_LEVEL: INFO
       KINKUDOS_DEFAULT_LANGUAGE: "${KINKUDOS_DEFAULT_LANGUAGE:-en}"
+      KINKUDOS_DEVICE_PAIRING_REQUIRED: "true"
+      KINKUDOS_TRUSTED_PROXIES: "${KINKUDOS_TRUSTED_PROXIES:-127.0.0.0/8,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16}"
     secrets:
       - django_secret_key
       - vapid_private
@@ -64,7 +49,6 @@ services:
       - ../backups:/app/backups
       - ../secrets/smtp:/run/smtp
     networks:
-      - web
       - backup
     healthcheck:
       test:
@@ -77,24 +61,10 @@ services:
       retries: 3
       start_period: 30s
     labels:
-      traefik.enable: "true"
-      traefik.docker.network: web
-      traefik.http.routers.kinkudos-http.entrypoints: web
-      traefik.http.routers.kinkudos-http.rule: "Host(`${KINKUDOS_HOSTNAME:-kinkudos.example.com}`)"
-      traefik.http.routers.kinkudos-http.middlewares: kinkudos-https-redirect
-      traefik.http.middlewares.kinkudos-https-redirect.redirectscheme.scheme: https
-      traefik.http.middlewares.kinkudos-https-redirect.redirectscheme.permanent: "true"
-      traefik.http.routers.kinkudos-https.entrypoints: websecure
-      traefik.http.routers.kinkudos-https.rule: "Host(`${KINKUDOS_HOSTNAME:-kinkudos.example.com}`)"
-      traefik.http.routers.kinkudos-https.tls: "true"
-      traefik.http.routers.kinkudos-https.tls.certresolver: letsencrypt
-      traefik.http.routers.kinkudos-https.middlewares: kinkudos-private-networks
-      traefik.http.middlewares.kinkudos-private-networks.ipallowlist.sourcerange: "${KINKUDOS_ALLOWED_NETWORKS:-192.168.0.0/16,10.0.0.0/8,172.16.0.0/12}"
-      traefik.http.services.kinkudos-app.loadbalancer.server.port: "8000"
       com.centurylinklabs.watchtower.enable: "false"
 
   backup-agent:
-    image: kinkudos:26.3.2
+    image: ghcr.io/vooz2/kinkudos:26.4.0
     entrypoint: ["python", "/app/scripts/backup_agent.py"]
     command: []
     user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"
@@ -127,8 +97,6 @@ services:
       - backup-egress
 
 networks:
-  web:
-    external: true
   backup:
     internal: true
   backup-egress:

@@ -4,7 +4,7 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "26.3.2")
+APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "26.4.0")
 
 
 def env_bool(name, default=False):
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "economy.middleware.TrustedProxyMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -51,6 +52,8 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "economy.middleware.NetworkAccessMiddleware",
+    "economy.middleware.AdminRateLimitMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -134,6 +137,20 @@ X_FRAME_OPTIONS = "DENY"
 PARENT_SESSION_SECONDS = int(os.environ.get("KINKUDOS_PARENT_SESSION_SECONDS", "86400"))
 CHILD_SESSION_SECONDS = int(os.environ.get("KINKUDOS_CHILD_SESSION_SECONDS", "172800"))
 PASSWORD_RESET_TIMEOUT = int(os.environ.get("KINKUDOS_PASSWORD_RESET_TIMEOUT", "3600"))
+DEVICE_COOKIE_NAME = "kk_device"
+DEVICE_PAIRING_REQUIRED = env_bool("KINKUDOS_DEVICE_PAIRING_REQUIRED", not DEBUG)
+DEVICE_COOKIE_MAX_AGE = int(
+    os.environ.get("KINKUDOS_DEVICE_COOKIE_MAX_AGE", str(365 * 24 * 60 * 60))
+)
+TRUSTED_PROXY_NETWORKS = env_list(
+    "KINKUDOS_TRUSTED_PROXIES",
+    "127.0.0.0/8,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16",
+)
+CLIENT_IP_HEADER = os.environ.get(
+    "KINKUDOS_CLIENT_IP_HEADER",
+    "HTTP_X_FORWARDED_FOR",
+)
+DJANGO_ADMIN_ENABLED = env_bool("KINKUDOS_DJANGO_ADMIN_ENABLED", False)
 
 EMAIL_ENABLED = env_bool("KINKUDOS_EMAIL_ENABLED", False)
 EMAIL_BACKEND = "economy.email_backend.EmailBackend"

@@ -7,6 +7,49 @@ schema.
 
 ## [Unreleased]
 
+## [26.4.0] - 2026-07-31
+
+### Pridėta
+
+- Tėvai trumpalaike vienkartine nuoroda gali susieti kiekvieną vaiko naršyklę
+  arba įdiegtą PWA, peržiūrėti susietus įrenginius, juos pervadinti ir atšaukti
+  vieno arba visų įrenginių prieigą. Vaiko PIN lieka antras patvirtinimo
+  žingsnis.
+- Tėvai pasirinktinai gali apriboti vaikų puslapius arba visą programą
+  konkrečiais IP adresais ir CIDR tinklais. Netyčia užsirakinus apribojimą
+  galima išjungti serverio komanda.
+- Produkcinis diegimas palaiko serveryje veikiantį „Nginx“ ar „Caddy“,
+  konteinerinius proxy, tokius kaip „Nginx Proxy Manager“, ir „Traefik“,
+  nesusiejant bazinio Compose failo su vienu produktu.
+- Leidimo žymos skelbia bendrą AMD64 ir ARM64 platformoms skirtą GHCR programos
+  atvaizdą.
+
+### Pakeista
+
+- Esami vaikų profiliai ir PIN po atnaujinimo išlieka, tačiau kiekvieną vaiko
+  naršyklę arba PWA reikia vieną kartą susieti. Senos vaikų „Web Push“
+  prenumeratos pašalinamos ir susietame įrenginyje turi būti įjungtos iš naujo.
+- Vidinis atsiliepimas aiškiai įvardytas kaip privatus šeimos pranešimas, o
+  programos klaidoms pateikiama GitHub Issues nuoroda su įspėjimu nesiųsti
+  šeimos duomenų.
+- Diegimas ir atnaujinimas patikrina rašomų serverio katalogų UID/GID nuosavybę
+  bei parsiunčia versijuotą programos atvaizdą.
+- Periodinė priežiūra taip pat išvalo pasenusius saugumo skaitiklius, susiejimo
+  nuorodas ir sesijas.
+
+### Saugumas
+
+- Tėvų prisijungimo, slaptažodžio atkūrimo ir vaikų PIN bandymai ribojami
+  serverio duomenų bazėje saugomais skaitikliais.
+- Persiųstos kliento IP antraštės priimamos tik iš nustatytų patikimų proxy, o
+  pasirenkamas tinklo leidžiamų adresų sąrašas naudoja taip patikrintą adresą.
+- Vaikų „Web Push“ prenumeratos susiejamos su patvirtintu įrenginiu, susiejimo
+  nuorodos yra vienkartinės ir trumpalaikės, o įrenginių paslaptys duomenų
+  bazėje saugomos maišos pavidalu.
+- „Django“ administravimo maršrutas produkcijoje pagal nutylėjimą išjungtas.
+- Regresijos testas patikrina, kad sugeneruotas VAPID privatus raktas yra
+  realiai naudojamas EC privatus raktas.
+
 ## [26.3.2] - 2026-07-31
 
 ### Pakeista

@@ -1,3 +1,5 @@
+import hashlib
+import secrets
 from datetime import timedelta
 from typing import ClassVar
 
@@ -13,6 +15,11 @@ from django.utils.translation import gettext_lazy as _
 
 
 class FamilySettings(models.Model):
+    class NetworkAccessMode(models.TextChoices):
+        OPEN = "open", _("Internet access")
+        CHILDREN = "children", _("Restrict child access")
+        ALL = "all", _("Restrict all access")
+
     class EvidenceRetention(models.IntegerChoices):
         FOREVER = 0, _("Keep indefinitely")
         SEVEN_DAYS = 7, _("7 days")
@@ -47,6 +54,12 @@ class FamilySettings(models.Model):
         choices=EvidenceRetention.choices,
         default=EvidenceRetention.NINETY_DAYS,
     )
+    network_access_mode = models.CharField(
+        max_length=16,
+        choices=NetworkAccessMode.choices,
+        default=NetworkAccessMode.OPEN,
+    )
+    allowed_networks = models.TextField(blank=True, default="")
     recovery_code_hash = models.CharField(max_length=255, blank=True)
 
     class Meta:
@@ -96,6 +109,116 @@ class BackupAuditEvent(models.Model):
     action = models.CharField(max_length=32, choices=Action.choices)
     provider = models.CharField(max_length=32, blank=True)
     target = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at", "-pk"]
+
+
+class DeviceToken(models.Model):
+    token_hash = models.CharField(max_length=64, unique=True)
+    label = models.CharField(max_length=80, blank=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="paired_devices",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_used_at = models.DateTimeField(null=True, blank=True)
+    revoked_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at", "-pk"]
+
+    @staticmethod
+    def digest(raw_token):
+        return hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
+
+    @classmethod
+    def issue(cls, *, created_by, label=""):
+        raw_token = secrets.token_urlsafe(32)
+        instance = cls.objects.create(
+            token_hash=cls.digest(raw_token),
+            label=label.strip()[:80],
+            created_by=created_by,
+        )
+        return instance, raw_token
+
+    @property
+    def is_revoked(self):
+        return self.revoked_at is not None
+
+
+class DevicePairingLink(models.Model):
+    token_hash = models.CharField(max_length=64, unique=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="device_pairing_links",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    used_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at", "-pk"]
+
+    @classmethod
+    def issue(cls, *, created_by, lifetime=timedelta(minutes=10)):
+        raw_token = secrets.token_urlsafe(32)
+        instance = cls.objects.create(
+            token_hash=DeviceToken.digest(raw_token),
+            created_by=created_by,
+            expires_at=timezone.now() + lifetime,
+        )
+        return instance, raw_token
+
+
+class AttemptCounter(models.Model):
+    class Scope(models.TextChoices):
+        CHILD_PIN_DEVICE = "child_pin_device", _("Child PIN by device")
+        CHILD_PIN_PROFILE = "child_pin_profile", _("Child PIN by profile")
+        CHILD_PIN_IP = "child_pin_ip", _("Child PIN by IP")
+        CHILD_PIN_SITE = "child_pin_site", _("Child PIN site-wide")
+        PARENT_LOGIN_IP = "parent_login_ip", _("Parent login by IP")
+        PARENT_LOGIN_ACCOUNT = "parent_login_account", _("Parent login by account")
+        PASSWORD_RESET_IP = "password_reset_ip", _("Password reset by IP")
+        PASSWORD_RESET_ACCOUNT = "password_reset_account", _("Password reset by account")
+        DEVICE_PAIRING = "device_pairing", _("Device pairing")
+        ADMIN_LOGIN_IP = "admin_login_ip", _("Admin login by IP")
+
+    scope = models.CharField(max_length=32, choices=Scope.choices)
+    key_hash = models.CharField(max_length=64)
+    window_start = models.DateTimeField()
+    count = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["scope", "key_hash", "window_start"],
+                name="uniq_attempt_counter_window",
+            )
+        ]
+        indexes = [models.Index(fields=["scope", "key_hash"])]
+
+
+class SecurityAuditEvent(models.Model):
+    class Action(models.TextChoices):
+        DEVICE_PAIRED = "device_paired", _("Child device paired")
+        DEVICE_REVOKED = "device_revoked", _("Child device revoked")
+        ALL_DEVICES_REVOKED = "all_devices_revoked", _("All child devices revoked")
+        NETWORK_POLICY_CHANGED = "network_policy_changed", _("Network access changed")
+
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="security_audit_events",
+    )
+    action = models.CharField(max_length=32, choices=Action.choices)
+    detail = models.CharField(max_length=240, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -661,6 +784,13 @@ class PushSubscription(models.Model):
         on_delete=models.CASCADE,
         related_name="push_subscriptions",
     )
+    device = models.ForeignKey(
+        DeviceToken,
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="push_subscriptions",
+    )
     endpoint = models.TextField(unique=True)
     p256dh = models.TextField()
     auth = models.TextField()
@@ -672,8 +802,8 @@ class PushSubscription(models.Model):
         constraints = [
             models.CheckConstraint(
                 condition=(
-                    Q(user__isnull=False, child__isnull=True)
-                    | Q(user__isnull=True, child__isnull=False)
+                    Q(user__isnull=False, child__isnull=True, device__isnull=True)
+                    | Q(user__isnull=True, child__isnull=False, device__isnull=False)
                 ),
                 name="push_subscription_has_one_owner",
             )

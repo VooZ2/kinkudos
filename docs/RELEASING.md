@@ -29,8 +29,9 @@ programos, naujos produkto versijos nereikalauja.
 
 Kiekvienai versijai privaloma:
 
-1. Pakeisti versiją `kinkudos/settings.py`, `pyproject.toml`, `deploy/compose.yml`
-   ir `README.md`.
+1. Pakeisti versiją `kinkudos/settings.py`, `pyproject.toml`, `deploy/compose.yml`,
+   `README.md`, `README.lt.md` ir visuose leidimo atvaizdą nurodančiuose
+   diegimo failuose.
 2. `CHANGELOG.md` sukurti versijos antraštę su data.
 3. Naujas funkcijas rašyti skiltyje `Added`.
 4. Elgsenos pakeitimus rašyti skiltyje `Changed`, klaidų pataisymus –
@@ -41,6 +42,8 @@ Kiekvienai versijai privaloma:
 7. GitHub Release notes rašyti tik angliškai, išlaikant tokią pačią struktūrą
    kaip atitinkamas `CHANGELOG.md` leidimo įrašas. Leidimo tekstą galima
    tiesiogiai kopijuoti iš `CHANGELOG.md`.
+8. Paskelbus versijos žymą palaukti, kol GHCR darbo eiga sėkmingai pastatys
+   AMD64 ir ARM64 atvaizdį, ir tik tada laikyti leidimą tinkamu diegti.
 
 Versijos numeris programos antraštėje visada turi likti nuoroda į
 `/pakeitimai/`.

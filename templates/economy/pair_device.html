@@ -1,0 +1,31 @@
+{% extends "economy/base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Pair child device" %} – {{ project_name }}{% endblock %}
+{% block content %}
+<section class="narrow-card">
+  <p class="eyebrow">{% translate "Child access" %}</p>
+  <h1>{% translate "Pair this device" %}</h1>
+  <p data-pairing-status>{% translate "Checking the private pairing link…" %}</p>
+  <form method="post" class="stack-form" data-pairing-form hidden>
+    {% csrf_token %}
+    <input type="hidden" name="token" data-pairing-token>
+    <button class="button button-primary button-large" type="submit">{% translate "Allow child access" %}</button>
+  </form>
+  <noscript><p class="form-error">{% translate "JavaScript is required to use the private pairing link." %}</p></noscript>
+</section>
+<script>
+(() => {
+  const token = window.location.hash.slice(1);
+  const form = document.querySelector("[data-pairing-form]");
+  const status = document.querySelector("[data-pairing-status]");
+  window.history.replaceState(null, "", window.location.pathname);
+  if (!token) {
+    status.textContent = "{% translate 'This pairing link is invalid or has expired.' %}";
+    return;
+  }
+  form.querySelector("[data-pairing-token]").value = token;
+  form.hidden = false;
+  status.textContent = "{% translate 'A parent created this private link. Continue to allow child access on this device.' %}";
+})();
+</script>
+{% endblock %}

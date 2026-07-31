@@ -5,7 +5,6 @@ from pathlib import Path
 from django.conf import settings
 from django.utils.translation import get_language
 
-
 RELEASE_HEADING = re.compile(
     r"^## \[(?P<version>[^\]]+)\](?: - (?P<date>\d{4}-\d{2}-\d{2}))?$"
 )

@@ -1,0 +1,14 @@
+{% extends "economy/base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Set up this device" %} – {{ project_name }}{% endblock %}
+{% block content %}
+<section class="narrow-card">
+  <p class="eyebrow">{% translate "Child access" %}</p>
+  <h1>{% translate "This device is not set up yet" %}</h1>
+  <p>{% translate "Ask a parent to allow child access on this device or open the private pairing link they created." %}</p>
+  <div class="hero-actions">
+    <a class="button button-primary" href="{% url 'parent_login' %}?next={% url 'parent_dashboard' %}">{% translate "Parent sign in" %}</a>
+    <a class="button button-secondary" href="{% url 'home' %}">{% translate "Back" %}</a>
+  </div>
+</section>
+{% endblock %}
