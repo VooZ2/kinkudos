@@ -90,7 +90,7 @@ Read more in the [architecture and security overview](docs/ARCHITECTURE.md).
 
 ## 📚 Using KinKudos
 
-- **[Open the documentation](docs/site/index.md)** — start with the first 15
+- **[Open the documentation](https://docs.kinkudos.app/)** — start with the first 15
   minutes, then find parent guidance, security, maintenance, and help.
 
 ## ⚡ Quick setup
