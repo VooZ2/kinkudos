@@ -27,7 +27,7 @@
 <table>
   <tr>
     <td width="50%"><img src="docs/screenshots/parent-dashboard-2026.png" alt="KinKudos parent dashboard with pending requests"></td>
-    <td width="50%"><img src="docs/screenshots/parent-settings-2026.png" alt="KinKudos parent settings"></td>
+    <td width="50%"><img src="docs/site/assets/parent-settings-2026.png" alt="KinKudos parent settings"></td>
   </tr>
   <tr>
     <td align="center"><sub><strong>Parent dashboard</strong><br>Review requests and make decisions in one place.</sub></td>
@@ -90,7 +90,7 @@ Read more in the [architecture and security overview](docs/ARCHITECTURE.md).
 
 ## 📚 Using KinKudos
 
-- **[Open the documentation](docs/index.md)** — start with the first 15
+- **[Open the documentation](docs/site/index.md)** — start with the first 15
   minutes, then find parent guidance, security, maintenance, and help.
 
 ## ⚡ Quick setup

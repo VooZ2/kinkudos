@@ -27,7 +27,7 @@
 <table>
   <tr>
     <td width="50%"><img src="docs/screenshots/parent-dashboard-2026.png" alt="KinKudos tėvų suvestinė su laukiančiais prašymais"></td>
-    <td width="50%"><img src="docs/screenshots/parent-settings-2026.png" alt="KinKudos tėvų nustatymai"></td>
+    <td width="50%"><img src="docs/site/assets/parent-settings-2026.png" alt="KinKudos tėvų nustatymai"></td>
   </tr>
   <tr>
     <td align="center"><sub><strong>Tėvų suvestinė</strong><br>Peržiūrėkite prašymus ir priimkite sprendimus vienoje vietoje.</sub></td>
@@ -90,7 +90,7 @@ Plačiau skaitykite [architektūros ir saugumo apžvalgoje](docs/ARCHITECTURE.md
 
 ## 📚 Kaip naudotis KinKudos
 
-- **[Atidaryti dokumentaciją](docs/index.lt.md)** — pradėkite nuo pirmų 15
+- **[Atidaryti dokumentaciją](docs/site/index.lt.md)** — pradėkite nuo pirmų 15
   minučių, tada raskite tėvų vadovus, saugumą, priežiūrą ir pagalbą.
 
 ## ⚡ Greitas diegimas

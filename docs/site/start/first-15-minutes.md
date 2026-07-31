@@ -9,7 +9,7 @@ You need a parent account and one child device. Network, email, and backup setti
 5. Submit a task from the child device, approve it from the parent area, then request and decide on one reward.
 6. Confirm the activity appears in **Parents → History**.
 
-![English parent settings](../screenshots/parent-settings-2026.png)
+![English parent settings](../assets/parent-settings-2026.png)
 
 The screenshot contains fictional demonstration data only.
 

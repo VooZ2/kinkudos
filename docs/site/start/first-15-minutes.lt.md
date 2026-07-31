@@ -9,7 +9,7 @@ Reikia tėvo paskyros ir vieno vaiko įrenginio. Tinklo, el. pašto ir atsargini
 5. Vaiko įrenginyje pateikite darbą, tėvų pusėje jį patvirtinkite, tada išbandykite vieną prizo prašymą.
 6. Patikrinkite, ar veiksmas matomas **Tėvai → Istorija**.
 
-![Angliški tėvų nustatymai](../screenshots/parent-settings-2026.png)
+![Angliški tėvų nustatymai](../assets/parent-settings-2026.png)
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 
