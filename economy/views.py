@@ -113,8 +113,13 @@ from .models import (
 from .net import client_ip
 from .push import (
     notify_assigned_tasks,
+    notify_birth_date_change,
+    notify_birth_date_decision,
     notify_gift_received,
+    notify_proposal,
+    notify_proposal_decision,
     notify_reward_decision,
+    notify_reward_request,
     notify_task_claim,
     notify_task_decision,
     notify_task_revision,
@@ -807,7 +812,8 @@ def child_request_reward(request, reward_id):
     reward = get_object_or_404(Reward, pk=reward_id, is_active=True)
     submitted = False
     try:
-        submit_reward_request(child=request.child, reward=reward)
+        reward_request = submit_reward_request(child=request.child, reward=reward)
+        notify_reward_request(reward_request)
         messages.success(
             request,
             _("The reward request was sent to the parents."),
@@ -878,6 +884,7 @@ def child_create_proposal(request):
         proposal = form.save(commit=False)
         proposal.child = request.child
         proposal.save()
+        notify_proposal(proposal)
         messages.success(request, _("The suggestion was sent to the parents."))
     else:
         messages.error(request, _("Check the suggestion details."))
@@ -928,11 +935,12 @@ def child_set_birth_date(request):
                 _("A birthday change is already waiting for parent approval."),
             )
         else:
-            BirthDateChangeRequest.objects.create(
+            change = BirthDateChangeRequest.objects.create(
                 child=child,
                 previous_birth_date=current_birth_date,
                 requested_birth_date=requested_birth_date,
             )
+            notify_birth_date_change(change)
             messages.success(
                 request,
                 _("The birthday change was sent to the parents for approval."),
@@ -1707,6 +1715,7 @@ def parent_decide_birth_date(request, request_id, decision):
             change.decided_by = request.user
             change.decided_at = timezone.now()
             change.save(update_fields=["status", "decided_by", "decided_at"])
+        notify_birth_date_decision(change, approved=decision == "approve")
         messages.success(request, success_message)
     except BirthDateChangeRequest.DoesNotExist:
         raise Http404
@@ -1870,6 +1879,8 @@ def parent_decide_proposal(request, proposal_id, decision):
                 actor=request.user,
                 final_cost=form.cleaned_data["final_cost"],
             )
+            proposal.refresh_from_db()
+            notify_proposal_decision(proposal, approved=True)
             messages.success(request, _("Suggestion approved."))
         elif decision == "reject":
             form = RejectForm(request.POST)
@@ -1882,6 +1893,7 @@ def parent_decide_proposal(request, proposal_id, decision):
             proposal.save(
                 update_fields=["status", "parent_note", "decided_by", "decided_at"]
             )
+            notify_proposal_decision(proposal, approved=False)
             messages.success(request, _("Suggestion rejected."))
         else:
             raise Http404

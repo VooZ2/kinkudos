@@ -5,6 +5,14 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.4.5] - 2026-07-31
+
+### Fixed
+
+- Parents now receive a Web Push notification when a child requests a reward.
+- Web Push now also covers child suggestions and birthday-date change requests,
+  along with the resulting parent decisions sent back to the child.
+
 ## [26.4.4] - 2026-07-31
 
 ### Changed

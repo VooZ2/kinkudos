@@ -40,6 +40,9 @@ msgstr "90 dienų"
 msgid "A birthday change is already waiting for parent approval."
 msgstr "Vienas gimimo datos pakeitimas jau laukia tėvų patvirtinimo."
 
+msgid "A birthday change is awaiting approval"
+msgstr "Gimimo datos pakeitimas laukia patvirtinimo"
+
 msgid "A child profile with this name already exists."
 msgstr "Toks vaiko profilis jau yra."
 
@@ -48,6 +51,9 @@ msgstr "Kartą per dieną automatiškai bus parinkta vis kita tema."
 
 msgid "A lottery ticket can be bought only with %(cost)s points you have earned."
 msgstr "Loterijos bilietą galima pirkti tik už %(cost)s uždirbtų taškų."
+
+msgid "A new suggestion is awaiting approval"
+msgstr "Naujas pasiūlymas laukia patvirtinimo"
 
 msgid "A new task is awaiting approval"
 msgstr "Naujas darbas laukia patvirtinimo"
@@ -60,6 +66,9 @@ msgstr "Paaiškinimas privalomas."
 
 msgid "A rejection reason is required."
 msgstr "Atmetimo priežastis privaloma."
+
+msgid "A reward is awaiting approval"
+msgstr "Prizo prašymas laukia patvirtinimo"
 
 msgid "A shared family space"
 msgstr "Bendra šeimos erdvė"
@@ -2512,6 +2521,12 @@ msgstr "Jūsų paskyros slaptažodis"
 msgid "Your artwork was sent to the review gallery!"
 msgstr "Tavo kūrinys išsiųstas į vertinimo galeriją!"
 
+msgid "Your birthday change was approved"
+msgstr "Tavo gimimo datos pakeitimas patvirtintas"
+
+msgid "Your birthday change was rejected"
+msgstr "Tavo gimimo datos pakeitimas atmestas"
+
 msgid "Your credit limit protected part of the loss."
 msgstr "Kredito limitas apsaugojo nuo dalies praradimo."
 
@@ -2529,6 +2544,12 @@ msgstr "Tavo prizo prašymas atmestas"
 
 msgid "Your reward was approved"
 msgstr "Tavo prizas patvirtintas"
+
+msgid "Your suggestion was approved"
+msgstr "Tavo pasiūlymas patvirtintas"
+
+msgid "Your suggestion was rejected"
+msgstr "Tavo pasiūlymas atmestas"
 
 msgid "Your task was approved"
 msgstr "Tavo darbas patvirtintas"

@@ -7,6 +7,14 @@ schema.
 
 ## [Unreleased]
 
+## [26.4.5] - 2026-07-31
+
+### Pataisyta
+
+- Tėvai dabar gauna „Web Push“ pranešimą, kai vaikas paprašo prizo.
+- „Web Push“ pranešimai dabar apima ir vaiko pasiūlymus bei gimimo datos
+  pakeitimo prašymus, o vaikui išsiunčiami tėvų sprendimai.
+
 ## [26.4.4] - 2026-07-31
 
 ### Pakeista

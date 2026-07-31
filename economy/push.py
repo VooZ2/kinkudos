@@ -55,6 +55,42 @@ def notify_task_claim(claim):
     )
 
 
+def notify_reward_request(reward_request):
+    _send(
+        {
+            "title": _("A reward is awaiting approval"),
+            "body": f"{reward_request.child.name}: {reward_request.reward_title}",
+            "url": "/tevai/",
+            "tag": f"reward-request-{reward_request.pk}",
+        },
+        PushSubscription.objects.filter(user__isnull=False),
+    )
+
+
+def notify_proposal(proposal):
+    _send(
+        {
+            "title": _("A new suggestion is awaiting approval"),
+            "body": f"{proposal.child.name}: {proposal.title}",
+            "url": "/tevai/",
+            "tag": f"proposal-{proposal.pk}",
+        },
+        PushSubscription.objects.filter(user__isnull=False),
+    )
+
+
+def notify_birth_date_change(change):
+    _send(
+        {
+            "title": _("A birthday change is awaiting approval"),
+            "body": change.child.name,
+            "url": "/tevai/",
+            "tag": f"birthday-change-{change.pk}",
+        },
+        PushSubscription.objects.filter(user__isnull=False),
+    )
+
+
 def notify_assigned_tasks(batch):
     _send(
         {
@@ -126,6 +162,42 @@ def notify_reward_decision(reward_request, *, approved):
             "tag": f"reward-{state}-{reward_request.pk}",
         },
         PushSubscription.objects.filter(child=reward_request.child),
+    )
+
+
+def notify_proposal_decision(proposal, *, approved):
+    if approved:
+        title = _("Your suggestion was approved")
+        body = proposal.title
+        state = "approved"
+    else:
+        title = _("Your suggestion was rejected")
+        body = proposal.title
+        if proposal.parent_note:
+            body = f"{body}: {proposal.parent_note}"
+        state = "rejected"
+    _send(
+        {
+            "title": title,
+            "body": body,
+            "url": "/vaikas/mano/#prizai",
+            "tag": f"proposal-{state}-{proposal.pk}",
+        },
+        PushSubscription.objects.filter(child=proposal.child),
+    )
+
+
+def notify_birth_date_decision(change, *, approved):
+    _send(
+        {
+            "title": _("Your birthday change was approved")
+            if approved
+            else _("Your birthday change was rejected"),
+            "body": "",
+            "url": "/vaikas/mano/#profilis",
+            "tag": f"birthday-change-{'approved' if approved else 'rejected'}-{change.pk}",
+        },
+        PushSubscription.objects.filter(child=change.child),
     )
 
 

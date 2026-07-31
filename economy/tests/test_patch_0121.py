@@ -126,7 +126,7 @@ class Patch0121Tests(TestCase):
         self.client.force_login(self.parent)
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, 'class="brand-mark brand-logo"', html=False)
-        self.assertContains(response, "KinKudos · v26.4.4")
+        self.assertContains(response, "KinKudos · v26.4.5")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_reward_approval_uses_task_decision_icons(self):

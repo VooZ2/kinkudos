@@ -147,9 +147,10 @@ parent-approved; one pending request per child at a time.
 
 **PushSubscription** — Web Push subscription for either a parent user or a
 paired child device (exactly one owner, enforced by a DB constraint). Parents are
-notified of new/revised task submissions; children are notified of task
-and reward decisions, newly assigned daily work, point gifts, and birthday
-awards.
+notified of new/revised task submissions, reward requests, suggestions, and
+birthday-change requests; children are notified of task, reward, suggestion,
+and birthday-change decisions, newly assigned daily work, point gifts, and
+birthday awards.
 
 **FeedbackReport** — in-app bug/idea report from a parent or child, with an
 optional screenshot and a review-status workflow.

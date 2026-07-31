@@ -1,5 +1,6 @@
 import json
 import tempfile
+from datetime import date
 from pathlib import Path
 from unittest.mock import patch
 
@@ -13,9 +14,12 @@ from py_vapid import Vapid
 from economy.models import (
     AssignedTask,
     AssignedTaskBatch,
+    BirthDateChangeRequest,
     ChildProfile,
     DeviceToken,
     PointGift,
+    Proposal,
+    ProposalType,
     PushSubscription,
     Reward,
     RewardRequest,
@@ -26,8 +30,13 @@ from economy.models import (
 from economy.push import (
     _currency_amount,
     notify_assigned_tasks,
+    notify_birth_date_change,
+    notify_birth_date_decision,
     notify_gift_received,
+    notify_proposal,
+    notify_proposal_decision,
     notify_reward_decision,
+    notify_reward_request,
     notify_task_decision,
 )
 
@@ -187,3 +196,69 @@ class ChildDecisionPushTests(TestCase):
         self.assertEqual(payload["title"], "Tavo prizo prašymas atmestas")
         self.assertIn("Pirmiausia atlik darbus.", payload["body"])
         self.assertEqual(payload["url"], "/vaikas/mano/#prizai")
+
+    @patch("economy.push.webpush")
+    def test_parent_approval_requests_target_parent_subscriptions(self, webpush):
+        reward = Reward.objects.create(title="Film", cost=50)
+        reward_request = RewardRequest.objects.create(
+            child=self.child,
+            reward=reward,
+            reward_title=reward.title,
+            cost_snapshot=reward.cost,
+        )
+        proposal = Proposal.objects.create(
+            child=self.child,
+            proposal_type=ProposalType.REWARD,
+            title="New reward",
+            suggested_cost=60,
+        )
+        change = BirthDateChangeRequest.objects.create(
+            child=self.child,
+            requested_birth_date=date(2018, 7, 30),
+        )
+
+        for notifier, item, expected_title in (
+            (notify_reward_request, reward_request, "A reward is awaiting approval"),
+            (notify_proposal, proposal, "A new suggestion is awaiting approval"),
+            (notify_birth_date_change, change, "A birthday change is awaiting approval"),
+        ):
+            with self.subTest(notifier=notifier.__name__):
+                webpush.reset_mock()
+                notifier(item)
+                webpush.assert_called_once()
+                self.assertEqual(
+                    webpush.call_args.kwargs["subscription_info"]["endpoint"],
+                    "https://push.example/parent",
+                )
+                self.assertEqual(
+                    json.loads(webpush.call_args.kwargs["data"])["title"], expected_title,
+                )
+
+    @patch("economy.push.webpush")
+    def test_proposal_and_birthday_decisions_target_affected_child(self, webpush):
+        proposal = Proposal.objects.create(
+            child=self.child,
+            proposal_type=ProposalType.GOAL,
+            title="Bike",
+            suggested_cost=500,
+        )
+        change = BirthDateChangeRequest.objects.create(
+            child=self.child,
+            requested_birth_date=date(2018, 7, 30),
+        )
+
+        for notifier, item, expected_title in (
+            (lambda value: notify_proposal_decision(value, approved=True), proposal, "Your suggestion was approved"),
+            (lambda value: notify_birth_date_decision(value, approved=False), change, "Your birthday change was rejected"),
+        ):
+            with self.subTest(expected_title=expected_title):
+                webpush.reset_mock()
+                notifier(item)
+                webpush.assert_called_once()
+                self.assertEqual(
+                    webpush.call_args.kwargs["subscription_info"]["endpoint"],
+                    "https://push.example/child_one",
+                )
+                self.assertEqual(
+                    json.loads(webpush.call_args.kwargs["data"])["title"], expected_title,
+                )
