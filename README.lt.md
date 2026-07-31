@@ -2,8 +2,8 @@
 
 <p align="center">
   <strong>Kasdienius šeimos darbus paverskite bendrais pasiekimais.</strong><br>
-  Privati, savarankiškai diegiama programa, kurioje vaikai atlieka darbus,
-  renka teminius taškus ir renkasi prizus, o tėvai viską valdo paprastai bei sąžiningai.
+  Privati, savarankiškai diegiama šeimos programa, kurioje vaikai atlieka darbus,
+  renka taškus ir siekia prizų, o tėvai užtikrina aiškias ir sąžiningas taisykles.
 </p>
 
 <p align="center">
@@ -15,8 +15,9 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT licencija"></a>
   <a href="https://github.com/VooZ2/kinkudos/releases"><img src="https://img.shields.io/github/v/release/VooZ2/kinkudos?display_name=release" alt="Naujausias GitHub leidimas"></a>
+  <a href="https://hub.docker.com/r/vooz2/kinkudos"><img src="https://img.shields.io/docker/pulls/vooz2/kinkudos" alt="Docker atsisiuntimai"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT licencija"></a>
 </p>
 <p align="center"><sub>Dabartinis leidimas: 26.4.9</sub></p>
 
@@ -147,4 +148,6 @@ KinKudos yra atvirojo kodo programa, platinama pagal [MIT licenciją](LICENSE).
 
 ## ⚠️ Atsakomybės apribojimas
 
-KinKudos yra AI sukurtas asmeninis projektas, skirtas tik išbandyti OpenAI Codex. Jis pateikiamas toks, koks yra, be garantijų, palaikymo pažado ar patvirtinimo, kad tinka konkrečiam naudojimui arba yra visiškai saugus.
+KinKudos yra savarankiškai vystomas atvirojo kodo projektas, kuriamas aktyviai naudojantis „OpenAI Codex“ pagalba. Sprendimus dėl produkto, reikalavimų, testavimo, leidimų, infrastruktūros ir tolesnės priežiūros priima bei įgyvendina projekto savininkas.
+
+Programa pateikiama tokia, kokia yra, be garantijų ar pažado užtikrinti palaikymą, tinkamumą konkrečiam naudojimui arba visišką saugumą.

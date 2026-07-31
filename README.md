@@ -2,8 +2,8 @@
 
 <p align="center">
   <strong>Turn everyday family tasks into shared progress.</strong><br>
-  A private, self-hosted app where children complete tasks, earn themed points,
-  and choose rewards — while parents keep everything simple and fair.
+  A private, self-hosted family app where children complete tasks, earn points,
+  and work toward rewards while parents keep the rules clear and fair.
 </p>
 
 <p align="center">
@@ -15,8 +15,9 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License"></a>
   <a href="https://github.com/VooZ2/kinkudos/releases"><img src="https://img.shields.io/github/v/release/VooZ2/kinkudos?display_name=release" alt="Latest GitHub release"></a>
+  <a href="https://hub.docker.com/r/vooz2/kinkudos"><img src="https://img.shields.io/docker/pulls/vooz2/kinkudos" alt="Docker Pulls"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License"></a>
 </p>
 <p align="center"><sub>Current release: 26.4.9</sub></p>
 
@@ -146,4 +147,6 @@ KinKudos is open-source software distributed under the [MIT License](LICENSE).
 
 ## ⚠️ Disclaimer
 
-KinKudos is an AI-created personal project made solely to experiment with OpenAI Codex. It is provided as-is, without warranty or a promise of support, fitness, or security for any particular use.
+KinKudos is an independently developed open-source project built with extensive assistance from OpenAI Codex. Product decisions, requirements, testing, releases, infrastructure, and ongoing maintenance are managed by the project owner.
+
+The software is provided as-is, without warranty or a promise of support, fitness, or security for any particular use.
