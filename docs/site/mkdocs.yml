@@ -47,14 +47,18 @@ markdown_extensions:
 nav:
   - Start:
       - What is KinKudos: start/what-is-kinkudos.md
+      - Quick install: start/quick-install.md
       - Your first 15 minutes: start/first-15-minutes.md
       - Pair a child device: start/pair-a-child-device.md
   - For parents:
+      - Parent dashboard and child cards: parents/dashboard-and-child-cards.md
       - Tasks and approvals: parents/tasks-and-approvals.md
       - Rewards, goals, and lottery: parents/rewards-goals-and-lottery.md
+      - Child space: parents/child-space.md
       - Parent settings: parents/settings.md
   - Security and privacy:
       - Accounts and devices: security/accounts-and-devices.md
+      - PINs and sign-in protection: security/pin-and-sign-in.md
       - Network access: security/network-access.md
       - Backups: security/backups.md
   - Installation and maintenance: deployment-and-maintenance.md

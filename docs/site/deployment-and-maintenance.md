@@ -2,6 +2,8 @@
 
 KinKudos runs on a server operated by the family. Installation, upgrades, reverse-proxy setup, scheduled maintenance, backup configuration, diagnostics, and recovery procedures are maintained in the deployment guide.
 
+For a new server that already has Docker, a domain, and HTTPS proxy, begin with [Quick install](start/quick-install.md). Do not use the fresh-install command on an existing family installation.
+
 - [Open the installation and upgrade guide](https://github.com/VooZ2/kinkudos/blob/main/deploy/README.md)
 - [Open the Lithuanian installation and upgrade guide](https://github.com/VooZ2/kinkudos/blob/main/deploy/README.lt.md)
 
