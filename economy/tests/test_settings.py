@@ -61,6 +61,41 @@ class ParentSettingsTests(TestCase):
         self.assertContains(response, "Keep feedback images for")
         self.assertContains(response, 'class="catalog-divider"', count=5)
 
+    def test_network_access_panel_explains_open_and_restricted_states(self):
+        self.client.force_login(self.admin)
+
+        open_response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(open_response, "IP restrictions disabled")
+        self.assertContains(open_response, "No IP addresses are blocked.")
+        self.assertContains(open_response, 'data-open-dialog="network-access-dialog"')
+
+        family = FamilySettings.load()
+        family.network_access_mode = FamilySettings.NetworkAccessMode.CHILDREN
+        family.allowed_networks = "192.0.2.0/24"
+        family.save(update_fields=["network_access_mode", "allowed_networks"])
+
+        restricted_response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(restricted_response, "Child access restricted")
+        self.assertContains(
+            restricted_response,
+            "Parent access is not restricted by IP.",
+        )
+        self.assertContains(restricted_response, "192.0.2.0/24")
+
+    def test_catalog_titles_use_the_shared_system_typography_class(self):
+        Task.objects.create(title="Clean the kitchen", reward=10, icon="🧹")
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(
+            response,
+            '<span class="catalog-title">Clean the kitchen',
+            html=False,
+        )
+
     def test_family_lottery_switch_can_be_disabled(self):
         self.client.force_login(self.admin)
 
@@ -171,10 +206,16 @@ class ParentSettingsTests(TestCase):
                 self.client.force_login(self.admin)
                 response = self.client.get(reverse("parent_dashboard"))
 
-        self.assertContains(response, 'class="service-details"', count=1)
-        self.assertContains(response, ">Edit settings</button>", count=1)
-        self.assertNotContains(response, "Edit email settings")
-        self.assertNotContains(response, 'class="backup-status-grid"')
+        content = response.content.decode()
+        email_panel = content.split('<article class="panel email-panel">', 1)[1].split(
+            "</article>",
+            1,
+        )[0]
+
+        self.assertIn('class="service-details"', email_panel)
+        self.assertIn(">Edit settings</button>", email_panel)
+        self.assertNotIn("Edit email settings", email_panel)
+        self.assertNotIn('class="backup-status-grid"', email_panel)
 
     def test_family_preferences_use_compact_rows_and_wrapped_help_text(self):
         self.client.force_login(self.admin)

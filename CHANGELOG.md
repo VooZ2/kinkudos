@@ -5,6 +5,21 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.4.2] - 2026-07-31
+
+### Changed
+
+- Network access settings now show a clear active state, explain which areas
+  are IP-restricted, list the effective allowlist, and move editing into a
+  focused dialog consistent with other service settings.
+- Catalog titles explicitly use the shared system typography.
+
+### Fixed
+
+- The feedback administration panel no longer shows an unrelated public
+  GitHub privacy warning.
+- Footers now include a compact link for reporting a software bug.
+
 ## [26.4.1] - 2026-07-31
 
 ### Changed

@@ -382,7 +382,7 @@
       <div class="catalog-list">
         {% for item in tasks %}
         <div class="catalog-row">
-          <div class="catalog-summary"><span class="catalog-emoji">{{ item.icon|icon_symbol }}</span><span>{{ item.title }} <small class="catalog-token catalog-token-positive">+{{ item.reward }} {{ item.reward|currency_unit:"neutral" }}</small></span></div>
+          <div class="catalog-summary"><span class="catalog-emoji">{{ item.icon|icon_symbol }}</span><span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-positive">+{{ item.reward }} {{ item.reward|currency_unit:"neutral" }}</small></span></div>
           <div class="catalog-actions">
             <button class="icon-button" type="button" data-toggle-edit="task-{{ item.pk }}" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-edit"></use></svg></button>
             <form method="post" action="{% url 'parent_toggle_catalog' 'task' item.pk %}">{% csrf_token %}<button class="icon-button {% if item.is_active %}danger{% endif %}" type="submit" aria-label="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %} {{ item.title }}" title="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %}"><svg class="action-icon"><use href="#icon-{% if item.is_active %}eye-off{% else %}eye{% endif %}"></use></svg></button></form>
@@ -411,7 +411,7 @@
       <div class="catalog-list">
         {% for item in penalties %}
         <div class="catalog-row">
-          <div class="catalog-summary"><span class="catalog-emoji">{{ item.icon|icon_symbol }}</span><span>{{ item.title }} <small class="catalog-token catalog-token-negative">{{ item.amount }} {{ item.amount|currency_unit:"neutral" }}</small></span></div>
+          <div class="catalog-summary"><span class="catalog-emoji">{{ item.icon|icon_symbol }}</span><span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-negative">{{ item.amount }} {{ item.amount|currency_unit:"neutral" }}</small></span></div>
           <div class="catalog-actions">
             <button class="icon-button" type="button" data-toggle-edit="penalty-{{ item.pk }}" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-edit"></use></svg></button>
             <form method="post" action="{% url 'parent_toggle_catalog' 'penalty' item.pk %}">{% csrf_token %}<button class="icon-button {% if item.is_active %}danger{% endif %}" type="submit" aria-label="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %} {{ item.title }}" title="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %}"><svg class="action-icon"><use href="#icon-{% if item.is_active %}eye-off{% else %}eye{% endif %}"></use></svg></button></form>
@@ -440,7 +440,7 @@
       <div class="catalog-list">
         {% for item in rewards %}
         <div class="catalog-row">
-          <div class="catalog-summary"><span class="catalog-emoji">{{ item.icon|icon_symbol }}</span><span>{{ item.title }} <small class="catalog-token catalog-token-negative">−{{ item.cost }} {{ item.cost|currency_unit:"neutral" }}</small></span></div>
+          <div class="catalog-summary"><span class="catalog-emoji">{{ item.icon|icon_symbol }}</span><span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-negative">−{{ item.cost }} {{ item.cost|currency_unit:"neutral" }}</small></span></div>
           <div class="catalog-actions">
             <button class="icon-button" type="button" data-toggle-edit="reward-{{ item.pk }}" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-edit"></use></svg></button>
             <form method="post" action="{% url 'parent_toggle_catalog' 'reward' item.pk %}">{% csrf_token %}<button class="icon-button {% if item.is_active %}danger{% endif %}" type="submit" aria-label="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %} {{ item.title }}" title="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %}"><svg class="action-icon"><use href="#icon-{% if item.is_active %}eye-off{% else %}eye{% endif %}"></use></svg></button></form>
@@ -585,14 +585,54 @@
     {% endif %}
   </article>
   <div class="section-heading subsection-heading"><h2>{% translate "Network access" %}</h2></div>
-  <article class="panel">
-    <p class="settings-description">{% translate "Optional IP restrictions add another layer on top of device pairing and sign-in limits." %}</p>
-    <p class="help-text">{% translate "Current IP address" %}: <strong>{{ current_client_ip }}</strong></p>
+  <article class="panel network-access-panel">
+    <div class="backup-heading">
+      <p class="settings-description">
+        {% if family_settings.network_access_mode == "open" %}
+          {% translate "No IP addresses are blocked. Device pairing and sign-in protections remain active." %}
+        {% elif family_settings.network_access_mode == "children" %}
+          {% translate "Child pages are available only from the allowed IP addresses. Parent access is not restricted by IP." %}
+        {% else %}
+          {% translate "Child pages and the parent area are available only from the allowed IP addresses." %}
+        {% endif %}
+      </p>
+      <span class="service-status {% if family_settings.network_access_mode == "open" %}service-status-warning{% else %}service-status-good{% endif %}">
+        <span aria-hidden="true"></span>
+        {% if family_settings.network_access_mode == "open" %}
+          {% translate "IP restrictions disabled" %}
+        {% elif family_settings.network_access_mode == "children" %}
+          {% translate "Child access restricted" %}
+        {% else %}
+          {% translate "All access restricted" %}
+        {% endif %}
+      </span>
+    </div>
+    <dl class="service-details">
+      <div><dt>{% translate "Current IP address" %}</dt><dd>{{ current_client_ip }}</dd></div>
+      <div>
+        <dt>{% translate "Allowed IP addresses and networks" %}</dt>
+        <dd>
+          {% if family_settings.network_access_mode == "open" %}
+            {% translate "Not used while IP restrictions are disabled" %}
+          {% elif family_settings.allowed_networks %}
+            {{ family_settings.allowed_networks|linebreaksbr }}
+          {% else %}
+            —
+          {% endif %}
+        </dd>
+      </div>
+    </dl>
     {% if user.is_staff %}
-      <form method="post" action="{% url 'parent_update_network_access' %}" class="stack-form settings-form">
-        {% csrf_token %}{{ network_access_form.as_p }}
-        <button class="button button-primary" type="submit">{% translate "Save" %}</button>
-      </form>
+      <button class="button button-primary" type="button" data-open-dialog="network-access-dialog">{% translate "Edit settings" %}</button>
+      <dialog id="network-access-dialog" class="action-dialog backup-dialog">
+        <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-close"></use></svg></button>
+        <h2>{% translate "Network access setup" %}</h2>
+        <p class="settings-description">{% translate "IP restrictions add an optional security layer on top of device pairing and sign-in limits." %}</p>
+        <form method="post" action="{% url 'parent_update_network_access' %}" class="stack-form settings-form">
+          {% csrf_token %}{{ network_access_form.as_p }}
+          <button class="button button-primary" type="submit">{% translate "Save" %}</button>
+        </form>
+      </dialog>
     {% else %}
       <p class="help-text">{% translate "Network access can be changed only by a parent administrator." %}</p>
     {% endif %}
@@ -767,7 +807,6 @@
   <div class="section-heading subsection-heading"><h2>{% translate "Family feedback" %}</h2></div>
   <section class="panel feedback-admin">
     <p class="settings-description feedback-description">{% translate "Family feedback stays on this server and can be reviewed by parents." %}</p>
-    <p class="danger-warning">{% translate "Before posting on GitHub, remove names, PINs, screenshots, email addresses, server details, and other family information." %}</p>
     {% if not feedback_email_configured %}
       <p class="feedback-email-warning">{% translate "Feedback is saved in KinKudos, but email notifications are not configured." %}</p>
     {% endif %}
@@ -962,6 +1001,10 @@
     <a class="github-link" href="https://github.com/VooZ2/kinkudos" aria-label="GitHub">
       <svg class="action-icon" aria-hidden="true"><use href="#icon-github"></use></svg>
       <span>GitHub</span>
+    </a>
+    <span aria-hidden="true">·</span>
+    <a href="https://github.com/VooZ2/kinkudos/issues" target="_blank" rel="noreferrer" aria-label="{% translate 'Report a KinKudos software bug on GitHub' %}">
+      {% translate "Report a bug" %}
     </a>
   </footer>
   </div>

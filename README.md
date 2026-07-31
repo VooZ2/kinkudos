@@ -2,7 +2,7 @@
 
 > A self-hosted family PWA that turns everyday tasks into shared progress.
 
-**Current release:** 26.4.1 · **Languages:** English and Lithuanian<br>
+**Current release:** 26.4.2 · **Languages:** English and Lithuanian<br>
 [Lietuviška README versija](README.lt.md)
 
 ## Why KinKudos?

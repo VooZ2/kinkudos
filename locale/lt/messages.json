@@ -858,5 +858,15 @@
   "Send family feedback": "Siųsti šeimos atsiliepimą",
   "This message stays on your family server and is reviewed by parents.": "Šis pranešimas lieka šeimos serveryje ir yra peržiūrimas tėvų.",
   "Report a KinKudos software bug on GitHub": "Pranešti apie „KinKudos“ programos klaidą „GitHub“",
+  "Report a bug": "Pranešti klaidą",
+  "No IP addresses are blocked. Device pairing and sign-in protections remain active.": "Jokie IP adresai neblokuojami. Įrenginių susiejimo ir prisijungimo apsaugos lieka aktyvios.",
+  "Child pages are available only from the allowed IP addresses. Parent access is not restricted by IP.": "Vaikų puslapiai pasiekiami tik iš leidžiamų IP adresų. Tėvų prieiga pagal IP neribojama.",
+  "Child pages and the parent area are available only from the allowed IP addresses.": "Vaikų puslapiai ir tėvų sritis pasiekiami tik iš leidžiamų IP adresų.",
+  "IP restrictions disabled": "IP ribojimai išjungti",
+  "Child access restricted": "Vaikų prieiga ribojama",
+  "All access restricted": "Visa prieiga ribojama",
+  "Not used while IP restrictions are disabled": "Nenaudojama, kol IP ribojimai išjungti",
+  "Network access setup": "Tinklo prieigos nustatymas",
+  "IP restrictions add an optional security layer on top of device pairing and sign-in limits.": "IP ribojimai suteikia pasirenkamą papildomą apsaugos sluoksnį virš įrenginių susiejimo ir prisijungimo limitų.",
   "Remove names, PINs, screenshots, email addresses, server details, and other family information before posting publicly.": "Prieš skelbdami viešai pašalinkite vardus, PIN, ekrano nuotraukas, el. pašto adresus, serverio informaciją ir kitus šeimos duomenis."
 }

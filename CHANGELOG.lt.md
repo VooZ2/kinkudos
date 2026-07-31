@@ -7,6 +7,21 @@ schema.
 
 ## [Unreleased]
 
+## [26.4.2] - 2026-07-31
+
+### Pakeista
+
+- Tinklo prieigos nustatymuose aiškiai rodoma aktyvi būsena, paaiškinama,
+  kurioms sritims taikomi IP ribojimai, pateikiamas leidžiamų tinklų sąrašas,
+  o redagavimas perkeltas į su kitais paslaugų nustatymais suderintą dialogą.
+- Katalogų pavadinimams aiškiai pritaikyta bendra sistemos tipografija.
+
+### Pataisyta
+
+- Atsiliepimų administravimo bloke neberodomas čia neaktualus viešo skelbimo
+  „GitHub“ privatumo įspėjimas.
+- Poraštėse pridėta kompaktiška programos klaidos pranešimo nuoroda.
+
 ## [26.4.1] - 2026-07-31
 
 ### Pakeista

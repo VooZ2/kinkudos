@@ -109,6 +109,9 @@ msgstr "Korekcija"
 msgid "Admin login by IP"
 msgstr "Administratoriaus prisijungimas pagal IP"
 
+msgid "All access restricted"
+msgstr "Visa prieiga ribojama"
+
 msgid "All child devices revoked"
 msgstr "Visi vaikų įrenginiai atšaukti"
 
@@ -442,6 +445,9 @@ msgstr "Bendras vaikų PIN limitas"
 msgid "Child access"
 msgstr "Vaikų prieiga"
 
+msgid "Child access restricted"
+msgstr "Vaikų prieiga ribojama"
+
 msgid "Child device"
 msgstr "Vaikų įrenginys"
 
@@ -453,6 +459,12 @@ msgstr "Vaikų įrenginys atšauktas"
 
 msgid "Child devices"
 msgstr "Vaikų įrenginiai"
+
+msgid "Child pages and the parent area are available only from the allowed IP addresses."
+msgstr "Vaikų puslapiai ir tėvų sritis pasiekiami tik iš leidžiamų IP adresų."
+
+msgid "Child pages are available only from the allowed IP addresses. Parent access is not restricted by IP."
+msgstr "Vaikų puslapiai pasiekiami tik iš leidžiamų IP adresų. Tėvų prieiga pagal IP neribojama."
 
 msgid "Child profile “%(name)s” created."
 msgstr "Vaiko profilis „%(name)s“ sukurtas."
@@ -1006,8 +1018,14 @@ msgstr "Turiu idėją"
 msgid "I understand"
 msgstr "Supratau"
 
+msgid "IP restrictions add an optional security layer on top of device pairing and sign-in limits."
+msgstr "IP ribojimai suteikia pasirenkamą papildomą apsaugos sluoksnį virš įrenginių susiejimo ir prisijungimo limitų."
+
 msgid "IP restrictions are optional and add another layer on top of device pairing."
 msgstr "IP ribojimai yra pasirenkamas papildomas apsaugos sluoksnis virš įrenginių susiejimo."
+
+msgid "IP restrictions disabled"
+msgstr "IP ribojimai išjungti"
 
 msgid "Icon"
 msgstr "Ikona"
@@ -1195,6 +1213,9 @@ msgstr "Tinklo prieiga pakeista"
 msgid "Network access settings saved."
 msgstr "Tinklo prieigos nustatymai išsaugoti."
 
+msgid "Network access setup"
+msgstr "Tinklo prieigos nustatymas"
+
 msgid "Neutral"
 msgstr "Neutrali"
 
@@ -1231,6 +1252,9 @@ msgstr "Naujų prizų prašymai pristabdyti, nes išnaudota pusė kredito. Uždi
 msgid "Next"
 msgstr "Kitas"
 
+msgid "No IP addresses are blocked. Device pairing and sign-in protections remain active."
+msgstr "Jokie IP adresai neblokuojami. Įrenginių susiejimo ir prisijungimo apsaugos lieka aktyvios."
+
 msgid "No child devices are paired yet."
 msgstr "Dar nesusietas nė vienas vaikų įrenginys."
 
@@ -1263,6 +1287,9 @@ msgstr "Nepakanka taškų"
 
 msgid "Not now"
 msgstr "Ne dabar"
+
+msgid "Not used while IP restrictions are disabled"
+msgstr "Nenaudojama, kol IP ribojimai išjungti"
 
 msgid "Notifications"
 msgstr "Pranešimai"
@@ -1635,6 +1662,9 @@ msgstr "Pranešti apie „KinKudos“ klaidą"
 
 msgid "Report a KinKudos software bug on GitHub"
 msgstr "Pranešti apie „KinKudos“ programos klaidą „GitHub“"
+
+msgid "Report a bug"
+msgstr "Pranešti klaidą"
 
 msgid "Repository"
 msgstr "Saugykla"
