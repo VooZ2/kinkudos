@@ -7,6 +7,15 @@ schema.
 
 ## [Unreleased]
 
+## [26.4.3] - 2026-07-31
+
+### Pataisyta
+
+- Vaiko įrenginio susiejimo nuorodą dabar galima patvirtinti „Safari“
+  naršyklėje negaunant CSRF 403 atsako. Susiejimo puslapis išsaugo „Django“
+  reikalingą tos pačios svetainės nuorodos šaltinį, o vienkartinis kodas lieka
+  URL fragmento dalyje.
+
 ## [26.4.2] - 2026-07-31
 
 ### Pakeista

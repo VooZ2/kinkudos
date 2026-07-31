@@ -411,7 +411,7 @@ def pair_device_via_link(request):
     if request.method == "GET":
         response = render(request, "economy/pair_device.html")
         response["Cache-Control"] = "no-store"
-        response["Referrer-Policy"] = "no-referrer"
+        response["Referrer-Policy"] = "same-origin"
         return response
     if not register_attempt(
         AttemptCounter.Scope.DEVICE_PAIRING,

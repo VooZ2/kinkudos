@@ -38,7 +38,7 @@ leidimą, jo kodą palikite kaip `app`, iškelkite diegimo katalogą ir paleiski
 vedlį:
 
 ```bash
-version=26.4.2
+version=26.4.3
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -72,7 +72,7 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 norimo diegti leidimo reikšmėmis:
 
 ```bash
-version=26.4.2
+version=26.4.3
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -242,7 +242,7 @@ automatiškai šalinamos tik išspręstų atsiliepimų nuotraukos.
 KinKudos darbų nuotraukas ir išspręstų atsiliepimų ekrano nuotraukas saugo
 tėvų nustatymuose pasirinktą laiką. Sistema taip pat kas 30 minučių patikrina,
 ar jau reikia siųsti savaitinį loterijos priminimą. `systemd` naudojančiame
-Docker serveryje po diegimo arba atnaujinimo į 26.4.2 įjunkite abu laikmačius:
+Docker serveryje po diegimo arba atnaujinimo į 26.4.3 įjunkite abu laikmačius:
 
 ```bash
 cd /kelias/iki/kinkudos/deploy

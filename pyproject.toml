@@ -1,6 +1,6 @@
 [project]
 name = "kinkudos"
-version = "26.4.2"
+version = "26.4.3"
 description = "Self-hosted family tasks, points, and rewards PWA"
 readme = "README.md"
 requires-python = ">=3.12"

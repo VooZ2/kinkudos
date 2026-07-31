@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase, override_settings
+from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
 
@@ -89,6 +89,30 @@ class DevicePairingTests(TestCase):
             {"token": expired_token},
         )
         self.assertRedirects(response, reverse("pair_device_via_link"))
+
+    def test_pairing_link_supports_secure_safari_csrf_post(self):
+        _link, raw_token = DevicePairingLink.issue(created_by=self.parent)
+        csrf_client = Client(enforce_csrf_checks=True)
+        pairing_url = reverse("pair_device_via_link")
+
+        page = csrf_client.get(pairing_url, secure=True)
+
+        self.assertEqual(page["Cache-Control"], "no-store")
+        self.assertEqual(page["Referrer-Policy"], "same-origin")
+        csrf_token = page.cookies["csrftoken"].value
+
+        response = csrf_client.post(
+            pairing_url,
+            {
+                "token": raw_token,
+                "csrfmiddlewaretoken": csrf_token,
+            },
+            secure=True,
+            HTTP_REFERER=f"https://testserver{pairing_url}",
+        )
+
+        self.assertRedirects(response, reverse("child_select"))
+        self.assertIn("kk_device", response.cookies)
 
     def test_revoking_device_removes_its_push_subscriptions(self):
         device, _raw_token = DeviceToken.issue(

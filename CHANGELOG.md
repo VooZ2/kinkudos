@@ -5,6 +5,14 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.4.3] - 2026-07-31
+
+### Fixed
+
+- Child-device pairing links can now be confirmed in Safari without a CSRF
+  403 response. The pairing page preserves the same-origin referrer Django
+  requires while keeping the one-time token in the URL fragment.
+
 ## [26.4.2] - 2026-07-31
 
 ### Changed
