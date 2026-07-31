@@ -1,12 +1,22 @@
 # Vaiko įrenginio susiejimas
 
-Vaiko profilis ir vaiko įrenginys nėra tas pats. Profilis saugo vaiko vardą ir PIN, o susiejimas leidžia vienam konkrečiam telefonui, planšetei ar naršyklei rodyti profilius bei priimti PIN.
+Vaiko profilis ir vaiko įrenginys yra skirtingi dalykai. Profilis saugo vardą, PIN, taisykles ir istoriją. Susiejimas leidžia vienai konkrečiai naršyklei, telefonui, planšetei ar įdiegtai PWA rodyti profilius ir priimti PIN.
 
-Atidarykite **Tėvai → Nustatymai → Vaikų įrenginiai** ir pasirinkite vieną būdą:
+## Susiekite įrenginį, kurį naudojate dabar
 
-- **Leisti vaikams naudoti šį įrenginį** — kai esate prie to paties įrenginio.
-- **Sukurti privačią susiejimo nuorodą** — kai nuorodą saugiai atidarysite kitame įrenginyje. Ji vienkartinė ir galioja trumpai.
+1. Vaiko įrenginyje prisijunkite tėvų paskyra.
+2. Atidarykite **Tėvai → Nustatymai → Vaikų įrenginiai**.
+3. Įrašykite aiškų pavadinimą, pvz., „Virtuvės planšetė“.
+4. Spauskite **Leisti vaikams naudoti šį įrenginį**.
+5. Atsijunkite arba atidarykite vaiko prisijungimą. Vaikas gali pasirinkti savo profilį ir įvesti PIN.
 
-Susieję įrenginį, jame pasirinkite profilį ir įveskite PIN. Jei įrenginys pamestas, parduotas ar nebešeimos, iš karto atšaukite jo prieigą.
+## Susiekite kitą įrenginį privačia nuoroda
 
-[Paskyros ir įrenginiai →](../security/accounts-and-devices.lt.md) · [English](pair-a-child-device.md)
+1. Bet kuriame tėvų įrenginyje atidarykite **Tėvai → Nustatymai → Vaikų įrenginiai**.
+2. Spauskite **Sukurti privačią susiejimo nuorodą**.
+3. Saugiai perduokite nuorodą numatytam įrenginiui ir atidarykite ją ten. Neskelbkite grupės pokalbyje ir nepalikite bendrame užraše.
+4. Nuoroda susieja vieną kartą ir greitai nustoja galioti.
+
+Įrenginių sąrašas rodo pavadinimą ir paskutinį naudojimą. Pamestą, parduotą, ilgam paskolintą ar nebe šeimai priklausantį įrenginį iškart atšaukite. Taip panaikinama prieiga ir pranešimai, bet neištrinamas profilis ar istorija.
+
+[Paskyros ir įrenginiai →](../security/accounts-and-devices.lt.md) · [PIN ir prisijungimo apsauga →](../security/pin-and-sign-in.lt.md) · [English](pair-a-child-device.md)

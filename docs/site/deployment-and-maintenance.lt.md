@@ -2,6 +2,8 @@
 
 KinKudos veikia šeimos valdomame serveryje. Diegimas, atnaujinimai, reverse proxy, planinė priežiūra, atsarginių kopijų konfigūravimas, diagnostika ir atkūrimas aprašyti diegimo vadove.
 
+Naujam serveriui, kuriame jau veikia „Docker“, domenas ir HTTPS proxy, pradėkite nuo [Greito diegimo](start/quick-install.lt.md). Nenaudokite naujos instaliacijos komandos jau veikiančiai šeimos instaliacijai atnaujinti.
+
 - [Atidaryti diegimo ir atnaujinimo vadovą](https://github.com/VooZ2/kinkudos/blob/main/deploy/README.lt.md)
 - [Atidaryti anglišką diegimo ir atnaujinimo vadovą](https://github.com/VooZ2/kinkudos/blob/main/deploy/README.md)
 

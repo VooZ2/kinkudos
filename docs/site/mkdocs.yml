@@ -66,12 +66,16 @@ nav:
   - Lietuviškai:
       - Pradžia: index.lt.md
       - Kas yra KinKudos: start/what-is-kinkudos.lt.md
+      - Greitas diegimas: start/quick-install.lt.md
       - Pirmos 15 minučių: start/first-15-minutes.lt.md
       - Vaiko įrenginio susiejimas: start/pair-a-child-device.lt.md
-      - Tėvams: parents/tasks-and-approvals.lt.md
+      - Tėvų skydelis ir vaikų kortelės: parents/dashboard-and-child-cards.lt.md
+      - Darbai ir patvirtinimai: parents/tasks-and-approvals.lt.md
       - Prizai, tikslai ir loterija: parents/rewards-goals-and-lottery.lt.md
+      - Vaiko aplinka: parents/child-space.lt.md
       - Tėvų nustatymai: parents/settings.lt.md
-      - Saugumas ir privatumas: security/accounts-and-devices.lt.md
+      - Paskyros ir įrenginiai: security/accounts-and-devices.lt.md
+      - PIN ir prisijungimo apsauga: security/pin-and-sign-in.lt.md
       - Tinklo prieiga: security/network-access.lt.md
       - Atsarginės kopijos: security/backups.lt.md
       - Diegimas ir priežiūra: deployment-and-maintenance.lt.md
