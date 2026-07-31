@@ -53,4 +53,4 @@ Versijos numeris programos antraštėje visada turi likti nuoroda į
 
 Docker Hub publikavimui repozitorijos Actions secret `DOCKERHUB_TOKEN` turi
 turėti tik Docker Hub access tokeno reikšmę, be vartotojo vardo ar `username:`
-prefikso. Publikavimo paskyra yra `VooZ2`.
+prefikso. Publikavimo Docker ID yra `vooz2`.

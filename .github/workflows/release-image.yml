@@ -65,7 +65,7 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
         with:
-          username: VooZ2
+          username: vooz2
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Extract image metadata
