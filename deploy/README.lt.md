@@ -129,7 +129,7 @@ vedlį:
 ```bash
 sudo install -d -o "$USER" -g "$(id -gn)" /opt/kinkudos
 cd /opt/kinkudos
-version=26.4.6
+version=26.4.7
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -184,7 +184,7 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 norimo diegti leidimo reikšmėmis:
 
 ```bash
-version=26.4.6
+version=26.4.7
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"

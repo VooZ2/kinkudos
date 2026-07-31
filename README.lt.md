@@ -18,6 +18,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT licencija"></a>
   <a href="https://github.com/VooZ2/kinkudos/releases"><img src="https://img.shields.io/github/v/release/VooZ2/kinkudos?display_name=release" alt="Naujausias GitHub leidimas"></a>
 </p>
+<p align="center"><sub>Dabartinis leidimas: 26.4.7</sub></p>
 
 ---
 

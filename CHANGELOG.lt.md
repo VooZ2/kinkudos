@@ -7,6 +7,8 @@ schema.
 
 ## [Unreleased]
 
+## [26.4.7] - 2026-07-31
+
 ### Pakeista
 
 - Pagrindinis, tėvų prisijungimo ir slaptažodžio atkūrimo ekranai dabar turi
@@ -14,6 +16,10 @@ schema.
 - GitHub README dabar pateikia vaizdinę produkto apžvalgą, kviečia pirmiausia
   išbandyti demonstraciją, glaustai paaiškina diegimą ir nurodo pasirenkamą VPS alternatyvą.
 - Vaiko loterijos kortelėje ir pirkimo dialoge dabar rodoma aiškesnė „Loterijos bilietų“ etiketė.
+
+### Saugumas
+
+- Atsarginių kopijų tiekėjas dabar nustatomas iš sukonfigūruotos S3 saugyklos URL hosto, o ne pagal bet kur rastą URL teksto dalį.
 
 ## [26.4.6] - 2026-07-31
 
