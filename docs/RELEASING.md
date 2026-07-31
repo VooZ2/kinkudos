@@ -50,3 +50,7 @@ Kiekvienai versijai privaloma:
 
 Versijos numeris programos antraštėje visada turi likti nuoroda į
 `/pakeitimai/`.
+
+Docker Hub publikavimui repozitorijos Actions secret `DOCKERHUB_TOKEN` turi
+turėti tik Docker Hub access tokeno reikšmę, be vartotojo vardo ar `username:`
+prefikso. Publikavimo paskyra yra `VooZ2`.
