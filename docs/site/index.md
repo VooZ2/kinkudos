@@ -7,6 +7,8 @@ KinKudos is a private, self-hosted space for one family. This guide starts with 
 
 **Language:** English · [Lietuviškai](index.lt.md)
 
+> **Privacy:** this public documentation uses cookie-free Umami analytics to understand which guides are useful. It does not track activity inside the private KinKudos family application.
+
 ## Start here
 
 1. [Quick install](start/quick-install.md) — install KinKudos on a prepared server.

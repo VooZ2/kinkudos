@@ -7,6 +7,8 @@ KinKudos yra privati, vienai šeimai skirta savarankiškai diegiama programa. Š
 
 **Kalba:** [English](index.md) · Lietuvių
 
+> **Privatumas:** šioje viešoje dokumentacijoje naudojama slapukų nenaudojanti „Umami“ analitika, kad suprastume, kurie vadovai yra naudingi. Privati KinKudos šeimos programa nestebima.
+
 ## Pradėkite čia
 
 1. [Greitas diegimas](start/quick-install.lt.md) — įdiekite KinKudos jau paruoštame serveryje.
