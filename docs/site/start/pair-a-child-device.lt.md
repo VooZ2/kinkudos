@@ -15,7 +15,7 @@ Vaiko profilis ir vaiko įrenginys yra skirtingi dalykai. Profilis saugo vardą,
 1. Bet kuriame tėvų įrenginyje atidarykite **Tėvai → Nustatymai → Vaikų įrenginiai**.
 2. Spauskite **Sukurti privačią susiejimo nuorodą**.
 3. Saugiai perduokite nuorodą numatytam įrenginiui ir atidarykite ją ten. Neskelbkite grupės pokalbyje ir nepalikite bendrame užraše.
-4. Nuoroda susieja vieną kartą ir greitai nustoja galioti.
+4. Nuoroda susieja vieną kartą ir nustoja galioti po **10 minučių**.
 
 Įrenginių sąrašas rodo pavadinimą ir paskutinį naudojimą. Pamestą, parduotą, ilgam paskolintą ar nebe šeimai priklausantį įrenginį iškart atšaukite. Taip panaikinama prieiga ir pranešimai, bet neištrinamas profilis ar istorija.
 

@@ -10,6 +10,10 @@ Kiekvienam suaugusiajam sukurkite atskirą paskyrą. Nesidalinkite tėvų slapta
 
 Tėvai savo paskyros duomenis gali keisti per **Tėvai → Nustatymai → Tėvų paskyros**. Slaptažodžio atkūrimas el. paštu veikia tik administratoriui sukonfigūravus SMTP.
 
+### Atkurti tėvų slaptažodį
+
+Tėvų prisijungimo puslapyje pasirinkite **Pamiršote slaptažodį?**, įrašykite aktyvios tėvų paskyros el. pašto adresą ir iš laiško nuorodos nustatykite naują slaptažodį. Kol SMTP išjungtas, šis puslapis sąmoningai nepasiekiamas. Negavę laiško, pirmiausia patikrinkite šlamštą, tada paprašykite administratoriaus patikrinti SMTP – nekurkite pakaitinės paskyros vien tam, kad atgautumėte prieigą.
+
 ## Vaiko PIN logika
 
 Vaikas jungiasi tiksliai keturių skaitmenų PIN kodu, tačiau tik iš [susieto įrenginio](../start/pair-a-child-device.lt.md). PIN saugomas kaip saugi maiša ir po nustatymo niekada nerodomas nei tėvams, nei vaikui.

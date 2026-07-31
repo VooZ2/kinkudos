@@ -55,4 +55,6 @@ For a task with a photo, select the thumbnail to view it at full size. Photos ar
 
 Use **History** to answer questions such as “Did this reward get approved?” or “Why did the balance change?” Every balance change is a separate, permanent record. If something needs correcting, use **Adjust points** to create a transparent new entry instead of trying to rewrite the past.
 
+Choose one child in the **History** filter to narrow a busy family ledger. Rejected task and reward decisions are also shown with the parent’s reason, even though no points moved. A camera icon means the evidence photo remains available; a faded camera means it was removed according to the retention setting.
+
 [Tasks and approvals →](tasks-and-approvals.md) · [Child space →](child-space.md)

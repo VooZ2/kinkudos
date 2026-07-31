@@ -29,6 +29,7 @@ KinKudos is a private, self-hosted space for one family. This guide starts with 
 
 - [Accounts and devices](security/accounts-and-devices.md)
 - [PINs and sign-in protection](security/pin-and-sign-in.md)
+- [Notifications and installing KinKudos](security/notifications-and-pwa.md)
 - [Network access](security/network-access.md)
 - [Backups](security/backups.md)
 - [Installation and maintenance](deployment-and-maintenance.md)

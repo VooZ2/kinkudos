@@ -45,7 +45,7 @@ Tik susietas įrenginys gali rodyti vaikų profilius arba priimti vaiko PIN. Pro
 | --- | --- | --- |
 | **Įrenginio pavadinimas** | Kai susiejate dabartinį kompiuterį ar planšetę. | Suteikia aiškų pavadinimą, pvz., „Virtuvės planšetė“. |
 | **Leisti vaikams naudoti šį įrenginį** | Kai esate prie vaiko įrenginio. | Iškart susieja šią naršyklę/PWA. Tuomet galima pasirinkti vaiką ir įvesti PIN. |
-| **Sukurti privačią susiejimo nuorodą** | Kai reikia susieti kitą telefoną, planšetę ar naršyklę. | Sukuria vienkartinę trumpalaikę nuorodą; ją atidarykite tik numatytame įrenginyje. |
+| **Sukurti privačią susiejimo nuorodą** | Kai reikia susieti kitą telefoną, planšetę ar naršyklę. | Sukuria vienkartinę nuorodą, galiojančią **10 minučių**; ją atidarykite tik numatytame įrenginyje. |
 | **Pervadinti** | Kai sąrašas neaiškus. | Keičia tik pavadinimą, prieigos nenutraukia. |
 | **Atšaukti** | Pametus, pardavus ar nebe šeimos valdomam įrenginiui. | Panaikina vaiko prieigą ir pranešimus tame įrenginyje; norint grįžti reikės susieti iš naujo. |
 | **Atšaukti visus vaikų įrenginius** | Esant platesniam saugumo incidentui. | Tik administratoriui; reikia jo slaptažodžio ir visus įrenginius teks susieti iš naujo. |
@@ -114,7 +114,15 @@ Skiltyje **Vaikų profiliai** galima keisti vardą, kreditą, individualų loter
 
 ## 7. Šeimos atsiliepimai
 
-Tėvai ir vaikai gali programoje išsaugoti privatų **pasiūlymą** arba **problemos** pranešimą su pasirenkama ekrano nuotrauka. Naudokite **Tipas** ir **Būsena** filtrus, atidarykite įrašą, peržiūrėkite nuotrauką bei pakeiskite jo peržiūros būseną. Nuotraukoms taikoma aukščiau nurodyta saugojimo taisyklė.
+Tėvai ir vaikai gali programoje išsaugoti privatų **pasiūlymą** arba **problemos** pranešimą su pasirenkama ekrano nuotrauka. Naudokite **Tipas** ir **Būsena** filtrus. **Naujas** reiškia dar neperžiūrėtą, **Peržiūrėtas** – tėvai perskaitė, **Planuojamas** – šeima ketina imtis veiksmų, o **Išspręstas** – papildomų veiksmų nebesitikima. Atidarykite įrašą, peržiūrėkite nuotrauką ir išsaugokite būseną.
+
+Kad pranešimas būtų naudingas, KinKudos taip pat išsaugo pateikusiojo vaidmenį ir vardą, puslapio kelią, programos versiją, kalbą, pasirinktą temą ir naršyklės/įrenginio aprašą. Ši informacija lieka šeimos instaliacijoje ir į „GitHub“ nesiunčiama. Nuotraukoms taikoma aukščiau nurodyta saugojimo taisyklė.
+
+## Nuotraukų ribos ir laiko taisyklės
+
+Darbų įrodymai ir atsiliepimų ekrano nuotraukos priima JPEG, PNG, WebP, HEIC arba HEIF iki **12 MB**. Avatarai priima tuos pačius formatus iki **5 MB** ir apkerpami į kvadratą. Nuotraukos apdorojamos privačiam saugojimui; nekelkite daugiau šeimos informacijos nei reikia darbui ar problemai paaiškinti.
+
+Paskirti dienos darbai baigiasi vidurnaktį pagal **vietinį serverio laiką**. Loterijos limitai atsinaujina kiekvieną pirmadienį tame pačiame kalendoriniame kontekste. Jei šeima gyvena kitoje laiko juostoje nei serveris, prieš remdamiesi vidurnakčio taisykle susitarkite, pagal kurį laiką gyvena dienos darbai.
 
 Pakartojamai viešai programos klaidai naudokite [GitHub Issues](https://github.com/VooZ2/kinkudos/issues), tačiau niekada nekelkite šeimos duomenų.
 

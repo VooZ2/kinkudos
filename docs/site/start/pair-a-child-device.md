@@ -15,7 +15,7 @@ A child profile and a child device are different. The profile holds the child’
 1. On any signed-in parent device, open **Parents → Settings → Child devices**.
 2. Select **Create private pairing link**.
 3. Transfer the link privately to the intended device and open it there. Do not post it in a group chat or leave it in a shared note.
-4. The link pairs that device once, then expires. The child can select their profile and enter their PIN.
+4. The link pairs that device once, then expires after **10 minutes**. The child can select their profile and enter their PIN.
 
 ## Manage paired devices
 

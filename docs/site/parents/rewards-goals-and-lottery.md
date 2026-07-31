@@ -41,4 +41,8 @@ The family settings set the ticket price and per-child weekly limit. The week ru
 
 When a child buys a ticket, KinKudos deducts the configured price and records it in History. Revealing the ticket produces a preselected positive, negative, or no-prize outcome; an outcome can never take the child below their credit limit. Disabling the feature prevents new purchases and reminders but lets an already-open ticket finish.
 
+### Before a child buys a ticket
+
+The ticket clearly states that it is a game of chance. A completed ticket can win up to 150 points, return no points, or lose up to 50 points; a loss is always capped at the child’s credit limit. The child must scratch all nine fields to reveal the result. Consider agreeing on the family rule and price together before enabling the feature.
+
 [Parent settings →](settings.md) · [Child space →](child-space.md) · [Lietuviškai](rewards-goals-and-lottery.lt.md)

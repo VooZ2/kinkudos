@@ -55,4 +55,6 @@ Jei darbas turi nuotrauką, pasirinkite miniatiūrą ir peržiūrėkite ją viso
 
 Naudokite **Istoriją**, kai kyla klausimas „Ar prizas tikrai patvirtintas?“ arba „Kodėl pasikeitė balansas?“. Kiekvienas balanso pakeitimas yra atskiras, nuolatinis įrašas. Jei reikia taisyti, naudokite **Koreguoti taškus** ir sukurkite aiškų naują įrašą, o ne perrašykite praeitį.
 
+Užimtoje šeimos istorijoje pasirinkite vieną vaiką **Istorijos** filtre. Atmesti darbų ir prizų sprendimai su tėvų priežastimi taip pat rodomi, nors taškai nepasikeitė. Kameros ikona reiškia, kad įrodymo nuotrauka dar pasiekiama, o išblukusi kamera – kad ji pašalinta pagal saugojimo nustatymą.
+
 [Darbai ir patvirtinimai →](tasks-and-approvals.lt.md) · [Vaiko aplinka →](child-space.lt.md)

@@ -10,6 +10,7 @@
 | A task or reward is not visible | Check whether it is active, whether the task is already pending/assigned/completed today, and whether the reward is affordable. | [Tasks and approvals](parents/tasks-and-approvals.md) |
 | A lottery ticket is unavailable | Check both the family-wide and individual child lottery switches, the weekly limit, balance, and whether another ticket is unfinished. | [Rewards, goals, and lottery tickets](parents/rewards-goals-and-lottery.md) |
 | Notifications do not arrive | Confirm browser permission. On iPhone or iPad, install KinKudos to the Home Screen first. | [What is KinKudos?](start/what-is-kinkudos.md) |
+| I want to install the app or enable the bell | Install the PWA on that device, then accept its notification permission. | [Notifications and installing KinKudos](security/notifications-and-pwa.md) |
 | Password-reset email does not arrive | Check whether SMTP is enabled, verified, and using the intended sender and recipient settings. | [Parent settings — SMTP](parents/settings.md#4-email-settings-smtp) |
 | Access from home stopped working | Check existing IP restrictions with the parent administrator. Do not guess at a replacement allowlist. | [Network access](security/network-access.md) |
 | Backup needs attention | Record the displayed error, then check the backup service and storage credentials with the server administrator. | [Backups](security/backups.md) |

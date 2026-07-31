@@ -45,7 +45,7 @@ Only a paired device can list child profiles or accept a child PIN. A child prof
 | --- | --- | --- |
 | **Device name** | Naming a device before pairing it on the current computer or tablet. | Gives the device a recognisable label such as “Kitchen tablet”. |
 | **Allow children on this device** | You are physically using the child’s device. | Pairs that browser/PWA immediately. It can then select a child and enter a PIN. |
-| **Create private pairing link** | You need to pair a different phone, tablet, or browser. | Creates a single-use, short-lived link. Open it only on the intended device. |
+| **Create private pairing link** | You need to pair a different phone, tablet, or browser. | Creates a single-use link that expires after **10 minutes**. Open it only on the intended device. |
 | **Rename** | The device list is unclear. | Changes the label only; it does not interrupt access. |
 | **Revoke** | A device is lost, sold, or no longer family-controlled. | Removes child access and child notifications on that one device. It must be paired again before it can sign in. |
 | **Revoke all child devices** | There is a broad security concern or you want every child device to start fresh. | Administrator-only. Requires the administrator’s password and forces every child browser/PWA to be paired again. |
@@ -155,6 +155,14 @@ Removing a child deactivates the profile and preserves history. It does not make
 
 Parents and children can submit a private **idea** or **problem** report from the app. The report stays on this server. If SMTP feedback notifications are configured, KinKudos can also email the chosen recipient.
 
-Use the **Type** and **Status** filters to find reports. Open a report to read its description, view its optional screenshot, and set its review status. Screenshots follow the feedback-image retention rule above. For a reproducible software defect that should be public, use the project’s GitHub issue tracker instead, and never include family data.
+Use the **Type** and **Status** filters to find reports. **New** means not yet reviewed; **Reviewed** means a parent has read it; **Planned** means the family intends to act; **Resolved** means no further action is expected. Open a report to read its description, view its optional screenshot, and save the status.
+
+To make a report useful, KinKudos also records the reporting role and name, page path, app version, language, selected theme, and browser/device description. This information remains in the family installation; it is not sent to GitHub. Screenshots follow the feedback-image retention rule above. For a reproducible software defect that should be public, use the project’s GitHub issue tracker instead, and never include family data.
+
+## Image limits and time rules
+
+Task-evidence and feedback screenshots accept JPEG, PNG, WebP, HEIC, or HEIF up to **12 MB**. Avatars use the same formats up to **5 MB** and are cropped to a square. Task photos and feedback screenshots are processed for private storage; do not upload more family information than is needed to explain the task or problem.
+
+Daily assigned tasks expire at midnight in the **server’s local time**. Lottery limits reset every Monday in that same calendar context. If a household lives in a different time zone from its server, discuss which clock should govern daily work before relying on the midnight rule.
 
 [GitHub issues](https://github.com/VooZ2/kinkudos/issues) · [Network access →](../security/network-access.md) · [Backups →](../security/backups.md)

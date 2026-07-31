@@ -10,6 +10,10 @@ Use one account per adult. Do not share a parent password with a child, even if 
 
 Parents can change their own account details in **Parents → Settings → Parent accounts**. Password-reset email is available only after an administrator has configured SMTP.
 
+### Reset a parent password
+
+On the parent sign-in page, select **Forgot password?**, enter the email address of an active parent account, then use the link sent by email to choose a new password. This page is intentionally unavailable while SMTP email is disabled. If no message arrives, first check the spam folder, then ask the parent administrator to verify the SMTP settings; do not create a replacement account merely to regain access.
+
 ## Child PIN logic
 
 A child signs in with exactly four digits, but only from a [paired device](../start/pair-a-child-device.md). The PIN is stored as a secure hash and is never shown to parents or children after it is set.

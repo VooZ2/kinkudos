@@ -39,4 +39,8 @@ Loterija pasirenkama ir veikia tik įjungus abu jungiklius:
 
 Šeimos nustatymai nurodo kainą ir savaitinį limitą nuo pirmadienio iki sekmadienio. Vienas vaikas vienu metu gali turėti tik vieną nebaigtą bilietą. Perkant atimama nustatyta kaina ir sukuriamas istorijos įrašas. Atskleistas bilietas gali duoti teigiamą, neigiamą arba tuščią rezultatą, bet niekada nenukrenta žemiau kredito limito. Išjungus loteriją nauji pirkimai ir priminimai sustoja, bet atidarytas bilietas užbaigiamas.
 
+### Prieš vaikui perkant bilietą
+
+Biliete aiškiai nurodyta, kad tai sėkmės žaidimas. Užbaigtas bilietas gali laimėti iki 150 taškų, nieko neduoti arba atimti iki 50 taškų; praradimas visada ribojamas vaiko kredito limitu. Rezultatas paaiškėja nutrinus visus devynis laukelius. Prieš įjungdami funkciją, su vaiku iš anksto susitarkite dėl šeimos taisyklės ir kainos.
+
 [Tėvų nustatymai →](settings.lt.md) · [Vaiko aplinka →](child-space.lt.md) · [English](rewards-goals-and-lottery.md)

@@ -29,6 +29,7 @@ KinKudos yra privati, vienai šeimai skirta savarankiškai diegiama programa. Š
 
 - [Paskyros ir įrenginiai](security/accounts-and-devices.lt.md)
 - [PIN ir prisijungimo apsauga](security/pin-and-sign-in.lt.md)
+- [Pranešimai ir KinKudos diegimas](security/notifications-and-pwa.lt.md)
 - [Tinklo prieiga](security/network-access.lt.md)
 - [Atsarginės kopijos](security/backups.lt.md)
 

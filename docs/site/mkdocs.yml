@@ -59,6 +59,7 @@ nav:
   - Security and privacy:
       - Accounts and devices: security/accounts-and-devices.md
       - PINs and sign-in protection: security/pin-and-sign-in.md
+      - Notifications and installing KinKudos: security/notifications-and-pwa.md
       - Network access: security/network-access.md
       - Backups: security/backups.md
   - Installation and maintenance: deployment-and-maintenance.md
@@ -76,6 +77,7 @@ nav:
       - Tėvų nustatymai: parents/settings.lt.md
       - Paskyros ir įrenginiai: security/accounts-and-devices.lt.md
       - PIN ir prisijungimo apsauga: security/pin-and-sign-in.lt.md
+      - Pranešimai ir KinKudos diegimas: security/notifications-and-pwa.lt.md
       - Tinklo prieiga: security/network-access.lt.md
       - Atsarginės kopijos: security/backups.lt.md
       - Diegimas ir priežiūra: deployment-and-maintenance.lt.md
