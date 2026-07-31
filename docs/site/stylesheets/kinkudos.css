@@ -1,0 +1,197 @@
+/* KinKudos documentation theme: uses the same purple, green and neutral palette
+   as the application, while preserving Material's accessible controls. */
+:root {
+  --kinkudos-plum-950: #21113d;
+  --kinkudos-plum-900: #2e1065;
+  --kinkudos-plum-800: #4c1d95;
+  --kinkudos-plum-700: #6d28d9;
+  --kinkudos-lilac: #b69af2;
+  --kinkudos-green: #10b981;
+  --kinkudos-ink: #272333;
+  --kinkudos-muted: #706a7c;
+  --kinkudos-paper: #fbfaff;
+  --kinkudos-surface: #ffffff;
+}
+
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: var(--kinkudos-plum-800);
+  --md-primary-fg-color--light: var(--kinkudos-plum-700);
+  --md-primary-fg-color--dark: var(--kinkudos-plum-900);
+  --md-accent-fg-color: var(--kinkudos-green);
+  --md-typeset-a-color: var(--kinkudos-plum-800);
+  --md-default-bg-color: var(--kinkudos-paper);
+  --md-default-fg-color: var(--kinkudos-ink);
+  --md-default-fg-color--light: var(--kinkudos-muted);
+  --md-code-bg-color: #f3f0fb;
+  --md-code-fg-color: var(--kinkudos-ink);
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: var(--kinkudos-plum-800);
+  --md-primary-fg-color--light: var(--kinkudos-plum-700);
+  --md-primary-fg-color--dark: var(--kinkudos-plum-950);
+  --md-accent-fg-color: #4ee3ae;
+  --md-typeset-a-color: #c5b0f7;
+  --md-default-bg-color: #161321;
+  --md-default-fg-color: #f4f1fb;
+  --md-default-fg-color--light: #c3bdcf;
+  --md-default-fg-color--lighter: #8d879b;
+  --md-code-bg-color: #252035;
+  --md-code-fg-color: #f4f1fb;
+}
+
+body,
+input,
+button {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+}
+
+.md-header,
+.md-tabs {
+  background: var(--kinkudos-plum-800);
+}
+
+.md-header {
+  box-shadow: 0 1px 0 rgb(255 255 255 / 10%);
+}
+
+.md-header__button.md-logo {
+  margin: 0.18rem 0.35rem 0.18rem 0;
+  padding: 0;
+}
+
+.md-header__button.md-logo img {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 0.6rem;
+  box-shadow: 0 0.25rem 0.8rem rgb(0 0 0 / 25%);
+}
+
+.md-header__title,
+.md-header__topic {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.md-tabs__link {
+  font-weight: 650;
+  opacity: 0.76;
+}
+
+.md-tabs__link:hover,
+.md-tabs__link--active {
+  color: #fff;
+  opacity: 1;
+}
+
+.md-search__form {
+  border-radius: 0.75rem;
+  background-color: rgb(20 8 44 / 35%);
+}
+
+.md-search__input + .md-search__icon,
+.md-search__input::placeholder {
+  color: rgb(255 255 255 / 78%);
+}
+
+.md-main {
+  background:
+    radial-gradient(circle at 0 0, rgb(109 40 217 / 7%), transparent 24rem),
+    var(--md-default-bg-color);
+}
+
+.md-content {
+  max-width: 48rem;
+}
+
+.md-typeset {
+  font-size: 0.8rem;
+  line-height: 1.72;
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  color: var(--md-default-fg-color);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.md-typeset h1 {
+  margin-bottom: 1.35rem;
+  font-size: 2.15rem;
+}
+
+.md-typeset h2 {
+  margin-top: 2.5rem;
+  font-size: 1.45rem;
+}
+
+.md-typeset a {
+  font-weight: 650;
+}
+
+.md-typeset a:hover {
+  color: var(--kinkudos-green);
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+  border: 0;
+  border-radius: 0.85rem;
+  box-shadow: 0 0.25rem 1rem rgb(35 17 69 / 9%);
+}
+
+.md-typeset .admonition-title,
+.md-typeset summary {
+  border-radius: 0.85rem 0.85rem 0 0;
+}
+
+.md-typeset .md-button--primary {
+  border-color: var(--kinkudos-plum-800);
+  border-radius: 0.65rem;
+  background-color: var(--kinkudos-plum-800);
+  font-weight: 750;
+}
+
+.md-typeset .md-button--primary:hover {
+  border-color: var(--kinkudos-green);
+  background-color: var(--kinkudos-green);
+}
+
+.md-typeset table:not([class]) {
+  border: 1px solid rgb(76 29 149 / 14%);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 0.2rem 0.8rem rgb(35 17 69 / 5%);
+}
+
+.md-typeset table:not([class]) th {
+  background: rgb(76 29 149 / 9%);
+  color: var(--md-default-fg-color);
+  font-weight: 750;
+}
+
+.md-nav__link--active,
+.md-nav__link:focus,
+.md-nav__link:hover {
+  color: var(--kinkudos-plum-700);
+}
+
+[data-md-color-scheme="slate"] .md-nav__link--active,
+[data-md-color-scheme="slate"] .md-nav__link:focus,
+[data-md-color-scheme="slate"] .md-nav__link:hover {
+  color: #c5b0f7;
+}
+
+.md-footer {
+  background: var(--kinkudos-plum-950);
+}
+
+@media screen and (max-width: 76.1875em) {
+  .md-header__button.md-logo img {
+    width: 1.85rem;
+    height: 1.85rem;
+  }
+}

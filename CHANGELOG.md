@@ -9,6 +9,10 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Public English-first user documentation now covers getting started, parent workflows, settings, security, maintenance, and quick help; Lithuanian equivalents are available from every section.
 
+### Changed
+
+- Hosted documentation now uses the KinKudos icon, colour palette, typography, and light/dark appearance styling.
+
 ## [26.4.9] - 2026-07-31
 
 ### Fixed

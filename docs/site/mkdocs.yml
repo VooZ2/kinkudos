@@ -1,0 +1,74 @@
+site_name: KinKudos
+site_description: Help for KinKudos families
+site_url: https://docs.kinkudos.app
+
+# Keep the public documentation self-contained: the server copies this folder
+# and builds it without needing the application source tree.
+docs_dir: .
+site_dir: ../site
+
+theme:
+  name: material
+  language: en
+  logo: assets/kinkudos-icon.png
+  favicon: assets/favicon-32.png
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Use dark appearance
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Use light appearance
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+extra_css:
+  - stylesheets/kinkudos.css
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+
+nav:
+  - Start:
+      - What is KinKudos: start/what-is-kinkudos.md
+      - Your first 15 minutes: start/first-15-minutes.md
+      - Pair a child device: start/pair-a-child-device.md
+  - For parents:
+      - Tasks and approvals: parents/tasks-and-approvals.md
+      - Rewards, goals, and lottery: parents/rewards-goals-and-lottery.md
+      - Parent settings: parents/settings.md
+  - Security and privacy:
+      - Accounts and devices: security/accounts-and-devices.md
+      - Network access: security/network-access.md
+      - Backups: security/backups.md
+  - Installation and maintenance: deployment-and-maintenance.md
+  - Quick help: quick-help.md
+  - Lietuviškai:
+      - Pradžia: index.lt.md
+      - Kas yra KinKudos: start/what-is-kinkudos.lt.md
+      - Pirmos 15 minučių: start/first-15-minutes.lt.md
+      - Vaiko įrenginio susiejimas: start/pair-a-child-device.lt.md
+      - Tėvams: parents/tasks-and-approvals.lt.md
+      - Prizai, tikslai ir loterija: parents/rewards-goals-and-lottery.lt.md
+      - Tėvų nustatymai: parents/settings.lt.md
+      - Saugumas ir privatumas: security/accounts-and-devices.lt.md
+      - Tinklo prieiga: security/network-access.lt.md
+      - Atsarginės kopijos: security/backups.lt.md
+      - Diegimas ir priežiūra: deployment-and-maintenance.lt.md
+      - Greita pagalba: quick-help.lt.md

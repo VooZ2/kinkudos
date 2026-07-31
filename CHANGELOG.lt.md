@@ -11,6 +11,10 @@ schema.
 
 - Vieša angliška naudotojo dokumentacija dabar apima pradžią, tėvų veiksmus, nustatymus, saugumą, priežiūrą ir greitą pagalbą; iš kiekvienos skilties pasiekiami lietuviški atitikmenys.
 
+### Pakeista
+
+- Vieša dokumentacija dabar naudoja KinKudos ikoną, spalvų paletę, tipografiją ir šviesios bei tamsios išvaizdos stilių.
+
 ## [26.4.9] - 2026-07-31
 
 ### Pataisyta
