@@ -18,7 +18,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License"></a>
   <a href="https://github.com/VooZ2/kinkudos/releases"><img src="https://img.shields.io/github/v/release/VooZ2/kinkudos?display_name=release" alt="Latest GitHub release"></a>
 </p>
-<p align="center"><sub>Current release: 26.4.8</sub></p>
+<p align="center"><sub>Current release: 26.4.9</sub></p>
 
 ---
 

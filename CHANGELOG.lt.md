@@ -7,6 +7,8 @@ schema.
 
 ## [Unreleased]
 
+## [26.4.9] - 2026-07-31
+
 ### Pataisyta
 
 - Vieši, prisijungimo, įrenginio susiejimo ir pirmojo paruošimo ekranai dabar

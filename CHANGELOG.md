@@ -5,6 +5,8 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.4.9] - 2026-07-31
+
 ### Fixed
 
 - Public, sign-in, device-pairing, and first-time setup screens now share the

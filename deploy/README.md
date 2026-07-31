@@ -151,7 +151,7 @@ directory, and start the same guided setup:
 ```bash
 sudo install -d -o "$USER" -g "$(id -gn)" /opt/kinkudos
 cd /opt/kinkudos
-version=26.4.8
+version=26.4.9
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -212,7 +212,7 @@ Run these commands from the deployment root (the directory containing
 version with the release you want to install:
 
 ```bash
-version=26.4.8
+version=26.4.9
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"

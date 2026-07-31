@@ -9,7 +9,7 @@ on:
       release_tag:
         description: Existing release tag to publish
         required: true
-        default: v26.4.8
+        default: v26.4.9
 
 concurrency:
   group: release-images-${{ github.event_name == 'workflow_dispatch' && inputs.release_tag || github.ref }}
