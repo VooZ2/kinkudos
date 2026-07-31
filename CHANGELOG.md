@@ -5,6 +5,12 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+### Fixed
+
+- Public, sign-in, device-pairing, and first-time setup screens now share the
+  colorful system shell and follow the device light or dark appearance until
+  a signed-in parent or child interface takes over.
+
 ## [26.4.8] - 2026-07-31
 
 ### Added

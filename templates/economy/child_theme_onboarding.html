@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block title %}{% translate "Choose your world" %} – {{ project_name }}{% endblock %}
-{% block body_class %}theme-neutral{% endblock %}
+{% block body_class %}system-page theme-neutral{% endblock %}
 
 {% block header_actions %}
 <form method="post" action="{% url 'logout' %}">

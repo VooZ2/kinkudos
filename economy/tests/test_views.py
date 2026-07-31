@@ -719,6 +719,7 @@ class AccessAndWorkflowTests(TestCase):
                 )
                 self.assertContains(response, 'class="brand-mark brand-logo"', html=False)
                 self.assertContains(response, 'class="brand-name">KinKudos', html=False)
+                self.assertContains(response, "system-page", html=False)
                 self.assertNotContains(response, "Aurora šeima")
                 self.assertNotContains(response, 'class="app-version"', html=False)
 
@@ -745,7 +746,22 @@ class AccessAndWorkflowTests(TestCase):
         for url_name in ("parent_login", "password_reset", "password_reset_done"):
             with self.subTest(url_name=url_name):
                 response = self.client.get(reverse(url_name))
-                self.assertContains(response, '<body class="auth-page theme-neutral">', html=False)
+                self.assertContains(
+                    response,
+                    '<body class="system-page auth-page theme-neutral">',
+                    html=False,
+                )
+
+    def test_signed_in_areas_do_not_use_the_system_page_shell(self):
+        self.client.login(username="tevai", password=self.parent_password)
+        parent_response = self.client.get(reverse("parent_dashboard"))
+        self.assertContains(parent_response, '<body class="parent-area">', html=False)
+        self.assertNotContains(parent_response, "system-page", html=False)
+
+        self.client.logout()
+        child_response = self.login_child(self.child_one, "1234")
+        self.assertContains(child_response, "child-area", html=False)
+        self.assertNotContains(child_response, "system-page", html=False)
 
     def test_parent_history_is_collapsed_paginated_and_filterable(self):
         for index in range(12):

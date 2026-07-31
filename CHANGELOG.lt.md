@@ -7,6 +7,12 @@ schema.
 
 ## [Unreleased]
 
+### Pataisyta
+
+- Vieši, prisijungimo, įrenginio susiejimo ir pirmojo paruošimo ekranai dabar
+  naudoja bendrą spalvingą sistemos apvalkalą ir iki tėvų ar vaiko vidinės
+  sąsajos įjungimo prisitaiko prie įrenginio šviesios arba tamsios išvaizdos.
+
 ## [26.4.8] - 2026-07-31
 
 ### Pridėta
