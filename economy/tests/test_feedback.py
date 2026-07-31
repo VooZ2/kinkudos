@@ -99,7 +99,7 @@ class FeedbackWorkflowTests(TestCase):
         self.assertEqual(report.reporter_role, "parent")
         self.assertEqual(report.family_name, "Aurora")
         self.assertEqual(report.page_path, "/tevai/")
-        self.assertEqual(report.app_version, "26.4.3")
+        self.assertEqual(report.app_version, "26.4.4")
         self.assertEqual(report.user_agent, "Feedback Browser")
         self.assertIsNotNone(report.email_notified_at)
         self.assertEqual(len(mail.outbox), 1)
@@ -364,5 +364,11 @@ class FeedbackWorkflowTests(TestCase):
             css,
         )
         self.assertIn("max-height: calc(100dvh - 24px)", css)
-        self.assertIn(".feedback-description { margin-bottom: 10px; }", css)
+        self.assertIn(".feedback-admin { padding: 22px; }", css)
+        self.assertIn(
+            ".feedback-admin .feedback-description { margin-bottom: 20px; }",
+            css,
+        )
+        self.assertIn('input[type="file"]::file-selector-button', css)
+        self.assertIn("font: inherit", css)
         self.assertIn(".feedback-admin .danger-warning", css)

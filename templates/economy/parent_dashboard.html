@@ -596,7 +596,7 @@
           {% translate "Child pages and the parent area are available only from the allowed IP addresses." %}
         {% endif %}
       </p>
-      <span class="service-status {% if family_settings.network_access_mode == "open" %}service-status-warning{% else %}service-status-good{% endif %}">
+      <span class="service-status {% if family_settings.network_access_mode == "open" %}service-status-bad{% else %}service-status-good{% endif %}">
         <span aria-hidden="true"></span>
         {% if family_settings.network_access_mode == "open" %}
           {% translate "IP restrictions disabled" %}

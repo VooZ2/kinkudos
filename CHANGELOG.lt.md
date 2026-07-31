@@ -7,6 +7,23 @@ schema.
 
 ## [Unreleased]
 
+## [26.4.4] - 2026-07-31
+
+### Pakeista
+
+- Diegimo dokumentacijoje dabar aprašytas tuščio „Ubuntu“ serverio paruošimas:
+  „Docker Engine“, Docker Compose, „GitHub CLI“ ir „Caddy“ HTTPS proxy diegimas
+  prieš paleidžiant KinKudos vedlį.
+
+### Pataisyta
+
+- Išjungti IP ribojimai dabar žymimi raudona neaktyvios būsenos spalva, o
+  įjungti ribojimai lieka žali.
+- Atsiliepimų administravimo blokas lygiuojamas kaip kiti nustatymų blokai ir
+  palieka vienodą tarpą po paaiškinimu.
+- Atsiliepimo ekrano nuotraukos pasirinkimo valdiklis paveldi bendrą sąsajos
+  tipografiką vietoje nederančio naršyklės mygtuko šrifto.
+
 ## [26.4.3] - 2026-07-31
 
 ### Pataisyta

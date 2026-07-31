@@ -23,7 +23,8 @@ administratoriui, turėti `0600` teises ir niekada nepatekti į Git.
 
 Reikalavimai:
 
-- 64 bitų ARM arba x86 Linux serveris su Docker Engine ir Docker Compose;
+- tuščias 64 bitų ARM arba x86 Linux serveris ir administratoriaus paskyra su
+  `sudo` teisėmis;
 - HTTPS reverse proxy: „Nginx“, „Caddy“, „Nginx Proxy Manager“, „Traefik“ arba
   lygiavertis sprendimas;
 - į serverį nukreiptas domeno vardas;
@@ -33,12 +34,102 @@ Reikalavimai:
 - prieiga prie paskelbto konteinerio paketo. Jei paketas privatus, prie
   „Docker“ prisijunkite „GitHub“ paskyra, turinčia teisę jį parsisiųsti.
 
+### Tuščio „Ubuntu“ serverio paruošimas
+
+Toliau pateiktos komandos paruošia dabartinę palaikomą „Ubuntu Server“ versiją.
+Kitoje Linux distribucijoje vadovaukitės oficialia
+[Docker Engine diegimo instrukcija](https://docs.docker.com/engine/install/) ir
+įdiekite Docker Compose papildinį (senas atskiras `docker-compose` failas
+nenaudojamas). Palikite veikiančią SSH prieigą ir į serverį įleiskite HTTP bei
+HTTPS srautą per 80 ir 443 prievadus. Neviešinkite 8000 prievado internete.
+
+„Docker Engine“ ir Compose papildinį įdiekite iš oficialios Docker Apt
+saugyklos:
+
+```bash
+sudo apt update
+sudo apt install -y ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+  -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+sudo tee /etc/apt/sources.list.d/docker.sources >/dev/null <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io \
+  docker-buildx-plugin docker-compose-plugin
+sudo systemctl enable --now docker
+sudo usermod -aG docker "$USER"
+```
+
+Narystė `docker` grupėje suteikia root lygiavertę serverio prieigą. Atsijunkite
+ir prisijunkite iš naujo, tada patikrinkite abu komponentus:
+
+```bash
+docker run --rm hello-world
+docker compose version
+```
+
+„GitHub CLI“ įdiekite iš oficialios Apt saugyklos:
+
+```bash
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+  | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg >/dev/null
+sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+  | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null
+sudo apt update
+sudo apt install -y gh
+```
+
+Viešiems leidimams ir viešiems GHCR atvaizdams prisijungti nereikia. Jei
+repozitorija privati, paleiskite `gh auth login`. Privačiam konteinerio paketui
+sukurkite klasikinį asmeninį prieigos raktą tik su `read:packages` teise ir
+įveskite jį neįrašydami į komandų istoriją:
+
+```bash
+read -rsp "GitHub paketo prieigos raktas: " KINKUDOS_GHCR_TOKEN; echo
+printf '%s' "$KINKUDOS_GHCR_TOKEN" | docker login ghcr.io \
+  -u JŪSŲ_GITHUB_NAUDOTOJAS --password-stdin
+unset KINKUDOS_GHCR_TOKEN
+```
+
+Paprasčiausiam serveryje veikiančio proxy variantui įdiekite „Caddy“ iš jo
+oficialios saugyklos. Galite pasirinkti kitą palaikomą proxy ir
+`bootstrap.sh` nurodyti jam tinkantį režimą.
+
+```bash
+sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https gnupg
+curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key \
+  | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt \
+  | sudo tee /etc/apt/sources.list.d/caddy-stable.list >/dev/null
+sudo chmod o+r /usr/share/keyrings/caddy-stable-archive-keyring.gpg \
+  /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update
+sudo apt install -y caddy
+```
+
+Prieš tikėdamiesi TLS sertifikato patikrinkite, kad pasirinktas domenas jau
+nukreiptas į šį serverį.
+
 Naujame tuščiame diegimo šakniniame kataloge parsisiųskite ir patikrinkite
 leidimą, jo kodą palikite kaip `app`, iškelkite diegimo katalogą ir paleiskite
 vedlį:
 
 ```bash
-version=26.4.3
+sudo install -d -o "$USER" -g "$(id -gn)" /opt/kinkudos
+cd /opt/kinkudos
+version=26.4.4
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -49,6 +140,27 @@ cp -a app/deploy ./deploy
 cd deploy
 ./bootstrap.sh
 ```
+
+Pasirinkę serveryje veikiančio „Caddy“ režimą, `/etc/caddy/Caddyfile` pavyzdžio
+domeną pakeiskite diegiklyje įvestu domenu:
+
+```caddyfile
+family.example.com {
+    reverse_proxy 127.0.0.1:8000
+}
+```
+
+Patikrinkite konfigūraciją ir perkraukite „Caddy“:
+
+```bash
+sudo caddy validate --config /etc/caddy/Caddyfile
+sudo systemctl reload caddy
+```
+
+Atverkite `https://family.example.com`, pakeitę jį tikruoju domenu. Diegimo
+pabaigoje vedlys parodo konteinerių būseną; vėliau ją ir programos žurnalą
+galite patikrinti komandomis `docker compose ps` bei
+`docker compose logs --tail=100 app`.
 
 Diegiklis paprašo pasirinkti kalbą, domeną, reverse proxy režimą ir ar iš karto
 kurti šeimą. Šeimos vedlys paprašo pirmos tėvų paskyros, šeimos pavadinimo bei
@@ -72,7 +184,7 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 norimo diegti leidimo reikšmėmis:
 
 ```bash
-version=26.4.3
+version=26.4.4
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -242,7 +354,7 @@ automatiškai šalinamos tik išspręstų atsiliepimų nuotraukos.
 KinKudos darbų nuotraukas ir išspręstų atsiliepimų ekrano nuotraukas saugo
 tėvų nustatymuose pasirinktą laiką. Sistema taip pat kas 30 minučių patikrina,
 ar jau reikia siųsti savaitinį loterijos priminimą. `systemd` naudojančiame
-Docker serveryje po diegimo arba atnaujinimo į 26.4.3 įjunkite abu laikmačius:
+Docker serveryje po diegimo arba atnaujinimo įjunkite abu laikmačius:
 
 ```bash
 cd /kelias/iki/kinkudos/deploy

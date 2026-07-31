@@ -5,6 +5,23 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.4.4] - 2026-07-31
+
+### Changed
+
+- Deployment documentation now covers preparing a fresh Ubuntu server with
+  Docker Engine, Docker Compose, GitHub CLI, and a Caddy HTTPS proxy before
+  running the KinKudos installer.
+
+### Fixed
+
+- Disabled IP restrictions now use the red inactive-state treatment, while
+  enabled restrictions remain green.
+- The feedback administration panel uses the same inner alignment as other
+  settings panels and leaves consistent space below its explanation.
+- Feedback screenshot controls inherit the shared interface typography instead
+  of using the browser's mismatched default button font.
+
 ## [26.4.3] - 2026-07-31
 
 ### Fixed

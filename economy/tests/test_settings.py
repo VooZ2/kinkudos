@@ -67,6 +67,7 @@ class ParentSettingsTests(TestCase):
         open_response = self.client.get(reverse("parent_dashboard"))
 
         self.assertContains(open_response, "IP restrictions disabled")
+        self.assertContains(open_response, "service-status-bad")
         self.assertContains(open_response, "No IP addresses are blocked.")
         self.assertContains(open_response, 'data-open-dialog="network-access-dialog"')
 
@@ -78,6 +79,7 @@ class ParentSettingsTests(TestCase):
         restricted_response = self.client.get(reverse("parent_dashboard"))
 
         self.assertContains(restricted_response, "Child access restricted")
+        self.assertContains(restricted_response, "service-status-good")
         self.assertContains(
             restricted_response,
             "Parent access is not restricted by IP.",

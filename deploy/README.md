@@ -35,7 +35,8 @@ permissions. Never commit `.env` or the `secrets` directory.
 
 Prerequisites:
 
-- a 64-bit ARM or x86 Linux host with Docker Engine and Docker Compose;
+- a fresh 64-bit ARM or x86 Linux host and an administrator account with
+  `sudo` access;
 - an HTTPS reverse proxy: Nginx, Caddy, Nginx Proxy Manager, Traefik, or an
   equivalent product;
 - a hostname routed to the host;
@@ -45,11 +46,101 @@ Prerequisites:
 - access to the published container package. If the package is private,
   authenticate Docker with a GitHub account that has permission to download it.
 
+### Preparing a fresh Ubuntu server
+
+The commands below prepare a current supported Ubuntu Server installation.
+For another Linux distribution, use the official
+[Docker Engine installation instructions](https://docs.docker.com/engine/install/)
+and install the Docker Compose plugin (the legacy standalone `docker-compose`
+binary is not used). Keep SSH access open and allow inbound HTTP/HTTPS traffic
+on ports 80 and 443. Do not expose port 8000 publicly.
+
+Install Docker Engine and the Compose plugin from Docker's official Apt
+repository:
+
+```bash
+sudo apt update
+sudo apt install -y ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+  -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+sudo tee /etc/apt/sources.list.d/docker.sources >/dev/null <<EOF
+Types: deb
+URIs: https://download.docker.com/linux/ubuntu
+Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+Components: stable
+Architectures: $(dpkg --print-architecture)
+Signed-By: /etc/apt/keyrings/docker.asc
+EOF
+
+sudo apt update
+sudo apt install -y docker-ce docker-ce-cli containerd.io \
+  docker-buildx-plugin docker-compose-plugin
+sudo systemctl enable --now docker
+sudo usermod -aG docker "$USER"
+```
+
+Membership in the `docker` group grants root-equivalent host access. Log out
+and sign in again before continuing, then verify both components:
+
+```bash
+docker run --rm hello-world
+docker compose version
+```
+
+Install GitHub CLI from its official Apt repository:
+
+```bash
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+  | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg >/dev/null
+sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+  | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null
+sudo apt update
+sudo apt install -y gh
+```
+
+Public releases and public GHCR images do not require authentication. For a
+private repository, run `gh auth login`. For a private container package,
+create a classic personal access token with only `read:packages`, then enter it
+without placing it in shell history:
+
+```bash
+read -rsp "GitHub package token: " KINKUDOS_GHCR_TOKEN; echo
+printf '%s' "$KINKUDOS_GHCR_TOKEN" | docker login ghcr.io \
+  -u YOUR_GITHUB_USERNAME --password-stdin
+unset KINKUDOS_GHCR_TOKEN
+```
+
+For the simplest host-proxy setup, install Caddy from its official repository.
+You may instead install one of the other supported proxies and select the
+matching mode in `bootstrap.sh`.
+
+```bash
+sudo apt install -y debian-keyring debian-archive-keyring apt-transport-https gnupg
+curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/gpg.key \
+  | sudo gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+curl -1sLf https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt \
+  | sudo tee /etc/apt/sources.list.d/caddy-stable.list >/dev/null
+sudo chmod o+r /usr/share/keyrings/caddy-stable-archive-keyring.gpg \
+  /etc/apt/sources.list.d/caddy-stable.list
+sudo apt update
+sudo apt install -y caddy
+```
+
+Confirm that the chosen hostname resolves to this server before expecting the
+proxy to obtain a TLS certificate.
+
 From a new empty deployment root, download and verify the release, keep its
 source as `app`, copy out the deployment directory, and start the installer:
 
 ```bash
-version=26.4.3
+sudo install -d -o "$USER" -g "$(id -gn)" /opt/kinkudos
+cd /opt/kinkudos
+version=26.4.4
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -60,6 +151,26 @@ cp -a app/deploy ./deploy
 cd deploy
 ./bootstrap.sh
 ```
+
+When using the host Caddy mode, replace the example hostname in
+`/etc/caddy/Caddyfile` with the hostname entered in the installer:
+
+```caddyfile
+family.example.com {
+    reverse_proxy 127.0.0.1:8000
+}
+```
+
+Then validate and reload Caddy:
+
+```bash
+sudo caddy validate --config /etc/caddy/Caddyfile
+sudo systemctl reload caddy
+```
+
+Open `https://family.example.com`, using your real hostname. The installer
+shows container status at the end; `docker compose ps` and
+`docker compose logs --tail=100 app` provide the same checks later.
 
 The installer asks for English or Lithuanian, hostname, reverse-proxy mode,
 and whether to create the first family. Family setup asks for the first parent
@@ -90,7 +201,7 @@ Run these commands from the deployment root (the directory containing
 version with the release you want to install:
 
 ```bash
-version=26.4.3
+version=26.4.4
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -257,7 +368,7 @@ selected in Settings.
 KinKudos keeps task photos and resolved-feedback screenshots for the periods
 selected in the parent settings. It also checks every 30 minutes whether a due
 weekly lottery reminder should be sent. On a systemd-based Docker host, enable
-both timers after installation or upgrading to 26.4.3:
+both timers after installation or an upgrade:
 
 ```bash
 cd /path/to/kinkudos/deploy
