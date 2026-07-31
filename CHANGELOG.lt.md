@@ -7,6 +7,18 @@ schema.
 
 ## [Unreleased]
 
+## [26.4.8] - 2026-07-31
+
+### Pridėta
+
+- Nedidelis viešas diegiklis gali atsisiųsti ir patikrinti naujausią leidimą,
+  o tada paleisti esamą vedamą „Docker Compose“ paruošimą.
+
+### Pakeista
+
+- Skelbiamos instaliacijos dabar versijuotą kelių platformų programos atvaizdą
+  parsisiunčia iš viešos `vooz2/kinkudos` „Docker Hub“ saugyklos.
+
 ## [26.4.7] - 2026-07-31
 
 ### Pakeista

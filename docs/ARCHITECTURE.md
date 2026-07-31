@@ -219,6 +219,14 @@ kinkudos/
 The deployment service account may modify only `app` and `deploy`; runtime
 data, backups, and secrets remain separately permissioned.
 
+Fresh installations may start with the small public `deploy/install.sh`
+bootstrapper. It resolves a published release, downloads the release archive
+and its SHA256 file, verifies the checksum, refuses a non-empty installation
+root, and then hands control to the versioned interactive `bootstrap.sh`.
+Production Compose files pin the full release tag from the public
+`vooz2/kinkudos` Docker Hub repository; `latest` and partial-version tags are
+published for discovery but are not used by supported deployments.
+
 ## Backups
 An isolated `backup-agent` container owns the remote-storage credentials and
 has no published port or Docker socket. The application reaches it only over

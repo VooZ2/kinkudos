@@ -18,7 +18,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT licencija"></a>
   <a href="https://github.com/VooZ2/kinkudos/releases"><img src="https://img.shields.io/github/v/release/VooZ2/kinkudos?display_name=release" alt="Naujausias GitHub leidimas"></a>
 </p>
-<p align="center"><sub>Dabartinis leidimas: 26.4.7</sub></p>
+<p align="center"><sub>Dabartinis leidimas: 26.4.8</sub></p>
 
 ---
 
@@ -91,6 +91,17 @@ Plačiau skaitykite [architektūros ir saugumo apžvalgoje](docs/ARCHITECTURE.md
 ## ⚡ Greitas diegimas
 
 KinKudos diegiama su Docker Compose ARM64 arba AMD64 Linux serveryje.
+
+Naujame serveryje, kuriame jau veikia „Docker Engine“ ir „Docker Compose“
+papildinys:
+
+```bash
+curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh && sh /tmp/kinkudos-install.sh
+```
+
+Nedidelis diegiklis parsisiunčia naujausią paskelbtą leidimą, patikrina jo
+SHA256 kontrolinę sumą ir paleidžia esamą vedamą paruošimą. Jis skirtas naujai
+KinKudos instaliacijai; esamos instaliacijos atnaujinamos pagal atskirą gidą.
 
 1. **Paruoškite serverį** su Docker, Docker Compose, domenu ir TLS reverse proxy.
 2. **Paleiskite vedlį** iš paskelbto leidimo.

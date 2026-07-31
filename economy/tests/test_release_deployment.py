@@ -17,7 +17,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertIn("      - backup", app_service)
         self.assertNotIn("traefik.", app_service)
         self.assertNotIn("ports:", app_service)
-        self.assertIn("image: ghcr.io/vooz2/kinkudos:", app_service)
+        self.assertIn("image: vooz2/kinkudos:", app_service)
 
     def test_proxy_overlays_keep_direct_port_private(self):
         host = (ROOT / "deploy" / "compose.host-proxy.yml").read_text(
@@ -57,6 +57,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
 
         self.assertIn('"$release_dir/deploy/$helper" "$deploy_dir/$helper"', installer)
         self.assertIn("  backup.sh \\", installer)
+        self.assertIn("  install.sh \\", installer)
         self.assertIn("  kinkudos-lottery-reminders.service \\", installer)
         self.assertIn("  kinkudos-lottery-reminders.timer \\", installer)
         self.assertNotIn("docker compose run --rm restic", backup_script)
@@ -96,7 +97,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.4.7",
+                    "26.4.8",
                     str(root),
                 ],
                 env=environment,
@@ -113,3 +114,45 @@ class ReleaseDeploymentTests(SimpleTestCase):
             self.assertIn(str(root / "backup-state"), ownership)
             self.assertIn(str(root / "secrets" / "backup" / "restic.env"), ownership)
             self.assertIn(str(root / "secrets" / "smtp"), ownership)
+
+    def test_public_installer_verifies_release_and_refuses_existing_install(self):
+        installer = (ROOT / "deploy" / "install.sh").read_text(encoding="utf-8")
+
+        self.assertIn("sha256sum -c", installer)
+        self.assertIn("Unsafe archive member", installer)
+        self.assertIn("releases/latest", installer)
+        self.assertIn('KINKUDOS_INSTALL_ROOT:-/opt/kinkudos', installer)
+        self.assertIn("is not empty; use the upgrade guide", installer)
+        self.assertIn("./bootstrap.sh", installer)
+        self.assertIn("is not writable by the current user", installer)
+        self.assertNotIn("sudo sh", installer)
+
+    def test_public_installer_leaves_nonempty_installation_untouched(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            install_root = root / "existing"
+            install_root.mkdir()
+            sentinel = install_root / "family-data"
+            sentinel.write_text("keep", encoding="utf-8")
+
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            fake_docker = fake_bin / "docker"
+            fake_docker.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+            fake_docker.chmod(fake_docker.stat().st_mode | stat.S_IXUSR)
+
+            environment = os.environ.copy()
+            environment["PATH"] = f"{fake_bin}:{environment['PATH']}"
+            environment["KINKUDOS_VERSION"] = "26.4.8"
+            environment["KINKUDOS_INSTALL_ROOT"] = str(install_root)
+            result = subprocess.run(
+                ["sh", str(ROOT / "deploy" / "install.sh")],
+                env=environment,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("is not empty", result.stderr)
+            self.assertEqual(sentinel.read_text(encoding="utf-8"), "keep")

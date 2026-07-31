@@ -18,7 +18,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License"></a>
   <a href="https://github.com/VooZ2/kinkudos/releases"><img src="https://img.shields.io/github/v/release/VooZ2/kinkudos?display_name=release" alt="Latest GitHub release"></a>
 </p>
-<p align="center"><sub>Current release: 26.4.7</sub></p>
+<p align="center"><sub>Current release: 26.4.8</sub></p>
 
 ---
 
@@ -91,6 +91,16 @@ Read more in the [architecture and security overview](docs/ARCHITECTURE.md).
 ## ⚡ Quick setup
 
 KinKudos is deployed with Docker Compose on an ARM64 or AMD64 Linux server.
+
+On a fresh server that already has Docker Engine and the Docker Compose plugin:
+
+```bash
+curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh && sh /tmp/kinkudos-install.sh
+```
+
+The small installer downloads the latest published release, verifies its
+SHA256 checksum, and then starts the existing guided setup. It is for a fresh
+KinKudos installation; existing installations use the separate upgrade guide.
 
 1. **Prepare a server** with Docker, Docker Compose, a domain name, and a TLS reverse proxy.
 2. **Follow the guided installer** from the published release.

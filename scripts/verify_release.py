@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import os
 import re
 from pathlib import Path
 
@@ -38,11 +39,17 @@ versions = {
     ),
     "deploy/compose.yml": version_from(
         ROOT / "deploy" / "compose.yml",
-        r"(?m)^\s*image: ghcr\.io/vooz2/kinkudos:([0-9]+\.[0-9]+\.[0-9]+)\s*$",
+        r"(?m)^\s*image: vooz2/kinkudos:([0-9]+\.[0-9]+\.[0-9]+)\s*$",
     ),
 }
 if len(set(versions.values())) != 1:
     raise SystemExit(f"Release versions do not match: {versions}")
+
+public_installer = ROOT / "deploy" / "install.sh"
+if not public_installer.is_file():
+    raise SystemExit("The public installer is missing: deploy/install.sh")
+if not os.access(public_installer, os.X_OK):
+    raise SystemExit("The public installer is not executable: deploy/install.sh")
 
 migrations_dir = ROOT / "economy" / "migrations"
 conflicting_packages = sorted(

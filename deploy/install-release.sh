@@ -23,7 +23,7 @@ secrets_dir="$project_root/secrets"
 releases_dir="$project_root/releases"
 release_dir="$releases_dir/$version"
 staging_dir="$releases_dir/.staging-$version-$$"
-image="ghcr.io/vooz2/kinkudos:$version"
+image="vooz2/kinkudos:$version"
 container="kinkudos-app-1"
 
 test -f "$archive"
@@ -198,6 +198,7 @@ for helper in \
   configure-feedback.sh \
   install-diagnostics.sh \
   install-maintenance.sh \
+  install.sh \
   install-release.sh \
   kinkudos-diagnose
 do

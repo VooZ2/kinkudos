@@ -5,6 +5,18 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.4.8] - 2026-07-31
+
+### Added
+
+- A small public installer can download and verify the latest release before
+  starting the existing guided Docker Compose setup.
+
+### Changed
+
+- Published deployments now pull the versioned multi-platform application
+  image from the public `vooz2/kinkudos` Docker Hub repository.
+
 ## [26.4.7] - 2026-07-31
 
 ### Changed

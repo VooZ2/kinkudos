@@ -43,8 +43,25 @@ Prerequisites:
 - access to the chosen release archive and its SHA256 checksum. When using
   GitHub CLI with a private repository, authenticate an account that can read
   that repository;
-- access to the published container package. If the package is private,
-  authenticate Docker with a GitHub account that has permission to download it.
+- access to the public `vooz2/kinkudos` Docker Hub image.
+
+### Quick installation on a prepared server
+
+Use this option on a fresh server that already has Docker Engine, the Docker
+Compose plugin, a hostname routed to the server, and a supported HTTPS reverse
+proxy:
+
+```bash
+curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh && sh /tmp/kinkudos-install.sh
+```
+
+The installer discovers the latest release, downloads its archive and checksum,
+verifies SHA256, creates `/opt/kinkudos`, and starts the guided setup. Run it as
+the normal deployment user, not as root. Set `KINKUDOS_VERSION` to install a
+specific release or `KINKUDOS_INSTALL_ROOT` to choose another root directory.
+
+This command is only for a fresh installation. If KinKudos is already
+installed, follow [Updating an existing installation](#updating-an-existing-installation).
 
 ### Preparing a fresh Ubuntu server
 
@@ -103,17 +120,8 @@ sudo apt update
 sudo apt install -y gh
 ```
 
-Public releases and public GHCR images do not require authentication. For a
-private repository, run `gh auth login`. For a private container package,
-create a classic personal access token with only `read:packages`, then enter it
-without placing it in shell history:
-
-```bash
-read -rsp "GitHub package token: " KINKUDOS_GHCR_TOKEN; echo
-printf '%s' "$KINKUDOS_GHCR_TOKEN" | docker login ghcr.io \
-  -u YOUR_GITHUB_USERNAME --password-stdin
-unset KINKUDOS_GHCR_TOKEN
-```
+Public releases and the public Docker Hub image do not require registry login.
+For a private GitHub repository, authenticate GitHub CLI with `gh auth login`.
 
 For the simplest host-proxy setup, install Caddy from its official repository.
 You may instead install one of the other supported proxies and select the
@@ -134,13 +142,16 @@ sudo apt install -y caddy
 Confirm that the chosen hostname resolves to this server before expecting the
 proxy to obtain a TLS certificate.
 
-From a new empty deployment root, download and verify the release, keep its
-source as `app`, copy out the deployment directory, and start the installer:
+### Manual verified installation
+
+For a manual installation from a new empty deployment root, download and
+verify a specific release, keep its source as `app`, copy out the deployment
+directory, and start the same guided setup:
 
 ```bash
 sudo install -d -o "$USER" -g "$(id -gn)" /opt/kinkudos
 cd /opt/kinkudos
-version=26.4.7
+version=26.4.8
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -194,14 +205,14 @@ If initial family creation was skipped:
 docker compose exec app python manage.py setup_family --language en
 ```
 
-## Updating from a release archive
+## Updating an existing installation
 
 Run these commands from the deployment root (the directory containing
 `app`, `deploy`, `data`, and `secrets`). Replace `OWNER/REPOSITORY` and the
 version with the release you want to install:
 
 ```bash
-version=26.4.7
+version=26.4.8
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"

@@ -27,7 +27,10 @@ EXCLUDED_PARTS = {
 EXCLUDED_NAMES = {".DS_Store"}
 EXCLUDED_SUFFIXES = {".pyc", ".pyo", ".sqlite3"}
 EXCLUDED_PART_PREFIXES = ("release-",)
-REQUIRED_DEPLOY_FILES = {Path("deploy/compose.yml")}
+REQUIRED_DEPLOY_FILES = {
+    Path("deploy/compose.yml"),
+    Path("deploy/install.sh"),
+}
 
 
 def run(

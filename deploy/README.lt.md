@@ -31,8 +31,26 @@ Reikalavimai:
 - prieiga prie pasirinkto leidimo archyvo ir jo SHA256 kontrolinės sumos. Jei
   privačiai repozitorijai naudojamas GitHub CLI, jame turi būti prijungta tą
   repozitoriją galinti skaityti paskyra;
-- prieiga prie paskelbto konteinerio paketo. Jei paketas privatus, prie
-  „Docker“ prisijunkite „GitHub“ paskyra, turinčia teisę jį parsisiųsti.
+- prieiga prie viešo `vooz2/kinkudos` „Docker Hub“ atvaizdo.
+
+### Greitas diegimas paruoštame serveryje
+
+Šį variantą naudokite naujame serveryje, kuriame jau veikia „Docker Engine“,
+„Docker Compose“ papildinys, į serverį nukreiptas domenas ir palaikomas HTTPS
+reverse proxy:
+
+```bash
+curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh && sh /tmp/kinkudos-install.sh
+```
+
+Diegiklis nustato naujausią leidimą, parsisiunčia jo archyvą ir kontrolinę
+sumą, patikrina SHA256, sukuria `/opt/kinkudos` ir paleidžia vedamą paruošimą.
+Paleiskite jį įprasto diegimo naudotojo, o ne root vardu. Konkrečiam leidimui
+naudokite `KINKUDOS_VERSION`, o kitam šakniniam katalogui –
+`KINKUDOS_INSTALL_ROOT`.
+
+Ši komanda skirta tik naujai instaliacijai. Jei KinKudos jau įdiegta,
+naudokite [esamos instaliacijos atnaujinimą](#esamos-instaliacijos-atnaujinimas).
 
 ### Tuščio „Ubuntu“ serverio paruošimas
 
@@ -91,17 +109,8 @@ sudo apt update
 sudo apt install -y gh
 ```
 
-Viešiems leidimams ir viešiems GHCR atvaizdams prisijungti nereikia. Jei
-repozitorija privati, paleiskite `gh auth login`. Privačiam konteinerio paketui
-sukurkite klasikinį asmeninį prieigos raktą tik su `read:packages` teise ir
-įveskite jį neįrašydami į komandų istoriją:
-
-```bash
-read -rsp "GitHub paketo prieigos raktas: " KINKUDOS_GHCR_TOKEN; echo
-printf '%s' "$KINKUDOS_GHCR_TOKEN" | docker login ghcr.io \
-  -u JŪSŲ_GITHUB_NAUDOTOJAS --password-stdin
-unset KINKUDOS_GHCR_TOKEN
-```
+Viešiems leidimams ir viešam „Docker Hub“ atvaizdui prisijungti prie registro
+nereikia. Jei GitHub repozitorija privati, paleiskite `gh auth login`.
 
 Paprasčiausiam serveryje veikiančio proxy variantui įdiekite „Caddy“ iš jo
 oficialios saugyklos. Galite pasirinkti kitą palaikomą proxy ir
@@ -122,14 +131,16 @@ sudo apt install -y caddy
 Prieš tikėdamiesi TLS sertifikato patikrinkite, kad pasirinktas domenas jau
 nukreiptas į šį serverį.
 
-Naujame tuščiame diegimo šakniniame kataloge parsisiųskite ir patikrinkite
-leidimą, jo kodą palikite kaip `app`, iškelkite diegimo katalogą ir paleiskite
-vedlį:
+### Rankinis patikrintas diegimas
+
+Diegdami rankiniu būdu, naujame tuščiame diegimo šakniniame kataloge
+parsisiųskite ir patikrinkite konkretų leidimą, jo kodą palikite kaip `app`,
+iškelkite diegimo katalogą ir paleiskite tą patį vedamą paruošimą:
 
 ```bash
 sudo install -d -o "$USER" -g "$(id -gn)" /opt/kinkudos
 cd /opt/kinkudos
-version=26.4.7
+version=26.4.8
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -177,14 +188,14 @@ docker compose exec app python manage.py setup_family --language lt
 Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tame
 įrenginyje.
 
-## Atnaujinimas iš leidimo archyvo
+## Esamos instaliacijos atnaujinimas
 
 Šias komandas paleiskite diegimo šakniniame kataloge, kuriame yra `app`,
 `deploy`, `data` ir `secrets`. `OWNER/REPOSITORY` bei versiją pakeiskite
 norimo diegti leidimo reikšmėmis:
 
 ```bash
-version=26.4.7
+version=26.4.8
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
