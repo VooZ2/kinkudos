@@ -42,8 +42,11 @@ Kiekvienai versijai privaloma:
 7. GitHub Release notes rašyti tik angliškai, išlaikant tokią pačią struktūrą
    kaip atitinkamas `CHANGELOG.md` leidimo įrašas. Leidimo tekstą galima
    tiesiogiai kopijuoti iš `CHANGELOG.md`.
-8. Paskelbus versijos žymą palaukti, kol GHCR darbo eiga sėkmingai pastatys
-   AMD64 ir ARM64 atvaizdį, ir tik tada laikyti leidimą tinkamu diegti.
+8. Paskelbus versijos žymą palaukti, kol konteinerių darbo eiga sėkmingai
+   pastatys AMD64 ir ARM64 atvaizdį ir publikuos jį į GHCR bei Docker Hub.
+   Publikuojamos nekintamos pilnos versijos (pvz., `26.4.7`), einamosios
+   pataisų serijos (pvz., `26.4`) ir `latest` žymos. Produkciniame diegime
+   visada naudoti pilną versiją, o ne slankiąją žymą.
 
 Versijos numeris programos antraštėje visada turi likti nuoroda į
 `/pakeitimai/`.
