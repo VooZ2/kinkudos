@@ -100,6 +100,23 @@
             link.setAttribute("href", lithuanianPath(link.href));
           }
         });
+        var tabLabels = [
+          "Pradžia",
+          "Tėvams",
+          "Saugumas",
+          "Serveris",
+          "Šeimos admin",
+          "Pagalba",
+          "Atmintinė"
+        ];
+        document.querySelectorAll(".md-tabs__link").forEach(function (link, index) {
+          if (tabLabels[index]) {
+            link.textContent = tabLabels[index];
+          }
+          if (link.getAttribute("href")) {
+            link.setAttribute("href", lithuanianPath(link.href));
+          }
+        });
         document.querySelectorAll(".md-nav--secondary .md-nav__title").forEach(function (title) {
           title.textContent = "Turinys";
         });
