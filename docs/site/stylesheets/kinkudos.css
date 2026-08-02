@@ -289,6 +289,8 @@ button.md-button:disabled,
   font-weight: 750;
   letter-spacing: 0.03em;
   white-space: nowrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 
 .kinkudos-language-switcher a {
@@ -301,27 +303,12 @@ button.md-button:disabled,
   color: #fff;
 }
 
-.kinkudos-language-switcher__icon {
-  display: inline-flex;
-  width: 1rem;
-  height: 1rem;
-  color: #fff;
-}
-
-.kinkudos-language-switcher__icon svg {
-  width: 100%;
-  height: 100%;
-  fill: none;
-  stroke: currentcolor;
-  stroke-width: 1.8;
-}
-
 .kinkudos-language-switcher--header {
   margin: 0 0.45rem;
 }
 
 .kinkudos-language-switcher--drawer {
-  display: none;
+  display: none !important;
 }
 
 @media screen and (max-width: 76.1875em) {
@@ -337,7 +324,7 @@ button.md-button:disabled,
   }
 
   .kinkudos-language-switcher--drawer {
-    display: inline-flex;
+    display: inline-flex !important;
     margin: 0.55rem 0.8rem;
     color: var(--md-default-fg-color--light);
   }
@@ -351,13 +338,15 @@ button.md-button:disabled,
     color: var(--kinkudos-link-hover);
   }
 
-  .kinkudos-language-switcher--drawer .kinkudos-language-switcher__icon {
-    color: var(--kinkudos-link);
-  }
-
   .md-typeset .md-button {
     width: 100%;
     margin: 0.2rem 0;
     text-align: center;
+  }
+}
+
+@media screen and (min-width: 60em) {
+  .md-sidebar--primary .kinkudos-language-switcher--drawer {
+    display: none !important;
   }
 }

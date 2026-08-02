@@ -16,7 +16,7 @@
         : path === "/" ? "/index.lt/" : path.replace(/\/$/, ".lt/");
 
       function switcher(className) {
-        var nav = document.createElement("nav");
+        var nav = document.createElement("div");
         nav.className = "kinkudos-language-switcher " + className;
         nav.dataset.path = path;
         nav.setAttribute(
@@ -24,7 +24,6 @@
           isLithuanian ? "Dokumentacijos kalba" : "Documentation language"
         );
         nav.innerHTML =
-          '<span class="kinkudos-language-switcher__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg></span>' +
           '<a href="' + englishPath + '" lang="en"' + (!isLithuanian ? ' aria-current="page"' : "") + '>EN</a>' +
           '<span aria-hidden="true">/</span>' +
           '<a href="' + lithuanianPath + '" lang="lt"' + (isLithuanian ? ' aria-current="page"' : "") + '>LT</a>';
