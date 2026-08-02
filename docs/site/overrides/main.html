@@ -35,6 +35,80 @@
         return nav;
       }
 
+      function lithuanianPath(urlValue) {
+        if (urlValue.charAt(0) === "#") {
+          return urlValue;
+        }
+        var url = new URL(urlValue, window.location.origin);
+        if (url.origin !== window.location.origin) {
+          return urlValue;
+        }
+        if (url.pathname === "/") {
+          return "/index.lt/" + url.search + url.hash;
+        }
+        if (!/\.lt\/$/.test(url.pathname)) {
+          url.pathname = url.pathname.replace(/\/$/, ".lt/");
+        }
+        return url.pathname + url.search + url.hash;
+      }
+
+      function localiseLithuanianNavigation() {
+        if (!isLithuanian) {
+          return;
+        }
+        var labels = {
+          "Start": "Pradžia",
+          "What is KinKudos": "Kas yra KinKudos",
+          "Is KinKudos right for your family?": "Ar KinKudos tinka šeimai?",
+          "What self-hosting means": "Ką reiškia savarankiškas diegimas?",
+          "Quick install": "Greitas diegimas",
+          "Your first 15 minutes": "Pirmos 15 minučių",
+          "Pair a child device": "Vaiko įrenginio susiejimas",
+          "Parents": "Tėvams",
+          "Parent dashboard": "Tėvų skydelis",
+          "Create and manage tasks": "Kurti ir valdyti darbus",
+          "Review completed tasks": "Peržiūrėti atliktus darbus",
+          "Assign tasks for today": "Paskirti darbus šiandienai",
+          "Points, penalties, and corrections": "Taškai, nuobaudos ir korekcijos",
+          "Create and manage rewards": "Kurti ir valdyti prizus",
+          "Savings goals and suggestions": "Taupymo tikslai ir pasiūlymai",
+          "Lottery tickets": "Loterijos bilietai",
+          "Child space": "Vaiko aplinka",
+          "Parent settings": "Tėvų nustatymai",
+          "Security": "Saugumas",
+          "Accounts and devices": "Paskyros ir įrenginiai",
+          "PINs and sign-in protection": "PIN ir prisijungimo apsauga",
+          "Notifications and installing KinKudos": "Pranešimai ir KinKudos diegimas",
+          "Network access": "Tinklo prieiga",
+          "Backups": "Atsarginės kopijos",
+          "Server": "Serveris",
+          "Overview": "Apžvalga",
+          "Before installing": "Prieš diegiant",
+          "Updates, backups, and recovery": "Atnaujinimai, kopijos ir atkūrimas",
+          "Family admin": "Šeimos administravimas",
+          "Help": "Pagalba",
+          "Reference": "Atmintinė",
+          "Roles, data, and limits": "Vaidmenys, duomenys ir ribos",
+          "Release and support policy": "Leidimų ir palaikymo politika"
+        };
+        document.querySelectorAll(".md-tabs__link, .md-sidebar--primary .md-nav__link").forEach(function (link) {
+          var label = link.textContent.trim();
+          if (labels[label]) {
+            link.textContent = labels[label];
+          }
+          if (link.getAttribute("href")) {
+            link.setAttribute("href", lithuanianPath(link.href));
+          }
+        });
+        document.querySelectorAll(".md-nav--secondary .md-nav__title").forEach(function (title) {
+          title.textContent = "Turinys";
+        });
+        document.querySelectorAll(".md-search__input").forEach(function (input) {
+          input.placeholder = "Ieškoti";
+          input.setAttribute("aria-label", "Ieškoti dokumentacijoje");
+        });
+      }
+
       var header = document.querySelector(".md-header__inner");
       var headerExisting = header && header.querySelector(".kinkudos-language-switcher");
       if (headerExisting && headerExisting.dataset.path !== path) {
@@ -46,6 +120,8 @@
         var themeControl = header.querySelector(".md-header__option");
         header.insertBefore(headerSwitcher, themeControl || null);
       }
+
+      localiseLithuanianNavigation();
 
       }
 

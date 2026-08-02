@@ -284,7 +284,7 @@ button.md-button:disabled,
   display: inline-flex;
   align-items: center;
   color: rgb(255 255 255 / 88%);
-  font-size: 0.7rem;
+  font-size: 0.82rem;
   font-weight: 750;
   white-space: nowrap;
   flex-direction: row;
@@ -294,13 +294,13 @@ button.md-button:disabled,
 .kinkudos-language-switcher label {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.65rem;
 }
 
 .kinkudos-language-switcher select {
-  min-width: 6.4rem;
-  min-height: 2rem;
-  padding: 0.2rem 1.7rem 0.2rem 0.55rem;
+  min-width: 7.1rem;
+  min-height: 2.25rem;
+  padding: 0.25rem 1.8rem 0.25rem 0.65rem;
   border: 1px solid rgb(255 255 255 / 52%);
   border-radius: 0.45rem;
   color: #fff;
