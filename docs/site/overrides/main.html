@@ -5,6 +5,23 @@
   <script defer src="https://stats.enduristas.lt/script.js" data-website-id="b47fc9f2-ce4f-4aee-8254-5935471ffb21"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
+      function lithuanianPath(urlValue) {
+        if (urlValue.charAt(0) === "#") {
+          return urlValue;
+        }
+        var url = new URL(urlValue, window.location.origin);
+        if (url.origin !== window.location.origin) {
+          return urlValue;
+        }
+        if (url.pathname === "/") {
+          return "/index.lt/" + url.search + url.hash;
+        }
+        if (!/\.lt\/$/.test(url.pathname)) {
+          url.pathname = url.pathname.replace(/\/$/, ".lt/");
+        }
+        return url.pathname + url.search + url.hash;
+      }
+
       function mountLanguageSwitchers() {
       var path = window.location.pathname;
       var isLithuanian = /\.lt\/$/.test(path) || path === "/index.lt/";
@@ -33,23 +50,6 @@
           window.location.assign(event.target.value);
         });
         return nav;
-      }
-
-      function lithuanianPath(urlValue) {
-        if (urlValue.charAt(0) === "#") {
-          return urlValue;
-        }
-        var url = new URL(urlValue, window.location.origin);
-        if (url.origin !== window.location.origin) {
-          return urlValue;
-        }
-        if (url.pathname === "/") {
-          return "/index.lt/" + url.search + url.hash;
-        }
-        if (!/\.lt\/$/.test(url.pathname)) {
-          url.pathname = url.pathname.replace(/\/$/, ".lt/");
-        }
-        return url.pathname + url.search + url.hash;
       }
 
       function localiseLithuanianNavigation() {
@@ -176,6 +176,28 @@
       if (typeof document$ !== "undefined") {
         document$.subscribe(mountLanguageSwitchers);
       }
+
+      function keepLithuanianNavigationTarget(event) {
+        var path = window.location.pathname;
+        var isLithuanian = /\.lt\/$/.test(path) || path === "/index.lt/";
+        if (!isLithuanian || !(event.target instanceof Element)) {
+          return;
+        }
+        var link = event.target.closest(
+          ".md-tabs__link, .md-sidebar--primary .md-nav__link"
+        );
+        if (!link || !link.getAttribute("href")) {
+          return;
+        }
+        var target = lithuanianPath(link.href);
+        if (link.getAttribute("href") !== target) {
+          link.setAttribute("href", target);
+        }
+      }
+
+      document.addEventListener("pointerover", keepLithuanianNavigationTarget, true);
+      document.addEventListener("focusin", keepLithuanianNavigationTarget, true);
+      document.addEventListener("click", keepLithuanianNavigationTarget, true);
     });
   </script>
 {% endblock %}
