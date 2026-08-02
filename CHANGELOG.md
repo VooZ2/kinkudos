@@ -25,6 +25,8 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 - Hosted documentation now exposes task and reward overview guides in the
   parent navigation, publishes website and breadcrumb structured data, and
   includes a Traefik-safe Nginx configuration for relative directory redirects.
+- Lithuanian documentation now renders its complete sidebar labels and links
+  directly in the generated HTML instead of relying on client-side translation.
 
 ## [26.4.9] - 2026-07-31
 

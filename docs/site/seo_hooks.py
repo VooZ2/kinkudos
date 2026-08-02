@@ -1,6 +1,45 @@
 """Build-time SEO adjustments for the bilingual documentation."""
 
 import json
+import re
+
+_LT_NAV_LABELS = {
+    "Start": "Pradžia",
+    "What is KinKudos": "Kas yra KinKudos",
+    "Is KinKudos right for your family?": "Ar KinKudos tinka šeimai?",
+    "What self-hosting means": "Ką reiškia savarankiškas diegimas?",
+    "Quick install": "Greitas diegimas",
+    "Your first 15 minutes": "Pirmos 15 minučių",
+    "Pair a child device": "Vaiko įrenginio susiejimas",
+    "Parents": "Tėvams",
+    "Parent dashboard": "Tėvų skydelis",
+    "Tasks and approvals": "Darbai ir patvirtinimai",
+    "Create and manage tasks": "Kurti ir valdyti darbus",
+    "Review completed tasks": "Peržiūrėti atliktus darbus",
+    "Assign tasks for today": "Paskirti darbus šiandienai",
+    "Points, penalties, and corrections": "Taškai, nuobaudos ir korekcijos",
+    "Rewards, goals, and lottery": "Prizai, tikslai ir loterija",
+    "Create and manage rewards": "Kurti ir valdyti prizus",
+    "Savings goals and suggestions": "Taupymo tikslai ir pasiūlymai",
+    "Lottery tickets": "Loterijos bilietai",
+    "Child space": "Vaiko aplinka",
+    "Parent settings": "Tėvų nustatymai",
+    "Security": "Saugumas",
+    "Accounts and devices": "Paskyros ir įrenginiai",
+    "PINs and sign-in protection": "PIN ir prisijungimo apsauga",
+    "Notifications and installing KinKudos": "Pranešimai ir KinKudos diegimas",
+    "Network access": "Tinklo prieiga",
+    "Backups": "Atsarginės kopijos",
+    "Server": "Serveris",
+    "Overview": "Apžvalga",
+    "Before installing": "Prieš diegiant",
+    "Updates, backups, and recovery": "Atnaujinimai, kopijos ir atkūrimas",
+    "Family admin": "Šeimos administravimas",
+    "Help": "Pagalba",
+    "Reference": "Atmintinė",
+    "Roles, data, and limits": "Vaidmenys, duomenys ir ribos",
+    "Release and support policy": "Leidimų ir palaikymo politika",
+}
 
 _SECTIONS = {
     "parents": {
@@ -79,10 +118,40 @@ def _breadcrumb_data(page, language):
     }
 
 
+def _localize_primary_navigation(output):
+    """Render Lithuanian primary navigation without relying on JavaScript."""
+    start = output.find('<div class="md-sidebar md-sidebar--primary"')
+    end = output.find('<div class="md-sidebar md-sidebar--secondary"', start)
+    if start == -1 or end == -1:
+        return output
+
+    navigation = output[start:end]
+    navigation = navigation.replace('aria-label="Navigation"', 'aria-label="Navigacija"')
+    for english, lithuanian in _LT_NAV_LABELS.items():
+        navigation = re.sub(
+            rf"(?<=>)(\s*){re.escape(english)}(\s*)(?=<)",
+            rf"\1{lithuanian}\2",
+            navigation,
+        )
+
+    navigation = re.sub(
+        r'href="(?P<path>(?!https?://|#)[^"]+/)"',
+        lambda match: (
+            match.group(0)
+            if match.group("path").endswith(".lt/")
+            else f'href="{match.group("path")[:-1]}.lt/"'
+        ),
+        navigation,
+    )
+    return output[:start] + navigation + output[end:]
+
+
 def on_post_page(output, page, config):
     """Set HTML language and inject matching WebSite or breadcrumb JSON-LD."""
     language = _language(page)
     output = output.replace('<html lang="en"', f'<html lang="{language}"', 1)
+    if language == "lt":
+        output = _localize_primary_navigation(output)
 
     is_homepage = page.is_homepage or page.file.src_uri == "index.lt.md"
     data = _website_data(page, language) if is_homepage else _breadcrumb_data(page, language)
