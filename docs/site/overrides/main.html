@@ -25,6 +25,23 @@
   {{ super() }}
   <script defer src="https://stats.enduristas.lt/script.js" data-website-id="b47fc9f2-ce4f-4aee-8254-5935471ffb21"></script>
   <script>
+    (function selectInitialDocumentationLanguage() {
+      if (window.location.pathname !== "/") {
+        return;
+      }
+      var preferredLanguage = null;
+      try {
+        preferredLanguage = window.localStorage.getItem("kinkudos-docs-language");
+      } catch (error) {
+        preferredLanguage = null;
+      }
+      var deviceUsesLithuanian = (window.navigator.languages || [window.navigator.language || "en"])
+        .some(function (language) { return /^lt(?:-|$)/i.test(language); });
+      if (preferredLanguage === "lt" || (!preferredLanguage && deviceUsesLithuanian)) {
+        window.location.replace("/index.lt/");
+      }
+    })();
+
     document.addEventListener("DOMContentLoaded", function () {
       function lithuanianPath(urlValue) {
         if (urlValue.charAt(0) === "#") {
@@ -69,6 +86,18 @@
           '<a href="' + lithuanianPath + '" aria-label="Lietuvių" title="Lietuvių"' + (isLithuanian ? ' aria-current="page"' : "") + '>' +
           '<span aria-hidden="true">🇱🇹</span><span class="kinkudos-language-switcher__code">LT</span></a>' +
           '</div>';
+        nav.querySelectorAll("a").forEach(function (link) {
+          link.addEventListener("click", function () {
+            try {
+              window.localStorage.setItem(
+                "kinkudos-docs-language",
+                link.getAttribute("aria-label") === "Lietuvių" ? "lt" : "en"
+              );
+            } catch (error) {
+              // Language switching still works when storage is unavailable.
+            }
+          });
+        });
         return nav;
       }
 
