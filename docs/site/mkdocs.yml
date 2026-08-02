@@ -1,6 +1,7 @@
 site_name: KinKudos
 site_description: Help for KinKudos families
 site_url: https://docs.kinkudos.app
+strict: true
 
 # Keep the public documentation self-contained: the server copies this folder
 # and builds it without needing the application source tree.
@@ -67,7 +68,7 @@ nav:
       - Lottery tickets: parents/lottery-tickets.md
       - Child space: parents/child-space.md
       - Parent settings: parents/settings.md
-  - Security and privacy:
+  - Security:
       - Accounts and devices: security/accounts-and-devices.md
       - PINs and sign-in protection: security/pin-and-sign-in.md
       - Notifications and installing KinKudos: security/notifications-and-pwa.md
@@ -77,41 +78,8 @@ nav:
       - Overview: deployment-and-maintenance.md
       - Before installing: server/before-installing.md
       - Updates, backups, and recovery: server/updates-and-recovery.md
-  - Family administration: family-administration.md
+  - Family admin: family-administration.md
   - Help: quick-help.md
   - Reference:
       - Roles, data, and limits: reference/roles-and-data.md
       - Release and support policy: reference/release-and-support-policy.md
-  - Lietuviškai:
-      - Pradžia: index.lt.md
-      - Kas yra KinKudos: start/what-is-kinkudos.lt.md
-      - Ar KinKudos tinka jūsų šeimai?: start/is-kinkudos-right.lt.md
-      - Ką reiškia savarankiškas diegimas?: start/what-self-hosting-means.lt.md
-      - Greitas diegimas: start/quick-install.lt.md
-      - Pirmos 15 minučių: start/first-15-minutes.lt.md
-      - Vaiko įrenginio susiejimas: start/pair-a-child-device.lt.md
-      - Tėvams:
-          - Tėvų skydelis: parents/dashboard-and-child-cards.lt.md
-          - Kurti ir valdyti darbus: parents/create-and-manage-tasks.lt.md
-          - Peržiūrėti atliktus darbus: parents/review-completed-tasks.lt.md
-          - Paskirti darbus šiandienai: parents/assign-tasks-today.lt.md
-          - Taškai, nuobaudos ir korekcijos: parents/points-and-corrections.lt.md
-          - Kurti ir valdyti prizus: parents/create-and-manage-rewards.lt.md
-          - Taupymo tikslai ir pasiūlymai: parents/savings-goals.lt.md
-          - Loterijos bilietai: parents/lottery-tickets.lt.md
-      - Vaiko aplinka: parents/child-space.lt.md
-      - Tėvų nustatymai: parents/settings.lt.md
-      - Paskyros ir įrenginiai: security/accounts-and-devices.lt.md
-      - PIN ir prisijungimo apsauga: security/pin-and-sign-in.lt.md
-      - Pranešimai ir KinKudos diegimas: security/notifications-and-pwa.lt.md
-      - Tinklo prieiga: security/network-access.lt.md
-      - Atsarginės kopijos: security/backups.lt.md
-      - Serveris:
-          - Apžvalga: deployment-and-maintenance.lt.md
-          - Prieš diegiant: server/before-installing.lt.md
-          - Atnaujinimai, kopijos ir atkūrimas: server/updates-and-recovery.lt.md
-      - Šeimos administravimas: family-administration.lt.md
-      - Greita pagalba: quick-help.lt.md
-      - Atmintinė:
-          - Vaidmenys, duomenys ir ribos: reference/roles-and-data.lt.md
-      - Leidimų ir palaikymo politika: reference/release-and-support-policy.lt.md

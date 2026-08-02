@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # KinKudos documentation
 
 Learn how to set up and use KinKudos with your family, or manage the server
@@ -8,7 +13,7 @@ that keeps it running.
 
 > **Before you install:** KinKudos is self-hosted. You need a Linux server,
 > Docker, a hostname or domain, HTTPS, and someone with basic server
-> administration skills. [Check whether it is right for your family →](start/is-kinkudos-right.md)
+> administration skills. [Check the installation requirements →](server/before-installing.md)
 
 <div class="grid cards" markdown>
 
@@ -30,12 +35,12 @@ that keeps it running.
 
     [Open the parent guide →](parents/dashboard-and-child-cards.md)
 
--   :material-server-outline: **Install and maintain**
+-   :material-server-outline: **For server administrators**
 
     ---
 
-    Prepare Docker, HTTPS, backups, updates, and recovery for a private family
-    installation.
+    Install, update, back up, restore, and maintain KinKudos on a server you
+    control.
 
     [Open the server guide →](deployment-and-maintenance.md)
 
@@ -66,5 +71,3 @@ guides are useful. It does not track activity inside the private KinKudos family
 application.
 
 <small>[KinKudos website](https://kinkudos.app/) · [Live demo](https://demo.kinkudos.app/) · [GitHub](https://github.com/VooZ2/kinkudos) · [Releases](https://github.com/VooZ2/kinkudos/releases) · [Report a reproducible bug](https://github.com/VooZ2/kinkudos/issues)</small>
-
-**Language:** English · [Lietuviškai](index.lt.md)

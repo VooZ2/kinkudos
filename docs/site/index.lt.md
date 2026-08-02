@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # KinKudos dokumentacija
 
 Sužinokite, kaip paruošti ir naudoti KinKudos šeimoje arba prižiūrėti serverį,
@@ -8,7 +13,7 @@ kuris ją palaiko.
 
 > **Prieš diegdami:** KinKudos diegiama savarankiškai. Reikia Linux serverio,
 > Docker, hosto vardo arba domeno, HTTPS ir žmogaus, turinčio pagrindinius
-> serverio administravimo įgūdžius. [Patikrinkite, ar ji tinka jūsų šeimai →](start/is-kinkudos-right.lt.md)
+> serverio administravimo įgūdžius. [Patikrinkite diegimo reikalavimus →](server/before-installing.lt.md)
 
 <div class="grid cards" markdown>
 
@@ -30,12 +35,12 @@ kuris ją palaiko.
 
     [Atidaryti tėvų vadovą →](parents/dashboard-and-child-cards.lt.md)
 
--   :material-server-outline: **Diegti ir prižiūrėti**
+-   :material-server-outline: **Serverio administratoriui**
 
     ---
 
-    Paruoškite Docker, HTTPS, kopijas, atnaujinimus ir atkūrimą privačiam
-    šeimos diegimui.
+    Diekite, atnaujinkite, kurkite kopijas, atkurkite ir prižiūrėkite KinKudos
+    savo valdomame serveryje.
 
     [Atidaryti serverio vadovą →](deployment-and-maintenance.lt.md)
 
@@ -66,5 +71,3 @@ kad suprastume, kurie vadovai naudingi. Privati KinKudos šeimos programa
 nestebima.
 
 <small>[KinKudos svetainė](https://kinkudos.app/) · [Demonstracija](https://demo.kinkudos.app/) · [GitHub](https://github.com/VooZ2/kinkudos) · [Leidimai](https://github.com/VooZ2/kinkudos/releases) · [Pranešti apie pakartojamą klaidą](https://github.com/VooZ2/kinkudos/issues)</small>
-
-**Kalba:** [English](index.md) · Lietuvių
