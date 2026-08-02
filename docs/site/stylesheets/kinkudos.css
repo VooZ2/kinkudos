@@ -156,7 +156,6 @@ button {
 .md-typeset a:focus-visible,
 .md-header a:focus-visible,
 .md-tabs a:focus-visible,
-.kinkudos-language-switcher summary:focus-visible,
 .kinkudos-language-switcher a:focus-visible {
   outline: 0.18rem solid var(--kinkudos-link-focus);
   outline-offset: 0.18rem;
@@ -165,7 +164,6 @@ button {
 
 .md-header a:focus-visible,
 .md-tabs a:focus-visible,
-.md-header .kinkudos-language-switcher summary:focus-visible,
 .md-header .kinkudos-language-switcher a:focus-visible {
   outline-color: #fff;
 }
@@ -283,86 +281,55 @@ button.md-button:disabled,
 }
 
 .kinkudos-language-switcher {
-  position: relative;
-  display: block;
+  display: inline-flex;
   align-items: center;
+  gap: 0.38rem;
   color: rgb(255 255 255 / 88%);
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 700;
   white-space: nowrap;
 }
 
-.kinkudos-language-switcher details {
-  position: relative;
-}
-
-.kinkudos-language-switcher summary {
-  display: flex;
+.kinkudos-language-switcher__options {
+  display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  min-height: 2rem;
-  padding: 0.25rem 0.62rem;
+  gap: 0.12rem;
+  padding: 0.12rem;
   border: 1px solid rgb(255 255 255 / 52%);
-  border-radius: 0.48rem;
+  border-radius: 0.45rem;
   background: rgb(20 8 44 / 24%);
-  color: #fff;
-  cursor: pointer;
-  list-style: none;
 }
 
-.kinkudos-language-switcher summary::-webkit-details-marker {
-  display: none;
-}
-
-.kinkudos-language-switcher summary::after {
-  content: "";
-  width: 0.4rem;
-  height: 0.4rem;
-  margin-left: 0.18rem;
-  border-right: 0.1rem solid currentcolor;
-  border-bottom: 0.1rem solid currentcolor;
-  transform: translateY(-0.1rem) rotate(45deg);
-}
-
-.kinkudos-language-switcher details[open] summary::after {
-  transform: translateY(0.12rem) rotate(225deg);
-}
-
-.kinkudos-language-switcher summary:hover {
-  border-color: rgb(255 255 255 / 84%);
-  background: rgb(20 8 44 / 48%);
-}
-
-.kinkudos-language-switcher summary:focus-visible,
-.kinkudos-language-switcher a:focus-visible {
-  outline: 0.18rem solid #fff;
-  outline-offset: 0.16rem;
-}
-
-.kinkudos-language-switcher__menu {
-  position: absolute;
-  z-index: 20;
-  top: calc(100% + 0.35rem);
-  right: 0;
-  min-width: 8.2rem;
-  padding: 0.3rem;
-  border: 1px solid rgb(255 255 255 / 24%);
-  border-radius: 0.5rem;
-  background: #261344;
-  box-shadow: 0 0.5rem 1.25rem rgb(0 0 0 / 28%);
-}
-
-.kinkudos-language-switcher__menu a {
-  display: block;
-  padding: 0.42rem 0.55rem;
-  border-radius: 0.32rem;
+.kinkudos-language-switcher__options a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  min-height: 1.52rem;
+  padding: 0.12rem 0.34rem;
+  border: 1px solid transparent;
+  border-radius: 0.3rem;
   color: #fff;
   text-decoration: none;
+  line-height: 1;
 }
 
-.kinkudos-language-switcher__menu a:hover,
-.kinkudos-language-switcher__menu a[aria-current="page"] {
+.kinkudos-language-switcher__options a:hover {
   background: rgb(255 255 255 / 14%);
+}
+
+.kinkudos-language-switcher__options a[aria-current="page"] {
+  border-color: rgb(255 255 255 / 72%);
+  background: rgb(255 255 255 / 18%);
+}
+
+.kinkudos-language-switcher__options a:focus-visible {
+  outline: 0.14rem solid #fff;
+  outline-offset: 0.12rem;
+}
+
+.kinkudos-language-switcher__options a > span[aria-hidden="true"] {
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
 .kinkudos-language-switcher--header {
@@ -386,8 +353,13 @@ button.md-button:disabled,
     white-space: nowrap;
   }
 
-  .kinkudos-language-switcher--header summary {
-    padding-inline: 0.5rem;
+  .kinkudos-language-switcher__code {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
   .md-typeset .md-button {

@@ -62,16 +62,13 @@
           isLithuanian ? "Dokumentacijos kalba" : "Documentation language"
         );
         nav.innerHTML =
-          '<details>' +
-          '<summary aria-label="' + (isLithuanian ? "Keisti dokumentacijos kalbą" : "Change documentation language") + '">' +
           '<span class="kinkudos-language-switcher__label">' + (isLithuanian ? "Kalba" : "Language") + '</span>' +
-          '<span class="kinkudos-language-switcher__current">' + (isLithuanian ? "Lietuvių" : "English") + '</span>' +
-          '</summary>' +
-          '<div class="kinkudos-language-switcher__menu">' +
-          '<a href="' + englishPath + '"' + (!isLithuanian ? ' aria-current="page"' : "") + '>English</a>' +
-          '<a href="' + lithuanianPath + '"' + (isLithuanian ? ' aria-current="page"' : "") + '>Lietuvių</a>' +
-          '</div>' +
-          '</details>';
+          '<div class="kinkudos-language-switcher__options">' +
+          '<a href="' + englishPath + '" aria-label="English" title="English"' + (!isLithuanian ? ' aria-current="page"' : "") + '>' +
+          '<span aria-hidden="true">🇬🇧</span><span class="kinkudos-language-switcher__code">EN</span></a>' +
+          '<a href="' + lithuanianPath + '" aria-label="Lietuvių" title="Lietuvių"' + (isLithuanian ? ' aria-current="page"' : "") + '>' +
+          '<span aria-hidden="true">🇱🇹</span><span class="kinkudos-language-switcher__code">LT</span></a>' +
+          '</div>';
         return nav;
       }
 
