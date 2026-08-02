@@ -2,6 +2,12 @@ site_name: KinKudos
 site_description: Help for KinKudos families
 site_url: https://docs.kinkudos.app
 strict: true
+hooks:
+  - seo_hooks.py
+exclude_docs: |
+  seo_hooks.py
+  mkdocs.yml
+  overrides/
 
 # Keep the public documentation self-contained: the server copies this folder
 # and builds it without needing the application source tree.

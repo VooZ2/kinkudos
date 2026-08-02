@@ -21,6 +21,9 @@ schema.
 ### Pakeista
 
 - Vieša dokumentacija dabar naudoja KinKudos ikoną, spalvų paletę, tipografiją ir šviesios bei tamsios išvaizdos stilių.
+- Vieša dokumentacija dabar pateikia lokalizuotus pavadinimus, aprašymus,
+  kalbos metaduomenis, kanonines ir alternatyvių kalbų nuorodas, dalinimosi
+  peržiūras bei paieškos robotų nurodymus anglų ir lietuvių puslapiams.
 
 ## [26.4.9] - 2026-07-31
 

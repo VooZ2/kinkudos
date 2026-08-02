@@ -1,4 +1,6 @@
 ---
+title: KinKudos Documentation — Setup, Parent Guide & Self-Hosting
+description: Set up and use KinKudos with your family, explore the parent and child guides, or install and maintain the self-hosted app on your server.
 hide:
   - toc
 ---

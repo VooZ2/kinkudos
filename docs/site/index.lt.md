@@ -1,4 +1,6 @@
 ---
+title: KinKudos dokumentacija — diegimo ir naudojimo vadovas
+description: Paruoškite ir naudokite KinKudos šeimoje, peržiūrėkite tėvų bei vaikų vadovus arba įdiekite ir prižiūrėkite programą savo serveryje.
 hide:
   - toc
 ---

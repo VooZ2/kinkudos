@@ -1,5 +1,62 @@
 {% extends "base.html" %}
 
+{% block site_meta %}
+  {% if page %}
+  {% set is_lithuanian = page and (page.file.src_uri == "index.lt.md" or page.file.src_uri.endswith(".lt.md")) %}
+  {% set page_description = page.meta.description if page.meta and page.meta.description else (page.title ~ ". Išsamus KinKudos dokumentacijos vadovas šeimoms ir serverio administratoriams." if is_lithuanian else page.title ~ ". A practical KinKudos documentation guide for families and server administrators.") %}
+  {% set page_title = page.meta.title if page.meta and page.meta.title else (page.title ~ " — " ~ config.site_name if not page.is_homepage else config.site_name) %}
+  {% if is_lithuanian %}
+    {% set english_url = "https://docs.kinkudos.app/" if page.file.src_uri == "index.lt.md" else page.canonical_url | replace(".lt/", "/") %}
+    {% set lithuanian_url = page.canonical_url %}
+  {% else %}
+    {% set english_url = page.canonical_url %}
+    {% set lithuanian_url = "https://docs.kinkudos.app/index.lt/" if page.is_homepage else page.canonical_url.rstrip("/") ~ ".lt/" %}
+  {% endif %}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="{{ page_description }}" />
+  <link rel="canonical" href="{{ page.canonical_url }}" />
+  <link rel="alternate" hreflang="en" href="{{ english_url }}" />
+  <link rel="alternate" hreflang="lt" href="{{ lithuanian_url }}" />
+  <link rel="alternate" hreflang="x-default" href="{{ english_url }}" />
+  {% if page.previous_page %}<link rel="prev" href="{{ page.previous_page.url | url }}" />{% endif %}
+  {% if page.next_page %}<link rel="next" href="{{ page.next_page.url | url }}" />{% endif %}
+  <link rel="icon" href="{{ config.theme.favicon | url }}" />
+  <meta name="generator" content="mkdocs-{{ mkdocs_version }}, material" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="KinKudos" />
+  <meta property="og:title" content="{{ page_title }}" />
+  <meta property="og:description" content="{{ page_description }}" />
+  <meta property="og:url" content="{{ page.canonical_url }}" />
+  <meta property="og:locale" content="{{ 'lt_LT' if is_lithuanian else 'en_US' }}" />
+  <meta property="og:locale:alternate" content="{{ 'en_US' if is_lithuanian else 'lt_LT' }}" />
+  <meta property="og:image" content="https://kinkudos.app/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="KinKudos parent dashboard" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ page_title }}" />
+  <meta name="twitter:description" content="{{ page_description }}" />
+  <meta name="twitter:image" content="https://kinkudos.app/og.jpg" />
+  {% else %}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="{{ config.site_description }}" />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="{{ config.theme.favicon | url }}" />
+  {% endif %}
+{% endblock %}
+
+{% block htmltitle %}
+  {% if page.meta and page.meta.title %}
+    <title>{{ page.meta.title }}</title>
+  {% elif page.title and not page.is_homepage %}
+    <title>{{ page.title | striptags }} — {{ config.site_name }}</title>
+  {% else %}
+    <title>{{ config.site_name }}</title>
+  {% endif %}
+{% endblock %}
+
 {% block tabs %}
   {% set is_lithuanian = page and (page.file.src_uri == "index.lt.md" or page.file.src_uri.endswith(".lt.md")) %}
   {% if is_lithuanian %}
@@ -35,9 +92,7 @@
       } catch (error) {
         preferredLanguage = null;
       }
-      var deviceUsesLithuanian = (window.navigator.languages || [window.navigator.language || "en"])
-        .some(function (language) { return /^lt(?:-|$)/i.test(language); });
-      if (preferredLanguage === "lt" || (!preferredLanguage && deviceUsesLithuanian)) {
+      if (preferredLanguage === "lt") {
         window.location.replace("/index.lt/");
       }
     })();

@@ -19,6 +19,9 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 ### Changed
 
 - Hosted documentation now uses the KinKudos icon, colour palette, typography, and light/dark appearance styling.
+- Hosted documentation now publishes localized titles, descriptions, language
+  metadata, canonical and alternate-language links, social previews, and
+  crawler guidance for English and Lithuanian pages.
 
 ## [26.4.9] - 2026-07-31
 
