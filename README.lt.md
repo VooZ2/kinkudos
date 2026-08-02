@@ -2,9 +2,9 @@
 
 <p align="center">
   <strong>Privati, savarankiškai diegiama šeimos programa darbams, taškams, tikslams ir prizams.</strong><br>
-  Vaikai atlieka kasdienius darbus ir siekia prizų, o tėvai patvirtina pažangą ir
-  užtikrina aiškias bei sąžiningas taisykles. KinKudos veikia jūsų serveryje,
-  todėl šeimos duomenys lieka jums kontroliuojami.
+  Paverskite kasdienius šeimos darbus matoma pažanga. Vaikai mato, ką daryti, ir siekia
+  prizų, o tėvai peržiūri pažangą bei užtikrina aiškias ir sąžiningas taisykles. KinKudos
+  veikia jūsų serveryje, todėl šeimos duomenys lieka jums kontroliuojami.
 </p>
 
 <p align="center">
@@ -66,15 +66,15 @@
 
 ### 👨‍👩‍👧‍👦 Aišku tėvams
 
-Kurkite darbus, peržiūrėkite atliktus, valdykite taškus ir laikykite šeimos taisykles matomas.
+Laikykite darbus, patvirtinimus, taškus ir prizus vienoje vietoje, išsaugodami šeimos taisyklių bei galutinių sprendimų kontrolę.
 
-### 🎮 Motyvuoja vaikus
+### 🎮 Matoma pažanga vaikams
 
-Vaikai renkasi arba gauna darbus, renka teminius taškus, prašo prizų ir taupo tikslams.
+Vaikai gali matyti savo darbus, rinkti teminius taškus, prašyti prizų ir taupyti ilgalaikiams tikslams.
 
 ### 🔒 Privatumas pagal numatymą
 
-Viena instaliacija skirta vienam namų ūkiui. Nėra viešos registracijos, reklamų, profiliavimo ar integruotos šeimos analitikos.
+Viena instaliacija skirta vienam namų ūkiui. Nėra viešos registracijos, reklamų, profiliavimo ar programoje integruotos analitikos.
 
 ### 🏠 Jūsų kontrolė
 
@@ -88,20 +88,20 @@ Paleiskite KinKudos savo namų serveryje ar VPS ir nuspręskite, kur saugomi še
 - Prizai, taupymo tikslai, taškų dovanos ir gimtadienio taškai
 - Vaikų pasiūlymai ir tėvų sprendimai
 - Taškų korekcijos, nuobaudos ir konfigūruojamas kreditas
-- Matoma šeimos taškų pokyčių istorija
+- Matoma taškų istorija
 
 ### 🎨 Vaiko patirtis
 
 - Septynios originalios vaizdinės temos su savais tekstais, garsais ir taškų vienetais
 - Vaikams pritaikytas prisijungimas PIN iš susieto naršyklės lango ar PWA
 - Pasirenkami garsai ir „Web Push“ pranešimai
-- Pasirenkami tėvų kontroliuojami nutrinami loterijos bilietai
+- Pasirenkami tėvų kontroliuojami nutrinami bilietai
 
 ### 🔐 Privatumas ir kontrolė
 
 - Viena šeima vienoje instaliacijoje
-- Nėra viešos registracijos, reklamų ar integruotos analitikos
-- Įkeltos nuotraukos sumažinamos, konvertuojamos į WebP ir išvalomos nuo EXIF metaduomenų
+- Nėra viešos registracijos, reklamų, profiliavimo ar integruotos analitikos
+- Įkeltos darbų nuotraukos sumažinamos, konvertuojamos į WebP ir išvalomos nuo EXIF metaduomenų
 - Pasirenkamos šifruotos nuotolinės kopijos
 - Lietuvių ir anglų sąsajos
 
@@ -185,7 +185,7 @@ Nepriklausomai nuo VPS tiekėjo, vadovaukitės tuo pačiu [serverio diegimo gidu
 
 ## 🛡️ Saugumas ir privatumas
 
-KinKudos sukurta kaip privati erdvė vienam namų ūkiui. Tėvų slaptažodžiai ir vaikų PIN yra ribojami pagal bandymus, taškų pakeitimai transakciniai ir įrašomi į istoriją, o šeimos duomenys, nuotraukos, duomenų bazės, kopijos ir prisijungimo duomenys nelaikomi viešoje repozitorijoje. Programa neturi reklamų, integruotos analitikos ar KinKudos valdomos šeimos duomenų debesijos.
+KinKudos sukurta kaip privati erdvė vienam namų ūkiui. Tėvų slaptažodžiai ir vaikų PIN yra ribojami pagal bandymus, taškų pakeitimai transakciniai ir įrašomi į matomą istoriją, o šeimos duomenys, darbų nuotraukos, duomenų bazės, kopijos ir prisijungimo duomenys nelaikomi viešoje repozitorijoje. Programa neturi reklamų, profiliavimo, integruotos analitikos ar KinKudos valdomos šeimos duomenų debesijos.
 
 Savarankiškas diegimas suteikia kontrolę, bet atsakomybė už HTTPS, serverio saugumą, atnaujinimus ir patikrintas kopijas lieka jums. Apie saugumo pažeidžiamumus ir palaikymo apimtį skaitykite [SECURITY.md](SECURITY.md). Nepataisytus pažeidžiamumus praneškite privačiai, niekada ne viešame GitHub Issue.
 

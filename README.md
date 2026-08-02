@@ -2,9 +2,9 @@
 
 <p align="center">
   <strong>A private, self-hosted family app for tasks, points, goals, and rewards.</strong><br>
-  Children complete everyday tasks and work toward rewards, while parents approve progress
-  and keep the rules clear and fair. KinKudos runs on your own server, so your family data
-  stays under your control.
+  Turn everyday family tasks into visible progress. Children see what to do and work toward
+  rewards, while parents review progress and keep the rules clear and fair. KinKudos runs on
+  your own server, so your family data stays under your control.
 </p>
 
 <p align="center">
@@ -69,15 +69,15 @@
 
 ### 👨‍👩‍👧‍👦 Clear for parents
 
-Create tasks, review completed work, manage points, and keep family rules visible.
+Keep tasks, approvals, points, and rewards in one place while retaining control over family rules and final decisions.
 
-### 🎮 Motivating for children
+### 🎮 Progress children can see
 
-Children choose or receive tasks, collect themed points, request rewards, and save toward goals.
+Children can view their tasks, collect themed points, request rewards, and save toward longer-term goals.
 
 ### 🔒 Private by design
 
-One installation serves one household. There is no public registration, advertising, profiling, or built-in family analytics.
+One installation serves one household. There is no public registration, advertising, profiling, or built-in analytics inside the family app.
 
 ### 🏠 Yours to control
 
@@ -91,20 +91,20 @@ Run KinKudos on your own home server or VPS and decide where your family's data 
 - Rewards, savings goals, point gifts, and birthday awards
 - Child proposals and parent decisions
 - Point corrections, penalties, and configurable credit
-- A visible family history of point changes
+- A visible point history
 
 ### 🎨 Child experience
 
 - Seven original visual themes with their own wording, sounds, and point units
 - Child-friendly PIN sign-in from a paired browser or installed PWA
 - Optional sounds and Web Push notifications
-- Optional parent-controlled scratch lottery tickets
+- Optional parent-controlled scratch tickets
 
 ### 🔐 Privacy and control
 
 - One family per installation
-- No public registration, advertising, or built-in analytics
-- Uploaded photos are resized, converted to WebP, and stripped of EXIF metadata
+- No public registration, advertising, profiling, or built-in analytics
+- Uploaded task photos are resized, converted to WebP, and stripped of EXIF metadata
 - Optional encrypted remote backups
 - English and Lithuanian interfaces
 
@@ -209,10 +209,10 @@ KinKudos is designed as a private space for one household.
 
 - Parent accounts use rate-limited password authentication.
 - Children use a paired browser or installed PWA together with a rate-limited PIN.
-- Point changes are transactional and added to a history that is not silently rewritten through the normal application workflow.
-- Photos, database files, backups, and credentials stay outside the public source repository.
+- Point changes are transactional and added to a visible point history.
+- Task photos, database files, backups, and credentials stay outside the public source repository.
 - Optional encrypted remote backups support Backblaze B2 and S3-compatible storage.
-- KinKudos contains no advertising or built-in analytics.
+- KinKudos contains no advertising, profiling, or built-in analytics inside the family app.
 - Family data is not sent to a KinKudos-operated cloud service.
 
 Self-hosting gives you control, but it also makes you responsible for HTTPS, server security, updates, and tested backups.
