@@ -8,6 +8,9 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 ### Added
 
 - Public English-first user documentation now covers getting started, parent workflows, settings, security, maintenance, and quick help; Lithuanian equivalents are available from every section.
+- Public security-reporting and release-support policies explain the private
+  vulnerability channel, supported-version scope, and best-effort support
+  boundaries.
 
 ### Changed
 

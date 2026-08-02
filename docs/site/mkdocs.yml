@@ -65,6 +65,8 @@ nav:
       - Backups: security/backups.md
   - Installation and maintenance: deployment-and-maintenance.md
   - Quick help: quick-help.md
+  - Reference:
+      - Release and support policy: reference/release-and-support-policy.md
   - Lietuviškai:
       - Pradžia: index.lt.md
       - Kas yra KinKudos: start/what-is-kinkudos.lt.md
@@ -83,3 +85,4 @@ nav:
       - Atsarginės kopijos: security/backups.lt.md
       - Diegimas ir priežiūra: deployment-and-maintenance.lt.md
       - Greita pagalba: quick-help.lt.md
+      - Leidimų ir palaikymo politika: reference/release-and-support-policy.lt.md

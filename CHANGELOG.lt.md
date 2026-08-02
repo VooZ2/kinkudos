@@ -10,6 +10,9 @@ schema.
 ### Pridėta
 
 - Vieša angliška naudotojo dokumentacija dabar apima pradžią, tėvų veiksmus, nustatymus, saugumą, priežiūrą ir greitą pagalbą; iš kiekvienos skilties pasiekiami lietuviški atitikmenys.
+- Viešos saugumo pranešimo ir leidimų bei palaikymo politikos paaiškina privatų
+  pažeidžiamumų kanalą, palaikomos versijos ribas ir pagal galimybes teikiamo
+  palaikymo apimtį.
 
 ### Pakeista
 
