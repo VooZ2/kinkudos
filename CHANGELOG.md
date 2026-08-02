@@ -22,6 +22,9 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 - Hosted documentation now publishes localized titles, descriptions, language
   metadata, canonical and alternate-language links, social previews, and
   crawler guidance for English and Lithuanian pages.
+- Hosted documentation now exposes task and reward overview guides in the
+  parent navigation, publishes website and breadcrumb structured data, and
+  includes a Traefik-safe Nginx configuration for relative directory redirects.
 
 ## [26.4.9] - 2026-07-31
 

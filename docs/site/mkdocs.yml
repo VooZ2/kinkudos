@@ -8,6 +8,7 @@ exclude_docs: |
   seo_hooks.py
   mkdocs.yml
   overrides/
+  hosting/
 
 # Keep the public documentation self-contained: the server copies this folder
 # and builds it without needing the application source tree.
@@ -65,10 +66,12 @@ nav:
       - Pair a child device: start/pair-a-child-device.md
   - Parents:
       - Parent dashboard: parents/dashboard-and-child-cards.md
+      - Tasks and approvals: parents/tasks-and-approvals.md
       - Create and manage tasks: parents/create-and-manage-tasks.md
       - Review completed tasks: parents/review-completed-tasks.md
       - Assign tasks for today: parents/assign-tasks-today.md
       - Points, penalties, and corrections: parents/points-and-corrections.md
+      - Rewards, goals, and lottery: parents/rewards-goals-and-lottery.md
       - Create and manage rewards: parents/create-and-manage-rewards.md
       - Savings goals and suggestions: parents/savings-goals.md
       - Lottery tickets: parents/lottery-tickets.md

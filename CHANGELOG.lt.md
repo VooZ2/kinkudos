@@ -24,6 +24,9 @@ schema.
 - Vieša dokumentacija dabar pateikia lokalizuotus pavadinimus, aprašymus,
   kalbos metaduomenis, kanonines ir alternatyvių kalbų nuorodas, dalinimosi
   peržiūras bei paieškos robotų nurodymus anglų ir lietuvių puslapiams.
+- Viešoje dokumentacijoje darbų ir prizų apžvalgos dabar matomos tėvų
+  navigacijoje, publikuojami svetainės bei naršymo kelio struktūriniai duomenys
+  ir pateikiama su „Traefik“ suderinama santykinių Nginx peradresavimų konfigūracija.
 
 ## [26.4.9] - 2026-07-31
 
