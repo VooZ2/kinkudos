@@ -156,7 +156,7 @@ button {
 .md-typeset a:focus-visible,
 .md-header a:focus-visible,
 .md-tabs a:focus-visible,
-.kinkudos-language-switcher a:focus-visible {
+.kinkudos-language-switcher select:focus-visible {
   outline: 0.18rem solid var(--kinkudos-link-focus);
   outline-offset: 0.18rem;
   border-radius: 0.25rem;
@@ -164,7 +164,7 @@ button {
 
 .md-header a:focus-visible,
 .md-tabs a:focus-visible,
-.md-header .kinkudos-language-switcher a:focus-visible {
+.md-header .kinkudos-language-switcher select:focus-visible {
   outline-color: #fff;
 }
 
@@ -283,32 +283,44 @@ button.md-button:disabled,
 .kinkudos-language-switcher {
   display: inline-flex;
   align-items: center;
-  gap: 0.28rem;
-  color: rgb(255 255 255 / 72%);
-  font-size: 0.68rem;
+  color: rgb(255 255 255 / 88%);
+  font-size: 0.7rem;
   font-weight: 750;
-  letter-spacing: 0.03em;
   white-space: nowrap;
   flex-direction: row;
   flex-wrap: nowrap;
 }
 
-.kinkudos-language-switcher a {
-  color: rgb(255 255 255 / 74%);
-  text-decoration: none;
+.kinkudos-language-switcher label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
-.kinkudos-language-switcher a:hover,
-.kinkudos-language-switcher a[aria-current="page"] {
+.kinkudos-language-switcher select {
+  min-width: 6.4rem;
+  min-height: 2rem;
+  padding: 0.2rem 1.7rem 0.2rem 0.55rem;
+  border: 1px solid rgb(255 255 255 / 52%);
+  border-radius: 0.45rem;
   color: #fff;
+  background: rgb(20 8 44 / 32%);
+  font: inherit;
+  cursor: pointer;
+}
+
+.kinkudos-language-switcher select:hover {
+  border-color: rgb(255 255 255 / 84%);
+  background: rgb(20 8 44 / 48%);
+}
+
+.kinkudos-language-switcher select:focus-visible {
+  outline: 0.18rem solid #fff;
+  outline-offset: 0.16rem;
 }
 
 .kinkudos-language-switcher--header {
   margin: 0 0.45rem;
-}
-
-.kinkudos-language-switcher--drawer {
-  display: none !important;
 }
 
 @media screen and (max-width: 76.1875em) {
@@ -319,34 +331,22 @@ button.md-button:disabled,
 }
 
 @media screen and (max-width: 59.9375em) {
-  .kinkudos-language-switcher--header {
-    display: none;
+  .kinkudos-language-switcher--header label > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
-  .kinkudos-language-switcher--drawer {
-    display: inline-flex !important;
-    margin: 0.55rem 0.8rem;
-    color: var(--md-default-fg-color--light);
-  }
-
-  .kinkudos-language-switcher--drawer a {
-    color: var(--kinkudos-link);
-  }
-
-  .kinkudos-language-switcher--drawer a:hover,
-  .kinkudos-language-switcher--drawer a[aria-current="page"] {
-    color: var(--kinkudos-link-hover);
+  .kinkudos-language-switcher--header select {
+    min-width: 5.7rem;
   }
 
   .md-typeset .md-button {
     width: 100%;
     margin: 0.2rem 0;
     text-align: center;
-  }
-}
-
-@media screen and (min-width: 60em) {
-  .md-sidebar--primary .kinkudos-language-switcher--drawer {
-    display: none !important;
   }
 }

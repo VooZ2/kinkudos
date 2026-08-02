@@ -24,9 +24,14 @@
           isLithuanian ? "Dokumentacijos kalba" : "Documentation language"
         );
         nav.innerHTML =
-          '<a href="' + englishPath + '" lang="en"' + (!isLithuanian ? ' aria-current="page"' : "") + '>EN</a>' +
-          '<span aria-hidden="true">/</span>' +
-          '<a href="' + lithuanianPath + '" lang="lt"' + (isLithuanian ? ' aria-current="page"' : "") + '>LT</a>';
+          '<label><span>' + (isLithuanian ? "Kalba" : "Language") + '</span>' +
+          '<select aria-label="' + (isLithuanian ? "Dokumentacijos kalba" : "Documentation language") + '">' +
+          '<option value="' + englishPath + '"' + (!isLithuanian ? " selected" : "") + '>English</option>' +
+          '<option value="' + lithuanianPath + '"' + (isLithuanian ? " selected" : "") + '>Lietuvių</option>' +
+          '</select></label>';
+        nav.querySelector("select").addEventListener("change", function (event) {
+          window.location.assign(event.target.value);
+        });
         return nav;
       }
 
@@ -42,15 +47,6 @@
         header.insertBefore(headerSwitcher, themeControl || null);
       }
 
-      var drawer = document.querySelector(".md-sidebar--primary .md-nav--primary");
-      var drawerExisting = drawer && drawer.querySelector(".kinkudos-language-switcher");
-      if (drawerExisting && drawerExisting.dataset.path !== path) {
-        drawerExisting.remove();
-        drawerExisting = null;
-      }
-      if (drawer && !drawerExisting) {
-        drawer.insertBefore(switcher("kinkudos-language-switcher--drawer"), drawer.firstChild);
-      }
       }
 
       mountLanguageSwitchers();
