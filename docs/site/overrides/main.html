@@ -89,17 +89,31 @@
           "Help": "Pagalba",
           "Reference": "Atmintinė",
           "Roles, data, and limits": "Vaidmenys, duomenys ir ribos",
-          "Release and support policy": "Leidimų ir palaikymo politika"
+          "Release and support policy": "Leidimų ir palaikymo politika",
+          "Table of contents": "Turinys"
         };
-        document.querySelectorAll(".md-tabs__link, .md-sidebar--primary .md-nav__link").forEach(function (link) {
-          var label = link.textContent.trim();
-          if (labels[label]) {
-            link.textContent = labels[label];
+
+        function translateText(root) {
+          if (!root) {
+            return;
           }
-          if (link.getAttribute("href")) {
-            link.setAttribute("href", lithuanianPath(link.href));
+          var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+          var nodes = [];
+          while (walker.nextNode()) {
+            nodes.push(walker.currentNode);
           }
-        });
+          nodes.forEach(function (node) {
+            var value = node.nodeValue.trim();
+            if (labels[value]) {
+              node.nodeValue = node.nodeValue.replace(value, labels[value]);
+            }
+          });
+        }
+
+        translateText(document.querySelector(".md-tabs"));
+        translateText(document.querySelector(".md-sidebar--primary"));
+        translateText(document.querySelector(".md-sidebar--secondary"));
+
         var tabLabels = [
           "Pradžia",
           "Tėvams",
@@ -111,14 +125,30 @@
         ];
         document.querySelectorAll(".md-tabs__link").forEach(function (link, index) {
           if (tabLabels[index]) {
-            link.textContent = tabLabels[index];
+            var textNode = Array.from(link.childNodes).find(function (node) {
+              return node.nodeType === Node.TEXT_NODE && node.nodeValue.trim();
+            });
+            if (textNode) {
+              textNode.nodeValue = textNode.nodeValue.replace(
+                textNode.nodeValue.trim(),
+                tabLabels[index]
+              );
+            }
           }
           if (link.getAttribute("href")) {
-            link.setAttribute("href", lithuanianPath(link.href));
+            var target = lithuanianPath(link.href);
+            if (link.getAttribute("href") !== target) {
+              link.setAttribute("href", target);
+            }
           }
         });
-        document.querySelectorAll(".md-nav--secondary .md-nav__title").forEach(function (title) {
-          title.textContent = "Turinys";
+        document.querySelectorAll(".md-sidebar--primary .md-nav__link").forEach(function (link) {
+          if (link.getAttribute("href")) {
+            var target = lithuanianPath(link.href);
+            if (link.getAttribute("href") !== target) {
+              link.setAttribute("href", target);
+            }
+          }
         });
         document.querySelectorAll(".md-search__input").forEach(function (input) {
           input.placeholder = "Ieškoti";
@@ -143,10 +173,9 @@
       }
 
       mountLanguageSwitchers();
-      new MutationObserver(mountLanguageSwitchers).observe(document.body, {
-        childList: true,
-        subtree: true
-      });
+      if (typeof document$ !== "undefined") {
+        document$.subscribe(mountLanguageSwitchers);
+      }
     });
   </script>
 {% endblock %}
