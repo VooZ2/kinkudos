@@ -1,5 +1,26 @@
 {% extends "base.html" %}
 
+{% block tabs %}
+  {% set is_lithuanian = page and (page.file.src_uri == "index.lt.md" or page.file.src_uri.endswith(".lt.md")) %}
+  {% if is_lithuanian %}
+    <nav class="md-tabs" aria-label="Pagrindinė navigacija" data-md-component="tabs">
+      <div class="md-grid">
+        <ul class="md-tabs__list">
+          <li class="md-tabs__item"><a href="/start/what-is-kinkudos.lt/" class="md-tabs__link">Pradžia</a></li>
+          <li class="md-tabs__item"><a href="/parents/dashboard-and-child-cards.lt/" class="md-tabs__link">Tėvams</a></li>
+          <li class="md-tabs__item"><a href="/security/accounts-and-devices.lt/" class="md-tabs__link">Saugumas</a></li>
+          <li class="md-tabs__item"><a href="/deployment-and-maintenance.lt/" class="md-tabs__link">Serveris</a></li>
+          <li class="md-tabs__item"><a href="/family-administration.lt/" class="md-tabs__link">Šeimos administravimas</a></li>
+          <li class="md-tabs__item"><a href="/quick-help.lt/" class="md-tabs__link">Pagalba</a></li>
+          <li class="md-tabs__item"><a href="/reference/roles-and-data.lt/" class="md-tabs__link">Atmintinė</a></li>
+        </ul>
+      </div>
+    </nav>
+  {% else %}
+    {{ super() }}
+  {% endif %}
+{% endblock %}
+
 {% block extrahead %}
   {{ super() }}
   <script defer src="https://stats.enduristas.lt/script.js" data-website-id="b47fc9f2-ce4f-4aee-8254-5935471ffb21"></script>
@@ -41,14 +62,16 @@
           isLithuanian ? "Dokumentacijos kalba" : "Documentation language"
         );
         nav.innerHTML =
-          '<label><span>' + (isLithuanian ? "Kalba" : "Language") + '</span>' +
-          '<select aria-label="' + (isLithuanian ? "Dokumentacijos kalba" : "Documentation language") + '">' +
-          '<option value="' + englishPath + '"' + (!isLithuanian ? " selected" : "") + '>English</option>' +
-          '<option value="' + lithuanianPath + '"' + (isLithuanian ? " selected" : "") + '>Lietuvių</option>' +
-          '</select></label>';
-        nav.querySelector("select").addEventListener("change", function (event) {
-          window.location.assign(event.target.value);
-        });
+          '<details>' +
+          '<summary aria-label="' + (isLithuanian ? "Keisti dokumentacijos kalbą" : "Change documentation language") + '">' +
+          '<span class="kinkudos-language-switcher__label">' + (isLithuanian ? "Kalba" : "Language") + '</span>' +
+          '<span class="kinkudos-language-switcher__current">' + (isLithuanian ? "Lietuvių" : "English") + '</span>' +
+          '</summary>' +
+          '<div class="kinkudos-language-switcher__menu">' +
+          '<a href="' + englishPath + '"' + (!isLithuanian ? ' aria-current="page"' : "") + '>English</a>' +
+          '<a href="' + lithuanianPath + '"' + (isLithuanian ? ' aria-current="page"' : "") + '>Lietuvių</a>' +
+          '</div>' +
+          '</details>';
         return nav;
       }
 
@@ -110,38 +133,8 @@
           });
         }
 
-        translateText(document.querySelector(".md-tabs"));
         translateText(document.querySelector(".md-sidebar--primary"));
         translateText(document.querySelector(".md-sidebar--secondary"));
-
-        var tabLabels = [
-          "Pradžia",
-          "Tėvams",
-          "Saugumas",
-          "Serveris",
-          "Šeimos admin",
-          "Pagalba",
-          "Atmintinė"
-        ];
-        document.querySelectorAll(".md-tabs__link").forEach(function (link, index) {
-          if (tabLabels[index]) {
-            var textNode = Array.from(link.childNodes).find(function (node) {
-              return node.nodeType === Node.TEXT_NODE && node.nodeValue.trim();
-            });
-            if (textNode) {
-              textNode.nodeValue = textNode.nodeValue.replace(
-                textNode.nodeValue.trim(),
-                tabLabels[index]
-              );
-            }
-          }
-          if (link.getAttribute("href")) {
-            var target = lithuanianPath(link.href);
-            if (link.getAttribute("href") !== target) {
-              link.setAttribute("href", target);
-            }
-          }
-        });
         document.querySelectorAll(".md-sidebar--primary .md-nav__link").forEach(function (link) {
           if (link.getAttribute("href")) {
             var target = lithuanianPath(link.href);
@@ -174,7 +167,11 @@
 
       mountLanguageSwitchers();
       if (typeof document$ !== "undefined") {
-        document$.subscribe(mountLanguageSwitchers);
+        document$.subscribe(function () {
+          window.requestAnimationFrame(function () {
+            window.requestAnimationFrame(mountLanguageSwitchers);
+          });
+        });
       }
 
       function keepLithuanianNavigationTarget(event) {
@@ -183,15 +180,22 @@
         if (!isLithuanian || !(event.target instanceof Element)) {
           return;
         }
-        var link = event.target.closest(
-          ".md-tabs__link, .md-sidebar--primary .md-nav__link"
-        );
+        var link = event.target.closest(".md-sidebar--primary .md-nav__link");
         if (!link || !link.getAttribute("href")) {
           return;
         }
         var target = lithuanianPath(link.href);
         if (link.getAttribute("href") !== target) {
           link.setAttribute("href", target);
+        }
+        if (event.type === "click") {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          if (event.metaKey || event.ctrlKey || event.shiftKey || event.button === 1) {
+            window.open(target, "_blank");
+          } else {
+            window.location.assign(target);
+          }
         }
       }
 
