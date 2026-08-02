@@ -1,16 +1,17 @@
 # KinKudos
 
 <p align="center">
-  <strong>Kasdienius šeimos darbus paverskite bendrais pasiekimais.</strong><br>
-  Privati, savarankiškai diegiama šeimos programa, kurioje vaikai atlieka darbus,
-  renka taškus ir siekia prizų, o tėvai užtikrina aiškias ir sąžiningas taisykles.
+  <strong>Privati, savarankiškai diegiama šeimos programa darbams, taškams, tikslams ir prizams.</strong><br>
+  Vaikai atlieka kasdienius darbus ir siekia prizų, o tėvai patvirtina pažangą ir
+  užtikrina aiškias bei sąžiningas taisykles. KinKudos veikia jūsų serveryje,
+  todėl šeimos duomenys lieka jums kontroliuojami.
 </p>
 
 <p align="center">
-  <a href="https://demo.kinkudos.app/"><strong>🚀 Išbandyti demonstraciją</strong></a>
-  ·
-  <a href="https://kinkudos.app/">🌐 Apsilankyti svetainėje</a>
-  ·
+  <a href="https://demo.kinkudos.app/"><strong>🚀 Išbandyti demonstraciją</strong></a> ·
+  <a href="https://docs.kinkudos.app/index.lt/">📚 Dokumentacija</a> ·
+  <a href="https://kinkudos.app/">🌐 Svetainė</a> ·
+  <a href="https://github.com/VooZ2/kinkudos/releases">📦 Naujausias leidimas</a> ·
   <a href="README.md">🇬🇧 In English</a>
 </p>
 
@@ -19,7 +20,6 @@
   <a href="https://hub.docker.com/r/vooz2/kinkudos"><img src="https://img.shields.io/docker/pulls/vooz2/kinkudos" alt="Docker atsisiuntimai"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT licencija"></a>
 </p>
-<p align="center"><sub>Dabartinis leidimas: 26.4.9</sub></p>
 
 ---
 
@@ -27,12 +27,12 @@
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/screenshots/parent-dashboard-2026.png" alt="KinKudos tėvų suvestinė su laukiančiais prašymais"></td>
-    <td width="50%"><img src="docs/site/assets/parent-settings-2026.png" alt="KinKudos tėvų nustatymai"></td>
+    <td width="50%"><img src="docs/screenshots/parent-dashboard-2026.png" alt="KinKudos tėvų suvestinė su laukiančiais šeimos prašymais"></td>
+    <td width="50%"><img src="docs/site/assets/parent-settings-2026.png" alt="KinKudos šeimos nustatymai ir valdikliai"></td>
   </tr>
   <tr>
     <td align="center"><sub><strong>Tėvų suvestinė</strong><br>Peržiūrėkite prašymus ir priimkite sprendimus vienoje vietoje.</sub></td>
-    <td align="center"><sub><strong>Šeimos valdymas</strong><br>Tvarkykite prizus, loterijos nustatymus, privatumą ir paslaugas.</sub></td>
+    <td align="center"><sub><strong>Šeimos valdymas</strong><br>Tvarkykite prizus, privatumą, įrenginius ir šeimos nustatymus.</sub></td>
   </tr>
 </table>
 
@@ -51,83 +51,160 @@
   <img src="docs/screenshots/mobile-welcome-2026.png" width="31%" alt="KinKudos mobilus pradžios ekranas">
   <img src="docs/screenshots/mobile-parent-dashboard-2026.png" width="31%" alt="KinKudos mobili tėvų suvestinė">
 </p>
-<p align="center"><sub>Įsidiekite KinKudos kaip PWA ir rūpinkitės šeimos kasdienybe telefone ar planšetėje.</sub></p>
+<p align="center"><sub>Pridėkite KinKudos prie palaikomo telefono, planšetės ar kompiuterio kaip progresyviąją žiniatinklio programą.</sub></p>
 
-Ekrano nuotraukose naudojami išgalvoti demonstraciniai duomenys.
+*Ekrano nuotraukose naudojami išgalvoti demonstraciniai duomenys.*
 
-## 🚀 Išbandykite demonstraciją
+## 🔄 Kaip tai veikia
 
-Susipažinkite su KinKudos nieko nediegdami:
+1. 📝 Tėvai sukuria ar paskiria darbą.
+2. ✅ Vaikas jį atlieka ir pateikia rezultatą.
+3. 👀 Tėvai peržiūri ir patvirtina darbą.
+4. 🎯 Vaikas gauna taškų bei artėja prie prizo ar taupymo tikslo.
 
-- **Demonstracija:** [demo.kinkudos.app](https://demo.kinkudos.app/)
-- **Tėvų paskyra:** `demo` / `demo`
-- **Vaiko PIN:** `1234`
+## 💜 Kodėl KinKudos?
 
-Vieša demonstracija atkuriama kas valandą, todėl galite drąsiai išbandyti.
+### 👨‍👩‍👧‍👦 Aišku tėvams
+
+Kurkite darbus, peržiūrėkite atliktus, valdykite taškus ir laikykite šeimos taisykles matomas.
+
+### 🎮 Motyvuoja vaikus
+
+Vaikai renkasi arba gauna darbus, renka teminius taškus, prašo prizų ir taupo tikslams.
+
+### 🔒 Privatumas pagal numatymą
+
+Viena instaliacija skirta vienam namų ūkiui. Nėra viešos registracijos, reklamų, profiliavimo ar integruotos šeimos analitikos.
+
+### 🏠 Jūsų kontrolė
+
+Paleiskite KinKudos savo namų serveryje ar VPS ir nuspręskite, kur saugomi šeimos duomenys.
 
 ## 🎯 Ką gali šeima
 
-- ✅ **Paverskite darbus pažanga** — vaikai pasirenka arba gauna darbus, pateikia atliktą darbą, o tėvai jį patvirtina.
-- 🎨 **Suteikite asmeniškumo** — septynios originalios vaikų temos turi savo vaizdus, tekstus, garsus ir taškų vienetus.
-- 🎁 **Kurti sveikus įpročius su prizais** — prizai, taupymo tikslai, dovanos, gimtadienio taškai ir tėvų patvirtinami pasiūlymai.
-- 🎟️ **Pridėkite netikėtumo** — pasirenkami nutrinami loterijos bilietai su aiškiomis tikimybėmis, limitais ir tėvų valdikliais.
-- 📷 **Dalinkitės privačiomis darbų nuotraukomis** — jos sumažinamos, konvertuojamos į WebP ir prieš saugojimą išvalomos nuo EXIF metaduomenų.
-- 🔔 **Išlikite informuoti** — pasirinktiniai „Web Push“ pranešimai apie sprendimus, prašymus, paskyrimus ir priminimus.
-- 📱 **Naudokite namuose bet kuriame įrenginyje** — įdiegiama PWA telefonuose, planšetėse ir kompiuteriuose.
-- 🌍 **Pasirinkite kalbą** — tėvų ir vaikų sąsaja pateikiama lietuvių ir anglų kalbomis.
-- 🔐 **Išlaikykite šeimos duomenų privatumą** — viena instaliacija skirta vienai šeimai; programoje nėra reklamų ar integruotos analitikos.
+### 👨‍👩‍👧 Šeimos eiga
 
-## 🛡️ Privati šeimos erdvė
+- Darbai, dienos paskyrimai ir tėvų patvirtinimai
+- Prizai, taupymo tikslai, taškų dovanos ir gimtadienio taškai
+- Vaikų pasiūlymai ir tėvų sprendimai
+- Taškų korekcijos, nuobaudos ir konfigūruojamas kreditas
+- Matoma šeimos taškų pokyčių istorija
 
-KinKudos skirta diegti nuosavame serveryje, už pasirinkto HTTPS reverse proxy.
+### 🎨 Vaiko patirtis
 
-- Tėvų paskyros naudoja bandymų skaičių ribojančius slaptažodžius.
-- Vaikai jungiasi susietu įrenginiu ir PIN su bandymų limitu.
-- Taškų operacijos yra transakcinės ir įrašomos į nekintamą žurnalą.
-- Nuotraukos, duomenų bazės, kopijos ir prisijungimo duomenys laikomi už viešos repozitorijos ribų.
-- Pasirenkamos šifruotos kopijos palaiko „Backblaze B2“ ir S3 suderinamas saugyklas.
+- Septynios originalios vaizdinės temos su savais tekstais, garsais ir taškų vienetais
+- Vaikams pritaikytas prisijungimas PIN iš susieto naršyklės lango ar PWA
+- Pasirenkami garsai ir „Web Push“ pranešimai
+- Pasirenkami tėvų kontroliuojami nutrinami loterijos bilietai
 
-Plačiau skaitykite [architektūros ir saugumo apžvalgoje](docs/ARCHITECTURE.md).
+### 🔐 Privatumas ir kontrolė
 
-## 📚 Kaip naudotis KinKudos
+- Viena šeima vienoje instaliacijoje
+- Nėra viešos registracijos, reklamų ar integruotos analitikos
+- Įkeltos nuotraukos sumažinamos, konvertuojamos į WebP ir išvalomos nuo EXIF metaduomenų
+- Pasirenkamos šifruotos nuotolinės kopijos
+- Lietuvių ir anglų sąsajos
 
-- **[Atidaryti dokumentaciją](https://docs.kinkudos.app/index.lt/)** — sužinokite,
-  [kas yra KinKudos](https://docs.kinkudos.app/start/what-is-kinkudos.lt/),
-  [ar savarankiškas diegimas tinka šeimai](https://docs.kinkudos.app/start/is-kinkudos-right.lt/),
-  ir atlikite [pirmas 15 minučių](https://docs.kinkudos.app/start/first-15-minutes.lt/).
+## 🏡 Sukurta šeimos kasdienybei
 
-## ⚡ Greitas diegimas
+KinKudos nėra darbo užduočių programa, pritaikyta vaikams. Ji sukurta tikroms šeimos rutinoms: paprastiems darbams, tėvų patvirtinimui, matomai pažangai, teminiams taškams, prizams ir ilgalaikiams tikslams.
 
-KinKudos diegiama su Docker Compose ARM64 arba AMD64 Linux serveryje.
+## ✅ Ar KinKudos tinka jūsų šeimai?
 
-Naujame serveryje, kuriame jau veikia „Docker Engine“ ir „Docker Compose“
-papildinys:
+### Tinka, jei
+
+- norite vienos privačios erdvės vienam namų ūkiui;
+- jau turite namų serverį ar VPS arba norite jį susikonfigūruoti;
+- kas nors gali prižiūrėti Docker, atnaujinimus, HTTPS ir kopijas;
+- vertinate kontrolę labiau nei prenumeruojamą paslaugą.
+
+### Tikriausiai netinka, jei
+
+- norite užsiregistruoti ir pradėti be serverio paruošimo;
+- vienoje instaliacijoje reikia kelių nesusijusių šeimų;
+- tikitės komercinio palaikymo ar paslaugų lygio sutarties;
+- reikia vietos stebėjimo, tėvų sekimo ar bankinių funkcijų.
+
+Prieš diegdami perskaitykite, [ar KinKudos tinka jūsų šeimai](https://docs.kinkudos.app/start/is-kinkudos-right.lt/), ir peržiūrėkite [KinKudos dokumentaciją](https://docs.kinkudos.app/index.lt/).
+
+## 🚀 Išbandykite demonstraciją
+
+Susipažinkite su tėvų ir vaikų eiga nieko nediegdami:
+
+- **Demonstracija:** [demo.kinkudos.app](https://demo.kinkudos.app/)
+- **Tėvų vartotojo vardas:** `demo`
+- **Tėvų slaptažodis:** `demo`
+- **Vaiko PIN:** `1234`
+
+Viešoje demonstracijoje naudojami išgalvoti duomenys; ji atkuriama kas valandą, todėl galite drąsiai išbandyti.
+
+## 🐳 Įdiekite KinKudos serveryje
+
+KinKudos veikia AMD64 ir ARM64 „Linux“ serveriuose su „Docker Engine“ ir „Docker Compose“ papildiniu. Taip pat reikės pagrindinio kompiuterio vardo arba domeno, HTTPS per Caddy, Nginx ar Traefik reverse proxy ir bazinių „Linux“ bei Docker administravimo įgūdžių.
+
+Naujame serveryje, kuriame jau veikia „Docker Engine“ ir „Docker Compose“:
 
 ```bash
-curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh && sh /tmp/kinkudos-install.sh
+curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh \
+  && sh /tmp/kinkudos-install.sh
 ```
 
-Nedidelis diegiklis parsisiunčia naujausią paskelbtą leidimą, patikrina jo
-SHA256 kontrolinę sumą ir paleidžia esamą vedamą paruošimą. Jis skirtas naujai
-KinKudos instaliacijai; esamos instaliacijos atnaujinamos pagal atskirą gidą.
+Vedlys parsisiunčia naujausią KinKudos leidimą, patikrina jo SHA256 kontrolinę sumą, sukuria reikiamus programos katalogus ir konfigūraciją, paleidžia KinKudos su Docker Compose bei gali sukurti pirmą tėvų paskyrą ir vaikų profilius.
 
-1. **Paruoškite serverį** su Docker, Docker Compose, domenu ir TLS reverse proxy.
-2. **Paleiskite vedlį** iš paskelbto leidimo.
-3. **Sukurkite šeimą** — diegiklis gali sukurti pirmą tėvų paskyrą ir vaikų profilius.
+Komanda skirta **naujai instaliacijai**. Esamas instaliacijas būtina atnaujinti pagal dokumentuotą procesą.
 
-👉 **[Patikrinti serverio reikalavimus ir diegti KinKudos](https://docs.kinkudos.app/server/before-installing.lt/)**
+👉 **[Patikrinkite reikalavimus ir įdiekite KinKudos](https://docs.kinkudos.app/server/before-installing.lt/)**
 
-Dokumentacijoje aprašytas Docker diegimas, leidimo patikra, Caddy/Nginx/Traefik
-ir konteinerinių proxy variantai, pirmos šeimos sukūrimas,
-[atnaujinimas ir atkūrimas](https://docs.kinkudos.app/server/updates-and-recovery.lt/)
-bei problemų sprendimas.
+Dokumentacijoje taip pat aprašomi HTTPS, atnaujinimai, kopijos, atkūrimas, diagnostika ir problemų sprendimas.
 
-### 🖥️ Neturite serverio namuose?
+### ☁️ Neturite namų serverio?
 
-Šeimai, neturinčiai namų serverio, mažas VPS yra paprasčiausias būdas privačiai
-naudoti KinKudos internete. Rekomenduojame Docker tinkamą [Hostinger
-VPS](https://www.hostinger.com/lt?REFERRALCODE=LKIGEDIMICSU) *(referral nuoroda)*
-ir tą patį [serverio vadovą](https://docs.kinkudos.app/server/before-installing.lt/).
+Nedidelis Docker tinkamas VPS dažnai yra vienas paprastesnių būdų privačiai naudoti KinKudos internete. Tinka bet kuris tinkamas VPS tiekėjas; „Hostinger VPS“ yra viena galimybė šeimoms, kurios renkasi komercinę paslaugą.
+
+<p>
+  <a href="https://www.hostinger.com/lt?REFERRALCODE=LKIGEDIMICSU">
+    <img src="https://img.shields.io/badge/Hostinger_VPS-View_options-673DE6?logo=hostinger&logoColor=white" alt="Peržiūrėti Hostinger VPS pasirinkimus">
+  </a>
+</p>
+
+> **Atskleidimas:** „Hostinger“ nuoroda yra rekomendacinė. Jei įsigysite per ją, galiu gauti komisinį atlyginimą be papildomos kainos jums. „Hostinger“ nėra būtina KinKudos naudojimo sąlyga, nėra oficialus KinKudos partneris ir neturi prieigos prie šeimos duomenų, išskyrus tuos, kuriuos techniškai laikote pasirinktame VPS.
+
+Nepriklausomai nuo VPS tiekėjo, vadovaukitės tuo pačiu [serverio diegimo gidu](https://docs.kinkudos.app/server/before-installing.lt/).
+
+## ⚙️ Architektūra
+
+- Django 5.2
+- Serverio generuojamas HTML
+- Vanilla JavaScript PWA
+- SQLite WAL režimu
+- Gunicorn ir WhiteNoise
+- Docker
+- „Web Push“ su VAPID
+
+Įprastam naudojimui nereikia Node.js, SPA karkaso ar viešo API.
+
+## 🛡️ Saugumas ir privatumas
+
+KinKudos sukurta kaip privati erdvė vienam namų ūkiui. Tėvų slaptažodžiai ir vaikų PIN yra ribojami pagal bandymus, taškų pakeitimai transakciniai ir įrašomi į istoriją, o šeimos duomenys, nuotraukos, duomenų bazės, kopijos ir prisijungimo duomenys nelaikomi viešoje repozitorijoje. Programa neturi reklamų, integruotos analitikos ar KinKudos valdomos šeimos duomenų debesijos.
+
+Savarankiškas diegimas suteikia kontrolę, bet atsakomybė už HTTPS, serverio saugumą, atnaujinimus ir patikrintas kopijas lieka jums. Apie saugumo pažeidžiamumus ir palaikymo apimtį skaitykite [SECURITY.md](SECURITY.md). Nepataisytus pažeidžiamumus praneškite privačiai, niekada ne viešame GitHub Issue.
+
+## 📚 Dokumentacija
+
+Visa dokumentacija pateikiama [docs.kinkudos.app](https://docs.kinkudos.app/index.lt/).
+
+- [Kas yra KinKudos?](https://docs.kinkudos.app/start/what-is-kinkudos.lt/)
+- [Ar KinKudos tinka mano šeimai?](https://docs.kinkudos.app/start/is-kinkudos-right.lt/)
+- [Pirmos 15 minučių](https://docs.kinkudos.app/start/first-15-minutes.lt/)
+- [Prieš diegiant](https://docs.kinkudos.app/server/before-installing.lt/)
+
+## 📌 Projekto būsena ir palaikymas
+
+KinKudos aktyviai prižiūrima ir naudojama tikrame namų ūkyje. Palaikymas teikiamas pagal galimybes, be SLA ar garantuoto atsakymo laiko; palaikomas tik naujausias paskelbtas leidimas.
+
+- [Naujausi leidimai](https://github.com/VooZ2/kinkudos/releases)
+- [Pakeitimų istorija](CHANGELOG.lt.md)
+- [KinKudos dokumentacija](https://docs.kinkudos.app/index.lt/)
 
 ## 🧑‍💻 Vietinis kūrimas
 
@@ -140,24 +217,28 @@ python manage.py test economy.tests
 python manage.py runserver
 ```
 
-`seed_demo` skirta tik kūrimui ir atsisako keisti netuščią duomenų bazę.
+Komanda `seed_demo` skirta tik kūrimui ir atsisako keisti netuščią duomenų bazę. Prieš keisdami autentifikavimą, teises, taškų apskaitą, kopijas ar diegimo logiką perskaitykite repozitorijos dokumentaciją ir esamus testus.
 
-## 🤝 Atsiliepimai ir pagalba
+## 🤝 Prisidėjimas ir atsiliepimai
 
-Radote problemą ar turite idėją?
+Laukiami klaidų pranešimai, dokumentacijos pataisymai, vertimai ir tikslinės pull request. Didesnius pakeitimus pirmiausia aptarkite Issue.
 
-- Naudokite programoje esančią atsiliepimų formą, kad privačiai pasidalintumėte su šeimos administratoriumi.
-- [Atidarykite GitHub problemą](https://github.com/VooZ2/kinkudos/issues), jei radote pakartojamą programos klaidą.
-- Apie nepataisytą saugumo pažeidžiamumą praneškite privačiai, kaip nurodyta
-  [SECURITY.md](SECURITY.md), o ne viešame Issue.
-- Peržiūrėkite [pakeitimų istoriją](CHANGELOG.lt.md), kad sužinotumėte, kas keitėsi kiekviename leidime.
+- [Ieškoti arba atidaryti GitHub Issue](https://github.com/VooZ2/kinkudos/issues)
+- [Skaityti pakeitimų istoriją](CHANGELOG.lt.md)
+- [Pranešti apie saugumo problemas privačiai](SECURITY.md)
+
+Programos atsiliepimų forma siunčia atsiliepimą konkrečios KinKudos instaliacijos administratoriui, o ne projekto prižiūrėtojui. GitHub Issue niekada neskelbkite slaptažodžių, raktų, privačių šeimos nuotraukų, duomenų bazių, kopijų, asmeninių duomenų ar neredaguotų žurnalų.
+
+## ☕ Palaikykite KinKudos
+
+KinKudos yra nemokama atvirojo kodo programa. Jei ji naudinga jūsų šeimai, galite palaikyti tolesnę priežiūrą vienkartiniu kavos puodeliu. Parama padeda apmokėti domeną, viešą demonstraciją, dokumentaciją, testavimą ir kitą projekto infrastruktūrą, tačiau nesuteikia prioritetinio palaikymo ar garantuotų funkcijų.
+
+<p>
+  <a href="https://buymeacoffee.com/vooz2">
+    <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-Support_KinKudos-FFDD00?logo=buymeacoffee&logoColor=000000" alt="Palaikyti KinKudos per Buy Me a Coffee">
+  </a>
+</p>
 
 ## 📄 Licencija
 
-KinKudos yra atvirojo kodo programa, platinama pagal [MIT licenciją](LICENSE).
-
-## ⚠️ Atsakomybės apribojimas
-
-KinKudos yra savarankiškai vystomas atvirojo kodo projektas, kuriamas aktyviai naudojantis „OpenAI Codex“ pagalba. Sprendimus dėl produkto, reikalavimų, testavimo, leidimų, infrastruktūros ir tolesnės priežiūros priima bei įgyvendina projekto savininkas.
-
-Programa pateikiama tokia, kokia yra, be garantijų ar pažado užtikrinti palaikymą, tinkamumą konkrečiam naudojimui arba visišką saugumą.
+KinKudos yra atvirojo kodo programa, platinama pagal [MIT licenciją](LICENSE). Programa pateikiama tokia, kokia yra, be jokių garantijų.

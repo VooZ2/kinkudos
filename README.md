@@ -1,38 +1,41 @@
 # KinKudos
 
 <p align="center">
-  <strong>Turn everyday family tasks into shared progress.</strong><br>
-  A private, self-hosted family app where children complete tasks, earn points,
-  and work toward rewards while parents keep the rules clear and fair.
+  <strong>A private, self-hosted family app for tasks, points, goals, and rewards.</strong><br>
+  Children complete everyday tasks and work toward rewards, while parents approve progress
+  and keep the rules clear and fair. KinKudos runs on your own server, so your family data
+  stays under your control.
 </p>
 
 <p align="center">
   <a href="https://demo.kinkudos.app/"><strong>🚀 Try the live demo</strong></a>
   ·
+  <a href="https://docs.kinkudos.app/">📚 Documentation</a>
+  ·
   <a href="https://kinkudos.app/">🌐 Visit the website</a>
+  ·
+  <a href="https://github.com/VooZ2/kinkudos/releases">📦 Latest release</a>
   ·
   <a href="README.lt.md">🇱🇹 Lietuviškai</a>
 </p>
 
 <p align="center">
   <a href="https://github.com/VooZ2/kinkudos/releases"><img src="https://img.shields.io/github/v/release/VooZ2/kinkudos?display_name=release" alt="Latest GitHub release"></a>
-  <a href="https://hub.docker.com/r/vooz2/kinkudos"><img src="https://img.shields.io/docker/pulls/vooz2/kinkudos" alt="Docker Pulls"></a>
+  <a href="https://hub.docker.com/r/vooz2/kinkudos"><img src="https://img.shields.io/docker/pulls/vooz2/kinkudos" alt="Docker pulls"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License"></a>
 </p>
-<p align="center"><sub>Current release: 26.4.9</sub></p>
-
 ---
 
 ## ✨ See it in action
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/screenshots/parent-dashboard-2026.png" alt="KinKudos parent dashboard with pending requests"></td>
-    <td width="50%"><img src="docs/site/assets/parent-settings-2026.png" alt="KinKudos parent settings"></td>
+    <td width="50%"><img src="docs/screenshots/parent-dashboard-2026.png" alt="KinKudos parent dashboard with pending family requests"></td>
+    <td width="50%"><img src="docs/site/assets/parent-settings-2026.png" alt="KinKudos family settings and controls"></td>
   </tr>
   <tr>
     <td align="center"><sub><strong>Parent dashboard</strong><br>Review requests and make decisions in one place.</sub></td>
-    <td align="center"><sub><strong>Family controls</strong><br>Manage rewards, lottery settings, privacy, and services.</sub></td>
+    <td align="center"><sub><strong>Family controls</strong><br>Manage rewards, privacy, devices, and family settings.</sub></td>
   </tr>
 </table>
 
@@ -51,86 +54,197 @@
   <img src="docs/screenshots/mobile-welcome-2026.png" width="31%" alt="KinKudos mobile welcome screen">
   <img src="docs/screenshots/mobile-parent-dashboard-2026.png" width="31%" alt="KinKudos mobile parent dashboard">
 </p>
-<p align="center"><sub>Install KinKudos as a PWA and keep family life moving from any phone or tablet.</sub></p>
+<p align="center"><sub>Add KinKudos to a supported phone, tablet, or computer as a Progressive Web App.</sub></p>
 
-Screenshots use fictional demonstration data.
+*Screenshots contain fictional demonstration data.*
 
-## 🚀 Try the demo
+## 🔄 How it works
 
-Explore KinKudos without installing anything:
+1. 📝 A parent creates or assigns a task.
+2. ✅ A child completes it and submits the result.
+3. 👀 A parent reviews and approves the work.
+4. 🎯 The child receives points and works toward a reward or savings goal.
 
-- **Demo:** [demo.kinkudos.app](https://demo.kinkudos.app/)
-- **Parent account:** `demo` / `demo`
-- **Child PIN:** `1234`
+## 💜 Why KinKudos?
 
-The public demo resets every hour, so you can experiment freely.
+### 👨‍👩‍👧‍👦 Clear for parents
+
+Create tasks, review completed work, manage points, and keep family rules visible.
+
+### 🎮 Motivating for children
+
+Children choose or receive tasks, collect themed points, request rewards, and save toward goals.
+
+### 🔒 Private by design
+
+One installation serves one household. There is no public registration, advertising, profiling, or built-in family analytics.
+
+### 🏠 Yours to control
+
+Run KinKudos on your own home server or VPS and decide where your family's data is stored.
 
 ## 🎯 What families can do
 
-- ✅ **Turn chores into progress** — children choose or receive tasks, submit work, and parents approve it.
-- 🎨 **Make it feel personal** — seven original child themes with their own visuals, wording, sounds, and point units.
-- 🎁 **Build healthy reward habits** — rewards, savings goals, gifts, birthday awards, and parent-approved proposals.
-- 🎟️ **Add a little surprise** — optional scratch lottery tickets with transparent odds, limits, and parent controls.
-- 📷 **Share private photo evidence** — photos are resized, converted to WebP, and stripped of EXIF metadata before storage.
-- 🔔 **Stay in sync** — optional Web Push notifications for decisions, requests, assignments, and reminders.
-- 📱 **Use it anywhere at home** — installable as a PWA on phones, tablets, and desktops.
-- 🌍 **Choose your language** — English and Lithuanian are included throughout the parent and child experience.
-- 🔐 **Keep family data private** — one installation serves one family; there are no ads or built-in analytics.
+### 👨‍👩‍👧 Family workflow
 
-## 🛡️ Built for a private family space
+- Tasks, daily assignments, and parent approvals
+- Rewards, savings goals, point gifts, and birthday awards
+- Child proposals and parent decisions
+- Point corrections, penalties, and configurable credit
+- A visible family history of point changes
 
-KinKudos is designed to run on your own server, behind your own HTTPS reverse proxy.
+### 🎨 Child experience
 
-- Parent accounts use rate-limited passwords.
-- Children use a paired device and a rate-limited PIN.
-- Point changes are transactional and recorded in an append-only ledger.
-- Photos, database files, backups, and credentials stay outside the public source repository.
-- Optional encrypted backups support Backblaze B2 and S3-compatible storage.
+- Seven original visual themes with their own wording, sounds, and point units
+- Child-friendly PIN sign-in from a paired browser or installed PWA
+- Optional sounds and Web Push notifications
+- Optional parent-controlled scratch lottery tickets
 
-Read more in the [architecture and security overview](docs/ARCHITECTURE.md).
+### 🔐 Privacy and control
 
-## 📚 Using KinKudos
+- One family per installation
+- No public registration, advertising, or built-in analytics
+- Uploaded photos are resized, converted to WebP, and stripped of EXIF metadata
+- Optional encrypted remote backups
+- English and Lithuanian interfaces
 
-- **[Open the documentation](https://docs.kinkudos.app/)** — learn [what
-  KinKudos is](https://docs.kinkudos.app/start/what-is-kinkudos/), decide
-  [whether self-hosting fits your family](https://docs.kinkudos.app/start/is-kinkudos-right/),
-  and follow [the first 15 minutes](https://docs.kinkudos.app/start/first-15-minutes/).
+## 🏡 Built for family life
 
-## ⚡ Quick setup
+KinKudos is not a workplace task manager adapted for children. It is designed around real family routines: simple tasks, parent approval, visible progress, themed points, rewards, and longer-term goals.
 
-KinKudos is deployed with Docker Compose on an ARM64 or AMD64 Linux server.
+## ✅ Is KinKudos right for you?
 
-On a fresh server that already has Docker Engine and the Docker Compose plugin:
+### A good fit if
+
+- you want one private space for one household;
+- you already run a home server or VPS, or are willing to set one up;
+- someone can maintain Docker, updates, HTTPS, and backups;
+- you prefer control over a hosted subscription.
+
+### Probably not a good fit if
+
+- you want to register and start without any server setup;
+- you need several unrelated families in one installation;
+- you expect commercial support or a service-level agreement;
+- you need location tracking, parental surveillance, or banking features.
+
+Read [whether KinKudos fits your family](https://docs.kinkudos.app/start/is-kinkudos-right/) and explore the [KinKudos documentation](https://docs.kinkudos.app/) before installing.
+
+## 🚀 Try the live demo
+
+Explore the parent and child workflow without installing anything:
+
+- **Demo:** [demo.kinkudos.app](https://demo.kinkudos.app/)
+- **Parent username:** `demo`
+- **Parent password:** `demo`
+- **Child PIN:** `1234`
+
+The public demo contains fictional data and resets every hour, so you can experiment freely.
+
+## 🐳 Install KinKudos on your server
+
+KinKudos runs on AMD64 and ARM64 Linux servers with Docker Engine and the Docker Compose plugin.
+
+You will also need:
+
+- a hostname or domain;
+- HTTPS through a reverse proxy such as Caddy, Nginx, or Traefik;
+- basic Linux and Docker administration skills.
+
+For a fresh server that already has Docker Engine and Docker Compose:
 
 ```bash
-curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh && sh /tmp/kinkudos-install.sh
+curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh \
+  && sh /tmp/kinkudos-install.sh
 ```
 
-The small installer downloads the latest published release, verifies its
-SHA256 checksum, and then starts the existing guided setup. It is for a fresh
-KinKudos installation; existing installations use the separate upgrade guide.
+The guided installer downloads the latest published KinKudos release, verifies its SHA256 checksum, creates the required application directories and configuration, starts KinKudos with Docker Compose, and can create the first parent account and child profiles.
 
-1. **Prepare a server** with Docker, Docker Compose, a domain name, and a TLS reverse proxy.
-2. **Follow the guided installer** from the published release.
-3. **Create your family** — the installer can create the first parent account and child profiles.
+The command is for a **new installation**. Existing installations must use the documented update process.
 
-👉 **[Check server requirements and install KinKudos](https://docs.kinkudos.app/server/before-installing/)**
+👉 **[Check the requirements and install KinKudos](https://docs.kinkudos.app/server/before-installing/)**
 
-The documentation covers Docker installation, release verification,
-Caddy/Nginx/Traefik and container-proxy setups, first-family setup,
-[updates and recovery](https://docs.kinkudos.app/server/updates-and-recovery/),
-and troubleshooting.
+The documentation also covers HTTPS, updates, backups, recovery, diagnostics, and troubleshooting.
 
-### 🖥️ No server at home?
+### ☁️ No home server?
 
-For families without a home server, a small VPS is the simplest way to run
-KinKudos privately on the internet. We recommend a Docker-capable [Hostinger
-VPS](https://www.hostinger.com/lt?REFERRALCODE=LKIGEDIMICSU) *(referral link)*,
-then follow the same [server guide](https://docs.kinkudos.app/server/before-installing/).
+A small Docker-capable VPS is usually one of the simpler ways to run KinKudos privately on the internet. KinKudos works with any suitable VPS provider. Hostinger VPS is one available option for users who prefer a guided commercial service.
+
+<p>
+  <a href="https://www.hostinger.com/lt?REFERRALCODE=LKIGEDIMICSU">
+    <img src="https://img.shields.io/badge/Hostinger_VPS-View_options-673DE6?logo=hostinger&logoColor=white" alt="View Hostinger VPS options">
+  </a>
+</p>
+
+> **Disclosure:** The Hostinger link is a referral link. If you purchase through it, I may receive a commission at no additional cost to you. Hostinger is not required to use KinKudos, is not an official KinKudos partner, and does not receive access to your family data beyond what is technically stored on the VPS you choose to operate.
+
+Follow the same [server installation guide](https://docs.kinkudos.app/server/before-installing/) regardless of the VPS provider.
+
+## ⚙️ Architecture
+
+- Django 5.2
+- Server-rendered HTML
+- Vanilla JavaScript PWA
+- SQLite in WAL mode
+- Gunicorn
+- WhiteNoise
+- Docker
+- Web Push with VAPID
+
+No Node.js runtime, SPA framework, or public API is required for normal operation.
+
+## 💡 Why I built KinKudos
+
+I wanted a simple and private way to manage family tasks, points, and rewards without relying on a hosted service.
+
+I am not a professional software developer. KinKudos also began as a practical experiment: could I use OpenAI Codex to turn a real family problem into a maintainable, tested, and documented open-source application?
+
+The project grew from that experiment into software used in a real household and published for other families who may find it useful.
+
+OpenAI Codex has assisted extensively with implementation, refactoring, tests, documentation, and release preparation. Product direction, requirements, review, validation, infrastructure, releases, and ongoing maintenance remain my responsibility.
+
+## 🛡️ Security and privacy
+
+KinKudos is designed as a private space for one household.
+
+- Parent accounts use rate-limited password authentication.
+- Children use a paired browser or installed PWA together with a rate-limited PIN.
+- Point changes are transactional and added to a history that is not silently rewritten through the normal application workflow.
+- Photos, database files, backups, and credentials stay outside the public source repository.
+- Optional encrypted remote backups support Backblaze B2 and S3-compatible storage.
+- KinKudos contains no advertising or built-in analytics.
+- Family data is not sent to a KinKudos-operated cloud service.
+
+Self-hosting gives you control, but it also makes you responsible for HTTPS, server security, updates, and tested backups.
+
+Read [SECURITY.md](SECURITY.md) for vulnerability reporting and security support information. Additional privacy and server-security guidance is available in the [KinKudos documentation](https://docs.kinkudos.app/).
+
+Report unpatched security vulnerabilities privately, never in a public GitHub issue.
+
+## 📚 Documentation
+
+The complete documentation is available at **[docs.kinkudos.app](https://docs.kinkudos.app/)**.
+
+Useful starting points:
+
+- [What is KinKudos?](https://docs.kinkudos.app/start/what-is-kinkudos/)
+- [Is KinKudos right for my family?](https://docs.kinkudos.app/start/is-kinkudos-right/)
+- [Your first 15 minutes](https://docs.kinkudos.app/start/first-15-minutes/)
+- [Before you install](https://docs.kinkudos.app/server/before-installing/)
+
+## 📌 Project status and support
+
+KinKudos is actively maintained and used in a real household.
+
+Support is provided on a best-effort basis, without a service-level agreement or guaranteed response time. Only the latest published release is supported. Users should review release notes and maintain tested backups before updating.
+
+- [Latest releases](https://github.com/VooZ2/kinkudos/releases)
+- [Release notes](CHANGELOG.md)
+- [KinKudos documentation](https://docs.kinkudos.app/)
 
 ## 🧑‍💻 Local development
 
-KinKudos requires Python 3.12. After creating a virtual environment and installing `requirements.txt`:
+KinKudos requires Python 3.12. After creating a virtual environment and installing the dependencies from `requirements.txt`:
 
 ```bash
 python scripts/compile_translations.py
@@ -139,24 +253,36 @@ python manage.py test economy.tests
 python manage.py runserver
 ```
 
-`seed_demo` is development-only and refuses to modify a non-empty database.
+The `seed_demo` command is development-only and refuses to modify a non-empty database.
 
-## 🤝 Feedback and support
+Before changing authentication, permissions, point accounting, backup behaviour, or deployment logic, read the repository documentation and existing tests.
 
-Found a problem or have an idea?
+## 🤝 Contributing and feedback
 
-- Use the in-app feedback form to share it privately with the family administrator.
-- [Open a GitHub issue](https://github.com/VooZ2/kinkudos/issues) for reproducible software bugs.
-- Report an unpatched security vulnerability privately as described in
-  [SECURITY.md](SECURITY.md), never in a public issue.
-- Browse [release notes](CHANGELOG.md) to see what changed in each version.
+Bug reports, documentation corrections, translations, and focused pull requests are welcome. For larger changes, open an issue first to discuss the use case and scope.
+
+- [Search or open GitHub issues](https://github.com/VooZ2/kinkudos/issues)
+- [Read the release notes](CHANGELOG.md)
+- [Report security issues privately](SECURITY.md)
+
+The in-app feedback form sends feedback to the administrator of that KinKudos installation. It does not contact the KinKudos project maintainer.
+
+Do not publish passwords, secret keys, private family photos, database files, backup files, personal information, or unredacted logs in GitHub issues.
+
+## ☕ Support KinKudos
+
+KinKudos is free and open source. If it is useful to your family, you can support its continued maintenance with a one-time coffee.
+
+Support helps cover the domain, public demo, documentation, testing, and other project infrastructure. It does not provide priority support, guaranteed features, faster issue resolution, or influence over security decisions.
+
+<p>
+  <a href="https://buymeacoffee.com/vooz2">
+    <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-Support_KinKudos-FFDD00?logo=buymeacoffee&logoColor=000000" alt="Support KinKudos on Buy Me a Coffee">
+  </a>
+</p>
 
 ## 📄 License
 
 KinKudos is open-source software distributed under the [MIT License](LICENSE).
 
-## ⚠️ Disclaimer
-
-KinKudos is an independently developed open-source project built with extensive assistance from OpenAI Codex. Product decisions, requirements, testing, releases, infrastructure, and ongoing maintenance are managed by the project owner.
-
-The software is provided as-is, without warranty or a promise of support, fitness, or security for any particular use.
+The software is provided as-is, without warranty of any kind.
