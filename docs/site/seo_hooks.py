@@ -2,6 +2,7 @@
 
 import json
 import re
+from urllib.parse import urljoin, urlparse
 
 _LT_NAV_LABELS = {
     "Start": "Pradžia",
@@ -39,6 +40,14 @@ _LT_NAV_LABELS = {
     "Reference": "Atmintinė",
     "Roles, data, and limits": "Vaidmenys, duomenys ir ribos",
     "Release and support policy": "Leidimų ir palaikymo politika",
+}
+
+_PRIMARY_NAV_SECTION_IDS = {
+    "start": "__nav_1",
+    "parents": "__nav_2",
+    "security": "__nav_3",
+    "server": "__nav_4",
+    "reference": "__nav_7",
 }
 
 _SECTIONS = {
@@ -118,7 +127,15 @@ def _breadcrumb_data(page, language):
     }
 
 
-def _localize_primary_navigation(output):
+def _add_active_class(class_names, extra_classes):
+    classes = class_names.split()
+    for name in extra_classes:
+        if name not in classes:
+            classes.append(name)
+    return " ".join(classes)
+
+
+def _localize_primary_navigation(output, page):
     """Render Lithuanian primary navigation without relying on JavaScript."""
     start = output.find('<div class="md-sidebar md-sidebar--primary"')
     end = output.find('<div class="md-sidebar md-sidebar--secondary"', start)
@@ -143,6 +160,44 @@ def _localize_primary_navigation(output):
         ),
         navigation,
     )
+
+    section_key = page.file.src_uri.split("/", 1)[0]
+    section_id = _PRIMARY_NAV_SECTION_IDS.get(section_key)
+    if section_id:
+        section_pattern = re.compile(
+            rf'(<li class=")(?P<classes>[^"]*md-nav__item--nested[^"]*)'
+            rf'(">\s*<input class="md-nav__toggle md-toggle " type="checkbox" '
+            rf'id="{re.escape(section_id)}")(?P<checked> checked)?(\s*>)'
+        )
+
+        def activate_section(match):
+            classes = _add_active_class(
+                match.group("classes"),
+                ("md-nav__item--active", "md-nav__item--section"),
+            )
+            return (
+                f'{match.group(1)}{classes}{match.group(3)} checked{match.group(5)}'
+            )
+
+        navigation = section_pattern.sub(activate_section, navigation, count=1)
+
+    current_path = urlparse(page.canonical_url).path
+    for anchor in re.finditer(r'<a href="(?P<href>[^"]+)" class="md-nav__link">', navigation):
+        if urlparse(urljoin(page.canonical_url, anchor.group("href"))).path != current_path:
+            continue
+        item_start = navigation.rfind('<li class="', 0, anchor.start())
+        if item_start == -1:
+            break
+        class_start = item_start + len('<li class="')
+        class_end = navigation.find('"', class_start)
+        if class_end == -1:
+            break
+        classes = _add_active_class(
+            navigation[class_start:class_end], ("md-nav__item--active",)
+        )
+        navigation = navigation[:class_start] + classes + navigation[class_end:]
+        break
+
     return output[:start] + navigation + output[end:]
 
 
@@ -151,7 +206,7 @@ def on_post_page(output, page, config):
     language = _language(page)
     output = output.replace('<html lang="en"', f'<html lang="{language}"', 1)
     if language == "lt":
-        output = _localize_primary_navigation(output)
+        output = _localize_primary_navigation(output, page)
 
     is_homepage = page.is_homepage or page.file.src_uri == "index.lt.md"
     data = _website_data(page, language) if is_homepage else _breadcrumb_data(page, language)

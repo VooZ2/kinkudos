@@ -29,6 +29,8 @@ schema.
   ir pateikiama su „Traefik“ suderinama santykinių Nginx peradresavimų konfigūracija.
 - Lietuviškos dokumentacijos visas šoninis meniu ir jo nuorodos dabar įrašomi
   tiesiai sugeneruotame HTML, nepaliekant vertimo naršyklės JavaScript kodui.
+- Lietuviškuose puslapiuose dabar parenkama ir išskleidžiama ta pati aktyvi
+  šoninio meniu skiltis kaip angliškuose atitikmenyse.
 
 ## [26.4.9] - 2026-07-31
 

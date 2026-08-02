@@ -27,6 +27,8 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
   includes a Traefik-safe Nginx configuration for relative directory redirects.
 - Lithuanian documentation now renders its complete sidebar labels and links
   directly in the generated HTML instead of relying on client-side translation.
+- Lithuanian pages now select and expand the same active sidebar section as
+  their English counterparts.
 
 ## [26.4.9] - 2026-07-31
 
