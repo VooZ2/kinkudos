@@ -1,8 +1,13 @@
-# Greitas diegimas
+# Diegimas paruoštame Docker serveryje
 
 Šį būdą rinkitės naujai KinKudos instaliacijai serveryje, kuriame jau veikia „Docker Engine“, „Docker Compose“ įskiepis, domenas ir HTTPS reverse proxy, pavyzdžiui, „Traefik“, „Caddy“ ar „Nginx“.
 
-> Tai diegimo vadovas žmogui, kuris prižiūri serverį. Kasdieniam KinKudos naudojimui tėvams jis nereikalingas.
+> **Kam:** Serverio administratoriui<br>
+> **Sudėtingumas:** Linux ir Docker administravimas<br>
+> **Rezultatas:** Naujas KinKudos diegimas su pirmu šeimos paruošimu
+
+> Tai diegimo vadovas žmogui, kuris prižiūri serverį. Kasdieniam KinKudos
+> naudojimui tėvams jis nereikalingas.
 
 ## Prieš pradedant
 
@@ -22,13 +27,21 @@ Paruoštame serveryje paleiskite:
 curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh && sh /tmp/kinkudos-install.sh
 ```
 
-Diegiklis parsiunčia naujausią paskelbtą leidimą, patikrina jo SHA256 sumą, sukuria diegimo katalogą ir pradeda vedamą paruošimą. Jis paklaus kalbos, domeno, proxy režimo, šeimos pavadinimo, pirmos tėvų paskyros ir, jei norėsite, vaikų profilių.
+Diegiklis parsiunčia naujausią paskelbtą leidimą, patikrina jo SHA256 sumą,
+sukuria diegimo katalogą ir pradeda vedamą paruošimą. Kontrolinė suma patvirtina,
+kad parsisiųstas archyvas sutampa su to paties leidimo paskelbta suma; tai nėra
+atskira pasirašyta atestacija. Vedlys paklaus kalbos, domeno, proxy režimo,
+šeimos pavadinimo, pirmos tėvų paskyros ir, jei norėsite, vaikų profilių.
 
-Pabaigę atidarykite savo domeną per HTTPS ir prisijunkite pirmąja tėvų paskyra.
+Pabaigę patikrinkite konteinerių būseną ir atidarykite savo domeną per HTTPS,
+tada prisijunkite pirmąja tėvų paskyra. Jei neveikia HTTPS, DNS arba
+konteineris, sustokite ir naudokite diegimo diagnostiką, o ne paleiskite naujo
+diegimo vedlį ant jau esančių failų.
 
 ## Ko šis diegiklis nedaro
 
-- Jis nepakeičia esamos KinKudos instaliacijos. Atnaujinimams naudokite [diegimo ir priežiūros vadovą](../deployment-and-maintenance.lt.md).
+- Jis nepakeičia esamos KinKudos instaliacijos. Esamam serveriui naudokite
+  [atnaujinimą, kopijas ir atkūrimą](../server/updates-and-recovery.lt.md).
 - Jis nesukuria už jus DNS įrašo ar reverse proxy.
 - Jis nesiunčia šeimos duomenų į „GitHub“ ar „Docker Hub“. Paskelbtame „Docker“ atvaizde yra tik programa; duomenų bazė, nuotraukos, kopijos ir paslaptys lieka jūsų serveryje.
 

@@ -91,8 +91,10 @@ Plačiau skaitykite [architektūros ir saugumo apžvalgoje](docs/ARCHITECTURE.md
 
 ## 📚 Kaip naudotis KinKudos
 
-- **[Atidaryti dokumentaciją](https://docs.kinkudos.app/index.lt/)** — pradėkite nuo pirmų 15
-  minučių, tada raskite tėvų vadovus, saugumą, priežiūrą ir pagalbą.
+- **[Atidaryti dokumentaciją](https://docs.kinkudos.app/index.lt/)** — sužinokite,
+  [kas yra KinKudos](https://docs.kinkudos.app/start/what-is-kinkudos.lt/),
+  [ar savarankiškas diegimas tinka šeimai](https://docs.kinkudos.app/start/is-kinkudos-right.lt/),
+  ir atlikite [pirmas 15 minučių](https://docs.kinkudos.app/start/first-15-minutes.lt/).
 
 ## ⚡ Greitas diegimas
 
@@ -113,13 +115,19 @@ KinKudos instaliacijai; esamos instaliacijos atnaujinamos pagal atskirą gidą.
 2. **Paleiskite vedlį** iš paskelbto leidimo.
 3. **Sukurkite šeimą** — diegiklis gali sukurti pirmą tėvų paskyrą ir vaikų profilius.
 
-👉 **[Atidaryti visą diegimo ir atnaujinimo gidą](deploy/README.lt.md)**
+👉 **[Patikrinti serverio reikalavimus ir diegti KinKudos](https://docs.kinkudos.app/server/before-installing.lt/)**
 
-Gide aprašytas Docker diegimas, leidimo patikra, Caddy/Nginx/Traefik ir konteinerinių proxy variantai, pirmos šeimos sukūrimas, atnaujinimai, kopijos ir diagnostika.
+Dokumentacijoje aprašytas Docker diegimas, leidimo patikra, Caddy/Nginx/Traefik
+ir konteinerinių proxy variantai, pirmos šeimos sukūrimas,
+[atnaujinimas ir atkūrimas](https://docs.kinkudos.app/server/updates-and-recovery.lt/)
+bei problemų sprendimas.
 
 ### 🖥️ Neturite serverio namuose?
 
-Šeimai, neturinčiai namų serverio, mažas VPS yra paprasčiausias būdas privačiai naudoti KinKudos internete. Rekomenduojame Docker tinkamą [Hostinger VPS](https://www.hostinger.com/lt?REFERRALCODE=LKIGEDIMICSU) *(referral nuoroda)* ir tą patį [visą diegimo gidą](deploy/README.lt.md).
+Šeimai, neturinčiai namų serverio, mažas VPS yra paprasčiausias būdas privačiai
+naudoti KinKudos internete. Rekomenduojame Docker tinkamą [Hostinger
+VPS](https://www.hostinger.com/lt?REFERRALCODE=LKIGEDIMICSU) *(referral nuoroda)*
+ir tą patį [serverio vadovą](https://docs.kinkudos.app/server/before-installing.lt/).
 
 ## 🧑‍💻 Vietinis kūrimas
 
@@ -140,6 +148,8 @@ Radote problemą ar turite idėją?
 
 - Naudokite programoje esančią atsiliepimų formą, kad privačiai pasidalintumėte su šeimos administratoriumi.
 - [Atidarykite GitHub problemą](https://github.com/VooZ2/kinkudos/issues), jei radote pakartojamą programos klaidą.
+- Apie nepataisytą saugumo pažeidžiamumą praneškite privačiai, kaip nurodyta
+  [SECURITY.md](SECURITY.md), o ne viešame Issue.
 - Peržiūrėkite [pakeitimų istoriją](CHANGELOG.lt.md), kad sužinotumėte, kas keitėsi kiekviename leidime.
 
 ## 📄 Licencija

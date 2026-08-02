@@ -91,8 +91,10 @@ Read more in the [architecture and security overview](docs/ARCHITECTURE.md).
 
 ## 📚 Using KinKudos
 
-- **[Open the documentation](https://docs.kinkudos.app/)** — start with the first 15
-  minutes, then find parent guidance, security, maintenance, and help.
+- **[Open the documentation](https://docs.kinkudos.app/)** — learn [what
+  KinKudos is](https://docs.kinkudos.app/start/what-is-kinkudos/), decide
+  [whether self-hosting fits your family](https://docs.kinkudos.app/start/is-kinkudos-right/),
+  and follow [the first 15 minutes](https://docs.kinkudos.app/start/first-15-minutes/).
 
 ## ⚡ Quick setup
 
@@ -112,13 +114,19 @@ KinKudos installation; existing installations use the separate upgrade guide.
 2. **Follow the guided installer** from the published release.
 3. **Create your family** — the installer can create the first parent account and child profiles.
 
-👉 **[Open the complete installation and upgrade guide](deploy/README.md)**
+👉 **[Check server requirements and install KinKudos](https://docs.kinkudos.app/server/before-installing/)**
 
-The guide covers Docker installation, release verification, Caddy/Nginx/Traefik and container-proxy setups, first-family setup, updates, backups, and diagnostics.
+The documentation covers Docker installation, release verification,
+Caddy/Nginx/Traefik and container-proxy setups, first-family setup,
+[updates and recovery](https://docs.kinkudos.app/server/updates-and-recovery/),
+and troubleshooting.
 
 ### 🖥️ No server at home?
 
-For families without a home server, a small VPS is the simplest way to run KinKudos privately on the internet. We recommend a Docker-capable [Hostinger VPS](https://www.hostinger.com/lt?REFERRALCODE=LKIGEDIMICSU) *(referral link)*, then follow the same [complete installation guide](deploy/README.md).
+For families without a home server, a small VPS is the simplest way to run
+KinKudos privately on the internet. We recommend a Docker-capable [Hostinger
+VPS](https://www.hostinger.com/lt?REFERRALCODE=LKIGEDIMICSU) *(referral link)*,
+then follow the same [server guide](https://docs.kinkudos.app/server/before-installing/).
 
 ## 🧑‍💻 Local development
 
@@ -139,6 +147,8 @@ Found a problem or have an idea?
 
 - Use the in-app feedback form to share it privately with the family administrator.
 - [Open a GitHub issue](https://github.com/VooZ2/kinkudos/issues) for reproducible software bugs.
+- Report an unpatched security vulnerability privately as described in
+  [SECURITY.md](SECURITY.md), never in a public issue.
 - Browse [release notes](CHANGELOG.md) to see what changed in each version.
 
 ## 📄 License

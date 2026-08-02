@@ -42,19 +42,29 @@ markdown_extensions:
   - md_in_html
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - pymdownx.tabbed:
       alternate_style: true
 
 nav:
   - Start:
       - What is KinKudos: start/what-is-kinkudos.md
+      - Is KinKudos right for your family?: start/is-kinkudos-right.md
+      - What self-hosting means: start/what-self-hosting-means.md
       - Quick install: start/quick-install.md
       - Your first 15 minutes: start/first-15-minutes.md
       - Pair a child device: start/pair-a-child-device.md
-  - For parents:
-      - Parent dashboard and child cards: parents/dashboard-and-child-cards.md
-      - Tasks and approvals: parents/tasks-and-approvals.md
-      - Rewards, goals, and lottery: parents/rewards-goals-and-lottery.md
+  - Parents:
+      - Parent dashboard: parents/dashboard-and-child-cards.md
+      - Create and manage tasks: parents/create-and-manage-tasks.md
+      - Review completed tasks: parents/review-completed-tasks.md
+      - Assign tasks for today: parents/assign-tasks-today.md
+      - Points, penalties, and corrections: parents/points-and-corrections.md
+      - Create and manage rewards: parents/create-and-manage-rewards.md
+      - Savings goals and suggestions: parents/savings-goals.md
+      - Lottery tickets: parents/lottery-tickets.md
       - Child space: parents/child-space.md
       - Parent settings: parents/settings.md
   - Security and privacy:
@@ -63,19 +73,30 @@ nav:
       - Notifications and installing KinKudos: security/notifications-and-pwa.md
       - Network access: security/network-access.md
       - Backups: security/backups.md
-  - Installation and maintenance: deployment-and-maintenance.md
-  - Quick help: quick-help.md
+  - Server:
+      - Overview: deployment-and-maintenance.md
+      - Before installing: server/before-installing.md
+      - Updates, backups, and recovery: server/updates-and-recovery.md
+  - Help: quick-help.md
   - Reference:
       - Release and support policy: reference/release-and-support-policy.md
   - Lietuviškai:
       - Pradžia: index.lt.md
       - Kas yra KinKudos: start/what-is-kinkudos.lt.md
+      - Ar KinKudos tinka jūsų šeimai?: start/is-kinkudos-right.lt.md
+      - Ką reiškia savarankiškas diegimas?: start/what-self-hosting-means.lt.md
       - Greitas diegimas: start/quick-install.lt.md
       - Pirmos 15 minučių: start/first-15-minutes.lt.md
       - Vaiko įrenginio susiejimas: start/pair-a-child-device.lt.md
-      - Tėvų skydelis ir vaikų kortelės: parents/dashboard-and-child-cards.lt.md
-      - Darbai ir patvirtinimai: parents/tasks-and-approvals.lt.md
-      - Prizai, tikslai ir loterija: parents/rewards-goals-and-lottery.lt.md
+      - Tėvams:
+          - Tėvų skydelis: parents/dashboard-and-child-cards.lt.md
+          - Kurti ir valdyti darbus: parents/create-and-manage-tasks.lt.md
+          - Peržiūrėti atliktus darbus: parents/review-completed-tasks.lt.md
+          - Paskirti darbus šiandienai: parents/assign-tasks-today.lt.md
+          - Taškai, nuobaudos ir korekcijos: parents/points-and-corrections.lt.md
+          - Kurti ir valdyti prizus: parents/create-and-manage-rewards.lt.md
+          - Taupymo tikslai ir pasiūlymai: parents/savings-goals.lt.md
+          - Loterijos bilietai: parents/lottery-tickets.lt.md
       - Vaiko aplinka: parents/child-space.lt.md
       - Tėvų nustatymai: parents/settings.lt.md
       - Paskyros ir įrenginiai: security/accounts-and-devices.lt.md
@@ -83,6 +104,9 @@ nav:
       - Pranešimai ir KinKudos diegimas: security/notifications-and-pwa.lt.md
       - Tinklo prieiga: security/network-access.lt.md
       - Atsarginės kopijos: security/backups.lt.md
-      - Diegimas ir priežiūra: deployment-and-maintenance.lt.md
+      - Serveris:
+          - Apžvalga: deployment-and-maintenance.lt.md
+          - Prieš diegiant: server/before-installing.lt.md
+          - Atnaujinimai, kopijos ir atkūrimas: server/updates-and-recovery.lt.md
       - Greita pagalba: quick-help.lt.md
       - Leidimų ir palaikymo politika: reference/release-and-support-policy.lt.md

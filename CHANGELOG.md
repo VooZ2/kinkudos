@@ -11,6 +11,8 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 - Public security-reporting and release-support policies explain the private
   vulnerability channel, supported-version scope, and best-effort support
   boundaries.
+- The hosted guide now offers an English/Lithuanian start path, focused parent
+  workflows, and server-administration overviews for installation and recovery.
 
 ### Changed
 
