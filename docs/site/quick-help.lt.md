@@ -28,4 +28,16 @@
 
 Privačiam šeimos klausimui naudokite programos atsiliepimų formą. Apie pakartojamą programos klaidą praneškite per [GitHub Issues](https://github.com/VooZ2/kinkudos/issues), bet niekada nekelkite šeimos duomenų, prisijungimo duomenų ar privačių ekrano nuotraukų.
 
+## Pagalba, palaikymas ir saugumas
+
+- Prieš prašydami pagalbos atnaujinkite iki naujausio paskelbto leidimo.
+  KinKudos yra pagal galimybes prižiūrimas bendruomenės projektas; nėra
+  garantuoto atsakymo laiko ar nestandartinių serverių konfigūracijų palaikymo.
+  Perskaitykite [leidimų ir palaikymo politiką](reference/release-and-support-policy.lt.md).
+- GitHub Issues naudokite tik pakartojamai KinKudos klaidai ar funkcijos idėjai,
+  o ne slaptažodžiams, paslaptims, duomenų bazėms, kopijoms, privačiai šeimos
+  informacijai, nuotraukoms ar neredaguotiems žurnalams.
+- Apie nepataisytą saugumo pažeidžiamumą nepraneškite viešame Issue. Vadovaukitės
+  repozitorijos [saugumo politika](https://github.com/VooZ2/kinkudos/security/policy).
+
 [Grįžti į dokumentacijos pradžią →](index.lt.md) · [English](quick-help.md)

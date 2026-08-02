@@ -28,4 +28,16 @@
 
 For a private family question, use the in-app feedback form. For a reproducible software bug, [open a GitHub issue](https://github.com/VooZ2/kinkudos/issues) and never include family data, credentials, or screenshots containing private information.
 
+## Help, support, and security
+
+- Update to the latest published release before requesting help. KinKudos is a
+  community project maintained on a best-effort basis; there is no guaranteed
+  response time or support for custom server setups. Read the [release and
+  support policy](reference/release-and-support-policy.md).
+- Use GitHub Issues only for a reproducible KinKudos bug or feature request,
+  never for passwords, secrets, databases, backups, private family information,
+  photos, or unredacted logs.
+- Do not report an unpatched security vulnerability in a public Issue. Follow
+  the repository [security policy](https://github.com/VooZ2/kinkudos/security/policy).
+
 [Back to documentation home →](index.md) · [Lietuviškai](quick-help.lt.md)

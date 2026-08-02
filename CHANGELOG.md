@@ -13,6 +13,8 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
   boundaries.
 - The hosted guide now offers an English/Lithuanian start path, focused parent
   workflows, and server-administration overviews for installation and recovery.
+- Family administration, data limits, support boundaries, and private security
+  reporting are now easier to find from the public guide.
 
 ### Changed
 

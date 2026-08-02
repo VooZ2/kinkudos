@@ -15,6 +15,8 @@ schema.
   palaikymo apimtį.
 - Viešas vadovas dabar pateikia anglišką ir lietuvišką pradžios kelią,
   konkrečius tėvų darbo srautus bei serverio diegimo ir atkūrimo apžvalgas.
+- Šeimos administravimą, duomenų ribas, palaikymo ribas ir privatų saugumo
+  pranešimą dabar lengviau rasti viešame vadove.
 
 ### Pakeista
 

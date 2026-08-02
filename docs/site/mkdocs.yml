@@ -77,8 +77,10 @@ nav:
       - Overview: deployment-and-maintenance.md
       - Before installing: server/before-installing.md
       - Updates, backups, and recovery: server/updates-and-recovery.md
+  - Family administration: family-administration.md
   - Help: quick-help.md
   - Reference:
+      - Roles, data, and limits: reference/roles-and-data.md
       - Release and support policy: reference/release-and-support-policy.md
   - Lietuviškai:
       - Pradžia: index.lt.md
@@ -108,5 +110,8 @@ nav:
           - Apžvalga: deployment-and-maintenance.lt.md
           - Prieš diegiant: server/before-installing.lt.md
           - Atnaujinimai, kopijos ir atkūrimas: server/updates-and-recovery.lt.md
+      - Šeimos administravimas: family-administration.lt.md
       - Greita pagalba: quick-help.lt.md
+      - Atmintinė:
+          - Vaidmenys, duomenys ir ribos: reference/roles-and-data.lt.md
       - Leidimų ir palaikymo politika: reference/release-and-support-policy.lt.md
