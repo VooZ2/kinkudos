@@ -63,7 +63,7 @@ Explore KinKudos without installing anything:
 - **Parent account:** `demo` / `demo`
 - **Child PIN:** `1234`
 
-The public demo resets regularly, so you can experiment freely.
+The public demo resets every hour, so you can experiment freely.
 
 ## 🎯 What families can do
 

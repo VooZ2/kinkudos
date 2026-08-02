@@ -63,7 +63,7 @@ Susipažinkite su KinKudos nieko nediegdami:
 - **Tėvų paskyra:** `demo` / `demo`
 - **Vaiko PIN:** `1234`
 
-Vieša demonstracija reguliariai atkuriama, todėl galite drąsiai išbandyti.
+Vieša demonstracija atkuriama kas valandą, todėl galite drąsiai išbandyti.
 
 ## 🎯 Ką gali šeima
 
