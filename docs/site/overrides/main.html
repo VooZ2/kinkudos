@@ -74,6 +74,25 @@
   {% endif %}
 {% endblock %}
 
+{% block content %}
+  {% if page %}
+    {% set source_uri = page.file.src_uri %}
+    {% set doc_language = "de" if source_uri == "index.de.md" or source_uri.endswith(".de.md") else ("fr" if source_uri == "index.fr.md" or source_uri.endswith(".fr.md") else "") %}
+    {% if doc_language == "de" %}
+      <aside class="kinkudos-translation-scope" role="note" aria-label="Übersetzungsumfang">
+        <p><strong>Diese Übersetzung enthält nur den Schnellstart.</strong> Die vollständige Dokumentation zu Installation, Serververwaltung, Backups und Fehlerbehebung ist derzeit auf Englisch und Litauisch verfügbar.</p>
+        <p><a href="/">Vollständige englische Dokumentation öffnen →</a></p>
+      </aside>
+    {% elif doc_language == "fr" %}
+      <aside class="kinkudos-translation-scope" role="note" aria-label="Étendue de la traduction">
+        <p><strong>Cette traduction contient uniquement le guide de démarrage rapide.</strong> La documentation complète sur l’installation, l’administration du serveur, les sauvegardes et le dépannage est actuellement disponible en anglais et en lituanien.</p>
+        <p><a href="/">Ouvrir la documentation complète en anglais →</a></p>
+      </aside>
+    {% endif %}
+  {% endif %}
+  {{ super() }}
+{% endblock %}
+
 {% block tabs %}
   {% set source_uri = page.file.src_uri if page else "" %}
   {% set doc_language = "lt" if source_uri == "index.lt.md" or source_uri.endswith(".lt.md") else ("de" if source_uri == "index.de.md" or source_uri.endswith(".de.md") else ("fr" if source_uri == "index.fr.md" or source_uri.endswith(".fr.md") else "en")) %}

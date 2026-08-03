@@ -1,50 +1,50 @@
 ---
 title: KinKudos dokumentacija — diegimo ir naudojimo vadovas
-description: Paruoškite ir naudokite KinKudos šeimoje, peržiūrėkite tėvų bei vaikų vadovus arba įdiekite ir prižiūrėkite programą savo serveryje.
+description: Įdiekite KinKudos, naudokite ją šeimos kasdienybėje, prižiūrėkite savo serverį arba raskite pagalbą iškilus problemai.
 hide:
   - toc
 ---
 
 # KinKudos dokumentacija
 
-Sužinokite, kaip paruošti ir naudoti KinKudos šeimoje arba prižiūrėti serverį,
-kuris ją palaiko.
+Įdiekite KinKudos, naudokite ją šeimos kasdienybėje, prižiūrėkite serverį arba
+raskite pagalbą iškilus problemai.
 
-[Pradėti naudoti KinKudos](start/first-15-minutes.lt.md){ .md-button .md-button--primary }
-[Išbandyti demonstraciją](https://demo.kinkudos.app/){ .md-button }
+[Įdiegti KinKudos](installation/index.lt.md){ .md-button .md-button--primary }
+[Išbandyti demonstracinę versiją](https://demo.kinkudos.app/){ .md-button }
 
-> **Prieš diegdami:** KinKudos diegiama savarankiškai. Reikia Linux serverio,
-> Docker, hosto vardo arba domeno, HTTPS ir žmogaus, turinčio pagrindinius
-> serverio administravimo įgūdžius. [Pasirinkite diegimo būdą →](installation/index.lt.md)
+> **Savarankiškai diegiama:** rinkitės paprastesnį Hostinger VPS kelią arba
+> įdiekite KinKudos savo jau valdomame serveryje.
+> [Palyginti diegimo būdus →](installation/index.lt.md)
 
-<div class="grid cards" markdown>
+<div class="grid cards kinkudos-home-paths" markdown>
 
--   :material-rocket-launch-outline: **Dar nepažįstate KinKudos**
+-   :material-cloud-check-outline: **Įdiekite KinKudos Hostinger VPS** <span class="kinkudos-path-badge">Paprasčiausias diegimas</span>
 
     ---
 
-    Supraskite šeimos programą, savarankišką diegimą ir trumpiausią saugų kelią
-    iki pirmo paruošimo.
+    Įdiekite KinKudos palaikomame Hostinger VPS serveryje, tada naršyklėje
+    saugiai sukurkite šeimą ir pirmąją tėvų paskyrą.
 
-    [Pradėti čia →](start/what-is-kinkudos.lt.md)
+    [Atidaryti Hostinger vadovą →](installation/hostinger.lt.md)
+
+-   :material-server-outline: **Jau turite serverį?**
+
+    ---
+
+    Naudokite vedamąjį diegiklį arba Docker Compose savo VPS, NAS ar namų
+    serveryje.
+
+    [Pasirinkti diegimo būdą →](installation/index.lt.md)
 
 -   :material-account-heart-outline: **Tėvams**
 
     ---
 
-    Kurkite darbus ir prizus, peržiūrėkite prašymus, supraskite taškus ir
-    padėkite vaikui naudotis savo aplinka.
+    Kurkite užduotis ir apdovanojimus, peržiūrėkite prašymus, valdykite taškus
+    ir padėkite vaikui naudotis savo aplinka.
 
     [Atidaryti tėvų vadovą →](parents/dashboard-and-child-cards.lt.md)
-
--   :material-server-outline: **Serverio administratoriui**
-
-    ---
-
-    Diekite, atnaujinkite, kurkite kopijas, atkurkite ir prižiūrėkite KinKudos
-    savo valdomame serveryje.
-
-    [Atidaryti serverio vadovą →](installation/index.lt.md)
 
 -   :material-lifebuoy: **Kažkas neveikia?**
 
@@ -56,6 +56,10 @@ kuris ją palaiko.
     [Spręsti problemą →](troubleshooting.lt.md)
 
 </div>
+
+**Administruokite veikiantį KinKudos serverį.** Atnaujinkite KinKudos, kurkite
+ir atkurkite kopijas, tikrinkite žurnalus bei naudokite CLI atkūrimo įrankius.
+[Atidaryti serverio administravimą →](administration/index.lt.md)
 
 ## Populiariausi vadovai
 
@@ -73,5 +77,3 @@ kuris ją palaiko.
 Šioje viešoje dokumentacijoje naudojama slapukų nenaudojanti „Umami“ analitika,
 kad suprastume, kurie vadovai naudingi. Privati KinKudos šeimos programa
 nestebima.
-
-<small>[KinKudos svetainė](https://kinkudos.app/) · [Demonstracija](https://demo.kinkudos.app/) · [GitHub](https://github.com/VooZ2/kinkudos) · [Leidimai](https://github.com/VooZ2/kinkudos/releases) · [Pranešti apie pakartojamą klaidą](https://github.com/VooZ2/kinkudos/issues)</small>

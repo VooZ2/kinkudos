@@ -258,6 +258,50 @@ button.md-button:disabled,
   background: var(--kinkudos-plum-950);
 }
 
+.md-footer-meta__inner {
+  justify-content: center;
+}
+
+.kinkudos-project-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.08rem;
+  width: 100%;
+  padding: 0.55rem 0;
+  color: rgb(255 255 255 / 72%);
+  font-size: 0.72rem;
+  font-weight: 750;
+  text-align: center;
+}
+
+.kinkudos-project-footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.42rem;
+  border-radius: 0.55rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.kinkudos-project-footer a:hover,
+.kinkudos-project-footer a:focus-visible {
+  color: #fff;
+  background: rgb(255 255 255 / 10%);
+}
+
+.kinkudos-project-footer a:focus-visible {
+  outline: 0.18rem solid #fff;
+  outline-offset: 0.12rem;
+}
+
+.kinkudos-project-footer__github .twemoji {
+  width: 0.85rem;
+  height: 0.85rem;
+}
+
 .md-typeset .grid.cards > ul > li {
   border-color: var(--kinkudos-card-border);
   transition: border-color 140ms ease, background-color 140ms ease;
@@ -270,6 +314,7 @@ button.md-button:disabled,
 
 .md-typeset .grid.cards > ul > li > p:first-child {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.45rem;
 }
@@ -278,6 +323,57 @@ button.md-button:disabled,
   width: 1.25rem;
   height: 1.25rem;
   flex: 0 0 1.25rem;
+}
+
+.md-typeset .kinkudos-home-paths > ul > li:first-child {
+  border-color: rgb(76 29 149 / 38%);
+  background: rgb(76 29 149 / 4%);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .kinkudos-home-paths > ul > li:first-child {
+  border-color: rgb(221 208 255 / 42%);
+  background: rgb(221 208 255 / 7%);
+}
+
+.kinkudos-path-badge {
+  margin-inline-start: auto;
+  padding: 0.12rem 0.42rem;
+  border: 1px solid rgb(76 29 149 / 24%);
+  border-radius: 999px;
+  color: var(--kinkudos-plum-800);
+  background: rgb(76 29 149 / 8%);
+  font-size: 0.62rem;
+  font-weight: 750;
+  line-height: 1.45;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+[data-md-color-scheme="slate"] .kinkudos-path-badge {
+  border-color: rgb(221 208 255 / 34%);
+  color: var(--kinkudos-plum-200);
+  background: rgb(221 208 255 / 11%);
+}
+
+.kinkudos-translation-scope {
+  margin: 0 0 1.5rem;
+  padding: 0.75rem 0.9rem;
+  border-inline-start: 0.2rem solid var(--kinkudos-plum-700);
+  border-radius: 0.2rem 0.65rem 0.65rem 0.2rem;
+  background: rgb(76 29 149 / 6%);
+}
+
+.kinkudos-translation-scope p {
+  margin: 0;
+}
+
+.kinkudos-translation-scope p + p {
+  margin-top: 0.35rem;
+}
+
+[data-md-color-scheme="slate"] .kinkudos-translation-scope {
+  border-inline-start-color: var(--kinkudos-plum-200);
+  background: rgb(221 208 255 / 8%);
 }
 
 .kinkudos-language-switcher {

@@ -1,0 +1,22 @@
+{% set source_uri = page.file.src_uri if page else "" %}
+{% set doc_language = "lt" if source_uri == "index.lt.md" or source_uri.endswith(".lt.md") else ("de" if source_uri == "index.de.md" or source_uri.endswith(".de.md") else ("fr" if source_uri == "index.fr.md" or source_uri.endswith(".fr.md") else "en")) %}
+{% set documentation_url = "/index.lt/" if doc_language == "lt" else ("/index.de/" if doc_language == "de" else ("/index.fr/" if doc_language == "fr" else "/")) %}
+{% set release_label = "Atidaryti leidimų istoriją" if doc_language == "lt" else ("Versionshinweise öffnen" if doc_language == "de" else ("Ouvrir les notes de version" if doc_language == "fr" else "Open release notes")) %}
+{% set documentation_label = "Dokumentacija" if doc_language == "lt" else ("Dokumentation" if doc_language == "de" else ("Documentation" if doc_language == "fr" else "Documentation")) %}
+{% set bug_label = "Pranešti klaidą" if doc_language == "lt" else ("Fehler melden" if doc_language == "de" else ("Signaler un bug" if doc_language == "fr" else "Report a bug")) %}
+{% set bug_aria = "Pranešti apie „KinKudos“ programos klaidą „GitHub“" if doc_language == "lt" else ("Einen KinKudos-Softwarefehler auf GitHub melden" if doc_language == "de" else ("Signaler un bug du logiciel KinKudos sur GitHub" if doc_language == "fr" else "Report a KinKudos software bug on GitHub")) %}
+
+<nav class="kinkudos-project-footer" aria-label="{{ 'Projekto nuorodos' if doc_language == 'lt' else ('Projektlinks' if doc_language == 'de' else ('Liens du projet' if doc_language == 'fr' else 'Project links')) }}">
+  <a href="https://github.com/VooZ2/kinkudos/releases/tag/v{{ config.extra.app_version }}" aria-label="{{ release_label }}">
+    KinKudos · v{{ config.extra.app_version }}
+  </a>
+  <span aria-hidden="true">·</span>
+  <a class="kinkudos-project-footer__github" href="https://github.com/VooZ2/kinkudos" aria-label="GitHub">
+    <span class="twemoji" aria-hidden="true">{% include ".icons/fontawesome/brands/github.svg" %}</span>
+    <span>GitHub</span>
+  </a>
+  <span aria-hidden="true">·</span>
+  <a href="{{ documentation_url }}">{{ documentation_label }}</a>
+  <span aria-hidden="true">·</span>
+  <a href="https://github.com/VooZ2/kinkudos/issues" aria-label="{{ bug_aria }}">{{ bug_label }}</a>
+</nav>

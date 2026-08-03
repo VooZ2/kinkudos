@@ -56,6 +56,9 @@ theme:
 extra_css:
   - stylesheets/kinkudos.css
 
+extra:
+  app_version: "26.5.1"
+
 markdown_extensions:
   - admonition
   - attr_list

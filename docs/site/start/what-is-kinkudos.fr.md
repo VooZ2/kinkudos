@@ -1,15 +1,15 @@
 # Qu’est-ce que KinKudos ?
 
-KinKudos est une application privée et auto-hébergée destinée à une seule
+KinKudos est une application privée et auto-hébergée conçue pour une seule
 famille. Les enfants accomplissent des tâches, gagnent des points et demandent
 des récompenses ; les parents examinent les demandes et prennent les décisions.
 
 Il n’y a ni publicité, ni analyse intégrée, ni espace familial public partagé.
-La base de données, les photos et les identifiants restent chez la personne qui
-exploite l’installation familiale.
+La base de données, les photos et les identifiants restent sur votre propre
+serveur.
 
 ```text
-Tâche → envoi → décision du parent → points → récompense ou objectif → historique
+Tâche → soumission → décision du parent → points → récompense ou objectif → historique
 ```
 
 ## Fonctionnalités principales

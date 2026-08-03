@@ -1,32 +1,40 @@
 ---
 title: KinKudos Documentation — Setup, Parent Guide & Self-Hosting
-description: Set up and use KinKudos with your family, explore the parent and child guides, or install and maintain the self-hosted app on your server.
+description: Install KinKudos, use it with your family, manage your self-hosted server, or find help when something goes wrong.
 hide:
   - toc
 ---
 
 # KinKudos documentation
 
-Learn how to set up and use KinKudos with your family, or manage the server
-that keeps it running.
+Install KinKudos, use it with your family, manage the server, or find help when
+something goes wrong.
 
-[Start using KinKudos](start/first-15-minutes.md){ .md-button .md-button--primary }
+[Install KinKudos](installation/index.md){ .md-button .md-button--primary }
 [Try the live demo](https://demo.kinkudos.app/){ .md-button }
 
-> **Before you install:** KinKudos is self-hosted. You need a Linux server,
-> Docker, a hostname or domain, HTTPS, and someone with basic server
-> administration skills. [Choose an installation method →](installation/index.md)
+> **Self-hosted by design:** Choose the simpler Hostinger VPS path or install
+> KinKudos on a server you already manage.
+> [Compare installation methods →](installation/index.md)
 
-<div class="grid cards" markdown>
+<div class="grid cards kinkudos-home-paths" markdown>
 
--   :material-rocket-launch-outline: **New to KinKudos**
+-   :material-cloud-check-outline: **Install on a Hostinger VPS** <span class="kinkudos-path-badge">Simplest setup</span>
 
     ---
 
-    Understand the family app, self-hosting, and the shortest safe path to a
-    first setup.
+    Install KinKudos on a supported Hostinger VPS, then securely create your
+    family and first parent account in the browser.
 
-    [Start here →](start/what-is-kinkudos.md)
+    [Open the Hostinger guide →](installation/hostinger.md)
+
+-   :material-server-outline: **Already have a server?**
+
+    ---
+
+    Use the guided installer or Docker Compose on your VPS, NAS, or home server.
+
+    [Choose a server installation →](installation/index.md)
 
 -   :material-account-heart-outline: **For parents**
 
@@ -36,15 +44,6 @@ that keeps it running.
     child use their own space.
 
     [Open the parent guide →](parents/dashboard-and-child-cards.md)
-
--   :material-server-outline: **For server administrators**
-
-    ---
-
-    Install, update, back up, restore, and maintain KinKudos on a server you
-    control.
-
-    [Open the server guide →](installation/index.md)
 
 -   :material-lifebuoy: **Something not working?**
 
@@ -56,6 +55,10 @@ that keeps it running.
     [Troubleshoot →](troubleshooting.md)
 
 </div>
+
+**Manage an existing KinKudos server.** Update, back up, restore, inspect logs,
+and use CLI recovery tools.
+[Open server administration →](administration/index.md)
 
 ## Popular guides
 
@@ -73,5 +76,3 @@ that keeps it running.
 This public documentation uses cookie-free Umami analytics to understand which
 guides are useful. It does not track activity inside the private KinKudos family
 application.
-
-<small>[KinKudos website](https://kinkudos.app/) · [Live demo](https://demo.kinkudos.app/) · [GitHub](https://github.com/VooZ2/kinkudos) · [Releases](https://github.com/VooZ2/kinkudos/releases) · [Report a reproducible bug](https://github.com/VooZ2/kinkudos/issues)</small>

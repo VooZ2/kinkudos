@@ -26,14 +26,8 @@ propre serveur et configurer votre première famille en toute sécurité.
 - [Vos 15 premières minutes](start/first-15-minutes.fr.md)
 - [Associer l’appareil d’un enfant](start/pair-a-child-device.fr.md)
 
-La documentation complète destinée aux parents, à la sécurité et à
-l’administration du serveur est actuellement disponible en
-[anglais](index.md) et en [lituanien](index.lt.md).
-
 ## Confidentialité de cette documentation
 
 Cette documentation publique utilise Umami sans cookies pour comprendre quels
 guides sont utiles. Elle ne suit aucune activité dans l’application familiale
 KinKudos privée.
-
-<small>[Site KinKudos](https://kinkudos.app/) · [Démo](https://demo.kinkudos.app/) · [GitHub](https://github.com/VooZ2/kinkudos) · [Versions](https://github.com/VooZ2/kinkudos/releases)</small>
