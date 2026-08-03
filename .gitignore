@@ -14,6 +14,8 @@ staticfiles/
 media/
 secrets/
 backups/
+!docs/site/backups/
+!docs/site/backups/*.md
 backup-state/
 
 # Maintainer-only local documentation
