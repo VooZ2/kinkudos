@@ -33,4 +33,4 @@ Task → submission → parent decision → points → reward or goal → histor
 
 KinKudos is not a bank, parental-monitoring tool, or social network. It does not track a child’s location, read device content, scan private messages, or publish family activity. It helps a family agree on everyday tasks and rewards in one place.
 
-[Quick install →](quick-install.md) · [Your first 15 minutes →](first-15-minutes.md) · [Lietuviškai](what-is-kinkudos.lt.md)
+[Quick install →](../installation/guided-installer.md) · [Your first 15 minutes →](first-15-minutes.md) · [Lietuviškai](what-is-kinkudos.lt.md)

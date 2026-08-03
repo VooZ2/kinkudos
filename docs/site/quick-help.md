@@ -13,7 +13,7 @@
 | I want to install the app or enable the bell | Install the PWA on that device, then accept its notification permission. | [Notifications and installing KinKudos](security/notifications-and-pwa.md) |
 | Password-reset email does not arrive | Check whether SMTP is enabled, verified, and using the intended sender and recipient settings. | [Parent settings — SMTP](parents/settings.md#4-email-settings-smtp) |
 | Access from home stopped working | Check existing IP restrictions with the parent administrator. Do not guess at a replacement allowlist. | [Network access](security/network-access.md) |
-| Backup needs attention | Record the displayed error, then check the backup service and storage credentials with the server administrator. | [Backups](security/backups.md) |
+| Backup needs attention | Record the displayed error, then check the backup service and storage credentials with the server administrator. | [Backups](backups.md) |
 
 ## Where to find a feature
 

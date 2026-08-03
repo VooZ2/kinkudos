@@ -47,7 +47,7 @@ nepersiunčia pranešimo KinKudos projekto prižiūrėtojui.
 ## Toliau
 
 - Norite saugiai pasižvalgyti? [Išbandykite demonstraciją](https://demo.kinkudos.app/).
-- Esate pasiruošę diegti? Prieš [diegdami paruoštame Docker serveryje](quick-install.lt.md)
+- Esate pasiruošę diegti? Prieš [diegdami paruoštame Docker serveryje](../installation/guided-installer.lt.md)
   perskaitykite, [ką reiškia savarankiškas diegimas](what-self-hosting-means.lt.md).
 
 [Grįžti į pradžią →](../index.lt.md) · [English](is-kinkudos-right.md)

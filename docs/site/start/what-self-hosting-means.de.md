@@ -36,7 +36,7 @@ Kindergerät zu verbinden oder Punkte und Belohnungen zu verwenden.
 
 ## Nächster Schritt
 
-Prüfen Sie die [Anforderungen an den vorbereiteten Server](quick-install.de.md)
+Prüfen Sie die [Anforderungen an den vorbereiteten Server](../installation/guided-installer.de.md)
 oder beginnen Sie bei einer vorhandenen Installation mit den
 [ersten 15 Minuten](first-15-minutes.de.md).
 

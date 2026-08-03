@@ -126,4 +126,4 @@ Paskirti dienos darbai baigiasi vidurnaktį pagal **vietinį serverio laiką**. 
 
 Pakartojamai viešai programos klaidai naudokite [GitHub Issues](https://github.com/VooZ2/kinkudos/issues), tačiau niekada nekelkite šeimos duomenų.
 
-[Tinklo prieiga →](../security/network-access.lt.md) · [Atsarginės kopijos →](../security/backups.lt.md) · [English](settings.md)
+[Tinklo prieiga →](../security/network-access.lt.md) · [Atsarginės kopijos →](../backups.lt.md) · [English](settings.md)

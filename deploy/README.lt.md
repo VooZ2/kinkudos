@@ -33,6 +33,24 @@ Reikalavimai:
   repozitoriją galinti skaityti paskyra;
 - prieiga prie viešo `vooz2/kinkudos` „Docker Hub“ atvaizdo.
 
+### Hostinger Ubuntu 24.04 Docker profilis
+
+Naujam Hostinger VPS, sukurtam iš **Ubuntu 24.04 su Docker** šablono,
+nukreipkite galutinį domeną į VPS, leiskite įeinančius TCP 80 ir 443 prievadus,
+tada Hostinger Browser Terminal kaip root vykdykite:
+
+```bash
+curl -fsSL https://kinkudos.app/install-hostinger.sh \
+  -o /tmp/install-kinkudos-hostinger.sh \
+  && sh /tmp/install-kinkudos-hostinger.sh
+```
+
+Šis pasirenkamas profilis patikrina paskelbtą leidimą ir SHA256 kontrolinę
+sumą, prideda konkrečios versijos Caddy HTTPS servisą, patikrina programos bei
+HTTPS būseną ir parodo naršyklės `/setup/` adresą bei privatų setup kodą. Jis
+atskirtas nuo žemiau aprašyto bendro installerio; nemaišykite abiejų profilių
+viename diegimo kataloge. Žr. [Hostinger naudotojo vadovą](https://docs.kinkudos.app/installation/hostinger.lt/).
+
 ### Greitas diegimas paruoštame serveryje
 
 Šį variantą naudokite naujame serveryje, kuriame jau veikia „Docker Engine“,

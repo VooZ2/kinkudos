@@ -6,17 +6,20 @@
   {% set doc_language = "lt" if source_uri == "index.lt.md" or source_uri.endswith(".lt.md") else ("de" if source_uri == "index.de.md" or source_uri.endswith(".de.md") else ("fr" if source_uri == "index.fr.md" or source_uri.endswith(".fr.md") else "en")) %}
   {% set page_description = page.meta.description if page.meta and page.meta.description else (page.title ~ ". Išsamus KinKudos dokumentacijos vadovas." if doc_language == "lt" else (page.title ~ ". Praktische KinKudos-Schnellstartanleitung." if doc_language == "de" else (page.title ~ ". Guide de démarrage rapide KinKudos." if doc_language == "fr" else page.title ~ ". A practical KinKudos documentation guide."))) %}
   {% set page_title = page.meta.title if page.meta and page.meta.title else (page.title ~ " — " ~ config.site_name if not page.is_homepage else config.site_name) %}
+  {% set is_section_index = source_uri.endswith("/index.md") or source_uri.endswith("/index.lt.md") or source_uri.endswith("/index.de.md") or source_uri.endswith("/index.fr.md") %}
   {% if doc_language == "en" %}
     {% set english_url = page.canonical_url %}
   {% elif source_uri.startswith("index.") %}
     {% set english_url = "https://docs.kinkudos.app/" %}
+  {% elif is_section_index %}
+    {% set english_url = page.canonical_url | replace("index.lt/", "") | replace("index.de/", "") | replace("index.fr/", "") %}
   {% else %}
     {% set english_url = page.canonical_url | replace(".lt/", "/") | replace(".de/", "/") | replace(".fr/", "/") %}
   {% endif %}
-  {% set is_start_page = source_uri.startswith("start/") %}
-  {% set lithuanian_url = "https://docs.kinkudos.app/index.lt/" if page.is_homepage or source_uri.startswith("index.") else (english_url.rstrip("/") ~ ".lt/") %}
-  {% set german_url = "https://docs.kinkudos.app/index.de/" if page.is_homepage or source_uri.startswith("index.") else (english_url.rstrip("/") ~ ".de/") %}
-  {% set french_url = "https://docs.kinkudos.app/index.fr/" if page.is_homepage or source_uri.startswith("index.") else (english_url.rstrip("/") ~ ".fr/") %}
+  {% set is_start_page = source_uri.startswith("start/") or source_uri.startswith("installation/guided-installer.") or source_uri == "installation/guided-installer.md" %}
+  {% set lithuanian_url = "https://docs.kinkudos.app/index.lt/" if page.is_homepage or source_uri.startswith("index.") else ((english_url ~ "index.lt/") if is_section_index else (english_url.rstrip("/") ~ ".lt/")) %}
+  {% set german_url = "https://docs.kinkudos.app/index.de/" if page.is_homepage or source_uri.startswith("index.") else ((english_url ~ "index.de/") if is_section_index else (english_url.rstrip("/") ~ ".de/")) %}
+  {% set french_url = "https://docs.kinkudos.app/index.fr/" if page.is_homepage or source_uri.startswith("index.") else ((english_url ~ "index.fr/") if is_section_index else (english_url.rstrip("/") ~ ".fr/")) %}
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="{{ page_description }}" />
@@ -38,11 +41,11 @@
   <meta property="og:description" content="{{ page_description }}" />
   <meta property="og:url" content="{{ page.canonical_url }}" />
   <meta property="og:locale" content="{{ 'lt_LT' if doc_language == 'lt' else ('de_DE' if doc_language == 'de' else ('fr_FR' if doc_language == 'fr' else 'en_US')) }}" />
-  <meta property="og:locale:alternate" content="en_US" />
-  <meta property="og:locale:alternate" content="lt_LT" />
+  {% if doc_language != "en" %}<meta property="og:locale:alternate" content="en_US" />{% endif %}
+  {% if doc_language != "lt" %}<meta property="og:locale:alternate" content="lt_LT" />{% endif %}
   {% if page.is_homepage or source_uri.startswith("index.") or is_start_page %}
-  <meta property="og:locale:alternate" content="de_DE" />
-  <meta property="og:locale:alternate" content="fr_FR" />
+  {% if doc_language != "de" %}<meta property="og:locale:alternate" content="de_DE" />{% endif %}
+  {% if doc_language != "fr" %}<meta property="og:locale:alternate" content="fr_FR" />{% endif %}
   {% endif %}
   <meta property="og:image" content="https://kinkudos.app/og.jpg" />
   <meta property="og:image:width" content="1200" />
@@ -81,9 +84,10 @@
           <li class="md-tabs__item"><a href="/start/what-is-kinkudos.lt/" class="md-tabs__link">Pradžia</a></li>
           <li class="md-tabs__item"><a href="/parents/dashboard-and-child-cards.lt/" class="md-tabs__link">Tėvams</a></li>
           <li class="md-tabs__item"><a href="/security/accounts-and-devices.lt/" class="md-tabs__link">Saugumas</a></li>
-          <li class="md-tabs__item"><a href="/deployment-and-maintenance.lt/" class="md-tabs__link">Serveris</a></li>
+          <li class="md-tabs__item"><a href="/installation/index.lt/" class="md-tabs__link">Diegimas</a></li>
+          <li class="md-tabs__item"><a href="/administration/index.lt/" class="md-tabs__link">Administravimas</a></li>
           <li class="md-tabs__item"><a href="/family-administration.lt/" class="md-tabs__link">Šeimos administravimas</a></li>
-          <li class="md-tabs__item"><a href="/quick-help.lt/" class="md-tabs__link">Pagalba</a></li>
+          <li class="md-tabs__item"><a href="/troubleshooting.lt/" class="md-tabs__link">Problemų sprendimas</a></li>
           <li class="md-tabs__item"><a href="/reference/roles-and-data.lt/" class="md-tabs__link">Atmintinė</a></li>
         </ul>
       </div>
@@ -150,14 +154,18 @@
       var basePath = path
         .replace(/\/index\.(lt|de|fr)\/$/, "/")
         .replace(/\.(lt|de|fr)\/$/, "/");
-      var hasQuickStartTranslation = basePath === "/" || /^\/start\//.test(basePath);
+      var hasQuickStartTranslation = basePath === "/" || /^\/start\//.test(basePath) || basePath === "/installation/guided-installer/";
+      var hasLocalizedIndex = basePath === "/installation/" || basePath === "/administration/";
 
       function pathForLanguage(language) {
         if (language === "en") {
           return basePath;
         }
-        if (!hasQuickStartTranslation) {
+        if (language !== "lt" && !hasQuickStartTranslation) {
           return "/index." + language + "/";
+        }
+        if (hasLocalizedIndex) {
+          return basePath + "index." + language + "/";
         }
         return basePath === "/"
           ? "/index." + language + "/"
@@ -233,12 +241,27 @@
           "Notifications and installing KinKudos": "Pranešimai ir KinKudos diegimas",
           "Network access": "Tinklo prieiga",
           "Backups": "Atsarginės kopijos",
-          "Server": "Serveris",
+          "Installation": "Diegimas",
+          "Choose a method": "Pasirinkti būdą",
+          "Hostinger VPS": "Hostinger VPS",
+          "Guided server installer": "Vedamas serverio installeris",
+          "Docker Compose": "Docker Compose",
+          "First-time web setup": "Pirmasis setup naršyklėje",
+          "Updating KinKudos": "KinKudos atnaujinimas",
+          "Backups and restore": "Kopijos ir atkūrimas",
+          "Uninstall KinKudos": "KinKudos pašalinimas",
+          "Advanced deployment": "Pažangus diegimas",
+          "Administration": "Administravimas",
+          "Password recovery": "Slaptažodžio atkūrimas",
+          "Emergency administrator": "Avarinis administratorius",
+          "SMTP configuration": "SMTP nustatymas",
+          "Logs and diagnostics": "Žurnalai ir diagnostika",
+          "CLI command reference": "CLI komandų atmintinė",
           "Overview": "Apžvalga",
           "Before installing": "Prieš diegiant",
           "Updates, backups, and recovery": "Atnaujinimai, kopijos ir atkūrimas",
           "Family admin": "Šeimos administravimas",
-          "Help": "Pagalba",
+          "Troubleshooting": "Problemų sprendimas",
           "Reference": "Atmintinė",
           "Roles, data, and limits": "Vaidmenys, duomenys ir ribos",
           "Release and support policy": "Leidimų ir palaikymo politika",

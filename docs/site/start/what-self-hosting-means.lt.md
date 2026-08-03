@@ -37,7 +37,7 @@ administratoriumi, neužblokuodami pirmo šeimos paruošimo.
 ## Toliau
 
 Jeigu toks atsakomybių pasidalijimas aiškus, peržiūrėkite [paruošto serverio
-reikalavimus](quick-install.lt.md) arba jau įdiegtą programą pradėkite naudoti
+reikalavimus](../installation/guided-installer.lt.md) arba jau įdiegtą programą pradėkite naudoti
 nuo [pirmų 15 minučių](first-15-minutes.lt.md).
 
 [Grįžti į pradžią →](../index.lt.md) · [English](what-self-hosting-means.md)

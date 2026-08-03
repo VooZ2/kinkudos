@@ -23,4 +23,4 @@ It is most useful for a stable home network or VPN. It is not a good first step 
 
 Changing a rule requires the parent administrator’s current password and is recorded as a security event. See [Parent settings](../parents/settings.md) for field-by-field guidance.
 
-[Installation and maintenance →](../deployment-and-maintenance.md) · [PINs and sign-in protection →](pin-and-sign-in.md) · [Lietuviškai](network-access.lt.md)
+[Server administration →](../administration/index.md) · [PINs and sign-in protection →](pin-and-sign-in.md) · [Lietuviškai](network-access.lt.md)

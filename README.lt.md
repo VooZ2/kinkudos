@@ -149,11 +149,11 @@ curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh \
   && sh /tmp/kinkudos-install.sh
 ```
 
-Vedlys parsisiunčia naujausią KinKudos leidimą, patikrina jo SHA256 kontrolinę sumą, sukuria reikiamus programos katalogus ir konfigūraciją, paleidžia KinKudos su Docker Compose bei gali sukurti pirmą tėvų paskyrą ir vaikų profilius.
+Vedlys parsisiunčia naujausią KinKudos leidimą, patikrina jo SHA256 kontrolinę sumą, sukuria reikiamus programos katalogus ir konfigūraciją bei paleidžia KinKudos su Docker Compose. Pirmoji šeima ir tėvų administratorius tada saugiai sukuriami naršyklėje; neprivalomą SMTP galima praleisti ir nustatyti vėliau. CLI lieka atkūrimo bei pažangiam administravimui.
 
 Komanda skirta **naujai instaliacijai**. Esamas instaliacijas būtina atnaujinti pagal dokumentuotą procesą.
 
-👉 **[Patikrinkite reikalavimus ir įdiekite KinKudos](https://docs.kinkudos.app/server/before-installing.lt/)**
+👉 **[Pasirinkite diegimo būdą](https://docs.kinkudos.app/installation/index.lt/)**
 
 Dokumentacijoje taip pat aprašomi HTTPS, atnaujinimai, kopijos, atkūrimas, diagnostika ir problemų sprendimas.
 
@@ -169,7 +169,7 @@ Nedidelis Docker tinkamas VPS dažnai yra vienas paprastesnių būdų privačiai
 
 > **Atskleidimas:** „Hostinger“ nuoroda yra rekomendacinė. Jei įsigysite per ją, galiu gauti komisinį atlyginimą be papildomos kainos jums. „Hostinger“ nėra būtina KinKudos naudojimo sąlyga, nėra oficialus KinKudos partneris ir neturi prieigos prie šeimos duomenų, išskyrus tuos, kuriuos techniškai laikote pasirinktame VPS.
 
-Nepriklausomai nuo VPS tiekėjo, vadovaukitės tuo pačiu [serverio diegimo gidu](https://docs.kinkudos.app/server/before-installing.lt/).
+Palaikomas Hostinger Ubuntu 24.04 Docker profilis apima patikrintą installerį ir Caddy HTTPS proxy. Vadovaukitės [Hostinger VPS instrukcija](https://docs.kinkudos.app/installation/hostinger.lt/). Hostinger yra mokama išorinė paslauga, o KinKudos išlieka nemokama ir savarankiškai diegiama.
 
 ## ⚙️ Architektūra
 
@@ -196,7 +196,13 @@ Visa dokumentacija pateikiama [docs.kinkudos.app](https://docs.kinkudos.app/inde
 - [Kas yra KinKudos?](https://docs.kinkudos.app/start/what-is-kinkudos.lt/)
 - [Ar KinKudos tinka mano šeimai?](https://docs.kinkudos.app/start/is-kinkudos-right.lt/)
 - [Pirmos 15 minučių](https://docs.kinkudos.app/start/first-15-minutes.lt/)
-- [Prieš diegiant](https://docs.kinkudos.app/server/before-installing.lt/)
+- [Pasirinkti diegimo būdą](https://docs.kinkudos.app/installation/index.lt/)
+- [Įdiegti Hostinger VPS](https://docs.kinkudos.app/installation/hostinger.lt/)
+- [Vedamas serverio installeris](https://docs.kinkudos.app/installation/guided-installer.lt/)
+- [Diegimas su Docker Compose](https://docs.kinkudos.app/installation/docker-compose.lt/)
+- [Pirmasis setup naršyklėje](https://docs.kinkudos.app/installation/first-time-setup.lt/)
+- [Atnaujinimas ir kopijos](https://docs.kinkudos.app/installation/updating.lt/)
+- [Problemų sprendimas ir CLI](https://docs.kinkudos.app/troubleshooting.lt/)
 
 ## 📌 Projekto būsena ir palaikymas
 

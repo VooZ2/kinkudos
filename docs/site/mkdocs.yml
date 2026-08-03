@@ -9,6 +9,18 @@ exclude_docs: |
   mkdocs.yml
   overrides/
   hosting/
+  deployment-and-maintenance.md
+  deployment-and-maintenance.lt.md
+  server/before-installing.md
+  server/before-installing.lt.md
+  server/updates-and-recovery.md
+  server/updates-and-recovery.lt.md
+  security/backups.md
+  security/backups.lt.md
+  start/quick-install.md
+  start/quick-install.lt.md
+  start/quick-install.de.md
+  start/quick-install.fr.md
 
 # Keep the public documentation self-contained: the server copies this folder
 # and builds it without needing the application source tree.
@@ -61,7 +73,7 @@ nav:
       - What is KinKudos: start/what-is-kinkudos.md
       - Is KinKudos right for your family?: start/is-kinkudos-right.md
       - What self-hosting means: start/what-self-hosting-means.md
-      - Quick install: start/quick-install.md
+      - Quick install: installation/guided-installer.md
       - Your first 15 minutes: start/first-15-minutes.md
       - Pair a child device: start/pair-a-child-device.md
   - Parents:
@@ -82,13 +94,26 @@ nav:
       - PINs and sign-in protection: security/pin-and-sign-in.md
       - Notifications and installing KinKudos: security/notifications-and-pwa.md
       - Network access: security/network-access.md
-      - Backups: security/backups.md
-  - Server:
-      - Overview: deployment-and-maintenance.md
-      - Before installing: server/before-installing.md
-      - Updates, backups, and recovery: server/updates-and-recovery.md
+      - Backups: backups.md
+  - Installation:
+      - Choose a method: installation/index.md
+      - Hostinger VPS: installation/hostinger.md
+      - Guided server installer: installation/guided-installer.md
+      - Docker Compose: installation/docker-compose.md
+      - First-time web setup: installation/first-time-setup.md
+      - Updating KinKudos: installation/updating.md
+      - Backups and restore: backups.md
+      - Uninstall KinKudos: installation/uninstall.md
+      - Advanced deployment: installation/advanced.md
+  - Administration:
+      - Overview: administration/index.md
+      - Password recovery: administration/password-recovery.md
+      - Emergency administrator: administration/emergency-admin.md
+      - SMTP configuration: administration/smtp.md
+      - Logs and diagnostics: administration/logs.md
+      - CLI command reference: administration/cli.md
   - Family admin: family-administration.md
-  - Help: quick-help.md
+  - Troubleshooting: troubleshooting.md
   - Reference:
       - Roles, data, and limits: reference/roles-and-data.md
       - Release and support policy: reference/release-and-support-policy.md

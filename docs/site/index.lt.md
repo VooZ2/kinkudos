@@ -15,7 +15,7 @@ kuris ją palaiko.
 
 > **Prieš diegdami:** KinKudos diegiama savarankiškai. Reikia Linux serverio,
 > Docker, hosto vardo arba domeno, HTTPS ir žmogaus, turinčio pagrindinius
-> serverio administravimo įgūdžius. [Patikrinkite diegimo reikalavimus →](server/before-installing.lt.md)
+> serverio administravimo įgūdžius. [Pasirinkite diegimo būdą →](installation/index.lt.md)
 
 <div class="grid cards" markdown>
 
@@ -44,7 +44,7 @@ kuris ją palaiko.
     Diekite, atnaujinkite, kurkite kopijas, atkurkite ir prižiūrėkite KinKudos
     savo valdomame serveryje.
 
-    [Atidaryti serverio vadovą →](deployment-and-maintenance.lt.md)
+    [Atidaryti serverio vadovą →](installation/index.lt.md)
 
 -   :material-lifebuoy: **Kažkas neveikia?**
 
@@ -53,7 +53,7 @@ kuris ją palaiko.
     Pradėkite nuo simptomo, saugiausio pirmo patikrinimo ir nuorodos į išsamų
     vadovą.
 
-    [Spręsti problemą →](quick-help.lt.md)
+    [Spręsti problemą →](troubleshooting.lt.md)
 
 </div>
 
@@ -65,6 +65,8 @@ kuris ją palaiko.
 - [Kurti prizus, tikslus ir loterijos taisykles](parents/rewards-goals-and-lottery.lt.md)
 - [Įdiegti KinKudos telefone arba planšetėje](security/notifications-and-pwa.lt.md)
 - [Išspręsti prisijungimo arba vaiko PIN problemą](security/pin-and-sign-in.lt.md)
+- [Įdiegti Hostinger VPS serveryje](installation/hostinger.lt.md)
+- [Atlikti pirmąjį setup naršyklėje](installation/first-time-setup.lt.md)
 
 ## Šios dokumentacijos privatumas
 

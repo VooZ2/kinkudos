@@ -31,4 +31,4 @@ Darbas → pateikimas → tėvų sprendimas → taškai → prizas arba tikslas 
 
 KinKudos nėra bankas, vaikų sekimo priemonė ar socialinis tinklas. Jis neseka vietos, neskaito įrenginio turinio ar žinučių ir neskelbia šeimos veiklos.
 
-[Greitas diegimas →](quick-install.lt.md) · [Pirmos 15 minučių →](first-15-minutes.lt.md) · [English](what-is-kinkudos.md)
+[Greitas diegimas →](../installation/guided-installer.lt.md) · [Pirmos 15 minučių →](first-15-minutes.lt.md) · [English](what-is-kinkudos.md)

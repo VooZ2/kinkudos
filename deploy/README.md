@@ -45,6 +45,24 @@ Prerequisites:
   that repository;
 - access to the public `vooz2/kinkudos` Docker Hub image.
 
+### Hostinger Ubuntu 24.04 Docker profile
+
+For a new Hostinger VPS created from the **Ubuntu 24.04 with Docker** template,
+point the final hostname to the VPS, allow inbound TCP 80 and 443, then run in
+Hostinger Browser Terminal as root:
+
+```bash
+curl -fsSL https://kinkudos.app/install-hostinger.sh \
+  -o /tmp/install-kinkudos-hostinger.sh \
+  && sh /tmp/install-kinkudos-hostinger.sh
+```
+
+This opt-in profile verifies the published release and SHA256 checksum, adds
+the pinned Caddy HTTPS service, checks application and HTTPS state, and prints
+the browser `/setup/` URL and private setup code. It is separate from the
+generic installer below; do not mix both profiles in one installation root.
+See the [Hostinger user guide](https://docs.kinkudos.app/installation/hostinger/).
+
 ### Quick installation on a prepared server
 
 Use this option on a fresh server that already has Docker Engine, the Docker

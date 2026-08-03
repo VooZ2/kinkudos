@@ -32,12 +32,27 @@ _NAV_LABELS = {
         "Notifications and installing KinKudos": "Pranešimai ir KinKudos diegimas",
         "Network access": "Tinklo prieiga",
         "Backups": "Atsarginės kopijos",
-        "Server": "Serveris",
+        "Installation": "Diegimas",
+        "Choose a method": "Pasirinkti būdą",
+        "Hostinger VPS": "Hostinger VPS",
+        "Guided server installer": "Vedamas serverio installeris",
+        "Docker Compose": "Docker Compose",
+        "First-time web setup": "Pirmasis setup naršyklėje",
+        "Updating KinKudos": "KinKudos atnaujinimas",
+        "Backups and restore": "Kopijos ir atkūrimas",
+        "Uninstall KinKudos": "KinKudos pašalinimas",
+        "Advanced deployment": "Pažangus diegimas",
+        "Administration": "Administravimas",
+        "Password recovery": "Slaptažodžio atkūrimas",
+        "Emergency administrator": "Avarinis administratorius",
+        "SMTP configuration": "SMTP nustatymas",
+        "Logs and diagnostics": "Žurnalai ir diagnostika",
+        "CLI command reference": "CLI komandų atmintinė",
         "Overview": "Apžvalga",
         "Before installing": "Prieš diegiant",
         "Updates, backups, and recovery": "Atnaujinimai, kopijos ir atkūrimas",
         "Family admin": "Šeimos administravimas",
-        "Help": "Pagalba",
+        "Troubleshooting": "Problemų sprendimas",
         "Reference": "Atmintinė",
         "Roles, data, and limits": "Vaidmenys, duomenys ir ribos",
         "Release and support policy": "Leidimų ir palaikymo politika",
@@ -69,6 +84,7 @@ _QUICK_START_SLUGS = {
     "quick-install",
     "first-15-minutes",
     "pair-a-child-device",
+    "guided-installer",
 }
 
 _UI_LABELS = {
@@ -96,8 +112,9 @@ _PRIMARY_NAV_SECTION_IDS = {
     "start": "__nav_1",
     "parents": "__nav_2",
     "security": "__nav_3",
-    "server": "__nav_4",
-    "reference": "__nav_7",
+    "installation": "__nav_4",
+    "administration": "__nav_5",
+    "reference": "__nav_8",
 }
 
 _SECTIONS = {
@@ -113,9 +130,21 @@ _SECTIONS = {
         "en": ("Security", "https://docs.kinkudos.app/security/accounts-and-devices/"),
         "lt": ("Saugumas", "https://docs.kinkudos.app/security/accounts-and-devices.lt/"),
     },
-    "server": {
-        "en": ("Server", "https://docs.kinkudos.app/deployment-and-maintenance/"),
-        "lt": ("Serveris", "https://docs.kinkudos.app/deployment-and-maintenance.lt/"),
+    "installation": {
+        "en": ("Installation", "https://docs.kinkudos.app/installation/"),
+        "lt": ("Diegimas", "https://docs.kinkudos.app/installation/index.lt/"),
+    },
+    "administration": {
+        "en": ("Administration", "https://docs.kinkudos.app/administration/"),
+        "lt": ("Administravimas", "https://docs.kinkudos.app/administration/index.lt/"),
+    },
+    "backups.md": {
+        "en": ("Backups", "https://docs.kinkudos.app/backups/"),
+        "lt": ("Atsarginės kopijos", "https://docs.kinkudos.app/backups.lt/"),
+    },
+    "backups": {
+        "en": ("Backups", "https://docs.kinkudos.app/backups/"),
+        "lt": ("Atsarginės kopijos", "https://docs.kinkudos.app/backups.lt/"),
     },
     "start": {
         "de": ("Schnellstart", "https://docs.kinkudos.app/start/what-is-kinkudos.de/"),
@@ -223,12 +252,19 @@ def _localize_primary_navigation(output, page, language):
 
     def localize_link(match):
         path = match.group("path")
-        if path.endswith(f".{language}/"):
+        absolute = urlparse(urljoin(page.canonical_url, path)).path
+        if absolute.endswith(f".{language}/"):
             return match.group(0)
-        slug = path.rstrip("/").rsplit("/", 1)[-1]
+        slug = absolute.rstrip("/").rsplit("/", 1)[-1]
         if language != "lt" and slug not in _QUICK_START_SLUGS:
             return match.group(0)
-        return f'href="{path[:-1]}.{language}/"'
+        if absolute == "/":
+            localized = f"/index.{language}/"
+        elif language == "lt" and absolute in {"/installation/", "/administration/"}:
+            localized = f"{absolute}index.lt/"
+        else:
+            localized = f"{absolute[:-1]}.{language}/"
+        return f'href="{localized}"'
 
     navigation = re.sub(
         r'href="(?P<path>(?!https?://|#)[^"]+/)"',
@@ -236,9 +272,12 @@ def _localize_primary_navigation(output, page, language):
         navigation,
     )
 
+    is_quick_start_translation = page.file.src_uri.startswith("start/") or (
+        page.file.src_uri.startswith("installation/guided-installer.")
+    )
     section_key = (
         "start"
-        if language in {"de", "fr"} and page.file.src_uri.startswith("start/")
+        if language in {"de", "fr"} and is_quick_start_translation
         else page.file.src_uri.split("/", 1)[0]
     )
     section_id = _PRIMARY_NAV_SECTION_IDS.get(section_key)

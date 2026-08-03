@@ -37,6 +37,6 @@ de la famille : ce n’est ni un achat ni un service de jeu d’argent externe.
 
 - [Essayer la démo en toute sécurité](https://demo.kinkudos.app/)
 - [Comprendre l’auto-hébergement](what-self-hosting-means.fr.md)
-- [Installer sur un serveur préparé](quick-install.fr.md)
+- [Installer sur un serveur préparé](../installation/guided-installer.fr.md)
 
 [Retour au démarrage rapide →](../index.fr.md)

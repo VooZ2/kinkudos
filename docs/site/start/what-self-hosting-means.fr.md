@@ -36,7 +36,7 @@ associer un appareil enfant ou utiliser les points et récompenses.
 
 ## Étape suivante
 
-Vérifiez les [prérequis du serveur](quick-install.fr.md) ou commencez à utiliser
+Vérifiez les [prérequis du serveur](../installation/guided-installer.fr.md) ou commencez à utiliser
 une installation existante avec [vos 15 premières minutes](first-15-minutes.fr.md).
 
 [Retour au démarrage rapide →](../index.fr.md)

@@ -158,11 +158,11 @@ curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh \
   && sh /tmp/kinkudos-install.sh
 ```
 
-The guided installer downloads the latest published KinKudos release, verifies its SHA256 checksum, creates the required application directories and configuration, starts KinKudos with Docker Compose, and can create the first parent account and child profiles.
+The guided installer downloads the latest published KinKudos release, verifies its SHA256 checksum, creates the required application directories and configuration, and starts KinKudos with Docker Compose. The first family and parent administrator are then created securely in the browser; optional SMTP can be skipped and configured later. CLI administration remains available for recovery and advanced operations.
 
 The command is for a **new installation**. Existing installations must use the documented update process.
 
-👉 **[Check the requirements and install KinKudos](https://docs.kinkudos.app/server/before-installing/)**
+👉 **[Choose an installation method](https://docs.kinkudos.app/installation/)**
 
 The documentation also covers HTTPS, updates, backups, recovery, diagnostics, and troubleshooting.
 
@@ -178,7 +178,7 @@ A small Docker-capable VPS is usually one of the simpler ways to run KinKudos pr
 
 > **Disclosure:** The Hostinger link is a referral link. If you purchase through it, I may receive a commission at no additional cost to you. Hostinger is not required to use KinKudos, is not an official KinKudos partner, and does not receive access to your family data beyond what is technically stored on the VPS you choose to operate.
 
-Follow the same [server installation guide](https://docs.kinkudos.app/server/before-installing/) regardless of the VPS provider.
+Hostinger’s supported Ubuntu 24.04 Docker profile includes a verified installer and Caddy HTTPS proxy. Follow the [Hostinger VPS step-by-step guide](https://docs.kinkudos.app/installation/hostinger/). Hostinger is a paid external service; KinKudos remains free and self-hosted.
 
 ## ⚙️ Architecture
 
@@ -230,7 +230,13 @@ Useful starting points:
 - [What is KinKudos?](https://docs.kinkudos.app/start/what-is-kinkudos/)
 - [Is KinKudos right for my family?](https://docs.kinkudos.app/start/is-kinkudos-right/)
 - [Your first 15 minutes](https://docs.kinkudos.app/start/first-15-minutes/)
-- [Before you install](https://docs.kinkudos.app/server/before-installing/)
+- [Choose an installation method](https://docs.kinkudos.app/installation/)
+- [Install on a Hostinger VPS](https://docs.kinkudos.app/installation/hostinger/)
+- [Guided server installer](https://docs.kinkudos.app/installation/guided-installer/)
+- [Docker Compose installation](https://docs.kinkudos.app/installation/docker-compose/)
+- [First-time web setup](https://docs.kinkudos.app/installation/first-time-setup/)
+- [Updating and backups](https://docs.kinkudos.app/installation/updating/)
+- [Troubleshooting and CLI administration](https://docs.kinkudos.app/troubleshooting/)
 
 ## 📌 Project status and support
 

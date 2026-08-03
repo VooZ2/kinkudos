@@ -27,7 +27,7 @@ negali garantuoti pagalbos nestandartinėms Docker, NAS, reverse proxy, tinklo,
 VPS ar operacinės sistemos konfigūracijoms.
 
 Diegimo ir priežiūros klausimais pirmiausia perskaitykite [serverio
-administravimo vadovą](../deployment-and-maintenance.lt.md) ir patikrinkite,
+administravimo vadovą](../administration/index.lt.md) ir patikrinkite,
 ar naudojate naujausią leidimą.
 
 ## Saugokite šeimos duomenis

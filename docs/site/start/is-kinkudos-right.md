@@ -47,6 +47,6 @@ does not send a report to the KinKudos project maintainer.
 
 - Ready to explore safely? [Try the live demo](https://demo.kinkudos.app/).
 - Ready to install? Read [what self-hosting means](what-self-hosting-means.md)
-  before [installing on a prepared Docker server](quick-install.md).
+  before [installing on a prepared Docker server](../installation/guided-installer.md).
 
 [Back to Start here →](../index.md) · [Lietuviškai](is-kinkudos-right.lt.md)

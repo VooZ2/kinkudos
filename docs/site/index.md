@@ -15,7 +15,7 @@ that keeps it running.
 
 > **Before you install:** KinKudos is self-hosted. You need a Linux server,
 > Docker, a hostname or domain, HTTPS, and someone with basic server
-> administration skills. [Check the installation requirements →](server/before-installing.md)
+> administration skills. [Choose an installation method →](installation/index.md)
 
 <div class="grid cards" markdown>
 
@@ -44,7 +44,7 @@ that keeps it running.
     Install, update, back up, restore, and maintain KinKudos on a server you
     control.
 
-    [Open the server guide →](deployment-and-maintenance.md)
+    [Open the server guide →](installation/index.md)
 
 -   :material-lifebuoy: **Something not working?**
 
@@ -53,7 +53,7 @@ that keeps it running.
     Start with the symptom, the safest first check, and a link to the relevant
     detailed guide.
 
-    [Troubleshoot →](quick-help.md)
+    [Troubleshoot →](troubleshooting.md)
 
 </div>
 
@@ -65,6 +65,8 @@ that keeps it running.
 - [Create rewards, goals, and lottery rules](parents/rewards-goals-and-lottery.md)
 - [Install KinKudos on a phone or tablet](security/notifications-and-pwa.md)
 - [Fix sign-in or a child PIN](security/pin-and-sign-in.md)
+- [Install on a Hostinger VPS](installation/hostinger.md)
+- [Complete first-time setup](installation/first-time-setup.md)
 
 ## Privacy of this documentation
 

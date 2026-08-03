@@ -165,4 +165,4 @@ Task-evidence and feedback screenshots accept JPEG, PNG, WebP, HEIC, or HEIF up 
 
 Daily assigned tasks expire at midnight in the **server’s local time**. Lottery limits reset every Monday in that same calendar context. If a household lives in a different time zone from its server, discuss which clock should govern daily work before relying on the midnight rule.
 
-[GitHub issues](https://github.com/VooZ2/kinkudos/issues) · [Network access →](../security/network-access.md) · [Backups →](../security/backups.md)
+[GitHub issues](https://github.com/VooZ2/kinkudos/issues) · [Network access →](../security/network-access.md) · [Backups →](../backups.md)

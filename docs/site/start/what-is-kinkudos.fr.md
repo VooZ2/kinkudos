@@ -36,4 +36,4 @@ KinKudos n’est ni une banque, ni un outil de surveillance parentale, ni un
 réseau social. Il ne suit pas la localisation d’un enfant et ne lit ni le
 contenu de l’appareil ni les messages privés.
 
-[Installation rapide →](quick-install.fr.md) · [Vos 15 premières minutes →](first-15-minutes.fr.md)
+[Installation rapide →](../installation/guided-installer.fr.md) · [Vos 15 premières minutes →](first-15-minutes.fr.md)

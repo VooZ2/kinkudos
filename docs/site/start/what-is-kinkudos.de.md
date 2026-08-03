@@ -36,4 +36,4 @@ KinKudos ist keine Bank, kein Überwachungswerkzeug und kein soziales Netzwerk.
 Es verfolgt weder den Standort eines Kindes noch liest es Geräteinhalte oder
 private Nachrichten.
 
-[Schnellinstallation →](quick-install.de.md) · [Die ersten 15 Minuten →](first-15-minutes.de.md)
+[Schnellinstallation →](../installation/guided-installer.de.md) · [Die ersten 15 Minuten →](first-15-minutes.de.md)

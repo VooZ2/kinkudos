@@ -28,7 +28,7 @@ particular, KinKudos cannot guarantee support for custom Docker, NAS, reverse
 proxy, network, VPS, or operating-system configurations.
 
 For installation and maintenance help, first use the [server administration
-guide](../deployment-and-maintenance.md) and confirm that your installation is
+guide](../administration/index.md) and confirm that your installation is
 on the latest release.
 
 ## Keep family data private

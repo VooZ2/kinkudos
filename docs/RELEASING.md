@@ -47,6 +47,24 @@ Kiekvienai versijai privaloma:
    Publikuojamos nekintamos pilnos versijos (pvz., `26.4.7`), einamosios
    pataisų serijos (pvz., `26.4`) ir `latest` žymos. Produkciniame diegime
    visada naudoti pilną versiją, o ne slankiąją žymą.
+9. Diegimo ar setup pakeitimams papildomai patikrinti:
+   - švarų Hostinger Ubuntu 24.04 Docker profilio diegimą nuo tuščio VPS;
+   - švarų bendro vedamo installerio diegimą;
+   - švarų Docker Compose diegimą;
+   - pirmą Web UI setup ir jo setup kodo apsaugą;
+   - SMTP praleidimą ir atskirai SMTP nustatymą;
+   - kad užbaigus setup jis nebeatsidaro;
+   - realios ankstesnės instancijos atnaujinimą ir duomenų išlikimą;
+   - CLI slaptažodžio atkūrimą ir avarinį administratorių;
+   - kopijos sukūrimą ir izoliuotą restore bandymą;
+   - Hostinger HTTP→HTTPS, sertifikato išdavimą, health check ir saugų
+     konteinerių pašalinimą neištrinant duomenų ar sertifikatų.
+10. Dokumentacijos pakeitimams paleisti strict MkDocs build, patikrinti vidines
+    bei išorines nuorodas, senų URL redirectus, canonical, `hreflang`, sitemap,
+    `robots.txt` ir kad kiekvienas sitemap URL tiesiogiai grąžina `200`.
+
+Vien docs.kinkudos.app, README ar kito dokumentacinio turinio pakeitimai į
+produkto changelog nekeliami ir produkto versijos nekeičia.
 
 Versijos numeris programos antraštėje visada turi likti nuoroda į
 `/pakeitimai/`.

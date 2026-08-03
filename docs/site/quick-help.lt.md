@@ -13,7 +13,7 @@
 | Noriu įdiegti programą ar įjungti varpelį | Įdiekite PWA tame įrenginyje ir patvirtinkite pranešimų leidimą. | [Pranešimai ir KinKudos diegimas](security/notifications-and-pwa.lt.md) |
 | Neateina slaptažodžio atkūrimo laiškas | Patikrinkite, ar SMTP įjungtas, patikrintas ir nustatyti teisingi siuntėjo bei gavėjo duomenys. | [SMTP nustatymai](parents/settings.lt.md#4-el-pasto-nustatymai-smtp) |
 | Namuose nebeveikia prieiga | Su administratoriumi patikrinkite IP ribojimus; nespėliokite naujo leidžiamų adresų sąrašo. | [Tinklo prieiga](security/network-access.lt.md) |
-| Kopijai reikia dėmesio | Užsirašykite rodomą klaidą ir tik tada su administratoriumi tikrinkite saugyklą bei duomenis. | [Atsarginės kopijos](security/backups.lt.md) |
+| Kopijai reikia dėmesio | Užsirašykite rodomą klaidą ir tik tada su administratoriumi tikrinkite saugyklą bei duomenis. | [Atsarginės kopijos](backups.lt.md) |
 
 ## Kur rasti funkciją
 

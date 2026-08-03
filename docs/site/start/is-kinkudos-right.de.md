@@ -37,6 +37,6 @@ ist kein Geld-, Kauf- oder externer Glücksspielservice.
 
 - [Live-Demo sicher ausprobieren](https://demo.kinkudos.app/)
 - [Was Selbsthosting bedeutet](what-self-hosting-means.de.md)
-- [Auf einem vorbereiteten Server installieren](quick-install.de.md)
+- [Auf einem vorbereiteten Server installieren](../installation/guided-installer.de.md)
 
 [Zurück zum Schnellstart →](../index.de.md)

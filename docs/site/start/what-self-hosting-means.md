@@ -37,7 +37,7 @@ server administrator instead of blocking the first family setup.
 
 ## Next step
 
-If this division is clear, check the [prepared-server requirements](quick-install.md)
+If this division is clear, check the [prepared-server requirements](../installation/guided-installer.md)
 or start using an installed instance with [your first 15 minutes](first-15-minutes.md).
 
 [Back to Start here →](../index.md) · [Lietuviškai](what-self-hosting-means.lt.md)

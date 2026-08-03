@@ -15,14 +15,14 @@ propre serveur et configurer votre première famille en toute sécurité.
 
 > **Avant l’installation :** KinKudos est auto-hébergé. Il vous faut un serveur
 > Linux, Docker, un nom d’hôte ou un domaine, HTTPS et des connaissances de base
-> en administration système. [Vérifier les prérequis →](start/quick-install.fr.md)
+> en administration système. [Vérifier les prérequis →](installation/guided-installer.fr.md)
 
 ## Démarrage rapide
 
 - [Qu’est-ce que KinKudos ?](start/what-is-kinkudos.fr.md)
 - [KinKudos convient-il à votre famille ?](start/is-kinkudos-right.fr.md)
 - [Comprendre l’auto-hébergement](start/what-self-hosting-means.fr.md)
-- [Installer sur un serveur Docker préparé](start/quick-install.fr.md)
+- [Installer sur un serveur Docker préparé](installation/guided-installer.fr.md)
 - [Vos 15 premières minutes](start/first-15-minutes.fr.md)
 - [Associer l’appareil d’un enfant](start/pair-a-child-device.fr.md)
 
