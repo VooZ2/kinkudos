@@ -51,6 +51,16 @@ if not public_installer.is_file():
 if not os.access(public_installer, os.X_OK):
     raise SystemExit("The public installer is not executable: deploy/install.sh")
 
+hostinger_installer = ROOT / "deploy" / "install-hostinger.sh"
+if not hostinger_installer.is_file():
+    raise SystemExit(
+        "The Hostinger installer is missing: deploy/install-hostinger.sh"
+    )
+if not os.access(hostinger_installer, os.X_OK):
+    raise SystemExit(
+        "The Hostinger installer is not executable: deploy/install-hostinger.sh"
+    )
+
 migrations_dir = ROOT / "economy" / "migrations"
 conflicting_packages = sorted(
     path.name

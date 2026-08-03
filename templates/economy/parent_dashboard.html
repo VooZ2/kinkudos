@@ -1003,6 +1003,10 @@
       <span>GitHub</span>
     </a>
     <span aria-hidden="true">·</span>
+    <a href="{% if LANGUAGE_CODE == 'lt' %}https://docs.kinkudos.app/index.lt/{% else %}https://docs.kinkudos.app/{% endif %}" target="_blank" rel="noreferrer">
+      {% translate "Documentation" %}
+    </a>
+    <span aria-hidden="true">·</span>
     <a href="https://github.com/VooZ2/kinkudos/issues" target="_blank" rel="noreferrer" aria-label="{% translate 'Report a KinKudos software bug on GitHub' %}">
       {% translate "Report a bug" %}
     </a>

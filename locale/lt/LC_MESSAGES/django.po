@@ -763,6 +763,9 @@ msgstr "Išjungta"
 msgid "Do not include passwords, PINs, or other private information."
 msgstr "Nerašykite slaptažodžių, PIN kodų ar privačių duomenų."
 
+msgid "Documentation"
+msgstr "Dokumentacija"
+
 msgid "Dream Enchantments"
 msgstr "Svajonių užkeitimai"
 

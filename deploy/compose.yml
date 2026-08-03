@@ -2,7 +2,7 @@ name: kinkudos
 
 services:
   app:
-    image: vooz2/kinkudos:26.5.0
+    image: vooz2/kinkudos:26.5.1
     user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"
     restart: unless-stopped
     read_only: true
@@ -66,7 +66,7 @@ services:
       com.centurylinklabs.watchtower.enable: "false"
 
   backup-agent:
-    image: vooz2/kinkudos:26.5.0
+    image: vooz2/kinkudos:26.5.1
     entrypoint: ["python", "/app/scripts/backup_agent.py"]
     command: []
     user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"

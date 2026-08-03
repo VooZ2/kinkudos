@@ -40,11 +40,20 @@ class LanguageSelectionTests(TestCase):
         response = self.client.get(reverse("home"))
         self.assertContains(response, "A shared family space")
         self.assertContains(response, '<html lang="en">', html=False)
+        self.assertContains(response, "Documentation")
+        self.assertContains(response, 'href="https://docs.kinkudos.app/"', html=False)
+        self.assertNotContains(response, "https://docs.kinkudos.app/index.lt/")
 
     def test_browser_lithuanian_is_used_without_saved_preference(self):
         response = self.client.get(reverse("home"), HTTP_ACCEPT_LANGUAGE="lt-LT,lt;q=0.9")
         self.assertContains(response, "Bendra šeimos erdvė")
         self.assertContains(response, '<html lang="lt">', html=False)
+        self.assertContains(response, "Dokumentacija")
+        self.assertContains(
+            response,
+            'href="https://docs.kinkudos.app/index.lt/"',
+            html=False,
+        )
         self.assertContains(response, ">🇱🇹</span>", html=False)
         self.assertNotContains(response, "🇱🇹 LT</span>", html=False)
 
@@ -643,7 +652,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.5.0")
+        self.assertContains(response, "v26.5.1")
         self.assertContains(response, 'href="/pakeitimai/"', html=False)
         self.assertContains(response, "TAŠKAI")
         self.assertContains(response, "Kredito limitas: -100")
@@ -706,7 +715,9 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Complete tasks, earn points")
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
-        self.assertContains(response, "KinKudos · v26.5.0")
+        self.assertContains(response, "KinKudos · v26.5.1")
+        self.assertContains(response, "Dokumentacija")
+        self.assertContains(response, "https://docs.kinkudos.app/index.lt/")
         self.assertContains(response, "https://github.com/VooZ2/kinkudos")
         self.assertContains(response, 'href="#icon-github"', html=False)
         self.assertNotContains(response, 'class="app-version"', html=False)
@@ -922,7 +933,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.5.0")
+        self.assertContains(response, "v26.5.1")
         self.assertContains(response, "v0.12.2 BETA")
         self.assertContains(response, "v0.10.4 BETA")
         self.assertContains(response, "v0.10.1 BETA")
@@ -1396,10 +1407,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.5.0',
+            '/static/icons/favicon-32.png?v=26.5.1',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.5.0")
-        self.assertContains(home, "/static/js/app.js?v=26.5.0")
+        self.assertContains(home, "/static/css/app.css?v=26.5.1")
+        self.assertContains(home, "/static/js/app.js?v=26.5.1")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1407,11 +1418,11 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.5.0",
+            "/static/icons/icon-192.png?v=26.5.1",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.5.0")
-        self.assertContains(worker, 'kinkudos-app-shell-26.5.0')
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.5.1")
+        self.assertContains(worker, 'kinkudos-app-shell-26.5.1')
         self.assertEqual(worker["Service-Worker-Allowed"], "/")
         self.assertEqual(worker["Cache-Control"], "no-cache")

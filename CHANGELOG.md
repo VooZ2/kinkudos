@@ -5,6 +5,29 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.5.1] - 2026-08-03
+
+### Added
+
+- An opt-in Hostinger VPS installer now verifies the selected release and
+  prepares an idempotent Ubuntu 24.04 Docker deployment with a version-pinned
+  Caddy HTTPS proxy, persistent certificate storage, explicit deployment
+  states, and safe resume and stop procedures.
+- The application footer links to English or Lithuanian KinKudos documentation
+  according to the active interface language.
+
+### Changed
+
+- Hostinger deployments reuse the standard backup agent and carry a stable,
+  versioned installation-profile marker so updates, health checks, and safe
+  removal never infer their mode from proxy files.
+
+### Security
+
+- The Hostinger installer validates release SHA256 checksums before executing
+  the release-owned bootstrap, keeps Gunicorn private, and preserves existing
+  secrets and the setup code when a recognized installation is resumed.
+
 ## [26.5.0] - 2026-08-03
 
 ### Added

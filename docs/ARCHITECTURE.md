@@ -238,6 +238,19 @@ the application URL and setup code; it never collects family account details
 or PINs in the terminal. SMTP remains optional and can be skipped during
 browser setup or configured later by the parent administrator.
 
+An opt-in Hostinger profile supports the Hostinger Ubuntu 24.04 Docker
+template. Its small public installer downloads and verifies a release before
+running the release-owned bootstrap as root. A stable
+`hostinger-caddy-v1` marker identifies the profile for bootstrap, updates,
+health checks, and safe removal; the presence of proxy files is never used to
+infer the mode. The overlay reuses the base `app` and `backup-agent` services
+and adds a version-pinned Caddy container. Only Caddy publishes TCP 80 and 443;
+Gunicorn remains on an internal network. Caddy certificate state is persistent
+and normal updates or safe container removal do not delete application data,
+secrets, backups, or certificate volumes. Re-running the installer preserves
+all existing secrets and the setup code and either resumes the recognized
+profile or stops on ambiguous state.
+
 ## Backups
 An isolated `backup-agent` container owns the remote-storage credentials and
 has no published port or Docker socket. The application reaches it only over

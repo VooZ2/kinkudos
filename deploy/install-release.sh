@@ -31,6 +31,15 @@ test -f "$checksum_file"
 test -d "$deploy_dir"
 test -f "$deploy_dir/compose.yml"
 
+install_profile=generic
+if [ -f "$project_root/install-profile" ]; then
+  install_profile=$(cat "$project_root/install-profile")
+  case "$install_profile" in
+    hostinger-caddy-v1) ;;
+    *) echo "Unsupported installation profile: $install_profile" >&2; exit 1 ;;
+  esac
+fi
+
 umask 077
 mkdir -p \
   "$secrets_dir/backup" \
@@ -203,9 +212,13 @@ for helper in \
   configure-feedback.sh \
   install-diagnostics.sh \
   install-maintenance.sh \
+  install-hostinger.sh \
   install.sh \
   install-release.sh \
-  kinkudos-diagnose
+  kinkudos-diagnose \
+  hostinger-bootstrap.sh \
+  hostinger-healthcheck.sh \
+  uninstall-hostinger.sh
 do
   install -m 0755 "$release_dir/deploy/$helper" "$deploy_dir/$helper"
 done
@@ -213,8 +226,10 @@ for support_file in \
   README.lt.md \
   README.md \
   compose.container-proxy.yml \
+  compose.hostinger.yml \
   compose.host-proxy.yml \
   compose.traefik.yml \
+  Caddyfile.hostinger \
   kinkudos-lottery-reminders.service \
   kinkudos-lottery-reminders.timer \
   kinkudos-maintenance.service \
@@ -224,6 +239,19 @@ do
   install -m 0644 "$release_dir/deploy/$support_file" "$deploy_dir/$support_file"
 done
 install -m 0644 "$release_dir/deploy/.env.example" "$deploy_dir/.env.example"
+
+if [ "$install_profile" = "hostinger-caddy-v1" ]; then
+  printf '%s\n' "$version" > "$project_root/installed-release"
+  chmod 0600 "$project_root/installed-release"
+  set +e
+  "$deploy_dir/hostinger-healthcheck.sh" "$project_root"
+  hostinger_health=$?
+  set -e
+  case "$hostinger_health" in
+    0|2) ;;
+    *) exit "$hostinger_health" ;;
+  esac
+fi
 
 # Keep only the successfully deployed source release. The running Docker image
 # and application data are unaffected by removing older source directories.

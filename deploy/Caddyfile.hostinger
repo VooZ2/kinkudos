@@ -1,0 +1,4 @@
+{$KINKUDOS_HOSTNAME} {
+	encode zstd gzip
+	reverse_proxy app:8000
+}

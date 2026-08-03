@@ -7,6 +7,29 @@ schema.
 
 ## [Unreleased]
 
+## [26.5.1] - 2026-08-03
+
+### Pridėta
+
+- Pasirenkamas Hostinger VPS diegiklis dabar patikrina pasirinktą leidimą ir
+  paruošia idempotentinę Ubuntu 24.04 Docker instaliaciją su prisegtos versijos
+  „Caddy“ HTTPS proxy, išliekančia sertifikatų saugykla, aiškiomis diegimo
+  būsenomis bei saugiu tęsimo ir sustabdymo procesu.
+- Programos poraštė pagal aktyvią sąsajos kalbą pateikia nuorodą į anglišką
+  arba lietuvišką „KinKudos“ dokumentaciją.
+
+### Pakeista
+
+- Hostinger instaliacijos pernaudoja standartinį atsarginių kopijų agentą ir
+  turi stabilų versijuotą diegimo profilio žymenį, todėl atnaujinimai, būklės
+  patikros bei saugus sustabdymas režimo nenustato pagal proxy failus.
+
+### Saugumas
+
+- Hostinger diegiklis prieš paleisdamas leidime esantį bootstrap patikrina
+  SHA256 kontrolinę sumą, neviešina Gunicorn ir tęsdamas atpažintą instaliaciją
+  išsaugo esamas paslaptis bei setup kodą.
+
 ## [26.5.0] - 2026-08-03
 
 ### Pridėta
