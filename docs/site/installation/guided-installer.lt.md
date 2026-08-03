@@ -1,23 +1,26 @@
 ---
-title: Vedamas KinKudos serverio installeris
+title: Vedamasis KinKudos serverio diegiklis
 description: Įdiekite patikrintą KinKudos leidimą paruoštame Linux serveryje, o pirmą tėvų paskyrą saugiai sukurkite naršyklėje.
 ---
 
-# Vedamas serverio installeris
+# Vedamasis serverio diegiklis
 
-Šį būdą naudokite tik **naujai, tuščiai instaliacijai** serveryje, kuriame jau yra:
+Šį būdą naudokite tik **naujam, tuščiam diegimui** serveryje, kuriame jau yra:
 
 - 64 bitų AMD64 arba ARM64 Linux;
 - Docker Engine ir Docker Compose papildinys;
 - Docker prieigą turintis ne root diegimo naudotojas;
 - į serverį nukreiptas domenas;
-- HTTPS reverse proxy, pavyzdžiui, Caddy, Nginx, Nginx Proxy Manager ar Traefik.
+- HTTPS atvirkštinis tarpinis serveris (proxy), pavyzdžiui, Caddy, Nginx, Nginx Proxy Manager ar Traefik.
 
-Installeris neįdiegia Docker ir nesukuria reverse proxy. Jis atsisako naudoti netuščią diegimo katalogą ir nėra skirtas esamai instaliacijai atnaujinti.
+Diegiklis neįdiegia Docker ir nesukuria proxy. Jis atsisako naudoti netuščią diegimo katalogą ir nėra skirtas esamam diegimui atnaujinti.
 
-## Peržiūrėkite ir paleiskite installerį
+!!! warning "Docker prieiga yra privilegijuota"
+    Docker prieiga praktiškai suteikia administracinę serverio kontrolę. Naudokite atskirą diegimo paskyrą, tačiau laikykite ją privilegijuota ir saugokite jos prisijungimo duomenis.
 
-Prieš vykdydami galite [peržiūrėti installerio kodą](https://kinkudos.app/install.sh). Prisijungę diegimo naudotoju paleiskite:
+## Peržiūrėkite ir paleiskite diegiklį
+
+Prieš vykdydami galite [peržiūrėti diegiklio kodą](https://kinkudos.app/install.sh). Prisijungę diegimo naudotoju paleiskite:
 
 ```bash
 curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh \
@@ -32,7 +35,7 @@ Pasirinkite:
 2. tikslų viešą domeną;
 3. jau paruošto proxy režimą: `host`, `traefik` arba `container`.
 
-Installeris sugeneruoja serverio paslaptis, įrašo vietinį `.env`, parenka proxy papildinį, patikrina katalogų savininkus, parsiunčia konkrečios versijos programos atvaizdą ir paleidžia `app` bei `backup-agent`.
+Diegiklis sugeneruoja serverio paslaptis, įrašo vietinį `.env`, parenka proxy papildinį, patikrina katalogų savininkus, parsiunčia pasirinktam KinKudos leidimui priskirtą programos atvaizdą ir paleidžia `app` bei `backup-agent`.
 
 ## Laukiamas rezultatas
 
@@ -43,7 +46,7 @@ Atverkite https://seima.example.com/setup/ ir naršyklėje įveskite šį setup 
 ...
 ```
 
-Setup kodą laikykite paslaptyje. Toliau atlikite [pirmąjį paruošimą naršyklėje](first-time-setup.lt.md). Terminale neįvedamas šeimos pavadinimas, tėvų slaptažodis ar vaikų PIN.
+Setup kodą laikykite paslaptyje. Toliau atlikite [pradinį nustatymą naršyklėje](first-time-setup.lt.md). Terminale neįvedamas šeimos pavadinimas, tėvų slaptažodis ar vaikų PIN.
 
 Jeigu konteineriai nepasileido, kataloge `/opt/kinkudos/deploy` vykdykite:
 
@@ -52,4 +55,4 @@ docker compose ps
 docker compose logs --tail=100 app
 ```
 
-Prieš dalydamiesi žurnalais pašalinkite paslaptis ir šeimos informaciją. Saugias patikras rasite [problemų sprendimo puslapyje](../troubleshooting.lt.md). Esamą instaliaciją atnaujinkite pagal [atnaujinimo vadovą](updating.lt.md).
+Prieš dalydamiesi žurnalais pašalinkite paslaptis ir šeimos informaciją. Saugias patikras rasite [problemų sprendimo puslapyje](../troubleshooting.lt.md). Esamą diegimą atnaujinkite pagal [atnaujinimo vadovą](updating.lt.md).

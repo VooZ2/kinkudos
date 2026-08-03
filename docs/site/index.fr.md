@@ -13,9 +13,9 @@ propre serveur et configurer votre première famille en toute sécurité.
 [Configurer KinKudos](start/first-15-minutes.fr.md){ .md-button .md-button--primary }
 [Essayer la démo](https://demo.kinkudos.app/){ .md-button }
 
-> **Avant l’installation :** KinKudos est auto-hébergé. Il vous faut un serveur
-> Linux, Docker, un nom d’hôte ou un domaine, HTTPS et des connaissances de base
-> en administration système. [Vérifier les prérequis →](installation/guided-installer.fr.md)
+> **Auto-hébergé :** choisissez la procédure simplifiée sur un VPS Hostinger ou
+> installez KinKudos sur un serveur que vous administrez déjà.
+> [Comparer les méthodes d’installation dans la documentation complète en anglais →](installation/index.md)
 
 ## Démarrage rapide
 

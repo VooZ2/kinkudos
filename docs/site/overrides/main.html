@@ -80,12 +80,12 @@
     {% set doc_language = "de" if source_uri == "index.de.md" or source_uri.endswith(".de.md") else ("fr" if source_uri == "index.fr.md" or source_uri.endswith(".fr.md") else "") %}
     {% if doc_language == "de" %}
       <aside class="kinkudos-translation-scope" role="note" aria-label="Übersetzungsumfang">
-        <p><strong>Diese Übersetzung enthält nur den Schnellstart.</strong> Die vollständige Dokumentation zu Installation, Serververwaltung, Backups und Fehlerbehebung ist derzeit auf Englisch und Litauisch verfügbar.</p>
+        <p><strong>Diese Übersetzung enthält nur den Schnellstart.</strong> Die vollständige Dokumentation zu Installation, Serververwaltung, Backups und Fehlerbehebung ist derzeit auf <a href="/">Englisch</a> und <a href="/index.lt/">Litauisch</a> verfügbar.</p>
         <p><a href="/">Vollständige englische Dokumentation öffnen →</a></p>
       </aside>
     {% elif doc_language == "fr" %}
       <aside class="kinkudos-translation-scope" role="note" aria-label="Étendue de la traduction">
-        <p><strong>Cette traduction contient uniquement le guide de démarrage rapide.</strong> La documentation complète sur l’installation, l’administration du serveur, les sauvegardes et le dépannage est actuellement disponible en anglais et en lituanien.</p>
+        <p><strong>Cette traduction contient uniquement le guide de démarrage rapide.</strong> La documentation complète sur l’installation, l’administration du serveur, les sauvegardes et le dépannage est actuellement disponible en <a href="/">anglais</a> et en <a href="/index.lt/">lituanien</a>.</p>
         <p><a href="/">Ouvrir la documentation complète en anglais →</a></p>
       </aside>
     {% endif %}
@@ -107,7 +107,7 @@
           <li class="md-tabs__item"><a href="/administration/index.lt/" class="md-tabs__link">Administravimas</a></li>
           <li class="md-tabs__item"><a href="/family-administration.lt/" class="md-tabs__link">Šeimos administravimas</a></li>
           <li class="md-tabs__item"><a href="/troubleshooting.lt/" class="md-tabs__link">Problemų sprendimas</a></li>
-          <li class="md-tabs__item"><a href="/reference/roles-and-data.lt/" class="md-tabs__link">Atmintinė</a></li>
+          <li class="md-tabs__item"><a href="/reference/roles-and-data.lt/" class="md-tabs__link">Informacija</a></li>
         </ul>
       </div>
     </nav>
@@ -238,18 +238,18 @@
           "What is KinKudos": "Kas yra KinKudos",
           "Is KinKudos right for your family?": "Ar KinKudos tinka šeimai?",
           "What self-hosting means": "Ką reiškia savarankiškas diegimas?",
-          "Quick install": "Greitas diegimas",
+          "Guided server installer": "Vedamasis serverio diegiklis",
           "Your first 15 minutes": "Pirmos 15 minučių",
           "Pair a child device": "Vaiko įrenginio susiejimas",
           "Parents": "Tėvams",
           "Parent dashboard": "Tėvų skydelis",
-          "Tasks and approvals": "Darbai ir patvirtinimai",
-          "Create and manage tasks": "Kurti ir valdyti darbus",
-          "Review completed tasks": "Peržiūrėti atliktus darbus",
-          "Assign tasks for today": "Paskirti darbus šiandienai",
+          "Tasks and approvals": "Užduotys ir patvirtinimai",
+          "Create and manage tasks": "Kurti ir valdyti užduotis",
+          "Review completed tasks": "Peržiūrėti atliktas užduotis",
+          "Assign tasks for today": "Paskirti užduotis šiandienai",
           "Points, penalties, and corrections": "Taškai, nuobaudos ir korekcijos",
-          "Rewards, goals, and lottery": "Prizai, tikslai ir loterija",
-          "Create and manage rewards": "Kurti ir valdyti prizus",
+          "Rewards, goals, and lottery": "Apdovanojimai, tikslai ir loterija",
+          "Create and manage rewards": "Kurti ir valdyti apdovanojimus",
           "Savings goals and suggestions": "Taupymo tikslai ir pasiūlymai",
           "Lottery tickets": "Loterijos bilietai",
           "Child space": "Vaiko aplinka",
@@ -261,13 +261,13 @@
           "Network access": "Tinklo prieiga",
           "Backups": "Atsarginės kopijos",
           "Installation": "Diegimas",
-          "Choose a method": "Pasirinkti būdą",
+          "Choose a method": "Pasirinkti diegimo būdą",
           "Hostinger VPS": "Hostinger VPS",
-          "Guided server installer": "Vedamas serverio installeris",
+          "Guided server installer": "Vedamasis serverio diegiklis",
           "Docker Compose": "Docker Compose",
-          "First-time web setup": "Pirmasis setup naršyklėje",
+          "First-time web setup": "Pradinis nustatymas naršyklėje",
           "Updating KinKudos": "KinKudos atnaujinimas",
-          "Backups and restore": "Kopijos ir atkūrimas",
+          "Backups and restore": "Atsarginės kopijos ir atkūrimas",
           "Uninstall KinKudos": "KinKudos pašalinimas",
           "Advanced deployment": "Pažangus diegimas",
           "Administration": "Administravimas",
@@ -278,10 +278,11 @@
           "CLI command reference": "CLI komandų atmintinė",
           "Overview": "Apžvalga",
           "Before installing": "Prieš diegiant",
-          "Updates, backups, and recovery": "Atnaujinimai, kopijos ir atkūrimas",
+          "Updates, backups, and recovery": "Atnaujinimai, atsarginės kopijos ir atkūrimas",
           "Family admin": "Šeimos administravimas",
+          "Family administration": "Šeimos administravimas",
           "Troubleshooting": "Problemų sprendimas",
-          "Reference": "Atmintinė",
+          "Reference": "Informacija",
           "Roles, data, and limits": "Vaidmenys, duomenys ir ribos",
           "Release and support policy": "Leidimų ir palaikymo politika",
           "Table of contents": "Turinys"

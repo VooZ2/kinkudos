@@ -13,7 +13,9 @@ This route is for experienced self-hosters who want to integrate KinKudos with a
 kinkudos/
 ├── app/            # retained release source
 ├── deploy/         # Compose, environment, and management scripts
-├── data/           # SQLite database and private media
+├── data/
+│   ├── kinkudos.sqlite3  # SQLite database
+│   └── media/            # private uploaded images
 ├── backups/        # local database backup copies
 ├── backup-state/   # backup health state
 └── secrets/        # setup, Django, VAPID, SMTP, and backup secrets
@@ -31,12 +33,12 @@ Never publish port `8000` to the internet. Terminate HTTPS at the proxy and forw
 
 The safest manual route is to download a specific GitHub release archive and SHA256 file, verify it, copy its `deploy` directory, then run the versioned `bootstrap.sh`. Exact verified commands are maintained in the repository’s [deployment reference](https://github.com/VooZ2/kinkudos/blob/main/deploy/README.md#manual-verified-installation).
 
-The bootstrap asks only for language, hostname, and the already prepared proxy mode. It generates required secrets and `.env`, validates the Compose configuration, pulls the full pinned image tag, and starts the services.
+The bootstrap asks only for language, hostname, and the already prepared proxy mode. It generates required secrets and `.env`, validates the Compose configuration, pulls the image pinned to the selected KinKudos release, and starts the services.
 
 After it prints the HTTPS URL and private setup code, continue with [First-time web setup](first-time-setup.md).
 
 ## Persistent data and secrets
 
-Back up `data`, required private media, and the separately protected secrets needed to decrypt remote backups. Do not commit `.env`, `secrets`, databases, backups, or uploads. Removing or recreating a container must not remove these host directories.
+Back up the complete `data/` directory: it contains both `kinkudos.sqlite3` and private uploads under `data/media/`. If remote backups are enabled, separately protect `secrets/restic_password` and `secrets/backup/restic.env`; they contain the password and repository settings needed to access those backups. Do not commit `.env`, `secrets`, databases, backups, or uploads. Removing or recreating a container must not remove these host directories. See [Backups and restore](../backups.md) for the supported procedure.
 
 For later operations use [Updating](updating.md), [Backups](../backups.md), [CLI reference](../administration/cli.md), and [Troubleshooting](../troubleshooting.md).

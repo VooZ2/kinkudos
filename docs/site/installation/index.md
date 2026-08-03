@@ -5,7 +5,7 @@ description: Compare the supported KinKudos installation methods, required skill
 
 # Choose your installation method
 
-KinKudos is self-hosted: every installation runs for one family on a Linux server controlled by that family. The application is free, but a VPS or other hosting service may cost money.
+KinKudos is self-hosted: every installation serves one family and runs on a Linux server controlled by the family or its chosen administrator. The application is free, but a VPS or other hosting service may cost money.
 
 Whichever method you choose, the process has two distinct parts:
 
@@ -16,7 +16,7 @@ Whichever method you choose, the process has two distinct parts:
 
 | Method | Best for | Terminal | What you maintain |
 |---|---|---:|---|
-| [Hostinger VPS](hostinger.md) | People who want the shortest supported route on a commercial VPS | One command in Browser Terminal | VPS, updates, and backups |
+| [Hostinger VPS](hostinger.md) | People who want the simplest supported Hostinger VPS route | One command in Browser Terminal | VPS, updates, and backups |
 | [Guided server installer](guided-installer.md) | A prepared Linux server with Docker and HTTPS proxy | Yes | The complete server |
 | [Docker Compose](docker-compose.md) | Experienced self-hosters, NAS users, or custom proxy setups | Yes | Compose, secrets, proxy, storage, and updates |
 | [Advanced deployment](advanced.md) | Existing Traefik/Nginx Proxy Manager networks or unusual Linux layouts | Yes | All integration decisions |

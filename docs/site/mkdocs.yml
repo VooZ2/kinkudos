@@ -56,9 +56,6 @@ theme:
 extra_css:
   - stylesheets/kinkudos.css
 
-extra:
-  app_version: "26.5.1"
-
 markdown_extensions:
   - admonition
   - attr_list
@@ -76,7 +73,7 @@ nav:
       - What is KinKudos: start/what-is-kinkudos.md
       - Is KinKudos right for your family?: start/is-kinkudos-right.md
       - What self-hosting means: start/what-self-hosting-means.md
-      - Quick install: installation/guided-installer.md
+      - Guided server installer: installation/guided-installer.md
       - Your first 15 minutes: start/first-15-minutes.md
       - Pair a child device: start/pair-a-child-device.md
   - Parents:
@@ -115,7 +112,7 @@ nav:
       - SMTP configuration: administration/smtp.md
       - Logs and diagnostics: administration/logs.md
       - CLI command reference: administration/cli.md
-  - Family admin: family-administration.md
+  - Family administration: family-administration.md
   - Troubleshooting: troubleshooting.md
   - Reference:
       - Roles, data, and limits: reference/roles-and-data.md

@@ -19,7 +19,9 @@ something goes wrong.
 
 <div class="grid cards kinkudos-home-paths" markdown>
 
--   :material-cloud-check-outline: **Install on a Hostinger VPS** <span class="kinkudos-path-badge">Simplest setup</span>
+-   <span class="kinkudos-path-badge">Simplest setup</span>
+
+    :material-cloud-check-outline: **Install on a Hostinger VPS**
 
     ---
 
@@ -56,9 +58,13 @@ something goes wrong.
 
 </div>
 
-**Manage an existing KinKudos server.** Update, back up, restore, inspect logs,
-and use CLI recovery tools.
+<div class="kinkudos-admin-path" markdown>
+**Manage an existing KinKudos server**
+
+Update, back up, restore, inspect logs, and use CLI recovery tools.
+
 [Open server administration →](administration/index.md)
+</div>
 
 ## Popular guides
 

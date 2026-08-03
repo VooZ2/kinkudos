@@ -1,6 +1,6 @@
 ---
 title: KinKudos tėvų slaptažodžio atkūrimas
-description: Atkurkite tėvų slaptažodį el. paštu, kai veikia SMTP, arba serverio CLI naudodami vienkartinį šeimos atkūrimo kodą.
+description: Atkurkite tėvų slaptažodį el. paštu, kai veikia SMTP, arba serverio CLI naudodami šeimos atkūrimo kodą.
 ---
 
 # Tėvų slaptažodžio atkūrimas
@@ -11,7 +11,7 @@ Kai SMTP įjungtas, tėvų prisijungimo puslapyje pasirinkite **Pamiršote slapt
 
 ## Atkūrimas serveryje
 
-Jeigu el. paštas neveikia, naudokite pirmojo paruošimo metu išsaugotą vienkartinį šeimos atkūrimo kodą. Pirmiausia sukurkite kopiją, tada `deploy` kataloge interaktyviai vykdykite:
+Jeigu el. paštas neveikia, naudokite pradinio nustatymo metu vieną kartą parodytą ir išsaugotą šeimos atkūrimo kodą. Kodas galioja tol, kol yra pakeičiamas. Pirmiausia sukurkite atsarginę kopiją, tada `deploy` kataloge interaktyviai vykdykite:
 
 ```bash
 docker compose exec app python manage.py reset_parent_password --username TEVU_NAUDOTOJAS

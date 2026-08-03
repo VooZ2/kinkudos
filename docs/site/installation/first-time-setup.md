@@ -32,7 +32,7 @@ If selected, provide the SMTP host, port, security mode, username, password, sen
 
 ## Save the recovery code
 
-After successful setup, KinKudos signs you in and shows a one-time recovery code. Save it in a password manager before leaving the page. It is not shown again and is required by the KinKudos CLI recovery command.
+After successful setup, KinKudos signs you in and shows the recovery code once. Save it in a password manager before leaving the page. It is not shown again, remains valid until it is rotated, and is required by the KinKudos CLI recovery command.
 
 Setup then becomes permanently unavailable. Revisiting `/setup/` sends a signed-in parent to the dashboard or a signed-out visitor to parent sign-in.
 

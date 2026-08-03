@@ -13,9 +13,9 @@ und die erste Familie sicher einrichten.
 [KinKudos einrichten](start/first-15-minutes.de.md){ .md-button .md-button--primary }
 [Live-Demo testen](https://demo.kinkudos.app/){ .md-button }
 
-> **Vor der Installation:** KinKudos wird selbst gehostet. Sie benötigen einen
-> Linux-Server, Docker, einen Hostnamen oder eine Domain, HTTPS und grundlegende
-> Kenntnisse in der Serververwaltung. [Installationsanforderungen prüfen →](installation/guided-installer.de.md)
+> **Selbst gehostet:** Wählen Sie den einfacheren Weg über einen Hostinger VPS
+> oder installieren Sie KinKudos auf einem Server, den Sie bereits verwalten.
+> [Installationsmethoden in der vollständigen englischen Dokumentation vergleichen →](installation/index.md)
 
 ## Schnellstart
 

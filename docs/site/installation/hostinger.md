@@ -5,7 +5,9 @@ description: Create a Hostinger Ubuntu 24.04 Docker VPS, connect a domain, run t
 
 # Install KinKudos on a Hostinger VPS
 
-This is the shortest supported route for a new KinKudos server. The installer is designed for Hostinger’s **Ubuntu 24.04 with Docker** VPS template, runs in Browser Terminal as `root`, starts KinKudos with a version-pinned Caddy proxy, checks HTTPS, and prints the private first-time setup code.
+This is the simplest supported way to start a new KinKudos server. You create a Hostinger VPS, connect your domain, run one installation command, and finish the family setup in your browser.
+
+The installer supports Hostinger’s **Ubuntu 24.04 with Docker** template. It runs in Browser Terminal as `root`, starts KinKudos with Caddy, configures HTTPS, and prints the private setup code.
 
 KinKudos is free. Hostinger VPS is a paid, self-managed service: you remain responsible for the VPS, domain, updates, and tested backups. Allow about 30–60 minutes, plus possible DNS propagation time.
 
@@ -17,7 +19,7 @@ You need:
 - a domain or subdomain you control;
 - access to that domain’s DNS records;
 - an email address for your Hostinger account;
-- a password manager for the server password, setup code, and recovery code.
+- a password manager where you can safely store the VPS password, setup code, and recovery code.
 
 SMTP is optional and can be configured later.
 
@@ -25,7 +27,7 @@ SMTP is optional and can be configured later.
 
 > **Affiliate disclosure:** This is a referral link. If you purchase through it, the maintainer may receive a commission at no additional cost to you. Hostinger is not required to use KinKudos, is not an official KinKudos partner, and does not receive access to your family data beyond the VPS service you operate.
 
-Choose a **VPS**, not shared Web Hosting. Plan names and prices change; KinKudos does not promise a minimum Hostinger plan until that plan has completed real-world release testing.
+Choose a **VPS**, not shared Web Hosting. Choose a plan that supports the **Ubuntu 24.04 with Docker** template. Plan names, resources, and prices may change.
 
 ## 2. Create the VPS
 
@@ -41,10 +43,10 @@ Use only a lowercase fully qualified hostname. The installer does not accept an 
 
 In the Hostinger VPS firewall, allow inbound TCP ports **80** and **443**. Keep SSH or Browser Terminal access available. Do not expose port `8000`.
 
-Before installing, confirm from your computer that the hostname resolves to the VPS:
+Before installing, confirm from your computer that the hostname resolves to the VPS. The following command is available on Windows, macOS, and many Linux systems:
 
 ```bash
-getent hosts family.example.com
+nslookup family.example.com
 ```
 
 Replace the example with your real hostname. The result should contain the VPS IP.
@@ -101,7 +103,7 @@ Keep the setup code private. It remains valid only until setup completes success
 
 ## 6. Complete setup in your browser
 
-Open the printed HTTPS URL and follow [First-time web setup](first-time-setup.md). Create the first parent administrator, family name, language, timezone, and strong password. Save the one-time recovery code in your password manager.
+Open the printed HTTPS URL and follow [First-time web setup](first-time-setup.md). Create the first parent administrator, family name, language, timezone, and strong password. Save the recovery code shown once during setup in your password manager.
 
 You may skip SMTP. KinKudos works without it; only email password recovery and optional feedback notification email remain unavailable. See [SMTP configuration](../administration/smtp.md) when you are ready.
 

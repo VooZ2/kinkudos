@@ -15,6 +15,9 @@ Use this method only for a **new, empty installation** on a server that already 
 
 The installer does not install Docker or create the reverse proxy. It refuses a non-empty installation root and must not be used to update an existing installation.
 
+!!! warning "Docker access is privileged"
+    Docker access effectively grants administrative control of the server. Use a dedicated deployment account, but treat it as privileged and protect its credentials.
+
 ## Review and run the installer
 
 You can [inspect the installer source](https://kinkudos.app/install.sh) before running it. Then sign in as the deployment user and run:
@@ -32,7 +35,7 @@ Choose:
 2. the exact public hostname;
 3. the already prepared proxy mode: `host`, `traefik`, or `container`.
 
-The installer generates server secrets, writes the local `.env`, selects the proxy overlay, checks directory ownership, pulls the pinned application image, and starts `app` and `backup-agent`.
+The installer generates server secrets, writes the local `.env`, selects the proxy overlay, checks directory ownership, pulls the image pinned to the selected KinKudos release, and starts `app` and `backup-agent`.
 
 ## Expected result
 

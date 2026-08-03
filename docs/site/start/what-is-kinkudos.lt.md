@@ -1,34 +1,36 @@
 # Kas yra KinKudos?
 
-KinKudos yra privati, vienai šeimai skirta savarankiškai diegiama programa. Vaikai atlieka darbus, uždirba taškus ir prašo prizų, o tėvai peržiūri prašymus ir priima sprendimus.
+KinKudos yra privati, vienai šeimai skirta programa, veikianti jūsų valdomame serveryje. Vaikai atlieka užduotis, uždirba taškus ir prašo apdovanojimų, o tėvai peržiūri prašymus ir priima sprendimus.
 
-Nėra reklamų, įdiegtos analizės ar viešos bendros šeimų erdvės. Duomenų bazė, nuotraukos ir prisijungimo duomenys lieka pas asmenį, prižiūrintį šeimos instaliaciją.
+Duomenų bazė, nuotraukos ir prisijungimo duomenys lieka jūsų valdomame KinKudos serveryje.
 
 ```text
-Darbas → pateikimas → tėvų sprendimas → taškai → prizas arba tikslas → istorija
+Užduotis → pateikimas → tėvų sprendimas → taškai → apdovanojimas arba tikslas → istorija
 ```
 
 ## Pagrindinės funkcijos
 
 | Funkcija | Kaip veikia |
 | --- | --- |
-| **Darbai** | Vaikai gali pasirinkti katalogo darbą, jį pateikti su pasirenkama nuotrauka, o tėvai patvirtina, grąžina taisyti arba atmeta. Tėvai taip pat gali iškart užskaityti matytą darbą. |
-| **Dienos darbai** | Tėvai vaikui išsiunčia šiandienos darbus. Užbaigus kiekvieną, taškai pridedami iškart. |
-| **Prizai ir tikslai** | Vaikai prašo prizų arba siūlo naują prizą ar taupymo tikslą. Tėvai nusprendžia ir nustato kainą. |
+| **Užduotys** | Vaikai gali pasirinkti katalogo užduotį, ją pateikti su pasirenkama nuotrauka, o tėvai patvirtina, grąžina taisyti arba atmeta. Tėvai taip pat gali iškart užskaityti matytą atliktą užduotį. |
+| **Dienos užduotys** | Tėvai vaikui paskiria šiandienos užduotis. Užbaigus kiekvieną, taškai pridedami iškart. |
+| **Apdovanojimai ir tikslai** | Vaikai prašo apdovanojimų arba siūlo naują apdovanojimą ar taupymo tikslą. Tėvai nusprendžia ir nustato kainą. |
 | **Taškai ir istorija** | Kiekvienas pridėjimas, atėmimas, dovana, bilietas ar korekcija sukuria nekintamą istorijos įrašą. |
-| **Kreditas** | Vaikas gali išleisti iki tėvų nustatyto neigiamo balanso. Išnaudojus pusę kredito, nauji prizų prašymai stabdomi. |
+| **Kreditas** | Vaikas gali išleisti iki tėvų nustatyto neigiamo balanso. Išnaudojus pusę kredito, nauji apdovanojimų prašymai stabdomi. |
 | **Loterijos bilietai** | Pasirenkama nutrinama loterija turi kainą, savaitinį limitą, aiškius rezultatus ir niekada neperžengia kredito limito. |
-| **Vaiko pasauliai** | Vaikai renkasi temas, avatarą, kasdienę atsitiktinę temą, keičia savo PIN ir siūlo prizus ar tikslus. |
+| **Vaiko temos ir išvaizda** | Vaikai renkasi temas, avatarą, kasdienę atsitiktinę temą, keičia savo PIN ir siūlo apdovanojimus ar tikslus. |
 | **Pranešimai** | Tėvai ir vaikai gali įjungti naršyklės pranešimus. „iPhone“ ir „iPad“ programą pirmiausia reikia įdiegti į pradžios ekraną. |
 | **Privatūs atsiliepimai** | Tėvai ir vaikai programoje gali išsaugoti privatų pasiūlymą ar problemą su pasirenkama ekrano nuotrauka. |
 
 ## Kas ją naudoja
 
 - **Tėvų** paskyros priima kasdienius sprendimus ir mato šeimos skydelį.
-- **Tėvų administratorius** papildomai valdo tinklo ribojimus, SMTP, kopijas, rankines kopijas ir visų vaikų įrenginių atšaukimą.
+- **Tėvų administratorius** papildomai valdo tinklo ribojimus, SMTP, atsargines kopijas ir visų vaikų įrenginių prieigos panaikinimą.
 - **Vaikų** profiliai naudoja susietą įrenginį ir keturių skaitmenų PIN bei mato tik savo informaciją ir bendrus katalogus.
-- **Serverio administratorius** prižiūri serverį, HTTPS proxy, atnaujinimus ir atkūrimą. Mažoje šeimoje tai gali būti tas pats žmogus kaip tėvų administratorius.
+- **Serverio administratorius** prižiūri serverį, HTTPS atvirkštinį tarpinį serverį (proxy), atnaujinimus ir atkūrimą. Mažoje šeimoje tai gali būti tas pats žmogus kaip tėvų administratorius.
 
-KinKudos nėra bankas, vaikų sekimo priemonė ar socialinis tinklas. Jis neseka vietos, neskaito įrenginio turinio ar žinučių ir neskelbia šeimos veiklos.
+## Ko KinKudos nedaro
 
-[Greitas diegimas →](../installation/guided-installer.lt.md) · [Pirmos 15 minučių →](first-15-minutes.lt.md) · [English](what-is-kinkudos.md)
+KinKudos neturi reklamų, integruotos naudojimo analizės ar viešos bendros šeimų erdvės. Tai nėra bankas, vaikų sekimo priemonė ar socialinis tinklas. KinKudos neseka vietos, neskaito įrenginio turinio ar žinučių ir neskelbia šeimos veiklos.
+
+[Vedamasis serverio diegiklis →](../installation/guided-installer.lt.md) · [Pirmos 15 minučių →](first-15-minutes.lt.md) · [English](what-is-kinkudos.md)

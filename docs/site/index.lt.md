@@ -13,13 +13,15 @@ raskite pagalbą iškilus problemai.
 [Įdiegti KinKudos](installation/index.lt.md){ .md-button .md-button--primary }
 [Išbandyti demonstracinę versiją](https://demo.kinkudos.app/){ .md-button }
 
-> **Savarankiškai diegiama:** rinkitės paprastesnį Hostinger VPS kelią arba
-> įdiekite KinKudos savo jau valdomame serveryje.
+> **Veikia jūsų serveryje:** rinkitės paprastesnį Hostinger VPS kelią arba
+> įdiekite KinKudos jau valdomame serveryje.
 > [Palyginti diegimo būdus →](installation/index.lt.md)
 
 <div class="grid cards kinkudos-home-paths" markdown>
 
--   :material-cloud-check-outline: **Įdiekite KinKudos Hostinger VPS** <span class="kinkudos-path-badge">Paprasčiausias diegimas</span>
+-   <span class="kinkudos-path-badge">Paprasčiausias būdas</span>
+
+    :material-cloud-check-outline: **Diegimas Hostinger VPS**
 
     ---
 
@@ -42,7 +44,7 @@ raskite pagalbą iškilus problemai.
     ---
 
     Kurkite užduotis ir apdovanojimus, peržiūrėkite prašymus, valdykite taškus
-    ir padėkite vaikui naudotis savo aplinka.
+    ir padėkite vaikui naudotis savo KinKudos erdve.
 
     [Atidaryti tėvų vadovą →](parents/dashboard-and-child-cards.lt.md)
 
@@ -50,16 +52,21 @@ raskite pagalbą iškilus problemai.
 
     ---
 
-    Pradėkite nuo simptomo, saugiausio pirmo patikrinimo ir nuorodos į išsamų
-    vadovą.
+    Pasirinkite, kas neveikia, atlikite saugiausią pirmą patikrą ir raskite
+    išsamų sprendimą.
 
     [Spręsti problemą →](troubleshooting.lt.md)
 
 </div>
 
-**Administruokite veikiantį KinKudos serverį.** Atnaujinkite KinKudos, kurkite
-ir atkurkite kopijas, tikrinkite žurnalus bei naudokite CLI atkūrimo įrankius.
+<div class="kinkudos-admin-path" markdown>
+**Administruokite veikiantį KinKudos serverį**
+
+Atnaujinkite KinKudos, kurkite ir atkurkite atsargines kopijas, tikrinkite
+žurnalus ir naudokite CLI atkūrimo įrankius.
+
 [Atidaryti serverio administravimą →](administration/index.lt.md)
+</div>
 
 ## Populiariausi vadovai
 

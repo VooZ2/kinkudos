@@ -325,6 +325,18 @@ button.md-button:disabled,
   flex: 0 0 1.25rem;
 }
 
+.md-typeset .kinkudos-home-paths > ul > li:first-child > p:nth-child(2) {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.md-typeset .kinkudos-home-paths > ul > li:first-child > p:nth-child(2) svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: 0 0 1.25rem;
+}
+
 .md-typeset .kinkudos-home-paths > ul > li:first-child {
   border-color: rgb(76 29 149 / 38%);
   background: rgb(76 29 149 / 4%);
@@ -336,7 +348,7 @@ button.md-button:disabled,
 }
 
 .kinkudos-path-badge {
-  margin-inline-start: auto;
+  margin: 0 0 0.25rem;
   padding: 0.12rem 0.42rem;
   border: 1px solid rgb(76 29 149 / 24%);
   border-radius: 999px;
@@ -345,7 +357,8 @@ button.md-button:disabled,
   font-size: 0.62rem;
   font-weight: 750;
   line-height: 1.45;
-  letter-spacing: 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   white-space: nowrap;
 }
 
@@ -353,6 +366,22 @@ button.md-button:disabled,
   border-color: rgb(221 208 255 / 34%);
   color: var(--kinkudos-plum-200);
   background: rgb(221 208 255 / 11%);
+}
+
+.kinkudos-admin-path {
+  margin-top: 1.6rem;
+  padding: 0.85rem 1rem;
+  border-inline-start: 0.2rem solid var(--kinkudos-card-border);
+  border-radius: 0.2rem 0.65rem 0.65rem 0.2rem;
+  background: var(--kinkudos-card-hover);
+}
+
+.kinkudos-admin-path p {
+  margin: 0;
+}
+
+.kinkudos-admin-path p + p {
+  margin-top: 0.35rem;
 }
 
 .kinkudos-translation-scope {
@@ -479,4 +508,18 @@ html[lang="fr"] .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav_
     margin: 0.2rem 0;
     text-align: center;
   }
+}
+
+/* Keep long technical examples and wide tables usable on narrow screens. */
+.md-typeset pre,
+.md-typeset__table {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.md-typeset__table {
+  border-inline-end: 1px solid var(--md-default-fg-color--lightest);
+  scrollbar-width: thin;
 }

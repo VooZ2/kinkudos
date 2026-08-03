@@ -1,6 +1,6 @@
 ---
 title: Recover a KinKudos parent password
-description: Reset a parent password by email when SMTP works or use the one-time family recovery code from the server CLI.
+description: Reset a parent password by email when SMTP works or use the family recovery code from the server CLI.
 ---
 
 # Parent password recovery
@@ -11,7 +11,7 @@ When SMTP is enabled, select **Forgot password?** on parent sign-in, enter the a
 
 ## Recover from the server
 
-If email is unavailable, use the one-time family recovery code saved during first-time setup. Make a backup first, then run interactively from `deploy`:
+If email is unavailable, use the family recovery code shown once and saved during first-time setup. The code remains valid until it is rotated. Make a backup first, then run interactively from `deploy`:
 
 ```bash
 docker compose exec app python manage.py reset_parent_password --username PARENT_USERNAME

@@ -27,11 +27,11 @@ Hostinger patikra rodo **deployed but HTTPS pending**, kai KinKudos ir Caddy vei
 
 Neapeikite sertifikato įspėjimų ir nepradėkite įprastai naudoti šeimos programos per viešą HTTP.
 
-## Installeris nepasileidžia
+## Diegiklis nepasileidžia
 
-Hostinger installeriui reikia root, Hostinger Ubuntu 24.04 Docker šablono, veikiančio Docker, bent Compose 2.20, Docker 24 ir įprastų sistemos įrankių. Vadovaukitės tikslia jo klaida, o ne diekite atsitiktinius paketus ar išjunkite patikras.
+Hostinger diegikliui reikia root, Hostinger Ubuntu 24.04 Docker šablono, veikiančio Docker, bent Compose 2.20, Docker 24 ir įprastų sistemos įrankių. Vadovaukitės tikslia jo klaida, o ne diekite atsitiktinius paketus ar išjunkite patikras.
 
-Bendras vedamas installeris turi kitus reikalavimus: ne root diegimo naudotoją ir jau veikiantį HTTPS proxy. Nemaišykite abiejų profilių viename diegimo kataloge.
+Bendras vedamasis diegiklis turi kitus reikalavimus: ne root diegimo naudotoją ir jau veikiantį HTTPS proxy. Nemaišykite abiejų profilių viename diegimo kataloge.
 
 ## Setup puslapis nerodomas
 
@@ -41,9 +41,9 @@ Jeigu nukreipiama į tėvų prisijungimą ar skydelį, setup jau užbaigtas arba
 
 ## Setup kodas nepriimamas
 
-Nukopijuokite dabartinį installerio parodytą kodą be papildomų tarpų. Hostinger profilyje iki sėkmingos setup pabaigos jis taip pat laikomas `/opt/kinkudos/secrets/setup_token`. Tai paslaptis – nedėkite jos į nuotraukas ar pagalbos užklausas.
+Nukopijuokite dabartinį diegiklio parodytą kodą be papildomų tarpų. Hostinger profilyje iki sėkmingos setup pabaigos jis taip pat laikomas `/opt/kinkudos/secrets/setup_token`. Tai paslaptis – nedėkite jos į nuotraukas ar pagalbos užklausas.
 
-Dar kartą paleidus atpažintą Hostinger installerį esamas kodas išsaugomas. Nekeiskite paslapčių failų rankiniu būdu.
+Dar kartą paleidus atpažintą Hostinger diegiklį esamas kodas išsaugomas. Nekeiskite paslapčių failų rankiniu būdu.
 
 ## Nepavyksta prisijungti
 
