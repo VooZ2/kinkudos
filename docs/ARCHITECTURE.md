@@ -26,8 +26,12 @@ Passwords are hashed with Argon2. Parent sessions last 24 hours
 and requires SMTP configuration. Removing a parent account deactivates it
 (`is_active=False`); it is not physically deleted, and the last active
 parent account cannot be removed.
-The first parent created by the installer is the parent administrator
-(`is_staff=True`). All parents may see backup health, but only the parent
+The first parent is created in the browser-only initial setup and is the parent
+administrator (`is_staff=True`). The installer generates a high-entropy setup
+code, stored as a local secret, so a person who merely reaches a fresh public
+hostname cannot claim the first account. Setup creates the first parent and
+family settings atomically; after it succeeds, server-side checks permanently
+disable it. All parents may see backup health, but only the parent
 administrator may change backup credentials or request a manual backup.
 
 **Children** — multiple `ChildProfile` records managed by parents. Before a
@@ -48,8 +52,11 @@ rewards, themes). Cross-child access is forbidden.
 per-child negative balance floor, photo-bonus points, birthday points,
 family-wide lottery availability, ticket price and weekly purchase limit,
 evidence/screenshot retention periods, optional application-level network
-access mode and allowed IPv4/IPv6 CIDRs, password-recovery code hash. Not a
-source of app versioning or general PWA configuration.
+access mode and allowed IPv4/IPv6 CIDRs, password-recovery code hash, initial
+setup completion state, default interface language, and family timezone. The
+timezone is activated for requests and lottery reminders so daily/weekly rules
+follow the household clock. Not a source of app versioning or general PWA
+configuration.
 
 **DeviceToken** / **DevicePairingLink** — a paired child browser/PWA and its
 short-lived, single-use bootstrap link. Only SHA-256 token digests are stored.
@@ -226,6 +233,10 @@ root, and then hands control to the versioned interactive `bootstrap.sh`.
 Production Compose files pin the full release tag from the public
 `vooz2/kinkudos` Docker Hub repository; `latest` and partial-version tags are
 published for discovery but are not used by supported deployments.
+The installer prepares secrets, verifies and starts the containers, then prints
+the application URL and setup code; it never collects family account details
+or PINs in the terminal. SMTP remains optional and can be skipped during
+browser setup or configured later by the parent administrator.
 
 ## Backups
 An isolated `backup-agent` container owns the remote-storage credentials and

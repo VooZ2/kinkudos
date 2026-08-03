@@ -183,12 +183,12 @@ Open `https://family.example.com`, using your real hostname. The installer
 shows container status at the end; `docker compose ps` and
 `docker compose logs --tail=100 app` provide the same checks later.
 
-The installer asks for English or Lithuanian, hostname, reverse-proxy mode,
-and whether to create the first family. Family setup asks for the first parent
-credentials, family name, and child profiles. It generates missing Django,
-VAPID, backup-agent, and `restic` secrets, creates `.env`, checks host-directory
-ownership, and pulls the published application image. Existing secrets are not
-overwritten.
+The installer asks for English or Lithuanian, hostname, and reverse-proxy mode.
+It generates missing Django, VAPID, backup-agent, restic, and browser-setup
+secrets, creates `.env`, checks host-directory ownership, pulls the published
+application image, and starts the containers. It then prints the application
+URL and a setup code. Open `/setup/` in a browser and create the first parent,
+family name, language, and timezone there. Existing secrets are not overwritten.
 
 For an unattended English installation, set:
 
@@ -199,11 +199,8 @@ KINKUDOS_DEFAULT_LANGUAGE=en ./bootstrap.sh
 Use `lt` instead of `en` for Lithuanian. Users can still switch language in the
 web interface; their choice is saved on that device.
 
-If initial family creation was skipped:
-
-```bash
-docker compose exec app python manage.py setup_family --language en
-```
+The setup code is needed only while no parent account exists. Keep it private;
+after browser setup the server permanently disables the setup route.
 
 ## Updating an existing installation
 

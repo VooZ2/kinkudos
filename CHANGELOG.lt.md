@@ -7,8 +7,16 @@ schema.
 
 ## [Unreleased]
 
+## [26.5.0] - 2026-08-03
+
 ### Pridėta
 
+- Naujos instaliacijos pirmą paruošimą dabar užbaigia naršyklėje: vedlys
+  sukuria pirmą tėvų administratorių, šeimos pavadinimą, numatytąją kalbą,
+  laiko juostą, atkūrimo kodą ir pasirinktinius SMTP nustatymus.
+- Vokiškoje ir prancūziškoje dokumentacijoje dabar pateikiami lokalizuoti
+  tituliniai, tinkamumo, savarankiško diegimo, pirmojo paruošimo ir vaiko
+  įrenginio susiejimo vadovai.
 - Vieša angliška naudotojo dokumentacija dabar apima pradžią, tėvų veiksmus, nustatymus, saugumą, priežiūrą ir greitą pagalbą; iš kiekvienos skilties pasiekiami lietuviški atitikmenys.
 - Viešos saugumo pranešimo ir leidimų bei palaikymo politikos paaiškina privatų
   pažeidžiamumų kanalą, palaikomos versijos ribas ir pagal galimybes teikiamo
@@ -20,6 +28,19 @@ schema.
 
 ### Pakeista
 
+- Diegiklis dabar paruošia ir paleidžia KinKudos, parodo privatų naršyklės
+  setup kodą ir terminale nebeprašo šeimos prisijungimo duomenų, vardų ar
+  vaikų PIN.
+- Šeimos laiko juosta dabar nustato su kalendoriumi susijusį užklausų bei
+  loterijos priminimų veikimą, o pasirinkta numatytoji kalba naudojama
+  naršyklėse be išsaugoto pasirinkimo.
+- Katalogo kūrimo, redagavimo, rodymo/slėpimo ir šalinimo veiksmai grįžta į
+  darbų ir prizų skiltį, o ne tėvų pradžios skiltį.
+- Plaukiojanti šeimos atsiliepimų forma rodoma tik vaikams; tėvai vaikų
+  atsiliepimus ir toliau peržiūri nustatymuose.
+- Dokumentacijos kalbos pasirinkimas, metaduomenys, struktūriniai duomenys ir
+  greito starto navigacija dabar palaiko EN, LT, DE ir FR, nerodydami neišverstų
+  skilčių kaip lokalizuoto turinio.
 - Vieša dokumentacija dabar naudoja KinKudos ikoną, spalvų paletę, tipografiją ir šviesios bei tamsios išvaizdos stilių.
 - Vieša dokumentacija dabar pateikia lokalizuotus pavadinimus, aprašymus,
   kalbos metaduomenis, kanonines ir alternatyvių kalbų nuorodas, dalinimosi
@@ -31,6 +52,17 @@ schema.
   tiesiai sugeneruotame HTML, nepaliekant vertimo naršyklės JavaScript kodui.
 - Lietuviškuose puslapiuose dabar parenkama ir išskleidžiama ta pati aktyvi
   šoninio meniu skiltis kaip angliškuose atitikmenyse.
+
+### Pataisyta
+
+- Laukiančių darbų ir prizų kortelėse iPhone dydžio ekranuose antraštės bei
+  taškų tarpai dabar kompaktiški ir vienodi.
+
+### Saugumas
+
+- Serverio sugeneruotas setup kodas ir serverio pusėje saugoma užbaigimo būsena
+  neleidžia naujoje viešoje instaliacijoje sukurti daugiau nei vieno pradinio
+  administratoriaus.
 
 ## [26.4.9] - 2026-07-31
 

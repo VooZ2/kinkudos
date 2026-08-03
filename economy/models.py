@@ -61,6 +61,9 @@ class FamilySettings(models.Model):
     )
     allowed_networks = models.TextField(blank=True, default="")
     recovery_code_hash = models.CharField(max_length=255, blank=True)
+    setup_completed_at = models.DateTimeField(null=True, blank=True)
+    default_language = models.CharField(max_length=8, blank=True, default="")
+    timezone_name = models.CharField(max_length=64, blank=True, default="")
 
     class Meta:
         verbose_name = _("family settings")

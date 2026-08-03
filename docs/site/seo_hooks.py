@@ -1,45 +1,95 @@
-"""Build-time SEO adjustments for the bilingual documentation."""
+"""Build-time SEO and localization adjustments for the documentation."""
 
 import json
 import re
 from urllib.parse import urljoin, urlparse
 
-_LT_NAV_LABELS = {
-    "Start": "Pradžia",
-    "What is KinKudos": "Kas yra KinKudos",
-    "Is KinKudos right for your family?": "Ar KinKudos tinka šeimai?",
-    "What self-hosting means": "Ką reiškia savarankiškas diegimas?",
-    "Quick install": "Greitas diegimas",
-    "Your first 15 minutes": "Pirmos 15 minučių",
-    "Pair a child device": "Vaiko įrenginio susiejimas",
-    "Parents": "Tėvams",
-    "Parent dashboard": "Tėvų skydelis",
-    "Tasks and approvals": "Darbai ir patvirtinimai",
-    "Create and manage tasks": "Kurti ir valdyti darbus",
-    "Review completed tasks": "Peržiūrėti atliktus darbus",
-    "Assign tasks for today": "Paskirti darbus šiandienai",
-    "Points, penalties, and corrections": "Taškai, nuobaudos ir korekcijos",
-    "Rewards, goals, and lottery": "Prizai, tikslai ir loterija",
-    "Create and manage rewards": "Kurti ir valdyti prizus",
-    "Savings goals and suggestions": "Taupymo tikslai ir pasiūlymai",
-    "Lottery tickets": "Loterijos bilietai",
-    "Child space": "Vaiko aplinka",
-    "Parent settings": "Tėvų nustatymai",
-    "Security": "Saugumas",
-    "Accounts and devices": "Paskyros ir įrenginiai",
-    "PINs and sign-in protection": "PIN ir prisijungimo apsauga",
-    "Notifications and installing KinKudos": "Pranešimai ir KinKudos diegimas",
-    "Network access": "Tinklo prieiga",
-    "Backups": "Atsarginės kopijos",
-    "Server": "Serveris",
-    "Overview": "Apžvalga",
-    "Before installing": "Prieš diegiant",
-    "Updates, backups, and recovery": "Atnaujinimai, kopijos ir atkūrimas",
-    "Family admin": "Šeimos administravimas",
-    "Help": "Pagalba",
-    "Reference": "Atmintinė",
-    "Roles, data, and limits": "Vaidmenys, duomenys ir ribos",
-    "Release and support policy": "Leidimų ir palaikymo politika",
+_NAV_LABELS = {
+    "lt": {
+        "Start": "Pradžia",
+        "What is KinKudos": "Kas yra KinKudos",
+        "Is KinKudos right for your family?": "Ar KinKudos tinka šeimai?",
+        "What self-hosting means": "Ką reiškia savarankiškas diegimas?",
+        "Quick install": "Greitas diegimas",
+        "Your first 15 minutes": "Pirmos 15 minučių",
+        "Pair a child device": "Vaiko įrenginio susiejimas",
+        "Parents": "Tėvams",
+        "Parent dashboard": "Tėvų skydelis",
+        "Tasks and approvals": "Darbai ir patvirtinimai",
+        "Create and manage tasks": "Kurti ir valdyti darbus",
+        "Review completed tasks": "Peržiūrėti atliktus darbus",
+        "Assign tasks for today": "Paskirti darbus šiandienai",
+        "Points, penalties, and corrections": "Taškai, nuobaudos ir korekcijos",
+        "Rewards, goals, and lottery": "Prizai, tikslai ir loterija",
+        "Create and manage rewards": "Kurti ir valdyti prizus",
+        "Savings goals and suggestions": "Taupymo tikslai ir pasiūlymai",
+        "Lottery tickets": "Loterijos bilietai",
+        "Child space": "Vaiko aplinka",
+        "Parent settings": "Tėvų nustatymai",
+        "Security": "Saugumas",
+        "Accounts and devices": "Paskyros ir įrenginiai",
+        "PINs and sign-in protection": "PIN ir prisijungimo apsauga",
+        "Notifications and installing KinKudos": "Pranešimai ir KinKudos diegimas",
+        "Network access": "Tinklo prieiga",
+        "Backups": "Atsarginės kopijos",
+        "Server": "Serveris",
+        "Overview": "Apžvalga",
+        "Before installing": "Prieš diegiant",
+        "Updates, backups, and recovery": "Atnaujinimai, kopijos ir atkūrimas",
+        "Family admin": "Šeimos administravimas",
+        "Help": "Pagalba",
+        "Reference": "Atmintinė",
+        "Roles, data, and limits": "Vaidmenys, duomenys ir ribos",
+        "Release and support policy": "Leidimų ir palaikymo politika",
+    },
+    "de": {
+        "Start": "Schnellstart",
+        "What is KinKudos": "Was ist KinKudos?",
+        "Is KinKudos right for your family?": "Passt KinKudos zu Ihrer Familie?",
+        "What self-hosting means": "Was Selbsthosting bedeutet",
+        "Quick install": "Schnellinstallation",
+        "Your first 15 minutes": "Die ersten 15 Minuten",
+        "Pair a child device": "Kindergerät verbinden",
+    },
+    "fr": {
+        "Start": "Démarrage rapide",
+        "What is KinKudos": "Qu’est-ce que KinKudos ?",
+        "Is KinKudos right for your family?": "KinKudos convient-il à votre famille ?",
+        "What self-hosting means": "Comprendre l’auto-hébergement",
+        "Quick install": "Installation rapide",
+        "Your first 15 minutes": "Vos 15 premières minutes",
+        "Pair a child device": "Associer un appareil enfant",
+    },
+}
+
+_QUICK_START_SLUGS = {
+    "what-is-kinkudos",
+    "is-kinkudos-right",
+    "what-self-hosting-means",
+    "quick-install",
+    "first-15-minutes",
+    "pair-a-child-device",
+}
+
+_UI_LABELS = {
+    "de": {
+        "Back to top": "Nach oben",
+        "Search": "Suchen",
+        "Skip to content": "Zum Inhalt springen",
+        "Table of contents": "Inhalt",
+    },
+    "fr": {
+        "Back to top": "Retour en haut",
+        "Search": "Rechercher",
+        "Skip to content": "Aller au contenu",
+        "Table of contents": "Sommaire",
+    },
+    "lt": {
+        "Back to top": "Grįžti į viršų",
+        "Search": "Ieškoti",
+        "Skip to content": "Pereiti prie turinio",
+        "Table of contents": "Turinys",
+    },
 }
 
 _PRIMARY_NAV_SECTION_IDS = {
@@ -68,7 +118,9 @@ _SECTIONS = {
         "lt": ("Serveris", "https://docs.kinkudos.app/deployment-and-maintenance.lt/"),
     },
     "start": {
+        "de": ("Schnellstart", "https://docs.kinkudos.app/start/what-is-kinkudos.de/"),
         "en": ("Start", "https://docs.kinkudos.app/start/what-is-kinkudos/"),
+        "fr": ("Démarrage rapide", "https://docs.kinkudos.app/start/what-is-kinkudos.fr/"),
         "lt": ("Pradžia", "https://docs.kinkudos.app/start/what-is-kinkudos.lt/"),
     },
 }
@@ -76,11 +128,20 @@ _SECTIONS = {
 
 def _language(page):
     source = page.file.src_uri
-    return "lt" if source == "index.lt.md" or source.endswith(".lt.md") else "en"
+    for language in ("lt", "de", "fr"):
+        if source == f"index.{language}.md" or source.endswith(f".{language}.md"):
+            return language
+    return "en"
 
 
 def _website_data(page, language):
-    name = "KinKudos dokumentacija" if language == "lt" else "KinKudos Documentation"
+    names = {
+        "de": "KinKudos-Dokumentation",
+        "en": "KinKudos Documentation",
+        "fr": "Documentation KinKudos",
+        "lt": "KinKudos dokumentacija",
+    }
+    name = names[language]
     return {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -94,11 +155,17 @@ def _website_data(page, language):
 
 def _breadcrumb_data(page, language):
     root_url = (
-        "https://docs.kinkudos.app/index.lt/"
-        if language == "lt"
-        else "https://docs.kinkudos.app/"
+        "https://docs.kinkudos.app/"
+        if language == "en"
+        else f"https://docs.kinkudos.app/index.{language}/"
     )
-    root_name = "KinKudos dokumentacija" if language == "lt" else "KinKudos Documentation"
+    root_names = {
+        "de": "KinKudos-Dokumentation",
+        "en": "KinKudos Documentation",
+        "fr": "Documentation KinKudos",
+        "lt": "KinKudos dokumentacija",
+    }
+    root_name = root_names[language]
     items = [{"@type": "ListItem", "position": 1, "name": root_name, "item": root_url}]
 
     section_key = page.file.src_uri.split("/", 1)[0]
@@ -135,33 +202,45 @@ def _add_active_class(class_names, extra_classes):
     return " ".join(classes)
 
 
-def _localize_primary_navigation(output, page):
-    """Render Lithuanian primary navigation without relying on JavaScript."""
+def _localize_primary_navigation(output, page, language):
+    """Render localized primary navigation without relying on JavaScript."""
     start = output.find('<div class="md-sidebar md-sidebar--primary"')
     end = output.find('<div class="md-sidebar md-sidebar--secondary"', start)
     if start == -1 or end == -1:
         return output
 
     navigation = output[start:end]
-    navigation = navigation.replace('aria-label="Navigation"', 'aria-label="Navigacija"')
-    for english, lithuanian in _LT_NAV_LABELS.items():
+    aria_labels = {"de": "Navigation", "fr": "Navigation", "lt": "Navigacija"}
+    navigation = navigation.replace(
+        'aria-label="Navigation"', f'aria-label="{aria_labels[language]}"'
+    )
+    for english, translation in _NAV_LABELS[language].items():
         navigation = re.sub(
             rf"(?<=>)(\s*){re.escape(english)}(\s*)(?=<)",
-            rf"\1{lithuanian}\2",
+            rf"\1{translation}\2",
             navigation,
         )
 
+    def localize_link(match):
+        path = match.group("path")
+        if path.endswith(f".{language}/"):
+            return match.group(0)
+        slug = path.rstrip("/").rsplit("/", 1)[-1]
+        if language != "lt" and slug not in _QUICK_START_SLUGS:
+            return match.group(0)
+        return f'href="{path[:-1]}.{language}/"'
+
     navigation = re.sub(
         r'href="(?P<path>(?!https?://|#)[^"]+/)"',
-        lambda match: (
-            match.group(0)
-            if match.group("path").endswith(".lt/")
-            else f'href="{match.group("path")[:-1]}.lt/"'
-        ),
+        localize_link,
         navigation,
     )
 
-    section_key = page.file.src_uri.split("/", 1)[0]
+    section_key = (
+        "start"
+        if language in {"de", "fr"} and page.file.src_uri.startswith("start/")
+        else page.file.src_uri.split("/", 1)[0]
+    )
     section_id = _PRIMARY_NAV_SECTION_IDS.get(section_key)
     if section_id:
         section_pattern = re.compile(
@@ -175,9 +254,7 @@ def _localize_primary_navigation(output, page):
                 match.group("classes"),
                 ("md-nav__item--active", "md-nav__item--section"),
             )
-            return (
-                f'{match.group(1)}{classes}{match.group(3)} checked{match.group(5)}'
-            )
+            return f"{match.group(1)}{classes}{match.group(3)} checked{match.group(5)}"
 
         navigation = section_pattern.sub(activate_section, navigation, count=1)
 
@@ -192,26 +269,41 @@ def _localize_primary_navigation(output, page):
         class_end = navigation.find('"', class_start)
         if class_end == -1:
             break
-        classes = _add_active_class(
-            navigation[class_start:class_end], ("md-nav__item--active",)
-        )
+        classes = _add_active_class(navigation[class_start:class_end], ("md-nav__item--active",))
         navigation = navigation[:class_start] + classes + navigation[class_end:]
         break
 
     return output[:start] + navigation + output[end:]
 
 
+def _localize_theme_ui(output, language):
+    """Translate small Material UI labels that are visible on localized pages."""
+    for english, translation in _UI_LABELS[language].items():
+        output = re.sub(
+            rf"(?<=>)(\s*){re.escape(english)}(\s*)(?=<)",
+            rf"\1{translation}\2",
+            output,
+        )
+    search = _UI_LABELS[language]["Search"]
+    output = output.replace('aria-label="Search"', f'aria-label="{search}"')
+    output = output.replace('placeholder="Search"', f'placeholder="{search}"')
+    return output
+
+
 def on_post_page(output, page, config):
     """Set HTML language and inject matching WebSite or breadcrumb JSON-LD."""
     language = _language(page)
     output = output.replace('<html lang="en"', f'<html lang="{language}"', 1)
-    if language == "lt":
-        output = _localize_primary_navigation(output, page)
+    if language in _NAV_LABELS:
+        output = _localize_primary_navigation(output, page, language)
+        output = _localize_theme_ui(output, language)
 
-    is_homepage = page.is_homepage or page.file.src_uri == "index.lt.md"
+    is_homepage = page.is_homepage or page.file.src_uri in {
+        "index.de.md",
+        "index.fr.md",
+        "index.lt.md",
+    }
     data = _website_data(page, language) if is_homepage else _breadcrumb_data(page, language)
-    payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace(
-        "</", "<\\/"
-    )
+    payload = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     structured_data = f'<script type="application/ld+json">{payload}</script>'
     return output.replace("</head>", f"  {structured_data}\n  </head>", 1)

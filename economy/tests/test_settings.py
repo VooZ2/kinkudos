@@ -98,6 +98,18 @@ class ParentSettingsTests(TestCase):
             html=False,
         )
 
+    def test_catalog_changes_return_to_the_catalogs_panel(self):
+        self.client.force_login(self.admin)
+        response = self.client.post(
+            reverse("parent_create_catalog", args=["task"]),
+            {"title": "Kitchen", "reward": 10, "icon": "🧹"},
+        )
+        self.assertRedirects(
+            response,
+            f"{reverse('parent_dashboard')}#parent-catalogs",
+            fetch_redirect_response=False,
+        )
+
     def test_family_lottery_switch_can_be_disabled(self):
         self.client.force_login(self.admin)
 

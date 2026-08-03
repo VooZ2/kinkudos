@@ -4,7 +4,7 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "26.4.9")
+APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "26.5.0")
 
 
 def env_bool(name, default=False):
@@ -48,10 +48,13 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "economy.middleware.SetupRequiredMiddleware",
+    "economy.middleware.DefaultLanguageMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "economy.middleware.FamilyTimezoneMiddleware",
     "economy.middleware.NetworkAccessMiddleware",
     "economy.middleware.AdminRateLimitMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -151,6 +154,7 @@ CLIENT_IP_HEADER = os.environ.get(
     "HTTP_X_FORWARDED_FOR",
 )
 DJANGO_ADMIN_ENABLED = env_bool("KINKUDOS_DJANGO_ADMIN_ENABLED", False)
+SETUP_TOKEN = secret_value("KINKUDOS_SETUP_TOKEN")
 
 EMAIL_ENABLED = env_bool("KINKUDOS_EMAIL_ENABLED", False)
 EMAIL_BACKEND = "economy.email_backend.EmailBackend"

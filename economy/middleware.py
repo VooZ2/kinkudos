@@ -1,11 +1,53 @@
 import ipaddress
 
+from django.conf import settings
 from django.http import HttpResponseForbidden
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.utils import timezone
 
 from .models import AttemptCounter, FamilySettings
 from .net import FORWARDED_HEADERS, client_ip, direct_peer_is_trusted, parse_allowed_networks
 from .rate_limit import register_attempt
+from .setup import setup_is_available
+
+
+class SetupRequiredMiddleware:
+    public_prefixes = ("/setup/", "/health/", "/static/", "/manifest.webmanifest", "/service-worker.js", "/offline/", "/i18n/")
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if request.path.startswith(self.public_prefixes):
+            return self.get_response(request)
+        if setup_is_available():
+            return redirect("setup")
+        return self.get_response(request)
+
+
+class DefaultLanguageMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if settings.LANGUAGE_COOKIE_NAME not in request.COOKIES:
+            language = FamilySettings.load().default_language
+            if language:
+                request.COOKIES[settings.LANGUAGE_COOKIE_NAME] = language
+        return self.get_response(request)
+
+
+class FamilyTimezoneMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        zone = FamilySettings.load().timezone_name or settings.TIME_ZONE
+        timezone.activate(zone)
+        try:
+            return self.get_response(request)
+        finally:
+            timezone.deactivate()
 
 
 class TrustedProxyMiddleware:

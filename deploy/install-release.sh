@@ -41,6 +41,9 @@ mkdir -p \
 if [ ! -s "$secrets_dir/backup_agent_token" ]; then
   openssl rand -base64 48 | tr -d '\n' > "$secrets_dir/backup_agent_token"
 fi
+if [ ! -s "$secrets_dir/setup_token" ]; then
+  openssl rand -base64 36 | tr -d '\n' > "$secrets_dir/setup_token"
+fi
 if [ ! -s "$secrets_dir/restic_password" ]; then
   openssl rand -base64 48 | tr -d '\n' > "$secrets_dir/restic_password"
 fi
@@ -55,6 +58,7 @@ if [ ! -f "$secrets_dir/backup/restic.env" ]; then
 fi
 chmod 0600 \
   "$secrets_dir/backup_agent_token" \
+  "$secrets_dir/setup_token" \
   "$secrets_dir/restic_password" \
   "$secrets_dir/backup/restic.env"
 
@@ -74,6 +78,7 @@ chown "$runtime_uid:$runtime_gid" \
   "$secrets_dir/backup" \
   "$secrets_dir/smtp" \
   "$secrets_dir/backup_agent_token" \
+  "$secrets_dir/setup_token" \
   "$secrets_dir/restic_password" \
   "$secrets_dir/backup/restic.env"
 

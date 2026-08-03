@@ -28,11 +28,13 @@ curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh && sh /tm
 ```
 
 The installer downloads the latest published release, verifies its SHA256
-checksum, creates the installation directory, and opens the guided setup. The
+checksum, creates the installation directory, and prepares browser setup. The
 checksum confirms that the downloaded archive matches the checksum published
-with the same release; it is not a separate signed attestation. The setup asks
-for the language, hostname, proxy mode, family name, first parent account, and
-optional child profiles.
+with the same release; it is not a separate signed attestation. The terminal
+installer asks for the language, hostname, and proxy mode, then prints the
+application URL and a private setup code. Open `/setup/` in the browser to
+create the family name, first parent account, language, and timezone. SMTP can
+be skipped and configured later in Settings.
 
 After it finishes, check the container status and open your hostname over HTTPS
 before signing in with the first parent account. If HTTPS, DNS, or a container

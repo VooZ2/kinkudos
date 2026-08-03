@@ -99,7 +99,7 @@ class FeedbackWorkflowTests(TestCase):
         self.assertEqual(report.reporter_role, "parent")
         self.assertEqual(report.family_name, "Aurora")
         self.assertEqual(report.page_path, "/tevai/")
-        self.assertEqual(report.app_version, "26.4.9")
+        self.assertEqual(report.app_version, "26.5.0")
         self.assertEqual(report.user_agent, "Feedback Browser")
         self.assertIsNotNone(report.email_notified_at)
         self.assertEqual(len(mail.outbox), 1)
@@ -278,7 +278,7 @@ class FeedbackWorkflowTests(TestCase):
             {"feedback_status": "resolved", "feedback_type": "idea"},
         )
         self.assertContains(dashboard, "A saved suggestion")
-        self.assertContains(dashboard, "feedback-launcher")
+        self.assertNotContains(dashboard, "feedback-launcher")
 
     def test_resolved_feedback_is_hidden_by_default_and_available_by_filter(self):
         FeedbackReport.objects.create(

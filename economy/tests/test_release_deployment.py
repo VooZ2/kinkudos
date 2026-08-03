@@ -97,7 +97,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.4.9",
+                    "26.5.0",
                     str(root),
                 ],
                 env=environment,
@@ -143,7 +143,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
 
             environment = os.environ.copy()
             environment["PATH"] = f"{fake_bin}:{environment['PATH']}"
-            environment["KINKUDOS_VERSION"] = "26.4.9"
+            environment["KINKUDOS_VERSION"] = "26.5.0"
             environment["KINKUDOS_INSTALL_ROOT"] = str(install_root)
             result = subprocess.run(
                 ["sh", str(ROOT / "deploy" / "install.sh")],

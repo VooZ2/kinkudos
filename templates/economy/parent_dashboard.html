@@ -292,7 +292,7 @@
         {% for reward_request in group.rewards %}
         <article class="approval-card reward-approval-card">
           <span class="item-icon">{{ reward_request.reward.icon|icon_symbol }}</span>
-          <div><p class="eyebrow">{% translate "Reward" %}</p><h3>{{ reward_request.reward_title }}</h3><p class="amount">−{{ reward_request.cost_snapshot }} {{ reward_request.cost_snapshot|currency_unit:"neutral" }}</p></div>
+          <div class="approval-copy"><p class="eyebrow">{% translate "Reward" %}</p><h3>{{ reward_request.reward_title }}</h3><p class="amount">−{{ reward_request.cost_snapshot }} {{ reward_request.cost_snapshot|currency_unit:"neutral" }}</p></div>
           <div class="approval-actions">
             <form method="post" action="{% url 'parent_decide_reward' reward_request.pk 'approve' %}">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg></button></form>
             <button class="decision-icon-button decision-reject" type="button" data-open-dialog="reject-reward-{{ reward_request.pk }}" aria-label="{% translate "Reject" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg></button>

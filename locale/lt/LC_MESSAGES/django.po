@@ -502,6 +502,9 @@ msgstr "Pasirink užduotį"
 msgid "Choose a valid feedback status."
 msgstr "Pasirinkite tinkamą atsiliepimo būseną."
 
+msgid "Choose a valid time zone."
+msgstr "Pasirinkite tinkamą laiko juostą."
+
 msgid "Choose an emoji or enter one using your device keyboard."
 msgstr "Pasirinkite emoji arba įveskite jį įrenginio klaviatūra."
 
@@ -613,6 +616,9 @@ msgstr "Pasiektas"
 msgid "Completed task"
 msgstr "Atliktas darbas"
 
+msgid "Configure email now"
+msgstr "Nustatyti el. paštą dabar"
+
 msgid "Connect through an allowed home or VPN network and try again."
 msgstr "Prisijunkite per leidžiamą namų arba VPN tinklą ir bandykite dar kartą."
 
@@ -664,6 +670,9 @@ msgstr "Sukurti prizą"
 msgid "Create task"
 msgstr "Sukurti darbą"
 
+msgid "Create the first parent administrator account. Email setup is optional and can be configured later in Settings."
+msgstr "Sukurkite pirmą tėvų administratoriaus paskyrą. El. pašto nustatymas yra pasirinktinis ir vėliau keičiamas nustatymuose."
+
 msgid "Creative Journal"
 msgstr "Kūrybos dienoraštis"
 
@@ -705,6 +714,9 @@ msgstr "Individualus darbas (nebūtina)"
 
 msgid "Daily encrypted copies protect the family database and uploaded photos."
 msgstr "Kasdienės šifruotos kopijos apsaugo šeimos duomenų bazę ir įkeltas nuotraukas."
+
+msgid "Default language"
+msgstr "Numatytoji kalba"
 
 msgid "Delete"
 msgstr "Trinti"
@@ -853,6 +865,9 @@ msgstr "Kaskart išsaugodami šiuos nustatymus iš naujo įveskite SMTP slaptaž
 msgid "Enter the birthday date."
 msgstr "Įveskite gimimo datą."
 
+msgid "Enter the code shown by the server installer."
+msgstr "Įveskite serverio diegiklio parodytą kodą."
+
 msgid "Enter the email address assigned to the parent account. If the account is active, we will send a link valid for one hour."
 msgstr "Įveskite tėvų paskyrai priskirtą el. pašto adresą. Jei paskyra aktyvi, išsiųsime vieną valandą galiojančią nuorodą."
 
@@ -939,6 +954,9 @@ msgstr "Ieškoti darbo"
 
 msgid "Finish every project before the studio closes at midnight."
 msgstr "Užbaik visus projektus, kol studija užsidarys vidurnaktį."
+
+msgid "Finish setup"
+msgstr "Baigti paruošimą"
 
 msgid "Finish your open lottery ticket before buying another."
 msgstr "Prieš pirkdamas kitą užbaik pradėtą loterijos bilietą."
@@ -1371,6 +1389,9 @@ msgstr "Neužbaigtas"
 
 msgid "Open feedback"
 msgstr "Neišspręsti atsiliepimai"
+
+msgid "Open parent area"
+msgstr "Atidaryti tėvų sritį"
 
 msgid "Open release notes"
 msgstr "Atidaryti pakeitimų istoriją"
@@ -1819,6 +1840,9 @@ msgstr "Išsaugoti profilį"
 msgid "Save settings"
 msgstr "Išsaugoti nustatymus"
 
+msgid "Save this recovery code in your password manager. It will not be shown again."
+msgstr "Išsaugokite šį atkūrimo kodą slaptažodžių tvarkyklėje. Jis daugiau nebus rodomas."
+
 msgid "Savings goal"
 msgstr "Taupymo tikslas"
 
@@ -1891,11 +1915,23 @@ msgstr "Naują slaptažodį nustatykite čia:"
 msgid "Set the lowest balance this child may spend down to."
 msgstr "Nurodykite, iki kokio minuso vaikas gali išleisti tokenus."
 
+msgid "Set up KinKudos"
+msgstr "Paruošti „KinKudos“"
+
 msgid "Set up this device"
 msgstr "Paruošti šį įrenginį"
 
+msgid "Set up your family"
+msgstr "Paruoškite savo šeimą"
+
 msgid "Settings"
 msgstr "Nustatymai"
+
+msgid "Setup code"
+msgstr "Paruošimo kodas"
+
+msgid "Setup complete"
+msgstr "Paruošimas baigtas"
 
 msgid "Shared reason"
 msgstr "Bendras paaiškinimas"
@@ -2089,6 +2125,9 @@ msgstr "Dabartinis PIN neteisingas."
 msgid "The current parent password is incorrect."
 msgstr "Dabartinis tėvų paskyros slaptažodis neteisingas."
 
+msgid "The family name is required."
+msgstr "Šeimos pavadinimas privalomas."
+
 msgid "The family name or nickname is required."
 msgstr "Šeimos pavadinimas arba slapyvardis yra privalomas."
 
@@ -2169,6 +2208,9 @@ msgstr "Prizo prašymas perduotas tėvams."
 
 msgid "The rewards catalog is empty."
 msgstr "Prizų katalogas dar tuščias."
+
+msgid "The setup code is incorrect."
+msgstr "Paruošimo kodas neteisingas."
 
 msgid "The suggestion was sent to the parents."
 msgstr "Pasiūlymas perduotas tėvams."
@@ -2257,6 +2299,9 @@ msgstr "Šis įrenginys dar neparuoštas"
 msgid "This email address is already in use."
 msgstr "Šis el. pašto adresas jau naudojamas."
 
+msgid "This field is required when email is enabled."
+msgstr "Šis laukas privalomas, kai įjungtas el. paštas."
+
 msgid "This message stays on your family server and is reviewed by parents."
 msgstr "Šis pranešimas lieka šeimos serveryje ir yra peržiūrimas tėvų."
 
@@ -2304,6 +2349,9 @@ msgstr "Šią savaitę liko bilietų: %(remaining)s iš %(limit)s."
 
 msgid "Tidy your room"
 msgstr "Sutvarkyti savo kambarį"
+
+msgid "Time zone"
+msgstr "Laiko juosta"
 
 msgid "Title"
 msgstr "Pavadinimas"

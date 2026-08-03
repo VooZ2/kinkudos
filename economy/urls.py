@@ -74,12 +74,14 @@ from .views import (
     push_unsubscribe,
     service_worker,
     session_logout,
+    setup,
     submit_feedback,
     task_evidence,
 )
 
 urlpatterns = [
     path("", home, name="home"),
+    path("setup/", setup, name="setup"),
     path("pakeitimai/", changelog, name="changelog"),
     path("health/", health, name="health"),
     path("manifest.webmanifest", manifest, name="manifest"),

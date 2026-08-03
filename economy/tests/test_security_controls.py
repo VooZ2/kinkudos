@@ -90,6 +90,7 @@ class ClientIpTests(TestCase):
 @override_settings(DEVICE_PAIRING_REQUIRED=False)
 class NetworkAccessTests(TestCase):
     def test_child_area_can_be_restricted_without_blocking_parent_login(self):
+        get_user_model().objects.create_user("parent", password="Safe-parent-pass-123!")
         family = FamilySettings.load()
         family.network_access_mode = FamilySettings.NetworkAccessMode.CHILDREN
         family.allowed_networks = "192.0.2.0/24"

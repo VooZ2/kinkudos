@@ -28,10 +28,12 @@ curl -fsSL https://kinkudos.app/install.sh -o /tmp/kinkudos-install.sh && sh /tm
 ```
 
 Diegiklis parsiunčia naujausią paskelbtą leidimą, patikrina jo SHA256 sumą,
-sukuria diegimo katalogą ir pradeda vedamą paruošimą. Kontrolinė suma patvirtina,
+sukuria diegimo katalogą ir paruošia naršyklės setup. Kontrolinė suma patvirtina,
 kad parsisiųstas archyvas sutampa su to paties leidimo paskelbta suma; tai nėra
-atskira pasirašyta atestacija. Vedlys paklaus kalbos, domeno, proxy režimo,
-šeimos pavadinimo, pirmos tėvų paskyros ir, jei norėsite, vaikų profilių.
+atskira pasirašyta atestacija. Terminalo diegiklis paklaus kalbos, domeno ir
+proxy režimo, tada parodys programos URL bei privatų setup kodą. Naršyklėje
+atidarykite `/setup/` ir sukurkite šeimos pavadinimą, pirmą tėvų paskyrą,
+kalbą bei laiko juostą. SMTP galima praleisti ir nustatyti vėliau.
 
 Pabaigę patikrinkite konteinerių būseną ir atidarykite savo domeną per HTTPS,
 tada prisijunkite pirmąja tėvų paskyra. Jei neveikia HTTPS, DNS arba

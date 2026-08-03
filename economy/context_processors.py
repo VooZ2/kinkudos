@@ -13,6 +13,7 @@ PUBLIC_HEADER_ROUTES = {
     "password_reset_done",
     "password_reset_confirm",
     "password_reset_complete",
+    "setup",
     "child_select",
     "pair_device_via_link",
 }
@@ -38,7 +39,5 @@ def family_context(request):
         "feedback_email_configured": bool(
             email.get("enabled") and email.get("feedback_email")
         ),
-        "feedback_available": bool(
-            request.user.is_authenticated or child is not None
-        ),
+        "feedback_available": child is not None,
     }

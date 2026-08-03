@@ -2,7 +2,7 @@ name: kinkudos
 
 services:
   app:
-    image: vooz2/kinkudos:26.4.9
+    image: vooz2/kinkudos:26.5.0
     user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"
     restart: unless-stopped
     read_only: true
@@ -15,6 +15,7 @@ services:
       KINKUDOS_ALLOWED_HOSTS: "${KINKUDOS_HOSTNAME:-kinkudos.example.com},127.0.0.1,localhost"
       KINKUDOS_CSRF_TRUSTED_ORIGINS: "https://${KINKUDOS_HOSTNAME:-kinkudos.example.com}"
       KINKUDOS_SECRET_KEY_FILE: /run/secrets/django_secret_key
+      KINKUDOS_SETUP_TOKEN_FILE: /run/secrets/setup_token
       KINKUDOS_VAPID_PRIVATE_KEY_FILE: /run/secrets/vapid_private
       KINKUDOS_VAPID_PUBLIC_KEY_FILE: /run/secrets/vapid_public
       KINKUDOS_VAPID_SUBJECT: "https://${KINKUDOS_HOSTNAME:-kinkudos.example.com}"
@@ -40,6 +41,7 @@ services:
       KINKUDOS_TRUSTED_PROXIES: "${KINKUDOS_TRUSTED_PROXIES:-127.0.0.0/8,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16}"
     secrets:
       - django_secret_key
+      - setup_token
       - vapid_private
       - vapid_public
       - smtp_password
@@ -64,7 +66,7 @@ services:
       com.centurylinklabs.watchtower.enable: "false"
 
   backup-agent:
-    image: vooz2/kinkudos:26.4.9
+    image: vooz2/kinkudos:26.5.0
     entrypoint: ["python", "/app/scripts/backup_agent.py"]
     command: []
     user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"
@@ -104,6 +106,8 @@ networks:
 secrets:
   django_secret_key:
     file: ../secrets/django_secret_key
+  setup_token:
+    file: ../secrets/setup_token
   vapid_private:
     file: ../secrets/vapid_private.pem
   vapid_public:

@@ -173,17 +173,16 @@ pabaigoje vedlys parodo konteinerių būseną; vėliau ją ir programos žurnal�
 galite patikrinti komandomis `docker compose ps` bei
 `docker compose logs --tail=100 app`.
 
-Diegiklis paprašo pasirinkti kalbą, domeną, reverse proxy režimą ir ar iš karto
-kurti šeimą. Šeimos vedlys paprašo pirmos tėvų paskyros, šeimos pavadinimo bei
-vaikų profilių. Sugeneruojamos trūkstamos paslaptys, sukuriamas `.env`,
-patikrinama serverio katalogų nuosavybė ir parsiunčiamas paskelbtas programos
-atvaizdas. Jau esančių paslapčių diegiklis neperrašo.
+Diegiklis paprašo pasirinkti kalbą, domeną ir reverse proxy režimą. Jis
+sugeneruoja trūkstamas Django, VAPID, atsarginių kopijų, restic ir naršyklės
+setup paslaptis, sukuria `.env`, patikrina serverio katalogų nuosavybę,
+parsiunčia atvaizdą ir paleidžia konteinerius. Tada parodo programos URL bei
+setup kodą. Atverkite `/setup/` naršyklėje ir ten sukurkite pirmą tėvų paskyrą,
+šeimos pavadinimą, kalbą bei laiko juostą. Jau esančių paslapčių diegiklis
+neperrašo.
 
-Jei šeimos kūrimą praleidote:
-
-```bash
-docker compose exec app python manage.py setup_family --language lt
-```
+Setup kodas reikalingas tik kol nėra tėvų paskyros. Saugokite jį privačiai;
+užbaigus paruošimą serveris setup maršrutą visam laikui išjungia.
 
 Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tame
 įrenginyje.

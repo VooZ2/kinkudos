@@ -5,8 +5,15 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.5.0] - 2026-08-03
+
 ### Added
 
+- New installations now complete first-time setup in the browser: a first
+  parent administrator, family name, default language, timezone, recovery code,
+  and optional SMTP settings are configured through a guided setup page.
+- German and French documentation now provide localized landing, suitability,
+  self-hosting, installation, first-setup, and child-device pairing guides.
 - Public English-first user documentation now covers getting started, parent workflows, settings, security, maintenance, and quick help; Lithuanian equivalents are available from every section.
 - Public security-reporting and release-support policies explain the private
   vulnerability channel, supported-version scope, and best-effort support
@@ -18,6 +25,19 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ### Changed
 
+- The installer now prepares and starts KinKudos, prints a private browser
+  setup code, and no longer collects family credentials, names, or child PINs
+  in the terminal.
+- Family timezone now governs request-time calendar behaviour and lottery
+  reminder scheduling; a selected default language is used for browsers with
+  no saved language preference.
+- Catalog create, edit, show/hide, and delete actions return to the Tasks and
+  rewards section instead of the parent home section.
+- The floating family-feedback form is available to children only; parents
+  continue to review child feedback in Settings.
+- The documentation language control, metadata, structured data, and quick-start
+  navigation now support EN, LT, DE, and FR without presenting untranslated
+  sections as localized content.
 - Hosted documentation now uses the KinKudos icon, colour palette, typography, and light/dark appearance styling.
 - Hosted documentation now publishes localized titles, descriptions, language
   metadata, canonical and alternate-language links, social previews, and
@@ -29,6 +49,16 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
   directly in the generated HTML instead of relying on client-side translation.
 - Lithuanian pages now select and expand the same active sidebar section as
   their English counterparts.
+
+### Fixed
+
+- Pending task and reward cards use compact, consistent title and point spacing
+  on iPhone-sized screens.
+
+### Security
+
+- A server-generated setup code and server-side completion guard prevent a
+  fresh public installation from creating more than one initial administrator.
 
 ## [26.4.9] - 2026-07-31
 

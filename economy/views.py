@@ -8,7 +8,13 @@ from uuid import uuid4
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, get_user_model, logout, update_session_auth_hash
+from django.contrib.auth import (
+    authenticate,
+    get_user_model,
+    login,
+    logout,
+    update_session_auth_hash,
+)
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.views import (
@@ -54,6 +60,7 @@ from .forms import (
     FeedbackReportForm,
     FeedbackStatusForm,
     FirstThemeForm,
+    InitialSetupForm,
     MinBalanceForm,
     NetworkAccessForm,
     ParentAccountForm,
@@ -145,6 +152,7 @@ from .services import (
     transfer_points,
     unavailable_assignment_task_ids,
 )
+from .setup import SetupUnavailable, complete_setup, setup_is_available, token_is_valid
 
 logger = logging.getLogger(__name__)
 
@@ -170,6 +178,71 @@ def home(request):
     if current_child(request):
         return redirect("child_dashboard")
     return render(request, "economy/home.html")
+
+
+def setup(request):
+    if not setup_is_available():
+        return redirect("parent_dashboard" if request.user.is_authenticated else "parent_login")
+    if request.method == "POST":
+        form = InitialSetupForm(request.POST)
+        if form.is_valid():
+            if not token_is_valid(form.cleaned_data["setup_token"]):
+                form.add_error("setup_token", _("The setup code is incorrect."))
+            else:
+                smtp = None
+                if form.cleaned_data["configure_smtp"]:
+                    smtp = {
+                        "enabled": True,
+                        "host": form.cleaned_data["smtp_host"],
+                        "port": form.cleaned_data["smtp_port"],
+                        "security": form.cleaned_data["smtp_security"],
+                        "username": form.cleaned_data["smtp_username"],
+                        "password": form.cleaned_data["smtp_password"],
+                        "from_email": form.cleaned_data["smtp_from_email"],
+                        "feedback_email": form.cleaned_data["smtp_feedback_email"],
+                    }
+                    try:
+                        verify_smtp(smtp)
+                    except (OSError, ValueError, smtplib.SMTPException):
+                        form.add_error(None, _("Email settings were not saved. Check the server details and credentials."))
+                        return render(request, "economy/setup.html", {"form": form})
+                try:
+                    result = complete_setup(
+                        username=form.cleaned_data["username"],
+                        email=form.cleaned_data["email"],
+                        password=form.cleaned_data["password1"],
+                        family_name=form.cleaned_data["family_name"],
+                        language=form.cleaned_data["default_language"],
+                        timezone_name=form.cleaned_data["timezone_name"],
+                    )
+                except SetupUnavailable:
+                    return redirect("parent_login")
+                if smtp is not None:
+                    try:
+                        save_smtp_config(smtp)
+                    except OSError:
+                        logger.warning("SMTP settings could not be saved after setup", exc_info=True)
+                user = authenticate(
+                    request,
+                    username=form.cleaned_data["username"],
+                    password=form.cleaned_data["password1"],
+                )
+                if user is not None:
+                    login(request, user)
+                    request.session.set_expiry(settings.PARENT_SESSION_SECONDS)
+                response = render(
+                    request,
+                    "economy/setup_complete.html",
+                    {"recovery_code": result.recovery_code},
+                )
+                response.set_cookie(
+                    settings.LANGUAGE_COOKIE_NAME,
+                    form.cleaned_data["default_language"],
+                )
+                return response
+    else:
+        form = InitialSetupForm(initial={"default_language": settings.LANGUAGE_CODE})
+    return render(request, "economy/setup.html", {"form": form})
 
 
 class ParentLoginView(LoginView):
@@ -1617,7 +1690,7 @@ def parent_create_catalog(request, kind):
         messages.success(request, _("Catalog item created."))
     else:
         messages.error(request, _("Check the entered data."))
-    return redirect("parent_dashboard")
+    return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
 
 @parent_required
@@ -1750,7 +1823,7 @@ def parent_edit_catalog(request, kind, item_id):
         messages.success(request, _("“%(title)s” updated.") % {"title": item.title})
     else:
         messages.error(request, _("Check the edited data."))
-    return redirect("parent_dashboard")
+    return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
 
 @parent_required
@@ -1768,7 +1841,7 @@ def parent_toggle_catalog(request, kind, item_id):
         _("“%(title)s” is now %(state)s.")
         % {"title": item.title, "state": _("visible") if item.is_active else _("hidden")},
     )
-    return redirect("parent_dashboard")
+    return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
 
 @parent_required
@@ -1783,7 +1856,7 @@ def parent_delete_catalog(request, kind, item_id):
     item.is_deleted = True
     item.save(update_fields=["is_active", "is_deleted"])
     messages.success(request, _("“%(title)s” deleted.") % {"title": item.title})
-    return redirect("parent_dashboard")
+    return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
 
 @parent_required

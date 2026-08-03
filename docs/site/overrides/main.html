@@ -2,22 +2,31 @@
 
 {% block site_meta %}
   {% if page %}
-  {% set is_lithuanian = page and (page.file.src_uri == "index.lt.md" or page.file.src_uri.endswith(".lt.md")) %}
-  {% set page_description = page.meta.description if page.meta and page.meta.description else (page.title ~ ". Išsamus KinKudos dokumentacijos vadovas šeimoms ir serverio administratoriams." if is_lithuanian else page.title ~ ". A practical KinKudos documentation guide for families and server administrators.") %}
+  {% set source_uri = page.file.src_uri %}
+  {% set doc_language = "lt" if source_uri == "index.lt.md" or source_uri.endswith(".lt.md") else ("de" if source_uri == "index.de.md" or source_uri.endswith(".de.md") else ("fr" if source_uri == "index.fr.md" or source_uri.endswith(".fr.md") else "en")) %}
+  {% set page_description = page.meta.description if page.meta and page.meta.description else (page.title ~ ". Išsamus KinKudos dokumentacijos vadovas." if doc_language == "lt" else (page.title ~ ". Praktische KinKudos-Schnellstartanleitung." if doc_language == "de" else (page.title ~ ". Guide de démarrage rapide KinKudos." if doc_language == "fr" else page.title ~ ". A practical KinKudos documentation guide."))) %}
   {% set page_title = page.meta.title if page.meta and page.meta.title else (page.title ~ " — " ~ config.site_name if not page.is_homepage else config.site_name) %}
-  {% if is_lithuanian %}
-    {% set english_url = "https://docs.kinkudos.app/" if page.file.src_uri == "index.lt.md" else page.canonical_url | replace(".lt/", "/") %}
-    {% set lithuanian_url = page.canonical_url %}
-  {% else %}
+  {% if doc_language == "en" %}
     {% set english_url = page.canonical_url %}
-    {% set lithuanian_url = "https://docs.kinkudos.app/index.lt/" if page.is_homepage else page.canonical_url.rstrip("/") ~ ".lt/" %}
+  {% elif source_uri.startswith("index.") %}
+    {% set english_url = "https://docs.kinkudos.app/" %}
+  {% else %}
+    {% set english_url = page.canonical_url | replace(".lt/", "/") | replace(".de/", "/") | replace(".fr/", "/") %}
   {% endif %}
+  {% set is_start_page = source_uri.startswith("start/") %}
+  {% set lithuanian_url = "https://docs.kinkudos.app/index.lt/" if page.is_homepage or source_uri.startswith("index.") else (english_url.rstrip("/") ~ ".lt/") %}
+  {% set german_url = "https://docs.kinkudos.app/index.de/" if page.is_homepage or source_uri.startswith("index.") else (english_url.rstrip("/") ~ ".de/") %}
+  {% set french_url = "https://docs.kinkudos.app/index.fr/" if page.is_homepage or source_uri.startswith("index.") else (english_url.rstrip("/") ~ ".fr/") %}
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="description" content="{{ page_description }}" />
   <link rel="canonical" href="{{ page.canonical_url }}" />
   <link rel="alternate" hreflang="en" href="{{ english_url }}" />
   <link rel="alternate" hreflang="lt" href="{{ lithuanian_url }}" />
+  {% if page.is_homepage or source_uri.startswith("index.") or is_start_page %}
+  <link rel="alternate" hreflang="de" href="{{ german_url }}" />
+  <link rel="alternate" hreflang="fr" href="{{ french_url }}" />
+  {% endif %}
   <link rel="alternate" hreflang="x-default" href="{{ english_url }}" />
   {% if page.previous_page %}<link rel="prev" href="{{ page.previous_page.url | url }}" />{% endif %}
   {% if page.next_page %}<link rel="next" href="{{ page.next_page.url | url }}" />{% endif %}
@@ -28,12 +37,17 @@
   <meta property="og:title" content="{{ page_title }}" />
   <meta property="og:description" content="{{ page_description }}" />
   <meta property="og:url" content="{{ page.canonical_url }}" />
-  <meta property="og:locale" content="{{ 'lt_LT' if is_lithuanian else 'en_US' }}" />
-  <meta property="og:locale:alternate" content="{{ 'en_US' if is_lithuanian else 'lt_LT' }}" />
+  <meta property="og:locale" content="{{ 'lt_LT' if doc_language == 'lt' else ('de_DE' if doc_language == 'de' else ('fr_FR' if doc_language == 'fr' else 'en_US')) }}" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <meta property="og:locale:alternate" content="lt_LT" />
+  {% if page.is_homepage or source_uri.startswith("index.") or is_start_page %}
+  <meta property="og:locale:alternate" content="de_DE" />
+  <meta property="og:locale:alternate" content="fr_FR" />
+  {% endif %}
   <meta property="og:image" content="https://kinkudos.app/og.jpg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="KinKudos parent dashboard" />
+  <meta property="og:image:alt" content="{{ 'KinKudos tėvų skydelis' if doc_language == 'lt' else ('KinKudos-Eltern-Dashboard' if doc_language == 'de' else ('Tableau de bord parent KinKudos' if doc_language == 'fr' else 'KinKudos parent dashboard')) }}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ page_title }}" />
   <meta name="twitter:description" content="{{ page_description }}" />
@@ -58,8 +72,9 @@
 {% endblock %}
 
 {% block tabs %}
-  {% set is_lithuanian = page and (page.file.src_uri == "index.lt.md" or page.file.src_uri.endswith(".lt.md")) %}
-  {% if is_lithuanian %}
+  {% set source_uri = page.file.src_uri if page else "" %}
+  {% set doc_language = "lt" if source_uri == "index.lt.md" or source_uri.endswith(".lt.md") else ("de" if source_uri == "index.de.md" or source_uri.endswith(".de.md") else ("fr" if source_uri == "index.fr.md" or source_uri.endswith(".fr.md") else "en")) %}
+  {% if doc_language == "lt" %}
     <nav class="md-tabs" aria-label="Pagrindinė navigacija" data-md-component="tabs">
       <div class="md-grid">
         <ul class="md-tabs__list">
@@ -72,6 +87,18 @@
           <li class="md-tabs__item"><a href="/reference/roles-and-data.lt/" class="md-tabs__link">Atmintinė</a></li>
         </ul>
       </div>
+    </nav>
+  {% elif doc_language == "de" %}
+    <nav class="md-tabs" aria-label="Hauptnavigation" data-md-component="tabs">
+      <div class="md-grid"><ul class="md-tabs__list">
+        <li class="md-tabs__item"><a href="/start/what-is-kinkudos.de/" class="md-tabs__link">Schnellstart</a></li>
+      </ul></div>
+    </nav>
+  {% elif doc_language == "fr" %}
+    <nav class="md-tabs" aria-label="Navigation principale" data-md-component="tabs">
+      <div class="md-grid"><ul class="md-tabs__list">
+        <li class="md-tabs__item"><a href="/start/what-is-kinkudos.fr/" class="md-tabs__link">Démarrage rapide</a></li>
+      </ul></div>
     </nav>
   {% else %}
     {{ super() }}
@@ -92,8 +119,8 @@
       } catch (error) {
         preferredLanguage = null;
       }
-      if (preferredLanguage === "lt") {
-        window.location.replace("/index.lt/");
+      if (["lt", "de", "fr"].indexOf(preferredLanguage) !== -1) {
+        window.location.replace("/index." + preferredLanguage + "/");
       }
     })();
 
@@ -117,13 +144,25 @@
 
       function mountLanguageSwitchers() {
       var path = window.location.pathname;
-      var isLithuanian = /\.lt\/$/.test(path) || path === "/index.lt/";
-      var englishPath = isLithuanian
-        ? path.replace(/index\.lt\/$/, "").replace(/\.lt\/$/, "/") || "/"
-        : path;
-      var lithuanianPath = isLithuanian
-        ? path
-        : path === "/" ? "/index.lt/" : path.replace(/\/$/, ".lt/");
+      var languageMatch = path.match(/\.(lt|de|fr)\/$/);
+      var currentLanguage = languageMatch ? languageMatch[1] : "en";
+      var isLithuanian = currentLanguage === "lt";
+      var basePath = path
+        .replace(/\/index\.(lt|de|fr)\/$/, "/")
+        .replace(/\.(lt|de|fr)\/$/, "/");
+      var hasQuickStartTranslation = basePath === "/" || /^\/start\//.test(basePath);
+
+      function pathForLanguage(language) {
+        if (language === "en") {
+          return basePath;
+        }
+        if (!hasQuickStartTranslation) {
+          return "/index." + language + "/";
+        }
+        return basePath === "/"
+          ? "/index." + language + "/"
+          : basePath.replace(/\/$/, "." + language + "/");
+      }
 
       function switcher(className) {
         var nav = document.createElement("div");
@@ -131,22 +170,29 @@
         nav.dataset.path = path;
         nav.setAttribute(
           "aria-label",
-          isLithuanian ? "Dokumentacijos kalba" : "Documentation language"
+          currentLanguage === "lt" ? "Dokumentacijos kalba" :
+          currentLanguage === "de" ? "Dokumentationssprache" :
+          currentLanguage === "fr" ? "Langue de la documentation" :
+          "Documentation language"
         );
         nav.innerHTML =
-          '<span class="kinkudos-language-switcher__label">' + (isLithuanian ? "Kalba" : "Language") + '</span>' +
+          '<span class="kinkudos-language-switcher__label">Language</span>' +
           '<div class="kinkudos-language-switcher__options">' +
-          '<a href="' + englishPath + '" aria-label="English" title="English"' + (!isLithuanian ? ' aria-current="page"' : "") + '>' +
+          '<a href="' + pathForLanguage("en") + '" data-language="en" aria-label="English" title="English"' + (currentLanguage === "en" ? ' aria-current="page"' : "") + '>' +
           '<span aria-hidden="true">🇬🇧</span><span class="kinkudos-language-switcher__code">EN</span></a>' +
-          '<a href="' + lithuanianPath + '" aria-label="Lietuvių" title="Lietuvių"' + (isLithuanian ? ' aria-current="page"' : "") + '>' +
+          '<a href="' + pathForLanguage("lt") + '" data-language="lt" aria-label="Lietuvių" title="Lietuvių"' + (currentLanguage === "lt" ? ' aria-current="page"' : "") + '>' +
           '<span aria-hidden="true">🇱🇹</span><span class="kinkudos-language-switcher__code">LT</span></a>' +
+          '<a href="' + pathForLanguage("de") + '" data-language="de" aria-label="Deutsch" title="Deutsch"' + (currentLanguage === "de" ? ' aria-current="page"' : "") + '>' +
+          '<span aria-hidden="true">🇩🇪</span><span class="kinkudos-language-switcher__code">DE</span></a>' +
+          '<a href="' + pathForLanguage("fr") + '" data-language="fr" aria-label="Français" title="Français"' + (currentLanguage === "fr" ? ' aria-current="page"' : "") + '>' +
+          '<span aria-hidden="true">🇫🇷</span><span class="kinkudos-language-switcher__code">FR</span></a>' +
           '</div>';
         nav.querySelectorAll("a").forEach(function (link) {
           link.addEventListener("click", function () {
             try {
               window.localStorage.setItem(
                 "kinkudos-docs-language",
-                link.getAttribute("aria-label") === "Lietuvių" ? "lt" : "en"
+                link.dataset.language
               );
             } catch (error) {
               // Language switching still works when storage is unavailable.

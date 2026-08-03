@@ -77,6 +77,6 @@ test -d "$release_dir/deploy" || fail "release archive does not contain deploy f
 mv "$release_dir" "$install_root/app"
 cp -a "$install_root/app/deploy" "$install_root/deploy"
 
-echo "Starting the guided KinKudos setup..."
+echo "Preparing KinKudos for browser setup..."
 cd "$install_root/deploy"
 ./bootstrap.sh

@@ -349,6 +349,27 @@ button.md-button:disabled,
   margin: 0 0.45rem;
 }
 
+html[lang="de"] .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item:not(:first-child),
+html[lang="fr"] .md-sidebar--primary .md-nav--primary > .md-nav__list > .md-nav__item:not(:first-child) {
+  display: none;
+}
+
+@media screen and (max-width: 30em) {
+  .kinkudos-language-switcher--header {
+    margin: 0 0.16rem;
+  }
+
+  .kinkudos-language-switcher__options {
+    gap: 0;
+    padding: 0.08rem;
+  }
+
+  .kinkudos-language-switcher__options a {
+    min-height: 1.42rem;
+    padding: 0.08rem 0.2rem;
+  }
+}
+
 @media screen and (max-width: 76.1875em) {
   .md-header__button.md-logo img {
     width: 1.85rem;

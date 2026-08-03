@@ -96,6 +96,9 @@ done
 if [ ! -s "$secrets_dir/django_secret_key" ]; then
   openssl rand -base64 64 | tr -d '\n' > "$secrets_dir/django_secret_key"
 fi
+if [ ! -s "$secrets_dir/setup_token" ]; then
+  openssl rand -base64 36 | tr -d '\n' > "$secrets_dir/setup_token"
+fi
 if [ ! -s "$secrets_dir/restic_password" ]; then
   openssl rand -base64 48 | tr -d '\n' > "$secrets_dir/restic_password"
 fi
@@ -128,6 +131,7 @@ fi
 chmod 0600 \
   "$deploy_dir/.env" \
   "$secrets_dir/django_secret_key" \
+  "$secrets_dir/setup_token" \
   "$secrets_dir/restic_password" \
   "$secrets_dir/backup_agent_token" \
   "$secrets_dir/smtp_password" \
@@ -147,25 +151,16 @@ docker compose pull
 docker compose up -d
 docker compose ps
 
-if [ -t 0 ]; then
-  if [ "$install_language" = "lt" ]; then
-    printf 'Ar dabar sukurti tėvų paskyrą ir vaikų PIN? [Y/n] '
-  else
-    printf 'Create the parent account and child PINs now? [Y/n] '
-  fi
-  read -r answer
-  case "$answer" in
-    n|N) ;;
-    *) docker compose exec app python manage.py setup_family --language "$install_language" ;;
-  esac
-fi
-
 if [ "$install_language" = "lt" ]; then
   echo "Programos konteineris paleistas."
+  echo "Atverkite https://$install_hostname/setup/ ir naršyklėje įveskite šį setup kodą:"
+  cat "$secrets_dir/setup_token"
   echo "Patikra: docker compose ps"
   echo "Žurnalai: docker compose logs --tail=100 app"
 else
   echo "The application container is running."
+  echo "Open https://$install_hostname/setup/ and enter this setup code in the browser:"
+  cat "$secrets_dir/setup_token"
   echo "Status: docker compose ps"
   echo "Logs: docker compose logs --tail=100 app"
 fi

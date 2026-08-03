@@ -1,3 +1,5 @@
+from zoneinfo import ZoneInfo, available_timezones
+
 from django import forms
 from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm, UserCreationForm
@@ -697,6 +699,55 @@ class ParentAccountForm(StyledFormMixin, UserCreationForm):
 
     def clean_email(self):
         return validate_unique_parent_email(self.cleaned_data["email"])
+
+
+class InitialSetupForm(ParentAccountForm):
+    setup_token = forms.CharField(
+        label=_("Setup code"),
+        widget=forms.PasswordInput(render_value=False),
+        help_text=_("Enter the code shown by the server installer."),
+    )
+    family_name = forms.CharField(label=_("Family name"), max_length=80)
+    default_language = forms.ChoiceField(
+        label=_("Default language"), choices=[("en", "English"), ("lt", "Lietuvių")]
+    )
+    timezone_name = forms.ChoiceField(label=_("Time zone"))
+    configure_smtp = forms.BooleanField(label=_("Configure email now"), required=False)
+    smtp_host = forms.CharField(label=_("SMTP server"), max_length=255, required=False)
+    smtp_port = forms.IntegerField(label=_("SMTP port"), min_value=1, max_value=65535, required=False)
+    smtp_security = forms.ChoiceField(label=_("Encryption"), choices=[("tls", "STARTTLS"), ("ssl", "SSL/TLS"), ("none", "None")], required=False)
+    smtp_username = forms.CharField(label=_("SMTP username"), max_length=255, required=False)
+    smtp_password = forms.CharField(label=_("SMTP password"), max_length=512, required=False, widget=forms.PasswordInput(render_value=False))
+    smtp_from_email = forms.EmailField(label=_("Sender email address"), required=False)
+    smtp_feedback_email = forms.EmailField(label=_("Feedback recipient email address"), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        zones = sorted(available_timezones())
+        self.fields["timezone_name"].choices = [(zone, zone) for zone in zones]
+        self.fields["timezone_name"].initial = "Europe/Vilnius"
+
+    def clean_family_name(self):
+        value = self.cleaned_data["family_name"].strip()
+        if not value:
+            raise forms.ValidationError(_("The family name is required."))
+        return value
+
+    def clean_timezone_name(self):
+        value = self.cleaned_data["timezone_name"]
+        try:
+            ZoneInfo(value)
+        except ValueError as exc:
+            raise forms.ValidationError(_("Choose a valid time zone.")) from exc
+        return value
+
+    def clean(self):
+        cleaned = super().clean()
+        if cleaned.get("configure_smtp"):
+            for name in ("smtp_host", "smtp_port", "smtp_security", "smtp_username", "smtp_password", "smtp_from_email", "smtp_feedback_email"):
+                if not cleaned.get(name):
+                    self.add_error(name, _("This field is required when email is enabled."))
+        return cleaned
 
 
 class ParentEditForm(StyledFormMixin, forms.Form):

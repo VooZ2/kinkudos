@@ -1,0 +1,12 @@
+{% extends "economy/base.html" %}
+{% load i18n %}
+{% block title %}{% translate "Setup complete" %} – {{ project_name }}{% endblock %}
+{% block body_class %}system-page auth-page theme-neutral{% endblock %}
+{% block content %}
+<section class="narrow-card setup-card">
+  <p class="eyebrow">{{ project_name }}</p><h1>{% translate "Setup complete" %}</h1>
+  <p>{% translate "Save this recovery code in your password manager. It will not be shown again." %}</p>
+  <p class="recovery-code"><code>{{ recovery_code }}</code></p>
+  <a class="button button-primary button-large" href="{% url 'parent_dashboard' %}">{% translate "Open parent area" %}</a>
+</section>
+{% endblock %}
