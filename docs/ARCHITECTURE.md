@@ -12,8 +12,8 @@ outside the repository.
 ## Stack
 Python 3.12 · Django 5.2 LTS · SQLite with WAL · server-rendered templates ·
 small vanilla-JavaScript PWA layer · Web Push with VAPID · Gunicorn · one
-published ARM64/AMD64 application image · a supported Nginx, Caddy, Traefik,
-or container-based TLS reverse proxy.
+published ARM64/AMD64 application image · a supported Nginx, Traefik, or
+container-based TLS reverse proxy.
 
 There is no Node.js toolchain, SPA, or public API. Small internal JSON
 endpoints are used where necessary, such as child-state polling for
@@ -238,24 +238,37 @@ the application URL and setup code; it never collects family account details
 or PINs in the terminal. SMTP remains optional and can be skipped during
 browser setup or configured later by the parent administrator.
 
-An opt-in Hostinger profile supports the Hostinger Ubuntu 24.04 Docker
-template. Its small public installer downloads and verifies a release before
-running the release-owned bootstrap as root. A stable
-`hostinger-caddy-v1` marker identifies the profile for bootstrap, updates,
-health checks, and safe removal; the presence of proxy files is never used to
-infer the mode. The overlay reuses the base `app` and `backup-agent` services
-and adds a version-pinned Caddy container. Only Caddy publishes TCP 80 and 443;
-Gunicorn remains on an internal network. Caddy certificate state is persistent
-and normal updates or safe container removal do not delete application data,
-secrets, backups, or certificate volumes. Re-running the installer preserves
-all existing secrets and the setup code and either resumes the recognized
-profile or stops on ambiguous state.
+The Hostinger Docker Manager Catalog profile is a separate deployment contract
+defined by `deploy/hostinger/compose.yaml`. It runs only the application
+container and lets Hostinger's existing host-network Traefik instance terminate
+TLS and route the configured hostname to Gunicorn on container port 8000.
+Traefik discovery uses Docker labels; the application publishes no host port,
+joins no guessed external proxy network, and receives no Docker socket access.
+
+All Hostinger Catalog runtime state is stored in one named volume mounted at
+`/app/data`: SQLite, private uploaded media, and generated runtime secrets.
+On first start the application entrypoint creates the Django secret and VAPID
+key pair with owner-only permissions. Container restart, Compose recreation,
+Docker Manager update, VPS restart, and whole-VPS snapshot restore must retain
+that volume and must not regenerate the secrets. The Catalog Compose does not
+include the backup agent, configure or use Restic, or require backup secrets.
+
+Hostinger automatic whole-VPS backups and a manually created snapshot before
+an update are the tested Catalog MVP recovery path. They restore the complete
+VPS and overwrite its current state; they are not a portable application-level
+KinKudos backup. Application export and portable backup/restore remain separate
+future functionality. Discovery and application of updated Catalog Compose
+templates or image tags without terminal access remains dependent on a defined
+Hostinger Docker Manager update workflow and must not be represented as
+automatic, one-click, or suitable for non-technical operators until verified.
 
 ## Backups
 An isolated `backup-agent` container owns the remote-storage credentials and
 has no published port or Docker socket. The application reaches it only over
 an internal Compose network authenticated with a generated service token.
 The application never receives stored provider secrets back from the agent.
+This backup-agent architecture applies to the standard Compose deployment; the
+Hostinger Docker Manager Catalog profile intentionally does not include it.
 
 The agent creates a consistent SQLite online backup, includes private uploaded
 media, keeps local database copies for 31 days, and sends encrypted snapshots

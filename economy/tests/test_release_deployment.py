@@ -159,23 +159,6 @@ class ReleaseDeploymentTests(SimpleTestCase):
             self.assertIn("is not empty", result.stderr)
             self.assertEqual(sentinel.read_text(encoding="utf-8"), "keep")
 
-    def test_hostinger_profile_publishes_only_caddy_and_reuses_backup_agent(self):
-        base = (ROOT / "deploy" / "compose.yml").read_text(encoding="utf-8")
-        hostinger = (ROOT / "deploy" / "compose.hostinger.yml").read_text(
-            encoding="utf-8"
-        )
-
-        self.assertIn("  backup-agent:", base)
-        self.assertNotIn("backup-agent:", hostinger)
-        self.assertIn("image: caddy:2.11.4-alpine", hostinger)
-        self.assertNotIn("image: caddy:latest", hostinger)
-        self.assertIn('      - "80:80"', hostinger)
-        self.assertIn('      - "443:443"', hostinger)
-        self.assertNotIn("8000:8000", hostinger)
-        self.assertIn("caddy-data:/data", hostinger)
-        self.assertIn("caddy-config:/config", hostinger)
-        self.assertIn("  web:\n    internal: true", hostinger)
-
     def test_hostinger_catalog_compose_is_self_contained_and_traefik_ready(self):
         compose = (ROOT / "deploy" / "hostinger" / "compose.yaml").read_text(
             encoding="utf-8"
@@ -206,6 +189,72 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertIn(
             "docker compose -f deploy/hostinger/compose.yaml config --quiet", workflow
         )
+
+    def test_legacy_hostinger_caddy_profile_is_removed(self):
+        legacy_paths = (
+            "Caddyfile.hostinger",
+            "compose.hostinger.yml",
+            "hostinger-bootstrap.sh",
+            "hostinger-healthcheck.sh",
+            "install-hostinger.sh",
+            "uninstall-hostinger.sh",
+        )
+        for relative in legacy_paths:
+            self.assertFalse((ROOT / "deploy" / relative).exists(), relative)
+
+        updater = (ROOT / "deploy" / "install-release.sh").read_text(
+            encoding="utf-8"
+        )
+        packager = (ROOT / "scripts" / "package_release.py").read_text(
+            encoding="utf-8"
+        )
+        verifier = (ROOT / "scripts" / "verify_release.py").read_text(
+            encoding="utf-8"
+        )
+        for legacy_reference in legacy_paths:
+            self.assertNotIn(legacy_reference, updater)
+            self.assertNotIn(legacy_reference, packager)
+            self.assertNotIn(legacy_reference, verifier)
+        self.assertNotIn("hostinger-caddy-v1", updater)
+
+    def test_release_updater_rejects_removed_installation_profiles(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            deploy = root / "deploy"
+            deploy.mkdir()
+            (deploy / "compose.yml").write_text(
+                "services: {}\n", encoding="utf-8"
+            )
+            (root / "install-profile").write_text(
+                "hostinger-caddy-v1\n", encoding="utf-8"
+            )
+            archive = root / "release.tar.gz"
+            archive.write_bytes(b"not a release")
+            checksum = root / "release.tar.gz.sha256"
+            checksum.write_text(
+                f"{'0' * 64}  release.tar.gz\n", encoding="utf-8"
+            )
+
+            result = subprocess.run(
+                [
+                    "sh",
+                    str(ROOT / "deploy" / "install-release.sh"),
+                    str(archive),
+                    str(checksum),
+                    "26.5.2",
+                    str(root),
+                ],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn(
+                "Unsupported installation profile: hostinger-caddy-v1",
+                result.stderr,
+            )
+            self.assertFalse((root / "secrets").exists())
 
     def test_entrypoint_persists_hostinger_runtime_secrets(self):
         with TemporaryDirectory() as directory:
@@ -253,40 +302,3 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     for path in secret_files
                 },
             )
-
-    def test_hostinger_installer_verifies_release_before_versioned_bootstrap(self):
-        installer = (ROOT / "deploy" / "install-hostinger.sh").read_text(
-            encoding="utf-8"
-        )
-        bootstrap = (ROOT / "deploy" / "hostinger-bootstrap.sh").read_text(
-            encoding="utf-8"
-        )
-
-        self.assertIn("sha256sum -c", installer)
-        self.assertIn("Unsafe archive member", installer)
-        self.assertIn("hostinger-bootstrap.sh", installer)
-        self.assertIn("hostinger-caddy-v1", installer)
-        self.assertIn("installed-release", installer)
-        self.assertIn("setup_token", bootstrap)
-        self.assertIn('if [ ! -s "$secrets_dir/setup_token" ]', bootstrap)
-        healthcheck = (ROOT / "deploy" / "hostinger-healthcheck.sh").read_text(
-            encoding="utf-8"
-        )
-        self.assertIn("deployed and HTTPS ready", healthcheck)
-        self.assertIn("deployed but HTTPS pending", healthcheck)
-        self.assertIn("did not redirect HTTP to HTTPS", healthcheck)
-
-    def test_hostinger_lifecycle_uses_explicit_profile_marker(self):
-        updater = (ROOT / "deploy" / "install-release.sh").read_text(
-            encoding="utf-8"
-        )
-        uninstaller = (ROOT / "deploy" / "uninstall-hostinger.sh").read_text(
-            encoding="utf-8"
-        )
-
-        self.assertIn('project_root/install-profile', updater)
-        self.assertIn("hostinger-caddy-v1", updater)
-        self.assertIn('project_root/install-profile', uninstaller)
-        self.assertIn("docker compose down", uninstaller)
-        self.assertNotIn("docker compose down -v", uninstaller)
-        self.assertNotIn("volume rm", uninstaller)

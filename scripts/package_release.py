@@ -30,10 +30,6 @@ EXCLUDED_PART_PREFIXES = ("release-",)
 REQUIRED_DEPLOY_FILES = {
     Path("deploy/compose.yml"),
     Path("deploy/hostinger/compose.yaml"),
-    Path("deploy/compose.hostinger.yml"),
-    Path("deploy/hostinger-bootstrap.sh"),
-    Path("deploy/hostinger-healthcheck.sh"),
-    Path("deploy/install-hostinger.sh"),
     Path("deploy/install.sh"),
 }
 
