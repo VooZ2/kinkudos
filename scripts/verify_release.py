@@ -41,6 +41,10 @@ versions = {
         ROOT / "deploy" / "compose.yml",
         r"(?m)^\s*image: vooz2/kinkudos:([0-9]+\.[0-9]+\.[0-9]+)\s*$",
     ),
+    "deploy/hostinger/compose.yaml": version_from(
+        ROOT / "deploy" / "hostinger" / "compose.yaml",
+        r"(?m)^\s*image: vooz2/kinkudos:([0-9]+\.[0-9]+\.[0-9]+)\s*$",
+    ),
 }
 if len(set(versions.values())) != 1:
     raise SystemExit(f"Release versions do not match: {versions}")

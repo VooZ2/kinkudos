@@ -5,6 +5,29 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.5.2] - 2026-08-04
+
+### Added
+
+- A Hostinger Docker Manager Catalog Compose profile runs the KinKudos
+  application behind Hostinger's existing Traefik service and keeps all
+  required runtime data in one persistent named volume.
+- The application container generates and preserves its Django secret and
+  VAPID keys inside the persistent volume on first start.
+
+### Changed
+
+- The Hostinger Catalog MVP intentionally omits the KinKudos backup agent,
+  does not configure or use Restic, and requires no backup credentials or
+  Docker socket access. Hostinger whole-VPS snapshots provide the tested MVP
+  recovery path, but are not a portable application-level KinKudos backup.
+
+### Security
+
+- Automatically generated Hostinger runtime secrets are created with
+  owner-only permissions and are not regenerated during container restart,
+  Compose recreation, Docker Manager update, VPS restart, or snapshot restore.
+
 ## [26.5.1] - 2026-08-03
 
 ### Added

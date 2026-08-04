@@ -1,6 +1,8 @@
+import hashlib
 import os
 import stat
 import subprocess
+import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -97,7 +99,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.5.1",
+                    "26.5.2",
                     str(root),
                 ],
                 env=environment,
@@ -143,7 +145,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
 
             environment = os.environ.copy()
             environment["PATH"] = f"{fake_bin}:{environment['PATH']}"
-            environment["KINKUDOS_VERSION"] = "26.5.1"
+            environment["KINKUDOS_VERSION"] = "26.5.2"
             environment["KINKUDOS_INSTALL_ROOT"] = str(install_root)
             result = subprocess.run(
                 ["sh", str(ROOT / "deploy" / "install.sh")],
@@ -173,6 +175,84 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertIn("caddy-data:/data", hostinger)
         self.assertIn("caddy-config:/config", hostinger)
         self.assertIn("  web:\n    internal: true", hostinger)
+
+    def test_hostinger_catalog_compose_is_self_contained_and_traefik_ready(self):
+        compose = (ROOT / "deploy" / "hostinger" / "compose.yaml").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("image: vooz2/kinkudos:26.5.2", compose)
+        self.assertIn("kinkudos-data:/app/data", compose)
+        self.assertIn('      - "8000"', compose)
+        self.assertIn("KINKUDOS_RUNTIME_SECRETS_DIR", compose)
+        self.assertIn("/health/", compose)
+        self.assertIn("traefik.enable=true", compose)
+        self.assertIn("entrypoints=websecure", compose)
+        self.assertIn("tls.certresolver=letsencrypt", compose)
+        self.assertIn("loadbalancer.server.port=8000", compose)
+        self.assertNotIn("backup-agent", compose)
+        self.assertNotIn("restic", compose.lower())
+        self.assertNotIn("caddy", compose.lower())
+        self.assertNotIn("build:", compose)
+        self.assertNotIn("privileged", compose)
+        self.assertNotIn("docker.sock", compose)
+        self.assertNotIn("network_mode", compose)
+        self.assertNotIn("ports:", compose)
+        self.assertNotIn("../", compose)
+
+        workflow = (ROOT / ".github" / "workflows" / "release-image.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(
+            "docker compose -f deploy/hostinger/compose.yaml config --quiet", workflow
+        )
+
+    def test_entrypoint_persists_hostinger_runtime_secrets(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            runtime_secrets = root / "runtime-secrets"
+            environment = os.environ.copy()
+            environment.update(
+                {
+                    "PATH": f"{Path(sys.executable).parent}:{environment['PATH']}",
+                    "KINKUDOS_DEBUG": "true",
+                    "KINKUDOS_DATABASE_PATH": str(root / "kinkudos.sqlite3"),
+                    "KINKUDOS_MEDIA_ROOT": str(root / "media"),
+                    "KINKUDOS_RUNTIME_SECRETS_DIR": str(runtime_secrets),
+                    "KINKUDOS_SECRET_KEY_FILE": str(runtime_secrets / "django_secret_key"),
+                    "KINKUDOS_VAPID_PRIVATE_KEY_FILE": str(
+                        runtime_secrets / "vapid_private.pem"
+                    ),
+                    "KINKUDOS_VAPID_PUBLIC_KEY_FILE": str(
+                        runtime_secrets / "vapid_public.txt"
+                    ),
+                    "KINKUDOS_SETUP_TOKEN": "test-setup-token",
+                }
+            )
+
+            command = ["sh", str(ROOT / "docker" / "entrypoint.sh"), "true"]
+            first = subprocess.run(command, env=environment, capture_output=True, text=True)
+            self.assertEqual(first.returncode, 0, first.stderr)
+            secret_files = [
+                runtime_secrets / "django_secret_key",
+                runtime_secrets / "vapid_private.pem",
+                runtime_secrets / "vapid_public.txt",
+            ]
+            self.assertTrue(all(path.is_file() and path.stat().st_size for path in secret_files))
+            initial_hashes = {
+                path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+                for path in secret_files
+            }
+
+            second = subprocess.run(command, env=environment, capture_output=True, text=True)
+            self.assertEqual(second.returncode, 0, second.stderr)
+            self.assertEqual(
+                initial_hashes,
+                {
+                    path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+                    for path in secret_files
+                },
+            )
 
     def test_hostinger_installer_verifies_release_before_versioned_bootstrap(self):
         installer = (ROOT / "deploy" / "install-hostinger.sh").read_text(

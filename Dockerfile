@@ -19,6 +19,7 @@ RUN python -m pip install --requirement requirements.lock
 COPY . .
 RUN find /app -type d -name __pycache__ -prune -exec rm -rf -- {} + \
     && find /app -type f \( -name '*.pyc' -o -name '*.pyo' \) -delete \
+    && mkdir -p /app/data \
     && chmod -R a+rX /app \
     && chmod 0755 /app/docker/entrypoint.sh \
     && python scripts/verify_release.py \

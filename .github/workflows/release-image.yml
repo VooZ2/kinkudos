@@ -49,6 +49,12 @@ jobs:
           echo "minor=${version%.*}" >> "$GITHUB_OUTPUT"
           echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
+      - name: Validate Hostinger Catalog Compose
+        env:
+          KINKUDOS_HOSTNAME: test.example.com
+          KINKUDOS_SETUP_TOKEN: release-validation-only
+        run: docker compose -f deploy/hostinger/compose.yaml config --quiet
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
 

@@ -7,6 +7,31 @@ schema.
 
 ## [Unreleased]
 
+## [26.5.2] - 2026-08-04
+
+### Pridėta
+
+- „Hostinger Docker Manager Catalog“ Compose profilis paleidžia „KinKudos“
+  aplikaciją už esamo „Hostinger Traefik“ serviso, o visus būtinus vykdymo
+  duomenis laiko viename išliekančiame vardiniame tome.
+- Pirmą kartą paleistas aplikacijos konteineris išliekančiame tome sukuria ir
+  išsaugo „Django“ paslaptį bei VAPID raktus.
+
+### Pakeista
+
+- „Hostinger Catalog“ MVP sąmoningai neįtraukia „KinKudos“ kopijų agento,
+  nekonfigūruoja ir nenaudoja „Restic“, nereikalauja kopijų prisijungimo
+  duomenų ar prieigos prie „Docker“ lizdo. Išbandytas MVP atkūrimo kelias
+  naudoja viso „Hostinger VPS“ momentines kopijas, tačiau jos nėra perkeliamas
+  aplikacijos lygio „KinKudos“ backup.
+
+### Saugumas
+
+- Automatiškai sugeneruotos „Hostinger“ vykdymo paslaptys sukuriamos tik
+  savininkui pasiekiamomis teisėmis ir nėra generuojamos iš naujo perkraunant
+  konteinerį, perkuriant Compose, vykdant „Docker Manager“ atnaujinimą,
+  perkraunant VPS ar atkuriant momentinę kopiją.
+
 ## [26.5.1] - 2026-08-03
 
 ### Pridėta

@@ -1,0 +1,50 @@
+services:
+  app:
+    image: vooz2/kinkudos:26.5.2
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    environment:
+      KINKUDOS_DEBUG: "false"
+      KINKUDOS_DATABASE_PATH: /app/data/kinkudos.sqlite3
+      KINKUDOS_MEDIA_ROOT: /app/data/media
+      KINKUDOS_RUNTIME_SECRETS_DIR: /app/data/.runtime-secrets
+      KINKUDOS_SECRET_KEY_FILE: /app/data/.runtime-secrets/django_secret_key
+      KINKUDOS_SETUP_TOKEN: "${KINKUDOS_SETUP_TOKEN:?Set a private setup code in Docker Manager.}"
+      KINKUDOS_VAPID_PRIVATE_KEY_FILE: /app/data/.runtime-secrets/vapid_private.pem
+      KINKUDOS_VAPID_PUBLIC_KEY_FILE: /app/data/.runtime-secrets/vapid_public.txt
+      KINKUDOS_VAPID_SUBJECT: "https://${KINKUDOS_HOSTNAME:?Set your KinKudos domain in Docker Manager.}"
+      KINKUDOS_ALLOWED_HOSTS: "${KINKUDOS_HOSTNAME:?Set your KinKudos domain in Docker Manager.},127.0.0.1,localhost"
+      KINKUDOS_CSRF_TRUSTED_ORIGINS: "https://${KINKUDOS_HOSTNAME:?Set your KinKudos domain in Docker Manager.}"
+      KINKUDOS_EMAIL_ENABLED: "false"
+      KINKUDOS_SECURE_COOKIES: "true"
+      KINKUDOS_SECURE_SSL_REDIRECT: "true"
+      KINKUDOS_HSTS_SECONDS: "31536000"
+      KINKUDOS_LOG_LEVEL: INFO
+      KINKUDOS_DEVICE_PAIRING_REQUIRED: "true"
+      KINKUDOS_TRUSTED_PROXIES: "127.0.0.0/8,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+    volumes:
+      - kinkudos-data:/app/data
+    expose:
+      - "8000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; r=urllib.request.Request('http://127.0.0.1:8000/health/', headers={'X-Forwarded-Proto':'https'}); urllib.request.urlopen(r, timeout=3)"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.entrypoints=websecure
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.rule=Host(`${KINKUDOS_HOSTNAME:?Set your KinKudos domain in Docker Manager.}`)
+      - traefik.http.routers.${COMPOSE_PROJECT_NAME}.tls.certresolver=letsencrypt
+      - traefik.http.services.${COMPOSE_PROJECT_NAME}.loadbalancer.server.port=8000
+      - com.centurylinklabs.watchtower.enable=false
+
+volumes:
+  kinkudos-data:
