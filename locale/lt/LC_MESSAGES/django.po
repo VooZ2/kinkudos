@@ -868,9 +868,6 @@ msgstr "Kaskart išsaugodami šiuos nustatymus iš naujo įveskite SMTP slaptaž
 msgid "Enter the birthday date."
 msgstr "Įveskite gimimo datą."
 
-msgid "Enter the code shown by the server installer."
-msgstr "Įveskite serverio diegiklio parodytą kodą."
-
 msgid "Enter the email address assigned to the parent account. If the account is active, we will send a link valid for one hour."
 msgstr "Įveskite tėvų paskyrai priskirtą el. pašto adresą. Jei paskyra aktyvi, išsiųsime vieną valandą galiojančią nuorodą."
 
@@ -882,6 +879,9 @@ msgstr "Nurodykite galutinę tokenų sumą."
 
 msgid "Enter the same password again."
 msgstr "Pakartokite tą patį slaptažodį."
+
+msgid "Enter the setup code configured for this installation."
+msgstr "Įveskite šiam diegimui nustatytą paruošimo kodą."
 
 msgid "Enter your PIN"
 msgstr "Įvesk PIN"
@@ -1921,11 +1921,11 @@ msgstr "Nurodykite, iki kokio minuso vaikas gali išleisti tokenus."
 msgid "Set up KinKudos"
 msgstr "Paruošti „KinKudos“"
 
+msgid "Set up the system"
+msgstr "Paruoškite sistemą"
+
 msgid "Set up this device"
 msgstr "Paruošti šį įrenginį"
-
-msgid "Set up your family"
-msgstr "Paruoškite savo šeimą"
 
 msgid "Settings"
 msgstr "Nustatymai"

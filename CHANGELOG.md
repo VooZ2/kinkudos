@@ -5,6 +5,12 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+### Changed
+
+- Initial setup now uses installation-neutral setup-code guidance, refers to
+  preparing the system, and keeps the optional email checkbox inline with its
+  label.
+
 ## [26.5.2] - 2026-08-04
 
 ### Added

@@ -7,6 +7,12 @@ schema.
 
 ## [Unreleased]
 
+### Pakeista
+
+- Pradinis paruošimas dabar neutraliai paaiškina paruošimo kodą, kviečia
+  paruošti sistemą, o pasirenkamo el. pašto žymimąjį langelį rodo vienoje
+  eilutėje su jo tekstu.
+
 ## [26.5.2] - 2026-08-04
 
 ### Pridėta

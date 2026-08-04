@@ -5,7 +5,7 @@
 {% block content %}
 <section class="narrow-card setup-card">
   <p class="eyebrow">{{ project_name }}</p>
-  <h1>{% translate "Set up your family" %}</h1>
+  <h1>{% translate "Set up the system" %}</h1>
   <p class="auth-help">{% translate "Create the first parent administrator account. Email setup is optional and can be configured later in Settings." %}</p>
   <form method="post" class="stack-form">{% csrf_token %}{{ form.as_p }}<button class="button button-primary button-large" type="submit">{% translate "Finish setup" %}</button></form>
 </section>

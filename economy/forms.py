@@ -705,7 +705,7 @@ class InitialSetupForm(ParentAccountForm):
     setup_token = forms.CharField(
         label=_("Setup code"),
         widget=forms.PasswordInput(render_value=False),
-        help_text=_("Enter the code shown by the server installer."),
+        help_text=_("Enter the setup code configured for this installation."),
     )
     family_name = forms.CharField(label=_("Family name"), max_length=80)
     default_language = forms.ChoiceField(
