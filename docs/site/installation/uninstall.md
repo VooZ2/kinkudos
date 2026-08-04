@@ -1,19 +1,16 @@
 ---
 title: Stop or uninstall KinKudos
-description: Stop KinKudos containers without accidentally deleting family data, secrets, backups, or Caddy certificate state.
+description: Stop KinKudos containers without accidentally deleting family data, secrets, backups, or persistent volumes.
 ---
 
 # Stop or uninstall KinKudos
 
 Stopping containers and deleting family data are different operations. Make and verify a backup before either.
 
-For a recognized Hostinger installation, run as root:
-
-```bash
-/opt/kinkudos/deploy/uninstall-hostinger.sh /opt/kinkudos
-```
-
-This performs `docker compose down`. It removes the containers but deliberately retains application data, secrets, backups, installation files, and Caddy certificate volumes. Running the supported Hostinger installer again resumes the recognized installation.
+For a Hostinger Docker Manager application, use Docker Manager's stop or
+remove action without deleting the `kinkudos-data` named volume. This removes
+containers while retaining the application database, media, and runtime
+secrets. Re-import the same Compose definition if you need to recreate it.
 
 For a generic deployment, use `docker compose down` from its `deploy` directory. Do not add `-v` unless you have independently identified every volume and intentionally want to destroy it.
 

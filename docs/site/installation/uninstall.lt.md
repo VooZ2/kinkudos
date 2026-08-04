@@ -1,19 +1,16 @@
 ---
 title: KinKudos sustabdymas arba pašalinimas
-description: Sustabdykite KinKudos konteinerius netyčia neištrindami šeimos duomenų, paslapčių, kopijų ar Caddy sertifikatų.
+description: Sustabdykite KinKudos konteinerius netyčia neištrindami šeimos duomenų, paslapčių, kopijų ar nuolatinių volume.
 ---
 
 # Sustabdykite arba pašalinkite KinKudos
 
 Konteinerių sustabdymas ir šeimos duomenų ištrynimas yra skirtingi veiksmai. Prieš abu sukurkite ir patikrinkite kopiją.
 
-Atpažintai Hostinger instaliacijai kaip root vykdykite:
-
-```bash
-/opt/kinkudos/deploy/uninstall-hostinger.sh /opt/kinkudos
-```
-
-Scenarijus įvykdo `docker compose down`: pašalina konteinerius, bet sąmoningai išsaugo programos duomenis, paslaptis, kopijas, diegimo failus ir Caddy sertifikatų volumes. Dar kartą paleidus palaikomą Hostinger installerį ši atpažinta instaliacija tęsiama.
+Hostinger Docker Manager programai naudokite Docker Manager sustabdymo arba
+pašalinimo veiksmą, neištrindami `kinkudos-data` named volume. Tai pašalina
+konteinerius, bet išsaugo programos duomenų bazę, mediją ir vykdymo paslaptis.
+Jei reikia programą sukurti iš naujo, importuokite tą patį Compose aprašą.
 
 Bendrame diegime jo `deploy` kataloge naudokite `docker compose down`. Nepridėkite `-v`, kol savarankiškai nenustatėte kiekvieno volume ir sąmoningai nenorite jo sunaikinti.
 

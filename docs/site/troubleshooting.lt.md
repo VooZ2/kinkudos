@@ -19,17 +19,24 @@ cd /opt/kinkudos/deploy
 docker compose ps
 ```
 
-Hostinger profilyje vykdykite `/opt/kinkudos/deploy/hostinger-healthcheck.sh /opt/kinkudos`. Pataisykite DNS ar firewall ir tikrinkite dar kartą. Neviešinkite `8000`.
+Hostinger aplinkoje patikrinkite Docker Manager programos būseną ir valdomą
+Traefik maršrutą. Pataisykite DNS ar firewall ir tikrinkite dar kartą.
+Neviešinkite `8000`.
 
 ## Domenas arba HTTPS dar neveikia
 
-Hostinger patikra rodo **deployed but HTTPS pending**, kai KinKudos ir Caddy veikia, bet sertifikatas dar neparuoštas. Įsitikinkite, kad domenas rodo į šį VPS, įeinantys TCP 80 ir 443 leidžiami ir jų neužėmė kita paslauga. Palaukite DNS atsinaujinimo ir pakartokite patikrą.
+Hostinger HTTPS neparuoštas, kai domenas nerodo į VPS, Traefik neprijungtas prie
+Compose programos arba neprieinami 80/443 prievadai. Patikrinkite DNS ir Docker
+Manager/Traefik būseną, palaukite sertifikato išdavimo ir bandykite dar kartą.
 
 Neapeikite sertifikato įspėjimų ir nepradėkite įprastai naudoti šeimos programos per viešą HTTP.
 
 ## Diegiklis nepasileidžia
 
-Hostinger diegikliui reikia root, Hostinger Ubuntu 24.04 Docker šablono, veikiančio Docker, bent Compose 2.20, Docker 24 ir įprastų sistemos įrankių. Vadovaukitės tikslia jo klaida, o ne diekite atsitiktinius paketus ar išjunkite patikras.
+Hostinger aplinkoje patikrinkite, ar importuotas `deploy/hostinger/compose.yaml`,
+ar nustatyti `KINKUDOS_HOSTNAME` ir `KINKUDOS_SETUP_TOKEN`, ir ar domenas sutampa
+su DNS įrašu. Vadovaukitės parodyta Compose klaida, o ne keiskite nesusijusius
+sistemos paketus.
 
 Bendras vedamasis diegiklis turi kitus reikalavimus: ne root diegimo naudotoją ir jau veikiantį HTTPS proxy. Nemaišykite abiejų profilių viename diegimo kataloge.
 
@@ -41,9 +48,11 @@ Jeigu nukreipiama į tėvų prisijungimą ar skydelį, setup jau užbaigtas arba
 
 ## Setup kodas nepriimamas
 
-Nukopijuokite dabartinį diegiklio parodytą kodą be papildomų tarpų. Hostinger profilyje iki sėkmingos setup pabaigos jis taip pat laikomas `/opt/kinkudos/secrets/setup_token`. Tai paslaptis – nedėkite jos į nuotraukas ar pagalbos užklausas.
+Nukopijuokite Compose aplinkoje nustatytą setup kodą be papildomų tarpų. Tai
+paslaptis – nedėkite jos į nuotraukas ar pagalbos užklausas.
 
-Dar kartą paleidus atpažintą Hostinger diegiklį esamas kodas išsaugomas. Nekeiskite paslapčių failų rankiniu būdu.
+Kol pradinis nustatymas neužbaigtas, nekeiskite named volume ar vykdymo paslapčių
+failų rankiniu būdu.
 
 ## Nepavyksta prisijungti
 
@@ -74,7 +83,9 @@ df -h
 docker system df
 ```
 
-Pirmiausia nustatykite tikslią priežastį. Saugokite `data`, `backups`, `secrets` ir Caddy sertifikatų volumes. Nežinomame serveryje nevykdykite plataus Docker prune ar rekursinio trynimo.
+Pirmiausia nustatykite tikslią priežastį. Saugokite `kinkudos-data` named volume
+ir atskirą snapshot ar atsarginę kopiją. Nežinomame serveryje nevykdykite
+plataus Docker prune ar rekursinio trynimo.
 
 ## Pakeitus Compose dingo duomenys
 

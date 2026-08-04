@@ -21,7 +21,8 @@ Use the release archive, SHA256 file, and `install-release.sh` procedure from th
 
 The updater verifies release metadata and checksum, pulls and smoke-tests the pinned image, checks directory ownership, creates a consistent database backup, starts the new app and backup agent, waits for health, verifies migrations and version, and refreshes versioned management helpers. It preserves `.env`, `data`, uploads, backups, and secrets.
 
-Hostinger-profile installations also preserve Caddy certificate volumes and run the Hostinger HTTPS health check after updating.
+On Hostinger, use Docker Manager's supported Update action and verify the
+managed Traefik route and HTTPS result afterward. Create a VPS snapshot first.
 
 ## Verify the result
 
@@ -31,11 +32,9 @@ docker compose ps
 docker compose logs --tail=100 app
 ```
 
-Open KinKudos, confirm the displayed version, sign in, and check a normal parent page. For Hostinger run:
-
-```bash
-/opt/kinkudos/deploy/hostinger-healthcheck.sh /opt/kinkudos
-```
+Open KinKudos, confirm the displayed version, sign in, and check a normal parent
+page. For Hostinger, also verify the Docker Manager application status, Traefik
+route, HTTPS URL, login, and family data in the browser.
 
 ## If an update fails
 

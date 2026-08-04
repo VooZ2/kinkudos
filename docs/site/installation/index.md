@@ -22,6 +22,6 @@ Whichever method you choose, the process has two distinct parts:
 | [Advanced deployment](advanced.md) | Existing Traefik/Nginx Proxy Manager networks or unusual Linux layouts | Yes | All integration decisions |
 
 !!! warning "Before you install"
-    Generic installations need a 64-bit AMD64 or ARM64 Linux server, Docker Engine, Docker Compose, a hostname, and an HTTPS reverse proxy. The Hostinger profile instead prepares its own Caddy HTTPS proxy on the supported Ubuntu 24.04 Docker template. Never expose KinKudos port `8000` to the internet.
+    Generic installations need a 64-bit AMD64 or ARM64 Linux server, Docker Engine, Docker Compose, a hostname, and an HTTPS reverse proxy. The Hostinger path uses Hostinger Docker Manager and its managed Traefik proxy. Never expose KinKudos port `8000` to the internet.
 
 After the containers start, continue with [First-time web setup](first-time-setup.md).

@@ -22,6 +22,6 @@ Nepriklausomai nuo pasirinkto būdo, diegimas susideda iš dviejų aiškių dali
 | [Pažangus diegimas](advanced.lt.md) | Esamiems Traefik, Nginx Proxy Manager ar nestandartiniams Linux sprendimams | Taip | Visus integravimo sprendimus |
 
 !!! warning "Prieš diegdami"
-    Bendram diegimui reikia 64 bitų AMD64 arba ARM64 Linux serverio, Docker Engine, Docker Compose, domeno ir HTTPS atvirkštinio tarpinio serverio (proxy). Hostinger profilis palaikomame Ubuntu 24.04 Docker šablone pats paruošia Caddy HTTPS proxy. Niekada neviešinkite KinKudos `8000` prievado.
+    Bendram diegimui reikia 64 bitų AMD64 arba ARM64 Linux serverio, Docker Engine, Docker Compose, domeno ir HTTPS atvirkštinio tarpinio serverio (proxy). Hostinger kelias naudoja Hostinger Docker Manager ir jo valdomą Traefik proxy. Niekada neviešinkite KinKudos `8000` prievado.
 
 Paleidę konteinerius tęskite [pradinį nustatymą naršyklėje](first-time-setup.lt.md).

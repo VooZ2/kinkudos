@@ -19,17 +19,24 @@ cd /opt/kinkudos/deploy
 docker compose ps
 ```
 
-For Hostinger run `/opt/kinkudos/deploy/hostinger-healthcheck.sh /opt/kinkudos`. Correct DNS or firewall access, then retry. Do not expose `8000`.
+For Hostinger, check the Docker Manager application status and managed Traefik
+router. Correct DNS or firewall access, then retry. Do not expose `8000`.
 
 ## Domain or HTTPS is not ready
 
-The Hostinger health check reports **deployed but HTTPS pending** when KinKudos and Caddy run but the certificate is not yet usable. Confirm the hostname resolves to this VPS, inbound TCP 80 and 443 are allowed, and no other service occupies those ports. Wait for DNS propagation and rerun the health check.
+On Hostinger, HTTPS is not ready when the hostname does not resolve to the VPS,
+Traefik is not attached to the Compose application, or ports 80/443 are not
+available. Confirm the DNS record and Docker Manager/Traefik status, then wait
+for certificate issuance before retrying.
 
 Never bypass certificate errors or continue normal family use over public HTTP.
 
-## Installer does not start
+## Docker Manager deployment does not start
 
-The Hostinger installer requires root, Hostinger Ubuntu 24.04 Docker, running Docker, Compose 2.20 or newer, Docker 24 or newer, and common system tools. Use its exact error instead of installing random packages or disabling checks.
+On Hostinger, verify that Docker Manager imported `deploy/hostinger/compose.yaml`,
+that `KINKUDOS_HOSTNAME` and `KINKUDOS_SETUP_TOKEN` are set, and that the
+hostname matches the DNS record. Use the displayed Compose error instead of
+changing unrelated system packages.
 
 The generic guided installer has different prerequisites and expects a non-root deployment user plus an existing HTTPS proxy. Do not mix the two profiles in one installation root.
 
@@ -41,9 +48,11 @@ If it redirects to parent sign-in or dashboard, setup has already been completed
 
 ## Setup code is rejected
 
-Copy the current code printed by the installer without extra spaces. In a Hostinger profile it is also stored in `/opt/kinkudos/secrets/setup_token` until setup succeeds. Treat it as a secret; do not place it in screenshots or support requests.
+Copy the setup code from the Compose environment configuration without extra
+spaces. Treat it as a secret; do not place it in screenshots or support requests.
 
-Re-running the recognized Hostinger installer preserves the existing setup code. Do not replace secret files manually.
+Do not replace the named volume or runtime secret files manually while the
+first-time setup is incomplete.
 
 ## Cannot sign in
 
@@ -74,7 +83,9 @@ df -h
 docker system df
 ```
 
-Identify the exact source first. Preserve `data`, `backups`, `secrets`, and Caddy certificate volumes. Do not run broad Docker prune or recursive deletion commands on an unfamiliar server.
+Identify the exact source first. Preserve the `kinkudos-data` named volume and
+any separate snapshot or backup you created. Do not run broad Docker prune or
+recursive deletion commands on an unfamiliar server.
 
 ## Data appears missing after a Compose change
 

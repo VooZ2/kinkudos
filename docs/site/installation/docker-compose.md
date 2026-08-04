@@ -5,7 +5,7 @@ description: Deploy KinKudos with the official Compose services, persistent host
 
 # Docker Compose installation
 
-This route is for experienced self-hosters who want to integrate KinKudos with an existing Linux, NAS, Docker, or reverse-proxy environment. The supported deployment uses the release-owned files in `deploy/`; do not copy an isolated Compose snippet without its secrets, scripts, and proxy overlay.
+This route is for experienced self-hosters who want to integrate KinKudos with an existing Linux, NAS, Docker, or reverse-proxy environment. Use the versioned files in the repository's `deploy/` directory; do not copy an isolated Compose snippet without its secrets, scripts, and proxy overlay.
 
 ## Deployment layout
 
@@ -29,13 +29,38 @@ The base Compose file starts `app` and `backup-agent`. It publishes no applicati
 
 Never publish port `8000` to the internet. Terminate HTTPS at the proxy and forward the original host and protocol.
 
-## Install
+## Manual Docker Compose setup
 
-The safest manual route is to download a specific GitHub release archive and SHA256 file, verify it, copy its `deploy` directory, then run the versioned `bootstrap.sh`. Exact verified commands are maintained in the repository’s [deployment reference](https://github.com/VooZ2/kinkudos/blob/main/deploy/README.md#manual-verified-installation).
+Download a specific GitHub release archive and SHA256 file, verify it, and use
+the release's `deploy/compose.yml` together with the matching proxy overlay.
+The official files are maintained in the [deployment directory](https://github.com/VooZ2/kinkudos/tree/main/deploy).
 
-The bootstrap asks only for language, hostname, and the already prepared proxy mode. It generates required secrets and `.env`, validates the Compose configuration, pulls the image pinned to the selected KinKudos release, and starts the services.
+Before starting, prepare the required environment variables and secret files,
+persistent `data/`, `backups/`, and `secrets/` directories, a hostname or
+domain, HTTPS, and a correctly configured reverse proxy. The `host`, `traefik`,
+and `container` overlays in `deploy/` are the supported proxy choices.
 
-After it prints the HTTPS URL and private setup code, continue with [First-time web setup](first-time-setup.md).
+Choose a predictable release by keeping the image tag in `compose.yml` pinned:
+
+```yaml
+image: vooz2/kinkudos:<version>
+```
+
+From the directory containing your configured `compose.yaml` (or the copied
+release Compose files), start the application with:
+
+```bash
+docker compose up -d --pull always
+```
+
+The command pulls the selected image, starts the app and backup agent, and
+keeps persistent data in the host directories. Using `latest` is possible only
+as a conscious choice to follow the newest stable image; a version tag is
+recommended for predictable deployments.
+
+For a fresh prepared server where you prefer an interactive setup, use the
+[Guided server installer](guided-installer.md) instead. After Compose starts,
+open your HTTPS URL and continue with [First-time web setup](first-time-setup.md).
 
 ## Persistent data and secrets
 

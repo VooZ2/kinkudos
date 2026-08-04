@@ -24,8 +24,6 @@
   <a href="https://hub.docker.com/r/vooz2/kinkudos"><img src="https://img.shields.io/docker/pulls/vooz2/kinkudos" alt="Docker pulls"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License"></a>
 </p>
----
-
 ## ✨ See it in action
 
 <table>
@@ -162,6 +160,30 @@ The guided installer downloads the latest published KinKudos release, verifies i
 
 The command is for a **new installation**. Existing installations must use the documented update process.
 
+### Manual Docker Compose setup
+
+For a custom or already managed server, use the official release files in the
+[`deploy/` directory](deploy/). Start from the configured `compose.yaml` in
+that directory, not from an isolated Compose snippet:
+
+```bash
+docker compose up -d --pull always
+```
+
+Before running it, prepare the required environment variables and secret files,
+persistent storage, a hostname or domain, HTTPS, and a correctly configured
+reverse proxy. Keep the image pinned to a released version for predictable
+deployments:
+
+```yaml
+image: vooz2/kinkudos:<version>
+```
+
+Using `latest` is an intentional choice to follow the newest stable image. After
+the containers start, open the HTTPS hostname and complete the first-time setup
+in the browser. The Compose deployment preserves its database and uploaded
+media in persistent storage; back up those directories and secrets separately.
+
 👉 **[Choose an installation method](https://docs.kinkudos.app/installation/)**
 
 The documentation also covers HTTPS, updates, backups, recovery, diagnostics, and troubleshooting.
@@ -178,7 +200,7 @@ A small Docker-capable VPS is usually one of the simpler ways to run KinKudos pr
 
 > **Disclosure:** The Hostinger link is a referral link. If you purchase through it, I may receive a commission at no additional cost to you. Hostinger is not required to use KinKudos, is not an official KinKudos partner, and does not receive access to your family data beyond what is technically stored on the VPS you choose to operate.
 
-Hostinger’s supported Ubuntu 24.04 Docker profile includes a verified installer and Caddy HTTPS proxy. Follow the [Hostinger VPS step-by-step guide](https://docs.kinkudos.app/installation/hostinger/). Hostinger is a paid external service; KinKudos remains free and self-hosted.
+Hostinger’s tested path uses Docker Manager, Hostinger-managed Traefik HTTPS, and the dedicated KinKudos Compose file. Follow the [Hostinger VPS step-by-step guide](https://docs.kinkudos.app/installation/hostinger/). Hostinger is a paid external service; KinKudos remains free and self-hosted.
 
 ## ⚙️ Architecture
 
