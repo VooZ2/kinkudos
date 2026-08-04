@@ -5,9 +5,10 @@ description: Įdiekite KinKudos 26.5.2 naudodami Hostinger Docker Manager, valdo
 
 # Įdiekite KinKudos Hostinger VPS serveryje
 
-Tai paprasčiausias palaikomas Hostinger kelias. Naudojamas Hostinger VPS su
-Docker Manager, Hostinger valdomas Traefik atvirkštinis tarpinis serveris ir
-specialus KinKudos Compose failas iš `26.5.2` leidimo.
+Tai paprasčiausias palaikomas Hostinger kelias. Naudojamas Hostinger VPS
+**Ubuntu 24.04 with Docker** šablonas, Docker Manager, kartu su šiuo šablonu
+įdiegtas Traefik atvirkštinis tarpinis serveris ir specialus KinKudos Compose
+failas iš `26.5.2` leidimo.
 
 KinKudos Compose aprašas naudoja viešą `vooz2/kinkudos:26.5.2` atvaizdą ir
 vieną nuolatinį named volume programos duomenų bazei, medijai bei vykdymo
@@ -18,7 +19,8 @@ atsakote už VPS, domeną, atnaujinimus ir snapshot kopijas.
 
 Reikės:
 
-- Hostinger paskyros ir VPS su Docker Manager;
+- Hostinger paskyros ir VPS, sukurto iš Hostinger **Ubuntu 24.04 with Docker**
+  šablono;
 - jūsų valdomo domeno arba subdomeno;
 - prieigos prie domeno DNS įrašų;
 - VPS viešo IPv4 adreso;
@@ -38,39 +40,68 @@ oficialus KinKudos partneris.
 Sukurkite `A` įrašą norimam adresui, pavyzdžiui, `seima.example.com`, ir
 nukreipkite jį į VPS viešą IPv4 adresą. Palaukite, kol DNS įrašas atsinaujins.
 
-Hostinger palikite įjungtą valdomą Traefik ir jo HTTP/HTTPS prievadus.
-Neviešinkite KinKudos `8000` prievado tiesiogiai — viešas įėjimas turi būti
-Traefik.
+Docker šablonas Traefik įdiegia automatiškai. Palikite šią Traefik programą
+veikiančią ir nekeiskite jos HTTP/HTTPS prievadų. Neviešinkite KinKudos `8000`
+prievado tiesiogiai — viešas įėjimas turi būti Traefik.
 
-## 3. Importuokite KinKudos Compose failą
+## 3. Atverkite rankinį Compose redaktorių
 
-Docker Manager sukurkite naują Compose programą ir importuokite tikslų faile
-esantį aprašą:
+Skiltyje **Docker Manager → Applications** atverkite **Compose** ir pasirinkite
+**Compose manually**. Nesirinkite **Compose from URL**: šiame lange prieš
+sukuriant projektą negalima pateikti KinKudos reikalingų kintamųjų.
+
+![Hostinger Docker Manager Compose meniu su pasirinkimu Compose manually](../assets/hostinger-compose-menu.png)
+
+Lauke **Application name** įrašykite:
 
 ```text
-deploy/hostinger/compose.yaml
+kinkudos
 ```
 
-Failą galite peržiūrėti [GitHub](https://github.com/VooZ2/kinkudos/blob/main/deploy/hostinger/compose.yaml).
+Atverkite **.yaml editor**. Visą jo turinį, įskaitant pradinę `services:`
+eilutę, pakeiskite tiksliu leidimo failu iš šio adreso:
+
+```text
+https://raw.githubusercontent.com/VooZ2/kinkudos/v26.5.2/deploy/hostinger/compose.yaml
+```
+
+Tą patį failą galite peržiūrėti
+[GitHub](https://github.com/VooZ2/kinkudos/blob/v26.5.2/deploy/hostinger/compose.yaml).
 Jame aprašyta `app` paslauga, `vooz2/kinkudos:26.5.2` atvaizdas, Hostinger
 Traefik žymos ir named volume `kinkudos-data`.
 
-Prieš diegdami pateikite du šio Compose failo reikalaujamus kintamuosius:
+## 4. Įrašykite dvi privalomas reikšmes
+
+Grįžkite į **Visual editor**, išskleiskite **Environment** ir pridėkite šiuos
+du pavadinimus bei reikšmes:
 
 ```text
 KINKUDOS_HOSTNAME=seima.example.com
 KINKUDOS_SETUP_TOKEN=<ilgas-privatus-setup-kodas>
 ```
 
-Įrašykite tikrą domeną ir sugeneruokite ilgą atsitiktinį setup kodą. Kodą
-saugokite paslaptyje — jo reikės tik pirmai šeimai ir tėvų administratoriaus
-paskyrai sukurti. Papildomų kintamųjų nepridėkite, nebent turite konkretų
-palaikomą konfigūracijos poreikį.
+Domeną įrašykite be `https://` ir be pasvirojo brūkšnio pabaigoje. Ilgą
+atsitiktinį paruošimo kodą sugeneruokite slaptažodžių tvarkyklėje arba komanda:
 
-## 4. Paleiskite ir užbaikite nustatymą naršyklėje
+```bash
+openssl rand -hex 32
+```
 
-Docker Manager paspauskite **Deploy**. Hostinger valdomas Traefik turėtų
-nukreipti domeną, peradresuoti HTTP į HTTPS ir gauti Let's Encrypt sertifikatą.
+Paruošimo kodą saugokite paslaptyje — jo reikės tik pirmai šeimai ir tėvų
+administratoriaus paskyrai sukurti. Nei vienos reikšmės nerodykite ekrano
+nuotraukose. Papildomų kintamųjų nepridėkite, nebent turite konkretų palaikomą
+konfigūracijos poreikį.
+
+![Hostinger Compose programa su KinKudos atvaizdu ir paslėptomis privalomomis reikšmėmis](../assets/hostinger-compose-environment.png)
+
+## 5. Paleiskite ir užbaikite nustatymą naršyklėje
+
+Po Environment reikšmėmis paspauskite **Save and deploy**. Palaukite, kol
+`kinkudos-app-1` būsena taps **Running**. Tuomet Traefik turėtų nukreipti
+domeną, peradresuoti HTTP į HTTPS ir gauti Let's Encrypt sertifikatą.
+
+![Veikiantis KinKudos konteineris Hostinger Docker Manager](../assets/hostinger-kinkudos-running.png)
+
 Atverkite:
 
 ```text
@@ -80,7 +111,7 @@ https://seima.example.com/setup/
 Įveskite setup kodą ir naršyklėje sukurkite šeimą bei pirmą tėvų administratorių.
 Tada prisijunkite ir patikrinkite, ar atsidaro tėvų skydelis.
 
-## 5. Nuolatiniai duomenys ir priežiūra
+## 6. Nuolatiniai duomenys ir priežiūra
 
 Named volume `kinkudos-data` saugo SQLite duomenų bazę, įkeltą mediją ir
 vykdymo paslaptis. Konteinerio perkrovimas, Compose priverstinis perkūrimas ir

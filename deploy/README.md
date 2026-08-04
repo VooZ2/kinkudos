@@ -48,20 +48,12 @@ Prerequisites:
 ### Hostinger Ubuntu 24.04 Docker profile
 
 For a new Hostinger VPS created from the **Ubuntu 24.04 with Docker** template,
-point the final hostname to the VPS, allow inbound TCP 80 and 443, then run in
-Hostinger Browser Terminal as root:
-
-```bash
-curl -fsSL https://kinkudos.app/install-hostinger.sh \
-  -o /tmp/install-kinkudos-hostinger.sh \
-  && sh /tmp/install-kinkudos-hostinger.sh
-```
-
-This opt-in profile verifies the published release and SHA256 checksum, adds
-the pinned Caddy HTTPS service, checks application and HTTPS state, and prints
-the browser `/setup/` URL and private setup code. It is separate from the
-generic installer below; do not mix both profiles in one installation root.
-See the [Hostinger user guide](https://docs.kinkudos.app/installation/hostinger/).
+point the final hostname to the VPS and use Docker Manager's **Compose
+manually** flow with `deploy/hostinger/compose.yaml`. The template-provided
+Traefik application handles HTTPS; do not add Caddy or expose port `8000`.
+Set `KINKUDOS_HOSTNAME` and a private `KINKUDOS_SETUP_TOKEN` in Docker Manager
+before deployment. Follow the complete
+[Hostinger user guide](https://docs.kinkudos.app/installation/hostinger/).
 
 ### Quick installation on a prepared server
 

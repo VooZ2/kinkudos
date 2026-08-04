@@ -169,7 +169,7 @@ Nedidelis Docker tinkamas VPS dažnai yra vienas paprastesnių būdų privačiai
 
 > **Atskleidimas:** „Hostinger“ nuoroda yra rekomendacinė. Jei įsigysite per ją, galiu gauti komisinį atlyginimą be papildomos kainos jums. „Hostinger“ nėra būtina KinKudos naudojimo sąlyga, nėra oficialus KinKudos partneris ir neturi prieigos prie šeimos duomenų, išskyrus tuos, kuriuos techniškai laikote pasirinktame VPS.
 
-Palaikomas Hostinger Ubuntu 24.04 Docker profilis apima patikrintą installerį ir Caddy HTTPS proxy. Vadovaukitės [Hostinger VPS instrukcija](https://docs.kinkudos.app/installation/hostinger.lt/). Hostinger yra mokama išorinė paslauga, o KinKudos išlieka nemokama ir savarankiškai diegiama.
+Patikrintas Hostinger kelias naudoja Ubuntu 24.04 with Docker šabloną, Docker Manager, kartu įdiegtą Traefik HTTPS tarpinį serverį ir specialų KinKudos Compose failą. Vadovaukitės [Hostinger VPS instrukcija](https://docs.kinkudos.app/installation/hostinger.lt/). Hostinger yra mokama išorinė paslauga, o KinKudos išlieka nemokama ir savarankiškai diegiama.
 
 ## ⚙️ Architektūra
 

@@ -200,7 +200,7 @@ A small Docker-capable VPS is usually one of the simpler ways to run KinKudos pr
 
 > **Disclosure:** The Hostinger link is a referral link. If you purchase through it, I may receive a commission at no additional cost to you. Hostinger is not required to use KinKudos, is not an official KinKudos partner, and does not receive access to your family data beyond what is technically stored on the VPS you choose to operate.
 
-Hostinger’s tested path uses Docker Manager, Hostinger-managed Traefik HTTPS, and the dedicated KinKudos Compose file. Follow the [Hostinger VPS step-by-step guide](https://docs.kinkudos.app/installation/hostinger/). Hostinger is a paid external service; KinKudos remains free and self-hosted.
+Hostinger’s tested path uses Docker Manager, the Traefik HTTPS proxy installed with its Ubuntu 24.04 with Docker template, and the dedicated KinKudos Compose file. Follow the [Hostinger VPS step-by-step guide](https://docs.kinkudos.app/installation/hostinger/). Hostinger is a paid external service; KinKudos remains free and self-hosted.
 
 ## ⚙️ Architecture
 

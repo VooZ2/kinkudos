@@ -33,8 +33,9 @@ Neapeikite sertifikato įspėjimų ir nepradėkite įprastai naudoti šeimos pro
 
 ## Diegiklis nepasileidžia
 
-Hostinger aplinkoje patikrinkite, ar importuotas `deploy/hostinger/compose.yaml`,
-ar nustatyti `KINKUDOS_HOSTNAME` ir `KINKUDOS_SETUP_TOKEN`, ir ar domenas sutampa
+Hostinger aplinkoje patikrinkite, ar `deploy/hostinger/compose.yaml` leidimo
+turinys įklijuotas į rankinį Compose redaktorių, ar Environment skiltyje
+nustatyti `KINKUDOS_HOSTNAME` ir `KINKUDOS_SETUP_TOKEN`, ir ar domenas sutampa
 su DNS įrašu. Vadovaukitės parodyta Compose klaida, o ne keiskite nesusijusius
 sistemos paketus.
 

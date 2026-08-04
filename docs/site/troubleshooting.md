@@ -33,10 +33,11 @@ Never bypass certificate errors or continue normal family use over public HTTP.
 
 ## Docker Manager deployment does not start
 
-On Hostinger, verify that Docker Manager imported `deploy/hostinger/compose.yaml`,
-that `KINKUDOS_HOSTNAME` and `KINKUDOS_SETUP_TOKEN` are set, and that the
-hostname matches the DNS record. Use the displayed Compose error instead of
-changing unrelated system packages.
+On Hostinger, verify that the release contents of
+`deploy/hostinger/compose.yaml` were pasted into the manual Compose editor,
+that `KINKUDOS_HOSTNAME` and `KINKUDOS_SETUP_TOKEN` are set in Environment,
+and that the hostname matches the DNS record. Use the displayed Compose error
+instead of changing unrelated system packages.
 
 The generic guided installer has different prerequisites and expects a non-root deployment user plus an existing HTTPS proxy. Do not mix the two profiles in one installation root.
 

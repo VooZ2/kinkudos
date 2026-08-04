@@ -5,9 +5,10 @@ description: Deploy KinKudos 26.5.2 with Hostinger Docker Manager, the managed T
 
 # Install KinKudos on a Hostinger VPS
 
-This is the simplest supported Hostinger route. It uses a Hostinger VPS with
-Docker Manager, Hostinger's managed Traefik reverse proxy, and the dedicated
-KinKudos Compose file from the `26.5.2` release.
+This is the simplest supported Hostinger route. It uses Hostinger's **Ubuntu
+24.04 with Docker** VPS template, Docker Manager, the Traefik reverse proxy
+installed with that template, and the dedicated KinKudos Compose file from
+the `26.5.2` release.
 
 The KinKudos Compose definition uses the public `vooz2/kinkudos:26.5.2` image
 and one persistent named volume for the application database, media, and
@@ -18,7 +19,8 @@ responsible for the VPS, domain, updates, and snapshots.
 
 You need:
 
-- a Hostinger account and a VPS with Docker Manager;
+- a Hostinger account and a VPS created from Hostinger's **Ubuntu 24.04 with
+  Docker** template;
 - a domain or subdomain you control;
 - access to that domain's DNS records;
 - the VPS public IPv4 address;
@@ -38,39 +40,67 @@ Create an `A` record for the hostname you want to use, for example
 `family.example.com`, pointing to the VPS public IPv4 address. Allow DNS time
 to propagate.
 
-In Hostinger, keep the managed Traefik and its HTTP/HTTPS entrypoints enabled.
-Do not publish KinKudos port `8000` directly; Traefik must be the public entry
-point.
+The Docker template installs Traefik for you. Keep that Traefik application
+running and leave its HTTP/HTTPS entrypoints enabled. Do not publish KinKudos
+port `8000` directly; Traefik must be the public entry point.
 
-## 3. Import the KinKudos Compose file
+## 3. Open the manual Compose editor
 
-In Docker Manager, create a new Compose application and import the exact file
-from the repository:
+In **Docker Manager → Applications**, open **Compose** and select **Compose
+manually**. Do not select **Compose from URL**: that screen does not provide
+the KinKudos variables before the project is created.
+
+![Hostinger Docker Manager Compose menu with Compose manually selected](../assets/hostinger-compose-menu.png)
+
+Set **Application name** to:
 
 ```text
-deploy/hostinger/compose.yaml
+kinkudos
 ```
 
-You can inspect the file in [GitHub](https://github.com/VooZ2/kinkudos/blob/main/deploy/hostinger/compose.yaml).
+Open the **.yaml editor**. Replace its complete contents, including the initial
+`services:` line, with the exact release file from:
+
+```text
+https://raw.githubusercontent.com/VooZ2/kinkudos/v26.5.2/deploy/hostinger/compose.yaml
+```
+
+You can inspect the same file in
+[GitHub](https://github.com/VooZ2/kinkudos/blob/v26.5.2/deploy/hostinger/compose.yaml).
 It defines the `app` service, the `vooz2/kinkudos:26.5.2` image, the Hostinger
 Traefik labels, and the named volume `kinkudos-data`.
 
-Before deploying, provide the two values required by that Compose file:
+## 4. Add the two required values
+
+Return to **Visual editor**, expand **Environment**, and add these two names
+and values:
 
 ```text
 KINKUDOS_HOSTNAME=family.example.com
 KINKUDOS_SETUP_TOKEN=<long-private-setup-code>
 ```
 
-Use your real hostname and generate a long random setup code. Keep the setup
-code private; it is needed only to create the first family and parent account.
-Do not invent additional variables unless you have a specific supported
-configuration need.
+Enter the hostname without `https://` or a trailing slash. Generate a long
+random setup code in a password manager or with:
 
-## 4. Deploy and complete browser setup
+```bash
+openssl rand -hex 32
+```
 
-Click **Deploy** in Docker Manager. Hostinger's managed Traefik should route
-the hostname, redirect HTTP to HTTPS, and obtain the Let's Encrypt certificate.
+Keep the setup code private; it is needed only to create the first family and
+parent account. Do not reveal either value in screenshots. Do not add other
+variables unless you have a specific supported configuration need.
+
+![Hostinger Compose application with the KinKudos image and masked required variables](../assets/hostinger-compose-environment.png)
+
+## 5. Deploy and complete browser setup
+
+Click **Save and deploy** below the Environment values. Wait until
+`kinkudos-app-1` shows **Running**. Traefik should then route the hostname,
+redirect HTTP to HTTPS, and obtain the Let's Encrypt certificate.
+
+![A running KinKudos container in Hostinger Docker Manager](../assets/hostinger-kinkudos-running.png)
+
 Open:
 
 ```text
@@ -80,7 +110,7 @@ https://family.example.com/setup/
 Enter the setup code and create the family and first parent administrator in
 the browser. Then sign in and confirm that the parent dashboard loads.
 
-## 5. Persistent data and maintenance
+## 6. Persistent data and maintenance
 
 The named volume `kinkudos-data` contains the SQLite database, uploaded media,
 and runtime secrets. Container restart, Compose force-recreate, and VPS restart
