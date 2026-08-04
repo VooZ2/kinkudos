@@ -21,8 +21,6 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT licencija"></a>
 </p>
 
----
-
 ## ✨ Kaip tai atrodo
 
 <table>

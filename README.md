@@ -24,6 +24,7 @@
   <a href="https://hub.docker.com/r/vooz2/kinkudos"><img src="https://img.shields.io/docker/pulls/vooz2/kinkudos" alt="Docker pulls"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License"></a>
 </p>
+
 ## ✨ See it in action
 
 <table>
