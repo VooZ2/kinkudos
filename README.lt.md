@@ -160,14 +160,14 @@ Dokumentacijoje taip pat aprašomi HTTPS, atnaujinimai, kopijos, atkūrimas, dia
 Nedidelis Docker tinkamas VPS dažnai yra vienas paprastesnių būdų privačiai naudoti KinKudos internete. Tinka bet kuris tinkamas VPS tiekėjas; „Hostinger VPS“ yra viena galimybė šeimoms, kurios renkasi komercinę paslaugą.
 
 <p>
-  <a href="https://www.hostinger.com/lt?REFERRALCODE=LKIGEDIMICSU">
-    <img src="https://img.shields.io/badge/Hostinger_VPS-View_options-673DE6?logo=hostinger&logoColor=white" alt="Peržiūrėti Hostinger VPS pasirinkimus">
+  <a href="https://www.hostinger.com/vps/docker-hosting?compose_url=https://raw.githubusercontent.com/VooZ2/kinkudos/main/deploy/hostinger/compose.yaml&REFERRALCODE=LKIGEDIMICSU#pricing">
+    <img src="https://img.shields.io/badge/Hostinger_Docker_VPS-Pradėti_Hostinger-673DE6?logo=hostinger&logoColor=white" alt="Pradėti Hostinger">
   </a>
 </p>
 
-> **Atskleidimas:** „Hostinger“ nuoroda yra rekomendacinė. Jei įsigysite per ją, galiu gauti komisinį atlyginimą be papildomos kainos jums. „Hostinger“ nėra būtina KinKudos naudojimo sąlyga, nėra oficialus KinKudos partneris ir neturi prieigos prie šeimos duomenų, išskyrus tuos, kuriuos techniškai laikote pasirinktame VPS.
+> **Referral pasiūlymas:** Nuoroda gali suteikti nuolaidą ar kitą naudą tinkamoms Hostinger paslaugoms, priklausomai nuo tuo metu galiojančio pasiūlymo. Aš taip pat galiu gauti komisinį, tačiau Jums tai papildomai nekainuoja. Hostinger nėra būtinas KinKudos naudojimui ir nėra oficialus KinKudos partneris.
 
-Patikrintas Hostinger kelias naudoja Ubuntu 24.04 with Docker šabloną, Docker Manager, kartu įdiegtą Traefik HTTPS tarpinį serverį ir specialų KinKudos Compose failą. Vadovaukitės [Hostinger VPS instrukcija](https://docs.kinkudos.app/installation/hostinger.lt/). Hostinger yra mokama išorinė paslauga, o KinKudos išlieka nemokama ir savarankiškai diegiama.
+Nuoroda atveria Hostinger Docker VPS pasirinkimą ir perduoda KinKudos Compose URL į Docker Manager. Pasirinkę VPS pateikite savo domeną bei privatų setup kodą, o pirmąjį šeimos nustatymą užbaikite naršyklėje. Vadovaukitės [Hostinger VPS instrukcija](https://docs.kinkudos.app/installation/hostinger.lt/). Hostinger yra mokama išorinė paslauga, o KinKudos išlieka nemokama ir savarankiškai diegiama.
 
 ## ⚙️ Architektūra
 

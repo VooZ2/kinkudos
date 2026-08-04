@@ -194,14 +194,14 @@ The documentation also covers HTTPS, updates, backups, recovery, diagnostics, an
 A small Docker-capable VPS is usually one of the simpler ways to run KinKudos privately on the internet. KinKudos works with any suitable VPS provider. Hostinger VPS is one available option for users who prefer a guided commercial service.
 
 <p>
-  <a href="https://www.hostinger.com/lt?REFERRALCODE=LKIGEDIMICSU">
-    <img src="https://img.shields.io/badge/Hostinger_VPS-View_options-673DE6?logo=hostinger&logoColor=white" alt="View Hostinger VPS options">
+  <a href="https://www.hostinger.com/vps/docker-hosting?compose_url=https://raw.githubusercontent.com/VooZ2/kinkudos/main/deploy/hostinger/compose.yaml&REFERRALCODE=LKIGEDIMICSU#pricing">
+    <img src="https://img.shields.io/badge/Hostinger_Docker_VPS-Deploy_on_Hostinger-673DE6?logo=hostinger&logoColor=white" alt="Deploy on Hostinger">
   </a>
 </p>
 
-> **Disclosure:** The Hostinger link is a referral link. If you purchase through it, I may receive a commission at no additional cost to you. Hostinger is not required to use KinKudos, is not an official KinKudos partner, and does not receive access to your family data beyond what is technically stored on the VPS you choose to operate.
+> **Referral offer:** The link may provide a discount or other benefit on eligible Hostinger services, depending on the current offer. I may also receive a commission at no additional cost to you. Hostinger is optional and is not an official KinKudos partner.
 
-Hostinger’s tested path uses Docker Manager, the Traefik HTTPS proxy installed with its Ubuntu 24.04 with Docker template, and the dedicated KinKudos Compose file. Follow the [Hostinger VPS step-by-step guide](https://docs.kinkudos.app/installation/hostinger/). Hostinger is a paid external service; KinKudos remains free and self-hosted.
+The link opens Hostinger’s Docker VPS selection and passes the KinKudos Compose URL to Docker Manager. After choosing a VPS, provide your hostname and private setup token; finish the first family setup in the browser. Follow the [Hostinger VPS step-by-step guide](https://docs.kinkudos.app/installation/hostinger/). Hostinger is a paid external service; KinKudos remains free and self-hosted.
 
 ## ⚙️ Architecture
 

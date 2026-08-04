@@ -29,11 +29,16 @@ Reikės:
 KinKudos yra nemokama. Hostinger yra išorinis prieglobos tiekėjas ir nėra
 oficialus KinKudos partneris.
 
-[Peržiūrėti Hostinger VPS pasiūlymus](https://www.hostinger.com/lt?REFERRALCODE=LKIGEDIMICSU)
+[Pradėkite Hostinger](https://www.hostinger.com/vps/docker-hosting?compose_url=https://raw.githubusercontent.com/VooZ2/kinkudos/main/deploy/hostinger/compose.yaml&REFERRALCODE=LKIGEDIMICSU#pricing)
 
-> **Partnerystės atskleidimas:** tai rekomendacinė nuoroda. Įsigijus paslaugą
-> per ją, projekto prižiūrėtojas gali gauti komisinį atlyginimą be papildomos
-> kainos jums.
+> **Referral pasiūlymas:** Nuoroda gali suteikti nuolaidą ar kitą naudą tinkamoms
+> Hostinger paslaugoms, priklausomai nuo tuo metu galiojančio pasiūlymo. Aš taip
+> pat galiu gauti komisinį, tačiau Jums tai papildomai nekainuoja. Hostinger nėra
+> būtinas KinKudos naudojimui ir nėra oficialus KinKudos partneris.
+
+Nuoroda atveria Hostinger Docker VPS pasirinkimą ir perduoda KinKudos Compose
+URL į Docker Manager. Pasirinkę VPS pateikite savo domeną bei privatų setup kodą,
+o pirmąjį šeimos nustatymą užbaikite naršyklėje.
 
 ## 2. Nukreipkite domeną į VPS
 

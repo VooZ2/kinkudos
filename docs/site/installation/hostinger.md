@@ -29,10 +29,16 @@ You need:
 KinKudos is free. Hostinger is an external hosting provider and is not an
 official KinKudos partner.
 
-[View Hostinger VPS options](https://www.hostinger.com/lt?REFERRALCODE=LKIGEDIMICSU)
+[Start on Hostinger](https://www.hostinger.com/vps/docker-hosting?compose_url=https://raw.githubusercontent.com/VooZ2/kinkudos/main/deploy/hostinger/compose.yaml&REFERRALCODE=LKIGEDIMICSU#pricing)
 
-> **Affiliate disclosure:** This is a referral link. If you purchase through it,
-> the maintainer may receive a commission at no additional cost to you.
+> **Referral offer:** The link may provide a discount or other benefit on eligible
+> Hostinger services, depending on the current offer. I may also receive a
+> commission at no additional cost to you. Hostinger is optional and is not an
+> official KinKudos partner.
+
+The link opens Hostinger’s Docker VPS selection and passes the KinKudos Compose
+URL to Docker Manager. After choosing a VPS, provide your hostname and private
+setup token, then finish the first family setup in the browser.
 
 ## 2. Point your domain to the VPS
 
