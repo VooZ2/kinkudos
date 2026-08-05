@@ -7,6 +7,11 @@ schema.
 
 ## [Unreleased]
 
+### Pataisyta
+
+- Taupymo tikslų pasiūlymų tarpai ir sumos tipografija tėvų patvirtinimų
+  sąraše dabar sutampa su darbų ir prizų prašymais.
+
 ## [26.5.3] - 2026-08-06
 
 ### Pakeista

@@ -172,6 +172,12 @@ class AccessAndWorkflowTests(TestCase):
             f'id="proposal-final-cost-{proposal.pk}"',
             html=False,
         )
+        self.assertContains(
+            response,
+            '<div class="approval-copy"><p class="eyebrow">Taupymo tikslas</p>'
+            '<h3>Dviratis</h3><p class="amount">Siūlo: 500 taškų</p></div>',
+            html=False,
+        )
         self.assertNotContains(response, ">Patvirtinti</button>", html=False)
         self.assertNotContains(response, ">Atmesti</button>", html=False)
 

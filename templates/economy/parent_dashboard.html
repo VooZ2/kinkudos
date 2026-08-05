@@ -311,7 +311,7 @@
         {% for proposal in group.proposals %}
         <article class="approval-card">
           <span class="item-icon">{{ proposal.icon|icon_symbol }}</span>
-          <div><p class="eyebrow">{{ proposal.get_proposal_type_display }}</p><h3>{{ proposal.title }}</h3><p>{% translate "Suggested" %}: {% if proposal.suggested_cost %}{{ proposal.suggested_cost }} {{ proposal.suggested_cost|currency_unit:"neutral" }}{% else %}–{% endif %}</p></div>
+          <div class="approval-copy"><p class="eyebrow">{{ proposal.get_proposal_type_display }}</p><h3>{{ proposal.title }}</h3><p class="amount">{% translate "Suggested" %}: {% if proposal.suggested_cost %}{{ proposal.suggested_cost }} {{ proposal.suggested_cost|currency_unit:"neutral" }}{% else %}–{% endif %}</p></div>
           <div class="approval-actions">
             <button class="decision-icon-button decision-approve" type="button" data-open-dialog="approve-proposal-{{ proposal.pk }}" aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg></button>
             <button class="decision-icon-button decision-reject" type="button" data-open-dialog="reject-proposal-{{ proposal.pk }}" aria-label="{% translate "Reject" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg></button>
