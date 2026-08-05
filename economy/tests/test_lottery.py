@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import override
+from django.utils.translation import activate, get_language, override
 
 from economy.lottery import (
     _draw_board,
@@ -54,6 +54,9 @@ class OutcomeRng:
 
 class LotteryServiceTests(TestCase):
     def setUp(self):
+        previous_language = get_language()
+        activate("en")
+        self.addCleanup(activate, previous_language)
         self.family = FamilySettings.load()
         self.child = ChildProfile.objects.create(
             name="Child",
@@ -110,7 +113,7 @@ class LotteryServiceTests(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "A lottery ticket can be bought only with 15 points you have earned.",
+            "A scratch ticket can be bought only with 15 points you have earned.",
         ):
             purchase_lottery_ticket(child=self.child)
 
@@ -121,7 +124,7 @@ class LotteryServiceTests(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "Finish your open lottery ticket before buying another.",
+            "Finish your open scratch ticket before buying another.",
         ):
             purchase_lottery_ticket(child=self.child)
 
@@ -140,7 +143,7 @@ class LotteryServiceTests(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "Complete the assigned tasks before buying a lottery ticket.",
+            "Complete the assigned tasks before buying a scratch ticket.",
         ):
             purchase_lottery_ticket(child=self.child)
 
@@ -161,7 +164,7 @@ class LotteryServiceTests(TestCase):
         self.assertEqual(state["tickets_remaining"], 0)
         with self.assertRaisesMessage(
             ValidationError,
-            "You have already used all 3 lottery tickets this week.",
+            "You have already used all 3 scratch tickets this week.",
         ):
             purchase_lottery_ticket(child=self.child)
 
@@ -184,7 +187,7 @@ class LotteryServiceTests(TestCase):
         self.assertEqual(state["tickets_remaining"], 0)
         with self.assertRaisesMessage(
             ValidationError,
-            "You have already used all 1 lottery tickets this week.",
+            "You have already used all 1 scratch tickets this week.",
         ):
             purchase_lottery_ticket(child=self.child)
 
@@ -196,7 +199,7 @@ class LotteryServiceTests(TestCase):
 
         self.assertFalse(state["feature_enabled"])
         self.assertFalse(state["is_visible"])
-        with self.assertRaisesMessage(ValidationError, "Lottery tickets are disabled."):
+        with self.assertRaisesMessage(ValidationError, "Scratch tickets are disabled."):
             purchase_lottery_ticket(child=self.child)
 
     def test_child_switch_disables_only_that_child(self):
@@ -245,7 +248,7 @@ class LotteryServiceTests(TestCase):
         self.assertEqual(self.child.balance, 160)
         self.assertEqual(
             self.child.ledger_entries.filter(
-                description="Lottery result"
+                description="Scratch ticket result"
             ).count(),
             1,
         )
@@ -400,7 +403,7 @@ class LotteryViewTests(TestCase):
         response = self.client.get(reverse("child_dashboard"))
 
         self.assertContains(response, "Enchanted Prophecy")
-        self.assertContains(response, "Lottery tickets")
+        self.assertContains(response, "Scratch tickets")
         self.assertContains(response, "Buy for 15 galleons")
         self.assertContains(response, "lose up to 50 points")
 
@@ -436,7 +439,7 @@ class LotteryViewTests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
 
         self.assertContains(response, "Credit limit: -100")
-        self.assertContains(response, "Lottery tickets this week: 3 of 3")
+        self.assertContains(response, "Scratch tickets this week: 3 of 3")
 
     def test_all_seven_themes_have_distinct_lottery_titles(self):
         with override("en"):
@@ -488,7 +491,7 @@ class LotteryViewTests(TestCase):
 
         response = self.client.get(reverse("parent_dashboard"))
 
-        self.assertContains(response, "Lottery tickets this week: 2 of 3")
-        self.assertContains(response, "Lottery ticket")
-        self.assertContains(response, "Lottery result")
+        self.assertContains(response, "Scratch tickets this week: 2 of 3")
+        self.assertContains(response, "Scratch ticket")
+        self.assertContains(response, "Scratch ticket result")
         self.assertNotContains(response, "data-lottery-value")

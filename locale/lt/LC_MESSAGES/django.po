@@ -49,9 +49,6 @@ msgstr "Toks vaiko profilis jau yra."
 msgid "A different theme will be selected automatically once a day."
 msgstr "Kartą per dieną automatiškai bus parinkta vis kita tema."
 
-msgid "A lottery ticket can be bought only with %(cost)s points you have earned."
-msgstr "Loterijos bilietą galima pirkti tik už %(cost)s uždirbtų taškų."
-
 msgid "A new suggestion is awaiting approval"
 msgstr "Naujas pasiūlymas laukia patvirtinimo"
 
@@ -69,6 +66,9 @@ msgstr "Atmetimo priežastis privaloma."
 
 msgid "A reward is awaiting approval"
 msgstr "Prizo prašymas laukia patvirtinimo"
+
+msgid "A scratch ticket can be bought only with %(cost)s points you have earned."
+msgstr "Nutrinamą bilietą galima pirkti tik už %(cost)s uždirbtų taškų."
 
 msgid "A shared family space"
 msgstr "Bendra šeimos erdvė"
@@ -601,8 +601,8 @@ msgstr "Atlik darbus, rink taškus ir išsirink prizą."
 msgid "Complete tasks, earn tokens, and choose your reward."
 msgstr "Atlik darbus, rink tokenus ir išsirink prizą."
 
-msgid "Complete the assigned tasks before buying a lottery ticket."
-msgstr "Prieš pirkdamas loterijos bilietą atlik paskirtus darbus."
+msgid "Complete the assigned tasks before buying a scratch ticket."
+msgstr "Prieš pirkdamas nutrinamą bilietą atlik paskirtus darbus."
 
 msgid "Complete the assigned tasks before requesting a new reward."
 msgstr "Prieš prašydamas naujo prizo atlik paskirtus darbus."
@@ -817,11 +817,11 @@ msgstr "El. pašto nustatymus gali keisti tik tėvų administratorius."
 msgid "Enable email"
 msgstr "Įjungti el. paštą"
 
-msgid "Enable lottery tickets"
-msgstr "Įjungti loterijos bilietus"
+msgid "Enable scratch tickets"
+msgstr "Įjungti nutrinamus bilietus"
 
-msgid "Enable lottery tickets for this child"
-msgstr "Įjungti loterijos bilietus šiam vaikui"
+msgid "Enable scratch tickets for this child"
+msgstr "Įjungti nutrinamus bilietus šiam vaikui"
 
 msgid "Enabled"
 msgstr "Įjungta"
@@ -961,8 +961,8 @@ msgstr "Užbaik visus projektus, kol studija užsidarys vidurnaktį."
 msgid "Finish setup"
 msgstr "Baigti paruošimą"
 
-msgid "Finish your open lottery ticket before buying another."
-msgstr "Prieš pirkdamas kitą užbaik pradėtą loterijos bilietą."
+msgid "Finish your open scratch ticket before buying another."
+msgstr "Prieš pirkdamas kitą užbaik pradėtą nutrinamą bilietą."
 
 msgid "Fix and resubmit"
 msgstr "Pataisyti ir pateikti iš naujo"
@@ -1144,32 +1144,11 @@ msgstr "Žurnalas"
 msgid "Log out"
 msgstr "Atsijungti"
 
+msgid "Login"
+msgstr "Prisijungti"
+
 msgid "Lottery"
 msgstr "Loterija"
-
-msgid "Lottery result"
-msgstr "Loterijos rezultatas"
-
-msgid "Lottery ticket"
-msgstr "Loterijos bilietas"
-
-msgid "Lottery ticket price"
-msgstr "Loterijos bilieto kaina"
-
-msgid "Lottery tickets"
-msgstr "Loterijos bilietai"
-
-msgid "Lottery tickets are disabled."
-msgstr "Loterijos bilietai išjungti."
-
-msgid "Lottery tickets are paused until your point balance improves."
-msgstr "Loterijos bilietai neprieinami, kol nepagerės tavo taškų balansas."
-
-msgid "Lottery tickets disabled"
-msgstr "Loterijos bilietai išjungti"
-
-msgid "Lottery tickets this week: %(remaining)s of %(limit)s"
-msgstr "Loterijos bilietų šią savaitę: %(remaining)s iš %(limit)s"
 
 msgid "Lucky Ticket"
 msgstr "Laimės bilietas"
@@ -1855,6 +1834,30 @@ msgstr "Nutrink visus devynis langelius"
 msgid "Scratch every field to reveal the result."
 msgstr "Nutrink kiekvieną langelį, kad pamatytum rezultatą."
 
+msgid "Scratch ticket"
+msgstr "Nutrinamas bilietas"
+
+msgid "Scratch ticket price"
+msgstr "Nutrinamo bilieto kaina"
+
+msgid "Scratch ticket result"
+msgstr "Nutrinamo bilieto rezultatas"
+
+msgid "Scratch tickets"
+msgstr "Nutrinami bilietai"
+
+msgid "Scratch tickets are disabled."
+msgstr "Nutrinami bilietai išjungti."
+
+msgid "Scratch tickets are paused until your point balance improves."
+msgstr "Nutrinami bilietai neprieinami, kol nepagerės tavo taškų balansas."
+
+msgid "Scratch tickets disabled"
+msgstr "Nutrinami bilietai išjungti"
+
+msgid "Scratch tickets this week: %(remaining)s of %(limit)s"
+msgstr "Nutrinamų bilietų šią savaitę: %(remaining)s iš %(limit)s"
+
 msgid "Scratch-off surface"
 msgstr "Nutrinamas paviršius"
 
@@ -2134,8 +2137,8 @@ msgstr "Šeimos pavadinimas privalomas."
 msgid "The family name or nickname is required."
 msgstr "Šeimos pavadinimas arba slapyvardis yra privalomas."
 
-msgid "The family-wide lottery switch must also be enabled."
-msgstr "Taip pat turi būti įjungtas bendras šeimos loterijos nustatymas."
+msgid "The family-wide scratch ticket switch must also be enabled."
+msgstr "Taip pat turi būti įjungtas bendras šeimos nutrinamų bilietų nustatymas."
 
 msgid "The image cannot be larger than 12 MB."
 msgstr "Nuotrauka negali būti didesnė nei 12 MB."
@@ -2419,8 +2422,8 @@ msgstr "Skanėstų skrynėlė"
 msgid "Try again"
 msgstr "Bandyti dar kartą"
 
-msgid "Turn lottery tickets on or off for every child."
-msgstr "Įjunkite arba išjunkite loterijos bilietus visiems vaikams."
+msgid "Turn scratch tickets on or off for every child."
+msgstr "Įjunkite arba išjunkite nutrinamus bilietus visiems vaikams."
 
 msgid "Turn sounds off"
 msgstr "Išjungti garsus"
@@ -2539,11 +2542,11 @@ msgstr "Negalima pašalinti paskutinės aktyvios tėvų paskyros."
 msgid "You do not have enough points for this reward."
 msgstr "Šiam prizui nepakanka taškų."
 
-msgid "You have already used all %(limit)s lottery tickets this week."
-msgstr "Šią savaitę jau panaudojai visus %(limit)s loterijos bilietus."
+msgid "You have already used all %(limit)s scratch tickets this week."
+msgstr "Šią savaitę jau panaudojai visus %(limit)s nutrinamus bilietus."
 
-msgid "You have not bought a ticket this week. It costs %(cost)s and you may win, get nothing, or lose points."
-msgstr "Šią savaitę dar nepirkai bilieto. Jis kainuoja %(cost)s – gali laimėti, nieko negauti arba prarasti taškų."
+msgid "You have not bought a scratch ticket this week. It costs %(cost)s and you may win, get nothing, or lose points."
+msgstr "Šią savaitę dar nepirkai nutrinamo bilieto. Jis kainuoja %(cost)s – gali laimėti, nieko negauti arba prarasti taškų."
 
 msgid "You lost {amount}."
 msgstr "Praradai {amount}."
@@ -2581,9 +2584,6 @@ msgstr "Tavo gimimo datos pakeitimas atmestas"
 msgid "Your credit limit protected part of the loss."
 msgstr "Kredito limitas apsaugojo nuo dalies praradimo."
 
-msgid "Your lottery ticket is ready."
-msgstr "Tavo loterijos bilietas paruoštas."
-
 msgid "Your point gift was sent."
 msgstr "Tavo taškų dovana išsiųsta."
 
@@ -2595,6 +2595,9 @@ msgstr "Tavo prizo prašymas atmestas"
 
 msgid "Your reward was approved"
 msgstr "Tavo prizas patvirtintas"
+
+msgid "Your scratch ticket is ready."
+msgstr "Tavo nutrinamas bilietas paruoštas."
 
 msgid "Your suggestion was approved"
 msgstr "Tavo pasiūlymas patvirtintas"

@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block title %}{% translate "Choose your world" %} – {{ project_name }}{% endblock %}
-{% block body_class %}system-page theme-neutral{% endblock %}
+{% block body_class %}system-page session-sensitive-page theme-neutral{% endblock %}
 
 {% block header_actions %}
 <form method="post" action="{% url 'logout' %}">
@@ -21,7 +21,21 @@
 <section class="content-section onboarding-panel">
   <form method="post" class="stack-form onboarding-form">
     {% csrf_token %}
-    {{ form.as_p }}
+    <fieldset class="theme-choice-fieldset">
+      <legend>{{ form.theme.label }}</legend>
+      <div class="theme-choice-grid">
+        {% for choice in form.theme %}
+          <label class="theme-choice theme-{{ choice.data.value }}" for="{{ choice.id_for_label }}">
+            {{ choice.tag }}
+            <span class="theme-choice-preview item-card">
+              <strong>{{ choice.choice_label }}</strong>
+              <span class="theme-choice-check" aria-hidden="true"><svg class="action-icon"><use href="#icon-check-circle"></use></svg></span>
+            </span>
+          </label>
+        {% endfor %}
+      </div>
+    </fieldset>
+    {{ form.theme.errors }}
     <button class="button button-primary" type="submit">{% translate "Enter my world" %}</button>
   </form>
 </section>

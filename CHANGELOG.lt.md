@@ -7,11 +7,32 @@ schema.
 
 ## [Unreleased]
 
+## [26.5.3] - 2026-08-06
+
 ### Pakeista
 
+- Prisijungusių tėvų ir vaikų puslapiai dabar naudoja vientisą, nuo lango
+  kraštų atitrauktą produkto antraštę kaip pasveikinimo puslapyje, o ne atskirą
+  viso pločio meniu juostą.
 - Pradinis paruošimas dabar neutraliai paaiškina paruošimo kodą, kviečia
-  paruošti sistemą, o pasirenkamo el. pašto žymimąjį langelį rodo vienoje
-  eilutėje su jo tekstu.
+  paruošti sistemą, o pasirenkamo el. pašto žymimąjį langelį rodo iškart už jo
+  teksto toje pačioje eilutėje. Kompiuteryje forma taip pat naudoja patogų dviejų
+  stulpelių išdėstymą, vienodo dydžio laukus ir aiškius teksto tarpus, o
+  telefone lieka vieno stulpelio. SMTP laukai rodomi neaktyvūs, kol
+  nepasirenkamas el. pašto nustatymas.
+- Pirmojo vaiko prisijungimo ekrane kiekvienas pasaulis dabar rodomas kaip
+  pilna temos peržiūra su aiškia ir prieinama pasirinkimo būsena kompiuteryje
+  bei telefone.
+
+### Pataisyta
+
+- Vaiko PIN dialogo pateikimo mygtukas dabar vadinamas „Prisijungti“ vietoje
+  nesusijusios būsenos teksto.
+- Prisijungimo ir kiti sesijai jautrūs puslapiai dabar neleidžia naršyklei ar
+  PWA pateikti pasenusios kopijos, saugiai atsinaujina po Back/Forward Cache
+  atkūrimo ir apsaugo tėvų prisijungimo formą nuo dvigubo pateikimo.
+- Service worker dabar apeina autentifikacijos maršrutus, visada
+  persitikrinamas ir toliau podėlyje laiko tik versijuotą offline puslapį.
 
 ## [26.5.2] - 2026-08-04
 

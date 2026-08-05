@@ -97,10 +97,10 @@
       <path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5V3Zm7.6 4.6L16.2 9l2 2H9v2h9.2l-2 2 1.4 1.4L22 12l-4.4-4.4Z"/>
     </symbol>
   </svg>
-  <header class="topbar{% if public_header %} landing-topbar{% endif %}">
+  <header class="topbar{% if public_header %} landing-topbar{% elif user.is_authenticated or request.session.child_id %} app-topbar{% endif %}">
     <div class="brand-wrap">
       <a class="brand" href="{% url 'home' %}">
-        {% if public_header %}
+        {% if public_header or user.is_authenticated or request.session.child_id %}
           <img class="brand-mark brand-logo" src="{% static 'icons/icon-192.png' %}?v={{ app_version }}" alt="">
           <span class="brand-name">{{ project_name }}</span>
         {% else %}

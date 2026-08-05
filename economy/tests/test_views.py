@@ -118,6 +118,15 @@ class AccessAndWorkflowTests(TestCase):
             follow=True,
         )
 
+    def test_child_pin_dialog_uses_explicit_login_label_in_both_languages(self):
+        response = self.client.get(reverse("child_select"))
+        self.assertContains(response, ">Prisijungti</button>", html=False)
+        self.assertNotContains(response, ">Neužbaigtas</button>", html=False)
+
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+        response = self.client.get(reverse("child_select"))
+        self.assertContains(response, ">Login</button>", html=False)
+
     def test_child_dashboard_does_not_expose_sibling_data(self):
         response = self.login_child(self.child_one, "1234")
         self.assertEqual(response.status_code, 200)
@@ -641,7 +650,7 @@ class AccessAndWorkflowTests(TestCase):
         self.child_one.theme = "magic_academy"
         self.child_one.save(update_fields=["theme"])
         response = self.client.get(reverse("child_select"))
-        self.assertContains(response, "Prisijungti", count=2)
+        self.assertContains(response, "Prisijungti", count=3)
         self.assertContains(response, "profile-select-heading")
         self.assertNotContains(response, "Tai aš")
         self.assertNotContains(response, "Magijos akademija")
@@ -652,7 +661,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.5.2")
+        self.assertContains(response, "v26.5.3")
         self.assertContains(response, 'href="/pakeitimai/"', html=False)
         self.assertContains(response, "TAŠKAI")
         self.assertContains(response, "Kredito limitas: -100")
@@ -715,7 +724,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Complete tasks, earn points")
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
-        self.assertContains(response, "KinKudos · v26.5.2")
+        self.assertContains(response, "KinKudos · v26.5.3")
         self.assertContains(response, "Dokumentacija")
         self.assertContains(response, "https://docs.kinkudos.app/index.lt/")
         self.assertContains(response, "https://github.com/VooZ2/kinkudos")
@@ -762,19 +771,115 @@ class AccessAndWorkflowTests(TestCase):
                 response = self.client.get(reverse(url_name))
                 self.assertContains(
                     response,
-                    '<body class="system-page auth-page theme-neutral">',
+                    '<body class="system-page auth-page session-sensitive-page theme-neutral">',
                     html=False,
                 )
+
+    def test_session_sensitive_pages_are_not_cacheable(self):
+        for url_name in ("parent_login", "child_select"):
+            with self.subTest(url_name=url_name):
+                response = self.client.get(reverse(url_name))
+                cache_control = response["Cache-Control"]
+                for directive in ("no-store", "no-cache", "must-revalidate", "private"):
+                    self.assertIn(directive, cache_control)
+
+    def test_parent_can_login_and_logout_thirty_times(self):
+        csrf_client = Client(enforce_csrf_checks=True)
+        for _attempt in range(30):
+            csrf_client.get(reverse("parent_login"))
+            csrf_token = csrf_client.cookies["csrftoken"].value
+            response = csrf_client.post(
+                reverse("parent_login"),
+                {
+                    "username": "tevai",
+                    "password": self.parent_password,
+                    "csrfmiddlewaretoken": csrf_token,
+                },
+            )
+            self.assertRedirects(
+                response,
+                reverse("parent_dashboard"),
+                fetch_redirect_response=False,
+            )
+            csrf_client.post(
+                reverse("logout"),
+                {"csrfmiddlewaretoken": csrf_client.cookies["csrftoken"].value},
+            )
+
+    def test_two_open_login_forms_work_until_authentication_rotates_csrf(self):
+        csrf_client = Client(enforce_csrf_checks=True)
+        csrf_client.get(reverse("parent_login"))
+        first_token = csrf_client.cookies["csrftoken"].value
+        csrf_client.get(reverse("parent_login"))
+        second_token = csrf_client.cookies["csrftoken"].value
+
+        invalid = csrf_client.post(
+            reverse("parent_login"),
+            {
+                "username": "tevai",
+                "password": "not-the-password",
+                "csrfmiddlewaretoken": first_token,
+            },
+        )
+        self.assertEqual(invalid.status_code, 200)
+        valid = csrf_client.post(
+            reverse("parent_login"),
+            {
+                "username": "tevai",
+                "password": self.parent_password,
+                "csrfmiddlewaretoken": second_token,
+            },
+        )
+        self.assertRedirects(
+            valid,
+            reverse("parent_dashboard"),
+            fetch_redirect_response=False,
+        )
+
+    def test_login_and_theme_onboarding_include_stale_form_guards(self):
+        login_response = self.client.get(reverse("parent_login"))
+        self.assertContains(login_response, "data-single-submit", html=False)
+        self.assertContains(login_response, "session-sensitive-page", html=False)
+
+        self.child_one.theme_selected = False
+        self.child_one.save(update_fields=["theme_selected"])
+        response = self.login_child(self.child_one, "1234")
+        self.assertContains(response, 'class="theme-choice-grid"', html=False)
+        self.assertNotContains(response, "theme-choice-motif", html=False)
+        for theme in (
+            "magic_academy",
+            "block_world",
+            "hero_hq",
+            "art_studio",
+            "panda_pet",
+            "blockville",
+        ):
+            self.assertContains(response, f"theme-choice theme-{theme}", html=False)
+        self.assertNotContains(response, "<strong>🛡️", html=False)
+        self.assertNotContains(response, "<strong>🎨", html=False)
+        self.assertNotContains(response, "<strong>🐼", html=False)
 
     def test_signed_in_areas_do_not_use_the_system_page_shell(self):
         self.client.login(username="tevai", password=self.parent_password)
         parent_response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(parent_response, '<body class="parent-area">', html=False)
+        self.assertContains(
+            parent_response,
+            'class="topbar app-topbar"',
+            html=False,
+        )
+        self.assertContains(parent_response, 'class="brand-name">KinKudos', html=False)
         self.assertNotContains(parent_response, "system-page", html=False)
 
         self.client.logout()
         child_response = self.login_child(self.child_one, "1234")
         self.assertContains(child_response, "child-area", html=False)
+        self.assertContains(
+            child_response,
+            'class="topbar app-topbar"',
+            html=False,
+        )
+        self.assertContains(child_response, 'class="brand-name">KinKudos', html=False)
         self.assertNotContains(child_response, "system-page", html=False)
 
     def test_parent_history_is_collapsed_paginated_and_filterable(self):
@@ -933,13 +1038,18 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.5.2")
+        self.assertContains(response, "v26.5.3")
         self.assertContains(response, "v0.12.2 BETA")
         self.assertContains(response, "v0.10.4 BETA")
         self.assertContains(response, "v0.10.1 BETA")
         self.assertContains(response, "v0.10.0 BETA")
         self.assertContains(response, "v0.1.0")
         self.assertContains(response, "Dabartinė versija")
+        current_release = response.context["releases"][0]
+        self.assertEqual(current_release["version"], "26.5.3")
+        current_copy = " ".join(current_release["new"] + current_release["fixed"]).lower()
+        self.assertNotIn("loterij", current_copy)
+        self.assertNotIn("demo", current_copy)
         self.assertContains(
             response,
             "„Safari“ perjungiant tėvų erdvės skyrius puslapis lieka viršuje",
@@ -1407,10 +1517,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.5.2',
+            '/static/icons/favicon-32.png?v=26.5.3',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.5.2")
-        self.assertContains(home, "/static/js/app.js?v=26.5.2")
+        self.assertContains(home, "/static/css/app.css?v=26.5.3")
+        self.assertContains(home, "/static/js/app.js?v=26.5.3")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1418,11 +1528,16 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.5.2",
+            "/static/icons/icon-192.png?v=26.5.3",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.5.2")
-        self.assertContains(worker, 'kinkudos-app-shell-26.5.2')
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.5.3")
+        self.assertContains(worker, 'kinkudos-app-shell-26.5.3')
+        self.assertContains(worker, '"/prisijungti/"')
+        self.assertContains(worker, "isSensitiveNavigation(url)")
         self.assertEqual(worker["Service-Worker-Allowed"], "/")
-        self.assertEqual(worker["Cache-Control"], "no-cache")
+        self.assertEqual(
+            worker["Cache-Control"],
+            "no-store, no-cache, must-revalidate",
+        )

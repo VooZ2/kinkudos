@@ -5,11 +5,30 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.5.3] - 2026-08-06
+
 ### Changed
 
+- Signed-in parent and child pages now use a seamless, inset product header
+  matching the welcome page instead of a separate full-width menu bar.
 - Initial setup now uses installation-neutral setup-code guidance, refers to
-  preparing the system, and keeps the optional email checkbox inline with its
-  label.
+  preparing the system, and keeps the optional email checkbox after its inline
+  label. Its desktop form also uses a comfortable two-column layout with
+  consistently sized controls and clear text spacing while remaining
+  single-column on phones. SMTP fields stay visibly disabled until email setup
+  is selected.
+- The first child sign-in now presents every world as a full theme preview with
+  a clear, accessible selected state on desktop and mobile.
+
+### Fixed
+
+- The child PIN dialog now labels its submit action “Login” instead of showing
+  unrelated status text.
+- Sign-in and other session-sensitive pages now prevent stale browser/PWA
+  caching, refresh safely after Back/Forward Cache restoration, and guard the
+  parent sign-in form against duplicate submission.
+- The service worker now bypasses authentication routes, is always revalidated,
+  and continues to cache only the versioned offline fallback.
 
 ## [26.5.2] - 2026-08-04
 

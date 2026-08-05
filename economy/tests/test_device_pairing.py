@@ -97,7 +97,8 @@ class DevicePairingTests(TestCase):
 
         page = csrf_client.get(pairing_url, secure=True)
 
-        self.assertEqual(page["Cache-Control"], "no-store")
+        for directive in ("no-store", "no-cache", "must-revalidate", "private"):
+            self.assertIn(directive, page["Cache-Control"])
         self.assertEqual(page["Referrer-Policy"], "same-origin")
         csrf_token = page.cookies["csrftoken"].value
 

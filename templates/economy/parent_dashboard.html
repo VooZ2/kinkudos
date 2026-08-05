@@ -64,10 +64,10 @@
     </p>
     <p class="lottery-parent-status">
       {% if child.lottery_feature_enabled or child.lottery_ticket_open %}
-        {% blocktranslate with remaining=child.lottery_tickets_remaining limit=child.lottery_weekly_limit %}Lottery tickets this week: {{ remaining }} of {{ limit }}{% endblocktranslate %}
+        {% blocktranslate with remaining=child.lottery_tickets_remaining limit=child.lottery_weekly_limit %}Scratch tickets this week: {{ remaining }} of {{ limit }}{% endblocktranslate %}
         {% if child.lottery_ticket_open %} · {% translate "one ticket is unfinished" %}{% endif %}
       {% else %}
-        {% translate "Lottery tickets disabled" %}
+        {% translate "Scratch tickets disabled" %}
       {% endif %}
     </p>
     <div class="child-quick-actions" aria-label="{{ child.name }} {% translate "actions" %}">
@@ -954,7 +954,7 @@
         {% else %}
           <div>
             <strong>{{ entry.child.name }} · {{ entry.description }}</strong>
-            <small>{{ entry.created_at|date:"Y-m-d H:i" }} · {{ entry.get_kind_display }}</small>
+            <small>{{ entry.created_at|date:"Y-m-d H:i" }} · {% if entry.kind == "lottery" %}{% translate "Scratch ticket" %}{% else %}{{ entry.get_kind_display }}{% endif %}</small>
             {% if entry.task_claim and entry.task_claim.decided_by %}
               <small class="history-actor">{% translate "Approved by" %}: {{ entry.task_claim.decided_by|user_display_name }}</small>
             {% elif entry.reward_request and entry.reward_request.decided_by %}

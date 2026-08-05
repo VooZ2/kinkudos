@@ -47,15 +47,60 @@ class BrowserSetupTests(TestCase):
         )
         self.assertNotContains(response, "Paruoškite savo šeimą")
 
-    def test_setup_email_checkbox_is_kept_inline_with_its_label(self):
+    def test_setup_email_checkbox_is_kept_after_its_inline_label(self):
         response = self.client.get(reverse("setup"))
         self.assertContains(response, 'id="id_configure_smtp"')
         stylesheet = (Path(settings.BASE_DIR) / "static" / "css" / "app.css").read_text(
             encoding="utf-8"
         )
-        selector = ".setup-card .stack-form p:has(> #id_configure_smtp)"
+        selector = '.setup-card .stack-form p:has(> input[type="checkbox"])'
         self.assertIn(f"{selector} {{ display: flex; align-items: center;", stylesheet)
-        self.assertIn(f"{selector} > #id_configure_smtp {{ order: -1;", stylesheet)
+        self.assertIn(
+            f'{selector} > input[type="checkbox"] {{ order: 1;',
+            stylesheet,
+        )
+
+    def test_setup_email_fields_are_enabled_only_when_requested(self):
+        self.client.get(reverse("setup"))
+        script = (Path(settings.BASE_DIR) / "static" / "js" / "app.js").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('getElementById("id_configure_smtp")', script)
+        self.assertIn("field.disabled = disabled;", script)
+        self.assertIn(
+            'setupEmailToggle?.addEventListener("change", syncSetupEmailFields);',
+            script,
+        )
+        self.assertIn("syncSetupEmailFields();", script)
+
+    def test_setup_uses_a_wide_two_column_desktop_layout(self):
+        response = self.client.get(reverse("setup"))
+        self.assertContains(response, 'class="narrow-card setup-card"', html=False)
+        stylesheet = (Path(settings.BASE_DIR) / "static" / "css" / "app.css").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(".auth-page .setup-card { width: min(860px, 100%); }", stylesheet)
+        self.assertIn(
+            ".setup-card .auth-help { max-width: 720px; margin: 28px auto 32px;",
+            stylesheet,
+        )
+        self.assertIn(
+            ".setup-card .stack-form { grid-template-columns: repeat(2, minmax(0, 1fr));",
+            stylesheet,
+        )
+        self.assertIn("row-gap: 22px;", stylesheet)
+        self.assertIn(
+            ".setup-card .stack-form > p { min-width: 0; align-self: start; align-content: start; }",
+            stylesheet,
+        )
+        self.assertIn(
+            '.setup-card .stack-form > p > input:not([type="checkbox"]),',
+            stylesheet,
+        )
+        self.assertIn(
+            ".setup-card .stack-form { grid-template-columns: 1fr; }",
+            stylesheet,
+        )
 
     def test_setup_creates_the_first_admin_and_family(self):
         response = self.client.post(reverse("setup"), self.payload())

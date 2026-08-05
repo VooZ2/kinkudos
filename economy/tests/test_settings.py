@@ -56,7 +56,7 @@ class ParentSettingsTests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
 
         self.assertContains(response, "Points for a task photo")
-        self.assertContains(response, "Lottery ticket price")
+        self.assertContains(response, "Scratch ticket price")
         self.assertContains(response, "Weekly ticket limit")
         self.assertContains(response, "Keep feedback images for")
         self.assertContains(response, 'class="catalog-divider"', count=5)

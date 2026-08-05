@@ -99,7 +99,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.5.2",
+                    "26.5.3",
                     str(root),
                 ],
                 env=environment,
@@ -145,7 +145,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
 
             environment = os.environ.copy()
             environment["PATH"] = f"{fake_bin}:{environment['PATH']}"
-            environment["KINKUDOS_VERSION"] = "26.5.2"
+            environment["KINKUDOS_VERSION"] = "26.5.3"
             environment["KINKUDOS_INSTALL_ROOT"] = str(install_root)
             result = subprocess.run(
                 ["sh", str(ROOT / "deploy" / "install.sh")],
@@ -164,7 +164,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
             encoding="utf-8"
         )
 
-        self.assertIn("image: vooz2/kinkudos:26.5.2", compose)
+        self.assertIn("image: vooz2/kinkudos:26.5.3", compose)
         self.assertIn("kinkudos-data:/app/data", compose)
         self.assertIn('      - "8000"', compose)
         self.assertIn("KINKUDOS_RUNTIME_SECRETS_DIR", compose)
@@ -241,7 +241,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.5.2",
+                    "26.5.3",
                     str(root),
                 ],
                 capture_output=True,

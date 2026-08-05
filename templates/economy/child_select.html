@@ -1,5 +1,6 @@
 {% extends "economy/base.html" %}
 {% load i18n %}
+{% block body_class %}system-page session-sensitive-page theme-neutral{% endblock %}
 {% block title %}{% translate "Choose a profile" %} – {{ project_name }}{% endblock %}
 {% block content %}
 <section class="section-heading profile-select-heading">
@@ -34,7 +35,7 @@
     <h2>{% translate "Enter your PIN" %}</h2>
     <label for="id_pin">{% translate "4 digits" %}:</label>
     <input class="pin-input" id="id_pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" required>
-    <button class="button button-primary button-large" type="submit">{% translate "Open" %}</button>
+    <button class="button button-primary button-large" type="submit">{% translate "Login" %}</button>
   </form>
 </dialog>
 {% endblock %}

@@ -33,9 +33,11 @@ from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
+from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 
 from .auth import child_required, current_child, current_device, parent_required
@@ -180,6 +182,7 @@ def home(request):
     return render(request, "economy/home.html")
 
 
+@never_cache
 def setup(request):
     if not setup_is_available():
         return redirect("parent_dashboard" if request.user.is_authenticated else "parent_login")
@@ -245,6 +248,7 @@ def setup(request):
     return render(request, "economy/setup.html", {"form": form})
 
 
+@method_decorator(never_cache, name="dispatch")
 class ParentLoginView(LoginView):
     template_name = "economy/parent_login.html"
     authentication_form = AuthenticationForm
@@ -276,6 +280,10 @@ class ParentLoginView(LoginView):
 
     def form_valid(self, form):
         reset_attempts(
+            AttemptCounter.Scope.PARENT_LOGIN_IP,
+            client_ip(self.request),
+        )
+        reset_attempts(
             AttemptCounter.Scope.PARENT_LOGIN_ACCOUNT,
             form.get_user().get_username().strip().casefold(),
         )
@@ -292,6 +300,7 @@ class EmailResetEnabledMixin:
         return super().dispatch(request, *args, **kwargs)
 
 
+@method_decorator(never_cache, name="dispatch")
 class ParentPasswordResetView(EmailResetEnabledMixin, PasswordResetView):
     template_name = "economy/password_reset_form.html"
     form_class = ParentPasswordResetForm
@@ -331,20 +340,24 @@ class ParentPasswordResetView(EmailResetEnabledMixin, PasswordResetView):
         return super().dispatch(request, *args, **kwargs)
 
 
+@method_decorator(never_cache, name="dispatch")
 class ParentPasswordResetDoneView(EmailResetEnabledMixin, PasswordResetDoneView):
     template_name = "economy/password_reset_done.html"
 
 
+@method_decorator(never_cache, name="dispatch")
 class ParentPasswordResetConfirmView(EmailResetEnabledMixin, PasswordResetConfirmView):
     template_name = "economy/password_reset_confirm.html"
     form_class = ParentSetPasswordForm
     success_url = reverse_lazy("password_reset_complete")
 
 
+@method_decorator(never_cache, name="dispatch")
 class ParentPasswordResetCompleteView(EmailResetEnabledMixin, PasswordResetCompleteView):
     template_name = "economy/password_reset_complete.html"
 
 
+@never_cache
 @require_POST
 def session_logout(request):
     logout(request)
@@ -352,6 +365,7 @@ def session_logout(request):
     return redirect("home")
 
 
+@never_cache
 def child_select(request):
     device = current_device(request)
     if settings.DEVICE_PAIRING_REQUIRED and device is None:
@@ -485,6 +499,7 @@ def parent_generate_pairing_link(request):
     )
 
 
+@never_cache
 def pair_device_via_link(request):
     if request.method == "GET":
         response = render(request, "economy/pair_device.html")
@@ -726,6 +741,7 @@ def child_dashboard(request):
     )
 
 
+@never_cache
 @child_required
 def child_theme_onboarding(request):
     form = FirstThemeForm(request.POST or None)
@@ -907,7 +923,7 @@ def child_request_reward(request, reward_id):
 def child_purchase_lottery_ticket(request):
     try:
         purchase_lottery_ticket(child=request.child)
-        messages.success(request, _("Your lottery ticket is ready."))
+        messages.success(request, _("Your scratch ticket is ready."))
     except ValidationError as exc:
         messages.error(request, exc.messages[0])
     return redirect(f"{reverse('child_dashboard')}#prizai")
@@ -2517,7 +2533,7 @@ def manifest(request):
 def service_worker(request):
     response = render(request, "economy/service-worker.js", content_type="application/javascript")
     response["Service-Worker-Allowed"] = "/"
-    response["Cache-Control"] = "no-cache"
+    response["Cache-Control"] = "no-store, no-cache, must-revalidate"
     return response
 
 

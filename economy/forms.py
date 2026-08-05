@@ -320,10 +320,10 @@ class FirstThemeForm(StyledFormMixin, forms.Form):
         choices=[
             (Theme.MAGIC_ACADEMY, _("Magic Academy")),
             (Theme.BLOCK_WORLD, _("Block World")),
-            (Theme.HERO_HQ, format_lazy("🛡️ {}", _("Superhero HQ"))),
-            (Theme.ART_STUDIO, format_lazy("🎨 {}", _("Art Studio"))),
-            (Theme.PANDA_PET, format_lazy("🐼 {}", _("Panda World"))),
-            (Theme.BLOCKVILLE, format_lazy("◆ {}", _("Blockville World"))),
+            (Theme.HERO_HQ, _("Superhero HQ")),
+            (Theme.ART_STUDIO, _("Art Studio")),
+            (Theme.PANDA_PET, _("Panda World")),
+            (Theme.BLOCKVILLE, _("Blockville World")),
         ],
         widget=forms.RadioSelect,
     )
@@ -481,8 +481,8 @@ class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
             "family_name": _("Family name"),
             "photo_bonus_points": _("Points for a task photo"),
             "birthday_points": _("Birthday points"),
-            "lottery_enabled": _("Enable lottery tickets"),
-            "lottery_ticket_cost": _("Lottery ticket price"),
+            "lottery_enabled": _("Enable scratch tickets"),
+            "lottery_ticket_cost": _("Scratch ticket price"),
             "lottery_weekly_limit": _("Weekly ticket limit"),
             "evidence_retention_days": _("Keep task photos for"),
             "feedback_screenshot_retention_days": _("Keep feedback images for"),
@@ -496,7 +496,7 @@ class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
                 "Each child receives this many points once a year on their birthday. Use 0 to disable birthday gifts."
             ),
             "lottery_enabled": _(
-                "Turn lottery tickets on or off for every child."
+                "Turn scratch tickets on or off for every child."
             ),
             "lottery_ticket_cost": _(
                 "The new price is used for every future ticket purchase."
@@ -898,10 +898,10 @@ class ChildEditForm(StyledFormMixin, forms.Form):
     )
     min_balance = forms.IntegerField(label=_("Credit"), max_value=0)
     lottery_enabled = forms.BooleanField(
-        label=_("Enable lottery tickets for this child"),
+        label=_("Enable scratch tickets for this child"),
         required=False,
         help_text=_(
-            "The family-wide lottery switch must also be enabled."
+            "The family-wide scratch ticket switch must also be enabled."
         ),
     )
     birth_date = forms.DateField(

@@ -1,5 +1,17 @@
 {% load i18n %}const CACHE = "kinkudos-app-shell-{{ app_version }}";
 const OFFLINE_URL = "/offline/";
+const SENSITIVE_PATHS = [
+  "/setup/",
+  "/prisijungti/",
+  "/atsijungti/",
+  "/slaptazodis/",
+  "/susieti-irengini/",
+  "/vaikas/",
+];
+
+function isSensitiveNavigation(url) {
+  return SENSITIVE_PATHS.some(path => url.pathname.startsWith(path));
+}
 
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll([OFFLINE_URL])));
@@ -15,6 +27,8 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET" || event.request.mode !== "navigate") return;
+  const url = new URL(event.request.url);
+  if (url.origin !== self.location.origin || isSensitiveNavigation(url)) return;
   event.respondWith(fetch(event.request).catch(() => caches.match(OFFLINE_URL)));
 });
 

@@ -24,6 +24,21 @@ document.querySelectorAll("[data-confirm]").forEach(button => {
   });
 });
 
+const setupEmailToggle = document.getElementById("id_configure_smtp");
+const setupEmailFields = [...document.querySelectorAll('[id^="id_smtp_"]')];
+
+function syncSetupEmailFields() {
+  if (!setupEmailToggle) return;
+  const disabled = !setupEmailToggle.checked;
+  setupEmailFields.forEach(field => {
+    field.disabled = disabled;
+    field.closest("p")?.classList.toggle("is-disabled", disabled);
+  });
+}
+
+setupEmailToggle?.addEventListener("change", syncSetupEmailFields);
+syncSetupEmailFields();
+
 const taskSearch = document.querySelector("[data-task-search]");
 const taskSearchResults = document.querySelector("[data-task-search-results]");
 const taskCards = [...document.querySelectorAll("[data-task-card]")];
@@ -819,12 +834,35 @@ pushButton?.addEventListener("click", () => {
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker
-      .register("/service-worker.js")
+      .register("/service-worker.js", { updateViaCache: "none" })
       .then(() => refreshPushState())
       .catch(() => setPushState("unsupported", t("notificationsUnsupported")));
   });
 } else {
   setPushState("unsupported", t("notificationsUnsupported"));
+}
+
+document.querySelectorAll("form[data-single-submit]").forEach(form => {
+  form.addEventListener("submit", () => {
+    const submitter = form.querySelector('button[type="submit"], input[type="submit"]');
+    if (submitter) submitter.disabled = true;
+  });
+});
+
+if (document.body.classList.contains("session-sensitive-page")) {
+  window.addEventListener("pageshow", event => {
+    if (event.persisted) window.location.reload();
+  });
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState !== "visible") return;
+    fetch(window.location.href, {
+      cache: "no-store",
+      credentials: "same-origin",
+      headers: { Accept: "text/html" },
+    }).then(response => {
+      if (response.redirected) window.location.assign(response.url);
+    }).catch(() => {});
+  });
 }
 
 const childStateUrl = window.KINKUDOS?.childStateUrl;
