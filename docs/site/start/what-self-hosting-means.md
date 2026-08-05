@@ -8,6 +8,25 @@ also gives it responsibility for the server.
 > **Difficulty:** Basic server administration<br>
 > **You need:** Linux, Docker, a hostname, HTTPS, and a backup plan
 
+## Home server or VPS
+
+Self-hosting does not require the physical server to belong to your family.
+
+You may run KinKudos on:
+
+- a home server or NAS that you physically control;
+- a rented VPS that you administer;
+- a server maintained by a trusted person on your family’s behalf.
+
+With a VPS, the hosting provider operates the underlying physical
+infrastructure. Its privacy policy, security controls, account terms, server
+region, and legal jurisdiction still apply.
+
+Self-hosting means that the KinKudos project does not operate your family
+installation. It does not mean that no infrastructure provider is involved.
+
+Choose a provider you trust and keep backups that can be restored elsewhere.
+
 ## The family is responsible for
 
 - keeping the server, domain, HTTPS proxy, and Docker installation working;

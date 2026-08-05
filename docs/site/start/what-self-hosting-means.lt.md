@@ -8,6 +8,25 @@ bet kartu ir atsakomybę už serverį.
 > **Sudėtingumas:** Pagrindinis serverio administravimas<br>
 > **Reikia:** Linux, Docker, hosto vardo, HTTPS ir kopijų plano
 
+## Namų serveris ar VPS
+
+Savarankiškam diegimui nebūtina, kad fizinis serveris priklausytų jūsų šeimai.
+
+KinKudos galima paleisti:
+
+- fiziškai jūsų valdomame namų serveryje ar NAS;
+- jūsų administruojamame nuomojamame VPS;
+- patikimo žmogaus jūsų šeimos vardu prižiūrimame serveryje.
+
+Naudojant VPS, fizinę infrastruktūrą valdo hostingo tiekėjas. Todėl taip pat
+taikoma jo privatumo politika, saugumo priemonės, paskyros sąlygos, serverio
+regionas ir teisinė jurisdikcija.
+
+Savarankiškas diegimas reiškia, kad KinKudos projektas nevaldo jūsų šeimos
+instaliacijos. Tai nereiškia, kad infrastruktūros tiekėjas visai nedalyvauja.
+
+Rinkitės patikimą tiekėją ir turėkite kopijas, kurias galėtumėte atkurti kitur.
+
 ## Už ką atsako šeima
 
 - kad veiktų serveris, domenas, HTTPS proxy ir Docker;

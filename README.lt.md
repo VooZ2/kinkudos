@@ -4,7 +4,8 @@
   <strong>Privati, savarankiškai diegiama šeimos programa darbams, taškams, tikslams ir prizams.</strong><br>
   Paverskite kasdienius šeimos darbus matoma pažanga. Vaikai mato, ką daryti, ir siekia
   prizų, o tėvai peržiūri pažangą bei užtikrina aiškias ir sąžiningas taisykles. KinKudos
-  veikia jūsų serveryje, todėl šeimos duomenys lieka jums kontroliuojami.
+  veikia jūsų pasirinktoje ir administruojamoje infrastruktūroje, todėl jūs sprendžiate,
+  kur saugomi šeimos duomenys.
 </p>
 
 <p align="center">

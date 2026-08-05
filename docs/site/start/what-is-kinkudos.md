@@ -2,7 +2,11 @@
 
 KinKudos is a private, self-hosted app for one family. Children complete tasks, earn points, and request rewards; parents review requests and decide what happens next.
 
-There are no ads, no built-in analytics, and no shared public family space. The database, photos, and credentials stay with the person operating the family’s installation.
+There are no ads, no built-in analytics, and no shared public family space.
+
+The database, task photos, and application credentials are stored in the
+installation your family chooses and administers. The KinKudos project does
+not operate a cloud service that receives this family data.
 
 ```text
 Task → submission → parent decision → points → reward or goal → history

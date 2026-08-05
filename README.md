@@ -4,7 +4,7 @@
   <strong>A private, self-hosted family app for tasks, points, goals, and rewards.</strong><br>
   Turn everyday family tasks into visible progress. Children see what to do and work toward
   rewards, while parents review progress and keep the rules clear and fair. KinKudos runs on
-  your own server, so your family data stays under your control.
+  infrastructure you choose and administer, so you decide where your family data is stored.
 </p>
 
 <p align="center">

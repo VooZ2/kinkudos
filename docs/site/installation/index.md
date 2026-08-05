@@ -5,7 +5,10 @@ description: Compare the supported KinKudos installation methods, required skill
 
 # Choose your installation method
 
-KinKudos is self-hosted: every installation serves one family and runs on a Linux server controlled by the family or its chosen administrator. The application is free, but a VPS or other hosting service may cost money.
+KinKudos is self-hosted: every installation runs for one family on a Linux
+server chosen and administered by that family or its trusted server administrator.
+
+The application is free, but a VPS or other hosting service may cost money.
 
 Whichever method you choose, the process has two distinct parts:
 

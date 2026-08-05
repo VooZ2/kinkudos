@@ -5,7 +5,11 @@ description: Palyginkite KinKudos diegimo būdus, reikalingus įgūdžius, serve
 
 # Pasirinkite diegimo būdą
 
-KinKudos veikia jūsų serveryje: vienas diegimas skirtas vienai šeimai ir veikia šeimos arba jos pasirinkto administratoriaus valdomame Linux serveryje. Programa nemokama, tačiau VPS ar kita prieglobos paslauga gali kainuoti.
+KinKudos diegiamas savarankiškai: kiekviena instaliacija veikia vienai šeimai
+jos arba patikimo serverio administratoriaus pasirinktame ir prižiūrimame
+Linux serveryje.
+
+Pati programa yra nemokama, tačiau VPS ar kita hostingo paslauga gali kainuoti.
 
 Nepriklausomai nuo pasirinkto būdo, diegimas susideda iš dviejų aiškių dalių:
 

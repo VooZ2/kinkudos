@@ -2,7 +2,11 @@
 
 KinKudos yra privati, vienai šeimai skirta programa, veikianti jūsų valdomame serveryje. Vaikai atlieka užduotis, uždirba taškus ir prašo apdovanojimų, o tėvai peržiūri prašymus ir priima sprendimus.
 
-Duomenų bazė, nuotraukos ir prisijungimo duomenys lieka jūsų valdomame KinKudos serveryje.
+Programoje nėra reklamų, integruotos analitikos ar viešos bendros šeimų erdvės.
+
+Duomenų bazė, darbų nuotraukos ir programos prisijungimo duomenys saugomi jūsų
+šeimos pasirinktame ir administruojamame diegime. KinKudos projektas nevaldo
+debesijos paslaugos, į kurią būtų siunčiami šie šeimos duomenys.
 
 ```text
 Užduotis → pateikimas → tėvų sprendimas → taškai → apdovanojimas arba tikslas → istorija
@@ -31,6 +35,6 @@ Užduotis → pateikimas → tėvų sprendimas → taškai → apdovanojimas arb
 
 ## Ko KinKudos nedaro
 
-KinKudos neturi reklamų, integruotos naudojimo analizės ar viešos bendros šeimų erdvės. Tai nėra bankas, vaikų sekimo priemonė ar socialinis tinklas. KinKudos neseka vietos, neskaito įrenginio turinio ar žinučių ir neskelbia šeimos veiklos.
+Tai nėra bankas, vaikų sekimo priemonė ar socialinis tinklas. KinKudos neseka vietos, neskaito įrenginio turinio ar žinučių ir neskelbia šeimos veiklos.
 
 [Vedamasis serverio diegiklis →](../installation/guided-installer.lt.md) · [Pirmos 15 minučių →](first-15-minutes.lt.md) · [English](what-is-kinkudos.md)
