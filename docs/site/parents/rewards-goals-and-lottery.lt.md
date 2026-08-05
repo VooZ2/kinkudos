@@ -1,4 +1,4 @@
-# Prizai, tikslai ir loterijos bilietai
+# Prizai, tikslai ir nutrinami bilietai
 
 Kelias: prizų katalogui **Tėvai → Darbai ir prizai**, prašymams ir sprendimams **Tėvai → Pradžia**.
 
@@ -30,14 +30,14 @@ Kiekvienas vaikas turi savo apatinę balanso ribą, pavyzdžiui, `-100`. Patvirt
 
 Limitą pakeisite vaiko kortelės veiksme **Keisti kreditą** arba per **Nustatymai → Vaikų profiliai**.
 
-## Loterijos bilietai
+## Nutrinami bilietai
 
-Loterija pasirenkama ir veikia tik įjungus abu jungiklius:
+Nutrinami bilietai yra pasirenkami ir veikia tik įjungus abu jungiklius:
 
-1. šeimos **Nustatymai → Įjungti loterijos bilietus**; ir
-2. **Nustatymai → Vaikų profiliai → Įjungti loterijos bilietus šiam vaikui**.
+1. šeimos **Nustatymai → Įjungti nutrinamus bilietus**; ir
+2. **Nustatymai → Vaikų profiliai → Įjungti nutrinamus bilietus šiam vaikui**.
 
-Šeimos nustatymai nurodo kainą ir savaitinį limitą nuo pirmadienio iki sekmadienio. Vienas vaikas vienu metu gali turėti tik vieną nebaigtą bilietą. Perkant atimama nustatyta kaina ir sukuriamas istorijos įrašas. Atskleistas bilietas gali duoti teigiamą, neigiamą arba tuščią rezultatą, bet niekada nenukrenta žemiau kredito limito. Išjungus loteriją nauji pirkimai ir priminimai sustoja, bet atidarytas bilietas užbaigiamas.
+Šeimos nustatymai nurodo kainą ir savaitinį limitą nuo pirmadienio iki sekmadienio. Vienas vaikas vienu metu gali turėti tik vieną nebaigtą bilietą. Perkant atimama nustatyta kaina ir sukuriamas taškų istorijos įrašas. Atskleistas bilietas gali duoti teigiamą, neigiamą arba tuščią rezultatą, bet niekada nenukrenta žemiau kredito limito. Išjungus nutrinamus bilietus nauji pirkimai ir priminimai sustoja, bet atidarytas bilietas užbaigiamas.
 
 ### Prieš vaikui perkant bilietą
 

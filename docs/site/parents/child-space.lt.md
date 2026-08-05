@@ -10,7 +10,7 @@ Vaikas mato savo darbus, prizus, tikslus, naujausią taškų istoriją ir profil
 | **Šiandien paskirti darbai** | Užbaigti tėvų atsiųstus darbus. Kiekvienas užbaigtas darbas iškart prideda taškus ir dingsta iš dienos sąrašo. |
 | **Prizai** | Prašyti galimo prizo, jei tai leidžia balansas ir kredito taisyklė. Kol prašymas laukia, vaikas gali jį atšaukti. |
 | **Tikslai ir pasiūlymai** | Pasiūlyti naują prizą ar asmeninį taupymo tikslą. Tėvai nusprendžia, ar patvirtinti, ir nustato galutinę taškų sumą. Tikslas skaičiuojamas iš bendro balanso; taškai atskirai neatidedami. |
-| **Loterijos bilietai** | Pirkti pasirenkamą bilietą tik jei jis įjungtas šeimai ir vaikui, pakanka taškų bei leidžia savaitės limitas. Prieš kitą pirkimą reikia užbaigti atidarytą bilietą. |
+| **Nutrinami bilietai** | Pirkti pasirenkamą bilietą tik jei jis įjungtas šeimai ir vaikui, pakanka taškų bei leidžia savaitės limitas. Prieš kitą pirkimą reikia užbaigti atidarytą bilietą. |
 | **Dovanoti taškus** | Jei yra kitas aktyvus vaikas, perduoti jam tik jau uždirbtus taškus. Kredito ar neturimų taškų perduoti negalima. |
 | **Atsiliepimai** | Nusiųsti tėvams privatų pasiūlymą ar problemos pranešimą, prireikus pridėjus ekrano nuotrauką. |
 

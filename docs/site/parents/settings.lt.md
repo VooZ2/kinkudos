@@ -10,7 +10,7 @@ Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 
 ## 1. Šeimos nustatymai
 
-Pirmas blokas valdo visai šeimai bendras taisykles. Nauja reikšmė taikoma būsimiems veiksmams; ji nekeičia jau užbaigto darbo, patvirtinto prizo ar esamo istorijos įrašo.
+Pirmas blokas valdo visai šeimai bendras taisykles. Nauja reikšmė taikoma būsimiems veiksmams; ji nekeičia jau užbaigto darbo, patvirtinto prizo ar esamo taškų istorijos įrašo.
 
 ### Šeimos pavadinimas
 
@@ -23,9 +23,9 @@ Pirmas blokas valdo visai šeimai bendras taisykles. Nauja reikšmė taikoma bū
 | Laukelis | Reikšmė | Kas pasikeičia |
 | --- | --- | --- |
 | **Taškai už darbo nuotrauką** | Papildomi taškai, kai vaikas pateikia darbą su nuotrauka. `0` išjungia priedą. | Reikšmė užfiksuojama darbo pateikimo metu; vėliau redagavimas nekeičia jau laukiančio ar patvirtinto darbo. |
-| **Gimtadienio taškai** | Kasmetinė dovana kiekvienam vaikui jo išsaugotą gimtadienį. `0` išjungia. | Nauja reikšmė taikoma būsimiems apdovanojimams; tam pačiam vaikui tais pačiais metais dovana neskiriama du kartus. |
-| **Įjungti loterijos bilietus** | Bendras pasirenkamos nutrinamos loterijos jungiklis. | Išjungus neleidžiami nauji pirkimai ir priminimai, tačiau pradėtą bilietą galima baigti. Kiekvienas vaikas turi ir savo jungiklį. |
-| **Loterijos bilieto kaina** | Kiek taškų kainuos būsimas bilietas. | Nauja kaina taikoma tik būsimiems pirkimams; jau nupirktas bilietas išlaiko užfiksuotą kainą. |
+| **Gimtadienio taškai** | Kasmetinė dovana kiekvienam vaikui jo išsaugotą gimtadienį. `0` išjungia. | Nauja reikšmė taikoma būsimiems gimtadienio taškams; tam pačiam vaikui tais pačiais metais dovana neskiriama du kartus. |
+| **Įjungti nutrinamus bilietus** | Bendras pasirenkamų nutrinamų bilietų jungiklis. | Išjungus neleidžiami nauji pirkimai ir priminimai, tačiau pradėtą bilietą galima baigti. Kiekvienas vaikas turi ir savo jungiklį. |
+| **Nutrinamo bilieto kaina** | Kiek taškų kainuos būsimas bilietas. | Nauja kaina taikoma tik būsimiems pirkimams; jau nupirktas bilietas išlaiko užfiksuotą kainą. |
 | **Savaitinis bilietų limitas** | Kiek bilietų vienas vaikas gali pirkti nuo pirmadienio iki sekmadienio. | Nauja riba taikoma būsimiems pirkimams; skaitiklis atsinaujina kiekvieną pirmadienį. |
 
 ### Saugojimas
@@ -106,11 +106,11 @@ Ryšys tikrinamas prieš išsaugojimą, o prisijungimo duomenys saugomi atskiruo
 
 ## 6. Šeimos paskyros ir programos nustatymai
 
-**Nauja tėvų paskyra** sukuria atskirą suaugusiojo naudotojo vardą, el. paštą ir stiprų slaptažodį. **Naujas vaiko profilis** nustato vardą, pasirenkamą kreipinį lietuvių kalbai, pradinį PIN, kredito limitą, loterijos leidimą ir gimtadienį.
+**Nauja tėvų paskyra** sukuria atskirą suaugusiojo naudotojo vardą, el. paštą ir stiprų slaptažodį. **Naujas vaiko profilis** nustato vardą, pasirenkamą kreipinį lietuvių kalbai, pradinį PIN, kredito limitą, nutrinamų bilietų leidimą ir gimtadienį.
 
 Skiltyje **Tėvų paskyros** galima keisti naudotojo vardą, el. paštą ir slaptažodį. Palikus naujo slaptažodžio laukelius tuščius, senas slaptažodis išlieka. Paskyros atšaukimas ją išjungia, o istorija lieka; paskutinio aktyvaus tėvo išjungti negalima.
 
-Skiltyje **Vaikų profiliai** galima keisti vardą, kreditą, individualų loterijos jungiklį, gimtadienį ir PIN. Kreditas yra žemiausias leidžiamas balansas, pvz., `-100`; bendra šeimos loterija taip pat turi būti įjungta. Vaiko gimtadienio prašymas reikalauja tėvų sprendimo, bet tėvai datą gali redaguoti tiesiogiai. Palikite naują PIN tuščią, jei jo keisti nenorite. Vaiko profilio atšaukimas išsaugo jo istoriją.
+Skiltyje **Vaikų profiliai** galima keisti vardą, kreditą, individualų nutrinamų bilietų jungiklį, gimtadienį ir PIN. Kreditas yra žemiausias leidžiamas balansas, pvz., `-100`; bendras šeimos nutrinamų bilietų jungiklis taip pat turi būti įjungtas. Vaiko gimtadienio prašymas reikalauja tėvų sprendimo, bet tėvai datą gali redaguoti tiesiogiai. Palikite naują PIN tuščią, jei jo keisti nenorite. Vaiko profilio atšaukimas išsaugo jo istoriją.
 
 ## 7. Šeimos atsiliepimai
 
@@ -120,9 +120,9 @@ Kad pranešimas būtų naudingas, KinKudos taip pat išsaugo pateikusiojo vaidme
 
 ## Nuotraukų ribos ir laiko taisyklės
 
-Darbų įrodymai ir atsiliepimų ekrano nuotraukos priima JPEG, PNG, WebP, HEIC arba HEIF iki **12 MB**. Avatarai priima tuos pačius formatus iki **5 MB** ir apkerpami į kvadratą. Nuotraukos apdorojamos privačiam saugojimui; nekelkite daugiau šeimos informacijos nei reikia darbui ar problemai paaiškinti.
+Darbo nuotraukos ir atsiliepimų ekrano nuotraukos priima JPEG, PNG, WebP, HEIC arba HEIF iki **12 MB**. Avatarai priima tuos pačius formatus iki **5 MB** ir apkerpami į kvadratą. Nuotraukos apdorojamos privačiam saugojimui; nekelkite daugiau šeimos informacijos nei reikia darbui ar problemai paaiškinti.
 
-Paskirti dienos darbai baigiasi vidurnaktį pagal **vietinį serverio laiką**. Loterijos limitai atsinaujina kiekvieną pirmadienį tame pačiame kalendoriniame kontekste. Jei šeima gyvena kitoje laiko juostoje nei serveris, prieš remdamiesi vidurnakčio taisykle susitarkite, pagal kurį laiką gyvena dienos darbai.
+Paskirti dienos darbai baigiasi vidurnaktį pagal **vietinį serverio laiką**. Nutrinamų bilietų limitai atsinaujina kiekvieną pirmadienį tame pačiame kalendoriniame kontekste. Jei šeima gyvena kitoje laiko juostoje nei serveris, prieš remdamiesi vidurnakčio taisykle susitarkite, pagal kurį laiką gyvena dienos darbai.
 
 Pakartojamai viešai programos klaidai naudokite [GitHub Issues](https://github.com/VooZ2/kinkudos/issues), tačiau niekada nekelkite šeimos duomenų.
 

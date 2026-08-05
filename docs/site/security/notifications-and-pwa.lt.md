@@ -12,6 +12,6 @@ KinKudos galima įdiegti kaip PWA programą ir ji gali siųsti naršyklės prane
 
 ## Įjunkite pranešimus
 
-Prisijunkite tame įrenginyje, viršutinėje juostoje spauskite varpelį ir patvirtinkite naršyklės leidimą. Pakartokite kiekviename įrenginyje, kuriame norite gauti pranešimus. Tėvai gauna pranešimus apie vaikų pateiktus darbus, prizų prašymus, pasiūlymus ir gimtadienio keitimo prašymus; vaikai – apie tėvų sprendimus, paskirtus darbus, dovanas, gimtadienio taškus ir pasirinktiną loterijos priminimą.
+Prisijunkite tame įrenginyje, viršutinėje juostoje spauskite varpelį ir patvirtinkite naršyklės leidimą. Pakartokite kiekviename įrenginyje, kuriame norite gauti pranešimus. Tėvai gauna pranešimus apie vaikų pateiktus darbus, prizų prašymus, pasiūlymus ir gimtadienio keitimo prašymus; vaikai – apie tėvų sprendimus, paskirtus darbus, dovanas, gimtadienio taškus ir pasirinktiną nutrinamų bilietų priminimą.
 
 Jei varpelis praneša, kad įjungti nepavyko, patikrinkite naršyklės/svetainės pranešimų leidimą, „iPhone/iPad“ atidarykite įdiegtą PWA ir patikrinkite internetą. Atšaukus vaiko įrenginį, jo pranešimų prenumerata panaikinama. Pranešimai yra patogumas – esamą būseną visada tikrinkite pačioje programoje.

@@ -1,4 +1,4 @@
-# Rewards, goals, and lottery tickets
+# Rewards, goals, and scratch tickets
 
 Path: **Parents → Tasks and rewards** for the reward catalogue; **Parents → Home** for requests and decisions.
 
@@ -30,12 +30,12 @@ Each child has an individual lower balance limit, for example `-100`. A reward a
 
 Change the limit from the child card’s **Change credit** icon or from **Settings → Child profiles**.
 
-## Lottery tickets
+## Scratch tickets
 
-Lottery tickets are optional and should be treated as a family choice, not a required reward. They are available only when both switches are on:
+Scratch tickets are optional and should be treated as a family choice, not a required reward. They are available only when both switches are on:
 
-1. **Settings → Enable lottery tickets** is on for the family; and
-2. **Settings → Child profiles → Enable lottery tickets for this child** is on.
+1. **Settings → Enable scratch tickets** is on for the family; and
+2. **Settings → Child profiles → Enable scratch tickets for this child** is on.
 
 The family settings set the ticket price and per-child weekly limit. The week runs Monday through Sunday. One child can have only one unfinished ticket at a time.
 

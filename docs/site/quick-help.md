@@ -6,9 +6,9 @@
 | --- | --- | --- |
 | A child profile is missing | Is this browser/PWA paired? A device must be paired before it can show child profiles. | [Pair a child device](start/pair-a-child-device.md) |
 | A child cannot sign in | Check the selected profile and four-digit PIN. After five incorrect attempts, a parent can unlock the profile. | [PINs and sign-in protection](security/pin-and-sign-in.md) |
-| A child cannot request a reward | Check the current balance, credit limit, and whether half the credit is already used. Also check if today’s assigned tasks block new reward purchases. | [Rewards, goals, and lottery tickets](parents/rewards-goals-and-lottery.md) |
+| A child cannot request a reward | Check the current balance, credit limit, and whether half the credit is already used. Also check if today’s assigned tasks block new reward purchases. | [Rewards, goals, and scratch tickets](parents/rewards-goals-and-lottery.md) |
 | A task or reward is not visible | Check whether it is active, whether the task is already pending/assigned/completed today, and whether the reward is affordable. | [Tasks and approvals](parents/tasks-and-approvals.md) |
-| A lottery ticket is unavailable | Check both the family-wide and individual child lottery switches, the weekly limit, balance, and whether another ticket is unfinished. | [Rewards, goals, and lottery tickets](parents/rewards-goals-and-lottery.md) |
+| A scratch ticket is unavailable | Check both the family-wide and individual child scratch-ticket switches, the weekly limit, balance, and whether another ticket is unfinished. | [Rewards, goals, and scratch tickets](parents/rewards-goals-and-lottery.md) |
 | Notifications do not arrive | Confirm browser permission. On iPhone or iPad, install KinKudos to the Home Screen first. | [What is KinKudos?](start/what-is-kinkudos.md) |
 | I want to install the app or enable the bell | Install the PWA on that device, then accept its notification permission. | [Notifications and installing KinKudos](security/notifications-and-pwa.md) |
 | Password-reset email does not arrive | Check whether SMTP is enabled, verified, and using the intended sender and recipient settings. | [Parent settings — SMTP](parents/settings.md#4-email-settings-smtp) |

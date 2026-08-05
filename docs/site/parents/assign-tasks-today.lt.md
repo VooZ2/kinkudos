@@ -12,7 +12,7 @@ Naudokite rodyklės veiksmą to vaiko kortelėje, esančioje **Tėvai → Pradž
 1. Atidarykite vaiko kortelę ir pasirinkite **Paskirti darbus šiandienai**.
 2. Pažymėkite katalogo užduotis. Taip pat galite įrašyti vieną pasirinktinį
    pavadinimą ir taškų vertę.
-3. Nuspręskite, ar nebaigtos paskirtos užduotys turi blokuoti **naujus** apdovanojimų
+3. Nuspręskite, ar nebaigtos paskirtos užduotys turi blokuoti **naujus** prizų
    prašymus.
 4. Išsaugokite ir paprašykite vaiko atidaryti savo skydelį bei patikrinti, ar
    sąrašas matomas.
@@ -28,7 +28,7 @@ Tokiam užbaigimui atskiro tėvų patvirtinimo nėra.
   tėvams lieka istorijoje, bet taškų nesuteikia.
 - Galite atšaukti vieną nebaigtą punktą arba visą likusį sąrašą. Atšauktas
   punktas taškų nesuteikia.
-- Apdovanojimų blokas taikomas tik naujiems apdovanojimų prašymams. Jis neatšaukia jau
+- Prizų blokas taikomas tik naujiems prizų prašymams. Jis neatšaukia jau
   laukiančio tėvų sprendimo ir netrukdo kitiems vaiko veiksmams.
 
 ## Kada rinktis įprastą užduotį

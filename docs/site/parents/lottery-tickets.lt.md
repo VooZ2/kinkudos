@@ -1,6 +1,6 @@
-# Loterijos bilietai
+# Nutrinami bilietai
 
-Loterijos bilietai yra pasirenkamas šeimos žaidimas KinKudos taškais. Tai nėra
+Nutrinami bilietai yra pasirenkamas šeimos žaidimas KinKudos taškais. Tai nėra
 tikri pinigai, pirkimas ar išorinė azartinių lošimų paslauga. Nejunkite jų,
 jeigu suaugusieji sąmoningai nenori tokios sėkmės dalies šeimos taškų taisyklėse.
 
@@ -21,9 +21,9 @@ užrašo bilieto kainą ir rezultatą.
 
 Bilietus turi leisti abu nustatymai:
 
-1. **Tėvai → Nustatymai** įjunkite **Leisti loterijos bilietus** šeimai ir
+1. **Tėvai → Nustatymai** įjunkite **Įjungti nutrinamus bilietus** šeimai ir
    nustatykite teigiamą kainą bei kiekvieno vaiko savaitinį limitą.
-2. **Nustatymai → Vaikų profiliai** įjunkite loterijos bilietus konkrečiam
+2. **Nustatymai → Vaikų profiliai** įjunkite nutrinamus bilietus konkrečiam
    vaikui.
 
 Savaitė tęsiasi nuo pirmadienio iki sekmadienio. Vienas vaikas gali turėti tik
@@ -32,7 +32,7 @@ neturėti blokuojančių paskirtų darbų ir nebūti kredito pristabdymo būseno
 
 Išjungus bilietus sustoja nauji pirkimai ir priminimai, bet jau atidarytas
 bilietas gali būti užbaigtas. Tėvai valdo kiekvieną jungiklį ir limitą;
-loterijos bilietai niekada nėra būtini įprastiems darbams ar prizams.
+nutrinami bilietai niekada nėra būtini įprastiems darbams ar prizams.
 
 ## Pasirenkamas priminimas
 

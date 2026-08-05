@@ -1,6 +1,6 @@
-# Lottery tickets
+# Scratch tickets
 
-Lottery tickets are an optional family game using KinKudos points. They are not
+Scratch tickets are an optional family game using KinKudos points. They are not
 real money, a purchase, or an external gambling service. Do not enable them
 unless the adults consciously want this form of chance in the family’s point
 rules.
@@ -22,9 +22,9 @@ result separately in History.
 
 Both settings must allow tickets:
 
-1. In **Parents → Settings**, turn on **Enable lottery tickets** for the
+1. In **Parents → Settings**, turn on **Enable scratch tickets** for the
    family and set a positive ticket price plus each child’s weekly limit.
-2. In **Settings → Child profiles**, turn on lottery tickets for the individual
+2. In **Settings → Child profiles**, turn on scratch tickets for the individual
    child.
 
 The week runs Monday through Sunday. One child can have only one unfinished
@@ -32,7 +32,7 @@ ticket at a time. A child must have enough earned points for the ticket price,
 must not be blocked by assigned work, and must not be at the credit pause.
 
 Disabling tickets stops new purchases and reminders, but a ticket already open
-can still be finished. Parents control every switch and limit; lottery tickets
+can still be finished. Parents control every switch and limit; scratch tickets
 are never required for ordinary tasks or rewards.
 
 ## Optional reminder

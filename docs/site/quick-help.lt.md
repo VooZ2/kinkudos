@@ -6,9 +6,9 @@
 | --- | --- | --- |
 | Nerodomas vaiko profilis | Ar naršyklė/PWA susieta? Nesusietas įrenginys negali rodyti profilių. | [Vaiko įrenginio susiejimas](start/pair-a-child-device.lt.md) |
 | Vaikas negali prisijungti | Patikrinkite profilį ir keturių skaitmenų PIN. Po penkių klaidų tėvai gali atrakinti profilį. | [PIN ir prisijungimo apsauga](security/pin-and-sign-in.lt.md) |
-| Vaikas negali prašyti prizo | Patikrinkite balansą, kreditą, ar neišnaudota pusė kredito ir ar dienos darbai neblokuoja naujų prašymų. | [Prizai, tikslai ir loterija](parents/rewards-goals-and-lottery.lt.md) |
+| Vaikas negali prašyti prizo | Patikrinkite balansą, kreditą, ar neišnaudota pusė kredito ir ar dienos darbai neblokuoja naujų prašymų. | [Prizai, tikslai ir nutrinami bilietai](parents/rewards-goals-and-lottery.lt.md) |
 | Nėra darbo ar prizo | Patikrinkite, ar įrašas aktyvus, ar darbas jau nelaukia/jau nepaskirtas/jau neužskaitytas šiandien, ir ar prizas įperkamas. | [Darbai ir patvirtinimai](parents/tasks-and-approvals.lt.md) |
-| Neveikia loterijos bilietas | Patikrinkite šeimos ir vaiko loterijos jungiklius, savaitinį limitą, balansą ir ar nėra nebaigto bilieto. | [Prizai, tikslai ir loterija](parents/rewards-goals-and-lottery.lt.md) |
+| Neveikia nutrinamas bilietas | Patikrinkite šeimos ir vaiko nutrinamų bilietų jungiklius, savaitinį limitą, balansą ir ar nėra nebaigto bilieto. | [Prizai, tikslai ir nutrinami bilietai](parents/rewards-goals-and-lottery.lt.md) |
 | Neateina pranešimai | Patikrinkite naršyklės leidimą. „iPhone“ ir „iPad“ KinKudos pirmiausia įdiekite į pradžios ekraną. | [Kas yra KinKudos?](start/what-is-kinkudos.lt.md) |
 | Noriu įdiegti programą ar įjungti varpelį | Įdiekite PWA tame įrenginyje ir patvirtinkite pranešimų leidimą. | [Pranešimai ir KinKudos diegimas](security/notifications-and-pwa.lt.md) |
 | Neateina slaptažodžio atkūrimo laiškas | Patikrinkite, ar SMTP įjungtas, patikrintas ir nustatyti teisingi siuntėjo bei gavėjo duomenys. | [SMTP nustatymai](parents/settings.lt.md#4-el-pasto-nustatymai-smtp) |

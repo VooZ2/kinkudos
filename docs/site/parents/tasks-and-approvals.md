@@ -20,13 +20,13 @@ You can edit, deactivate, or remove a catalogue item without changing points alr
 | **Ask to improve** | Returns the task to the child. Add an optional explanation; the child can submit it again. No points move yet. |
 | **Reject** | Closes the task without points. You may add an optional explanation visible to the child. |
 
-A child can have one active submission for the same task at a time. A photo is private family evidence: it is resized, stripped of camera metadata, and kept according to the family retention rule.
+A child can have one active submission for the same task at a time. A task photo is private to the family: it is resized, stripped of camera metadata, and kept according to the family retention rule.
 
 ## Completed task: direct parent award
 
 Use the **Completed task** check-mark icon on a child card when you personally confirm that one or more catalogue tasks are done. Select the tasks and choose **Award selected tasks**. Points are awarded immediately, so there is no child submission or approval step.
 
-This is helpful for young children, offline chores, or work you observed yourself. Use normal child submission when you want the child to practise reporting completion or to include evidence.
+This is helpful for young children, offline chores, or work you observed yourself. Use normal child submission when you want the child to practise reporting completion or to include a task photo.
 
 ## Assign tasks for today
 
@@ -44,4 +44,4 @@ Create penalty templates in **Tasks and rewards** with a clear title, negative p
 
 Use **Adjust points** for a one-off correction or something that is not a defined task, reward, or penalty. Enter a positive or negative amount and a required reason. Avoid changing a balance silently: the history is designed so the family can understand every change.
 
-[Parent dashboard and child cards →](dashboard-and-child-cards.md) · [Rewards, goals, and lottery tickets →](rewards-goals-and-lottery.md) · [Lietuviškai](tasks-and-approvals.lt.md)
+[Parent dashboard and child cards →](dashboard-and-child-cards.md) · [Rewards, goals, and scratch tickets →](rewards-goals-and-lottery.md) · [Lietuviškai](tasks-and-approvals.lt.md)

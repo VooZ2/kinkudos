@@ -36,8 +36,8 @@ trusted server administrator first.
 ## What KinKudos does not decide
 
 KinKudos does not decide which chores are fair, what a reward is worth, or
-whether lottery tickets belong in your family. Parents set those rules. The
-optional lottery uses only the family’s internal points: it is not a money,
+whether scratch tickets belong in your family. Parents set those rules. The
+optional scratch-ticket feature uses only the family’s internal points: it is not a money,
 purchase, or external gambling service.
 
 The in-app feedback form is also private to your own family installation. It

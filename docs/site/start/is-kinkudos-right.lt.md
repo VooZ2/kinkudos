@@ -37,8 +37,8 @@ susitarkite su patikimu serverio administratoriumi.
 ## Ko KinKudos nenusprendžia
 
 KinKudos nenusprendžia, kurie darbai yra sąžiningi, kiek vertas prizas ir ar
-loterijos bilietai tinka jūsų šeimai. Šias taisykles nustato tėvai. Pasirenkama
-loterija naudoja tik šeimos vidinius taškus: tai nėra pinigų, pirkimo ar išorinė
+nutrinami bilietai tinka jūsų šeimai. Šias taisykles nustato tėvai. Pasirenkami
+nutrinami bilietai naudoja tik šeimos vidinius taškus: tai nėra pinigų, pirkimo ar išorinė
 azartinių lošimų paslauga.
 
 Programos atsiliepimo forma taip pat yra privati jūsų šeimos diegimui. Ji

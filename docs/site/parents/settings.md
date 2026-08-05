@@ -10,7 +10,7 @@ The screenshot uses fictional demonstration data.
 
 ## 1. Family settings
 
-This first panel controls rules that apply to the whole family. Saving a new value affects future activity; it never changes a completed task, approved reward, or existing ledger entry.
+This first panel controls rules that apply to the whole family. Saving a new value affects future activity; it never changes a completed task, approved reward, or existing point history entry.
 
 ### Family name
 
@@ -24,8 +24,8 @@ This first panel controls rules that apply to the whole family. Saving a new val
 | --- | --- | --- |
 | **Points for a task photo** | Extra points awarded when a child submits a task with a photo. Use `0` to turn this bonus off. | The value is captured when the task is submitted. Later edits do not alter a request that is already pending or approved. |
 | **Birthday points** | A yearly gift automatically awarded once for each child’s saved birthday. Use `0` to disable it. | Future birthday awards use the new number. KinKudos never awards the same child twice in one calendar year. |
-| **Enable lottery tickets** | Master switch for the optional scratch-ticket feature. | Turning it off prevents new purchases and weekly reminders for everyone. An already-open ticket can still be finished. Each child also has their own lottery switch. |
-| **Lottery ticket price** | How many points a future ticket costs. | New purchases use the new price; a ticket that was already bought keeps its recorded cost. |
+| **Enable scratch tickets** | Master switch for the optional scratch-ticket feature. | Turning it off prevents new purchases and weekly reminders for everyone. An already-open ticket can still be finished. Each child also has their own scratch-ticket switch. |
+| **Scratch ticket price** | How many points a future ticket costs. | New purchases use the new price; a ticket that was already bought keeps its recorded cost. |
 | **Weekly ticket limit** | Maximum tickets one child may buy from Monday through Sunday. | New purchases use the new limit. The count resets every Monday for every child. |
 
 ### Retention
@@ -34,7 +34,7 @@ These settings control automatic deletion of uploaded images, not account histor
 
 | Field | What it means | What changes |
 | --- | --- | --- |
-| **Keep task photos for** | How long completed task-evidence photos are stored: indefinitely, 7, 30, or 90 days. | Photos for pending or revision-requested tasks are never removed automatically, so parents can still decide fairly. |
+| **Keep task photos for** | How long completed task photos are stored: indefinitely, 7, 30, or 90 days. | Photos for pending or revision-requested tasks are never removed automatically, so parents can still decide fairly. |
 | **Keep feedback images for** | How long a screenshot attached to a resolved feedback report is stored. | Screenshots for unresolved feedback are never removed automatically. |
 
 ## 2. Child devices
@@ -130,7 +130,7 @@ KinKudos verifies the storage connection before saving. It keeps provider creden
 | Area | Fields and result |
 | --- | --- |
 | **New parent account** | Create a separate adult username, email address, and strong password. The email must be unique and is used for password recovery when SMTP is configured. |
-| **New child profile** | Set the child name, optional Lithuanian greeting form, starting PIN, credit limit, lottery availability, and birthday. The child chooses a theme the first time they sign in. |
+| **New child profile** | Set the child name, optional Lithuanian greeting form, starting PIN, credit limit, scratch-ticket availability, and birthday. The child chooses a theme the first time they sign in. |
 
 ### Edit parent accounts
 
@@ -138,14 +138,14 @@ Use **Parent accounts** to change a parent’s username, email address, or passw
 
 ### Edit child profiles
 
-Use **Child profiles** to change a child’s name, credit, individual lottery switch, birthday, or PIN.
+Use **Child profiles** to change a child’s name, credit, individual scratch-ticket switch, birthday, or PIN.
 
 | Field | What it changes |
 | --- | --- |
 | **Child’s name** | The displayed name. Names must be unique. |
 | **Vocative name** | An optional Lithuanian greeting form; leave blank for automatic wording. It does not affect the English interface. |
 | **Credit** | The child’s lowest permitted balance, such as `-100`. This is the same rule shown on the child’s dashboard card. |
-| **Enable lottery tickets for this child** | Individual lottery permission. The family-wide lottery switch must also be on. |
+| **Enable scratch tickets for this child** | Individual scratch-ticket permission. The family-wide scratch-ticket switch must also be on. |
 | **Birthday** | Used only for the yearly birthday-points rule. Parents can edit it directly; a child’s own requested change needs parent approval. |
 | **New PIN / Repeat new PIN** | Resets the child’s four-digit PIN. Leave both blank to keep it unchanged. |
 
@@ -161,8 +161,8 @@ To make a report useful, KinKudos also records the reporting role and name, page
 
 ## Image limits and time rules
 
-Task-evidence and feedback screenshots accept JPEG, PNG, WebP, HEIC, or HEIF up to **12 MB**. Avatars use the same formats up to **5 MB** and are cropped to a square. Task photos and feedback screenshots are processed for private storage; do not upload more family information than is needed to explain the task or problem.
+Task photos and feedback screenshots accept JPEG, PNG, WebP, HEIC, or HEIF up to **12 MB**. Avatars use the same formats up to **5 MB** and are cropped to a square. Task photos and feedback screenshots are processed for private storage; do not upload more family information than is needed to explain the task or problem.
 
-Daily assigned tasks expire at midnight in the **server’s local time**. Lottery limits reset every Monday in that same calendar context. If a household lives in a different time zone from its server, discuss which clock should govern daily work before relying on the midnight rule.
+Daily assigned tasks expire at midnight in the **server’s local time**. Scratch-ticket limits reset every Monday in that same calendar context. If a household lives in a different time zone from its server, discuss which clock should govern daily work before relying on the midnight rule.
 
 [GitHub issues](https://github.com/VooZ2/kinkudos/issues) · [Network access →](../security/network-access.md) · [Backups →](../backups.md)

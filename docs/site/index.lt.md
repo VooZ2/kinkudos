@@ -43,7 +43,7 @@ raskite pagalbą iškilus problemai.
 
     ---
 
-    Kurkite užduotis ir apdovanojimus, peržiūrėkite prašymus, valdykite taškus
+    Kurkite darbus ir prizus, peržiūrėkite prašymus, valdykite taškus
     ir padėkite vaikui naudotis savo KinKudos erdve.
 
     [Atidaryti tėvų vadovą →](parents/dashboard-and-child-cards.lt.md)
@@ -73,7 +73,7 @@ Atnaujinkite KinKudos, kurkite ir atkurkite atsargines kopijas, tikrinkite
 - [Paruošti pirmą šeimą](start/first-15-minutes.lt.md)
 - [Susieti vaiko įrenginį](start/pair-a-child-device.lt.md)
 - [Kurti ir valdyti darbus](parents/tasks-and-approvals.lt.md)
-- [Kurti prizus, tikslus ir loterijos taisykles](parents/rewards-goals-and-lottery.lt.md)
+- [Kurti prizus, tikslus ir nutrinamų bilietų taisykles](parents/rewards-goals-and-lottery.lt.md)
 - [Įdiegti KinKudos telefone arba planšetėje](security/notifications-and-pwa.lt.md)
 - [Išspręsti prisijungimo arba vaiko PIN problemą](security/pin-and-sign-in.lt.md)
 - [Įdiegti Hostinger VPS serveryje](installation/hostinger.lt.md)

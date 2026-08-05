@@ -11,7 +11,7 @@ review step lets a parent keep the agreement clear before points move.
 
 1. Open **Pending requests** and select the child’s task.
 2. If a thumbnail is present, open it only when the photo is needed to review
-   the work. It is private family evidence.
+   the work. It is a task photo kept private to the family.
 3. Make one decision:
 
 | Decision | Result |

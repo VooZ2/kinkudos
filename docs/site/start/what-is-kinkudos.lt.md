@@ -1,6 +1,6 @@
 # Kas yra KinKudos?
 
-KinKudos yra privati, vienai šeimai skirta programa, veikianti jūsų valdomame serveryje. Vaikai atlieka užduotis, uždirba taškus ir prašo apdovanojimų, o tėvai peržiūri prašymus ir priima sprendimus.
+KinKudos yra privati, vienai šeimai skirta programa, veikianti jūsų valdomame serveryje. Vaikai atlieka darbus, uždirba taškus ir prašo prizų, o tėvai peržiūri prašymus ir priima sprendimus.
 
 Programoje nėra reklamų, integruotos analitikos ar viešos bendros šeimų erdvės.
 
@@ -9,7 +9,7 @@ Duomenų bazė, darbų nuotraukos ir programos prisijungimo duomenys saugomi jū
 debesijos paslaugos, į kurią būtų siunčiami šie šeimos duomenys.
 
 ```text
-Užduotis → pateikimas → tėvų sprendimas → taškai → apdovanojimas arba tikslas → istorija
+Darbas → pateikimas → tėvų sprendimas → taškai → prizas arba tikslas → taškų istorija
 ```
 
 ## Pagrindinės funkcijos
@@ -18,11 +18,11 @@ Užduotis → pateikimas → tėvų sprendimas → taškai → apdovanojimas arb
 | --- | --- |
 | **Užduotys** | Vaikai gali pasirinkti katalogo užduotį, ją pateikti su pasirenkama nuotrauka, o tėvai patvirtina, grąžina taisyti arba atmeta. Tėvai taip pat gali iškart užskaityti matytą atliktą užduotį. |
 | **Dienos užduotys** | Tėvai vaikui paskiria šiandienos užduotis. Užbaigus kiekvieną, taškai pridedami iškart. |
-| **Apdovanojimai ir tikslai** | Vaikai prašo apdovanojimų arba siūlo naują apdovanojimą ar taupymo tikslą. Tėvai nusprendžia ir nustato kainą. |
+| **Prizai ir tikslai** | Vaikai prašo prizų arba siūlo naują prizą ar taupymo tikslą. Tėvai nusprendžia ir nustato kainą. |
 | **Taškai ir istorija** | Kiekvienas pridėjimas, atėmimas, dovana, bilietas ar korekcija sukuria nekintamą istorijos įrašą. |
-| **Kreditas** | Vaikas gali išleisti iki tėvų nustatyto neigiamo balanso. Išnaudojus pusę kredito, nauji apdovanojimų prašymai stabdomi. |
-| **Loterijos bilietai** | Pasirenkama nutrinama loterija turi kainą, savaitinį limitą, aiškius rezultatus ir niekada neperžengia kredito limito. |
-| **Vaiko temos ir išvaizda** | Vaikai renkasi temas, avatarą, kasdienę atsitiktinę temą, keičia savo PIN ir siūlo apdovanojimus ar tikslus. |
+| **Kreditas** | Vaikas gali išleisti iki tėvų nustatyto neigiamo balanso. Išnaudojus pusę kredito, nauji prizų prašymai stabdomi. |
+| **Nutrinami bilietai** | Pasirenkami tėvų valdomi nutrinami bilietai turi kainą, savaitinį limitą, aiškius rezultatus ir niekada neperžengia kredito limito. |
+| **Vaiko temos ir išvaizda** | Vaikai renkasi temas, avatarą, kasdienę atsitiktinę temą, keičia savo PIN ir siūlo prizus ar tikslus. |
 | **Pranešimai** | Tėvai ir vaikai gali įjungti naršyklės pranešimus. „iPhone“ ir „iPad“ programą pirmiausia reikia įdiegti į pradžios ekraną. |
 | **Privatūs atsiliepimai** | Tėvai ir vaikai programoje gali išsaugoti privatų pasiūlymą ar problemą su pasirenkama ekrano nuotrauka. |
 

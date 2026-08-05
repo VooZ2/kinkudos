@@ -21,9 +21,9 @@ Didelis skaičius yra dabartinis vaiko balansas. Teigiamas skaičius reiškia u�
 
 Išnaudojus pusę kredito, KinKudos sustabdo naujus prizų prašymus, kol balansas pagerėja. Taip vaikas neprašo naujų prizų jau būdamas giliai minuse. Esamus prašymus tėvai vis dar gali spręsti, o darbų veiksmai nesustoja.
 
-### Loterijos eilutė
+### Nutrinamų bilietų eilutė
 
-Jei loterija įjungta, kortelė rodo, kiek bilietų vaikas dar gali nusipirkti einamą pirmadienio–sekmadienio savaitę. Ji taip pat įspėja, jei vienas bilietas dar nebaigtas. Užrašas **Loterijos bilietai išjungti** reiškia, kad išjungtas bendras šeimos arba šio vaiko jungiklis.
+Jei nutrinami bilietai įjungti, kortelė rodo, kiek bilietų vaikas dar gali nusipirkti einamą pirmadienio–sekmadienio savaitę. Ji taip pat įspėja, jei vienas bilietas dar nebaigtas. Užrašas **Nutrinami bilietai išjungti** reiškia, kad išjungtas bendras šeimos arba šio vaiko jungiklis.
 
 ## Penkios greitųjų veiksmų ikonos
 
@@ -49,12 +49,12 @@ Skiltis **Laukiantys prašymai** prašymus sugrupuoja pagal vaiką. Kiekvienam p
 - **Prašyti pataisyti** (grįžimo rodyklė) galimas pateiktam darbui. Pridėkite pasirenkamą paaiškinimą; vaikas gali pataisyti ir pateikti iš naujo.
 - **Atmesti** (stop ikona) uždaro prašymą nepridedant taškų ir neskiriant prizo. Prizui bei pasiūlymui priežastis privaloma, darbo komentaras pasirenkamas.
 
-Jei darbas turi nuotrauką, pasirinkite miniatiūrą ir peržiūrėkite ją viso dydžio. Nuotraukos yra privatūs šeimos duomenys ir saugomos pagal [Tėvų nustatymų](settings.lt.md) taisyklę.
+Jei darbas turi nuotrauką, pasirinkite miniatiūrą ir peržiūrėkite ją viso dydžio. Darbo nuotraukos yra privatūs šeimos duomenys ir saugomos pagal [Tėvų nustatymų](settings.lt.md) taisyklę.
 
 ## Istorija
 
 Naudokite **Istoriją**, kai kyla klausimas „Ar prizas tikrai patvirtintas?“ arba „Kodėl pasikeitė balansas?“. Kiekvienas balanso pakeitimas yra atskiras, nuolatinis įrašas. Jei reikia taisyti, naudokite **Koreguoti taškus** ir sukurkite aiškų naują įrašą, o ne perrašykite praeitį.
 
-Užimtoje šeimos istorijoje pasirinkite vieną vaiką **Istorijos** filtre. Atmesti darbų ir prizų sprendimai su tėvų priežastimi taip pat rodomi, nors taškai nepasikeitė. Kameros ikona reiškia, kad įrodymo nuotrauka dar pasiekiama, o išblukusi kamera – kad ji pašalinta pagal saugojimo nustatymą.
+Užimtoje šeimos istorijoje pasirinkite vieną vaiką **Istorijos** filtre. Atmesti darbų ir prizų sprendimai su tėvų priežastimi taip pat rodomi, nors taškai nepasikeitė. Kameros ikona reiškia, kad darbo nuotrauka dar pasiekiama, o išblukusi kamera – kad ji pašalinta pagal saugojimo nustatymą.
 
 [Darbai ir patvirtinimai →](tasks-and-approvals.lt.md) · [Vaiko aplinka →](child-space.lt.md)

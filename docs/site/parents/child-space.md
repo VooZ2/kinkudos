@@ -10,7 +10,7 @@ Children see their own tasks, rewards, goals, recent point history, and profile 
 | **Today’s assigned tasks** | Complete tasks sent by a parent. Each completion awards its points immediately and the task disappears from today’s list. |
 | **Rewards** | Request an available reward when the balance and credit rule allow it. A child may cancel their own request while it is still pending. |
 | **Goals and suggestions** | Suggest a new reward or a personal savings goal. A parent decides whether to approve it and sets the final point amount. A goal tracks progress against the overall balance; points are not set aside separately. |
-| **Lottery tickets** | Buy an optional ticket only when enabled for both the family and the child, the child has enough points, and the weekly limit allows it. An open ticket must be finished before buying another. |
+| **Scratch tickets** | Buy an optional ticket only when enabled for both the family and the child, the child has enough points, and the weekly limit allows it. An open ticket must be finished before buying another. |
 | **Give points** | If another active child exists, send only points already earned to them. A child cannot transfer credit or points they do not have. |
 | **Feedback** | Send a private idea or problem report to the parents, optionally with a screenshot. |
 

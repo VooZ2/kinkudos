@@ -35,13 +35,13 @@ Vaiko kortelėje paspauskite rodyklės ikoną ir pasirinkite šiandienai skiriam
 - Užduotys galioja iki vidurnakčio pagal serverio laiką.
 - Vaikas kiekvieną užbaigia pats ir taškai pridedami iškart.
 - Katalogo užduoties negalima paskirti, jei ji jau laukia patvirtinimo, jau paskirta šiandien arba šiandien jau užskaityta.
-- Pasirinktinai galima blokuoti naujus apdovanojimų prašymus, kol paskirtos užduotys nebaigtos.
+- Pasirinktinai galima blokuoti naujus prizų prašymus, kol paskirtos užduotys nebaigtos.
 - Galite atšaukti vieną nebaigtą užduotį arba visą rinkinį. Pasibaigusi ar atšaukta užduotis taškų neprideda.
 
 ## Nuobaudos ir korekcijos
 
 Skiltyje **Darbai ir prizai** sukurkite nuobaudų šablonus su aiškiu pavadinimu, neigiama verte ir emoji. Vaiko kortelės nuobaudos ikona pritaiko pasirinktus šablonus ir gali pridėti bendrą priežastį. Taip sukuriamas nuolatinis neigiamas istorijos įrašas.
 
-**Koreguoti taškus** naudokite vienkartinei klaidai ar veiksmui, kuris nėra katalogo užduotis, apdovanojimas ar nuobauda. Įrašykite teigiamą arba neigiamą skaičių ir privalomą priežastį. Istorija turi padėti šeimai suprasti kiekvieną pakeitimą.
+**Koreguoti taškus** naudokite vienkartinei klaidai ar veiksmui, kuris nėra katalogo užduotis, prizas ar nuobauda. Įrašykite teigiamą arba neigiamą skaičių ir privalomą priežastį. Istorija turi padėti šeimai suprasti kiekvieną pakeitimą.
 
-[Tėvų skydelis ir vaikų kortelės →](dashboard-and-child-cards.lt.md) · [Prizai, tikslai ir loterija →](rewards-goals-and-lottery.lt.md) · [English](tasks-and-approvals.md)
+[Tėvų skydelis ir vaikų kortelės →](dashboard-and-child-cards.lt.md) · [Prizai, tikslai ir nutrinami bilietai →](rewards-goals-and-lottery.lt.md) · [English](tasks-and-approvals.md)

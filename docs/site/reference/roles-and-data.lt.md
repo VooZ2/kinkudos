@@ -8,7 +8,7 @@ veiksmų vadovo.
 | Duomenys | Vieta ir tvarkymas |
 | --- | --- |
 | Šeimos nustatymai, paskyros, profiliai, taškai ir istorija | KinKudos duomenų bazėje šeimos serveryje. |
-| Darbų įrodymai, avatarai ir atsiliepimų ekrano nuotraukos | Privačioje įkeltoje medijoje šeimos serveryje. |
+| Darbo nuotraukos, avatarai ir atsiliepimų ekrano nuotraukos | Privačioje įkeltoje medijoje šeimos serveryje. |
 | Paslaptys ir tiekėjų prisijungimo duomenys | Atskirai apsaugotuose serverio failuose; niekada nerodomi viešoje repozitorijoje. |
 | Pasirenkamos nuotolinės kopijos | Šifruotose restic duomenų bazės ir įkeltos medijos kopijose. |
 

@@ -32,7 +32,7 @@ išsaugoma istorija; jo duomenys neperduodami kitam vaikui.
 ## Profilis, įrenginys ir PIN yra skirtingi dalykai
 
 - **Vaiko profilis** saugo vardą, temą, avatarą, balansą, kredito ribą,
-  gimtadienį, loterijos nustatymą ir istoriją.
+  gimtadienį, nutrinamų bilietų nustatymą ir istoriją.
 - **Susietas įrenginys** yra konkreti naršyklė, telefonas, planšetė ar įdiegta
   PWA, kuriai leista rodyti vaikų profilius.
 - **PIN** yra vaiko keturių skaitmenų prisijungimo žingsnis susietame įrenginyje.

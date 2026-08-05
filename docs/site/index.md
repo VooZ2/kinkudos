@@ -71,7 +71,7 @@ Update, back up, restore, inspect logs, and use CLI recovery tools.
 - [Set up your first family](start/first-15-minutes.md)
 - [Pair a child device](start/pair-a-child-device.md)
 - [Create and manage tasks](parents/tasks-and-approvals.md)
-- [Create rewards, goals, and lottery rules](parents/rewards-goals-and-lottery.md)
+- [Create rewards, goals, and scratch ticket rules](parents/rewards-goals-and-lottery.md)
 - [Install KinKudos on a phone or tablet](security/notifications-and-pwa.md)
 - [Fix sign-in or a child PIN](security/pin-and-sign-in.md)
 - [Install on a Hostinger VPS](installation/hostinger.md)

@@ -21,9 +21,9 @@ The **Credit limit** is the lowest balance a child may reach when a parent appro
 
 When half of that credit has been used, KinKudos pauses new reward requests until the balance improves. This keeps the child from requesting rewards while already far below zero. Parents can still review existing requests, and all task actions continue to work.
 
-### Lottery line
+### Scratch-ticket line
 
-If lottery tickets are enabled, the card shows how many tickets the child can still buy in the current Monday–Sunday week. It also warns when one purchased ticket is still unfinished. If it says **Lottery tickets disabled**, either the family-wide switch or that child’s individual switch is off.
+If scratch tickets are enabled, the card shows how many tickets the child can still buy in the current Monday–Sunday week. It also warns when one purchased ticket is still unfinished. If it says **Scratch tickets disabled**, either the family-wide switch or that child’s individual switch is off.
 
 ## The five quick-action icons
 
