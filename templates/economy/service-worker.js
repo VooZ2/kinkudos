@@ -1,4 +1,5 @@
-{% load i18n %}const CACHE = "kinkudos-app-shell-{{ app_version }}";
+/* {% load i18n %} */
+const CACHE = "kinkudos-app-shell-{{ app_version }}";
 const OFFLINE_URL = "/offline/";
 const SENSITIVE_PATHS = [
   "/setup/",
@@ -33,7 +34,7 @@ self.addEventListener("fetch", event => {
 });
 
 self.addEventListener("push", event => {
-  let data = { title: "{{ family_settings.display_name|escapejs }}", body: "{% translate "There is an update." %}", url: "/tevai/" };
+  let data = { title: "{{ family_settings.display_name|escapejs }}", body: "{% translate 'There is an update.' %}", url: "/tevai/" };
   if (event.data) {
     try { data = { ...data, ...event.data.json() }; } catch (_) {}
   }

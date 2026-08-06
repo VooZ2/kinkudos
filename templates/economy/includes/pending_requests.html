@@ -1,0 +1,92 @@
+{% load economy_tags i18n %}
+<div class="pending-requests-fragment" data-pending-requests-fragment data-pending-url="{% url 'parent_pending_requests' %}" data-pending-count="{{ pending_count }}">
+  <div class="section-heading"><h2>{% translate "Pending requests" %}{% if pending_count %} ({{ pending_count }}){% endif %}</h2></div>
+  <div class="pending-requests-panel">
+    {% if pending_requests %}
+      <div class="pending-request-list" role="list">
+        {% for pending_item in pending_requests %}
+          <article class="pending-request-row{% if pending_item.kind == 'task' and pending_item.claim.has_evidence %} has-evidence{% endif %}" role="listitem">
+            <div class="pending-request-avatar">
+              {% if pending_item.child.avatar %}
+                <img class="profile-mini profile-photo" src="{% url 'child_avatar' pending_item.child.pk %}" alt="">
+              {% else %}
+                <span class="profile-mini" aria-hidden="true">{{ pending_item.child.name|first }}</span>
+              {% endif %}
+            </div>
+            <div class="pending-request-copy">
+              <p class="pending-request-meta"><strong>{{ pending_item.child.name }}</strong><span aria-hidden="true"> · </span><span class="eyebrow">{% if pending_item.kind == "task" %}{% translate "Task" %}{% elif pending_item.kind == "reward" %}{% translate "Reward" %}{% elif pending_item.kind == "proposal" %}{{ pending_item.proposal.get_proposal_type_display }}{% elif pending_item.kind == "goal" %}{% translate "Reached goal" %}{% else %}{% translate "Birthday change" %}{% endif %}</span></p>
+              {% if pending_item.kind == "task" %}
+                <h3>{{ pending_item.claim.task_title }}</h3>
+                <p class="amount positive">+{{ pending_item.claim.reward_snapshot }} {{ pending_item.claim.reward_snapshot|currency_unit:"neutral" }}</p>
+                {% if pending_item.claim.photo_bonus_snapshot %}<p class="photo-bonus">+{{ pending_item.claim.photo_bonus_snapshot }} {{ pending_item.claim.photo_bonus_snapshot|currency_unit:"neutral" }} · {% translate "photo bonus" %}</p>{% endif %}
+              {% elif pending_item.kind == "reward" %}
+                <h3>{{ pending_item.reward_request.reward_title }}</h3>
+                <p class="amount">−{{ pending_item.reward_request.cost_snapshot }} {{ pending_item.reward_request.cost_snapshot|currency_unit:"neutral" }}</p>
+              {% elif pending_item.kind == "proposal" %}
+                <h3>{{ pending_item.proposal.title }}</h3>
+                <p class="amount">{% translate "Suggested" %}: {% if pending_item.proposal.suggested_cost %}{{ pending_item.proposal.suggested_cost }} {{ pending_item.proposal.suggested_cost|currency_unit:"neutral" }}{% else %}–{% endif %}</p>
+                {% if pending_item.proposal.proposal_type == "goal" and pending_item.proposal.goal_mode %}<small>{% if pending_item.proposal.goal_mode == "available" %}{% translate "Use available points" %}{% else %}{% translate "Save separately" %}{% endif %}</small>{% endif %}
+                {% if pending_item.proposal.replaces_current_goal %}<small class="danger">{% translate "Approving this will replace the current goal." %}</small>{% endif %}
+              {% elif pending_item.kind == "goal" %}
+                <h3>{{ pending_item.completion.goal.title }}</h3>
+                <p class="amount">{{ pending_item.completion.goal.progress_amount }} / {{ pending_item.completion.goal.target_amount }} {% translate "Points" %}</p>
+                <small>{% if pending_item.completion.goal.mode == "saved" %}{% translate "Saved separately" %}{% else %}{% translate "Uses available points" %}{% endif %}</small>
+              {% else %}
+                <h3>{% translate "Birthday change" %}</h3>
+                <p class="amount"><del>{{ pending_item.change.previous_birth_date|date:"Y-m-d"|default:"–" }}</del> <span aria-hidden="true">→</span> <strong>{{ pending_item.change.requested_birth_date|date:"Y-m-d"|default:"–" }}</strong></p>
+              {% endif %}
+            </div>
+            <div class="pending-request-actions">
+              {% if pending_item.kind == "task" %}
+                {% if pending_item.claim.has_evidence %}<button class="evidence-thumb-button" type="button" data-evidence-full="{% url 'task_evidence' pending_item.claim.pk 'full' %}" aria-label="{% translate "Open task photo" %}"><img src="{% url 'task_evidence' pending_item.claim.pk 'thumbnail' %}" alt="{% blocktranslate with task=pending_item.claim.task_title %}Photo for {{ task }}{% endblocktranslate %}"></button>{% endif %}
+                <form method="post" action="{% url 'parent_decide_task' pending_item.claim.pk 'approve' %}">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>
+                <button class="decision-icon-button decision-revise" type="button" data-open-dialog="revise-task-{{ pending_item.claim.pk }}" aria-label="{% translate "Ask to improve" %}" title="{% translate "Ask to improve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-rotate-left"></use></svg></button>
+                <button class="decision-icon-button decision-reject" type="button" data-open-dialog="reject-task-{{ pending_item.claim.pk }}" aria-label="{% translate "Reject" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button>
+              {% elif pending_item.kind == "reward" %}
+                <form method="post" action="{% url 'parent_decide_reward' pending_item.reward_request.pk 'approve' %}">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>
+                <button class="decision-icon-button decision-reject" type="button" data-open-dialog="reject-reward-{{ pending_item.reward_request.pk }}" aria-label="{% translate "Reject" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button>
+              {% elif pending_item.kind == "proposal" %}
+                <button class="decision-icon-button decision-approve" type="button" data-open-dialog="approve-proposal-{{ pending_item.proposal.pk }}" aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>
+                <button class="decision-icon-button decision-reject" type="button" data-open-dialog="reject-proposal-{{ pending_item.proposal.pk }}" aria-label="{% translate "Reject" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button>
+              {% elif pending_item.kind == "goal" %}
+                <form method="post" action="{% url 'parent_decide_goal_completion' pending_item.completion.pk 'complete' %}">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{% translate "Complete goal" %}" title="{% translate "Complete goal" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>
+                <form method="post" action="{% url 'parent_decide_goal_completion' pending_item.completion.pk 'keep_active' %}">{% csrf_token %}<button class="decision-icon-button decision-reject" type="submit" aria-label="{% translate "Keep active" %}" title="{% translate "Keep active" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form>
+              {% else %}
+                <form method="post" action="{% url 'parent_decide_birth_date' pending_item.change.pk 'approve' %}">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{% translate "Approve birthday change" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>
+                <form method="post" action="{% url 'parent_decide_birth_date' pending_item.change.pk 'reject' %}">{% csrf_token %}<button class="decision-icon-button decision-reject" type="submit" aria-label="{% translate "Reject birthday change" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form>
+              {% endif %}
+            </div>
+          </article>
+          {% if pending_item.kind == "task" %}
+            <dialog id="revise-task-{{ pending_item.claim.pk }}" class="action-dialog task-decision-dialog">
+              <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg></button>
+              <h2>{% translate "Ask to improve" %}</h2><p>{% translate "You may add a comment that the child will see." %}</p>
+              <form method="post" action="{% url 'parent_decide_task' pending_item.claim.pk 'revise' %}" class="stack-form">{% csrf_token %}<label for="revise-reason-{{ pending_item.claim.pk }}">{% translate "Comment (optional)" %}:</label><textarea class="field-control" id="revise-reason-{{ pending_item.claim.pk }}" name="reason" maxlength="500" rows="3" placeholder="{% translate "What should be improved?" %}"></textarea><button class="decision-icon-button decision-revise dialog-decision-action" type="submit" aria-label="{% translate "Ask to improve" %}" title="{% translate "Ask to improve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-rotate-left"></use></svg></button></form>
+            </dialog>
+            <dialog id="reject-task-{{ pending_item.claim.pk }}" class="action-dialog task-decision-dialog">
+              <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg></button>
+              <h2>{% translate "Reject task" %}</h2><p>{% translate "You may add a comment that the child will see." %}</p>
+              <form method="post" action="{% url 'parent_decide_task' pending_item.claim.pk 'reject' %}" class="stack-form">{% csrf_token %}<label for="reject-reason-{{ pending_item.claim.pk }}">{% translate "Comment (optional)" %}:</label><textarea class="field-control" id="reject-reason-{{ pending_item.claim.pk }}" name="reason" maxlength="500" rows="3" placeholder="{% translate "Why was the task rejected?" %}"></textarea><button class="decision-icon-button decision-reject dialog-decision-action" type="submit" aria-label="{% translate "Reject" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form>
+            </dialog>
+          {% elif pending_item.kind == "reward" %}
+            <dialog id="reject-reward-{{ pending_item.reward_request.pk }}" class="action-dialog task-decision-dialog">
+              <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg></button>
+              <h2>{% translate "Reject" %}</h2><form method="post" action="{% url 'parent_decide_reward' pending_item.reward_request.pk 'reject' %}" class="stack-form">{% csrf_token %}<label for="reward-rejection-reason-{{ pending_item.reward_request.pk }}">{% translate "Rejection reason" %}:</label><input class="field-control" id="reward-rejection-reason-{{ pending_item.reward_request.pk }}" name="reason" required><button class="decision-icon-button decision-reject dialog-decision-action" type="submit" aria-label="{% translate "Reject" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form>
+            </dialog>
+          {% elif pending_item.kind == "proposal" %}
+            <dialog id="approve-proposal-{{ pending_item.proposal.pk }}" class="action-dialog task-decision-dialog">
+              <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg></button>
+              <h2>{% translate "Approve" %}</h2><form method="post" action="{% url 'parent_decide_proposal' pending_item.proposal.pk 'approve' %}" class="stack-form">{% csrf_token %}<label for="proposal-final-cost-{{ pending_item.proposal.pk }}">{% translate "Final point amount" %}:</label><input class="field-control" id="proposal-final-cost-{{ pending_item.proposal.pk }}" name="final_cost" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ pending_item.proposal.suggested_cost|default:100 }}" required>{% if pending_item.proposal.proposal_type == "goal" and not pending_item.proposal.goal_mode %}<fieldset class="choice-fieldset"><legend>{% translate "Choose how to save" %}</legend><label><input type="radio" name="goal_mode" value="available" required> {% translate "Use available points" %}</label><label><input type="radio" name="goal_mode" value="saved" required> {% translate "Save separately" %}</label></fieldset>{% endif %}<button class="decision-icon-button decision-approve dialog-decision-action" type="submit" aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>
+            </dialog>
+            <dialog id="reject-proposal-{{ pending_item.proposal.pk }}" class="action-dialog task-decision-dialog">
+              <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg></button>
+              <h2>{% translate "Reject" %}</h2><form method="post" action="{% url 'parent_decide_proposal' pending_item.proposal.pk 'reject' %}" class="stack-form">{% csrf_token %}<label for="proposal-rejection-reason-{{ pending_item.proposal.pk }}">{% translate "Rejection reason" %}:</label><input class="field-control" id="proposal-rejection-reason-{{ pending_item.proposal.pk }}" name="reason" required><button class="decision-icon-button decision-reject dialog-decision-action" type="submit" aria-label="{% translate "Reject" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form>
+            </dialog>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="pending-empty-state"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg><p>{% translate "No pending requests" %}</p></div>
+    {% endif %}
+  </div>
+</div>

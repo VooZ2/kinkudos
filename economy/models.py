@@ -524,6 +524,11 @@ class RewardRequest(models.Model):
         ]
 
 
+class GoalMode(models.TextChoices):
+    AVAILABLE = "available", _("Current goal")
+    SAVED = "saved", _("Saved")
+
+
 class ProposalType(models.TextChoices):
     REWARD = "reward", _("Reward")
     GOAL = "goal", _("Savings goal")
@@ -535,6 +540,12 @@ class Proposal(models.Model):
     title = models.CharField(max_length=120)
     icon = models.CharField(max_length=32, default="⭐")
     suggested_cost = models.PositiveIntegerField(null=True, blank=True)
+    goal_mode = models.CharField(
+        max_length=16,
+        choices=GoalMode.choices,
+        null=True,
+        blank=True,
+    )
     final_cost = models.PositiveIntegerField(null=True, blank=True)
     status = models.CharField(max_length=16, choices=RequestStatus.choices, default=RequestStatus.PENDING)
     parent_note = models.TextField(blank=True)
@@ -556,11 +567,6 @@ class GoalStatus(models.TextChoices):
     ACTIVE = "active", _("Active")
     COMPLETED = "completed", _("Completed")
     CANCELLED = "cancelled", _("Cancelled")
-
-
-class GoalMode(models.TextChoices):
-    AVAILABLE = "available", _("Current goal")
-    SAVED = "saved", _("Saved")
 
 
 class SavingsGoal(models.Model):

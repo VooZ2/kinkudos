@@ -31,6 +31,9 @@ msgstr "%(name)s avataras"
 msgid "%(task)s: +%(amount)s"
 msgstr "%(task)s: +%(amount)s"
 
+msgid "%(unit)s available"
+msgstr "liko %(unit)s"
+
 msgid "30 days"
 msgstr "30 dienų"
 
@@ -82,6 +85,12 @@ msgstr "Bendra šeimos erdvė"
 msgid "A task needs a little more work"
 msgstr "Darbą reikia šiek tiek pataisyti"
 
+msgid "About credit"
+msgstr "Apie kreditą"
+
+msgid "About scratch tickets"
+msgstr "Apie nutrinamus bilietus"
+
 msgid "Access"
 msgstr "Prisijungimai"
 
@@ -127,8 +136,14 @@ msgstr "Pridėti naują"
 msgid "Add points"
 msgstr "Pridėti taškų"
 
+msgid "Added by"
+msgstr "Pridėjo"
+
 msgid "Adjust points"
 msgstr "Koreguoti taškus"
+
+msgid "Adjusted by"
+msgstr "Koregavo"
 
 msgid "Adjustment"
 msgstr "Korekcija"
@@ -169,6 +184,9 @@ msgstr "Leisti vaikų prieigą"
 msgid "Allow children on this device"
 msgstr "Leisti vaikams naudoti šį įrenginį"
 
+msgid "Allow on this device"
+msgstr "Leisti šiame įrenginyje"
+
 msgid "Allowed IP addresses and networks"
 msgstr "Leidžiami IP adresai ir tinklai"
 
@@ -205,6 +223,9 @@ msgstr "Patvirtinta"
 msgid "Approved by"
 msgstr "Patvirtino"
 
+msgid "Approving this will replace the current goal."
+msgstr "Patvirtinus tai pakeis dabartinį tikslą."
+
 msgid "Art Studio"
 msgstr "Dizaino studija"
 
@@ -222,6 +243,9 @@ msgstr "Skirti pažymėtas nuobaudas"
 
 msgid "Assign tasks for today"
 msgstr "Paskirti darbus šiandienai"
+
+msgid "Assigned by"
+msgstr "Priskyrė"
 
 msgid "Assigned task"
 msgstr "Paskirtas darbas"
@@ -418,6 +442,9 @@ msgstr "Pakeisti temą"
 msgid "Changelog"
 msgstr "Pakeitimų istorija"
 
+msgid "Changelog pages"
+msgstr "Pakeitimų istorijos puslapiai"
+
 msgid "Check the PIN fields."
 msgstr "Patikrinkite PIN laukus."
 
@@ -535,6 +562,9 @@ msgstr "Vaikų paskyros"
 msgid "Child's name"
 msgstr "Vaiko vardas"
 
+msgid "Children"
+msgstr "Vaikai"
+
 msgid "Children and access"
 msgstr "Vaikai ir prieiga"
 
@@ -595,8 +625,14 @@ msgstr "Pasirinkite atliktus darbus"
 msgid "Choose from gallery"
 msgstr "Pasirinkti iš galerijos"
 
+msgid "Choose how this savings goal should save points."
+msgstr "Pasirinkite, kaip šiame taupymo tiksle bus kaupiami taškai."
+
 msgid "Choose how to save"
 msgstr "Pasirinkite, kaip taupyti"
+
+msgid "Choose how to save."
+msgstr "Pasirinkite, kaip taupyti."
 
 msgid "Choose inspiration"
 msgstr "Rinktis įkvėpimą"
@@ -630,6 +666,9 @@ msgstr "Užsisakyti prizą"
 
 msgid "Classified Chance Card"
 msgstr "Įslaptinta sėkmės kortelė"
+
+msgid "Clear all filters"
+msgstr "Išvalyti filtrus"
 
 msgid "Close"
 msgstr "Uždaryti"
@@ -841,6 +880,9 @@ msgstr "Ištrinti prizą „%(title)s“? Ankstesni įrašai istorijoje išliks.
 msgid "Delete task “%(title)s”? Earlier history entries will remain."
 msgstr "Ištrinti darbą „%(title)s“? Ankstesni įrašai istorijoje išliks."
 
+msgid "Deleted by"
+msgstr "Ištrynė"
+
 msgid "Describe a problem or suggest an improvement."
 msgstr "Aprašykite problemą arba pasiūlykite patobulinimą."
 
@@ -873,6 +915,9 @@ msgstr "Išjungta"
 
 msgid "Do not include passwords, PINs, or other private information."
 msgstr "Nerašykite slaptažodžių, PIN kodų ar privačių duomenų."
+
+msgid "Docs"
+msgstr "Gidas"
 
 msgid "Documentation"
 msgstr "Dokumentacija"
@@ -969,6 +1014,9 @@ msgstr "Įveskite teigiamą tokenų skaičių."
 
 msgid "Enter a valid bucket name."
 msgstr "Įveskite tinkamą bucket pavadinimą."
+
+msgid "Enter a valid date range."
+msgstr "Įveskite tinkamą datų intervalą."
 
 msgid "Enter a valid point amount."
 msgstr "Įveskite tinkamą taškų skaičių."
@@ -1101,6 +1149,9 @@ msgstr "Pamiršote slaptažodį"
 
 msgid "From"
 msgstr "Nuo"
+
+msgid "From date must not be later than To date."
+msgstr "Data „Nuo“ negali būti vėlesnė už datą „Iki“."
 
 msgid "General"
 msgstr "Bendrieji"
@@ -1482,6 +1533,9 @@ msgstr "Kitas"
 
 msgid "No IP addresses are blocked. Device pairing and sign-in protections remain active."
 msgstr "Jokie IP adresai neblokuojami. Įrenginių susiejimo ir prisijungimo apsaugos lieka aktyvios."
+
+msgid "No activity matches these filters."
+msgstr "Nė vienas istorijos įrašas neatitinka pasirinktų filtrų."
 
 msgid "No child devices are paired yet."
 msgstr "Dar nesusietas nė vienas vaikų įrenginys."
@@ -1996,6 +2050,9 @@ msgstr "Grąžinta"
 msgid "Returned %(amount)s points from %(title)s"
 msgstr "Iš tikslo „%(title)s“ grąžinta taškų: %(amount)s"
 
+msgid "Returned by"
+msgstr "Grąžino taisyti"
+
 msgid "Returned from %(title)s"
 msgstr "Grąžinta iš „%(title)s“"
 
@@ -2193,6 +2250,9 @@ msgstr "Skyriai"
 
 msgid "See what was added and fixed in every application version."
 msgstr "Čia rasite, kas buvo pridėta ir pataisyta kiekvienoje programos versijoje."
+
+msgid "Send a link"
+msgstr "Siųsti nuorodą"
 
 msgid "Send a signal to HQ"
 msgstr "Siųsti signalą būstinei"
@@ -2412,6 +2472,9 @@ msgstr "PIN turi sudaryti tik 4 skaitmenys."
 
 msgid "The PINs do not match."
 msgstr "PIN nesutampa."
+
+msgid "The activity history is empty."
+msgstr "Veiklos istorija tuščia."
 
 msgid "The assigned task was cancelled."
 msgstr "Paskirtas darbas atšauktas."
@@ -2724,6 +2787,9 @@ msgstr "Toks prisijungimo vardas jau naudojamas."
 
 msgid "This week"
 msgstr "Šią savaitę"
+
+msgid "Tickets"
+msgstr "Bilietai"
 
 msgid "Tickets %(used)s/%(limit)s"
 msgstr "Bilietai %(used)s/%(limit)s"

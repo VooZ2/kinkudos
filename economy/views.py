@@ -109,6 +109,7 @@ from .models import (
     FeedbackReport,
     FeedbackStatus,
     FeedbackType,
+    GoalActivityType,
     GoalCompletionRequest,
     GoalMode,
     GoalStatus,
@@ -183,11 +184,15 @@ def health(request):
 
 
 def changelog(request):
+    release_page = Paginator(load_changelog(), 5).get_page(
+        request.GET.get("page", 1)
+    )
     return render(
         request,
         "economy/changelog.html",
         {
-            "releases": load_changelog(),
+            "releases": release_page.object_list,
+            "release_page": release_page,
             "current_version": settings.APP_VERSION,
         },
     )
@@ -1550,33 +1555,162 @@ def parent_update_feedback_status(request, report_id):
     return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
 
+def _pending_request_items(goals_by_child):
+    pending_requests = []
+    pending_claims = list(
+        TaskClaim.objects.filter(
+            status=RequestStatus.PENDING,
+            child__is_active=True,
+        )
+        .select_related("child", "task")
+        .order_by("submitted_at", "pk")
+    )
+    pending_rewards = list(
+        RewardRequest.objects.filter(
+            status=RequestStatus.PENDING,
+            child__is_active=True,
+        )
+        .select_related("child", "reward")
+        .order_by("submitted_at", "pk")
+    )
+    pending_proposals = list(
+        Proposal.objects.filter(
+            status=RequestStatus.PENDING,
+            child__is_active=True,
+        )
+        .select_related("child")
+        .order_by("created_at", "pk")
+    )
+    for proposal in pending_proposals:
+        proposal.replaces_current_goal = bool(
+            proposal.proposal_type == ProposalType.GOAL
+            and proposal.goal_mode == GoalMode.AVAILABLE
+            and any(
+                goal.status == GoalStatus.ACTIVE and goal.mode == GoalMode.AVAILABLE
+                for goal in goals_by_child.get(proposal.child_id, [])
+            )
+        )
+    pending_goal_completions = list(
+        GoalCompletionRequest.objects.filter(
+            status=RequestStatus.PENDING,
+            goal__child__is_active=True,
+        )
+        .select_related("goal", "goal__child")
+        .order_by("requested_at", "pk")
+    )
+    pending_birth_date_changes = list(
+        BirthDateChangeRequest.objects.filter(
+            status=RequestStatus.PENDING,
+            child__is_active=True,
+        )
+        .select_related("child")
+        .order_by("requested_at", "pk")
+    )
+    for claim in pending_claims:
+        pending_requests.append(
+            {
+                "kind": "task",
+                "child": claim.child,
+                "claim": claim,
+                "submitted_at": claim.submitted_at,
+            }
+        )
+    for reward_request in pending_rewards:
+        pending_requests.append(
+            {
+                "kind": "reward",
+                "child": reward_request.child,
+                "reward_request": reward_request,
+                "submitted_at": reward_request.submitted_at,
+            }
+        )
+    for proposal in pending_proposals:
+        pending_requests.append(
+            {
+                "kind": "proposal",
+                "child": proposal.child,
+                "proposal": proposal,
+                "submitted_at": proposal.created_at,
+            }
+        )
+    for completion in pending_goal_completions:
+        pending_requests.append(
+            {
+                "kind": "goal",
+                "child": completion.goal.child,
+                "completion": completion,
+                "submitted_at": completion.requested_at,
+            }
+        )
+    for change in pending_birth_date_changes:
+        pending_requests.append(
+            {
+                "kind": "birthday",
+                "child": change.child,
+                "change": change,
+                "submitted_at": change.requested_at,
+            }
+        )
+    pending_requests.sort(
+        key=lambda item: (item["submitted_at"], item["kind"]),
+    )
+    return pending_requests
+
+
+@parent_required
+def parent_pending_requests(request):
+    children = list(ChildProfile.objects.filter(is_active=True))
+    goals = list(
+        SavingsGoal.objects.filter(child__is_active=True)
+        .select_related("child")
+    )
+    goals_by_child = {child.pk: [] for child in children}
+    for goal in goals:
+        goals_by_child.setdefault(goal.child_id, []).append(goal)
+    pending_requests = _pending_request_items(goals_by_child)
+    return render(
+        request,
+        "economy/includes/pending_requests.html",
+        {
+            "pending_requests": pending_requests,
+            "pending_count": len(pending_requests),
+            "pending_requests_fragment": True,
+        },
+    )
+
+
 @parent_required
 def parent_dashboard(request):
     children = list(ChildProfile.objects.filter(is_active=True))
     today = timezone.localdate()
-    history_date = request.GET.get("history_date", "week").strip()
+    history_date = request.GET.get("history_date", "any").strip()
     history_custom_start = request.GET.get("history_start", "").strip()
     history_custom_end = request.GET.get("history_end", "").strip()
-    history_cutoff = timezone.now() - timedelta(days=7)
+    history_date_error = ""
+    if (history_custom_start or history_custom_end) and history_date != "custom":
+        history_date = "custom"
+    history_cutoff = None
     history_end_at = None
-    if history_date == "any":
-        history_cutoff = None
+    if history_date == "week":
+        history_cutoff = timezone.now() - timedelta(days=7)
     elif history_date == "month":
         history_cutoff = timezone.now() - timedelta(days=30)
     elif history_date == "custom":
         try:
-            start = date.fromisoformat(history_custom_start)
-            history_cutoff = timezone.make_aware(datetime.combine(start, time.min))
-            if history_custom_end:
-                end = date.fromisoformat(history_custom_end)
+            start = date.fromisoformat(history_custom_start) if history_custom_start else None
+            end = date.fromisoformat(history_custom_end) if history_custom_end else None
+            if start and end and start > end:
+                history_date_error = _("From date must not be later than To date.")
+            if start and not history_date_error:
+                history_cutoff = timezone.make_aware(datetime.combine(start, time.min))
+            if end and not history_date_error:
                 history_end_at = timezone.make_aware(datetime.combine(end, time.max))
         except ValueError:
-            history_date = "week"
-            history_custom_start = ""
-            history_custom_end = ""
-            history_cutoff = timezone.now() - timedelta(days=7)
-    elif history_date != "week":
-        history_date = "week"
+            history_date_error = _("Enter a valid date range.")
+    elif history_date != "any":
+        history_date = "any"
+        history_custom_start = ""
+        history_custom_end = ""
     all_goals = list(
         SavingsGoal.objects.filter(child__is_active=True)
         .select_related("child")
@@ -1816,17 +1950,57 @@ def parent_dashboard(request):
             "decided_by"
         )
     }
+    assigned_task_source_ids = [
+        entry.source_id
+        for entry in ledger_page.object_list
+        if (
+            entry.history_type == "ledger"
+            and entry.kind == LedgerKind.ASSIGNED_TASK
+            and entry.source_id
+        )
+    ]
+    history_assigned_tasks = {
+        item.pk: item
+        for item in AssignedTask.objects.filter(pk__in=assigned_task_source_ids).select_related(
+            "batch__assigned_by"
+        )
+    }
     for entry in ledger_page.object_list:
         if entry.history_type == "ledger":
             entry.task_claim = history_claims.get(entry.source_id)
-    history_is_open = bool(
-        request.GET.get("history_child")
-        or request.GET.get("history_page")
-        or request.GET.get("history_activity")
-        or request.GET.get("history_date") not in (None, "", "week")
-        or request.GET.get("history_start")
-        or request.GET.get("history_end")
-    )
+            entry.assigned_task = history_assigned_tasks.get(entry.source_id)
+            actor = entry.actor
+            actor_label = ""
+            if entry.kind == LedgerKind.TASK and entry.task_claim:
+                actor = entry.task_claim.decided_by or actor
+                actor_label = _("Approved by")
+            elif entry.kind == LedgerKind.REWARD and entry.reward_request:
+                actor = entry.reward_request.decided_by or actor
+                actor_label = _("Approved by")
+            elif entry.kind == LedgerKind.ASSIGNED_TASK and entry.assigned_task:
+                actor = entry.assigned_task.batch.assigned_by
+                actor_label = _("Assigned by")
+            elif entry.kind == LedgerKind.PENALTY:
+                actor_label = _("Added by")
+            elif entry.kind == LedgerKind.ADJUSTMENT:
+                actor_label = _("Adjusted by")
+            elif entry.kind == LedgerKind.SAVINGS_RETURN:
+                actor_label = _("Returned by")
+            elif entry.kind in {LedgerKind.SAVINGS_TRANSFER, LedgerKind.GOAL_COMPLETION}:
+                actor_label = _("Added by") if entry.kind == LedgerKind.SAVINGS_TRANSFER else _("Approved by")
+            entry.history_actor = actor
+            entry.history_actor_label = actor_label if actor else ""
+    for proposal in proposal_history:
+        proposal.history_actor_label = _("Approved by") if proposal.status == RequestStatus.APPROVED else _("Rejected by")
+    for event in goal_events:
+        event.history_actor_label = {
+            GoalActivityType.CREATED: _("Added by"),
+            GoalActivityType.CLOSED: _("Deleted by"),
+            GoalActivityType.RETURNED: _("Returned by"),
+            GoalActivityType.CURRENT_CHANGED: _("Adjusted by"),
+            GoalActivityType.MODE_SELECTED: _("Adjusted by"),
+            GoalActivityType.COMPLETED: _("Approved by"),
+        }.get(event.event_type, _("Added by")) if event.actor else ""
     history_preserved_params = [
         (key, value)
         for key in request.GET
@@ -1844,7 +2018,12 @@ def parent_dashboard(request):
     history_pagination_params = [
         *history_preserved_params,
         ("history_child", history_child_id),
+        ("history_activity", history_activity),
+        ("history_date", history_date if history_date != "any" else ""),
+        ("history_start", history_custom_start if history_date == "custom" else ""),
+        ("history_end", history_custom_end if history_date == "custom" else ""),
     ]
+    history_pagination_params = [(key, value) for key, value in history_pagination_params if value]
     history_pagination_query = urlencode(history_pagination_params)
     if history_pagination_query:
         history_pagination_query += "&"
@@ -1861,58 +2040,7 @@ def parent_dashboard(request):
         "scratch": _("Scratch tickets"),
         "adjustments": _("Point adjustments"),
     }.get(history_activity, "")
-    pending_claims = list(
-        TaskClaim.objects.filter(status=RequestStatus.PENDING)
-        .select_related("child", "task")
-        .order_by("submitted_at")
-    )
-    pending_rewards = list(
-        RewardRequest.objects.filter(status=RequestStatus.PENDING)
-        .select_related("child", "reward")
-        .order_by("submitted_at")
-    )
-    pending_proposals = list(
-        Proposal.objects.filter(status=RequestStatus.PENDING)
-        .select_related("child")
-        .order_by("created_at")
-    )
-    pending_birth_date_changes = list(
-        BirthDateChangeRequest.objects.filter(status=RequestStatus.PENDING)
-        .select_related("child")
-        .order_by("requested_at")
-    )
-    pending_by_child = []
-    for child in children:
-        group = {
-            "child": child,
-            "claims": [claim for claim in pending_claims if claim.child_id == child.pk],
-            "rewards": [
-                reward_request
-                for reward_request in pending_rewards
-                if reward_request.child_id == child.pk
-            ],
-            "proposals": [
-                proposal for proposal in pending_proposals if proposal.child_id == child.pk
-            ],
-            "goal_completions": [
-                completion
-                for completion in pending_goal_completions
-                if completion.goal.child_id == child.pk
-            ],
-            "birth_date_changes": [
-                change
-                for change in pending_birth_date_changes
-                if change.child_id == child.pk
-            ],
-        }
-        if (
-            group["claims"]
-            or group["rewards"]
-            or group["proposals"]
-            or group["goal_completions"]
-            or group["birth_date_changes"]
-        ):
-            pending_by_child.append(group)
+    pending_requests = _pending_request_items(goals_by_child)
     parent_accounts = list(get_user_model().objects.filter(is_active=True).order_by("username"))
 
     return render(
@@ -1921,14 +2049,8 @@ def parent_dashboard(request):
         {
             "children": children,
             "today": today,
-            "pending_by_child": pending_by_child,
-            "pending_count": (
-                len(pending_claims)
-                + len(pending_rewards)
-                + len(pending_proposals)
-                + len(pending_goal_completions)
-                + len(pending_birth_date_changes)
-            ),
+            "pending_requests": pending_requests,
+            "pending_count": len(pending_requests),
             "tasks": Task.objects.filter(is_deleted=False),
             "active_tasks": Task.objects.filter(is_active=True, is_deleted=False),
             "penalties": PenaltyTemplate.objects.filter(is_deleted=False),
@@ -1946,6 +2068,7 @@ def parent_dashboard(request):
             "history_date": history_date,
             "history_custom_start": history_custom_start,
             "history_custom_end": history_custom_end,
+            "history_date_error": history_date_error,
             "history_activity": history_activity,
             "history_activity_label": history_activity_label,
             "history_filter_count": sum(
@@ -1953,10 +2076,16 @@ def parent_dashboard(request):
                 for value in (
                     history_child_id,
                     history_activity,
-                    history_date != "week" or history_custom_start or history_custom_end,
+                    history_date != "any" or history_custom_start or history_custom_end,
                 )
             ),
-            "history_is_open": history_is_open,
+            "history_filters_active": bool(
+                history_child_id
+                or history_activity
+                or history_date != "any"
+                or history_custom_start
+                or history_custom_end
+            ),
             "history_preserved_params": history_preserved_params,
             "history_pagination_query": history_pagination_query,
             "task_form": TaskForm(auto_id="id_new_task_%s"),
@@ -2289,6 +2418,7 @@ def parent_decide_proposal(request, proposal_id, decision):
                 proposal=proposal,
                 actor=request.user,
                 final_cost=form.cleaned_data["final_cost"],
+                goal_mode=request.POST.get("goal_mode") or None,
             )
             proposal.refresh_from_db()
             notify_proposal_decision(proposal, approved=True)

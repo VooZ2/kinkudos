@@ -221,11 +221,11 @@ class AccessAndWorkflowTests(TestCase):
         )
         self.assertContains(
             response,
-            '<div class="approval-copy"><p class="eyebrow">Taupymo tikslas</p>'
-            '<h3>Dviratis</h3><p class="amount" style="color: var(--text);">'
-            'Siūlo: 500 taškų</p></div>',
+            'class="pending-request-row',
             html=False,
         )
+        self.assertContains(response, "Dviratis")
+        self.assertContains(response, "Siūlo: 500 taškų")
         self.assertNotContains(response, ">Patvirtinti</button>", html=False)
         self.assertNotContains(response, ">Atmesti</button>", html=False)
 
@@ -423,7 +423,8 @@ class AccessAndWorkflowTests(TestCase):
         self.child_one.refresh_from_db()
         self.assertEqual(self.child_one.balance, 50)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "Veiksmų istorija")
+        self.assertContains(response, "Istorija")
+        self.assertNotContains(response, "Veiksmų istorija")
         self.assertContains(response, "Child One · Testas")
 
     @patch("economy.views.notify_task_decision")
@@ -718,7 +719,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.6.0")
+        self.assertContains(response, "v26.6.1")
         self.assertContains(response, 'href="/pakeitimai/"', html=False)
         self.assertContains(response, "taškai")
         self.assertContains(response, "Kreditas -100")
@@ -800,7 +801,8 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Complete tasks, earn points")
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
-        self.assertContains(response, "KinKudos · v26.6.0")
+        self.assertContains(response, 'class="footer-product">KinKudos · ', html=False)
+        self.assertContains(response, "v26.6.1")
         self.assertContains(response, "Dokumentacija")
         self.assertContains(response, "https://docs.kinkudos.app/index.lt/")
         self.assertContains(response, "https://github.com/VooZ2/kinkudos")
@@ -968,7 +970,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, "Saved points")
         self.assertNotContains(response, "Got it")
 
-    def test_parent_history_is_collapsed_paginated_and_filterable(self):
+    def test_parent_history_is_paginated_and_filterable_without_a_collapse_header(self):
         for index in range(12):
             post_ledger_entry(
                 child=self.child_one,
@@ -986,7 +988,9 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, 'class="history-count"', html=False)
         self.assertContains(response, 'data-history-child-filter', html=False)
         self.assertNotContains(response, 'history-meta-icon', html=False)
-        self.assertNotContains(response, 'class="history-panel" open', html=False)
+        self.assertContains(response, '<h1>Istorija</h1>', html=False)
+        self.assertNotContains(response, "Veiklos istorija")
+        self.assertNotContains(response, '<details class="history-panel"', html=False)
         self.assertContains(response, "First child history 11")
         self.assertNotContains(response, "First child history 0")
 
@@ -994,7 +998,7 @@ class AccessAndWorkflowTests(TestCase):
             reverse("parent_dashboard"),
             {"history_child": self.child_one.pk, "history_page": 2},
         )
-        self.assertTrue(response.context["history_is_open"])
+        self.assertTrue(response.context["history_filters_active"])
         self.assertEqual(len(response.context["ledger_page"]), 2)
         self.assertContains(response, "First child history 0")
         self.assertNotContains(response, "Sibling private entry")
@@ -1076,7 +1080,7 @@ class AccessAndWorkflowTests(TestCase):
         nav_html = nav_html[:nav_html.index('</nav>')]
         self.assertEqual(
             re.findall(r'<use href="#(icon-[^"]+)"', nav_html),
-            ["icon-house", "icon-table-list", "icon-gear", "icon-clock-rotate-left"],
+            ["icon-house", "icon-table-list", "icon-clock-rotate-left", "icon-gear"],
         )
         manage_html = html[html.index('<nav class="manage-tabs"'):]
         manage_html = manage_html[:manage_html.index('</nav>')]
@@ -1172,31 +1176,24 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, "Atmesta")
         self.assertEqual(response.context["ledger_page"].paginator.count, 2)
 
-    def test_changelog_is_public_and_contains_full_release_history(self):
+    def test_changelog_is_public_and_paginates_release_history(self):
         response = self.client.get(reverse("changelog"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.6.0")
-        self.assertContains(response, "v0.12.2 BETA")
-        self.assertContains(response, "v0.10.4 BETA")
-        self.assertContains(response, "v0.10.1 BETA")
-        self.assertContains(response, "v0.10.0 BETA")
-        self.assertContains(response, "v0.1.0")
+        self.assertContains(response, "v26.6.1")
         self.assertContains(response, "Dabartinė versija")
         current_release = response.context["releases"][0]
-        self.assertEqual(current_release["version"], "26.6.0")
+        self.assertEqual(current_release["version"], "26.6.1")
+        self.assertEqual(len(response.context["releases"]), 5)
+        self.assertEqual(response.context["release_page"].paginator.per_page, 5)
         current_copy = " ".join(current_release["new"] + current_release["fixed"]).lower()
         self.assertNotIn("loterij", current_copy)
         self.assertNotIn("demo", current_copy)
-        self.assertContains(
-            response,
-            "„Safari“ perjungiant tėvų erdvės skyrius puslapis lieka viršuje",
-        )
-        self.assertContains(
-            response,
-            "Tėvų nustatymų puslapyje naudojama trumpa antraštė",
-        )
+        next_page = self.client.get(reverse("changelog"), {"page": 2})
+        self.assertEqual(next_page.status_code, 200)
+        self.assertNotContains(next_page, "<h2>v26.6.1</h2>", html=False)
+        self.assertContains(next_page, "Pakeitimų istorijos puslapiai")
 
     def test_parent_can_create_another_parent_account(self):
         self.client.login(username="tevai", password=self.parent_password)
@@ -1483,9 +1480,9 @@ class AccessAndWorkflowTests(TestCase):
             template.index('class="credit-caption"'),
         )
         stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
-        self.assertIn(".child-balance-row { display: flex; align-items: baseline; flex-wrap: nowrap;", stylesheet)
+        self.assertIn(".child-balance-row { display: flex; align-items: baseline; justify-content: flex-start;", stylesheet)
 
-    def test_pending_requests_are_grouped_and_oldest_first(self):
+    def test_pending_requests_are_one_shared_chronological_list(self):
         older = self.child_one.task_claims.create(
             task=self.task,
             task_title="Pirmas prašymas",
@@ -1501,10 +1498,48 @@ class AccessAndWorkflowTests(TestCase):
         older.save(update_fields=["submitted_at"])
         newer.submitted_at = timezone.now()
         newer.save(update_fields=["submitted_at"])
+        RewardRequest.objects.create(
+            child=self.child_two,
+            reward=self.reward,
+            reward_title=self.reward.title,
+            cost_snapshot=self.reward.cost,
+            status=RequestStatus.PENDING,
+        )
         self.client.login(username="tevai", password=self.parent_password)
         content = self.client.get(reverse("parent_dashboard")).content.decode()
         self.assertLess(content.index("Pirmas prašymas"), content.index("Antras prašymas"))
-        self.assertIn("Laukiantys prašymai (2)", content)
+        self.assertIn("Laukiantys prašymai (3)", content)
+        self.assertEqual(content.count('class="pending-requests-panel"'), 1)
+        self.assertEqual(content.count('class="pending-request-row'), 3)
+        self.assertEqual(content.count('class="pending-request-avatar"'), 3)
+        self.assertNotIn("pending-child-group", content)
+        self.assertEqual(content.count('class="pending-request-meta"'), 3)
+        self.assertEqual(content.count('data-open-dialog="revise-task-'), 2)
+        self.assertEqual(content.count('data-open-dialog="reject-reward-'), 1)
+        self.assertNotIn('class="pending-request-row"><span class="item-icon"', content)
+        self.assertIn("Vaikai", content)
+
+    def test_pending_requests_render_english_children_heading_and_fragment(self):
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+        self.child_one.task_claims.create(
+            task=self.task,
+            task_title="Clean your room",
+            reward_snapshot=self.task.reward,
+        )
+        self.client.login(username="tevai", password=self.parent_password)
+
+        response = self.client.get(reverse("parent_dashboard"))
+        self.assertContains(response, "Children")
+        self.assertNotContains(response, "Kids")
+        self.assertNotContains(response, "Kids info")
+        self.assertContains(response, 'data-pending-requests-fragment', html=False)
+        self.assertContains(response, reverse("parent_pending_requests"), html=False)
+
+        fragment = self.client.get(reverse("parent_pending_requests"))
+        self.assertEqual(fragment.status_code, 200)
+        self.assertContains(fragment, 'data-pending-requests-fragment', html=False)
+        self.assertContains(fragment, 'class="pending-request-row', html=False)
+        self.assertNotContains(fragment, "<html", html=False)
 
     def test_parent_dashboard_colors_positive_and_negative_balances(self):
         post_ledger_entry(
@@ -1675,10 +1710,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.6.0',
+            '/static/icons/favicon-32.png?v=26.6.1',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.6.0")
-        self.assertContains(home, "/static/js/app.js?v=26.6.0")
+        self.assertContains(home, "/static/css/app.css?v=26.6.1")
+        self.assertContains(home, "/static/js/app.js?v=26.6.1")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1686,12 +1721,12 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.6.0",
+            "/static/icons/icon-192.png?v=26.6.1",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.6.0")
-        self.assertContains(worker, 'kinkudos-app-shell-26.6.0')
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.6.1")
+        self.assertContains(worker, 'kinkudos-app-shell-26.6.1')
         self.assertContains(worker, '"/prisijungti/"')
         self.assertContains(worker, "isSensitiveNavigation(url)")
         self.assertEqual(worker["Service-Worker-Allowed"], "/")

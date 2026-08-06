@@ -7,7 +7,8 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from economy.email_config import smtp_config
-from economy.models import FamilySettings, PenaltyTemplate, Reward, Task
+from economy.forms import ChildEditForm
+from economy.models import ChildProfile, FamilySettings, PenaltyTemplate, Reward, Task
 
 
 @override_settings(LANGUAGE_CODE="en")
@@ -247,6 +248,43 @@ class ParentSettingsTests(TestCase):
             response,
             '<small class="helptext">Shown in family-facing headings and messages.</small>',
             html=False,
+        )
+
+    def test_checkbox_labels_are_inline_and_child_copy_is_short(self):
+        child = ChildProfile.objects.create(name="Checkbox child")
+        self.assertEqual(
+            ChildEditForm(child=child).fields["lottery_enabled"].label,
+            "Enable scratch tickets",
+        )
+
+        stylesheet = (Path(__file__).resolve().parents[2] / "static" / "css" / "app.css").read_text(
+            encoding="utf-8",
+        )
+        self.assertIn(
+            '.stack-form p:has(> input[type="checkbox"]) { display: flex; flex-wrap: wrap; align-items: center;',
+            stylesheet,
+        )
+        self.assertIn(
+            '.stack-form p:has(> input[type="checkbox"]) > .helptext { flex: 0 0 100%;',
+            stylesheet,
+        )
+        self.assertIn("margin-left: 0;", stylesheet)
+
+    def test_settings_actions_and_account_panels_use_shared_spacing(self):
+        stylesheet = (Path(__file__).resolve().parents[2] / "static" / "css" / "app.css").read_text(
+            encoding="utf-8",
+        )
+        self.assertIn(
+            ".network-access-panel > .button, .email-panel > .button { display: flex; margin-top: 18px;",
+            stylesheet,
+        )
+        self.assertIn(
+            ".backup-actions { justify-content: flex-end; margin-top: 18px; }",
+            stylesheet,
+        )
+        self.assertIn(
+            ".account-grid > .parent-accordion.panel:not([open]) { padding: 0; }",
+            stylesheet,
         )
 
     def test_settings_are_grouped_without_a_redundant_category_heading(self):

@@ -1,5 +1,21 @@
 const t = key => window.KINKUDOS?.i18n?.[key] || key;
 
+document.querySelectorAll('input[type="number"]').forEach(input => {
+  const min = Number(input.getAttribute("min"));
+  const max = Number(input.getAttribute("max"));
+  const signed = min < 0 || max <= 0;
+  const limit = signed ? 6 : 5;
+  if (!input.hasAttribute("maxlength")) input.setAttribute("maxlength", String(limit));
+  if (!input.hasAttribute("inputmode")) input.setAttribute("inputmode", "numeric");
+  input.addEventListener("input", () => {
+    const raw = input.value;
+    const sign = raw.startsWith("-") ? "-" : "";
+    const digits = raw.replace(/\D/g, "").slice(0, limit - sign.length);
+    const normalized = sign + digits;
+    if (raw !== normalized) input.value = normalized;
+  });
+});
+
 function openPinDialog(childId) {
   const dialog = document.getElementById("pin-dialog");
   const input = document.getElementById("pin-child-id");
@@ -12,13 +28,16 @@ function openPinDialog(childId) {
 document.querySelectorAll("[data-open-pin]").forEach(button => {
   button.addEventListener("click", () => openPinDialog(button.dataset.openPin));
 });
-document.querySelectorAll("[data-close-dialog]").forEach(button => {
-  button.addEventListener("click", () => button.closest("dialog")?.close());
-});
-document.querySelectorAll("[data-open-dialog]").forEach(button => {
-  button.addEventListener("click", () => {
-    document.getElementById(button.dataset.openDialog)?.showModal();
-  });
+document.addEventListener("click", event => {
+  const closeButton = event.target.closest?.("[data-close-dialog]");
+  if (closeButton) {
+    closeButton.closest("dialog")?.close();
+    return;
+  }
+  const openButton = event.target.closest?.("[data-open-dialog]");
+  if (openButton) {
+    document.getElementById(openButton.dataset.openDialog)?.showModal();
+  }
 });
 document.querySelectorAll("[data-confirm]").forEach(button => {
   button.addEventListener("click", event => {
@@ -294,20 +313,86 @@ document.querySelectorAll("[data-remove-history-filter]").forEach(button => {
       url.searchParams.delete("history_start");
       url.searchParams.delete("history_end");
     }
+    url.searchParams.delete("history_page");
     url.hash = "parent-history";
     window.location.assign(url.toString());
   });
 });
 
-document.querySelector("[data-history-reset]")?.addEventListener("click", event => {
-  const form = event.currentTarget.closest("form");
-  if (!form) return;
-  form.querySelector("[name=history_child]").value = "";
-  form.querySelector("[name=history_activity]").value = "";
-  form.querySelector("[name=history_date]").value = "week";
-  form.querySelector("[name=history_start]").value = "";
-  form.querySelector("[name=history_end]").value = "";
+function clearHistoryFilters() {
+  const url = new URL(window.location.href);
+  ["history_child", "history_activity", "history_date", "history_start", "history_end", "history_page"]
+    .forEach(key => url.searchParams.delete(key));
+  url.hash = "parent-history";
+  window.location.assign(url.toString());
+}
+
+document.querySelectorAll("[data-clear-history-filters]").forEach(button => {
+  button.addEventListener("click", () => {
+    if (button.disabled) return;
+    button.disabled = true;
+    clearHistoryFilters();
+  });
 });
+
+const historyFilterForm = document.querySelector("[data-history-filter-form]");
+if (historyFilterForm) {
+  const dateSelect = historyFilterForm.querySelector("[name=history_date]");
+  const customRange = historyFilterForm.querySelector("[data-history-custom-range]");
+  const dateInputs = [...historyFilterForm.querySelectorAll("[name=history_start], [name=history_end]")];
+  const dateError = historyFilterForm.querySelector("[data-history-date-error]");
+  const syncHistoryDateFields = ({ clear = false } = {}) => {
+    const custom = dateSelect?.value === "custom";
+    if (clear && !custom) dateInputs.forEach(input => { input.value = ""; });
+    dateInputs.forEach(input => { input.disabled = !custom; });
+    if (customRange) customRange.hidden = !custom;
+    if (!custom && dateError) {
+      dateError.hidden = true;
+      dateError.textContent = "";
+    }
+  };
+  dateSelect?.addEventListener("change", () => syncHistoryDateFields({ clear: true }));
+  dateInputs.forEach(input => {
+    input.addEventListener("change", () => {
+      if (dateSelect) dateSelect.value = "custom";
+      syncHistoryDateFields();
+    });
+  });
+  historyFilterForm.querySelector("[data-history-reset]")?.addEventListener("click", () => {
+    historyFilterForm.querySelector("[name=history_child]").value = "";
+    historyFilterForm.querySelector("[name=history_activity]").value = "";
+    dateSelect.value = "any";
+    syncHistoryDateFields({ clear: true });
+  });
+  historyFilterForm.addEventListener("submit", event => {
+    if (dateSelect?.value === "custom") {
+      const [start, end] = dateInputs.map(input => input.value);
+      if (start && end && start > end) {
+        event.preventDefault();
+        if (dateError) {
+          dateError.textContent = t("historyDateOrder");
+          dateError.hidden = false;
+        }
+        dateInputs[0].focus();
+        return;
+      }
+    }
+    historyFilterForm.querySelectorAll('[name="history_page"]').forEach(input => input.remove());
+  });
+  syncHistoryDateFields();
+}
+
+{
+  const url = new URL(window.location.href);
+  const hasDates = url.searchParams.has("history_start") || url.searchParams.has("history_end");
+  if (hasDates && url.searchParams.get("history_date") !== "custom") {
+    url.searchParams.set("history_date", "custom");
+    window.history.replaceState(null, "", url.toString());
+  } else if (url.searchParams.get("history_date") === "any") {
+    url.searchParams.delete("history_date");
+    window.history.replaceState(null, "", url.toString());
+  }
+}
 
 function celebrate() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -783,7 +868,7 @@ document.querySelectorAll("[data-goal-add-dialog]").forEach(dialog => {
   input.max = String(max);
   const updatePreview = () => {
     const amount = Math.max(Number(input.value || 0), 0);
-    after.textContent = String(Math.min(saved + amount, target));
+    after.textContent = String(Math.max(available - Math.min(amount, max), 0));
     input.setCustomValidity(amount > max ? t("goalAmountTooHigh").replace("{max}", max) : "");
   };
   dialog.querySelectorAll("[data-goal-quick-amount]").forEach(button => {
@@ -800,6 +885,46 @@ document.querySelectorAll("[data-goal-add-dialog]").forEach(dialog => {
   });
   input.addEventListener("input", updatePreview);
   updatePreview();
+});
+
+document.querySelectorAll("[data-proposal-form]").forEach(form => {
+  const type = form.querySelector("[name=proposal_type]");
+  const goalMode = form.querySelector("[data-proposal-goal-mode]");
+  const syncProposalType = () => {
+    const isGoal = type?.value === "goal";
+    if (goalMode) {
+      goalMode.hidden = !isGoal;
+      goalMode.disabled = !isGoal;
+    }
+    goalMode?.querySelectorAll("[name=goal_mode]").forEach(input => {
+      input.required = isGoal;
+      if (!isGoal) input.checked = false;
+    });
+  };
+  type?.addEventListener("change", syncProposalType);
+  syncProposalType();
+});
+
+let languageNavigationPending = false;
+document.querySelectorAll(".language-switcher form").forEach(form => {
+  form.addEventListener("submit", event => {
+    if (languageNavigationPending) {
+      event.preventDefault();
+      return;
+    }
+    languageNavigationPending = true;
+    const next = form.querySelector("[name=next]");
+    if (next) next.value = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    document.querySelectorAll(".language-switcher-option").forEach(button => {
+      button.setAttribute("aria-disabled", "true");
+    });
+    window.setTimeout(() => {
+      languageNavigationPending = false;
+      document.querySelectorAll(".language-switcher-option").forEach(button => {
+        button.removeAttribute("aria-disabled");
+      });
+    }, 8000);
+  });
 });
 
 function urlBase64ToUint8Array(value) {
@@ -1051,4 +1176,67 @@ if (childStateUrl) {
     if (event.data?.type === "kinkudos-state-changed") checkChildState();
   });
   window.setInterval(checkChildState, 15000);
+}
+
+let pendingRequestsRefreshRunning = false;
+
+function pendingRequestsHaveActiveInteraction(fragment) {
+  return Boolean(
+    document.querySelector("dialog[open]") ||
+    fragment.contains(document.activeElement)
+  );
+}
+
+function updatePendingNavigationCount(count) {
+  const navItem = document.querySelector('[data-parent-nav="home"]');
+  if (!navItem) return;
+  let badge = navItem.querySelector(".nav-count");
+  if (!count) {
+    badge?.remove();
+    return;
+  }
+  if (!badge) {
+    badge = document.createElement("strong");
+    badge.className = "nav-count";
+    navItem.append(badge);
+  }
+  badge.textContent = String(count);
+}
+
+async function refreshPendingRequests() {
+  const fragment = document.querySelector("[data-pending-requests-fragment]");
+  if (
+    !fragment ||
+    document.visibilityState !== "visible" ||
+    pendingRequestsRefreshRunning ||
+    pendingRequestsHaveActiveInteraction(fragment)
+  ) return;
+  pendingRequestsRefreshRunning = true;
+  try {
+    const response = await fetch(fragment.dataset.pendingUrl, {
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: { Accept: "text/html", "X-Requested-With": "XMLHttpRequest" },
+    });
+    if (!response.ok) return;
+    const html = await response.text();
+    const replacement = new DOMParser()
+      .parseFromString(html, "text/html")
+      .querySelector("[data-pending-requests-fragment]");
+    if (!replacement || !fragment.isConnected) return;
+    fragment.replaceWith(replacement);
+    updatePendingNavigationCount(Number(replacement.dataset.pendingCount || 0));
+  } catch (_) {
+    // A temporary connection problem should not interrupt the parent.
+  } finally {
+    pendingRequestsRefreshRunning = false;
+  }
+}
+
+if (document.querySelector("[data-pending-requests-fragment]")) {
+  window.setInterval(refreshPendingRequests, 15000);
+  window.addEventListener("focus", refreshPendingRequests);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") refreshPendingRequests();
+  });
 }

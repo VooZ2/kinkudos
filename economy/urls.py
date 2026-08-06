@@ -66,6 +66,7 @@ from .views import (
     parent_edit_parent_account,
     parent_generate_pairing_link,
     parent_pair_device,
+    parent_pending_requests,
     parent_remove_child_account,
     parent_remove_parent_account,
     parent_rename_device,
@@ -201,6 +202,11 @@ urlpatterns = [
     path("vaikas/pin/", child_change_pin, name="child_change_pin"),
     path("vaikas/avataras/", child_set_avatar, name="child_set_avatar"),
     path("tevai/", parent_dashboard, name="parent_dashboard"),
+    path(
+        "tevai/laukiantys-prasymai/",
+        parent_pending_requests,
+        name="parent_pending_requests",
+    ),
     path(
         "tevai/tikslai/<int:goal_id>/prideti/",
         parent_add_goal_points,

@@ -52,4 +52,16 @@
       <p class="empty-state">{% translate "The changelog is empty." %}</p>
     {% endfor %}
   </div>
+
+  {% if release_page.paginator.num_pages > 1 %}
+    <nav class="release-pagination" aria-label="{% translate 'Changelog pages' %}">
+      {% if release_page.has_previous %}
+        <a class="button button-secondary" href="?page={{ release_page.previous_page_number }}">{% translate "Previous" %}</a>
+      {% endif %}
+      <span>{{ release_page.number }} / {{ release_page.paginator.num_pages }}</span>
+      {% if release_page.has_next %}
+        <a class="button button-secondary" href="?page={{ release_page.next_page_number }}">{% translate "Next" %}</a>
+      {% endif %}
+    </nav>
+  {% endif %}
 {% endblock %}

@@ -5,6 +5,30 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+### Changed
+
+Nothing yet.
+
+## [26.6.1] - 2026-08-06
+
+### Changed
+
+- Parent cards, collapsed sections, History filters, dark-mode controls, and
+  device-pairing actions now use tighter spacing, clearer alignment, and safer
+  numeric input limits.
+- Manage's collapsed catalog sections now match the compact Settings section
+  height, Settings actions align to the right, and child point balances align
+  to the left with the card content.
+- The public changelog now shows five releases per page with navigation.
+- Email settings actions keep clear separation from their status badge, and
+  backup administrators can open backup settings even when the backup service
+  is unavailable.
+- Settings checkboxes now keep their labels inline, the child scratch-ticket
+  label is shorter, and account accordions match the compact collapsed panel
+  height used elsewhere.
+- Checkbox help text now aligns with the form's left edge instead of being
+  indented under the control.
+
 ## [26.6.0] - 2026-08-06
 
 ### Added

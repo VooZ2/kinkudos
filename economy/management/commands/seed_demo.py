@@ -6,6 +6,7 @@ from django.db import transaction
 from economy.models import (
     ChildProfile,
     FamilySettings,
+    GoalMode,
     LedgerKind,
     PenaltyTemplate,
     Proposal,
@@ -84,6 +85,7 @@ class Command(BaseCommand):
             title="Nauja knyga",
             suggested_cost=250,
             icon="📚",
+            goal_mode=GoalMode.AVAILABLE,
         )
         self.stdout.write(self.style.SUCCESS("Demonstraciniai duomenys sukurti."))
         self.stdout.write("Tėvai: tevai / Demo-safe-pass-123!")

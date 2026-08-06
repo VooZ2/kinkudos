@@ -448,7 +448,7 @@ def _record_goal_event(*, goal, event_type, description, actor=None, amount=None
 
 
 @transaction.atomic
-def create_savings_goal(*, child, title, target_amount, icon="⭐", actor=None):
+def create_savings_goal(*, child, title, target_amount, icon="⭐", actor=None, mode=None):
     if target_amount <= 0:
         raise ValidationError(_("The goal target must be greater than zero."))
     locked_child = ChildProfile.objects.select_for_update().get(
@@ -468,6 +468,13 @@ def create_savings_goal(*, child, title, target_amount, icon="⭐", actor=None):
         description=_("Goal created: %(title)s") % {"title": goal.title},
         actor=actor,
     )
+    if mode is not None:
+        goal = select_goal_mode(
+            goal=goal,
+            child=locked_child,
+            mode=mode,
+            actor=actor,
+        )
     return goal
 
 
@@ -883,7 +890,7 @@ def approve_reward_request(*, request, actor):
 
 
 @transaction.atomic
-def approve_proposal(*, proposal, actor, final_cost):
+def approve_proposal(*, proposal, actor, final_cost, goal_mode=None):
     locked = Proposal.objects.select_for_update().select_related("child").get(pk=proposal.pk)
     if locked.status != RequestStatus.PENDING:
         raise ValidationError(_("This proposal has already been resolved."))
@@ -892,16 +899,22 @@ def approve_proposal(*, proposal, actor, final_cost):
     if locked.proposal_type == ProposalType.REWARD:
         created = Reward.objects.create(title=locked.title, icon=locked.icon, cost=final_cost)
     else:
+        selected_goal_mode = locked.goal_mode or goal_mode
+        if selected_goal_mode not in GoalMode.values:
+            raise ValidationError(_("Choose how this savings goal should save points."))
         created = create_savings_goal(
             child=locked.child,
             title=locked.title,
             target_amount=final_cost,
             icon=locked.icon,
             actor=actor,
+            mode=selected_goal_mode,
         )
     locked.status = RequestStatus.APPROVED
     locked.final_cost = final_cost
+    if locked.proposal_type == ProposalType.GOAL and not locked.goal_mode:
+        locked.goal_mode = selected_goal_mode
     locked.decided_by = actor
     locked.decided_at = timezone.now()
-    locked.save(update_fields=["status", "final_cost", "decided_by", "decided_at"])
+    locked.save(update_fields=["status", "final_cost", "goal_mode", "decided_by", "decided_at"])
     return created

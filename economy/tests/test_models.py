@@ -4,6 +4,7 @@ from django.test import TestCase
 
 from economy.models import (
     ChildProfile,
+    GoalMode,
     LedgerEntry,
     LedgerKind,
     PenaltyTemplate,
@@ -164,6 +165,7 @@ class EconomyServiceTests(TestCase):
         goal_proposal = Proposal.objects.create(
             child=self.child,
             proposal_type=ProposalType.GOAL,
+            goal_mode=GoalMode.SAVED,
             title="Dviratis",
             suggested_cost=500,
         )
@@ -174,6 +176,7 @@ class EconomyServiceTests(TestCase):
         )
         self.assertIsInstance(created_goal, SavingsGoal)
         self.assertEqual(created_goal.child, self.child)
+        self.assertEqual(created_goal.mode, GoalMode.SAVED)
 
     def test_balance_equals_ledger_sum(self):
         post_ledger_entry(

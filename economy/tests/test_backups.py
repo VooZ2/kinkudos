@@ -90,6 +90,26 @@ class BackupSettingsTests(TestCase):
         )
 
     @patch("economy.views.backup_status")
+    def test_admin_can_open_backup_settings_when_service_is_unavailable(self, status):
+        status.return_value = {
+            "available": False,
+            "configured": False,
+            "provider": "",
+            "target": "",
+            "is_fresh": False,
+            "running": False,
+            "last_success": None,
+            "last_check": None,
+            "error": "",
+        }
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, ">Edit settings</button>")
+        self.assertContains(response, 'data-open-dialog="backup-settings-dialog"', html=False)
+
+    @patch("economy.views.backup_status")
     def test_configured_backup_without_success_uses_attention_status(self, status):
         status.return_value = {
             "available": True,

@@ -1,12 +1,12 @@
 <span class="history-kind-icon" aria-hidden="true"><svg class="action-icon">
-  {% if entry.history_type == "task_decision" %}<use href="#icon-clipboard-check"></use>
+  {% if entry.history_type == "task_decision" %}<use href="#icon-list-check"></use>
   {% elif entry.history_type == "reward_decision" %}<use href="#icon-gift"></use>
   {% elif entry.history_type == "goal_event" %}<use href="#icon-bullseye"></use>
   {% elif entry.history_type == "proposal_decision" %}{% if entry.proposal_type == "goal" %}<use href="#icon-bullseye"></use>{% else %}<use href="#icon-gift"></use>{% endif %}
-  {% elif entry.kind == "task" or entry.kind == "assigned_task" %}<use href="#icon-clipboard-check"></use>
+  {% elif entry.kind == "task" or entry.kind == "assigned_task" %}<use href="#icon-list-check"></use>
   {% elif entry.kind == "penalty" %}<use href="#icon-circle-minus"></use>
-  {% elif entry.kind == "reward" %}<use href="#icon-cart-shopping"></use>
-  {% elif entry.kind == "gift" %}<use href="#icon-gift"></use>
+  {% elif entry.kind == "reward" %}<use href="#icon-gift"></use>
+  {% elif entry.kind == "gift" %}<use href="#icon-hand-holding-heart"></use>
   {% elif entry.kind == "lottery" %}<use href="#icon-ticket-simple"></use>
   {% elif entry.kind == "birthday" %}<use href="#icon-cake-candles"></use>
   {% elif entry.kind == "savings_transfer" or entry.kind == "savings_return" %}<use href="#icon-piggy-bank"></use>

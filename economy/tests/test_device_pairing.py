@@ -102,8 +102,8 @@ class DevicePairingTests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
 
         self.assertContains(response, 'class="device-pairing-actions"', html=False)
-        self.assertContains(response, "Allow children on this device")
-        self.assertContains(response, "Create private pairing link")
+        self.assertContains(response, "Allow on this device")
+        self.assertContains(response, "Send a link")
 
     def test_pairing_link_is_single_use_and_expires(self):
         link, raw_token = DevicePairingLink.issue(created_by=self.parent)

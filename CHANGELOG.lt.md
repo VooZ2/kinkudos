@@ -7,6 +7,31 @@ schema.
 
 ## [Unreleased]
 
+### Pakeista
+
+Kol kas nieko.
+
+## [26.6.1] - 2026-08-06
+
+### Pakeista
+
+- Tėvų kortelėse, suskleistose skiltyse, Istorijos filtruose, tamsiojo režimo
+  valdikliuose ir įrenginių susiejimo veiksmuose suvienodinti tarpai,
+  lygiavimas ir skaitinių laukų ribos.
+- Suskleistos „Tvarkyti“ katalogų skiltys dabar tokio pat kompaktiško aukščio
+  kaip „Nustatymų“ skiltys, „Nustatymų“ veiksmai lygiuojami dešinėje, o vaiko
+  taškų suvestinė lygiuojama kairėje pagal kortelės turinį.
+- Viešoje pakeitimų istorijoje dabar rodomi penki leidimai viename puslapyje
+  su puslapiavimo valdikliais.
+- El. pašto nustatymų veiksmai dabar aiškiai atskirti nuo būsenos ženklelio, o
+  atsarginių kopijų administratoriai gali atidaryti nustatymus net neveikiant
+  kopijų paslaugai.
+- Nustatymų checkbox’ai dabar rodomi vienoje eilėje su tekstu, vaiko nutrinamų
+  bilietų tekstas sutrumpintas, o paskyrų suskleistos skiltys atitinka kitų
+  kompaktiškų blokų aukštį.
+- Checkbox paaiškinamasis tekstas dabar lygiuojamas pagal kairįjį formos kraštą,
+  o ne įtraukiamas po valdikliu.
+
 ## [26.6.0] - 2026-08-06
 
 ### Pridėta

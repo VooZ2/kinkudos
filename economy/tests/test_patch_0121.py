@@ -134,7 +134,8 @@ class Patch0121Tests(TestCase):
         self.client.force_login(self.parent)
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, 'class="brand-mark brand-logo"', html=False)
-        self.assertContains(response, "KinKudos · v26.6.0")
+        self.assertContains(response, 'class="footer-product">KinKudos · ', html=False)
+        self.assertContains(response, "v26.6.1")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_reward_approval_uses_task_decision_icons(self):
@@ -147,11 +148,11 @@ class Patch0121Tests(TestCase):
         )
         self.client.force_login(self.parent)
 
-        response = self.client.get(reverse("parent_dashboard"))
+        response = self.client.get(reverse("parent_pending_requests"))
 
         self.assertContains(
             response,
-            'class="approval-card reward-approval-card"',
+            'class="pending-request-row',
             html=False,
         )
         self.assertContains(response, 'href="#icon-circle-check"', html=False)

@@ -15,8 +15,10 @@ from .models import (
     FamilySettings,
     FeedbackReport,
     FeedbackStatus,
+    GoalMode,
     PenaltyTemplate,
     Proposal,
+    ProposalType,
     RequestStatus,
     Reward,
     SavingsGoal,
@@ -26,6 +28,8 @@ from .models import (
 from .net import parse_allowed_networks
 
 register_heif_opener()
+
+MAX_POINT_AMOUNT = 99999
 
 PASSWORD_HELP = (
     _("At least 12 characters; cannot be similar to the username, commonly used, "
@@ -38,6 +42,14 @@ class StyledFormMixin:
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.setdefault("class", "field-control")
+            if isinstance(field, forms.IntegerField) and not isinstance(
+                field.widget, forms.HiddenInput
+            ):
+                signed = field.min_value is None or field.min_value < 0
+                field.widget.attrs.setdefault("inputmode", "numeric")
+                field.widget.attrs.setdefault(
+                    "maxlength", "6" if signed else "5"
+                )
 
 
 def validate_unique_parent_email(email, exclude_pk=None):
@@ -108,6 +120,7 @@ class TaskForm(EmojiFormMixin, forms.ModelForm):
     reward = forms.IntegerField(
         label=_("Points"),
         min_value=1,
+        max_value=MAX_POINT_AMOUNT,
         error_messages={"min_value": _("Enter a positive point amount.")},
     )
 
@@ -128,6 +141,7 @@ class PenaltyForm(EmojiFormMixin, forms.ModelForm):
     amount = forms.IntegerField(
         label=_("Points"),
         min_value=1,
+        max_value=MAX_POINT_AMOUNT,
         error_messages={"min_value": _("Enter a positive point amount.")},
     )
 
@@ -155,6 +169,7 @@ class RewardForm(EmojiFormMixin, forms.ModelForm):
     cost = forms.IntegerField(
         label=_("Points"),
         min_value=1,
+        max_value=MAX_POINT_AMOUNT,
         error_messages={"min_value": _("Enter a positive point amount.")},
     )
 
@@ -172,22 +187,45 @@ class RewardForm(EmojiFormMixin, forms.ModelForm):
 
 class ProposalForm(EmojiFormMixin, forms.ModelForm):
     empty_icon_by_default = True
+    suggested_cost = forms.IntegerField(
+        label=_("Suggested point amount"),
+        min_value=1,
+        max_value=MAX_POINT_AMOUNT,
+        required=False,
+    )
+    goal_mode = forms.ChoiceField(
+        label=_("Choose how to save"),
+        choices=GoalMode.choices,
+        required=False,
+        widget=forms.RadioSelect,
+    )
 
     class Meta:
         model = Proposal
-        fields = ["proposal_type", "title", "suggested_cost", "icon"]
+        fields = ["proposal_type", "title", "suggested_cost", "icon", "goal_mode"]
         labels = {
             "proposal_type": _("Type"),
             "title": _("Title"),
             "suggested_cost": _("Suggested point amount"),
             "icon": _("Icon"),
+            "goal_mode": _("Choose how to save"),
         }
+
+    def clean(self):
+        cleaned = super().clean()
+        if cleaned.get("proposal_type") == ProposalType.GOAL:
+            if cleaned.get("goal_mode") not in GoalMode.values:
+                self.add_error("goal_mode", _("Choose how to save."))
+        else:
+            cleaned["goal_mode"] = None
+        return cleaned
 
 
 class GoalAmountForm(StyledFormMixin, forms.Form):
     amount = forms.IntegerField(
         label=_("Points to add"),
         min_value=1,
+        max_value=MAX_POINT_AMOUNT,
         error_messages={"min_value": _("Enter a positive point amount.")},
     )
 
@@ -197,6 +235,7 @@ class SavingsGoalForm(EmojiFormMixin, forms.ModelForm):
     target_amount = forms.IntegerField(
         label=_("Target amount"),
         min_value=1,
+        max_value=MAX_POINT_AMOUNT,
         error_messages={"min_value": _("Enter a positive point amount.")},
     )
 
@@ -211,7 +250,11 @@ class SavingsGoalForm(EmojiFormMixin, forms.ModelForm):
 
 
 class AdjustmentForm(StyledFormMixin, forms.Form):
-    amount = forms.IntegerField(label=_("Change"))
+    amount = forms.IntegerField(
+        label=_("Change"),
+        min_value=-MAX_POINT_AMOUNT,
+        max_value=MAX_POINT_AMOUNT,
+    )
     description = forms.CharField(label=_("Reason"), max_length=240)
 
     def clean_amount(self):
@@ -257,6 +300,7 @@ class AssignTasksForm(forms.Form):
     custom_points = forms.IntegerField(
         label=_("Points"),
         min_value=1,
+        max_value=MAX_POINT_AMOUNT,
         required=False,
     )
     blocks_rewards = forms.BooleanField(
@@ -322,11 +366,19 @@ class TaskDecisionCommentForm(StyledFormMixin, forms.Form):
 
 
 class ApprovalCostForm(StyledFormMixin, forms.Form):
-    final_cost = forms.IntegerField(label=_("Final point amount"), min_value=1)
+    final_cost = forms.IntegerField(
+        label=_("Final point amount"),
+        min_value=1,
+        max_value=MAX_POINT_AMOUNT,
+    )
 
 
 class MinBalanceForm(StyledFormMixin, forms.Form):
-    min_balance = forms.IntegerField(label=_("Minimum allowed balance"), max_value=0)
+    min_balance = forms.IntegerField(
+        label=_("Minimum allowed balance"),
+        min_value=-MAX_POINT_AMOUNT,
+        max_value=0,
+    )
 
 
 class ThemeForm(StyledFormMixin, forms.Form):
@@ -687,7 +739,11 @@ class PointGiftForm(StyledFormMixin, forms.Form):
         queryset=ChildProfile.objects.none(),
         label=_("Recipient"),
     )
-    amount = forms.IntegerField(label=_("Points to give"), min_value=1)
+    amount = forms.IntegerField(
+        label=_("Points to give"),
+        min_value=1,
+        max_value=MAX_POINT_AMOUNT,
+    )
 
     def __init__(self, *args, sender, **kwargs):
         super().__init__(*args, **kwargs)
@@ -880,7 +936,12 @@ class ChildAccountForm(StyledFormMixin, forms.Form):
         max_length=4,
         widget=forms.PasswordInput(attrs={"inputmode": "numeric", "pattern": "[0-9]*"}),
     )
-    min_balance = forms.IntegerField(label=_("Initial credit"), max_value=0, required=False)
+    min_balance = forms.IntegerField(
+        label=_("Initial credit"),
+        min_value=-MAX_POINT_AMOUNT,
+        max_value=0,
+        required=False,
+    )
 
     def clean_name(self):
         name = self.cleaned_data["name"].strip()
@@ -923,9 +984,11 @@ class ChildEditForm(StyledFormMixin, forms.Form):
         required=False,
         help_text=_("Used in Lithuanian greetings. Leave blank to generate it automatically."),
     )
-    min_balance = forms.IntegerField(label=_("Credit"), max_value=0)
+    min_balance = forms.IntegerField(
+        label=_("Credit"), min_value=-MAX_POINT_AMOUNT, max_value=0
+    )
     lottery_enabled = forms.BooleanField(
-        label=_("Enable scratch tickets for this child"),
+        label=_("Enable scratch tickets"),
         required=False,
         help_text=_(
             "The family-wide scratch ticket switch must also be enabled."
