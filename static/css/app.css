@@ -214,7 +214,7 @@ select.field-control, .stack-form select {
 .pin-dialog, .action-dialog { width: min(440px, calc(100% - 28px)); max-height: calc(100dvh - 28px); overflow-y: auto; border: 1px solid var(--line); border-radius: 24px; color: var(--text); background: var(--surface-solid); padding: 32px; box-shadow: var(--shadow); font-family: inherit; }
 .pin-dialog::backdrop, .action-dialog::backdrop { background: rgba(8, 6, 18, .66); backdrop-filter: blur(8px); }
 .action-dialog h2 { margin-top: 0; padding-right: 24px; }
-.action-dialog > p { color: var(--muted); line-height: 1.5; }
+.action-dialog > p { color: var(--muted); font-size: .94rem; font-weight: 720; line-height: 1.5; letter-spacing: .01em; }
 .action-dialog .dialog-context { margin: -8px 0 18px; color: var(--muted); font-weight: 750; }
 .pin-input { font-size: 2rem; text-align: center; letter-spacing: .35em; }
 .dialog-close { position: absolute; right: 14px; top: 12px; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 11px; background: none; color: var(--muted); cursor: pointer; }
@@ -408,7 +408,6 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .history-panel > summary { padding: 20px 22px; }
 .history-panel .eyebrow { display: block; }
 .history-title { display: block; font-size: clamp(1.45rem, 3vw, 2rem); letter-spacing: -.035em; }
-.history-count { margin-left: auto; min-width: 2rem; padding: 4px 8px; border-radius: 99px; color: var(--primary); background: color-mix(in srgb, var(--primary) 12%, var(--surface-solid)); text-align: center; font-size: .78rem; }
 .history-filter { display: grid; grid-template-columns: minmax(160px, 280px) auto; align-items: center; gap: 10px; padding: 0 22px 16px; color: var(--muted); font-weight: 700; }
 .history-filter.is-loading { opacity: .7; }
 .history-filter.is-loading .field-control { cursor: wait; }
@@ -485,7 +484,7 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .stack-form .checkbox-field label { display: block; color: var(--text); cursor: pointer; }
 .stack-form .checkbox-field .helptext { grid-column: 2; }
 .help-text { display: block; color: var(--muted); line-height: 1.45; }
-.empty-state { padding: 8px 18px; color: var(--muted); }
+.empty-state { padding: 8px 18px; color: var(--muted); font-size: .94rem; font-weight: 720; line-height: 1.2; letter-spacing: .01em; }
 .compact-panel { max-width: 560px; }
 .form-error { color: var(--danger); }
 .auth-help { margin: 18px 0 0; text-align: center; color: var(--muted); font-weight: 700; }

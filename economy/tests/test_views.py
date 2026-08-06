@@ -958,6 +958,16 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(child_response, 'class="brand-name">KinKudos', html=False)
         self.assertNotContains(child_response, "system-page", html=False)
 
+    def test_parent_information_dialogs_use_the_close_control_only(self):
+        self.client.login(username="tevai", password=self.parent_password)
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, "How does the credit limit work?")
+        self.assertContains(response, "Saved points")
+        self.assertNotContains(response, "Got it")
+
     def test_parent_history_is_collapsed_paginated_and_filterable(self):
         for index in range(12):
             post_ledger_entry(
@@ -973,6 +983,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(len(response.context["ledger_page"]), 10)
         self.assertEqual(response.context["ledger_page"].paginator.num_pages, 2)
         self.assertContains(response, 'class="history-panel"', html=False)
+        self.assertNotContains(response, 'class="history-count"', html=False)
         self.assertContains(response, 'data-history-child-filter', html=False)
         self.assertNotContains(response, 'history-meta-icon', html=False)
         self.assertNotContains(response, 'class="history-panel" open', html=False)

@@ -22,6 +22,10 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ### Changed
 
+- Activity History no longer shows an event-count badge, and empty-state text
+  now uses the same secondary typography as Credit summaries.
+- Informational dialogs rely on their consistent close control instead of
+  duplicate **Got it** buttons, with unified secondary body typography.
 - The parent workspace now uses the Home, Manage, Settings, and History navigation,
   with Manage sections for Tasks, Penalties, Rewards, and Goals.
 - Parent Home now has a compact pending-request empty state, clearer child

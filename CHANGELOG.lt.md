@@ -23,6 +23,10 @@ schema.
 
 ### Pakeista
 
+- Veiksmų istorijoje neberodomas įvykių skaičiaus ženklelis, o tuščių būsenų
+  tekstas naudoja tokią pačią antrinę tipografiją kaip kredito suvestinės.
+- Informaciniai dialogai uždaromi vienodu uždarymo valdikliu be pasikartojančių
+  **Supratau** mygtukų, o jų aprašų tipografija suvienodinta.
 - Tėvų erdvėje dabar yra Pradžios, Tvarkyti, Nustatymų ir Istorijos navigacija,
   o „Tvarkyti“ turi atskiras Darbų, Nuobaudų, Prizų ir Tikslų skiltis.
 - Tėvų Pradžioje yra kompaktiška laukiančių prašymų tuščia būsena, aiškesnės
