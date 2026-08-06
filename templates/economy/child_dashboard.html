@@ -4,12 +4,14 @@
 {% block body_class %}theme-{{ child.theme }} child-area{% endblock %}
 {% block child_state_signature %}{{ child_state_signature }}{% endblock %}
 {% block header_actions %}
-<button id="sound-toggle" class="sound-toggle" type="button" aria-label="{% translate 'Turn sounds off' %}" aria-pressed="true">
-  <svg class="action-icon" aria-hidden="true"><use href="#icon-sound-on"></use></svg>
+<button id="sound-toggle" class="sound-toggle" type="button" aria-label="{% translate 'Turn sounds off' %}" title="{% translate 'Turn sounds off' %}" aria-pressed="true">
+  <svg class="action-icon" aria-hidden="true"><use href="#icon-volume-high"></use></svg>
 </button>
-<button id="enable-push" class="push-control push-checking" type="button"><svg class="action-icon" aria-hidden="true"><use href="#icon-bell"></use></svg><span class="sr-only" data-push-label>{% translate "Checking notifications" %}</span></button>
-<form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="topbar-icon-button" type="submit" aria-label="{% translate "Switch profile" %}" title="{% translate "Switch profile" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-logout"></use></svg></button></form>
-<dialog id="push-help-dialog" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog>×</button><h2>{% translate "Notifications" %}</h2><p data-push-help-text>{% translate "Notifications could not be enabled on this device." %}</p></dialog>
+<button id="enable-push" class="push-control push-checking" type="button" title="{% translate 'Checking notifications' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-bell"></use></svg><span class="sr-only" data-push-label>{% translate "Checking notifications" %}</span></button>
+<form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="topbar-icon-button" type="submit" aria-label="{% translate "Switch profile" %}" title="{% translate "Switch profile" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-right-from-bracket"></use></svg></button></form>
+<dialog id="push-help-dialog" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
+      </button><h2>{% translate "Notifications" %}</h2><p data-push-help-text>{% translate "Notifications could not be enabled on this device." %}</p></dialog>
 {% endblock %}
 {% block content %}
 <section class="child-hero">
@@ -18,7 +20,7 @@
 </section>
 
 <nav class="tabbar" aria-label="{% translate 'Sections' %}">
-  <a href="#darbai">{{ child.theme|theme_text:"nav_tasks" }}</a><a href="#prizai">{{ child.theme|theme_text:"nav_rewards" }}</a><a href="#tikslai">{{ child.theme|theme_text:"nav_goals" }}</a><a href="#istorija">{{ child.theme|theme_text:"nav_history" }}</a>
+  <a href="#darbai">{{ child.theme|theme_text:"nav_tasks" }}</a><a href="#prizai">{{ child.theme|theme_text:"nav_rewards" }}</a>{% if goals %}<a href="#tikslai">{{ child.theme|theme_text:"nav_goals" }}</a>{% endif %}<a href="#istorija">{{ child.theme|theme_text:"nav_history" }}</a>
 </nav>
 
 <section id="darbai" class="content-section">
@@ -35,7 +37,7 @@
         <span class="item-icon">{{ assigned_task.icon_snapshot|icon_symbol }}</span>
         <div><h3>{{ assigned_task.title_snapshot }}</h3><p class="amount positive">+{{ assigned_task.reward_snapshot }} {{ assigned_task.reward_snapshot|currency_unit:child.theme }}</p></div>
         <form method="post" action="{% url 'child_complete_assigned_task' assigned_task.pk %}" data-success-effect="task">{% csrf_token %}
-          <button class="decision-icon-button decision-approve" type="submit" aria-label="{{ child.theme|theme_text:'assigned_complete' }}" title="{{ child.theme|theme_text:'assigned_complete' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg></button>
+          <button class="decision-icon-button decision-approve" type="submit" aria-label="{{ child.theme|theme_text:'assigned_complete' }}" title="{{ child.theme|theme_text:'assigned_complete' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>
         </form>
       </article>
       {% endfor %}
@@ -44,20 +46,22 @@
   {% endif %}
   <div class="section-heading"><p class="eyebrow">{% translate "Choose a task" %}</p><h2>{{ child.theme|theme_text:"nav_tasks" }}</h2></div>
   {% if revision_claims %}<div class="revision-list"><h3>{% if child.theme == "blockville" %}{{ child.theme|theme_text:"revision" }}{% else %}{% translate "Needs improvement" %}{% endif %}</h3>{% for claim in revision_claims %}
-    <article class="revision-card"><div><strong>{{ claim.task_title }}</strong>{% if claim.revision_note %}<p>{{ claim.revision_note }}</p>{% endif %}</div><button class="decision-icon-button decision-revise" type="button" data-open-dialog="resubmit-task-{{ claim.pk }}" aria-label="{% translate "Fix and resubmit" %}" title="{% translate "Fix and resubmit" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-revise"></use></svg></button></article>
-    <dialog id="resubmit-task-{{ claim.pk }}" class="action-dialog evidence-dialog"><button class="dialog-close" type="button" data-close-dialog>×</button><h2>{{ claim.task_title }}</h2><p class="revision-note">{{ claim.revision_note }}</p>
+    <article class="revision-card"><div><strong>{{ claim.task_title }}</strong>{% if claim.revision_note %}<p>{{ claim.revision_note }}</p>{% endif %}</div><button class="decision-icon-button decision-revise" type="button" data-open-dialog="resubmit-task-{{ claim.pk }}" aria-label="{% translate "Fix and resubmit" %}" title="{% translate "Fix and resubmit" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-rotate-left"></use></svg></button></article>
+    <dialog id="resubmit-task-{{ claim.pk }}" class="action-dialog evidence-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
+      </button><h2>{{ claim.task_title }}</h2><p class="revision-note">{{ claim.revision_note }}</p>
       <form method="post" action="{% url 'child_resubmit_task' claim.pk %}" enctype="multipart/form-data" class="stack-form evidence-form" data-success-effect="task">{% csrf_token %}
         <input type="file" name="proof" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" data-evidence-input hidden>
         <input type="hidden" name="remove_evidence" value="" data-remove-evidence>
         {% if claim.evidence_thumbnail %}<img class="evidence-preview" src="{% url 'task_evidence' claim.pk 'thumbnail' %}" alt="{% translate 'Task photo' %}" data-evidence-preview>{% else %}<img class="evidence-preview" alt="" data-evidence-preview hidden>{% endif %}
         <div class="evidence-actions"><button type="button" class="button button-secondary" data-evidence-camera><svg class="action-icon"><use href="#icon-camera"></use></svg>{% translate "Take photo" %}</button><button type="button" class="button button-secondary" data-evidence-gallery>{% translate "Choose from gallery" %}</button><button type="button" class="text-button danger" data-evidence-remove>{% translate "Remove photo" %}</button></div>
-        <button class="decision-icon-button decision-approve dialog-decision-action" type="submit" aria-label="{% translate "Send again" %}" title="{% translate "Send again" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg></button>
+        <button class="decision-icon-button decision-approve dialog-decision-action" type="submit" aria-label="{% translate "Send again" %}" title="{% translate "Send again" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>
       </form>
     </dialog>
   {% endfor %}</div>{% endif %}
   {% if rejected_task_claims %}<div class="task-response-list"><h3>{% translate "Parent response" %}</h3>{% for claim in rejected_task_claims %}
     <article class="task-response-card task-response-rejected">
-      <svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg>
+      <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg>
       <div class="task-response-copy">
         <span class="task-response-status">{% translate "Task rejected" %}</span>
         <strong>{{ claim.task_title }}</strong>
@@ -65,7 +69,7 @@
         {% if claim.decided_by %}<small class="history-actor">{% translate "Rejected by" %}: {{ claim.decided_by|user_display_name }}</small>{% endif %}
       </div>
       <form method="post" action="{% url 'child_acknowledge_task_response' claim.pk %}">{% csrf_token %}
-        <button type="submit" class="decision-icon-button decision-approve task-response-acknowledge" aria-label="{% translate "I understand" %}" title="{% translate "I understand" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg></button>
+        <button type="submit" class="decision-icon-button decision-approve task-response-acknowledge" aria-label="{% translate "I understand" %}" title="{% translate "I understand" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>
       </form>
     </article>
   {% endfor %}</div>{% endif %}
@@ -87,14 +91,16 @@
   </div>
   <div class="item-grid">{% for task in tasks %}
     <article id="task-card-{{ task.pk }}" class="item-card" data-task-card data-task-search-text="{{ task.title }}"><span class="item-icon">{{ task.icon|icon_symbol }}</span><div><h3>{{ task.title }}</h3><p class="amount positive">+{{ task.reward }} {{ task.reward|currency_unit:child.theme }}</p></div>
-    {% if task.pk in pending_task_ids %}<span class="status-pill">{% if child.theme == "blockville" %}{{ child.theme|theme_text:"pending" }}{% else %}{% translate "Awaiting approval" %}{% endif %}</span>{% else %}<button class="decision-icon-button decision-approve workflow-card-button" type="button" data-open-dialog="submit-task-{{ task.pk }}" aria-label="{{ child.theme|theme_text:'task_button' }}" title="{{ child.theme|theme_text:'task_button' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg></button>{% endif %}</article>
-    <dialog id="submit-task-{{ task.pk }}" class="action-dialog evidence-dialog"><button class="dialog-close" type="button" data-close-dialog>×</button><h2>{{ child.theme|theme_text:"task_modal_title" }}</h2><h3>{{ task.title }}</h3><p>{% translate "You can add a photo of the finished task." %}</p>
+    {% if task.pk in pending_task_ids %}<span class="status-pill">{% if child.theme == "blockville" %}{{ child.theme|theme_text:"pending" }}{% else %}{% translate "Awaiting approval" %}{% endif %}</span>{% else %}<button class="decision-icon-button decision-approve workflow-card-button" type="button" data-open-dialog="submit-task-{{ task.pk }}" aria-label="{{ child.theme|theme_text:'task_button' }}" title="{{ child.theme|theme_text:'task_button' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>{% endif %}</article>
+    <dialog id="submit-task-{{ task.pk }}" class="action-dialog evidence-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
+      </button><h2>{{ child.theme|theme_text:"task_modal_title" }}</h2><h3>{{ task.title }}</h3><p>{% translate "You can add a photo of the finished task." %}</p>
       {% if family_settings.photo_bonus_points %}<p class="photo-bonus">+{{ family_settings.photo_bonus_points }} {{ family_settings.photo_bonus_points|currency_unit:child.theme }} {% translate "for a photo" %}</p>{% endif %}
       <form method="post" action="{% url 'child_submit_task' task.pk %}" enctype="multipart/form-data" class="stack-form evidence-form" data-success-effect="task">{% csrf_token %}
         <input type="file" name="proof" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" data-evidence-input hidden>
         <img class="evidence-preview" alt="" data-evidence-preview hidden>
         <div class="evidence-actions"><button type="button" class="button button-secondary" data-evidence-camera><svg class="action-icon"><use href="#icon-camera"></use></svg>{% if child.theme == "blockville" %}{{ child.theme|theme_text:"task_photo" }}{% else %}{% translate "Take photo" %}{% endif %}</button><button type="button" class="button button-secondary" data-evidence-gallery>{% translate "Choose from gallery" %}</button><button type="button" class="text-button danger" data-evidence-remove hidden>{% translate "Remove photo" %}</button></div>
-        <button class="decision-icon-button decision-approve dialog-decision-action" type="submit" aria-label="{{ child.theme|theme_text:'task_modal_submit' }}" title="{{ child.theme|theme_text:'task_modal_submit' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg></button>
+        <button class="decision-icon-button decision-approve dialog-decision-action" type="submit" aria-label="{{ child.theme|theme_text:'task_modal_submit' }}" title="{{ child.theme|theme_text:'task_modal_submit' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>
       </form>
     </dialog>
   {% empty %}<p>{% translate "There are no tasks yet." %}</p>{% endfor %}</div>
@@ -103,7 +109,7 @@
 
 <section id="prizai" class="content-section">
   <div class="section-heading"><p class="eyebrow">{% translate "Choose a reward" %}</p><h2>{{ child.theme|theme_text:"nav_rewards" }}</h2></div>
-  {% if assigned_tasks_block_rewards %}<div class="credit-warning assigned-task-warning"><svg class="action-icon"><use href="#icon-info"></use></svg><p>{{ child.theme|theme_text:"assigned_reward_block" }}</p></div>{% elif credit_reward_requests_blocked %}<div class="credit-warning"><svg class="action-icon"><use href="#icon-info"></use></svg><p>{% translate "New reward requests are paused because half of the available credit has been used. Earn more points to unlock them." %}</p></div>{% endif %}
+  {% if assigned_tasks_block_rewards %}<div class="credit-warning assigned-task-warning"><svg class="action-icon"><use href="#icon-circle-info"></use></svg><p>{{ child.theme|theme_text:"assigned_reward_block" }}</p></div>{% elif credit_reward_requests_blocked %}<div class="credit-warning"><svg class="action-icon"><use href="#icon-circle-info"></use></svg><p>{% translate "New reward requests are paused because half of the available credit has been used. Earn more points to unlock them." %}</p></div>{% endif %}
   {% if lottery.is_visible %}
   <article class="system-lottery-card" data-lottery-card>
     <div class="lottery-card-art" aria-hidden="true"><span>?</span><span>?</span><span>?</span></div>
@@ -137,7 +143,7 @@
     </div>
   </article>
   <dialog id="lottery-purchase-dialog" class="action-dialog lottery-purchase-dialog">
-    <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-close"></use></svg></button>
+    <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
     <p class="lottery-system-label">{% translate "Scratch tickets" %}</p>
     <h2>{{ child.theme|theme_text:"lottery_title" }}</h2>
     <div class="lottery-risk-warning">
@@ -168,7 +174,7 @@
       data-progress-text="{% translate '{count} of 9 fields scratched.' %}"
       data-result-error="{% translate 'The result could not be saved. Reopen the ticket and try again.' %}"
     >
-      <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-close"></use></svg></button>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
       <p class="lottery-system-label">{% translate "Scratch all nine fields" %}</p>
       <h2>{{ child.theme|theme_text:"lottery_title" }}</h2>
       <p class="lottery-scratch-help">{% translate "Rub the silver surface with your finger. Three matching numbers reveal the result." %}</p>
@@ -190,12 +196,38 @@
   {% endif %}
   {% endif %}
   <div class="item-grid">{% for reward in rewards %}<article class="item-card reward-card"><span class="item-icon">{{ reward.icon|icon_symbol }}</span><div><h3>{{ reward.title }}</h3><p class="amount negative">−{{ reward.cost }} {{ reward.cost|currency_unit:child.theme }}</p></div>
-  {% if reward.pk in pending_reward_ids %}<span class="status-pill">{% if child.theme == "blockville" %}{{ child.theme|theme_text:"reward_pending" }}{% else %}{% translate "Awaiting approval" %}{% endif %}</span>{% elif reward_requests_blocked %}<span class="status-pill">{{ child.theme|theme_text:"reward" }}</span>{% elif not reward.is_affordable %}<span class="status-pill" title="{% translate "Not enough points" %}">{% blocktranslate with amount=reward.missing_amount unit=reward.missing_amount|currency_unit:child.theme %}Need {{ amount }} {{ unit }} more{% endblocktranslate %}</span>{% else %}<form class="workflow-card-action" method="post" action="{% url 'child_request_reward' reward.pk %}" data-success-effect="reward">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{{ child.theme|theme_text:'reward' }}" title="{{ child.theme|theme_text:'reward' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg></button></form>{% endif %}</article>{% empty %}<p>{% translate "The rewards catalog is empty." %}</p>{% endfor %}</div>
-  {% if pending_requests %}<div class="pending-list"><h3>{% translate "Pending requests" %}</h3>{% for reward_request in pending_requests %}<div class="list-row"><span>{{ reward_request.reward_title }}</span><form method="post" action="{% url 'child_cancel_reward' reward_request.pk %}">{% csrf_token %}<button class="decision-icon-button decision-reject compact-decision-button" type="submit" aria-label="{% translate "Cancel" %}" title="{% translate "Cancel" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg></button></form></div>{% endfor %}</div>{% endif %}
+  {% if reward.pk in pending_reward_ids %}<span class="status-pill">{% if child.theme == "blockville" %}{{ child.theme|theme_text:"reward_pending" }}{% else %}{% translate "Awaiting approval" %}{% endif %}</span>{% elif reward_requests_blocked %}<span class="status-pill">{{ child.theme|theme_text:"reward" }}</span>{% elif not reward.is_affordable %}<span class="status-pill" title="{% translate "Not enough points" %}">{% blocktranslate with amount=reward.missing_amount unit=reward.missing_amount|currency_unit:child.theme %}Need {{ amount }} {{ unit }} more{% endblocktranslate %}</span>{% else %}<form class="workflow-card-action" method="post" action="{% url 'child_request_reward' reward.pk %}" data-success-effect="reward">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{{ child.theme|theme_text:'reward' }}" title="{{ child.theme|theme_text:'reward' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>{% endif %}</article>{% empty %}<p>{% translate "The rewards catalog is empty." %}</p>{% endfor %}</div>
+  {% if pending_requests %}<div class="pending-list"><h3>{% translate "Pending requests" %}</h3>{% for reward_request in pending_requests %}<div class="list-row"><span>{{ reward_request.reward_title }}</span><form method="post" action="{% url 'child_cancel_reward' reward_request.pk %}">{% csrf_token %}<button class="decision-icon-button decision-reject compact-decision-button" type="submit" aria-label="{% translate "Cancel" %}" title="{% translate "Cancel" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form></div>{% endfor %}</div>{% endif %}
 </section>
 
-<section id="tikslai" class="content-section two-column"><div><div class="section-heading"><p class="eyebrow">{% translate "Save for a dream" %}</p><h2>{{ child.theme|theme_text:"nav_goals" }}</h2></div>{% for goal in goals %}<article class="goal-card"><div class="list-row"><strong>{{ goal.title }}</strong><span>{{ child.balance }} {{ child.balance|currency_unit:child.theme }} / {{ goal.target_amount }} {{ goal.target_amount|currency_unit:child.theme }}</span></div><div class="progress"><span style="width: {{ goal.progress_percent }}%"></span></div></article>{% empty %}<p>{% translate "There are no active goals yet." %}</p>{% endfor %}</div>
-<div class="panel"><h3>{% translate "Suggest a reward or goal" %}</h3><form method="post" action="{% url 'child_create_proposal' %}" class="stack-form">{% csrf_token %}{{ proposal_form.as_p }}<button class="decision-icon-button decision-approve dialog-decision-action" type="submit" aria-label="{{ child.theme|theme_text:'proposal' }}" title="{{ child.theme|theme_text:'proposal' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-check-circle"></use></svg></button></form></div></section>
+<section class="content-section building-plan-section"><div class="{% if goals %}building-plan-layout{% endif %}">{% if goals %}<div id="tikslai" class="building-plan-goals"><div class="section-heading"><p class="eyebrow">{% translate "Save for a dream" %}</p><h2>{{ child.theme|theme_text:"nav_goals" }}</h2></div>{% for goal in goals %}<article class="goal-card child-goal-card">
+  <div class="goal-card-heading"><div class="goal-title"><span class="item-icon">{{ goal.icon|icon_symbol }}</span><strong>{{ goal.title }}</strong></div><span>{{ goal.progress_amount }} {{ goal.progress_amount|currency_unit:child.theme }} / {{ goal.target_amount }} {{ goal.target_amount|currency_unit:child.theme }}</span></div>
+  <div class="progress"><span style="width: {{ goal.progress_percent }}%"></span></div>
+  <div class="goal-status-row">
+    {% if goal.mode == "available" %}
+      <span class="goal-status-label"><svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Current goal" %} <button class="info-button" type="button" data-open-dialog="goal-info-current-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button></span>
+    {% elif goal.mode == "saved" %}
+      <span class="goal-status-label"><svg class="action-icon" aria-hidden="true"><use href="#icon-piggy-bank"></use></svg>{% translate "Saved" %} <button class="info-button" type="button" data-open-dialog="goal-info-saved-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button></span>
+      <button class="button button-secondary goal-add-button" type="button" data-open-dialog="goal-add-{{ goal.pk }}">{% translate "Add points" %}</button>
+    {% else %}
+      <button class="goal-mode-button" type="button" data-open-dialog="goal-mode-{{ goal.pk }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Choose mode" %} <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>
+    {% endif %}
+  </div>
+  {% if goal.is_reached %}
+    {% if goal.has_pending_completion %}<span class="status-pill">{% translate "Awaiting parent approval" %}</span>{% else %}<form method="post" action="{% url 'child_request_goal_completion' goal.pk %}">{% csrf_token %}<button class="button button-primary" type="submit">{% translate "Request completion" %}</button></form>{% endif %}
+  {% endif %}
+</article>
+<dialog id="goal-info-current-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Current goal" %}</h2><p>{% translate "Uses your available points. You can still spend them, so progress may change." %}</p></dialog>
+<dialog id="goal-info-saved-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Saved" %}</h2><p>{% translate "Saved points are kept for this goal and cannot be used for rewards." %}</p></dialog>
+<dialog id="goal-mode-{{ goal.pk }}" class="action-dialog goal-mode-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Choose how to save" %}</h2>
+  <div class="goal-mode-options"><div class="goal-mode-option"><div><strong>{% translate "Use available points" %}</strong><p>{% translate "Your available balance counts as progress." %}</p></div><button class="info-button" type="button" data-open-dialog="goal-mode-info-available-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button></div>
+  <div class="goal-mode-option"><div><strong>{% translate "Save separately" %}</strong><p>{% translate "Move points into this goal." %}</p></div><button class="info-button" type="button" data-open-dialog="goal-mode-info-saved-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button></div></div>
+  <div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><form method="post" action="{% url 'child_set_goal_mode' goal.pk %}">{% csrf_token %}<input type="hidden" name="mode" value="available"><button class="button button-primary" type="submit">{% translate "Use available" %}</button></form><form method="post" action="{% url 'child_set_goal_mode' goal.pk %}">{% csrf_token %}<input type="hidden" name="mode" value="saved"><button class="button button-primary" type="submit">{% translate "Save separately" %}</button></form></div>
+</dialog>
+<dialog id="goal-mode-info-available-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Use available points" %}</h2><p>{% translate "You can still spend these points on rewards. Your progress may go down." %}</p></dialog>
+<dialog id="goal-mode-info-saved-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Save separately" %}</h2><p>{% translate "These points will no longer be available for rewards." %}</p></dialog>
+{% if goal.mode == "saved" %}<dialog id="goal-add-{{ goal.pk }}" class="action-dialog goal-add-dialog" data-goal-add-dialog data-goal-saved="{{ goal.saved_amount }}" data-goal-target="{{ goal.target_amount }}" data-goal-available="{{ child.available_goal_balance }}"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Add points" %}</h2><p>{% blocktranslate with balance=child.available_goal_balance unit=child.available_goal_balance|currency_unit:child.theme %}Available balance: {{ balance }} {{ unit }}{% endblocktranslate %}</p><div class="goal-quick-options"><button type="button" class="button button-secondary" data-goal-quick-amount="10">10</button><button type="button" class="button button-secondary" data-goal-quick-amount="25">25</button><button type="button" class="button button-secondary" data-goal-quick-amount="50">50</button><button type="button" class="button button-secondary" data-goal-quick-all>{% translate "All" %}</button></div><form method="post" action="{% url 'child_add_goal_points' goal.pk %}" class="stack-form" data-goal-add-form>{% csrf_token %}<label>{% translate "Custom amount" %}<input class="field-control" name="amount" type="number" min="1" max="{{ child.available_goal_balance }}" required data-goal-amount-input></label><p class="goal-add-preview">{% translate "After" %}: <strong data-goal-after>{{ goal.saved_amount }}</strong> {{ goal.saved_amount|currency_unit:child.theme }}</p><div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><button class="button button-primary" type="submit">{% translate "Add" %}</button></div></form></dialog>{% endif %}
+{% endfor %}</div>{% endif %}<section class="proposal-section"><div class="panel"><h3>{% translate "Suggest a reward or goal" %}</h3><form method="post" action="{% url 'child_create_proposal' %}" class="stack-form">{% csrf_token %}{{ proposal_form.as_p }}<button class="decision-icon-button decision-approve dialog-decision-action" type="submit" aria-label="{{ child.theme|theme_text:'proposal' }}" title="{{ child.theme|theme_text:'proposal' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form></div></section></div></section>
 
 <section id="istorija" class="content-section">
   <div class="section-heading">
@@ -215,7 +247,7 @@
           </div>
           <span class="history-row-actions">
             <span class="history-decision history-decision-rejected">
-              <svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg>
+              <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg>
               {% translate "Rejected" %}
             </span>
           </span>
@@ -229,10 +261,13 @@
           </div>
           <span class="history-row-actions">
             <span class="history-decision history-decision-rejected">
-              <svg class="action-icon" aria-hidden="true"><use href="#icon-stop"></use></svg>
+              <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg>
               {% translate "Rejected" %}
             </span>
           </span>
+        {% elif entry.history_type == "goal_event" %}
+          <span class="ledger-icon"><svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg></span>
+          <div><strong>{{ entry.description }}</strong><small>{{ entry.created_at|date:"m-d H:i" }} · {% translate "Goal" %}</small></div>
         {% else %}
           <span class="ledger-icon">
             {% if entry.task_claim %}
@@ -242,7 +277,7 @@
             {% elif entry.reward_request %}
               {{ entry.reward_request.reward.icon|icon_symbol }}
             {% elif entry.kind == "gift" %}
-              <svg class="action-icon" aria-hidden="true"><use href="#icon-gift-box"></use></svg>
+              <svg class="action-icon" aria-hidden="true"><use href="#icon-gift"></use></svg>
             {% else %}
               {{ entry.kind|slice:":1"|upper }}
             {% endif %}
@@ -258,7 +293,7 @@
           </div>
           <span class="history-row-actions">
             {% if entry.task_claim.evidence_thumbnail %}
-              <button class="photo-history-button" type="button" data-evidence-full="{% url 'task_evidence' entry.task_claim.pk 'full' %}" aria-label="{% translate 'Open task photo' %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></button>
+              <button class="photo-history-button" type="button" data-evidence-full="{% url 'task_evidence' entry.task_claim.pk 'full' %}" aria-label="{% translate 'Open task photo' %}" title="{% translate 'Open task photo' %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></button>
             {% endif %}
             <span class="amount {% if entry.delta > 0 %}positive{% elif entry.delta < 0 %}negative{% endif %}">{{ entry.delta|stringformat:"+d" }} {{ entry.delta|currency_unit:child.theme }}</span>
           </span>
@@ -312,10 +347,12 @@
 </div></section>
 {% if gift_recipients_available %}
 <button class="gift-launcher" type="button" data-open-dialog="gift-dialog" aria-label="{% translate 'Give points' %}">
-  <svg class="action-icon" aria-hidden="true"><use href="#icon-gift-box"></use></svg><span>{% translate "Gift" %}</span>
+  <svg class="action-icon" aria-hidden="true"><use href="#icon-gift"></use></svg><span>{% translate "Gift" %}</span>
 </button>
 <dialog id="gift-dialog" class="action-dialog">
-  <button class="dialog-close" type="button" data-close-dialog>×</button>
+  <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
+      </button>
   <h2>{% translate "Give points" %}</h2>
   <p>{% translate "Choose who receives your points and how many to give." %}</p>
   <form method="post" action="{% url 'child_give_points' %}" class="stack-form" data-gift-form>{% csrf_token %}
@@ -324,5 +361,7 @@
   </form>
 </dialog>
 {% endif %}
-<dialog id="evidence-lightbox" class="evidence-lightbox"><button class="dialog-close" type="button" data-close-dialog>×</button><img alt="{% translate 'Task photo' %}" data-lightbox-image></dialog>
+<dialog id="evidence-lightbox" class="evidence-lightbox"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
+      </button><img alt="{% translate 'Task photo' %}" data-lightbox-image></dialog>
 {% endblock %}

@@ -5,11 +5,57 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+## [26.6.0] - 2026-08-06
+
+### Added
+
+- Savings goals now support live current-goal progress or separately saved
+  points, atomic transfers and returns, parent-approved completion, goal
+  history, and child/parent management UI.
+
+### Changed
+
+- The parent area now uses Manage sections for Tasks, Penalties, Rewards, and
+  Goals, with compact child summaries and filtered activity history.
+
 ### Fixed
 
+- Manage section links now keep the parent dashboard open and expand the
+  selected Tasks, Penalties, Rewards, or Goals section.
+- Child savings-goal cards now keep a clear vertical gap instead of touching
+  or overlapping each other.
+- The saved-goal amount preview now keeps its label, amount, and unit on one
+  line.
+- Goal management rows now keep progress and savings-mode columns aligned even
+  when rows have different numbers of action buttons.
+- Parent and child interface icons now use exact Font Awesome Free 7.3.1 SVG
+  paths with consistent tap targets while preserving goal emoji personalization.
+- Parent dashboard quick-action icons now use complete, consistently sized
+  symbols, compact Credit/Tickets rows, and separated backup warnings.
 - Savings-goal proposals now match task and reward request spacing and amount
   typography in the parent approval list while keeping suggested amounts a
   neutral color.
+- Parent catalog edit actions now use the official regular `pen-to-square`
+  icon, visibility toggles use the matching `eye`/`eye-slash` pair, and
+  expanded goal editors can delete a goal with an explicit confirmation.
+- History child selection now applies immediately while preserving the other
+  active query filters.
+- Deleting a goal atomically returns its saved points, cancels pending goal
+  completion requests, and keeps the goal event history through soft deletion.
+- Goal editing now uses a text-only `Delete` action; activity-history rows
+  keep only the child avatar on the left, move the activity icon beside the
+  right-side result, remove date icons, and use a neutral Informational badge.
+- The flag-only language menu now stays centred directly below its trigger on
+  narrow and wide layouts without overlapping neighbouring header actions.
+- Parent history now limits each activity source before merging the latest 50
+  entries, avoiding unbounded in-memory history loading for “Any time”.
+
+### Security
+
+- Child avatars now require a signed-in parent or a valid paired device when
+  device pairing is enabled, preventing anonymous profile-image enumeration.
+- Goal completion request races now return a controlled validation error, and
+  the patched `cryptography` dependency is pinned to 50.0.0.
 
 ## [26.5.3] - 2026-08-06
 

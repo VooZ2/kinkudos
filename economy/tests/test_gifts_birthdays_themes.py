@@ -70,7 +70,7 @@ class GiftTests(TestCase):
 
         self.assertContains(
             response,
-            '<use href="#icon-gift-box"></use>',
+            '<use href="#icon-gift"></use>',
             html=False,
         )
         self.assertNotContains(

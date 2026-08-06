@@ -438,8 +438,8 @@ class LotteryViewTests(TestCase):
 
         response = self.client.get(reverse("parent_dashboard"))
 
-        self.assertContains(response, "Credit limit: -100")
-        self.assertContains(response, "Scratch tickets this week: 3 of 3")
+        self.assertContains(response, "Credit -100")
+        self.assertContains(response, "Tickets 0/3")
 
     def test_all_seven_themes_have_distinct_lottery_titles(self):
         with override("en"):
@@ -491,7 +491,7 @@ class LotteryViewTests(TestCase):
 
         response = self.client.get(reverse("parent_dashboard"))
 
-        self.assertContains(response, "Scratch tickets this week: 2 of 3")
+        self.assertContains(response, "Tickets 1/3")
         self.assertContains(response, "Scratch ticket")
         self.assertContains(response, "Scratch ticket result")
         self.assertNotContains(response, "data-lottery-value")

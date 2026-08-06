@@ -117,6 +117,14 @@ class Patch0121Tests(TestCase):
         self.assertContains(response, "Approved by")
         self.assertContains(response, self.parent.username)
         self.assertContains(response, 'class="history-row-actions"', html=False)
+        self.assertContains(response, 'class="history-kind-icon"', html=False)
+        self.assertNotContains(response, 'history-meta-icon', html=False)
+        html = response.content.decode()
+        row_start = html.index('<div class="ledger-row">')
+        row_end = html.index('</div>', html.index('class="history-row-actions"', row_start))
+        row_html = html[row_start:row_end]
+        self.assertLess(row_html.index('class="profile-mini'), row_html.index("<div>"))
+        self.assertGreater(row_html.index('class="history-kind-icon"'), row_html.index("<div>"))
         self.assertEqual(
             self.child.ledger_entries.get(kind=LedgerKind.TASK).actor,
             self.parent,
@@ -126,7 +134,7 @@ class Patch0121Tests(TestCase):
         self.client.force_login(self.parent)
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, 'class="brand-mark brand-logo"', html=False)
-        self.assertContains(response, "KinKudos · v26.5.3")
+        self.assertContains(response, "KinKudos · v26.6.0")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_reward_approval_uses_task_decision_icons(self):
@@ -146,8 +154,8 @@ class Patch0121Tests(TestCase):
             'class="approval-card reward-approval-card"',
             html=False,
         )
-        self.assertContains(response, 'href="#icon-check-circle"', html=False)
-        self.assertContains(response, 'href="#icon-stop"', html=False)
+        self.assertContains(response, 'href="#icon-circle-check"', html=False)
+        self.assertContains(response, 'href="#icon-circle-xmark"', html=False)
         self.assertContains(response, 'aria-label="Approve"', html=False)
         self.assertContains(response, 'aria-label="Reject"', html=False)
 

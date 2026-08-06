@@ -1,3 +1,5 @@
+const t = key => window.KINKUDOS?.i18n?.[key] || key;
+
 function openPinDialog(childId) {
   const dialog = document.getElementById("pin-dialog");
   const input = document.getElementById("pin-child-id");
@@ -192,8 +194,18 @@ if (parentShell) {
       });
     });
   };
+  const manageSectionForHash = id => {
+    if (id === "manage-goals" || /^manage-goals-child-\d+$/.test(id)) return "manage-goals";
+    if (["manage-tasks", "manage-penalties", "manage-rewards"].includes(id)) return id;
+    return "";
+  };
+  const parentPanelForHash = id => {
+    if (panels.some(panel => panel.id === id)) return id;
+    if (manageSectionForHash(id)) return "parent-catalogs";
+    return panels[0]?.id;
+  };
   const showPanel = id => {
-    if (!panels.some(panel => panel.id === id)) id = panels[0]?.id;
+    id = parentPanelForHash(id);
     panels.forEach(panel => { panel.hidden = panel.id !== id; });
     links.forEach(link => {
       const active = link.getAttribute("href") === `#${id}`;
@@ -202,6 +214,21 @@ if (parentShell) {
       else link.removeAttribute("aria-current");
     });
   };
+  const openManageSection = id => {
+    const sectionId = manageSectionForHash(id);
+    if (!sectionId) return false;
+    const target = document.getElementById(sectionId);
+    if (!target) return false;
+    parentShell.querySelectorAll(".catalog-grid > details").forEach(section => {
+      section.open = section === target;
+    });
+    window.requestAnimationFrame(() => target.scrollIntoView({ behavior: "auto", block: "start" }));
+    return true;
+  };
+  const showRoute = id => {
+    showPanel(id);
+    return openManageSection(id);
+  };
   links.forEach(link => link.addEventListener("click", event => {
     event.preventDefault();
     const id = link.hash.slice(1);
@@ -209,13 +236,78 @@ if (parentShell) {
     showPanel(id);
     scrollWorkspaceToTop();
   }));
-  showPanel(window.location.hash.slice(1) || panels[0]?.id);
-  if (window.location.hash) scrollWorkspaceToTop();
+  const initialHash = window.location.hash.slice(1);
+  const initialNestedRoute = showRoute(initialHash || panels[0]?.id);
+  if (window.location.hash && !initialNestedRoute) scrollWorkspaceToTop();
   window.addEventListener("hashchange", () => {
-    showPanel(window.location.hash.slice(1));
-    scrollWorkspaceToTop();
+    const nestedRoute = showRoute(window.location.hash.slice(1));
+    if (!nestedRoute) scrollWorkspaceToTop();
   });
 }
+
+document.querySelectorAll("[data-parent-goal-target]").forEach(link => {
+  link.addEventListener("click", event => {
+    event.preventDefault();
+    document.querySelector('[data-parent-nav="catalogs"]')?.click();
+    window.setTimeout(() => {
+      const target = document.getElementById(`goal-item-${link.dataset.parentGoalTarget}`);
+      target?.scrollIntoView({ behavior: "smooth", block: "center" });
+      target?.focus({ preventScroll: true });
+    }, 80);
+  });
+});
+
+document.querySelectorAll(".goal-filter a").forEach(link => {
+  link.addEventListener("click", event => {
+    const match = link.hash.match(/^#manage-goals-child-(\d+)$/);
+    if (!match && link.hash !== "#manage-goals") return;
+    event.preventDefault();
+    document.querySelectorAll(".goal-filter a").forEach(item => item.classList.remove("is-active"));
+    link.classList.add("is-active");
+    document.querySelectorAll("[data-goal-child]").forEach(row => {
+      row.hidden = Boolean(match) && row.dataset.goalChild !== match[1];
+    });
+  });
+});
+
+document.querySelector("[data-history-child-filter]")?.addEventListener("change", event => {
+  const select = event.currentTarget;
+  const form = select.form;
+  if (!form || form.dataset.submitting === "true") return;
+  form.dataset.submitting = "true";
+  form.classList.add("is-loading");
+  form.setAttribute("aria-busy", "true");
+  select.disabled = true;
+  const url = new URL(window.location.href);
+  if (select.value) url.searchParams.set("history_child", select.value);
+  else url.searchParams.delete("history_child");
+  url.searchParams.delete("history_page");
+  url.hash = "parent-history";
+  window.location.assign(url.toString());
+});
+
+document.querySelectorAll("[data-remove-history-filter]").forEach(button => {
+  button.addEventListener("click", () => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete(button.dataset.removeHistoryFilter);
+    if (button.dataset.removeHistoryFilter === "history_date") {
+      url.searchParams.delete("history_start");
+      url.searchParams.delete("history_end");
+    }
+    url.hash = "parent-history";
+    window.location.assign(url.toString());
+  });
+});
+
+document.querySelector("[data-history-reset]")?.addEventListener("click", event => {
+  const form = event.currentTarget.closest("form");
+  if (!form) return;
+  form.querySelector("[name=history_child]").value = "";
+  form.querySelector("[name=history_activity]").value = "";
+  form.querySelector("[name=history_date]").value = "week";
+  form.querySelector("[name=history_start]").value = "";
+  form.querySelector("[name=history_end]").value = "";
+});
 
 function celebrate() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -358,7 +450,7 @@ function refreshSoundToggle() {
   if (!soundToggle) return;
   const muted = localStorage.getItem("kinkudos-sound") === "off";
   const iconUse = soundToggle.querySelector("use");
-  iconUse?.setAttribute("href", muted ? "#icon-sound-off" : "#icon-sound-on");
+  iconUse?.setAttribute("href", muted ? "#icon-volume-xmark" : "#icon-volume-high");
   soundToggle.classList.toggle("sound-enabled", !muted);
   soundToggle.classList.toggle("sound-disabled", muted);
   const label = muted ? window.KINKUDOS?.i18n?.turnSoundsOn : window.KINKUDOS?.i18n?.turnSoundsOff;
@@ -680,6 +772,36 @@ document.querySelectorAll("[data-toggle-edit]").forEach(button => {
   });
 });
 
+document.querySelectorAll("[data-goal-add-dialog]").forEach(dialog => {
+  const input = dialog.querySelector("[data-goal-amount-input]");
+  const after = dialog.querySelector("[data-goal-after]");
+  if (!input || !after) return;
+  const saved = Number(dialog.dataset.goalSaved || 0);
+  const target = Number(dialog.dataset.goalTarget || 0);
+  const available = Math.max(Number(dialog.dataset.goalAvailable || 0), 0);
+  const max = Math.max(Math.min(available, target - saved), 0);
+  input.max = String(max);
+  const updatePreview = () => {
+    const amount = Math.max(Number(input.value || 0), 0);
+    after.textContent = String(Math.min(saved + amount, target));
+    input.setCustomValidity(amount > max ? t("goalAmountTooHigh").replace("{max}", max) : "");
+  };
+  dialog.querySelectorAll("[data-goal-quick-amount]").forEach(button => {
+    button.addEventListener("click", () => {
+      input.value = String(Math.min(Number(button.dataset.goalQuickAmount), max));
+      updatePreview();
+      input.focus();
+    });
+  });
+  dialog.querySelector("[data-goal-quick-all]")?.addEventListener("click", () => {
+    input.value = String(max);
+    updatePreview();
+    input.focus();
+  });
+  input.addEventListener("input", updatePreview);
+  updatePreview();
+});
+
 function urlBase64ToUint8Array(value) {
   const padding = "=".repeat((4 - value.length % 4) % 4);
   const base64 = (value + padding).replace(/-/g, "+").replace(/_/g, "/");
@@ -689,8 +811,6 @@ function urlBase64ToUint8Array(value) {
 const pushButton = document.getElementById("enable-push");
 const pushHelpDialog = document.getElementById("push-help-dialog");
 const pushHelpText = pushHelpDialog?.querySelector("[data-push-help-text]");
-const t = key => window.KINKUDOS?.i18n?.[key] || key;
-
 function isIosDevice() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent)
     || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);

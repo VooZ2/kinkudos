@@ -59,7 +59,7 @@ class ParentSettingsTests(TestCase):
         self.assertContains(response, "Scratch ticket price")
         self.assertContains(response, "Weekly ticket limit")
         self.assertContains(response, "Keep feedback images for")
-        self.assertContains(response, 'class="catalog-divider"', count=5)
+        self.assertContains(response, 'class="catalog-divider"', count=3)
 
     def test_network_access_panel_explains_open_and_restricted_states(self):
         self.client.force_login(self.admin)
@@ -248,6 +248,27 @@ class ParentSettingsTests(TestCase):
             '<small class="helptext">Shown in family-facing headings and messages.</small>',
             html=False,
         )
+
+    def test_settings_are_grouped_by_the_requested_categories(self):
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, "Children and access")
+        for heading in (
+            "Family",
+            "Points and tasks",
+            "Scratch tickets",
+            "Data and retention",
+            "Child devices",
+            "Network and security",
+            "Email and notifications",
+            "Backups",
+            "Accounts",
+            "Family feedback",
+        ):
+            self.assertContains(response, f"<summary>{heading}</summary>", html=False)
+        self.assertNotContains(response, ">Rewards and goals<", html=False)
 
     def smtp_payload(self, **overrides):
         payload = {

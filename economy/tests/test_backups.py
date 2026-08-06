@@ -67,6 +67,29 @@ class BackupSettingsTests(TestCase):
         self.assertNotContains(response, "Your current parent password")
 
     @patch("economy.views.backup_status")
+    def test_unavailable_backup_warning_uses_separate_warning_block(self, status):
+        status.return_value = {
+            "available": False,
+            "configured": False,
+            "provider": "",
+            "target": "",
+            "is_fresh": False,
+            "running": False,
+            "last_success": None,
+            "last_check": None,
+            "error": "",
+        }
+        self.client.force_login(self.parent)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, 'class="danger-warning backup-warning"', html=False)
+        self.assertContains(
+            response,
+            "The backup service is unavailable. Ask the server administrator to check the backup container.",
+        )
+
+    @patch("economy.views.backup_status")
     def test_configured_backup_without_success_uses_attention_status(self, status):
         status.return_value = {
             "available": True,

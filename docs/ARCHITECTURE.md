@@ -134,8 +134,18 @@ no ticket that week, and is not blocked from rewards.
 **Proposal** — a child proposes a new shared reward or personal savings
 goal; a parent approves/rejects and sets the final cost.
 
-**SavingsGoal** — per-child target; progress is calculated against the
-child's overall balance, not a separate ring-fenced sub-balance.
+**SavingsGoal** — per-child target with one of two explicit modes. An
+`available` goal tracks the child's current non-negative spendable balance;
+only one active goal per child may use that mode. A `saved` goal uses
+ring-fenced points represented by append-only **SavingsContribution** rows.
+Saving points deducts them from the spendable ledger, while returning points
+creates an offsetting ledger entry and resolves the active contributions.
+
+**GoalCompletionRequest** — a child request created after a savings goal
+reaches its target. A parent must approve completion or keep the goal active;
+there can be only one pending request per goal. **SavingsGoalEvent** preserves
+the goal activity history independently of the goal's active, completed, or
+cancelled state.
 
 **LedgerEntry** — append-only, the single source of truth for balances.
 Existing entries can't be modified or deleted; corrections are new

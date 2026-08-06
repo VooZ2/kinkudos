@@ -1,5 +1,6 @@
 Django==5.2.16
 argon2-cffi==25.1.0
+cryptography==50.0.0
 gunicorn==26.0.0
 Pillow==12.3.0
 pillow-heif==1.5.0

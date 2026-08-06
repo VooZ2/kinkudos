@@ -558,22 +558,177 @@ class GoalStatus(models.TextChoices):
     CANCELLED = "cancelled", _("Cancelled")
 
 
+class GoalMode(models.TextChoices):
+    AVAILABLE = "available", _("Current goal")
+    SAVED = "saved", _("Saved")
+
+
 class SavingsGoal(models.Model):
     child = models.ForeignKey(ChildProfile, on_delete=models.CASCADE, related_name="goals")
     title = models.CharField(max_length=120)
     icon = models.CharField(max_length=32, default="⭐")
     target_amount = models.PositiveIntegerField()
+    mode = models.CharField(
+        max_length=16,
+        choices=GoalMode.choices,
+        null=True,
+        blank=True,
+    )
     status = models.CharField(max_length=16, choices=GoalStatus.choices, default=GoalStatus.ACTIVE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["status", "-created_at"]
+        constraints = [
+            models.CheckConstraint(
+                condition=Q(target_amount__gt=0),
+                name="savings_goal_positive_target",
+            ),
+            models.UniqueConstraint(
+                fields=["child"],
+                condition=Q(status=GoalStatus.ACTIVE, mode=GoalMode.AVAILABLE),
+                name="one_current_goal_per_child",
+            ),
+        ]
+
+    @property
+    def saved_amount(self):
+        annotated = getattr(self, "_saved_amount", None)
+        if annotated is not None:
+            return max(0, int(annotated))
+        return sum(
+            contribution.amount
+            for contribution in self.contributions.filter(
+                state=SavingsContributionState.ACTIVE
+            )
+        )
+
+    @property
+    def progress_amount(self):
+        if self.mode == GoalMode.SAVED:
+            return min(self.target_amount, self.saved_amount)
+        if self.mode == GoalMode.AVAILABLE:
+            return min(self.target_amount, max(0, self.child.balance))
+        return 0
+
+    @property
+    def is_reached(self):
+        return self.progress_amount >= self.target_amount
 
     @property
     def progress_percent(self):
         if self.target_amount <= 0:
             return 100
-        return max(0, min(100, round(self.child.balance / self.target_amount * 100)))
+        return max(0, min(100, round(self.progress_amount / self.target_amount * 100)))
+
+
+class SavingsContributionState(models.TextChoices):
+    ACTIVE = "active", _("Saved")
+    RETURNED = "returned", _("Returned")
+    CONSUMED = "consumed", _("Used")
+
+
+class SavingsContribution(models.Model):
+    goal = models.ForeignKey(
+        SavingsGoal,
+        on_delete=models.PROTECT,
+        related_name="contributions",
+    )
+    amount = models.PositiveIntegerField()
+    state = models.CharField(
+        max_length=16,
+        choices=SavingsContributionState.choices,
+        default=SavingsContributionState.ACTIVE,
+    )
+    ledger_entry = models.OneToOneField(
+        "LedgerEntry",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="savings_contribution",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["created_at", "pk"]
+        constraints = [
+            models.CheckConstraint(
+                condition=Q(amount__gt=0),
+                name="savings_contribution_positive_amount",
+            )
+        ]
+        indexes = [
+            models.Index(
+                fields=["goal", "state"],
+                name="savings_contrib_goal_state_idx",
+            )
+        ]
+
+
+class GoalActivityType(models.TextChoices):
+    CREATED = "created", _("Goal created")
+    MODE_SELECTED = "mode_selected", _("Savings mode selected")
+    CURRENT_CHANGED = "current_changed", _("Current goal changed")
+    TRANSFERRED = "transferred", _("Points saved to goal")
+    RETURNED = "returned", _("Points returned from goal")
+    REACHED = "reached", _("Goal reached")
+    COMPLETED = "completed", _("Goal completed")
+    CLOSED = "closed", _("Goal closed")
+
+
+class SavingsGoalEvent(models.Model):
+    goal = models.ForeignKey(
+        SavingsGoal,
+        on_delete=models.PROTECT,
+        related_name="events",
+    )
+    event_type = models.CharField(max_length=24, choices=GoalActivityType.choices)
+    description = models.CharField(max_length=240)
+    amount = models.PositiveIntegerField(null=True, blank=True)
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="savings_goal_events",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at", "-pk"]
+
+
+class GoalCompletionRequest(models.Model):
+    goal = models.ForeignKey(
+        SavingsGoal,
+        on_delete=models.PROTECT,
+        related_name="completion_requests",
+    )
+    status = models.CharField(
+        max_length=16,
+        choices=RequestStatus.choices,
+        default=RequestStatus.PENDING,
+    )
+    requested_at = models.DateTimeField(auto_now_add=True)
+    decided_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="decided_goal_completion_requests",
+    )
+    decided_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["requested_at", "pk"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["goal"],
+                condition=Q(status=RequestStatus.PENDING),
+                name="one_pending_goal_completion_per_goal",
+            )
+        ]
 
 
 class LedgerKind(models.TextChoices):
@@ -585,6 +740,9 @@ class LedgerKind(models.TextChoices):
     ADJUSTMENT = "adjustment", _("Adjustment")
     GIFT = "gift", _("Gift")
     BIRTHDAY = "birthday", _("Birthday")
+    SAVINGS_TRANSFER = "savings_transfer", _("Saved to goal")
+    SAVINGS_RETURN = "savings_return", _("Returned from goal")
+    GOAL_COMPLETION = "goal_completion", _("Goal completion")
 
 
 class LedgerEntry(models.Model):

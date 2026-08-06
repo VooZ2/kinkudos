@@ -1,6 +1,12 @@
 msgid ""
 msgstr "Project-Id-Version: KinKudos\nLanguage: lt\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=4; plural=(n%10==1 && (n%100>19 || n%100<11) ? 0 : (n%10>=2 && n%10<=9) && (n%100>19 || n%100<11) ? 1 : n%1!=0 ? 2: 3);\n"
 
+msgid "%(amount)s points are available for rewards again."
+msgstr "Prizams vėl prieinami taškai: %(amount)s."
+
+msgid "%(amount)s saved points will be returned to %(child_name)s’s available balance before this goal is removed."
+msgstr "Prieš pašalinant šį tikslą, %(amount)s išsaugotų taškų bus grąžinta vaikui %(child_name)s į pasiekiamą balansą."
+
 msgid "%(family_display_name)s – password reset"
 msgstr "%(family_display_name)s – slaptažodžio atkūrimas"
 
@@ -103,11 +109,23 @@ msgstr "Veiksmų istorija"
 msgid "Activity history pages"
 msgstr "Veiksmų istorijos puslapiai"
 
+msgid "Activity type"
+msgstr "Veiklos tipas"
+
+msgid "Add"
+msgstr "Pridėti"
+
 msgid "Add at least one allowed IP address or network."
 msgstr "Pridėkite bent vieną leidžiamą IP adresą arba tinklą."
 
+msgid "Add completed task"
+msgstr "Pridėti atliktą darbą"
+
 msgid "Add new"
 msgstr "Pridėti naują"
+
+msgid "Add points"
+msgstr "Pridėti taškų"
 
 msgid "Adjust points"
 msgstr "Koreguoti taškus"
@@ -118,8 +136,17 @@ msgstr "Korekcija"
 msgid "Admin login by IP"
 msgstr "Administratoriaus prisijungimas pagal IP"
 
+msgid "After"
+msgstr "Po"
+
+msgid "All"
+msgstr "Visi"
+
 msgid "All access restricted"
 msgstr "Visa prieiga ribojama"
+
+msgid "All activity"
+msgstr "Visa veikla"
 
 msgid "All child devices revoked"
 msgstr "Visi vaikų įrenginiai atšaukti"
@@ -148,6 +175,9 @@ msgstr "Leidžiami IP adresai ir tinklai"
 msgid "Annual Blockville Gift!"
 msgstr "Metinė Blockville dovana!"
 
+msgid "Any time"
+msgstr "Bet kada"
+
 msgid "Anyone with this link can pair one device until it expires. Send it privately."
 msgstr "Iki nuorodai nustojant galioti ją turintis asmuo gali susieti vieną įrenginį. Siųskite ją privačiai."
 
@@ -159,6 +189,9 @@ msgstr "Programos raktas"
 
 msgid "Application key ID"
 msgstr "Programos rakto ID"
+
+msgid "Apply"
+msgstr "Taikyti"
 
 msgid "Approve"
 msgstr "Patvirtinti"
@@ -207,6 +240,15 @@ msgstr "Segti foto įrodymą"
 
 msgid "Attention needed"
 msgstr "Reikia dėmesio"
+
+msgid "Available balance: %(balance)s %(unit)s"
+msgstr "Turimas balansas: %(balance)s %(unit)s"
+
+msgid "Available balance: {{ balance }} {{ unit }}"
+msgstr "Turimas balansas: {{ balance }} {{ unit }}"
+
+msgid "Available points count as progress and can still be spent."
+msgstr "Turimi taškai skaičiuojami kaip pažanga, juos vis dar galima išleisti."
 
 msgid "Avatar"
 msgstr "Avataras"
@@ -406,6 +448,9 @@ msgstr "Patikrinkite šeimos nustatymus."
 msgid "Check the feedback description and screenshot."
 msgstr "Patikrinkite atsiliepimo aprašymą ir ekrano nuotrauką."
 
+msgid "Check the goal details."
+msgstr "Patikrinkite tikslo duomenis."
+
 msgid "Check the network access settings."
 msgstr "Patikrinkite tinklo prieigos nustatymus."
 
@@ -490,17 +535,32 @@ msgstr "Vaikų paskyros"
 msgid "Child's name"
 msgstr "Vaiko vardas"
 
+msgid "Children and access"
+msgstr "Vaikai ir prieiga"
+
+msgid "Choose Save separately before adding points."
+msgstr "Prieš pridėdami taškus pasirinkite „Taupyti atskirai“."
+
 msgid "Choose a profile"
 msgstr "Pasirink profilį"
 
 msgid "Choose a reward"
 msgstr "Pasirink prizą"
 
+msgid "Choose a savings mode before completing this goal."
+msgstr "Prieš užbaigdami šį tikslą pasirinkite taupymo režimą."
+
+msgid "Choose a savings mode for this goal."
+msgstr "Pasirinkite šio tikslo taupymo režimą."
+
 msgid "Choose a task"
 msgstr "Pasirink užduotį"
 
 msgid "Choose a valid feedback status."
 msgstr "Pasirinkite tinkamą atsiliepimo būseną."
+
+msgid "Choose a valid savings mode."
+msgstr "Pasirinkite tinkamą taupymo režimą."
 
 msgid "Choose a valid time zone."
 msgstr "Pasirinkite tinkamą laiko juostą."
@@ -535,8 +595,14 @@ msgstr "Pasirinkite atliktus darbus"
 msgid "Choose from gallery"
 msgstr "Pasirinkti iš galerijos"
 
+msgid "Choose how to save"
+msgstr "Pasirinkite, kaip taupyti"
+
 msgid "Choose inspiration"
 msgstr "Rinktis įkvėpimą"
+
+msgid "Choose mode"
+msgstr "Pasirinkite režimą"
 
 msgid "Choose one short emoji."
 msgstr "Pasirinkite vieną trumpą emoji."
@@ -568,8 +634,14 @@ msgstr "Įslaptinta sėkmės kortelė"
 msgid "Close"
 msgstr "Uždaryti"
 
+msgid "Close goal"
+msgstr "Uždaryti tikslą"
+
 msgid "Close notification"
 msgstr "Uždaryti pranešimą"
+
+msgid "Close this goal?"
+msgstr "Uždaryti šį tikslą?"
 
 msgid "Comment"
 msgstr "Komentaras"
@@ -595,6 +667,9 @@ msgstr "Atlik visas misijas iki pasaulio persikrovimo vidurnaktį."
 msgid "Complete every quest before the day resets at midnight."
 msgstr "Atlik visas užduotis iki dienos persikrovimo vidurnaktį."
 
+msgid "Complete goal"
+msgstr "Užbaigti tikslą"
+
 msgid "Complete tasks, earn points, and choose your reward."
 msgstr "Atlik darbus, rink taškus ir išsirink prizą."
 
@@ -612,6 +687,9 @@ msgstr "Atlik paskirtus darbus, kad vėl galėtum prašyti naujų prizų."
 
 msgid "Completed"
 msgstr "Pasiektas"
+
+msgid "Completed goal: %(title)s"
+msgstr "Užbaigtas tikslas: %(title)s"
 
 msgid "Completed task"
 msgstr "Atliktas darbas"
@@ -688,6 +766,9 @@ msgstr "Kredito limitas"
 msgid "Credit limit changed."
 msgstr "Kredito limitas pakeistas."
 
+msgid "Credit:"
+msgstr "Kredito limitas:"
+
 msgid "Currency name [%(default)s]: "
 msgstr "Valiutos pavadinimas [%(default)s]: "
 
@@ -700,11 +781,26 @@ msgstr "Dabartinis IP adresas"
 msgid "Current PIN"
 msgstr "Dabartinis PIN"
 
+msgid "Current goal"
+msgstr "Dabartinis tikslas"
+
+msgid "Current goal changed"
+msgstr "Pakeistas dabartinis tikslas"
+
+msgid "Current goal changed to %(title)s"
+msgstr "Dabartinis tikslas pakeistas į „%(title)s“"
+
 msgid "Current version"
 msgstr "Dabartinė versija"
 
 msgid "Currently unavailable"
 msgstr "Dabar nepasiekiama"
+
+msgid "Custom amount"
+msgstr "Sava suma"
+
+msgid "Custom range"
+msgstr "Pasirinktinis laikotarpis"
 
 msgid "Custom task"
 msgstr "Individualus darbas"
@@ -715,11 +811,26 @@ msgstr "Individualus darbas (nebūtina)"
 msgid "Daily encrypted copies protect the family database and uploaded photos."
 msgstr "Kasdienės šifruotos kopijos apsaugo šeimos duomenų bazę ir įkeltas nuotraukas."
 
+msgid "Data and retention"
+msgstr "Duomenys ir saugojimas"
+
+msgid "Date"
+msgstr "Data"
+
 msgid "Default language"
 msgstr "Numatytoji kalba"
 
 msgid "Delete"
 msgstr "Trinti"
+
+msgid "Delete goal"
+msgstr "Ištrinti tikslą"
+
+msgid "Delete goal and return saved points?"
+msgstr "Ištrinti tikslą ir grąžinti išsaugotus taškus?"
+
+msgid "Delete goal?"
+msgstr "Ištrinti tikslą?"
 
 msgid "Delete penalty “%(title)s”? Earlier history entries will remain."
 msgstr "Ištrinti nuobaudą „%(title)s“? Ankstesni įrašai istorijoje išliks."
@@ -781,6 +892,9 @@ msgstr "Redaguoti paskyras"
 msgid "Edit email settings"
 msgstr "Keisti el. pašto nustatymus"
 
+msgid "Edit goal"
+msgstr "Redaguoti tikslą"
+
 msgid "Edit settings"
 msgstr "Keisti nustatymus"
 
@@ -792,6 +906,9 @@ msgstr "El. pašto adresas"
 
 msgid "Email address not provided"
 msgstr "El. paštas nenurodytas"
+
+msgid "Email and notifications"
+msgstr "El. paštas ir pranešimai"
 
 msgid "Email credentials are sensitive. Your parent password is required and the SMTP password is never displayed."
 msgstr "El. pašto prisijungimo duomenys yra jautrūs. Būtinas jūsų tėvų paskyros slaptažodis, o SMTP slaptažodis niekada nerodomas."
@@ -852,6 +969,9 @@ msgstr "Įveskite teigiamą tokenų skaičių."
 
 msgid "Enter a valid bucket name."
 msgstr "Įveskite tinkamą bucket pavadinimą."
+
+msgid "Enter a valid point amount."
+msgstr "Įveskite tinkamą taškų skaičių."
 
 msgid "Enter both the custom task name and its point amount."
 msgstr "Įrašykite ir individualaus darbo pavadinimą, ir jo taškų skaičių."
@@ -946,6 +1066,9 @@ msgstr "Atsiliepimas išsaugotas, tačiau el. pašto pranešimo išsiųsti nepav
 msgid "Filter"
 msgstr "Filtruoti"
 
+msgid "Filters"
+msgstr "Filtrai"
+
 msgid "Final point amount"
 msgstr "Galutinis taškų skaičius"
 
@@ -976,6 +1099,9 @@ msgstr "Pavyzdžiui: s3.eu-central-003.backblazeb2.com"
 msgid "Forgot password"
 msgstr "Pamiršote slaptažodį"
 
+msgid "From"
+msgstr "Nuo"
+
 msgid "General"
 msgstr "Bendrieji"
 
@@ -991,11 +1117,71 @@ msgstr "Dovana nuo %(name)s"
 msgid "Gift to %(name)s"
 msgstr "Dovana vaikui %(name)s"
 
+msgid "Gifts"
+msgstr "Dovanos"
+
 msgid "Give bamboo"
 msgstr "Perduoti bambuką"
 
 msgid "Give points"
 msgstr "Dovanoti taškus"
+
+msgid "Goal"
+msgstr "Tikslas"
+
+msgid "Goal child filter"
+msgstr "Tikslo vaiko filtras"
+
+msgid "Goal closed"
+msgstr "Tikslas uždarytas"
+
+msgid "Goal closed."
+msgstr "Tikslas uždarytas."
+
+msgid "Goal closed: %(title)s"
+msgstr "Tikslas uždarytas: %(title)s"
+
+msgid "Goal completed"
+msgstr "Tikslas užbaigtas"
+
+msgid "Goal completed."
+msgstr "Tikslas užbaigtas."
+
+msgid "Goal completed: %(title)s"
+msgstr "Tikslas užbaigtas: %(title)s"
+
+msgid "Goal completion"
+msgstr "Tikslo užbaigimas"
+
+msgid "Goal created"
+msgstr "Tikslas sukurtas"
+
+msgid "Goal created: %(title)s"
+msgstr "Tikslas sukurtas: %(title)s"
+
+msgid "Goal deleted and %(amount)s points returned."
+msgstr "Tikslas ištrintas, grąžinta taškų: %(amount)s."
+
+msgid "Goal deleted."
+msgstr "Tikslas ištrintas."
+
+msgid "Goal deleted: %(title)s"
+msgstr "Tikslas ištrintas: %(title)s"
+
+msgid "Goal deleted: %(title)s · %(amount)s points returned"
+msgstr "Tikslas ištrintas: %(title)s · grąžinta taškų: %(amount)s"
+
+msgid "Goal reached"
+msgstr "Tikslas pasiektas"
+
+msgid "Goal reached: %(title)s"
+msgstr "Pasiektas tikslas: %(title)s"
+
+msgid "Goal title"
+msgstr "Tikslo pavadinimas"
+
+msgid "Goal updated."
+msgstr "Tikslas atnaujintas."
 
 msgid "Goals"
 msgstr "Tikslai"
@@ -1078,6 +1264,9 @@ msgstr "Neteisingas PIN."
 msgid "Incorrect changes can stop future backups. Continue only if you understand the storage credentials and have saved the repository password outside this server."
 msgstr "Neteisingi pakeitimai gali sustabdyti būsimas kopijas. Tęskite tik suprasdami saugyklos prisijungimo duomenis ir išsaugoję repozitorijos slaptažodį už šio serverio ribų."
 
+msgid "Informational"
+msgstr "Informacinis"
+
 msgid "Initial credit"
 msgstr "Pradinis kreditas"
 
@@ -1104,6 +1293,9 @@ msgstr "JPEG, PNG, WebP, HEIC arba HEIF, iki 5 MB. Nuotrauka bus apkirpta kvadra
 
 msgid "JavaScript is required to use the private pairing link."
 msgstr "Privačiai susiejimo nuorodai naudoti reikalingas „JavaScript“."
+
+msgid "Keep active"
+msgstr "Palikti aktyvų"
 
 msgid "Keep feedback images for"
 msgstr "Atsiliepimų nuotraukas saugoti"
@@ -1165,6 +1357,12 @@ msgstr "Magijos krautuvėlė"
 msgid "Make a panda wish"
 msgstr "Sugalvoti pandos svajonę"
 
+msgid "Manage"
+msgstr "Tvarkyti"
+
+msgid "Manage sections"
+msgstr "Valdymo skiltys"
+
 msgid "Management"
 msgstr "Valdymas"
 
@@ -1191,6 +1389,21 @@ msgstr "Misija atlikta"
 
 msgid "Missions"
 msgstr "Misijos"
+
+msgid "More information"
+msgstr "Daugiau informacijos"
+
+msgid "Move available points into this goal."
+msgstr "Perkelkite turimus taškus į šį tikslą."
+
+msgid "Move points back"
+msgstr "Grąžinti taškus"
+
+msgid "Move points into this goal."
+msgstr "Perkelkite taškus į šį tikslą."
+
+msgid "Move saved points back"
+msgstr "Grąžinti išsaugotus taškus"
 
 msgid "My Gallery"
 msgstr "Mano galerija"
@@ -1227,6 +1440,9 @@ msgstr "Tinklo prieigos nustatymai išsaugoti."
 
 msgid "Network access setup"
 msgstr "Tinklo prieigos nustatymas"
+
+msgid "Network and security"
+msgstr "Tinklas ir saugumas"
 
 msgid "Neutral"
 msgstr "Neutrali"
@@ -1275,6 +1491,9 @@ msgstr "Vaikų profiliai dar nesukurti."
 
 msgid "No new features in this release."
 msgstr "Naujų funkcijų nebuvo."
+
+msgid "No pending requests"
+msgstr "Nėra laukiančių prašymų"
 
 msgid "No points were lost."
 msgstr "Taškų nepraradai."
@@ -1365,6 +1584,9 @@ msgstr "Vaikų profilius matyti ir PIN įvesti gali tik susieti įrenginiai."
 
 msgid "Only screenshots from resolved feedback are removed automatically."
 msgstr "Šalinamos tik išspręstų atsiliepimų nuotraukos"
+
+msgid "Only separately saved points can be returned."
+msgstr "Grąžinti galima tik atskirai išsaugotus taškus."
 
 msgid "Open"
 msgstr "Neužbaigtas"
@@ -1531,6 +1753,9 @@ msgstr "Nuotrauka pasirinkta"
 msgid "Planned"
 msgstr "Planuojamas"
 
+msgid "Point adjustments"
+msgstr "Taškų korekcijos"
+
 msgid "Point amount"
 msgstr "Taškų skaičius"
 
@@ -1549,11 +1774,29 @@ msgstr "Taškų operacijų ištrinti negalima."
 msgid "Points"
 msgstr "Taškai"
 
+msgid "Points and tasks"
+msgstr "Taškai ir darbai"
+
 msgid "Points for a task photo"
 msgstr "Taškai už darbą su nuotrauka"
 
+msgid "Points returned from goal"
+msgstr "Taškai grąžinti iš tikslo"
+
+msgid "Points saved separately for goals. They cannot be used for rewards."
+msgstr "Atskirai tikslams išsaugoti taškai negali būti naudojami prizams."
+
+msgid "Points saved to goal"
+msgstr "Taškai išsaugoti tikslui"
+
+msgid "Points to add"
+msgstr "Pridedamų taškų skaičius"
+
 msgid "Points to give"
 msgstr "Dovanojamų taškų skaičius"
+
+msgid "Points were saved for this goal."
+msgstr "Taškai išsaugoti šiam tikslui."
 
 msgid "Present artwork"
 msgstr "Pristatyti kūrinį"
@@ -1608,6 +1851,9 @@ msgstr "Paskirtis"
 
 msgid "Quest complete"
 msgstr "Užduotis atlikta"
+
+msgid "Reached goal"
+msgstr "Tikslas pasiektas"
 
 msgid "Reason"
 msgstr "Paaiškinimas"
@@ -1687,6 +1933,9 @@ msgstr "Saugykla"
 msgid "Request a correction"
 msgstr "Paprašyti pataisyti"
 
+msgid "Request completion"
+msgstr "Prašyti užbaigti"
+
 msgid "Request from arsenal"
 msgstr "Prašyti iš arsenalo"
 
@@ -1701,6 +1950,9 @@ msgstr "Privalomas prieš keičiant tinklo prieigą."
 
 msgid "Required before changing sensitive email settings."
 msgstr "Privalomas prieš keičiant jautrius el. pašto nustatymus."
+
+msgid "Reset"
+msgstr "Atkurti"
 
 msgid "Reset link"
 msgstr "Atkūrimo nuoroda"
@@ -1722,6 +1974,33 @@ msgstr "Riboti vaikų prieigą"
 
 msgid "Retention"
 msgstr "Saugojimas"
+
+msgid "Return points and delete"
+msgstr "Grąžinti taškus ir ištrinti"
+
+msgid "Return saved points before closing"
+msgstr "Prieš uždarydami grąžinkite išsaugotus taškus"
+
+msgid "Return saved points before closing this goal."
+msgstr "Prieš uždarydami grąžinkite išsaugotus taškus."
+
+msgid "Return the excess saved points before lowering this target."
+msgstr "Prieš mažindami tikslą grąžinkite perteklinius išsaugotus taškus."
+
+msgid "Return the saved points before changing this goal's mode."
+msgstr "Prieš keisdami šio tikslo režimą grąžinkite išsaugotus taškus."
+
+msgid "Returned"
+msgstr "Grąžinta"
+
+msgid "Returned %(amount)s points from %(title)s"
+msgstr "Iš tikslo „%(title)s“ grąžinta taškų: %(amount)s"
+
+msgid "Returned from %(title)s"
+msgstr "Grąžinta iš „%(title)s“"
+
+msgid "Returned from goal"
+msgstr "Grąžinta iš tikslo"
 
 msgid "Revealed"
 msgstr "Atidengtas"
@@ -1819,14 +2098,47 @@ msgstr "Išsaugoti slaptažodį"
 msgid "Save profile"
 msgstr "Išsaugoti profilį"
 
+msgid "Save separately"
+msgstr "Taupyti atskirai"
+
 msgid "Save settings"
 msgstr "Išsaugoti nustatymus"
 
 msgid "Save this recovery code in your password manager. It will not be shown again."
 msgstr "Išsaugokite šį atkūrimo kodą slaptažodžių tvarkyklėje. Jis daugiau nebus rodomas."
 
+msgid "Saved"
+msgstr "Išsaugota"
+
+msgid "Saved %(amount)s points for %(title)s"
+msgstr "Tikslui „%(title)s“ išsaugota taškų: %(amount)s"
+
+msgid "Saved for %(title)s"
+msgstr "Išsaugota tikslui „%(title)s“"
+
+msgid "Saved points"
+msgstr "Išsaugoti taškai"
+
+msgid "Saved points are kept for this goal and cannot be used for rewards."
+msgstr "Išsaugoti taškai laikomi šiame tiksle ir negali būti naudojami prizams."
+
+msgid "Saved separately"
+msgstr "Taupoma atskirai"
+
+msgid "Saved to goal"
+msgstr "Išsaugota tikslui"
+
 msgid "Savings goal"
 msgstr "Taupymo tikslas"
+
+msgid "Savings mode saved."
+msgstr "Taupymo režimas išsaugotas."
+
+msgid "Savings mode selected"
+msgstr "Pasirinktas taupymo režimas"
+
+msgid "Savings mode selected for %(title)s"
+msgstr "Pasirinktas tikslo „%(title)s“ taupymo režimas"
 
 msgid "Scratch all nine fields"
 msgstr "Nutrink visus devynis langelius"
@@ -1857,6 +2169,9 @@ msgstr "Nutrinami bilietai išjungti"
 
 msgid "Scratch tickets this week: %(remaining)s of %(limit)s"
 msgstr "Nutrinamų bilietų šią savaitę: %(remaining)s iš %(limit)s"
+
+msgid "Scratch tickets used this week. The limit resets every Monday."
+msgstr "Šią savaitę panaudoti nutrinami bilietai. Limitas atnaujinamas kiekvieną pirmadienį."
 
 msgid "Scratch-off surface"
 msgstr "Nutrinamas paviršius"
@@ -1917,6 +2232,9 @@ msgstr "Siuntėjo el. pašto adresas"
 
 msgid "Set a new password here:"
 msgstr "Naują slaptažodį nustatykite čia:"
+
+msgid "Set credit"
+msgstr "Nustatyti kreditą"
 
 msgid "Set the lowest balance this child may spend down to."
 msgstr "Nurodykite, iki kokio minuso vaikas gali išleisti tokenus."
@@ -2029,6 +2347,9 @@ msgstr "Pasiimti iš skrynios"
 msgid "Take photo"
 msgstr "Fotografuoti"
 
+msgid "Target amount"
+msgstr "Tikslinė suma"
+
 msgid "Task"
 msgstr "Darbas"
 
@@ -2140,6 +2461,18 @@ msgstr "Šeimos pavadinimas arba slapyvardis yra privalomas."
 msgid "The family-wide scratch ticket switch must also be enabled."
 msgstr "Taip pat turi būti įjungtas bendras šeimos nutrinamų bilietų nustatymas."
 
+msgid "The goal cannot be completed because the available balance changed."
+msgstr "Tikslo nepavyksta užbaigti, nes pasikeitė turimas balansas."
+
+msgid "The goal target must be greater than zero."
+msgstr "Tikslo suma turi būti didesnė už nulį."
+
+msgid "The goal was sent to the parents for approval."
+msgstr "Tikslas išsiųstas tėvams patvirtinti."
+
+msgid "The goal will stay active."
+msgstr "Tikslas liks aktyvus."
+
 msgid "The image cannot be larger than 12 MB."
 msgstr "Nuotrauka negali būti didesnė nei 12 MB."
 
@@ -2215,6 +2548,9 @@ msgstr "Prizo prašymas perduotas tėvams."
 msgid "The rewards catalog is empty."
 msgstr "Prizų katalogas dar tuščias."
 
+msgid "The saved amount no longer reaches this goal."
+msgstr "Išsaugotų taškų nebeužtenka šiam tikslui pasiekti."
+
 msgid "The setup code is incorrect."
 msgstr "Paruošimo kodas neteisingas."
 
@@ -2263,6 +2599,9 @@ msgstr "Aktyvių nuobaudų nėra."
 msgid "There are no active tasks."
 msgstr "Aktyvių darbų nėra."
 
+msgid "There are no goals yet."
+msgstr "Tikslų dar nėra."
+
 msgid "There are no pending requests"
 msgstr "Nėra laukiančių prašymų"
 
@@ -2281,6 +2620,15 @@ msgstr "Yra naujienų."
 msgid "There is no feedback yet."
 msgstr "Atsiliepimų dar nėra."
 
+msgid "These points are reserved for this goal."
+msgstr "Šie taškai rezervuoti šiam tikslui."
+
+msgid "These points will become available for rewards again."
+msgstr "Šie taškai vėl bus prieinami prizams."
+
+msgid "These points will no longer be available for rewards."
+msgstr "Šie taškai nebebus prieinami prizams."
+
 msgid "This assigned task has expired."
 msgstr "Šio paskirto darbo galiojimas baigėsi."
 
@@ -2289,6 +2637,12 @@ msgstr "Šis paskirtas darbas nebelaukia atlikimo."
 
 msgid "This browser or device mode does not support web notifications."
 msgstr "Ši naršyklė arba įrenginio režimas nepalaiko interneto pranešimų."
+
+msgid "This child can spend points down to %(limit)s."
+msgstr "Šis vaikas gali išleisti taškus iki %(limit)s."
+
+msgid "This child can spend points down to {{ limit }}."
+msgstr "Šis vaikas gali išleisti taškus iki {{ limit }}."
 
 msgid "This child may spend points down to %(limit)s. After half of the available credit is used, new reward requests are paused until the balance improves."
 msgstr "Vaikas gali išleisti taškus iki %(limit)s. Išnaudojus pusę kredito, naujų prizų prašymai pristabdomi, kol balansas pagerės."
@@ -2308,8 +2662,26 @@ msgstr "Šis el. pašto adresas jau naudojamas."
 msgid "This field is required when email is enabled."
 msgstr "Šis laukas privalomas, kai įjungtas el. paštas."
 
+msgid "This goal has no saved points to return."
+msgstr "Šis tikslas neturi grąžintinų išsaugotų taškų."
+
+msgid "This goal has not reached its target yet."
+msgstr "Šis tikslas dar nepasiekė tikslinės sumos."
+
+msgid "This goal is already waiting for parent approval."
+msgstr "Šis tikslas jau laukia tėvų patvirtinimo."
+
+msgid "This goal request has already been resolved."
+msgstr "Šio tikslo prašymas jau išspręstas."
+
+msgid "This goal will be removed. This action cannot be undone."
+msgstr "Šis tikslas bus pašalintas. Šio veiksmo atšaukti negalima."
+
 msgid "This message stays on your family server and is reviewed by parents."
 msgstr "Šis pranešimas lieka šeimos serveryje ir yra peržiūrimas tėvų."
+
+msgid "This month"
+msgstr "Šį mėnesį"
 
 msgid "This operation would exceed the allowed %(limit)s point limit."
 msgstr "Šis veiksmas viršytų leidžiamą %(limit)s taškų limitą."
@@ -2350,8 +2722,17 @@ msgstr "Šis bilietas yra sėkmės žaidimas."
 msgid "This username is already in use."
 msgstr "Toks prisijungimo vardas jau naudojamas."
 
+msgid "This week"
+msgstr "Šią savaitę"
+
+msgid "Tickets %(used)s/%(limit)s"
+msgstr "Bilietai %(used)s/%(limit)s"
+
 msgid "Tickets left this week: %(remaining)s of %(limit)s."
 msgstr "Šią savaitę liko bilietų: %(remaining)s iš %(limit)s."
+
+msgid "Tickets {{ used }}/{{ limit }}"
+msgstr "Bilietai {{ used }}/{{ limit }}"
 
 msgid "Tidy your room"
 msgstr "Sutvarkyti savo kambarį"
@@ -2361,6 +2742,9 @@ msgstr "Laiko juosta"
 
 msgid "Title"
 msgstr "Pavadinimas"
+
+msgid "To"
+msgstr "Iki"
 
 msgid "Today's assigned missions"
 msgstr "Šiandien paskirtos misijos"
@@ -2455,6 +2839,15 @@ msgstr "Įrašykite 0, jei nenorite skirti papildomų taškų už nuotrauką. Re
 msgid "Use a JPEG, PNG, WebP, HEIC, or HEIF image."
 msgstr "Naudokite JPEG, PNG, WebP, HEIC arba HEIF nuotrauką."
 
+msgid "Use available"
+msgstr "Naudoti turimus"
+
+msgid "Use available points"
+msgstr "Naudoti turimus taškus"
+
+msgid "Used"
+msgstr "Panaudota"
+
 msgid "Used in Lithuanian greetings. Leave blank to generate it automatically."
 msgstr "Naudojama lietuviškuose kreipiniuose. Palikus tuščią bus parinkta automatiškai."
 
@@ -2466,6 +2859,12 @@ msgstr "Naudotojas %(username)s jau egzistuoja."
 
 msgid "Username"
 msgstr "Prisijungimo vardas"
+
+msgid "Uses available points"
+msgstr "Naudoja turimus taškus"
+
+msgid "Uses your available points. You can still spend them, so progress may change."
+msgstr "Naudoja turimus taškus. Juos vis dar galima išleisti, todėl pažanga gali mažėti."
 
 msgid "VERSIONS"
 msgstr "VERSIJOS"
@@ -2527,11 +2926,23 @@ msgstr "Užrašyti į burtų knygą"
 msgid "You can add a photo of the finished task."
 msgstr "Gali pridėti atlikto darbo nuotrauką."
 
+msgid "You can add at most %(amount)s points to reach this goal."
+msgstr "Šiam tikslui pasiekti galite pridėti ne daugiau kaip %(amount)s taškų."
+
+msgid "You can add at most {max} points."
+msgstr "Galite pridėti ne daugiau kaip {max} taškų."
+
 msgid "You can give only points you have already earned."
 msgstr "Gali dovanoti tik jau uždirbtus taškus."
 
 msgid "You can now sign in with your new password."
 msgstr "Dabar galite prisijungti naudodami naują slaptažodį."
+
+msgid "You can save only points you currently have available."
+msgstr "Galite išsaugoti tik šiuo metu turimus taškus."
+
+msgid "You can still spend these points on rewards. Your progress may go down."
+msgstr "Šiuos taškus vis dar galite išleisti prizams. Pažanga gali mažėti."
 
 msgid "You cannot remove the account you are currently using."
 msgstr "Negalima pašalinti paskyros, kuria dabar esate prisijungę."
@@ -2574,6 +2985,9 @@ msgstr "Jūsų paskyros slaptažodis"
 
 msgid "Your artwork was sent to the review gallery!"
 msgstr "Tavo kūrinys išsiųstas į vertinimo galeriją!"
+
+msgid "Your available balance counts as progress."
+msgstr "Turimas balansas skaičiuojamas kaip pažanga."
 
 msgid "Your birthday change was approved"
 msgstr "Tavo gimimo datos pakeitimas patvirtintas"
@@ -2649,6 +3063,9 @@ msgstr "vienas bilietas neužbaigtas"
 
 msgid "photo bonus"
 msgstr "priedas už nuotrauką"
+
+msgid "saved"
+msgstr "išsaugota"
 
 msgid "this device"
 msgstr "šis įrenginys"

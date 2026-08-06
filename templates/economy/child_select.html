@@ -31,7 +31,9 @@
   <form method="post" class="stack-form">
     {% csrf_token %}
     <input type="hidden" name="child_id" id="pin-child-id">
-    <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}">×</button>
+    <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
+      </button>
     <h2>{% translate "Enter your PIN" %}</h2>
     <label for="id_pin">{% translate "4 digits" %}:</label>
     <input class="pin-input" id="id_pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" required>

@@ -2,6 +2,7 @@ import random
 
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
+from django.db.models import Sum
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
@@ -12,6 +13,9 @@ from .models import (
     BirthdayAward,
     ChildProfile,
     FamilySettings,
+    GoalActivityType,
+    GoalCompletionRequest,
+    GoalMode,
     GoalStatus,
     LedgerEntry,
     LedgerKind,
@@ -21,7 +25,10 @@ from .models import (
     RequestStatus,
     Reward,
     RewardRequest,
+    SavingsContribution,
+    SavingsContributionState,
     SavingsGoal,
+    SavingsGoalEvent,
     TaskClaim,
     TaskCompletion,
     Theme,
@@ -421,6 +428,406 @@ def reward_is_affordable(child, reward):
     return child.balance - reward.cost >= child.min_balance
 
 
+def _active_saved_amount(goal):
+    return int(
+        goal.contributions.filter(state=SavingsContributionState.ACTIVE).aggregate(
+            total=Sum("amount")
+        )["total"]
+        or 0
+    )
+
+
+def _record_goal_event(*, goal, event_type, description, actor=None, amount=None):
+    return SavingsGoalEvent.objects.create(
+        goal=goal,
+        event_type=event_type,
+        description=description,
+        actor=actor,
+        amount=amount,
+    )
+
+
+@transaction.atomic
+def create_savings_goal(*, child, title, target_amount, icon="⭐", actor=None):
+    if target_amount <= 0:
+        raise ValidationError(_("The goal target must be greater than zero."))
+    locked_child = ChildProfile.objects.select_for_update().get(
+        pk=child.pk,
+        is_active=True,
+    )
+    goal = SavingsGoal.objects.create(
+        child=locked_child,
+        title=title.strip(),
+        icon=icon,
+        target_amount=target_amount,
+        status=GoalStatus.ACTIVE,
+    )
+    _record_goal_event(
+        goal=goal,
+        event_type=GoalActivityType.CREATED,
+        description=_("Goal created: %(title)s") % {"title": goal.title},
+        actor=actor,
+    )
+    return goal
+
+
+@transaction.atomic
+def select_goal_mode(*, goal, child, mode, actor=None):
+    if mode not in GoalMode.values:
+        raise ValidationError(_("Choose a valid savings mode."))
+    locked_child = ChildProfile.objects.select_for_update().get(
+        pk=child.pk,
+        is_active=True,
+    )
+    locked_goal = SavingsGoal.objects.select_for_update().get(
+        pk=goal.pk,
+        child=locked_child,
+        status=GoalStatus.ACTIVE,
+    )
+    if locked_goal.mode == GoalMode.SAVED and mode != GoalMode.SAVED:
+        if _active_saved_amount(locked_goal):
+            raise ValidationError(
+                _("Return the saved points before changing this goal's mode.")
+            )
+    previous_current = None
+    if mode == GoalMode.AVAILABLE:
+        previous_current = (
+            SavingsGoal.objects.select_for_update()
+            .filter(
+                child=locked_child,
+                status=GoalStatus.ACTIVE,
+                mode=GoalMode.AVAILABLE,
+            )
+            .exclude(pk=locked_goal.pk)
+            .first()
+        )
+        if previous_current:
+            previous_current.mode = None
+            previous_current.save(update_fields=["mode"])
+    if locked_goal.mode == mode and previous_current is None:
+        return locked_goal
+    locked_goal.mode = mode
+    locked_goal.save(update_fields=["mode"])
+    event_type = (
+        GoalActivityType.CURRENT_CHANGED
+        if mode == GoalMode.AVAILABLE and previous_current
+        else GoalActivityType.MODE_SELECTED
+    )
+    _record_goal_event(
+        goal=locked_goal,
+        event_type=event_type,
+        description=(
+            _("Current goal changed to %(title)s")
+            if previous_current
+            else _("Savings mode selected for %(title)s")
+        )
+        % {"title": locked_goal.title},
+        actor=actor,
+    )
+    return locked_goal
+
+
+@transaction.atomic
+def add_saved_points(*, goal, child, amount, actor=None):
+    if amount <= 0:
+        raise ValidationError(_("Enter a positive point amount."))
+    locked_child = ChildProfile.objects.select_for_update().get(
+        pk=child.pk,
+        is_active=True,
+    )
+    locked_goal = SavingsGoal.objects.select_for_update().get(
+        pk=goal.pk,
+        child=locked_child,
+        status=GoalStatus.ACTIVE,
+    )
+    if locked_goal.mode != GoalMode.SAVED:
+        raise ValidationError(_("Choose Save separately before adding points."))
+    saved_amount = _active_saved_amount(locked_goal)
+    remaining = locked_goal.target_amount - saved_amount
+    if amount > remaining:
+        raise ValidationError(
+            _("You can add at most %(amount)s points to reach this goal.")
+            % {"amount": max(remaining, 0)}
+        )
+    if locked_child.balance <= 0 or amount > locked_child.balance:
+        raise ValidationError(_("You can save only points you currently have available."))
+    contribution = SavingsContribution.objects.create(
+        goal=locked_goal,
+        amount=amount,
+        state=SavingsContributionState.ACTIVE,
+    )
+    entry = post_ledger_entry(
+        child=locked_child,
+        delta=-amount,
+        kind=LedgerKind.SAVINGS_TRANSFER,
+        description=_("Saved for %(title)s") % {"title": locked_goal.title},
+        actor=actor,
+        source_id=contribution.pk,
+    )
+    contribution.ledger_entry = entry
+    contribution.save(update_fields=["ledger_entry"])
+    _record_goal_event(
+        goal=locked_goal,
+        event_type=GoalActivityType.TRANSFERRED,
+        description=_("Saved %(amount)s points for %(title)s")
+        % {"amount": amount, "title": locked_goal.title},
+        actor=actor,
+        amount=amount,
+    )
+    return contribution
+
+
+@transaction.atomic
+def request_goal_completion(*, goal, child):
+    locked_child = ChildProfile.objects.select_for_update().get(
+        pk=child.pk,
+        is_active=True,
+    )
+    locked_goal = SavingsGoal.objects.select_for_update().get(
+        pk=goal.pk,
+        child=locked_child,
+        status=GoalStatus.ACTIVE,
+    )
+    progress = (
+        _active_saved_amount(locked_goal)
+        if locked_goal.mode == GoalMode.SAVED
+        else max(0, locked_child.balance)
+        if locked_goal.mode == GoalMode.AVAILABLE
+        else 0
+    )
+    if locked_goal.mode not in GoalMode.values or progress < locked_goal.target_amount:
+        raise ValidationError(_("This goal has not reached its target yet."))
+    if GoalCompletionRequest.objects.filter(
+        goal=locked_goal, status=RequestStatus.PENDING
+    ).exists():
+        raise ValidationError(_("This goal is already waiting for parent approval."))
+    try:
+        with transaction.atomic():
+            completion_request = GoalCompletionRequest.objects.create(goal=locked_goal)
+    except IntegrityError as exc:
+        raise ValidationError(
+            _("This goal is already waiting for parent approval.")
+        ) from exc
+    _record_goal_event(
+        goal=locked_goal,
+        event_type=GoalActivityType.REACHED,
+        description=_("Goal reached: %(title)s") % {"title": locked_goal.title},
+    )
+    return completion_request
+
+
+@transaction.atomic
+def approve_goal_completion(*, completion_request, actor):
+    locked_request = GoalCompletionRequest.objects.select_for_update().get(
+        pk=completion_request.pk
+    )
+    if locked_request.status != RequestStatus.PENDING:
+        raise ValidationError(_("This goal request has already been resolved."))
+    locked_goal = SavingsGoal.objects.select_for_update().get(
+        pk=locked_request.goal_id,
+        status=GoalStatus.ACTIVE,
+    )
+    locked_child = ChildProfile.objects.select_for_update().get(
+        pk=locked_goal.child_id,
+        is_active=True,
+    )
+    if locked_goal.mode == GoalMode.AVAILABLE:
+        if locked_child.balance < locked_goal.target_amount:
+            raise ValidationError(
+                _("The goal cannot be completed because the available balance changed.")
+            )
+        post_ledger_entry(
+            child=locked_child,
+            delta=-locked_goal.target_amount,
+            kind=LedgerKind.GOAL_COMPLETION,
+            description=_("Completed goal: %(title)s") % {"title": locked_goal.title},
+            actor=actor,
+            source_id=locked_request.pk,
+        )
+    elif locked_goal.mode == GoalMode.SAVED:
+        saved_contributions = list(
+            SavingsContribution.objects.select_for_update().filter(
+                goal=locked_goal,
+                state=SavingsContributionState.ACTIVE,
+            )
+        )
+        saved_amount = sum(contribution.amount for contribution in saved_contributions)
+        if saved_amount < locked_goal.target_amount:
+            raise ValidationError(_("The saved amount no longer reaches this goal."))
+        now = timezone.now()
+        SavingsContribution.objects.filter(
+            pk__in=[contribution.pk for contribution in saved_contributions]
+        ).update(state=SavingsContributionState.CONSUMED, resolved_at=now)
+    else:
+        raise ValidationError(_("Choose a savings mode before completing this goal."))
+    locked_goal.status = GoalStatus.COMPLETED
+    locked_goal.save(update_fields=["status"])
+    locked_request.status = RequestStatus.APPROVED
+    locked_request.decided_by = actor
+    locked_request.decided_at = timezone.now()
+    locked_request.save(update_fields=["status", "decided_by", "decided_at"])
+    _record_goal_event(
+        goal=locked_goal,
+        event_type=GoalActivityType.COMPLETED,
+        description=_("Goal completed: %(title)s") % {"title": locked_goal.title},
+        actor=actor,
+        amount=locked_goal.target_amount,
+    )
+    return locked_goal
+
+
+@transaction.atomic
+def keep_goal_active(*, completion_request, actor):
+    locked_request = GoalCompletionRequest.objects.select_for_update().get(
+        pk=completion_request.pk
+    )
+    if locked_request.status != RequestStatus.PENDING:
+        raise ValidationError(_("This goal request has already been resolved."))
+    locked_request.status = RequestStatus.REJECTED
+    locked_request.decided_by = actor
+    locked_request.decided_at = timezone.now()
+    locked_request.save(update_fields=["status", "decided_by", "decided_at"])
+    return locked_request
+
+
+def _return_active_goal_points(*, goal, actor, require_contributions=False):
+    contributions = list(
+        SavingsContribution.objects.select_for_update().filter(
+            goal=goal,
+            state=SavingsContributionState.ACTIVE,
+        )
+        .order_by("created_at", "pk")
+    )
+    if not contributions and require_contributions:
+        raise ValidationError(_("This goal has no saved points to return."))
+    if not contributions:
+        return 0
+    locked_child = ChildProfile.objects.select_for_update().get(
+        pk=goal.child_id,
+        is_active=True,
+    )
+    total = sum(contribution.amount for contribution in contributions)
+    now = timezone.now()
+    for contribution in contributions:
+        post_ledger_entry(
+            child=locked_child,
+            delta=contribution.amount,
+            kind=LedgerKind.SAVINGS_RETURN,
+            description=_("Returned from %(title)s") % {"title": goal.title},
+            actor=actor,
+            source_id=contribution.pk,
+        )
+        contribution.state = SavingsContributionState.RETURNED
+        contribution.resolved_at = now
+        contribution.save(update_fields=["state", "resolved_at"])
+    return total
+
+
+@transaction.atomic
+def return_saved_points(*, goal, actor):
+    locked_goal = SavingsGoal.objects.select_for_update().get(
+        pk=goal.pk,
+        status=GoalStatus.ACTIVE,
+    )
+    if locked_goal.mode != GoalMode.SAVED:
+        raise ValidationError(_("Only separately saved points can be returned."))
+    total = _return_active_goal_points(
+        goal=locked_goal,
+        actor=actor,
+        require_contributions=True,
+    )
+    _record_goal_event(
+        goal=locked_goal,
+        event_type=GoalActivityType.RETURNED,
+        description=_("Returned %(amount)s points from %(title)s")
+        % {"amount": total, "title": locked_goal.title},
+        actor=actor,
+        amount=total,
+    )
+    return total
+
+
+@transaction.atomic
+def update_savings_goal(*, goal, title, target_amount, icon, actor):
+    if target_amount <= 0:
+        raise ValidationError(_("The goal target must be greater than zero."))
+    locked_goal = SavingsGoal.objects.select_for_update().get(pk=goal.pk)
+    saved_amount = _active_saved_amount(locked_goal)
+    if target_amount < saved_amount:
+        raise ValidationError(
+            _("Return the excess saved points before lowering this target.")
+        )
+    locked_goal.title = title.strip()
+    locked_goal.target_amount = target_amount
+    locked_goal.icon = icon
+    locked_goal.save(update_fields=["title", "target_amount", "icon"])
+    return locked_goal
+
+
+@transaction.atomic
+def close_savings_goal(*, goal, actor):
+    locked_goal = SavingsGoal.objects.select_for_update().get(
+        pk=goal.pk,
+        status=GoalStatus.ACTIVE,
+    )
+    if _active_saved_amount(locked_goal):
+        raise ValidationError(_("Return saved points before closing this goal."))
+    GoalCompletionRequest.objects.filter(
+        goal=locked_goal,
+        status=RequestStatus.PENDING,
+    ).update(
+        status=RequestStatus.CANCELLED,
+        decided_by=actor,
+        decided_at=timezone.now(),
+    )
+    locked_goal.status = GoalStatus.CANCELLED
+    locked_goal.save(update_fields=["status"])
+    _record_goal_event(
+        goal=locked_goal,
+        event_type=GoalActivityType.CLOSED,
+        description=_("Goal closed: %(title)s") % {"title": locked_goal.title},
+        actor=actor,
+    )
+    return locked_goal
+
+
+@transaction.atomic
+def delete_savings_goal(*, goal, actor):
+    locked_goal = SavingsGoal.objects.select_for_update().get(
+        pk=goal.pk,
+        status=GoalStatus.ACTIVE,
+    )
+    returned_amount = _return_active_goal_points(
+        goal=locked_goal,
+        actor=actor,
+    )
+    GoalCompletionRequest.objects.filter(
+        goal=locked_goal,
+        status=RequestStatus.PENDING,
+    ).update(
+        status=RequestStatus.CANCELLED,
+        decided_by=actor,
+        decided_at=timezone.now(),
+    )
+    locked_goal.status = GoalStatus.CANCELLED
+    locked_goal.mode = None
+    locked_goal.save(update_fields=["status", "mode"])
+    if returned_amount:
+        description = _(
+            "Goal deleted: %(title)s · %(amount)s points returned"
+        ) % {"title": locked_goal.title, "amount": returned_amount}
+    else:
+        description = _("Goal deleted: %(title)s") % {"title": locked_goal.title}
+    _record_goal_event(
+        goal=locked_goal,
+        event_type=GoalActivityType.CLOSED,
+        description=description,
+        actor=actor,
+        amount=returned_amount or None,
+    )
+    return locked_goal, returned_amount
+
+
 def submit_reward_request(*, child, reward):
     if not reward.is_active:
         raise ValidationError(_("This reward is no longer active."))
@@ -485,12 +892,12 @@ def approve_proposal(*, proposal, actor, final_cost):
     if locked.proposal_type == ProposalType.REWARD:
         created = Reward.objects.create(title=locked.title, icon=locked.icon, cost=final_cost)
     else:
-        created = SavingsGoal.objects.create(
+        created = create_savings_goal(
             child=locked.child,
             title=locked.title,
-            icon=locked.icon,
             target_amount=final_cost,
-            status=GoalStatus.ACTIVE,
+            icon=locked.icon,
+            actor=actor,
         )
     locked.status = RequestStatus.APPROVED
     locked.final_cost = final_cost

@@ -2,7 +2,7 @@ import hashlib
 import json
 import logging
 import smtplib
-from datetime import timedelta
+from datetime import date, datetime, time, timedelta
 from urllib.parse import urlencode
 from uuid import uuid4
 
@@ -29,6 +29,8 @@ from django.core.files.base import ContentFile
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
 from django.db import transaction
+from django.db.models import Q, Sum, Value
+from django.db.models.functions import Coalesce
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -62,6 +64,7 @@ from .forms import (
     FeedbackReportForm,
     FeedbackStatusForm,
     FirstThemeForm,
+    GoalAmountForm,
     InitialSetupForm,
     MinBalanceForm,
     NetworkAccessForm,
@@ -74,6 +77,7 @@ from .forms import (
     ProposalForm,
     RejectForm,
     RewardForm,
+    SavingsGoalForm,
     SmtpSettingsForm,
     TaskDecisionCommentForm,
     TaskEvidenceForm,
@@ -105,15 +109,21 @@ from .models import (
     FeedbackReport,
     FeedbackStatus,
     FeedbackType,
+    GoalCompletionRequest,
+    GoalMode,
+    GoalStatus,
     LedgerEntry,
     LedgerKind,
     LotteryTicket,
     PenaltyTemplate,
     Proposal,
+    ProposalType,
     PushSubscription,
     RequestStatus,
     Reward,
     RewardRequest,
+    SavingsGoal,
+    SavingsGoalEvent,
     SecurityAuditEvent,
     Task,
     TaskClaim,
@@ -135,6 +145,8 @@ from .push import (
 )
 from .rate_limit import register_attempt, reset_attempts
 from .services import (
+    add_saved_points,
+    approve_goal_completion,
     approve_proposal,
     approve_reward_request,
     approve_task_claim,
@@ -142,17 +154,24 @@ from .services import (
     assigned_tasks_block_rewards,
     cancel_assigned_task,
     cancel_assigned_task_batch,
+    close_savings_goal,
     complete_assigned_task,
+    delete_savings_goal,
+    keep_goal_active,
     post_ledger_entry,
     reject_task_claim,
+    request_goal_completion,
     request_task_revision,
     resubmit_task_claim,
+    return_saved_points,
     reward_is_affordable,
     reward_requests_blocked,
+    select_goal_mode,
     submit_reward_request,
     submit_task,
     transfer_points,
     unavailable_assignment_task_ids,
+    update_savings_goal,
 )
 from .setup import SetupUnavailable, complete_setup, setup_is_available, token_is_valid
 
@@ -583,6 +602,7 @@ def parent_rename_device(request, device_id):
 @child_required
 def child_dashboard(request):
     child = request.child
+    child.available_goal_balance = max(0, child.balance)
     today = timezone.localdate()
     active_assigned_tasks = (
         AssignedTask.objects.filter(
@@ -599,6 +619,25 @@ def child_dashboard(request):
     for reward in rewards:
         reward.is_affordable = reward_is_affordable(child, reward)
         reward.missing_amount = max(reward.cost - (child.balance - child.min_balance), 0)
+    goals = list(
+        child.goals.filter(status=GoalStatus.ACTIVE).annotate(
+            _saved_amount=Coalesce(
+                Sum(
+                    "contributions__amount",
+                    filter=Q(contributions__state="active"),
+                ),
+                Value(0),
+            )
+        )
+    )
+    pending_goal_ids = set(
+        GoalCompletionRequest.objects.filter(
+            goal__child=child,
+            status=RequestStatus.PENDING,
+        ).values_list("goal_id", flat=True)
+    )
+    for goal in goals:
+        goal.has_pending_completion = goal.pk in pending_goal_ids
     ledger_entries = list(child.ledger_entries.select_related("actor").all()[:5])
     task_claims_by_id = {
         claim.pk: claim
@@ -671,11 +710,20 @@ def child_dashboard(request):
     for reward_request in rejected_reward_decisions:
         reward_request.history_type = "reward_decision"
         reward_request.history_timestamp = reward_request.decided_at
+    goal_events = list(
+        SavingsGoalEvent.objects.filter(goal__child=child)
+        .select_related("goal", "actor")
+        .order_by("-created_at", "-pk")[:5]
+    )
+    for event in goal_events:
+        event.history_type = "goal_event"
+        event.history_timestamp = event.created_at
     history_entries = sorted(
         [
             *ledger_entries,
             *rejected_task_decisions,
             *rejected_reward_decisions,
+            *goal_events,
         ],
         key=lambda entry: (entry.history_timestamp, entry.pk),
         reverse=True,
@@ -709,7 +757,7 @@ def child_dashboard(request):
             )
             .select_related("task", "decided_by")
             .order_by("-decided_at")[:5],
-            "goals": child.goals.filter(status="active"),
+            "goals": goals,
             "ledger": history_entries,
             "active_assigned_tasks": active_assigned_tasks,
             "assigned_tasks_block_rewards": assigned_reward_block,
@@ -982,6 +1030,68 @@ def child_create_proposal(request):
 
 @child_required
 @require_POST
+def child_set_goal_mode(request, goal_id):
+    goal = get_object_or_404(
+        SavingsGoal,
+        pk=goal_id,
+        child=request.child,
+        status=GoalStatus.ACTIVE,
+    )
+    try:
+        select_goal_mode(
+            goal=goal,
+            child=request.child,
+            mode=request.POST.get("mode", ""),
+        )
+        messages.success(request, _("Savings mode saved."))
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect(f"{reverse('child_dashboard')}#tikslai")
+
+
+@child_required
+@require_POST
+def child_add_goal_points(request, goal_id):
+    goal = get_object_or_404(
+        SavingsGoal,
+        pk=goal_id,
+        child=request.child,
+        status=GoalStatus.ACTIVE,
+    )
+    form = GoalAmountForm(request.POST)
+    try:
+        if not form.is_valid():
+            raise ValidationError(_("Enter a valid point amount."))
+        add_saved_points(
+            goal=goal,
+            child=request.child,
+            amount=form.cleaned_data["amount"],
+        )
+        messages.success(request, _("Points were saved for this goal."))
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect(f"{reverse('child_dashboard')}#tikslai")
+
+
+@child_required
+@require_POST
+def child_request_goal_completion(request, goal_id):
+    goal = get_object_or_404(
+        SavingsGoal,
+        pk=goal_id,
+        child=request.child,
+        status=GoalStatus.ACTIVE,
+    )
+    try:
+        request_goal_completion(goal=goal, child=request.child)
+        messages.success(request, _("The goal was sent to the parents for approval."))
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect(f"{reverse('child_dashboard')}#tikslai")
+
+
+@child_required
+@require_POST
 def child_set_theme(request):
     form = ThemeForm(request.POST)
     if form.is_valid():
@@ -1065,6 +1175,11 @@ def _child_state_payload(child):
             "revealed_at",
         )[:12]
     )
+    goal_states = list(
+        child.goals.order_by("-created_at", "-pk").values_list(
+            "pk", "mode", "status", "target_amount"
+        )
+    )
     raw_state = json.dumps(
         {
             "local_date": timezone.localdate(),
@@ -1074,6 +1189,7 @@ def _child_state_payload(child):
             "rewards": reward_states,
             "assigned_tasks": assigned_task_states,
             "lottery": lottery_states,
+            "goals": goal_states,
         },
         default=str,
         sort_keys=True,
@@ -1226,6 +1342,12 @@ def _replace_task_evidence(claim, processed):
 
 
 def child_avatar(request, child_id):
+    if (
+        not request.user.is_authenticated
+        and settings.DEVICE_PAIRING_REQUIRED
+        and current_device(request) is None
+    ):
+        raise Http404
     child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
     if not child.avatar:
         raise Http404
@@ -1432,7 +1554,90 @@ def parent_update_feedback_status(request, report_id):
 def parent_dashboard(request):
     children = list(ChildProfile.objects.filter(is_active=True))
     today = timezone.localdate()
+    history_date = request.GET.get("history_date", "week").strip()
+    history_custom_start = request.GET.get("history_start", "").strip()
+    history_custom_end = request.GET.get("history_end", "").strip()
     history_cutoff = timezone.now() - timedelta(days=7)
+    history_end_at = None
+    if history_date == "any":
+        history_cutoff = None
+    elif history_date == "month":
+        history_cutoff = timezone.now() - timedelta(days=30)
+    elif history_date == "custom":
+        try:
+            start = date.fromisoformat(history_custom_start)
+            history_cutoff = timezone.make_aware(datetime.combine(start, time.min))
+            if history_custom_end:
+                end = date.fromisoformat(history_custom_end)
+                history_end_at = timezone.make_aware(datetime.combine(end, time.max))
+        except ValueError:
+            history_date = "week"
+            history_custom_start = ""
+            history_custom_end = ""
+            history_cutoff = timezone.now() - timedelta(days=7)
+    elif history_date != "week":
+        history_date = "week"
+    all_goals = list(
+        SavingsGoal.objects.filter(child__is_active=True)
+        .select_related("child")
+        .annotate(
+            _saved_amount=Coalesce(
+                Sum(
+                    "contributions__amount",
+                    filter=Q(contributions__state="active"),
+                ),
+                Value(0),
+            )
+        )
+    )
+    pending_goal_completions = list(
+        GoalCompletionRequest.objects.filter(
+            status=RequestStatus.PENDING,
+            goal__child__is_active=True,
+        ).select_related("goal", "goal__child")
+    )
+    pending_goal_ids = {item.goal_id for item in pending_goal_completions}
+    goals_by_child = {child.pk: [] for child in children}
+    for goal in all_goals:
+        goal.has_pending_completion = goal.pk in pending_goal_ids
+        goals_by_child.setdefault(goal.child_id, []).append(goal)
+    for child in children:
+        child.dashboard_goals = [
+            goal
+            for goal in goals_by_child.get(child.pk, [])
+            if goal.status == GoalStatus.ACTIVE
+        ]
+        child.saved_total = sum(goal.saved_amount for goal in child.dashboard_goals)
+        child.goal_summary = None
+        if child.dashboard_goals:
+            child.goal_summary = next(
+                (
+                    goal
+                    for goal in child.dashboard_goals
+                    if goal.has_pending_completion and goal.is_reached
+                ),
+                None,
+            )
+            if child.goal_summary is None:
+                child.goal_summary = next(
+                    (
+                        goal
+                        for goal in child.dashboard_goals
+                        if goal.mode == GoalMode.AVAILABLE
+                    ),
+                    None,
+                )
+            if child.goal_summary is None:
+                saved_goals = [
+                    goal
+                    for goal in child.dashboard_goals
+                    if goal.mode == GoalMode.SAVED
+                ]
+                child.goal_summary = min(
+                    saved_goals or child.dashboard_goals,
+                    key=lambda goal: goal.target_amount - goal.saved_amount,
+                )
+            child.additional_goal_count = max(len(child.dashboard_goals) - 1, 0)
     for child in children:
         child_lottery = lottery_state(child)
         child.lottery_tickets_used = child_lottery["tickets_used"]
@@ -1469,29 +1674,86 @@ def parent_dashboard(request):
         request.GET.get("feedback_page", 1)
     )
     history_child_id = request.GET.get("history_child", "").strip()
-    ledger_query = LedgerEntry.objects.filter(
-        created_at__gte=history_cutoff
-    ).select_related("child", "actor")
+    history_activity = request.GET.get("history_activity", "").strip()
+    ledger_query = LedgerEntry.objects.all().select_related("child", "actor")
+    if history_cutoff is not None:
+        ledger_query = ledger_query.filter(created_at__gte=history_cutoff)
+    if history_end_at is not None:
+        ledger_query = ledger_query.filter(created_at__lte=history_end_at)
     reward_decisions = RewardRequest.objects.filter(
         status__in=[RequestStatus.APPROVED, RequestStatus.REJECTED],
         decided_at__isnull=False,
-        decided_at__gte=history_cutoff,
     ).select_related("child", "decided_by")
+    if history_cutoff is not None:
+        reward_decisions = reward_decisions.filter(decided_at__gte=history_cutoff)
+    if history_end_at is not None:
+        reward_decisions = reward_decisions.filter(decided_at__lte=history_end_at)
     task_decisions = TaskClaim.objects.filter(
         status=RequestStatus.REJECTED,
         decided_at__isnull=False,
-        decided_at__gte=history_cutoff,
     ).select_related("child", "decided_by", "task")
+    if history_cutoff is not None:
+        task_decisions = task_decisions.filter(decided_at__gte=history_cutoff)
+    if history_end_at is not None:
+        task_decisions = task_decisions.filter(decided_at__lte=history_end_at)
+    proposal_decisions = Proposal.objects.filter(
+        status__in=[RequestStatus.APPROVED, RequestStatus.REJECTED],
+        decided_at__isnull=False,
+    ).select_related("child", "decided_by")
+    if history_cutoff is not None:
+        proposal_decisions = proposal_decisions.filter(decided_at__gte=history_cutoff)
+    if history_end_at is not None:
+        proposal_decisions = proposal_decisions.filter(decided_at__lte=history_end_at)
+    goal_events_query = SavingsGoalEvent.objects.filter(
+        goal__child__is_active=True,
+    ).select_related("goal", "goal__child", "actor")
+    if history_cutoff is not None:
+        goal_events_query = goal_events_query.filter(created_at__gte=history_cutoff)
+    if history_end_at is not None:
+        goal_events_query = goal_events_query.filter(created_at__lte=history_end_at)
+    activity_kinds = {
+        "tasks": [LedgerKind.TASK, LedgerKind.ASSIGNED_TASK],
+        "penalties": [LedgerKind.PENALTY],
+        "rewards": [LedgerKind.REWARD],
+        "gifts": [LedgerKind.GIFT],
+        "scratch": [LedgerKind.LOTTERY],
+        "adjustments": [LedgerKind.ADJUSTMENT, LedgerKind.BIRTHDAY],
+        "goals": [
+            LedgerKind.SAVINGS_TRANSFER,
+            LedgerKind.SAVINGS_RETURN,
+            LedgerKind.GOAL_COMPLETION,
+        ],
+    }
+    if history_activity in activity_kinds:
+        ledger_query = ledger_query.filter(kind__in=activity_kinds[history_activity])
+        if history_activity != "goals":
+            goal_events_query = goal_events_query.none()
+        if history_activity != "rewards":
+            reward_decisions = reward_decisions.none()
+        if history_activity != "tasks":
+            task_decisions = task_decisions.none()
+        if history_activity == "goals":
+            proposal_decisions = proposal_decisions.filter(proposal_type=ProposalType.GOAL)
+        elif history_activity == "rewards":
+            proposal_decisions = proposal_decisions.filter(proposal_type=ProposalType.REWARD)
+        else:
+            proposal_decisions = proposal_decisions.none()
+    elif history_activity:
+        history_activity = ""
     if history_child_id.isdigit() and any(
         child.pk == int(history_child_id) for child in history_children
     ):
         ledger_query = ledger_query.filter(child_id=int(history_child_id))
         reward_decisions = reward_decisions.filter(child_id=int(history_child_id))
         task_decisions = task_decisions.filter(child_id=int(history_child_id))
+        proposal_decisions = proposal_decisions.filter(child_id=int(history_child_id))
+        goal_events_query = goal_events_query.filter(
+            goal__child_id=int(history_child_id)
+        )
     else:
         history_child_id = ""
-    ledger_entries = list(ledger_query)
-    reward_decisions = list(reward_decisions)
+    ledger_entries = list(ledger_query.order_by("-created_at", "-pk")[:50])
+    reward_decisions = list(reward_decisions.order_by("-decided_at", "-pk")[:50])
     reward_decisions_by_id = {
         reward_request.pk: reward_request
         for reward_request in reward_decisions
@@ -1512,15 +1774,26 @@ def parent_dashboard(request):
         reward_request.history_timestamp = reward_request.decided_at
         rejected_reward_decisions.append(reward_request)
     rejected_task_decisions = []
-    for task_claim in task_decisions:
+    for task_claim in task_decisions.order_by("-decided_at", "-pk")[:50]:
         task_claim.history_type = "task_decision"
         task_claim.history_timestamp = task_claim.decided_at
         rejected_task_decisions.append(task_claim)
+    proposal_history = list(proposal_decisions.order_by("-decided_at", "-pk")[:50])
+    for proposal in proposal_history:
+        proposal.history_type = "proposal_decision"
+        proposal.history_timestamp = proposal.decided_at
+    goal_events = list(goal_events_query.order_by("-created_at", "-pk")[:50])
+    for event in goal_events:
+        event.history_type = "goal_event"
+        event.history_timestamp = event.created_at
+        event.child = event.goal.child
     history_entries = sorted(
         [
             *ledger_entries,
             *rejected_reward_decisions,
             *rejected_task_decisions,
+            *proposal_history,
+            *goal_events,
         ],
         key=lambda entry: (entry.history_timestamp, entry.pk),
         reverse=True,
@@ -1547,12 +1820,25 @@ def parent_dashboard(request):
         if entry.history_type == "ledger":
             entry.task_claim = history_claims.get(entry.source_id)
     history_is_open = bool(
-        request.GET.get("history_child") or request.GET.get("history_page")
+        request.GET.get("history_child")
+        or request.GET.get("history_page")
+        or request.GET.get("history_activity")
+        or request.GET.get("history_date") not in (None, "", "week")
+        or request.GET.get("history_start")
+        or request.GET.get("history_end")
     )
     history_preserved_params = [
         (key, value)
         for key in request.GET
-        if key not in {"history_child", "history_page"}
+        if key
+        not in {
+            "history_child",
+            "history_page",
+            "history_date",
+            "history_activity",
+            "history_start",
+            "history_end",
+        }
         for value in request.GET.getlist(key)
     ]
     history_pagination_params = [
@@ -1562,6 +1848,19 @@ def parent_dashboard(request):
     history_pagination_query = urlencode(history_pagination_params)
     if history_pagination_query:
         history_pagination_query += "&"
+    history_child_name = next(
+        (child.name for child in history_children if str(child.pk) == history_child_id),
+        "",
+    )
+    history_activity_label = {
+        "tasks": _("Tasks"),
+        "penalties": _("Penalties"),
+        "rewards": _("Rewards"),
+        "goals": _("Goals"),
+        "gifts": _("Gifts"),
+        "scratch": _("Scratch tickets"),
+        "adjustments": _("Point adjustments"),
+    }.get(history_activity, "")
     pending_claims = list(
         TaskClaim.objects.filter(status=RequestStatus.PENDING)
         .select_related("child", "task")
@@ -1595,6 +1894,11 @@ def parent_dashboard(request):
             "proposals": [
                 proposal for proposal in pending_proposals if proposal.child_id == child.pk
             ],
+            "goal_completions": [
+                completion
+                for completion in pending_goal_completions
+                if completion.goal.child_id == child.pk
+            ],
             "birth_date_changes": [
                 change
                 for change in pending_birth_date_changes
@@ -1605,6 +1909,7 @@ def parent_dashboard(request):
             group["claims"]
             or group["rewards"]
             or group["proposals"]
+            or group["goal_completions"]
             or group["birth_date_changes"]
         ):
             pending_by_child.append(group)
@@ -1621,6 +1926,7 @@ def parent_dashboard(request):
                 len(pending_claims)
                 + len(pending_rewards)
                 + len(pending_proposals)
+                + len(pending_goal_completions)
                 + len(pending_birth_date_changes)
             ),
             "tasks": Task.objects.filter(is_deleted=False),
@@ -1631,9 +1937,25 @@ def parent_dashboard(request):
                 is_deleted=False,
             ),
             "rewards": Reward.objects.filter(is_deleted=False),
+            "goals": all_goals,
+            "goal_children": children,
             "ledger_page": ledger_page,
             "history_children": history_children,
             "history_child_id": history_child_id,
+            "history_child_name": history_child_name,
+            "history_date": history_date,
+            "history_custom_start": history_custom_start,
+            "history_custom_end": history_custom_end,
+            "history_activity": history_activity,
+            "history_activity_label": history_activity_label,
+            "history_filter_count": sum(
+                bool(value)
+                for value in (
+                    history_child_id,
+                    history_activity,
+                    history_date != "week" or history_custom_start or history_custom_end,
+                )
+            ),
             "history_is_open": history_is_open,
             "history_preserved_params": history_preserved_params,
             "history_pagination_query": history_pagination_query,
@@ -1989,6 +2311,149 @@ def parent_decide_proposal(request, proposal_id, decision):
     except ValidationError as exc:
         messages.error(request, exc.messages[0])
     return redirect("parent_dashboard")
+
+
+@parent_required
+@require_POST
+def parent_decide_goal_completion(request, request_id, decision):
+    completion_request = get_object_or_404(
+        GoalCompletionRequest,
+        pk=request_id,
+        goal__child__is_active=True,
+    )
+    try:
+        if decision == "complete":
+            approve_goal_completion(
+                completion_request=completion_request,
+                actor=request.user,
+            )
+            messages.success(request, _("Goal completed."))
+        elif decision == "keep_active":
+            keep_goal_active(
+                completion_request=completion_request,
+                actor=request.user,
+            )
+            messages.info(request, _("The goal will stay active."))
+        else:
+            raise Http404
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect(f"{reverse('parent_dashboard')}#parent-home")
+
+
+@parent_required
+@require_POST
+def parent_add_goal_points(request, goal_id):
+    goal = get_object_or_404(
+        SavingsGoal,
+        pk=goal_id,
+        child__is_active=True,
+        status=GoalStatus.ACTIVE,
+    )
+    form = GoalAmountForm(request.POST)
+    try:
+        if not form.is_valid():
+            raise ValidationError(_("Enter a valid point amount."))
+        add_saved_points(
+            goal=goal,
+            child=goal.child,
+            amount=form.cleaned_data["amount"],
+            actor=request.user,
+        )
+        messages.success(request, _("Points were saved for this goal."))
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
+
+
+@parent_required
+@require_POST
+def parent_return_goal_points(request, goal_id):
+    goal = get_object_or_404(
+        SavingsGoal,
+        pk=goal_id,
+        child__is_active=True,
+        status=GoalStatus.ACTIVE,
+    )
+    try:
+        amount = return_saved_points(goal=goal, actor=request.user)
+        messages.success(
+            request,
+            _("%(amount)s points are available for rewards again.") % {"amount": amount},
+        )
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
+
+
+@parent_required
+@require_POST
+def parent_edit_goal(request, goal_id):
+    goal = get_object_or_404(
+        SavingsGoal,
+        pk=goal_id,
+        child__is_active=True,
+        status=GoalStatus.ACTIVE,
+    )
+    form = SavingsGoalForm(request.POST, instance=goal)
+    try:
+        if not form.is_valid():
+            raise ValidationError(_("Check the goal details."))
+        update_savings_goal(
+            goal=goal,
+            title=form.cleaned_data["title"],
+            target_amount=form.cleaned_data["target_amount"],
+            icon=form.cleaned_data["icon"],
+            actor=request.user,
+        )
+        messages.success(request, _("Goal updated."))
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
+
+
+@parent_required
+@require_POST
+def parent_close_goal(request, goal_id):
+    goal = get_object_or_404(
+        SavingsGoal,
+        pk=goal_id,
+        child__is_active=True,
+        status=GoalStatus.ACTIVE,
+    )
+    try:
+        close_savings_goal(goal=goal, actor=request.user)
+        messages.success(request, _("Goal closed."))
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
+
+
+@parent_required
+@require_POST
+def parent_delete_goal(request, goal_id):
+    goal = get_object_or_404(
+        SavingsGoal,
+        pk=goal_id,
+        child__is_active=True,
+        status=GoalStatus.ACTIVE,
+    )
+    try:
+        _deleted_goal, returned_amount = delete_savings_goal(
+            goal=goal,
+            actor=request.user,
+        )
+        if returned_amount:
+            messages.success(
+                request,
+                _("Goal deleted and %(amount)s points returned.")
+                % {"amount": returned_amount},
+            )
+        else:
+            messages.success(request, _("Goal deleted."))
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
 
 @parent_required

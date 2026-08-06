@@ -1,6 +1,9 @@
+import tempfile
 from datetime import timedelta
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
@@ -31,6 +34,44 @@ class DevicePairingTests(TestCase):
         self.assertContains(response, "This device is not set up yet")
         self.assertNotContains(response, self.child.name)
         self.assertNotContains(response, 'name="pin"', html=False)
+
+    def test_unpaired_device_cannot_download_child_avatar(self):
+        with tempfile.TemporaryDirectory() as media_root:
+            with override_settings(MEDIA_ROOT=media_root):
+                self.child.avatar = SimpleUploadedFile(
+                    "private.webp",
+                    b"private-avatar",
+                    content_type="image/webp",
+                )
+                self.child.save(update_fields=["avatar"])
+
+                response = self.client.get(
+                    reverse("child_avatar", args=[self.child.pk])
+                )
+
+                self.assertEqual(response.status_code, 404)
+
+    def test_paired_device_can_download_child_avatar(self):
+        with tempfile.TemporaryDirectory() as media_root:
+            with override_settings(MEDIA_ROOT=media_root):
+                self.child.avatar = SimpleUploadedFile(
+                    "private.webp",
+                    b"private-avatar",
+                    content_type="image/webp",
+                )
+                self.child.save(update_fields=["avatar"])
+                _device, raw_token = DeviceToken.issue(
+                    created_by=self.parent,
+                    label="Paired tablet",
+                )
+                self.client.cookies[settings.DEVICE_COOKIE_NAME] = raw_token
+
+                response = self.client.get(
+                    reverse("child_avatar", args=[self.child.pk])
+                )
+
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(b"".join(response.streaming_content), b"private-avatar")
 
     def test_parent_can_pair_current_device_and_child_session_is_bound_to_it(self):
         self.client.force_login(self.parent)

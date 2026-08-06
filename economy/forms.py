@@ -19,6 +19,7 @@ from .models import (
     Proposal,
     RequestStatus,
     Reward,
+    SavingsGoal,
     Task,
     Theme,
 )
@@ -179,6 +180,32 @@ class ProposalForm(EmojiFormMixin, forms.ModelForm):
             "proposal_type": _("Type"),
             "title": _("Title"),
             "suggested_cost": _("Suggested point amount"),
+            "icon": _("Icon"),
+        }
+
+
+class GoalAmountForm(StyledFormMixin, forms.Form):
+    amount = forms.IntegerField(
+        label=_("Points to add"),
+        min_value=1,
+        error_messages={"min_value": _("Enter a positive point amount.")},
+    )
+
+
+class SavingsGoalForm(EmojiFormMixin, forms.ModelForm):
+    empty_icon_by_default = True
+    target_amount = forms.IntegerField(
+        label=_("Target amount"),
+        min_value=1,
+        error_messages={"min_value": _("Enter a positive point amount.")},
+    )
+
+    class Meta:
+        model = SavingsGoal
+        fields = ["title", "target_amount", "icon"]
+        labels = {
+            "title": _("Goal title"),
+            "target_amount": _("Target amount"),
             "icon": _("Icon"),
         }
 

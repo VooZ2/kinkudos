@@ -7,11 +7,63 @@ schema.
 
 ## [Unreleased]
 
+## [26.6.0] - 2026-08-06
+
+### Pridėta
+
+- Taupymo tikslai dabar gali rodyti gyvą dabartinio tikslo pažangą arba atskirai
+  saugomus taškus, palaiko atominius pervedimus ir grąžinimus, tėvų tvirtinamą
+  užbaigimą, tikslų istoriją bei vaiko ir tėvų valdymo sąsają.
+
+### Pakeista
+
+- Tėvų erdvėje dabar yra atskiros Darbų, Nuobaudų, Prizų ir Tikslų valdymo
+  skiltys, glaustos vaikų suvestinės ir filtruojama veiksmų istorija.
+
 ### Pataisyta
 
+- Valdymo skilčių nuorodos dabar palieka atidarytą tėvų skydelį ir išskleidžia
+  pasirinktą Darbų, Nuobaudų, Prizų arba Tikslų skiltį.
+- Vaiko taupymo tikslų kortelės dabar turi aiškų vertikalų tarpą ir nebesiliečia
+  bei nepersidengia viena su kita.
+- Išsaugoto tikslo sumos peržiūra dabar vienoje eilutėje rodo etiketę, sumą ir
+  vienetą.
+- Tikslų valdymo eilutėse progreso ir taupymo būdo stulpeliai dabar išlieka
+  vienoje vietoje, net kai eilutėse yra skirtingas veiksmų mygtukų skaičius.
+- Tėvų ir vaikų sąsajos ikonos dabar naudoja tikslius „Font Awesome Free 7.3.1“
+  SVG kelius ir vienodus paspaudimo laukus, išlaikant tikslų emoji
+  personalizavimą.
+- Tėvų skydelio greitųjų veiksmų ikonos dabar yra vientisos ir vienodo dydžio,
+  „Kredito“ ir bilietų eilutės kompaktiškesnės, o atsarginių kopijų įspėjimas
+  rodomas atskirame, aiškiai atskirtame bloke.
 - Taupymo tikslų pasiūlymų tarpai ir sumos tipografija tėvų patvirtinimų
   sąraše dabar sutampa su darbų ir prizų prašymais, o siūloma suma
   išlieka neutralios spalvos.
+- Tėvų katalogų redagavimo veiksmai dabar naudoja oficialią reguliarią
+  `pen-to-square` ikoną, matomumo jungikliai naudoja suderintą `eye`/`eye-slash`
+  porą, o išskleistame tikslo redaktoriuje galima ištrinti tikslą su aiškiu
+  patvirtinimu.
+- Istorijos vaiko pasirinkimas dabar pritaikomas iškart ir išsaugo kitus
+  aktyvius URL filtrus.
+- Ištrinant tikslą jo išsaugoti taškai atominėje transakcijoje grąžinami,
+  laukiantys tikslo užbaigimo prašymai atšaukiami, o tikslo įvykių istorija
+  išsaugoma minkštuoju ištrynimu.
+- Tikslo redagavimo veiksmas dabar yra tik tekstinis `Delete`, o veiksmų
+  istorijos eilutėse kairėje paliekamas tik vaiko avataras, veiksmo ikona
+  perkeliama prie dešinėje esančio rezultato, pašalinamos datos ikonos ir
+  „Informational“ ženklelis tampa neutralaus pilko atspalvio.
+- Tik vėliavas rodantis kalbos meniu dabar lieka tiksliai centruotas po savo
+  mygtuku siauruose ir plačiuose ekranuose bei neuždengia kitų antraštės veiksmų.
+- Tėvų istorija dabar apriboja kiekvieną veiklos šaltinį prieš sujungdama 50
+  naujausių įrašų, todėl „Bet kada“ nebekrauna neribotos istorijos į atmintį.
+
+### Saugumas
+
+- Kai įrenginių susiejimas įjungtas, vaikų avatarus dabar gali gauti tik
+  prisijungęs tėvas arba galiojantį susietą įrenginį turintis klientas, todėl
+  anonimiškai perrinkti profilių paveikslėlių pagal ID nebegalima.
+- Lygiagretūs tikslo užbaigimo prašymai dabar grąžina valdomą validacijos
+  klaidą, o pataisyta `cryptography` priklausomybė užfiksuota ties 50.0.0.
 
 ## [26.5.3] - 2026-08-06
 

@@ -2,6 +2,7 @@ import re
 import tempfile
 from datetime import timedelta
 from io import BytesIO
+from pathlib import Path
 from unittest.mock import patch
 
 from django.conf import settings
@@ -56,6 +57,9 @@ class LanguageSelectionTests(TestCase):
         )
         self.assertContains(response, ">🇱🇹</span>", html=False)
         self.assertNotContains(response, "🇱🇹 LT</span>", html=False)
+        self.assertContains(response, 'class="language-switcher-option"', count=2, html=False)
+        self.assertNotContains(response, "🇱🇹 LT", html=False)
+        self.assertNotContains(response, "🇬🇧 EN", html=False)
 
     def test_saved_language_overrides_browser_and_persists(self):
         response = self.client.post(
@@ -79,6 +83,18 @@ class LanguageSelectionTests(TestCase):
         self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "lt"
         response = self.client.get(reverse("home"))
         self.assertContains(response, "Aurora šeima")
+
+    def test_language_menu_is_centred_under_its_button(self):
+        stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(
+            encoding="utf-8"
+        )
+
+        rule = re.search(r"\.language-switcher-menu \{([^}]+)\}", stylesheet)
+
+        self.assertIsNotNone(rule)
+        self.assertIn("left: 50%", rule.group(1))
+        self.assertIn("transform: translateX(-50%)", rule.group(1))
+        self.assertNotIn("right: 0", rule.group(1))
 
 
 class AccessAndWorkflowTests(TestCase):
@@ -134,6 +150,14 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Sibling private entry")
         self.assertNotContains(response, ">999<", html=True)
 
+    def test_parent_manage_sections_expose_nested_hash_links(self):
+        self.client.force_login(self.parent)
+        response = self.client.get(reverse("parent_dashboard"))
+
+        for section in ("tasks", "penalties", "rewards", "goals"):
+            with self.subTest(section=section):
+                self.assertContains(response, f'href="#manage-{section}"', html=False)
+
     def test_child_request_workflows_use_state_colored_icon_actions(self):
         response = self.login_child(self.child_one, "1234")
 
@@ -143,7 +167,7 @@ class AccessAndWorkflowTests(TestCase):
             html=False,
         )
         self.assertContains(response, 'class="workflow-card-action"', html=False)
-        self.assertContains(response, 'href="#icon-check-circle"', html=False)
+        self.assertContains(response, 'href="#icon-circle-check"', html=False)
         self.assertNotContains(response, ">Pateikti</button>", html=False)
 
     def test_parent_proposal_decisions_use_one_icon_row_and_dialogs(self):
@@ -531,6 +555,9 @@ class AccessAndWorkflowTests(TestCase):
         self.client.logout()
         response = self.login_child(self.child_one, "1234")
         self.assertNotContains(response, "Testas")
+        self.client.login(username="tevai", password=self.parent_password)
+        response = self.client.get(reverse("parent_dashboard"))
+        self.assertContains(response, 'href="#icon-eye-slash"', html=False)
 
     def test_parent_can_edit_catalog_item_and_choose_emoji(self):
         self.client.login(username="tevai", password=self.parent_password)
@@ -649,7 +676,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, "Siųsti pelėdą")
         self.assertNotContains(response, "Siųsti pelėda")
         self.assertContains(response, 'id="sound-toggle"', html=False)
-        self.assertContains(response, 'href="#icon-sound-on"', html=False)
+        self.assertContains(response, 'href="#icon-volume-high"', html=False)
         self.assertContains(response, 'aria-label="Išjungti garsus"', html=False)
         self.assertNotContains(response, ">♪</button>", html=False)
 
@@ -668,15 +695,18 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.5.3")
+        self.assertContains(response, "v26.6.0")
         self.assertContains(response, 'href="/pakeitimai/"', html=False)
-        self.assertContains(response, "TAŠKAI")
-        self.assertContains(response, "Kredito limitas: -100")
+        self.assertContains(response, "taškai")
+        self.assertContains(response, "Kreditas -100")
         self.assertContains(response, 'class="push-icon"', html=False)
         self.assertContains(response, "Kaip įjungti pranešimus?")
         self.assertNotContains(response, '<details class="panel" open>', html=False)
-        self.assertContains(response, "🇱🇹 LT")
-        self.assertContains(response, "🇬🇧 EN")
+        self.assertContains(response, 'class="language-switcher-option"', count=2, html=False)
+        self.assertContains(response, "🇱🇹", html=False)
+        self.assertContains(response, "🇬🇧", html=False)
+        self.assertNotContains(response, "🇱🇹 LT", html=False)
+        self.assertNotContains(response, "🇬🇧 EN", html=False)
         self.assertContains(response, "<title>Tėvų erdvė – KinKudos</title>", html=False)
         self.assertNotContains(response, "Aurora šeima")
         self.assertContains(
@@ -689,22 +719,28 @@ class AccessAndWorkflowTests(TestCase):
             'class="catalog-token catalog-token-positive">−100 taškų',
             html=False,
         )
-        self.assertContains(response, "Darbai, nuobaudos ir prizai")
+        self.assertContains(response, ">Darbai<", html=False)
+        self.assertContains(response, ">Nuobaudos<", html=False)
+        self.assertContains(response, ">Prizai<", html=False)
+        self.assertContains(response, ">Tikslai<", html=False)
         self.assertContains(response, ">Nustatymai<", html=False)
         self.assertNotContains(response, "Šeimos nustatymai")
         self.assertNotContains(response, ">Bendrieji<", html=False)
-        self.assertContains(response, "Privilegijos")
-        self.assertContains(response, "Saugojimas")
+        self.assertContains(response, "Vaikai ir prieiga")
+        self.assertContains(response, "Vaikų įrenginiai")
+        self.assertContains(response, "Taškai ir darbai")
+        self.assertContains(response, "Duomenys ir saugojimas")
+        self.assertContains(response, "Tinklas ir saugumas")
         self.assertContains(response, "Bilietų limitas per savaitę")
         self.assertContains(
             response,
             "Limitas atnaujinamas kiekvieną pirmadienį, kiekvienam vaikui. "
             "Numatytoji reikšmė – 3.",
         )
-        self.assertContains(response, "El. pašto nustatymai")
-        self.assertNotContains(response, "El. pašto pranešimai")
+        self.assertNotContains(response, "El. pašto nustatymai")
+        self.assertContains(response, "El. paštas ir pranešimai")
         self.assertContains(response, ">Atsarginės kopijos<", html=False)
-        self.assertContains(response, ">Paskyrų ir programos nustatymai<", html=False)
+        self.assertContains(response, ">Paskyros<", html=False)
         self.assertNotContains(response, "Dabartinis jūsų tėvų paskyros slaptažodis")
         self.assertNotContains(response, '<label for="history-child">', html=False)
         self.assertContains(response, ">Išsaugoti</button>", html=False)
@@ -731,7 +767,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Complete tasks, earn points")
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
-        self.assertContains(response, "KinKudos · v26.5.3")
+        self.assertContains(response, "KinKudos · v26.6.0")
         self.assertContains(response, "Dokumentacija")
         self.assertContains(response, "https://docs.kinkudos.app/index.lt/")
         self.assertContains(response, "https://github.com/VooZ2/kinkudos")
@@ -904,6 +940,8 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(len(response.context["ledger_page"]), 10)
         self.assertEqual(response.context["ledger_page"].paginator.num_pages, 2)
         self.assertContains(response, 'class="history-panel"', html=False)
+        self.assertContains(response, 'data-history-child-filter', html=False)
+        self.assertNotContains(response, 'history-meta-icon', html=False)
         self.assertNotContains(response, 'class="history-panel" open', html=False)
         self.assertContains(response, "First child history 11")
         self.assertNotContains(response, "First child history 0")
@@ -919,11 +957,17 @@ class AccessAndWorkflowTests(TestCase):
 
         response = self.client.get(
             reverse("parent_dashboard"),
-            {"history_child": self.child_two.pk},
+            {
+                "history_child": self.child_two.pk,
+                "history_activity": "adjustments",
+                "history_date": "any",
+            },
         )
         self.assertEqual(response.context["ledger_page"].paginator.count, 1)
         self.assertContains(response, "Sibling private entry")
         self.assertNotContains(response, "First child history")
+        self.assertEqual(response.context["history_activity"], "adjustments")
+        self.assertEqual(response.context["history_date"], "any")
 
     def test_parent_history_is_limited_to_fifty_entries_from_the_last_seven_days(self):
         entries = [
@@ -948,6 +992,15 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Recent history 0")
         self.assertNotContains(response, "Recent history 1")
 
+        response = self.client.get(
+            reverse("parent_dashboard"),
+            {"history_date": "any"},
+        )
+
+        self.assertEqual(response.context["ledger_page"].paginator.count, 50)
+        self.assertNotContains(response, "Recent history 0")
+        self.assertNotContains(response, "Recent history 1")
+
     def test_parent_quick_actions_use_clear_icons_and_requested_order(self):
         self.client.login(username="tevai", password=self.parent_password)
 
@@ -963,8 +1016,43 @@ class AccessAndWorkflowTests(TestCase):
 
         positions = [html.index(marker) for marker in action_markers]
         self.assertEqual(positions, sorted(positions))
-        self.assertContains(response, 'href="#icon-check-circle"', html=False)
-        self.assertContains(response, 'href="#icon-adjust-points"', html=False)
+        quick_action_html = html[html.index('<div class="child-quick-actions"'):]
+        quick_action_html = quick_action_html[:quick_action_html.index('</div>')]
+        self.assertEqual(
+            re.findall(r'<button class="quick-action".*?<use href="#(icon-[^"]+)"', quick_action_html, re.S),
+            [
+                "icon-clipboard-check",
+                "icon-circle-minus",
+                "icon-calendar-plus",
+                "icon-coins",
+                "icon-credit-card",
+            ],
+        )
+        nav_html = html[html.index('<nav class="parent-navigation"'):]
+        nav_html = nav_html[:nav_html.index('</nav>')]
+        self.assertEqual(
+            re.findall(r'<use href="#(icon-[^"]+)"', nav_html),
+            ["icon-house", "icon-table-list", "icon-gear", "icon-clock-rotate-left"],
+        )
+        manage_html = html[html.index('<nav class="manage-tabs"'):]
+        manage_html = manage_html[:manage_html.index('</nav>')]
+        self.assertEqual(
+            re.findall(r'<use href="#(icon-[^"]+)"', manage_html),
+            ["icon-list-check", "icon-circle-minus", "icon-gift", "icon-bullseye"],
+        )
+        self.assertContains(response, 'id="icon-house"', html=False)
+        self.assertContains(response, 'id="icon-list-check"', html=False)
+        self.assertContains(response, 'fill="currentColor"', html=False)
+        self.assertNotContains(response, 'icon-square-check-plus', html=False)
+        self.assertNotContains(response, 'icon-coins-adjust', html=False)
+        for title in (
+            "Pridėti atliktą darbą",
+            "Skirti nuobaudą",
+            "Paskirti darbus šiandienai",
+            "Koreguoti taškus",
+            "Nustatyti kreditą",
+        ):
+            self.assertContains(response, f"<h2>{title}</h2>", html=False)
 
     def test_parent_history_shows_approved_and_rejected_reward_requests(self):
         approved_request = RewardRequest.objects.create(
@@ -1000,7 +1088,7 @@ class AccessAndWorkflowTests(TestCase):
         )
         self.assertContains(response, "Atmestas prizas")
         self.assertContains(response, "Pirmiausia užbaik sutartus darbus.")
-        self.assertContains(response, 'href="#icon-stop"', html=False)
+        self.assertContains(response, 'href="#icon-circle-xmark"', html=False)
         self.assertContains(response, "Atmesta")
         self.assertNotContains(response, "Patvirtintas prizas")
 
@@ -1009,7 +1097,7 @@ class AccessAndWorkflowTests(TestCase):
             {"history_child": self.child_one.pk},
         )
         self.assertContains(response, "Patvirtintas prizas")
-        self.assertContains(response, 'href="#icon-check-circle"', html=False)
+        self.assertContains(response, 'href="#icon-circle-check"', html=False)
         self.assertContains(response, "Patvirtinta")
         self.assertNotContains(response, "Atmestas prizas")
 
@@ -1036,7 +1124,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(self.child_two.balance, balance_before)
         self.assertContains(response, "Atmestas darbas")
         self.assertContains(response, "Dar liko nesutvarkyta.")
-        self.assertContains(response, 'href="#icon-stop"', html=False)
+        self.assertContains(response, 'href="#icon-circle-xmark"', html=False)
         self.assertContains(response, "Atmesta")
         self.assertEqual(response.context["ledger_page"].paginator.count, 2)
 
@@ -1045,7 +1133,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.5.3")
+        self.assertContains(response, "v26.6.0")
         self.assertContains(response, "v0.12.2 BETA")
         self.assertContains(response, "v0.10.4 BETA")
         self.assertContains(response, "v0.10.1 BETA")
@@ -1053,7 +1141,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, "v0.1.0")
         self.assertContains(response, "Dabartinė versija")
         current_release = response.context["releases"][0]
-        self.assertEqual(current_release["version"], "26.5.3")
+        self.assertEqual(current_release["version"], "26.6.0")
         current_copy = " ".join(current_release["new"] + current_release["fixed"]).lower()
         self.assertNotIn("loterij", current_copy)
         self.assertNotIn("demo", current_copy)
@@ -1524,10 +1612,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.5.3',
+            '/static/icons/favicon-32.png?v=26.6.0',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.5.3")
-        self.assertContains(home, "/static/js/app.js?v=26.5.3")
+        self.assertContains(home, "/static/css/app.css?v=26.6.0")
+        self.assertContains(home, "/static/js/app.js?v=26.6.0")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1535,12 +1623,12 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.5.3",
+            "/static/icons/icon-192.png?v=26.6.0",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.5.3")
-        self.assertContains(worker, 'kinkudos-app-shell-26.5.3')
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.6.0")
+        self.assertContains(worker, 'kinkudos-app-shell-26.6.0')
         self.assertContains(worker, '"/prisijungti/"')
         self.assertContains(worker, "isSensitiveNavigation(url)")
         self.assertEqual(worker["Service-Worker-Allowed"], "/")
