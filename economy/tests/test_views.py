@@ -1462,7 +1462,7 @@ class AccessAndWorkflowTests(TestCase):
             template.index('class="credit-caption"'),
         )
         stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
-        self.assertIn(".child-balance-row { display: flex; align-items: center; flex-wrap: nowrap;", stylesheet)
+        self.assertIn(".child-balance-row { display: flex; align-items: baseline; flex-wrap: nowrap;", stylesheet)
 
     def test_pending_requests_are_grouped_and_oldest_first(self):
         older = self.child_one.task_claims.create(
