@@ -632,8 +632,6 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .settings-section-standalone:not([open]) { padding-bottom: 0; }
 .settings-section-standalone:not([open]) > summary { margin-bottom: 0; }
 .settings-section-standalone > article, .settings-section-standalone > section { margin: 0; }
-.settings-category-heading { margin-top: 34px; }
-.settings-category-heading h3 { margin: 0; color: var(--primary); font-size: .84rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }
 .settings-save-actions { position: sticky; bottom: 0; z-index: 3; display: flex; justify-content: flex-end; padding-top: 14px; background: linear-gradient(var(--surface-solid), var(--surface-solid)); }
 .settings-group { display: grid; gap: 0; }
 .settings-group > .settings-row { grid-template-columns: minmax(170px, .42fr) minmax(0, 1fr); align-items: center; column-gap: 16px; row-gap: 4px; padding: 12px 0; }

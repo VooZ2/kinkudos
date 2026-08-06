@@ -249,12 +249,12 @@ class ParentSettingsTests(TestCase):
             html=False,
         )
 
-    def test_settings_are_grouped_by_the_requested_categories(self):
+    def test_settings_are_grouped_without_a_redundant_category_heading(self):
         self.client.force_login(self.admin)
 
         response = self.client.get(reverse("parent_dashboard"))
 
-        self.assertContains(response, "Children and access")
+        self.assertNotContains(response, "Children and access")
         for heading in (
             "Family",
             "Points and tasks",

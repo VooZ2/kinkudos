@@ -755,7 +755,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, ">Nustatymai<", html=False)
         self.assertNotContains(response, "Šeimos nustatymai")
         self.assertNotContains(response, ">Bendrieji<", html=False)
-        self.assertContains(response, "Vaikai ir prieiga")
+        self.assertNotContains(response, "Vaikai ir prieiga")
         self.assertContains(response, "Vaikų įrenginiai")
         self.assertContains(response, "Taškai ir darbai")
         self.assertContains(response, "Duomenys ir saugojimas")
