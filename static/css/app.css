@@ -89,7 +89,7 @@ a { color: inherit; }
 .topbar > * { display: flex; align-items: center; gap: 12px; }
 .brand-wrap { display: inline-flex; align-items: center; gap: 10px; }
 .topbar-actions { display: flex; align-items: center; gap: 10px; }
-.language-switcher { position: relative; z-index: 30; display: inline-block; width: 44px; height: 44px; min-height: 44px; }
+.language-switcher { position: relative; z-index: 30; display: inline-block; width: 44px; height: 44px; min-height: 44px; margin-top: 0; }
 .language-switcher-face { display: grid; place-items: center; width: 44px; height: 44px; min-height: 44px; padding: 0; color: var(--muted); background: var(--surface-solid); border: 1px solid var(--border); border-radius: 99px; font: inherit; font-size: 1.15rem; cursor: pointer; list-style: none; }
 .language-switcher-face::-webkit-details-marker { display: none; }
 .language-switcher-face::marker { content: ""; }

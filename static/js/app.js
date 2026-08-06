@@ -270,7 +270,7 @@ document.querySelectorAll(".goal-filter a").forEach(link => {
   });
 });
 
-document.querySelector("[data-history-child-filter]")?.addEventListener("change", event => {
+document.querySelector("[data-history-child-filter] select[name=history_child]")?.addEventListener("change", event => {
   const select = event.currentTarget;
   const form = select.form;
   if (!form || form.dataset.submitting === "true") return;

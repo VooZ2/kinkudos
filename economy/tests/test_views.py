@@ -96,6 +96,25 @@ class LanguageSelectionTests(TestCase):
         self.assertIn("transform: translateX(-50%)", rule.group(1))
         self.assertNotIn("right: 0", rule.group(1))
 
+        switcher_rule = re.search(r"\.language-switcher \{([^}]+)\}", stylesheet)
+
+        self.assertIsNotNone(switcher_rule)
+        self.assertIn("margin-top: 0", switcher_rule.group(1))
+
+    def test_history_child_filter_listens_to_the_child_select(self):
+        script = Path(settings.BASE_DIR, "static/js/app.js").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn(
+            'document.querySelector("[data-history-child-filter] select[name=history_child]")?.addEventListener("change"',
+            script,
+        )
+        self.assertNotIn(
+            'document.querySelector("[data-history-child-filter]")?.addEventListener("change"',
+            script,
+        )
+
 
 class AccessAndWorkflowTests(TestCase):
     def setUp(self):
