@@ -53,16 +53,18 @@
       {% endif %}
       <h2>{{ child.name }}</h2>
     </div>
-    <p class="stat-value {% if child.balance > 0 %}balance-positive{% elif child.balance < 0 %}balance-negative{% else %}balance-zero{% endif %}">
-      {{ child.balance }} <small>{{ child.balance|currency_unit:"neutral" }}</small>
-    </p>
+    <div class="child-balance-row">
+      <p class="stat-value {% if child.balance > 0 %}balance-positive{% elif child.balance < 0 %}balance-negative{% else %}balance-zero{% endif %}">
+        {{ child.balance }} <small>{{ child.balance|currency_unit:"neutral" }}</small>
+      </p>
+      {% if child.saved_total %}<p class="saved-total">{{ child.saved_total }} {% translate "saved" %} <button class="info-button" type="button" data-open-dialog="saved-info-{{ child.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button></p>{% endif %}
+    </div>
     <p class="credit-caption">
       <span>{% translate "Credit" %} {{ child.min_balance }}</span>
       <button class="info-button" type="button" data-open-dialog="credit-info-{{ child.pk }}" aria-label="{% translate "How does the credit limit work?" %}" title="{% translate "How does the credit limit work?" %}">
         <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg>
       </button>
     </p>
-    {% if child.saved_total %}<p class="saved-total">{{ child.saved_total }} {% translate "saved" %} <button class="info-button" type="button" data-open-dialog="saved-info-{{ child.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button></p>{% endif %}
     {% if child.lottery_feature_enabled or child.lottery_ticket_open %}<p class="lottery-parent-status"><svg class="action-icon" aria-hidden="true"><use href="#icon-ticket-simple"></use></svg>{% blocktranslate with used=child.lottery_tickets_used limit=child.lottery_weekly_limit %}Tickets {{ used }}/{{ limit }}{% endblocktranslate %} <button class="info-button" type="button" data-open-dialog="ticket-info-{{ child.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button></p>{% endif %}
     {% if child.goal_summary %}<a class="parent-goal-summary" href="#parent-catalogs" data-parent-goal-target="{{ child.goal_summary.pk }}"><span class="goal-summary-title"><span>{{ child.goal_summary.icon|icon_symbol }}</span> {{ child.goal_summary.title }}</span><span class="goal-summary-progress">{{ child.goal_summary.progress_amount }}/{{ child.goal_summary.target_amount }} {% translate "Points" %}</span><span class="progress"><span style="width: {{ child.goal_summary.progress_percent }}%"></span></span><small class="goal-summary-status">{% if child.goal_summary.has_pending_completion %}{% translate "Reached goal" %}{% elif child.goal_summary.mode == "available" %}{% translate "Current goal" %}{% else %}{% translate "Saved" %}{% endif %} <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></small>{% if child.additional_goal_count %}<small>+{{ child.additional_goal_count }}</small>{% endif %}</a>{% endif %}
     <div class="child-quick-actions" aria-label="{{ child.name }} {% translate "actions" %}">

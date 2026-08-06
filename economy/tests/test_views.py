@@ -157,10 +157,14 @@ class AccessAndWorkflowTests(TestCase):
         response = self.client.get(reverse("child_select"))
         self.assertContains(response, ">Prisijungti</button>", html=False)
         self.assertNotContains(response, ">Neužbaigtas</button>", html=False)
+        self.assertContains(response, ">PIN:</label>", html=False)
+        self.assertNotContains(response, "4 skaitmenys", html=False)
 
         self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
         response = self.client.get(reverse("child_select"))
         self.assertContains(response, ">Login</button>", html=False)
+        self.assertContains(response, ">PIN:</label>", html=False)
+        self.assertNotContains(response, "4 digits", html=False)
 
     def test_child_dashboard_does_not_expose_sibling_data(self):
         response = self.login_child(self.child_one, "1234")
@@ -1440,6 +1444,25 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, "Balansas pakoreguotas")
         self.child_one.refresh_from_db()
         self.assertEqual(self.child_one.balance, 17)
+
+    def test_parent_child_card_places_saved_points_with_balance(self):
+        template = Path(settings.BASE_DIR, "templates/economy/parent_dashboard.html").read_text(
+            encoding="utf-8"
+        )
+        balance_start = template.index('<div class="child-balance-row">')
+        balance_end = template.index("</div>", balance_start)
+        balance_row = template[balance_start:balance_end]
+
+        self.assertLess(
+            balance_row.index('class="stat-value'),
+            balance_row.index('class="saved-total"'),
+        )
+        self.assertLess(
+            template.index('class="saved-total"'),
+            template.index('class="credit-caption"'),
+        )
+        stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn(".child-balance-row { display: flex; align-items: center; flex-wrap: nowrap;", stylesheet)
 
     def test_pending_requests_are_grouped_and_oldest_first(self):
         older = self.child_one.task_claims.create(

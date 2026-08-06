@@ -272,15 +272,20 @@ select.field-control, .stack-form select {
 .goal-mode-button .action-icon { width: 17px; height: 17px; }
 .goal-add-button { min-height: 40px; padding: 8px 13px; }
 .goal-mode-options { display: grid; gap: 10px; }
-.goal-mode-option { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
-.goal-mode-option strong, .goal-mode-option p { margin: 0; }
-.goal-mode-option p { margin-top: 3px; color: var(--muted); font-size: .9rem; }
+.goal-mode-option { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 13px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.goal-mode-option label { display: flex; min-width: 0; align-items: center; gap: 11px; cursor: pointer; }
+.goal-mode-option label > input[type="radio"] { width: 22px; height: 22px; flex: 0 0 auto; margin: 0; accent-color: var(--primary); }
+.goal-mode-option label > span { display: grid; min-width: 0; gap: 3px; }
+.goal-mode-option strong, .goal-mode-option small { margin: 0; }
+.goal-mode-option small { color: var(--muted); font-size: .9rem; font-weight: 500; }
 .goal-mode-option .info-button { width: 44px; height: 44px; }
 .goal-quick-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 12px 0 18px; }
 .goal-quick-options .button { min-height: 42px; padding: 8px 10px; }
 .stack-form .goal-add-preview { display: flex; align-items: baseline; gap: 6px; margin: 0; color: var(--muted); white-space: nowrap; }
 .dialog-actions { justify-content: flex-end; flex-wrap: wrap; margin-top: 4px; }
 .dialog-actions form { margin: 0; }
+.goal-mode-form .dialog-actions { flex-wrap: nowrap; }
+.goal-mode-form .dialog-actions .button { min-width: 0; }
 .ledger-row { justify-content: initial; }
 .ledger-row > div { flex: 1; display: grid; }
 .ledger-row small { color: var(--muted); }
@@ -300,6 +305,8 @@ select.field-control, .stack-form select {
 .parent-title { margin-bottom: 28px; }
 .child-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
 .child-card-header h2 { margin: 0; }
+.child-balance-row { display: flex; align-items: center; flex-wrap: nowrap; gap: 8px 16px; margin-bottom: 2px; }
+.child-balance-row .stat-value, .child-balance-row .saved-total { margin-bottom: 0; }
 .credit-caption { display: flex; align-items: center; gap: 4px; margin-bottom: 2px; color: var(--muted); font-size: .94rem; font-weight: 720; line-height: 1.2; letter-spacing: .01em; }
 .credit-caption > span { display: flex; align-items: center; min-height: 28px; }
 .credit-caption .info-button, .lottery-parent-status .info-button { align-self: center; width: 44px; height: 44px; margin-block: -8px; }
@@ -335,6 +342,7 @@ select.field-control, .stack-form select {
 .balance-negative { color: var(--danger); }
 .balance-zero { color: var(--text); }
 .saved-total, .lottery-parent-status { display: flex; align-items: center; gap: 4px; margin: 0 0 2px; color: var(--muted); font-size: .88rem; font-weight: 720; }
+.saved-total { white-space: nowrap; }
 .lottery-parent-status > .action-icon { flex: 0 0 auto; width: 18px; height: 18px; }
 .parent-goal-summary { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 7px 10px; margin: 12px 0 4px; padding: 13px 14px; color: var(--text); border: 1px solid var(--line); border-radius: 14px; background: color-mix(in srgb, var(--primary) 6%, var(--surface-solid)); text-decoration: none; }
 .parent-goal-summary:hover, .parent-goal-summary:focus-visible { border-color: var(--primary); }
