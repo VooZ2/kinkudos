@@ -41,7 +41,7 @@ filters remain in place.
 
 <details class="screenshot-disclosure">
 <summary>View Parent activity History on mobile</summary>
-<img class="screenshot-image" src="../assets/parent-activity-history-mobile-26-6-0.png" alt="Parent activity History on mobile" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-activity-history-mobile-26-6-0.png" alt="Parent activity History on mobile" loading="lazy">
 </details>
 
 The screenshot uses fictional demonstration data.
