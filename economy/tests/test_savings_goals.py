@@ -383,6 +383,19 @@ class SavingsGoalServiceTests(TestCase):
         self.assertContains(response, 'data-goal-available="0"')
         self.assertContains(response, 'max="0"')
 
+    def test_goal_mode_dialog_includes_csrf_token_for_confirmation(self):
+        goal = self.make_goal()
+        session = self.client.session
+        session["child_id"] = self.child.pk
+        session.save()
+
+        response = self.client.get(reverse("child_dashboard"))
+
+        html = response.content.decode()
+        dialog_start = html.index(f'id="goal-mode-{goal.pk}"')
+        dialog_end = html.index("</dialog>", dialog_start)
+        self.assertIn('name="csrfmiddlewaretoken"', html[dialog_start:dialog_end])
+
     def test_parent_goal_summary_prioritises_reached_goals_waiting_for_approval(self):
         current = self.make_goal(target=100)
         select_goal_mode(goal=current, child=self.child, mode=GoalMode.AVAILABLE)
