@@ -8,7 +8,8 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 ### Fixed
 
 - Savings-goal proposals now match task and reward request spacing and amount
-  typography in the parent approval list.
+  typography in the parent approval list while keeping suggested amounts a
+  neutral color.
 
 ## [26.5.3] - 2026-08-06
 

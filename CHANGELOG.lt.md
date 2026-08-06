@@ -10,7 +10,8 @@ schema.
 ### Pataisyta
 
 - Taupymo tikslų pasiūlymų tarpai ir sumos tipografija tėvų patvirtinimų
-  sąraše dabar sutampa su darbų ir prizų prašymais.
+  sąraše dabar sutampa su darbų ir prizų prašymais, o siūloma suma
+  išlieka neutralios spalvos.
 
 ## [26.5.3] - 2026-08-06
 
