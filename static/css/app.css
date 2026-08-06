@@ -401,10 +401,11 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .catalog-list .catalog-token-positive { color: var(--success); }
 .catalog-list .catalog-token-negative { color: var(--danger); }
 .history-panel { margin-top: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
-.history-panel > summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 22px; list-style: none; }
-.history-panel > summary::-webkit-details-marker { display: none; }
-.history-panel > summary::after { content: "›"; color: var(--muted); font-size: 1.7rem; line-height: 1; transform: rotate(90deg); transition: transform .16s; }
-.history-panel[open] > summary::after { transform: rotate(-90deg); }
+.history-panel > summary, .catalog-grid > details > summary, #parent-settings details > summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; list-style: none; }
+.history-panel > summary::-webkit-details-marker, .catalog-grid > details > summary::-webkit-details-marker, #parent-settings details > summary::-webkit-details-marker { display: none; }
+.history-panel > summary::after, .catalog-grid > details > summary::after, #parent-settings details > summary::after { content: "›"; flex: 0 0 auto; margin-left: auto; color: var(--muted); font-size: 1.7rem; line-height: 1; transform: rotate(90deg); transition: transform .16s; }
+.history-panel[open] > summary::after, .catalog-grid > details[open] > summary::after, #parent-settings details[open] > summary::after { transform: rotate(-90deg); }
+.history-panel > summary { padding: 20px 22px; }
 .history-panel .eyebrow { display: block; }
 .history-title { display: block; font-size: clamp(1.45rem, 3vw, 2rem); letter-spacing: -.035em; }
 .history-count { margin-left: auto; min-width: 2rem; padding: 4px 8px; border-radius: 99px; color: var(--primary); background: color-mix(in srgb, var(--primary) 12%, var(--surface-solid)); text-align: center; font-size: .78rem; }
@@ -595,9 +596,6 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .feedback-list { display: grid; gap: 12px; }
 .feedback-card { min-width: 0; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-solid); overflow: hidden; }
 .feedback-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px; cursor: pointer; list-style: none; }
-.feedback-summary::-webkit-details-marker { display: none; }
-.feedback-summary::after { content: "⌄"; color: var(--muted); font-size: 1.1rem; transition: transform .16s; }
-.feedback-card[open] .feedback-summary::after { transform: rotate(180deg); }
 .feedback-summary > div { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
 .feedback-card-body { padding: 0 18px 18px; border-top: 1px solid var(--line); }
 .feedback-actions { display: flex; align-items: center; justify-content: flex-end; gap: 12px; }
@@ -627,13 +625,12 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .settings-section { margin: 0; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-solid); overflow: hidden; }
 .settings-section + .settings-section { margin-top: 12px; }
 .settings-section > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 18px; list-style: none; color: var(--text); font-size: 1rem; font-weight: 820; cursor: pointer; }
-.settings-section > summary::-webkit-details-marker { display: none; }
-.settings-section > summary::after { content: "⌄"; color: var(--muted); font-size: 1.1rem; transition: transform .16s; }
 .settings-section[open] > summary { border-bottom: 1px solid var(--line); }
-.settings-section[open] > summary::after { transform: rotate(180deg); }
 .settings-section:not(.settings-section-standalone) > .settings-group { padding-inline: 18px; }
 .settings-section-standalone { margin-top: 18px; padding: 0 20px 20px; overflow: visible; }
 .settings-section-standalone > summary { margin: 0 -20px 18px; }
+.settings-section-standalone:not([open]) { padding-bottom: 0; }
+.settings-section-standalone:not([open]) > summary { margin-bottom: 0; }
 .settings-section-standalone > article, .settings-section-standalone > section { margin: 0; }
 .settings-category-heading { margin-top: 34px; }
 .settings-category-heading h3 { margin: 0; color: var(--primary); font-size: .84rem; font-weight: 850; letter-spacing: .1em; text-transform: uppercase; }

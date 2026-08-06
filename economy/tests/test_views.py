@@ -725,6 +725,12 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, 'class="push-icon"', html=False)
         self.assertContains(response, "Kaip įjungti pranešimus?")
         self.assertNotContains(response, '<details class="panel" open>', html=False)
+        self.assertNotContains(response, '<details class="settings-section" open>', html=False)
+        self.assertNotContains(
+            response,
+            '<details class="settings-section settings-section-standalone" open>',
+            html=False,
+        )
         self.assertContains(response, 'class="language-switcher-option"', count=2, html=False)
         self.assertContains(response, "🇱🇹", html=False)
         self.assertContains(response, "🇬🇧", html=False)
@@ -778,6 +784,10 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, ">Valdymas<", html=False)
         self.assertNotContains(response, ">Prisijungimai<", html=False)
         self.assertNotContains(response, ">Žurnalas<", html=False)
+
+        stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn(".catalog-grid > details > summary::after", stylesheet)
+        self.assertIn("#parent-settings details > summary::after", stylesheet)
 
     def test_home_title_contains_family_nickname_and_project_name(self):
         response = self.client.get(reverse("home"))

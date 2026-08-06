@@ -475,7 +475,7 @@
       </div>
     </details>
 
-    <details id="manage-goals" class="panel" open>
+    <details id="manage-goals" class="panel">
       <summary>{% translate "Goals" %}</summary>
       <div class="goal-filter" aria-label="{% translate 'Goal child filter' %}"><a class="is-active" href="#manage-goals">{% translate "All" %}</a>{% for goal_child in goal_children %}<a href="#manage-goals-child-{{ goal_child.pk }}">{{ goal_child.name }}</a>{% endfor %}</div>
       <div class="goal-manage-list">
@@ -503,7 +503,7 @@
   <article class="panel family-preferences">
     <form method="post" action="{% url 'parent_update_family_preferences' %}" class="stack-form settings-form">
       {% csrf_token %}
-      <details class="settings-section" open>
+      <details class="settings-section">
         <summary>{% translate "Family" %}</summary>
         <div class="settings-group">
           <p class="settings-row">
@@ -513,7 +513,7 @@
           </p>
         </div>
       </details>
-      <details class="settings-section" open>
+      <details class="settings-section">
         <summary>{% translate "Points and tasks" %}</summary>
         <div class="settings-group">
         <p class="settings-row">
@@ -528,7 +528,7 @@
         </p>
         </div>
       </details>
-      <details class="settings-section" open>
+      <details class="settings-section">
         <summary>{% translate "Scratch tickets" %}</summary>
         <div class="settings-group">
         <p class="settings-row checkbox-field">
@@ -548,7 +548,7 @@
         </p>
         </div>
       </details>
-      <details class="settings-section" open>
+      <details class="settings-section">
         <summary>{% translate "Data and retention" %}</summary>
         <div class="settings-group">
         <p class="settings-row">
@@ -567,7 +567,7 @@
     </form>
   </article>
   <div class="settings-category-heading"><h3>{% translate "Children and access" %}</h3></div>
-  <details class="settings-section settings-section-standalone" open><summary>{% translate "Child devices" %}</summary>
+  <details class="settings-section settings-section-standalone"><summary>{% translate "Child devices" %}</summary>
   <article class="panel">
     <p class="settings-description">{% translate "Only paired devices can see child profiles or enter a child PIN." %}</p>
     <div class="device-pairing-actions{% if current_device %} pairing-link-only{% endif %}">
@@ -628,7 +628,7 @@
     {% endif %}
   </article>
   </details>
-  <details class="settings-section settings-section-standalone" open><summary>{% translate "Network and security" %}</summary>
+  <details class="settings-section settings-section-standalone"><summary>{% translate "Network and security" %}</summary>
   <article class="panel network-access-panel">
     <div class="backup-heading">
       <p class="settings-description">
@@ -682,7 +682,7 @@
     {% endif %}
   </article>
   </details>
-  <details class="settings-section settings-section-standalone" open><summary>{% translate "Email and notifications" %}</summary>
+  <details class="settings-section settings-section-standalone"><summary>{% translate "Email and notifications" %}</summary>
   <article class="panel email-panel">
     <div class="backup-heading">
       <p class="settings-description">{% translate "SMTP is used for password recovery and optional feedback notifications." %}</p>
@@ -716,7 +716,7 @@
     {% endif %}
   </article>
   </details>
-  <details class="settings-section settings-section-standalone" open><summary>{% translate "Backups" %}</summary>
+  <details class="settings-section settings-section-standalone"><summary>{% translate "Backups" %}</summary>
   <article class="panel backup-panel">
     <div class="backup-heading">
       <p class="settings-description">{% translate "Daily encrypted copies protect the family database and uploaded photos." %}</p>
@@ -777,7 +777,7 @@
     {% endif %}
   </article>
   </details>
-  <details class="settings-section settings-section-standalone" open><summary>{% translate "Accounts" %}</summary>
+  <details class="settings-section settings-section-standalone"><summary>{% translate "Accounts" %}</summary>
   <h3 class="account-section-title">{% translate "Create new accounts" %}</h3>
   <div class="account-grid">
     <details class="panel">
@@ -856,7 +856,7 @@
     </details>
   </div>
   </details>
-  <details class="settings-section settings-section-standalone" open><summary>{% translate "Family feedback" %}</summary>
+  <details class="settings-section settings-section-standalone"><summary>{% translate "Family feedback" %}</summary>
   <section class="panel feedback-admin">
     <p class="settings-description feedback-description">{% translate "Family feedback stays on this server and can be reviewed by parents." %}</p>
     {% if not feedback_email_configured %}
