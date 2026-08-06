@@ -11,9 +11,12 @@ remain full width.
 > network access, SMTP, backup credentials, run a backup, or revoke every child
 > device.
 
-![English parent settings](../assets/parent-settings-2026.png)
+<img class="screenshot-image" src="../assets/parent-settings-2026.png" alt="English parent settings" loading="lazy">
 
-![English parent settings on mobile](../assets/parent-settings-mobile-26-6-0.png)
+<details class="screenshot-disclosure">
+<summary>View English parent settings on mobile</summary>
+<img class="screenshot-image" src="../assets/parent-settings-mobile-26-6-0.png" alt="English parent settings on mobile" loading="lazy">
+</details>
 
 The screenshot uses fictional demonstration data.
 

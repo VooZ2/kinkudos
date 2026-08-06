@@ -116,6 +116,44 @@ button {
   max-width: 48rem;
 }
 
+.screenshot-image {
+  display: block;
+  width: min(100%, 38rem);
+  max-width: 100%;
+  height: auto;
+  margin: 1.25rem auto;
+  border: 1px solid var(--kinkudos-card-border);
+  border-radius: 1.1rem;
+  box-shadow: 0 0.75rem 1.8rem rgb(33 17 61 / 12%);
+}
+
+.screenshot-disclosure {
+  margin: 1.25rem 0;
+  overflow: hidden;
+  border: 1px solid var(--kinkudos-card-border);
+  border-radius: 1.1rem;
+  background: var(--md-default-bg-color);
+}
+
+.screenshot-disclosure > summary {
+  padding: 0.85rem 1rem;
+  color: var(--md-default-fg-color);
+  background: var(--kinkudos-card-hover);
+  cursor: pointer;
+  font-weight: 750;
+}
+
+.screenshot-disclosure[open] > summary {
+  border-bottom: 1px solid var(--kinkudos-card-border);
+}
+
+.screenshot-disclosure .screenshot-image {
+  margin: 0 auto;
+  border: 0;
+  border-radius: 0 0 1.1rem 1.1rem;
+  box-shadow: none;
+}
+
 .md-typeset {
   font-size: 0.8rem;
   line-height: 1.72;

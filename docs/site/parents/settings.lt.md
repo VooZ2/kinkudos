@@ -11,9 +11,12 @@ lieka per visą plotį.
 > prieigą, SMTP, kopijų duomenis, paleisti kopiją ir atšaukti visus vaikų
 > įrenginius.
 
-![Angliški tėvų nustatymai](../assets/parent-settings-2026.png)
+<img class="screenshot-image" src="../assets/parent-settings-2026.png" alt="Angliški tėvų nustatymai" loading="lazy">
 
-![Angliški tėvų nustatymai telefone](../assets/parent-settings-mobile-26-6-0.png)
+<details class="screenshot-disclosure">
+<summary>Peržiūrėti angliškus tėvų nustatymus telefone</summary>
+<img class="screenshot-image" src="../assets/parent-settings-mobile-26-6-0.png" alt="Angliški tėvų nustatymai telefone" loading="lazy">
+</details>
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 

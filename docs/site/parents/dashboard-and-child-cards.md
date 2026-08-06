@@ -11,7 +11,10 @@ requests first and child cards underneath them.
 When there are no requests, the compact empty state says **No pending
 requests**. The child cards remain directly below it.
 
-![Parent Home pending requests on mobile](../assets/parent-home-pending-requests-mobile-26-6-0.png)
+<details class="screenshot-disclosure">
+<summary>View Parent Home pending requests on mobile</summary>
+<img class="screenshot-image" src="../assets/parent-home-pending-requests-mobile-26-6-0.png" alt="Parent Home pending requests on mobile" loading="lazy">
+</details>
 
 The screenshot uses fictional demonstration data.
 
@@ -43,7 +46,10 @@ scratch tickets are disabled. The `saved` line is shown only when the child
 has saved points; `0 saved` is not shown. A child without goals has no empty
 goal block or placeholder.
 
-![Parent Home child cards on mobile](../assets/parent-home-child-cards-mobile-26-6-0.png)
+<details class="screenshot-disclosure">
+<summary>View Parent Home child cards on mobile</summary>
+<img class="screenshot-image" src="../assets/parent-home-child-cards-mobile-26-6-0.png" alt="Parent Home child cards on mobile" loading="lazy">
+</details>
 
 The screenshot uses fictional demonstration data.
 

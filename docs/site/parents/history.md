@@ -39,7 +39,10 @@ child filters History immediately; there is no need to open **Filters** or
 press another **Apply** action merely to switch children. Other active query
 filters remain in place.
 
-![Parent activity History on mobile](../assets/parent-activity-history-mobile-26-6-0.png)
+<details class="screenshot-disclosure">
+<summary>View Parent activity History on mobile</summary>
+<img class="screenshot-image" src="../assets/parent-activity-history-mobile-26-6-0.png" alt="Parent activity History on mobile" loading="lazy">
+</details>
 
 The screenshot uses fictional demonstration data.
 

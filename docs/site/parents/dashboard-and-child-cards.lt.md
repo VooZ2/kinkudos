@@ -11,7 +11,10 @@ rodomi laukiantys prašymai, o po jais – vaikų kortelės.
 Kai nėra prašymų, kompaktiška tuščia būsena rodo **Nėra laukiančių prašymų**.
 Vaikų kortelės lieka tiesiai po ja.
 
-![Tėvų Pradžia su laukiančiais prašymais telefone](../assets/parent-home-pending-requests-mobile-26-6-0.png)
+<details class="screenshot-disclosure">
+<summary>Peržiūrėti tėvų Pradžią su laukiančiais prašymais telefone</summary>
+<img class="screenshot-image" src="../assets/parent-home-pending-requests-mobile-26-6-0.png" alt="Tėvų Pradžia su laukiančiais prašymais telefone" loading="lazy">
+</details>
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 
@@ -43,7 +46,10 @@ eilutė slepiama, kai nutrinami bilietai išjungti. `Išsaugota` rodoma tik tada
 kai vaikas turi išsaugotų taškų; `0 išsaugota` nerodoma. Vaikas be tikslų neturi
 tuščio tikslo bloko ar vietos žymeklio.
 
-![Tėvų Pradžia su vaikų kortelėmis telefone](../assets/parent-home-child-cards-mobile-26-6-0.png)
+<details class="screenshot-disclosure">
+<summary>Peržiūrėti tėvų Pradžią su vaikų kortelėmis telefone</summary>
+<img class="screenshot-image" src="../assets/parent-home-child-cards-mobile-26-6-0.png" alt="Tėvų Pradžia su vaikų kortelėmis telefone" loading="lazy">
+</details>
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 
