@@ -1,7 +1,7 @@
 # Kurti ir valdyti prizus
 
-Atidarykite **Tėvai → Darbai ir prizai → Prizai**, kad sukurtumėte dalykus,
-kurių vaikas gali prašyti naudodamas savo taškus.
+Atidarykite **Tėvai → Tvarkyti → Prizai**, kad sukurtumėte dalykus, kurių
+vaikas gali prašyti naudodamas išleidžiamus taškus.
 
 > **Kam:** Tėvams<br>
 > **Rezultatas:** Aiškus prizų katalogas ir suprantami tėvų sprendimai
@@ -16,6 +16,19 @@ Vaikai mato aktyvius prizus ir gali jų prašyti, kai leidžia balanso bei kredi
 taisyklės. Pakeitus prizą keičiasi tik būsimi prašymai: jau tėvų sprendimo
 laukiantis prašymas išlaiko savo pradinę užrašytą kainą.
 
+## Katalogo veiksmai
+
+Naudokite veiksmus pagal pavadinimą:
+
+- **Redaguoti** – pakeisti būsimą pavadinimą, kainą ar emoji;
+- **Paslėpti** – išsaugoti prizą ir jo istoriją, bet pašalinti iš vaiko
+  pasirinkimo;
+- **Rodyti** – vėl padaryti jį prieinamą;
+- **Trinti** – pašalinti iš aktyvaus naudojimo pagal programoje įdiegtą
+  šalinimo elgseną.
+
+Po bet kurio katalogo veiksmo ankstesnė **Istorija** lieka suprantama.
+
 ## Peržiūrėkite prizo prašymą
 
 Prašymas atsiranda **Tėvai → Pradžia → Laukiantys prašymai**. Kol jis laukia,
@@ -23,17 +36,11 @@ vaikas gali jį atšaukti.
 
 | Sprendimas | Rezultatas |
 | --- | --- |
-| **Patvirtinti** | Nuskaito užrašytą kainą, prieš tai patikrinus, kad vaikas nenukris žemiau kredito ribos. |
+| **Patvirtinti** | Nuskaito užrašytą kainą, prieš tai patikrinus, kad vaikas nenukris žemiau žemiausios balanso ribos. |
 | **Atmesti** | Taškai nesikeičia. Priežastis privaloma, kad vaikas suprastų sprendimą. |
 
-## Išlaikykite prizus suprantamus
+Atskirus tikslo taupymo būdus rasite [Taupymo tikslų ir vaiko pasiūlymų
+vadove](savings-goals.lt.md), o nuolatinį įrašą – [Veiksmų istorijoje ir
+filtruose](history.lt.md).
 
-Rinkitės prizus, kuriuos šeima tikrai gali suteikti, ir sutarkite, kada prizas
-laikomas įteiktu. KinKudos užrašo taškų sprendimą; ji negali už jus įteikti
-realaus pasaulio prizo.
-
-Norėdami pakeisti būsimą pavadinimą ar kainą, redaguokite prizą. Išjunkite jį,
-jeigu galbūt naudosite vėliau, arba pašalinkite, jei jis nebereikalingas.
-Abiem atvejais ankstesnė istorija lieka.
-
-[Taupymo tikslai →](savings-goals.lt.md) · [English](create-and-manage-rewards.md)
+[English](create-and-manage-rewards.md)

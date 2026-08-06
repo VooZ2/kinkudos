@@ -9,46 +9,63 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ### Added
 
-- Savings goals now support live current-goal progress or separately saved
-  points, atomic transfers and returns, parent-approved completion, goal
-  history, and child/parent management UI.
+- Savings goals now support two methods: live **Current goal** progress from
+  available points, or points saved separately for one specific goal.
+- Approved savings goals now expose the saving-method choice on the child goal
+  card.
+- Separately saved points support atomic transfers and returns, parent-approved
+  completion, goal history, and child/parent management UI.
+- History now covers savings-method selection, goal transfers and returns,
+  Current goal changes, goal completion, and goal deletion events.
+- Dedicated goal management and History filters are available in the parent
+  workspace.
 
 ### Changed
 
-- The parent area now uses Manage sections for Tasks, Penalties, Rewards, and
-  Goals, with compact child summaries and filtered activity history.
+- The parent workspace now uses the Home, Manage, Settings, and History navigation,
+  with Manage sections for Tasks, Penalties, Rewards, and Goals.
+- Parent Home now has a compact pending-request empty state, clearer child
+  cards, spendable/saved summaries, goal summaries, and named quick actions.
+- Settings are organised into responsive Family, Points and tasks, Scratch
+  tickets, Data and retention, access, service, account, and feedback groups.
+- Child goal cards use a responsive two-column desktop layout where space
+  allows, while keeping the child’s themed presentation.
+- Parent and child controls use consistent local SVG icons and accessible
+  action names while preserving goal emoji personalization.
 
 ### Fixed
 
 - Manage section links now keep the parent dashboard open and expand the
   selected Tasks, Penalties, Rewards, or Goals section.
-- Child savings-goal cards now keep a clear vertical gap instead of touching
-  or overlapping each other.
-- The saved-goal amount preview now keeps its label, amount, and unit on one
-  line.
-- Goal management rows now keep progress and savings-mode columns aligned even
-  when rows have different numbers of action buttons.
-- Parent and child interface icons now use exact Font Awesome Free 7.3.1 SVG
-  paths with consistent tap targets while preserving goal emoji personalization.
-- Parent dashboard quick-action icons now use complete, consistently sized
-  symbols, compact Credit/Tickets rows, and separated backup warnings.
-- Savings-goal proposals now match task and reward request spacing and amount
-  typography in the parent approval list while keeping suggested amounts a
-  neutral color.
-- Parent catalog edit actions now use the official regular `pen-to-square`
-  icon, visibility toggles use the matching `eye`/`eye-slash` pair, and
-  expanded goal editors can delete a goal with an explicit confirmation.
+- The saved-goal **After** preview and its label/unit stay aligned while the
+  amount updates as the child chooses a value.
+- Saving-method dialog actions no longer overlap, and catalogue Show/Hide
+  controls keep their matching icons and accessible labels.
+- Goal management rows keep progress and saving-mode columns aligned even when
+  rows have different action counts; goal cards no longer touch or overlap.
+- Savings-goal proposals match task and reward request spacing and keep the
+  suggested amount neutral.
+- Parent catalogue edit actions use the official regular `pen-to-square` icon,
+  and expanded goal editors expose a text-only **Delete** action with explicit
+  confirmation.
 - History child selection now applies immediately while preserving the other
   active query filters.
-- Deleting a goal atomically returns its saved points, cancels pending goal
-  completion requests, and keeps the goal event history through soft deletion.
-- Goal editing now uses a text-only `Delete` action; activity-history rows
-  keep only the child avatar on the left, move the activity icon beside the
-  right-side result, remove date icons, and use a neutral Informational badge.
+- Add-points preview limits the **All** choice by both available points and the
+  remaining goal target.
+- Activity-history rows no longer show misleading calendar icons and use a
+  neutral **Informational** badge with the activity icon in the result area.
+- Deleting a goal atomically returns saved points, cancels pending completion
+  requests, and keeps goal event history through soft deletion.
+- Parent dashboard quick-action icons and compact Credit/Tickets rows keep
+  consistent sizing, and backup warnings remain separated.
 - The flag-only language menu now stays centred directly below its trigger on
   narrow and wide layouts without overlapping neighbouring header actions.
 - Parent history now limits each activity source before merging the latest 50
   entries, avoiding unbounded in-memory history loading for “Any time”.
+
+Existing children with exactly one active goal retain available-points progress
+after migration. Children with multiple active goals choose a saving method
+instead of having a goal selected by guesswork.
 
 ### Security
 

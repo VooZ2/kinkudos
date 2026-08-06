@@ -1,7 +1,7 @@
 # Create and manage tasks
 
-Use the task catalogue to define work your family repeats. Go to **Parents →
-Tasks and rewards → Tasks**.
+Use the task catalogue to define repeated family work. Go to **Parents →
+Manage → Tasks**.
 
 > **For:** Parents<br>
 > **You need:** A parent account<br>
@@ -16,32 +16,34 @@ Tasks and rewards → Tasks**.
 4. Save the task and check that it is active.
 
 The shared catalogue does not assign a task by itself. A child can choose an
-available active task to submit, or a parent can use it for a direct award or a
-task assigned for today.
+available active task to submit, or a parent can use it for **Add completed
+task** or **Assign tasks for today**.
 
-## Change, deactivate, or remove a task
+## Catalogue actions
 
-Edit a task when its future title, points, or emoji should change. The change
-affects new uses only; older history keeps the title, icon, and point value
-that applied at the time.
+Use the row actions by name:
 
-Deactivate a task when you may use it again later. It stops appearing as a new
-choice but preserves the catalogue item and family history. Remove a task only
-when it is no longer useful. Removing it also does not rewrite past points.
+- **Edit** changes the future title, points, or emoji;
+- **Hide** keeps the item and its history but removes it from child selection;
+- **Show** makes it available again;
+- **Delete** removes it from active use according to the implemented deletion
+  behavior.
 
-## Choose the right way to record completed work
+These actions do not rewrite previous History entries. Earlier entries remain
+understandable with the title, icon, and point value recorded at the time.
 
-KinKudos provides two ways to record completed work:
+## Choose how to record completed work
 
 | Method | What happens | Use it when |
 | --- | --- | --- |
-| **Child submission** | The child submits the task; a parent later approves, returns for improvement, or rejects it. | The child should report their own work or attach evidence. |
-| **Completed task** | A parent selects catalogue tasks from a child card and awards them immediately. | An adult already observed the work or the child is too young to submit it. |
+| **Child submission** | The child submits the task; a parent approves, asks for improvement, or rejects it. | The child should report the work or attach evidence. |
+| **Add completed task** | A parent selects catalogue tasks from a child card and awards them immediately. | An adult observed the work or the child is too young to submit it. |
 
 ## Related guides
 
 - [Review completed tasks](review-completed-tasks.md)
 - [Assign tasks for today](assign-tasks-today.md)
 - [Points, penalties, and corrections](points-and-corrections.md)
+- [Activity history and filters](history.md)
 
 [Parent dashboard →](dashboard-and-child-cards.md) · [Lietuviškai](create-and-manage-tasks.lt.md)

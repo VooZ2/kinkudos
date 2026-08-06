@@ -1,7 +1,7 @@
 # Create and manage rewards
 
-Use **Parents → Tasks and rewards → Rewards** to create the things a child may
-ask for using their points.
+Use **Parents → Manage → Rewards** to create things a child may ask for using
+spendable points.
 
 > **For:** Parents<br>
 > **Result:** A clear reward catalogue with transparent parent decisions
@@ -16,24 +16,30 @@ Children see active rewards and can request one when their balance and credit
 rules allow it. Changing a reward changes future requests only: a request
 already waiting for a parent keeps its original recorded cost.
 
+## Catalogue actions
+
+Use the row actions by name:
+
+- **Edit** changes the future title, cost, or emoji;
+- **Hide** keeps the reward and its history but removes it from child selection;
+- **Show** makes it available again;
+- **Delete** removes it from active use according to the implemented deletion
+  behavior.
+
+Past History remains understandable after any catalogue action.
+
 ## Review a reward request
 
 A request appears in **Parents → Home → Pending requests**. The child may
-cancel it while it is still pending.
+cancel it while it is pending.
 
 | Decision | Result |
 | --- | --- |
-| **Approve** | Deducts the recorded cost after checking the child will not go below their credit limit. |
+| **Approve** | Deducts the recorded cost after checking the child will not go below the lower balance limit. |
 | **Reject** | Leaves points unchanged. A reason is required so the child can understand the decision. |
 
-## Keep rewards understandable
+See [Savings goals and child suggestions](savings-goals.md) for the separate
+goal methods, and [Activity history and filters](history.md) for the permanent
+record.
 
-Use rewards that the family can realistically provide and agree when a reward
-is considered delivered. KinKudos records the point decision; it cannot deliver
-a real-world reward for you.
-
-To change an existing reward’s future title or cost, edit it. Deactivate it if
-you may use it again later; remove it if it is permanently obsolete. Past
-history is preserved in either case.
-
-[Savings goals →](savings-goals.md) · [Lietuviškai](create-and-manage-rewards.lt.md)
+[Lietuviškai](create-and-manage-rewards.lt.md)

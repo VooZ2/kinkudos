@@ -1,129 +1,201 @@
 # Tėvų nustatymai
 
-Kelias: **Tėvai → Nustatymai**. Čia yra šeimos taisyklės, įrenginiai, paskyros, pasirenkamas saugumas, el. paštas, kopijos ir šeimos atsiliepimai. Pradėkite nuo **Šeimos nustatymų**; tik administratoriui skirtas paslaugas palikite vėlesniam laikui, kol neveikia pagrindinis šeimos ciklas.
+Kelias: **Tėvai → Nustatymai**. Puslapis suskirstytas į tas pačias grupes kaip
+programoje. Telefone grupės yra kompaktiškos išskleidžiamos skiltys: pasirinkus
+atsiveria laukai, o tuščios skiltys nerodomos. Plačiame ekrane susietų paskyrų
+kortelės gali būti dviejuose stulpeliuose, o didelės paslaugų ir saugumo sritys
+lieka per visą plotį.
 
-> **Kas gali ką keisti?** Visi tėvai gali naudoti įprastus šeimos nustatymus ir tvarkyti paskyras. Tėvų administratorius (paprastai pirmas diegimo metu sukurtas tėvas) vienintelis gali keisti tinklo prieigą, SMTP, atsarginių kopijų duomenis, paleisti kopiją ir atšaukti visus vaikų įrenginius.
+> **Kas gali ką keisti?** Visi tėvai gali naudoti įprastus šeimos nustatymus ir
+> tvarkyti paskyras. Tėvų administratorius vienintelis gali keisti tinklo
+> prieigą, SMTP, kopijų duomenis, paleisti kopiją ir atšaukti visus vaikų
+> įrenginius.
 
 ![Angliški tėvų nustatymai](../assets/parent-settings-2026.png)
 
+![Angliški tėvų nustatymai telefone](../assets/parent-settings-mobile-26-6-0.png)
+
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 
-## 1. Šeimos nustatymai
-
-Pirmas blokas valdo visai šeimai bendras taisykles. Nauja reikšmė taikoma būsimiems veiksmams; ji nekeičia jau užbaigto darbo, patvirtinto prizo ar esamo taškų istorijos įrašo.
+## Šeima
 
 ### Šeimos pavadinimas
 
-| Laukelis | Reikšmė | Kas pasikeičia |
-| --- | --- | --- |
-| **Šeimos pavadinimas** | Vardas, rodomas šeimai skirtose antraštėse ir žinutėse. | Keičiamas tik rodomas pavadinimas, o ne naudotojų vardai, domenas ar prieiga. |
+**Šeimos pavadinimas** rodomas šeimai skirtose antraštėse ir žinutėse. Jis
+keičia tik rodomą pavadinimą, o ne paskyrų vardus, domeną ar prieigą.
 
-### Privilegijos
+## Taškai ir darbai
 
-| Laukelis | Reikšmė | Kas pasikeičia |
-| --- | --- | --- |
-| **Taškai už darbo nuotrauką** | Papildomi taškai, kai vaikas pateikia darbą su nuotrauka. `0` išjungia priedą. | Reikšmė užfiksuojama darbo pateikimo metu; vėliau redagavimas nekeičia jau laukiančio ar patvirtinto darbo. |
-| **Gimtadienio taškai** | Kasmetinė dovana kiekvienam vaikui jo išsaugotą gimtadienį. `0` išjungia. | Nauja reikšmė taikoma būsimiems gimtadienio taškams; tam pačiam vaikui tais pačiais metais dovana neskiriama du kartus. |
-| **Įjungti nutrinamus bilietus** | Bendras pasirenkamų nutrinamų bilietų jungiklis. | Išjungus neleidžiami nauji pirkimai ir priminimai, tačiau pradėtą bilietą galima baigti. Kiekvienas vaikas turi ir savo jungiklį. |
-| **Nutrinamo bilieto kaina** | Kiek taškų kainuos būsimas bilietas. | Nauja kaina taikoma tik būsimiems pirkimams; jau nupirktas bilietas išlaiko užfiksuotą kainą. |
-| **Savaitinis bilietų limitas** | Kiek bilietų vienas vaikas gali pirkti nuo pirmadienio iki sekmadienio. | Nauja riba taikoma būsimiems pirkimams; skaitiklis atsinaujina kiekvieną pirmadienį. |
+Šios reikšmės taikomos būsimiems veiksmams ir neperrašo užbaigtų darbų ar
+esamų **Istorijos** įrašų.
 
-### Saugojimas
-
-Šie laukai valdo automatinį įkeltų vaizdų šalinimą, o ne paskyrų ar taškų istorijos trynimą.
-
-| Laukelis | Reikšmė | Kas pasikeičia |
-| --- | --- | --- |
-| **Saugoti darbų nuotraukas** | Kiek laiko saugomos užbaigtų darbų nuotraukos: neribotai, 7, 30 arba 90 dienų. | Laukiančių arba taisyti grąžintų darbų nuotraukos automatiškai netrinamos. |
-| **Saugoti atsiliepimų nuotraukas** | Kiek laiko saugoma išspręsto atsiliepimo ekrano nuotrauka. | Neišspręstų atsiliepimų nuotraukos automatiškai netrinamos. |
-
-## 2. Vaikų įrenginiai
-
-Tik susietas įrenginys gali rodyti vaikų profilius arba priimti vaiko PIN. Profilis saugo vardą, taisykles ir istoriją, o įrenginys yra naršyklė, telefonas, planšetė ar PWA, kuriam leista juo naudotis.
-
-| Valdiklis | Kada naudoti | Rezultatas |
-| --- | --- | --- |
-| **Įrenginio pavadinimas** | Kai susiejate dabartinį kompiuterį ar planšetę. | Suteikia aiškų pavadinimą, pvz., „Virtuvės planšetė“. |
-| **Leisti vaikams naudoti šį įrenginį** | Kai esate prie vaiko įrenginio. | Iškart susieja šią naršyklę/PWA. Tuomet galima pasirinkti vaiką ir įvesti PIN. |
-| **Sukurti privačią susiejimo nuorodą** | Kai reikia susieti kitą telefoną, planšetę ar naršyklę. | Sukuria vienkartinę nuorodą, galiojančią **10 minučių**; ją atidarykite tik numatytame įrenginyje. |
-| **Pervadinti** | Kai sąrašas neaiškus. | Keičia tik pavadinimą, prieigos nenutraukia. |
-| **Atšaukti** | Pametus, pardavus ar nebe šeimos valdomam įrenginiui. | Panaikina vaiko prieigą ir pranešimus tame įrenginyje; norint grįžti reikės susieti iš naujo. |
-| **Atšaukti visus vaikų įrenginius** | Esant platesniam saugumo incidentui. | Tik administratoriui; reikia jo slaptažodžio ir visus įrenginius teks susieti iš naujo. |
-
-## 3. Tinklo prieiga
-
-Tai **pasirenkamas papildomas saugumo sluoksnis**, o ne privalomas pirmas žingsnis. Tėvų slaptažodžiai, vaikų PIN ir įrenginių susiejimas veikia ir tuomet, kai ribojimas išjungtas.
-
-| Režimas | Ką leidžia | Kada tinka |
-| --- | --- | --- |
-| **Prieiga iš interneto** | Jokio IP ribojimo. | Įprastas pasirinkimas daugumai šeimų. |
-| **Riboti vaikų prieigą** | Vaikų puslapiai veikia tik iš įrašytų IP adresų ar tinklų; tėvų puslapiai IP neribojami. | Vaikai KinKudos turi naudoti tik namuose, o tėvai keliauja. |
-| **Riboti visą prieigą** | Vaikų ir tėvų puslapiai veikia tik iš įrašytų adresų. | Tik žinomam stabiliam namų/VPN tinklui ir administratoriui, mokančiam atkurti prieigą. |
-
-Į **Leidžiamus IP adresus ir tinklus** rašykite po vieną IPv4, IPv6 ar CIDR tinklą eilutėje, pvz. `192.0.2.25`, `192.0.2.0/24` arba `2001:db8::/64`. Prieš **Riboti visą prieigą** įrašykite formoje rodomą dabartinį IP. Netinkama taisyklė gali užrakinti visus; tuomet reikės serverio administratoriaus.
-
-## 4. El. pašto nustatymai (SMTP)
-
-SMTP neprivalomas. Jis reikalingas tėvų slaptažodžio atkūrimui ir, nustačius gavėją, privačių atsiliepimų el. pašto pranešimams. Pats atsiliepimas KinKudos išsaugomas ir išjungus el. paštą.
-
-| Laukelis | Ką įrašyti | Pastaba |
-| --- | --- | --- |
-| **Įjungti el. paštą** | Įjunkite arba išjunkite laiškų siuntimą. | Išjungimas netrina atsiliepimų. |
-| **SMTP serveris** | El. pašto tiekėjo siunčiamų laiškų serverio vardą. | Pvz. `smtp.example.com`, be URL kelio. |
-| **SMTP prievadas** | Tiekėjo nurodytą prievadą. | Dažniausiai 587 STARTTLS arba 465 SSL/TLS; vadovaukitės tiekėju. |
-| **Šifravimas** | `STARTTLS`, `SSL/TLS` arba `None`. | `None` rinkitės tik patikimam vidiniam pašto relay. |
-| **SMTP naudotojo vardas** | Tiekėjo prisijungimo vardą. | Dažnai el. pašto adresas, bet ne visada. |
-| **SMTP slaptažodis** | Pašto paslaugos slaptažodį ar programėlės slaptažodį. | Po išsaugojimo nerodomas; įveskite kiekvieną kartą keisdami nustatymus. |
-| **Siuntėjo el. pašto adresas** | Adresą, kurį matys gavėjai. | Paprastai turi būti leidžiamas SMTP tiekėjo. |
-| **Atsiliepimų gavėjo el. paštas** | Adresą, kuriuo ateis papildomi atsiliepimų pranešimai. | Pranešimas išlieka privatus programoje. |
-| **Jūsų paskyros slaptažodis** | Administratorius įveda savo dabartinį slaptažodį. | Apsaugo jautrią konfigūraciją atidarytoje sesijoje. |
-
-KinKudos prieš išsaugodamas patikrina SMTP ryšį. SMTP slaptažodis niekada nerodomas.
-
-## 5. Atsarginės kopijos
-
-Kopijos neprivalomos, bet labai rekomenduojamos šeimai pradėjus naudoti KinKudos. Sistema kasdien sukuria šifruotą nuotolinę duomenų bazės ir įkeltų nuotraukų kopiją. Atkūrimas sąmoningai nėra mygtukas internete – tai serverio administratoriaus veiksmas.
-
-| Rodmuo | Reikšmė |
+| Laukelis | Reikšmė |
 | --- | --- |
-| **Įjungta** (žalia) | Saugykla nustatyta, o paskutinė sėkminga kopija ne senesnė kaip 7 dienos. |
-| **Kopijuojama** (gintarinė) | Vyksta kopija; vienu metu gali veikti tik viena. |
-| **Neįjungta** | Nuotolinė saugykla dar nesukonfigūruota. |
-| **Reikia dėmesio** (raudona) | Paslauga nepasiekiama, kopija pasenusi arba pateikta klaida. Pirmiausia perskaitykite klaidą. |
+| **Taškai už darbo nuotrauką** | Papildomi taškai, kai vaikas pateikia darbą su nuotrauka. `0` išjungia priedą. Reikšmė užfiksuojama pateikimo metu. |
+| **Gimtadienio taškai** | Kartą per metus skiriama dovana pagal išsaugotą vaiko gimtadienį. `0` išjungia. Tais pačiais kalendoriniais metais tas pats vaikas neapdovanojamas du kartus. |
 
-**Kurti kopiją dabar** paprašo papildomos kopijos; ji niekada neatkuria duomenų.
+## Nutrinami bilietai
+
+Šie šeimos valdikliai veikia kartu su individualiu jungikliu skiltyje
+**Paskyros → Vaikų profiliai**:
+
+| Laukelis | Reikšmė |
+| --- | --- |
+| **Įjungti nutrinamus bilietus** | Bendras jungiklis. Išjungus sustoja nauji pirkimai ir priminimai, bet pradėtą bilietą galima baigti. |
+| **Nutrinamo bilieto kaina** | Būsimų bilietų kaina taškais. Jau nupirktas bilietas išlaiko užrašytą kainą. |
+| **Savaitinis bilietų limitas** | Kiek vienas vaikas gali pirkti nuo pirmadienio iki sekmadienio. Skaitiklis atsinaujina pirmadienį. |
+
+Nutrinami bilietai pasirenkami; jie nebūtini įprastiems darbams ar prizams.
+
+## Duomenys ir saugojimas
+
+Šie laukai valdo automatinį įkeltų vaizdų šalinimą, o ne paskyrų istorijos ar
+taškų įrašų trynimą.
+
+| Laukelis | Reikšmė |
+| --- | --- |
+| **Saugoti darbų nuotraukas** | Užbaigtų darbų nuotraukų saugojimas: neribotai, 7, 30 arba 90 dienų. Laukiančios ar taisyti grąžintos nuotraukos automatiškai netrinamos. |
+| **Saugoti atsiliepimų nuotraukas** | Išspręsto atsiliepimo ekrano nuotraukos saugojimas. Neišspręstų atsiliepimų nuotraukos automatiškai netrinamos. |
+
+## Vaikai ir prieiga
+
+### Vaikų įrenginiai
+
+Tik susietas įrenginys gali rodyti vaikų profilius arba priimti vaiko PIN.
+Profilis saugo vaiko taisykles ir Istoriją, o įrenginys yra naršyklė,
+telefonas, planšetė ar PWA, kuriai leista tuo profiliu naudotis.
+
+| Valdiklis | Rezultatas |
+| --- | --- |
+| **Įrenginio pavadinimas** | Pavadina įrenginį prieš susiejant, pvz., „Virtuvės planšetė“. |
+| **Leisti vaikams naudoti šį įrenginį** | Iškart susieja dabartinę naršyklę/PWA. Tada galima pasirinkti vaiką ir įvesti PIN. |
+| **Sukurti privačią susiejimo nuorodą** | Sukuria vienkartinę nuorodą, galiojančią **10 minučių**. Atidarykite tik numatytame įrenginyje. |
+| **Pervadinti** | Pakeičia tik įrenginio pavadinimą. |
+| **Atšaukti** | Pašalina vaiko prieigą ir pranešimus iš vieno prarasto ar nebenaudojamo įrenginio. Norint prisijungti reikės susieti iš naujo. |
+| **Atšaukti visus vaikų įrenginius** | Tik administratoriui. Reikia jo slaptažodžio ir visus įrenginius teks susieti iš naujo. |
+
+Prieš naudodami privačią nuorodą perskaitykite [vaiko įrenginio susiejimo
+vadovą](../start/pair-a-child-device.lt.md).
+
+### Tinklas ir saugumas
+
+Tinklo prieiga yra pasirenkamas papildomas saugumo sluoksnis. Tėvų slaptažodžiai,
+vaikų PIN ir įrenginių susiejimas veikia ir išjungus IP ribojimus.
+
+| Režimas | Ką leidžia |
+| --- | --- |
+| **Prieiga iš interneto** | Jokio IP ribojimo. |
+| **Riboti vaikų prieigą** | Vaikų puslapiai veikia tik iš įrašytų IP adresų ar tinklų; tėvų puslapiai IP neribojami. |
+| **Riboti visą prieigą** | Vaikų ir tėvų puslapiai veikia tik iš įrašytų IP adresų ar tinklų. |
+
+Į **Leidžiamus IP adresus ir tinklus** rašykite po vieną IPv4, IPv6 ar CIDR
+tinklą eilutėje, pvz., `192.0.2.25`, `192.0.2.0/24` arba `2001:db8::/64`.
+Prieš pasirinkdami **Riboti visą prieigą** įrašykite puslapyje rodomą dabartinį
+IP. Neteisinga taisyklė gali užrakinti visus ir reikės serverio administratoriaus.
+
+## El. paštas ir pranešimai
+
+SMTP pasirenkamas. Jis naudojamas tėvų slaptažodžiui atkurti ir, nustačius
+gavėją, privačių atsiliepimų pranešimams. Atsiliepimas išlieka KinKudos, net jei
+el. paštas išjungtas. Naršyklės ar PWA pranešimai įjungiami prisijungusio ekrano
+pranešimų valdikliu; „iPhone“ ir „iPad“ pirmiausia reikia įdiegti KinKudos į
+pradžios ekraną.
+
+Įjungus el. paštą rodomas SMTP serveris, siuntėjo adresas ir atsiliepimų gavėjas,
+bet ne slaptažodis. **Keisti nustatymus** reikalauja administratoriaus tėvų
+slaptažodžio, o SMTP slaptažodį kiekvieną kartą reikia įvesti iš naujo.
 
 | Laukelis | Ką įrašyti |
 | --- | --- |
-| **Saugyklos tiekėjas** | „Backblaze B2“ (rekomenduojama) arba kitas su S3 suderinamas tiekėjas. |
-| **S3 endpoint** | Tiekėjo S3 API hostą be `https://` ir be galinio `/`. |
-| **Bucket pavadinimas** | Atskirtą KinKudos kopijoms skirtą bucket, be kelio. |
+| **Įjungti el. paštą** | Įjungti arba išjungti laiškų siuntimą. |
+| **SMTP serveris** | Tiekėjo siunčiamų laiškų serverio vardą, pvz., `smtp.example.com`. |
+| **SMTP prievadas** | Tiekėjo prievadą, dažnai 587 STARTTLS arba 465 SSL/TLS. |
+| **Šifravimas** | `STARTTLS`, `SSL/TLS` arba `None`; `None` tik patikimam privačiam relay. |
+| **SMTP naudotojo vardas** | Pašto paslaugos prisijungimo vardą. |
+| **SMTP slaptažodis** | Pašto ar programėlės slaptažodį; po išsaugojimo jis nerodomas. |
+| **Siuntėjo el. pašto adresas** | Adresą, kurį matys gavėjai. |
+| **Atsiliepimų gavėjo el. pašto adresas** | Adresą, kuriuo siunčiami papildomi pranešimai. |
+| **Jūsų paskyros slaptažodis** | Dabartinį administratoriaus slaptažodį jautriems pakeitimams apsaugoti. |
+
+## Atsarginės kopijos
+
+Kopijų paslauga kasdien sukuria šifruotas nuotolines šeimos duomenų bazės ir
+įkeltų nuotraukų kopijas. Atkūrimas nėra mygtukas internete – tai serverio
+administratoriaus veiksmas.
+
+Būsena gali būti **Įjungta**, **Kopijuojama**, **Neįjungta** arba **Reikia
+dėmesio**. Skydelyje taip pat rodomas tiekėjas, saugykla, **Paskutinė sėkminga
+kopija**, **Paskutinė vientisumo patikra**, klaidos ir naujausi kopijų veiksmai.
+
+**Kurti kopiją dabar** paprašo papildomos kopijos; ji neatkuria duomenų ir
+nepaleidžiama, kol kita kopija vyksta. Prieš keisdami duomenis išsaugokite repo
+slaptažodį ne serveryje ir suplanuokite atkūrimo bandymą.
+
+| Laukelis | Ką įrašyti |
+| --- | --- |
+| **Saugyklos tiekėjas** | „Backblaze B2“ (rekomenduojama) arba kitą su S3 suderinamą tiekėją. |
+| **S3 endpoint** | Tiekėjo S3 API hostą be `https://` ir galinio `/`. |
+| **Bucket pavadinimas** | Atskirą KinKudos kopijoms skirtą bucket. |
 | **Regionas** | Tiekėjo regioną, jei jis reikalingas. |
-| **Application key ID / Application key** | Ribotų teisių prisijungimo duomenis, geriausia tik šiam bucket. |
+| **Application key ID / Application key** | Prisijungimo duomenis, geriausia apribotus šiam bucket. |
 | **Jūsų paskyros slaptažodis** | Dabartinį administratoriaus slaptažodį. |
 
-Ryšys tikrinamas prieš išsaugojimą, o prisijungimo duomenys saugomi atskiruose apsaugotuose serverio failuose. Žalia būsena naudinga, tačiau pilnas saugumo patikrinimas – bandomasis atkūrimas saugioje atskiroje vietoje ir repo slaptažodžio saugojimas ne serveryje.
+Ryšys patikrinamas prieš išsaugojimą. Tiekėjo duomenys laikomi atskiruose
+apsaugotuose serverio failuose. Žalia būsena nepakeičia bandomojo atkūrimo.
 
-## 6. Šeimos paskyros ir programos nustatymai
+## Paskyros
 
-**Nauja tėvų paskyra** sukuria atskirą suaugusiojo naudotojo vardą, el. paštą ir stiprų slaptažodį. **Naujas vaiko profilis** nustato vardą, pasirenkamą kreipinį lietuvių kalbai, pradinį PIN, kredito limitą, nutrinamų bilietų leidimą ir gimtadienį.
+### Tėvų paskyros
 
-Skiltyje **Tėvų paskyros** galima keisti naudotojo vardą, el. paštą ir slaptažodį. Palikus naujo slaptažodžio laukelius tuščius, senas slaptažodis išlieka. Paskyros atšaukimas ją išjungia, o istorija lieka; paskutinio aktyvaus tėvo išjungti negalima.
+Kiekvienam suaugusiajam sukurkite atskirą tėvų paskyrą su naudotojo vardu, el.
+paštu ir stipriu slaptažodžiu. Redaguokite naudotojo vardą, el. paštą ar
+slaptažodį; tušti naujo slaptažodžio laukai palieka senąjį.
 
-Skiltyje **Vaikų profiliai** galima keisti vardą, kreditą, individualų nutrinamų bilietų jungiklį, gimtadienį ir PIN. Kreditas yra žemiausias leidžiamas balansas, pvz., `-100`; bendras šeimos nutrinamų bilietų jungiklis taip pat turi būti įjungtas. Vaiko gimtadienio prašymas reikalauja tėvų sprendimo, bet tėvai datą gali redaguoti tiesiogiai. Palikite naują PIN tuščią, jei jo keisti nenorite. Vaiko profilio atšaukimas išsaugo jo istoriją.
+Pašalinus tėvą paskyra išjungiama, o jos Istorija lieka. Paskutinio aktyvaus
+tėvo išjungti negalima.
 
-## 7. Šeimos atsiliepimai
+### Vaikų profiliai
 
-Tėvai ir vaikai gali programoje išsaugoti privatų **pasiūlymą** arba **problemos** pranešimą su pasirenkama ekrano nuotrauka. Naudokite **Tipas** ir **Būsena** filtrus. **Naujas** reiškia dar neperžiūrėtą, **Peržiūrėtas** – tėvai perskaitė, **Planuojamas** – šeima ketina imtis veiksmų, o **Išspręstas** – papildomų veiksmų nebesitikima. Atidarykite įrašą, peržiūrėkite nuotrauką ir išsaugokite būseną.
+Kurdami profilį nustatykite vaiko vardą, pasirenkamą lietuvišką kreipinį,
+pradinį PIN, kreditą, individualų nutrinamų bilietų jungiklį ir gimtadienį.
+Pirmą kartą prisijungęs vaikas pasirenka temą.
 
-Kad pranešimas būtų naudingas, KinKudos taip pat išsaugo pateikusiojo vaidmenį ir vardą, puslapio kelią, programos versiją, kalbą, pasirinktą temą ir naršyklės/įrenginio aprašą. Ši informacija lieka šeimos instaliacijoje ir į „GitHub“ nesiunčiama. Nuotraukoms taikoma aukščiau nurodyta saugojimo taisyklė.
+| Laukelis | Kas pasikeičia |
+| --- | --- |
+| **Vaiko vardas** | Rodomas vardas; vardai turi būti unikalūs. |
+| **Kreipinys** | Pasirenkamas lietuviškas pasisveikinimo variantas. |
+| **Kreditas** | Žemiausias leidžiamas balansas, pvz., `-100`; ta pati taisyklė rodoma vaiko kortelėje. |
+| **Įjungti nutrinamus bilietus šiam vaikui** | Individualus leidimas; bendras šeimos jungiklis taip pat turi būti įjungtas. |
+| **Gimtadienis** | Kasmetinių gimtadienio taškų taisyklė. Tėvai gali redaguoti tiesiogiai, o vaiko prašymui reikia patvirtinimo. |
+| **Naujas PIN / Pakartokite naują PIN** | Iš naujo nustato keturių skaitmenų PIN. Abu tušti laukai jo nekeičia. |
+
+Pašalinus vaiką profilis išjungiamas, o jo Istorija lieka. Duomenys kitam vaikui
+neperduodami.
+
+## Šeimos atsiliepimai
+
+Tėvai ir vaikai gali programoje pateikti privatų **pasiūlymą** arba **problemos**
+pranešimą. Jis lieka šiame serveryje; sukonfigūravus SMTP galima siųsti ir
+pranešimą pasirinktam gavėjui.
+
+Naudokite **Tipo** ir **Būsenos** filtrus. **Naujas** dar neperžiūrėtas,
+**Peržiūrėtas** perskaitytas, **Planuojamas** reiškia numatomą šeimos veiksmą,
+o **Išspręstas** – kad papildomų veiksmų nebesitikima. Atidarykite įrašą,
+perskaitykite aprašą, peržiūrėkite pasirenkamą nuotrauką ir išsaugokite būseną.
+
+KinKudos išsaugo pateikusiojo vaidmenį ir vardą, puslapio kelią, programos
+versiją, kalbą, temą ir naršyklės/įrenginio aprašą. Tai lieka šeimos diegime ir
+į GitHub nesiunčiama. Ekrano nuotraukoms taikoma aukščiau nurodyta saugojimo
+taisyklė.
 
 ## Nuotraukų ribos ir laiko taisyklės
 
-Darbo nuotraukos ir atsiliepimų ekrano nuotraukos priima JPEG, PNG, WebP, HEIC arba HEIF iki **12 MB**. Avatarai priima tuos pačius formatus iki **5 MB** ir apkerpami į kvadratą. Nuotraukos apdorojamos privačiam saugojimui; nekelkite daugiau šeimos informacijos nei reikia darbui ar problemai paaiškinti.
+Darbo nuotraukos ir atsiliepimų ekrano nuotraukos priima JPEG, PNG, WebP, HEIC
+arba HEIF iki **12 MB**. Avatarai priima tuos pačius formatus iki **5 MB** ir
+apkerpami į kvadratą.
 
-Paskirti dienos darbai baigiasi vidurnaktį pagal **vietinį serverio laiką**. Nutrinamų bilietų limitai atsinaujina kiekvieną pirmadienį tame pačiame kalendoriniame kontekste. Jei šeima gyvena kitoje laiko juostoje nei serveris, prieš remdamiesi vidurnakčio taisykle susitarkite, pagal kurį laiką gyvena dienos darbai.
+Paskirti dienos darbai baigiasi vidurnaktį pagal **vietinį serverio laiką**.
+Nutrinamų bilietų limitai atsinaujina kiekvieną pirmadienį tame pačiame
+kalendoriniame kontekste.
 
-Pakartojamai viešai programos klaidai naudokite [GitHub Issues](https://github.com/VooZ2/kinkudos/issues), tačiau niekada nekelkite šeimos duomenų.
-
-[Tinklo prieiga →](../security/network-access.lt.md) · [Atsarginės kopijos →](../backups.lt.md) · [English](settings.md)
+[Tinklo prieiga →](../security/network-access.lt.md) · [Atsarginės kopijos →](../backups.lt.md) · [Šeimos administravimas →](../family-administration.lt.md) · [English](settings.md)

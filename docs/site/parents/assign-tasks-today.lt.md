@@ -1,7 +1,8 @@
 # Paskirti užduotis šiandienai
 
 Paskirdami užduotis vienam vaikui sukuriate nedidelį, aiškų šios dienos sąrašą.
-Naudokite rodyklės veiksmą to vaiko kortelėje, esančioje **Tėvai → Pradžia**.
+Vaiko kortelėje, esančioje **Tėvai → Pradžia**, naudokite **Paskirti darbus
+šiandienai**.
 
 > **Kam:** Tėvams<br>
 > **Rezultatas:** Vaikas gauna užduočių sąrašą, kuris baigiasi vidurnaktį pagal
@@ -36,4 +37,4 @@ Tokiam užbaigimui atskiro tėvų patvirtinimo nėra.
 Naudokite įprastą vaiko pateikiamą užduotį, jeigu jos nereikia atlikti šiandien
 arba ji turėtų laukti tėvų peržiūros. Žr. [peržiūrėti atliktas užduotis](review-completed-tasks.lt.md).
 
-[Tėvų skydelis →](dashboard-and-child-cards.lt.md) · [English](assign-tasks-today.md)
+[Tėvų skydelis →](dashboard-and-child-cards.lt.md) · [Veiksmų istorija →](history.lt.md) · [English](assign-tasks-today.md)

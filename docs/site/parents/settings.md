@@ -1,168 +1,205 @@
 # Parent settings
 
-Path: **Parents → Settings**. This page contains family rules, devices, account administration, optional security, email, backups, and family feedback. Start with **Family settings**; leave administrator-only service settings alone until the basic family flow is working.
+Path: **Parents → Settings**. The page is organised into the same groups as
+the application. On a phone, groups are compact expandable sections: selecting
+one reveals its fields, and empty sections are not shown. On a wide screen,
+paired account cards may use two columns while large service and security areas
+remain full width.
 
-> **Who can change what?** Every parent can use the ordinary family settings and manage accounts. The parent administrator (normally the first parent created during setup) is the only person who can change network access, SMTP, backup credentials, run a backup, or revoke every child device.
+> **Who can change what?** Every parent can use ordinary family settings and
+> manage accounts. The parent administrator is the only person who can change
+> network access, SMTP, backup credentials, run a backup, or revoke every child
+> device.
 
 ![English parent settings](../assets/parent-settings-2026.png)
 
+![English parent settings on mobile](../assets/parent-settings-mobile-26-6-0.png)
+
 The screenshot uses fictional demonstration data.
 
-## 1. Family settings
-
-This first panel controls rules that apply to the whole family. Saving a new value affects future activity; it never changes a completed task, approved reward, or existing point history entry.
+## Family
 
 ### Family name
 
-| Field | What it means | What changes |
-| --- | --- | --- |
-| **Family name** | The name shown in family-facing headings and messages. | Changes the displayed family name only. It does not change user names, domain names, or account access. |
+The **Family name** appears in family-facing headings and messages. It changes
+the displayed name only; it does not change account names, domain names, or
+access.
 
-### Privileges
+## Points and tasks
 
-| Field | What it means | What changes |
-| --- | --- | --- |
-| **Points for a task photo** | Extra points awarded when a child submits a task with a photo. Use `0` to turn this bonus off. | The value is captured when the task is submitted. Later edits do not alter a request that is already pending or approved. |
-| **Birthday points** | A yearly gift automatically awarded once for each child’s saved birthday. Use `0` to disable it. | Future birthday awards use the new number. KinKudos never awards the same child twice in one calendar year. |
-| **Enable scratch tickets** | Master switch for the optional scratch-ticket feature. | Turning it off prevents new purchases and weekly reminders for everyone. An already-open ticket can still be finished. Each child also has their own scratch-ticket switch. |
-| **Scratch ticket price** | How many points a future ticket costs. | New purchases use the new price; a ticket that was already bought keeps its recorded cost. |
-| **Weekly ticket limit** | Maximum tickets one child may buy from Monday through Sunday. | New purchases use the new limit. The count resets every Monday for every child. |
+These values affect future activity and do not rewrite completed work or
+existing History entries.
 
-### Retention
-
-These settings control automatic deletion of uploaded images, not account history or point records.
-
-| Field | What it means | What changes |
-| --- | --- | --- |
-| **Keep task photos for** | How long completed task photos are stored: indefinitely, 7, 30, or 90 days. | Photos for pending or revision-requested tasks are never removed automatically, so parents can still decide fairly. |
-| **Keep feedback images for** | How long a screenshot attached to a resolved feedback report is stored. | Screenshots for unresolved feedback are never removed automatically. |
-
-## 2. Child devices
-
-Only a paired device can list child profiles or accept a child PIN. A child profile and a child device are deliberately separate: the profile stores the child’s rules and history; the device is the browser, tablet, phone, or PWA allowed to use that profile.
-
-| Control | Use it when | Result |
-| --- | --- | --- |
-| **Device name** | Naming a device before pairing it on the current computer or tablet. | Gives the device a recognisable label such as “Kitchen tablet”. |
-| **Allow children on this device** | You are physically using the child’s device. | Pairs that browser/PWA immediately. It can then select a child and enter a PIN. |
-| **Create private pairing link** | You need to pair a different phone, tablet, or browser. | Creates a single-use link that expires after **10 minutes**. Open it only on the intended device. |
-| **Rename** | The device list is unclear. | Changes the label only; it does not interrupt access. |
-| **Revoke** | A device is lost, sold, or no longer family-controlled. | Removes child access and child notifications on that one device. It must be paired again before it can sign in. |
-| **Revoke all child devices** | There is a broad security concern or you want every child device to start fresh. | Administrator-only. Requires the administrator’s password and forces every child browser/PWA to be paired again. |
-
-Read [Pair a child device](../start/pair-a-child-device.md) before using a private link.
-
-## 3. Network access
-
-This is an **optional extra security layer**, not a required first-setup task. Parent passwords, child PINs, and device pairing remain active whether it is enabled or not.
-
-The panel shows the current mode, the server’s detected current IP address, and the addresses or networks currently allowed. A parent administrator must enter their own password to make a change.
-
-| Mode | What it allows | Good use case |
-| --- | --- | --- |
-| **Internet access** | No IP restriction. | The normal choice for most families, especially when mobile networks or home IP addresses change. |
-| **Restrict child access** | Only listed IP addresses/networks can use child pages; parent pages are not IP-restricted. | Children should use KinKudos only from home, while parents may still travel. |
-| **Restrict all access** | Only listed IP addresses/networks can use either child or parent pages. | A stable, known home/VPN network and an operator comfortable with recovery steps. |
-
-For **Allowed IP addresses and networks**, enter one IPv4 address, IPv6 address, or CIDR network per line. Examples: `192.0.2.25`, `192.0.2.0/24`, or `2001:db8::/64`.
-
-> Before choosing **Restrict all access**, include the current IP shown on the page. If the rule is wrong, everyone can be locked out and recovery requires the server administrator. See [Network access](../security/network-access.md) for the safety checklist.
-
-## 4. Email settings (SMTP)
-
-SMTP is optional. It is used for parent password-recovery messages and, if a feedback recipient is configured, notifications about private in-app feedback. The feedback report itself is still saved in KinKudos even when email is off.
-
-The status badge tells you whether email is enabled. When it is enabled, the page displays the server address, sender address, and feedback recipient, but never displays the SMTP password.
-
-Select **Edit settings** only when you have correct details from your email provider. KinKudos tests the connection before saving it. The administrator must supply their current parent password, and must enter the SMTP password every time the settings are saved.
-
-| Field | What to enter | Notes |
-| --- | --- | --- |
-| **Enable email** | Turn email delivery on or off. | Turning it off prevents email sending but does not delete existing feedback reports. |
-| **SMTP server** | Your email provider’s outgoing-mail host name. | Example format: `smtp.example.com`. Do not include a web URL path. |
-| **SMTP port** | The port supplied by the provider. | Common choices are 587 for STARTTLS and 465 for SSL/TLS; use the provider’s instructions. |
-| **Encryption** | `STARTTLS`, `SSL/TLS`, or `None`. | Choose the provider’s required method. `None` should only be used on a trusted private mail relay. |
-| **SMTP username** | The login name provided by the mail service. | Often the sender email address, but not always. |
-| **SMTP password** | The mail-service password or app password. | Never displayed after saving; enter it again on every change. Prefer an app password when your provider offers one. |
-| **Sender email address** | The address recipients see as the sender. | It must normally be permitted by the SMTP provider. |
-| **Feedback recipient email address** | Where KinKudos sends optional feedback notifications. | Use an address a parent checks. The report remains private in the app. |
-| **Your account password** | The current password of the administrator saving this form. | Protects sensitive configuration from someone who finds an unlocked parent session. |
-
-## 5. Backups
-
-Backups are optional to configure but strongly recommended once the family starts using KinKudos. The backup service makes encrypted daily remote copies of the family database and uploaded photos. Restoring data is intentionally a server-administrator operation, not a web button.
-
-### What the backup panel shows
-
-| Item | Meaning |
+| Field | What it means |
 | --- | --- |
-| **Enabled** (green) | Storage is configured and the latest successful remote copy is no more than seven days old. |
-| **Copying** (amber) | A backup is currently running. Only one run can run at a time. |
-| **Not enabled** | No remote storage has been configured yet. |
-| **Attention needed** (red) | The service is unavailable, a backup is stale, or the page has a reported error. Read the error before editing credentials. |
-| **Provider / Repository** | The chosen storage service and destination, without exposing secrets. |
-| **Last successful backup** | When a complete remote copy last finished. |
-| **Last integrity check** | When the repository was last checked for integrity. |
-| **Recent backup actions** | A short audit of who changed backup settings or requested a manual run. |
+| **Points for a task photo** | Extra points awarded when a child submits a task with a photo. Use `0` to turn the bonus off. The value is captured when the task is submitted. |
+| **Birthday points** | A yearly gift awarded once for each child’s saved birthday. Use `0` to disable it. The same child is not awarded twice in one calendar year. |
 
-**Back up now** requests one extra backup. It never restores data and it does not run when a backup is already in progress.
+## Scratch tickets
 
-### Backup setup fields
+These family-wide controls work together with the individual switch in
+**Accounts → Child profiles**:
 
-Before changing these fields, keep the repository password in a safe place outside the server and plan a restore test. Incorrect credentials can stop all future backups.
-
-| Field | What to enter | Notes |
-| --- | --- | --- |
-| **Storage provider** | `Backblaze B2 (recommended)` or another S3-compatible provider. | Choose the provider matching your credentials. |
-| **S3 endpoint** | The provider’s S3 API host name. | Example: `s3.eu-central-003.backblazeb2.com`. Enter no `https://` prefix or trailing slash. |
-| **Bucket name** | A dedicated bucket name. | Use a bucket for KinKudos backups only; do not add a path. |
-| **Region** | The provider’s region, if it requires one. | Leave empty only when your provider’s S3 service does not use a region. |
-| **Application key ID** | The provider’s access-key ID. | Use a key limited to this backup bucket whenever possible. |
-| **Application key** | The provider’s secret access key. | Sensitive; it is never displayed after saving. |
-| **Your account password** | The current administrator password. | Required before backup credentials can change. |
-
-KinKudos verifies the storage connection before saving. It keeps provider credentials outside the database in separately protected server files. A green status is useful, but a backup setup is not complete until you have performed a restore test in a safe, separate location.
-
-## 6. Family accounts and application settings
-
-### Create new accounts
-
-| Area | Fields and result |
+| Field | What it means |
 | --- | --- |
-| **New parent account** | Create a separate adult username, email address, and strong password. The email must be unique and is used for password recovery when SMTP is configured. |
-| **New child profile** | Set the child name, optional Lithuanian greeting form, starting PIN, credit limit, scratch-ticket availability, and birthday. The child chooses a theme the first time they sign in. |
+| **Enable scratch tickets** | Master switch. Turning it off prevents new purchases and reminders, but an already-open ticket can still be finished. |
+| **Scratch ticket price** | The point cost for future tickets. A ticket already bought keeps its recorded cost. |
+| **Weekly ticket limit** | How many tickets one child may buy from Monday through Sunday. The count resets every Monday. |
 
-### Edit parent accounts
+Scratch tickets are optional; they are not required for ordinary tasks or
+rewards.
 
-Use **Parent accounts** to change a parent’s username, email address, or password. Leaving the new-password fields empty keeps the existing password. Removing a parent deactivates the account and preserves history; the final active parent account cannot be removed.
+## Data and retention
 
-### Edit child profiles
+These fields control automatic deletion of uploaded images, not account
+history or point records.
 
-Use **Child profiles** to change a child’s name, credit, individual scratch-ticket switch, birthday, or PIN.
+| Field | What it means |
+| --- | --- |
+| **Keep task photos for** | Completed task-photo retention: indefinitely, 7, 30, or 90 days. Pending or revision-requested photos are not removed automatically. |
+| **Keep feedback images for** | Retention for a screenshot attached to a resolved feedback report. Unresolved feedback screenshots are not removed automatically. |
+
+## Children and access
+
+### Child devices
+
+Only a paired device can list child profiles or accept a child PIN. A profile
+stores the child’s rules and history; a device is the browser, phone, tablet,
+or PWA allowed to use that profile.
+
+| Control | Result |
+| --- | --- |
+| **Device name** | Names the device before pairing it, for example “Kitchen tablet”. |
+| **Allow children on this device** | Pairs the current browser/PWA immediately. It can then select a child and accept a PIN. |
+| **Create private pairing link** | Creates a single-use link that expires after **10 minutes**. Open it only on the intended device. |
+| **Rename** | Changes a device label without interrupting access. |
+| **Revoke** | Removes child access and notifications from one lost or retired device. It must be paired again before sign-in. |
+| **Revoke all child devices** | Administrator-only. Requires the administrator’s password and forces every child browser/PWA to pair again. |
+
+Read [Pair a child device](../start/pair-a-child-device.md) before using a
+private link.
+
+### Network and security
+
+Network access is an optional extra security layer. Parent passwords, child
+PINs, and device pairing remain active when IP restrictions are disabled.
+
+| Mode | What it allows |
+| --- | --- |
+| **Internet access** | No IP restriction. |
+| **Restrict child access** | Only listed IP addresses or networks can use child pages; parent pages are not restricted by IP. |
+| **Restrict all access** | Only listed IP addresses or networks can use child and parent pages. |
+
+For **Allowed IP addresses and networks**, enter one IPv4 address, IPv6
+address, or CIDR network per line, such as `192.0.2.25`, `192.0.2.0/24`, or
+`2001:db8::/64`. Before choosing **Restrict all access**, include the current IP
+shown on the page. A wrong rule can lock everyone out and requires server
+administrator recovery.
+
+## Email and notifications
+
+SMTP is optional. It is used for parent password-recovery messages and, when a
+feedback recipient is configured, notifications about private in-app feedback.
+The report remains stored in KinKudos when email is disabled. Browser or PWA
+notifications are enabled from the notification control on the signed-in
+screen; on iPhone and iPad, install KinKudos to the Home Screen first.
+
+The page shows the SMTP server, sender address, and feedback recipient when
+email is enabled, but never the SMTP password. **Edit settings** requires the
+administrator’s current parent password, and the SMTP password must be
+entered again whenever sensitive settings are saved.
+
+| Field | What to enter |
+| --- | --- |
+| **Enable email** | Turn email delivery on or off. |
+| **SMTP server** | The provider’s outgoing-mail host, such as `smtp.example.com`. |
+| **SMTP port** | The provider’s port, commonly 587 for STARTTLS or 465 for SSL/TLS. |
+| **Encryption** | `STARTTLS`, `SSL/TLS`, or `None`; use `None` only for a trusted private relay. |
+| **SMTP username** | The mail service login. |
+| **SMTP password** | The mail-service or app password; it is never displayed after saving. |
+| **Sender email address** | The address recipients see as the sender. |
+| **Feedback recipient email address** | Where optional feedback notifications are sent. |
+| **Your account password** | The administrator’s current password, required to protect sensitive changes. |
+
+## Backups
+
+The backup service makes encrypted daily remote copies of the family database
+and uploaded photos. Restoring is a server-administrator operation, not a web
+button.
+
+The status can be **Enabled**, **Copying**, **Not enabled**, or **Attention
+needed**. The panel also shows the provider, repository, **Last successful
+backup**, **Last integrity check**, errors, and recent backup actions.
+
+**Back up now** requests an additional copy; it never restores data and does
+not run while another backup is in progress. Before changing credentials, keep
+the repository password outside the server and plan a restore test.
+
+| Field | What to enter |
+| --- | --- |
+| **Storage provider** | `Backblaze B2 (recommended)` or another S3-compatible provider. |
+| **S3 endpoint** | The provider’s S3 API host without `https://` or a trailing slash. |
+| **Bucket name** | A dedicated bucket for KinKudos backups. |
+| **Region** | The provider’s region when required. |
+| **Application key ID / Application key** | Access credentials limited to this backup bucket when possible. |
+| **Your account password** | The current administrator password. |
+
+KinKudos verifies the connection before saving. Provider credentials are kept
+outside the database in separately protected server files. A green status is
+not a substitute for a restore test.
+
+## Accounts
+
+### Parent accounts
+
+Create a separate parent account for each adult with a username, email address,
+and strong password. Edit a parent account to change its username, email, or
+password. Leaving new-password fields empty keeps the existing password.
+
+Removing a parent deactivates the account and preserves its History. The final
+active parent cannot be removed.
+
+### Child profiles
+
+Create a child profile with the child’s name, optional Lithuanian greeting
+form, starting PIN, credit, individual scratch-ticket switch, and birthday.
+The child chooses a theme on first sign-in.
 
 | Field | What it changes |
 | --- | --- |
-| **Child’s name** | The displayed name. Names must be unique. |
-| **Vocative name** | An optional Lithuanian greeting form; leave blank for automatic wording. It does not affect the English interface. |
-| **Credit** | The child’s lowest permitted balance, such as `-100`. This is the same rule shown on the child’s dashboard card. |
-| **Enable scratch tickets for this child** | Individual scratch-ticket permission. The family-wide scratch-ticket switch must also be on. |
-| **Birthday** | Used only for the yearly birthday-points rule. Parents can edit it directly; a child’s own requested change needs parent approval. |
+| **Child’s name** | The displayed name; names must be unique. |
+| **Vocative name** | An optional Lithuanian greeting form. |
+| **Credit** | The child’s lowest permitted balance, such as `-100`; it is the same rule shown on the child card. |
+| **Enable scratch tickets for this child** | Individual permission; the family-wide switch must also be on. |
+| **Birthday** | The yearly birthday-points rule. Parents can edit it directly; a child’s requested change needs approval. |
 | **New PIN / Repeat new PIN** | Resets the child’s four-digit PIN. Leave both blank to keep it unchanged. |
 
-Removing a child deactivates the profile and preserves history. It does not make a new child able to see the old child’s data.
+Removing a child deactivates the profile and preserves its History. It does not
+transfer that child’s data to another child.
 
-## 7. Family feedback
+## Family feedback
 
-Parents and children can submit a private **idea** or **problem** report from the app. The report stays on this server. If SMTP feedback notifications are configured, KinKudos can also email the chosen recipient.
+Parents and children can submit a private **idea** or **problem** report from
+the app. The report stays on this server. If SMTP feedback notifications are
+configured, KinKudos can also email the chosen recipient.
 
-Use the **Type** and **Status** filters to find reports. **New** means not yet reviewed; **Reviewed** means a parent has read it; **Planned** means the family intends to act; **Resolved** means no further action is expected. Open a report to read its description, view its optional screenshot, and save the status.
+Use the **Type** and **Status** filters. **New** means not reviewed; **Reviewed**
+means a parent has read it; **Planned** means the family intends to act; and
+**Resolved** means no further action is expected. Open a report to read its
+description, view its optional screenshot, and save its status.
 
-To make a report useful, KinKudos also records the reporting role and name, page path, app version, language, selected theme, and browser/device description. This information remains in the family installation; it is not sent to GitHub. Screenshots follow the feedback-image retention rule above. For a reproducible software defect that should be public, use the project’s GitHub issue tracker instead, and never include family data.
+KinKudos records the reporting role and name, page path, app version, language,
+selected theme, and browser/device description. This remains in the family
+installation and is not sent to GitHub. Feedback screenshots follow the
+retention rule above.
 
 ## Image limits and time rules
 
-Task photos and feedback screenshots accept JPEG, PNG, WebP, HEIC, or HEIF up to **12 MB**. Avatars use the same formats up to **5 MB** and are cropped to a square. Task photos and feedback screenshots are processed for private storage; do not upload more family information than is needed to explain the task or problem.
+Task photos and feedback screenshots accept JPEG, PNG, WebP, HEIC, or HEIF up to
+**12 MB**. Avatars use the same formats up to **5 MB** and are cropped to a
+square.
 
-Daily assigned tasks expire at midnight in the **server’s local time**. Scratch-ticket limits reset every Monday in that same calendar context. If a household lives in a different time zone from its server, discuss which clock should govern daily work before relying on the midnight rule.
+Daily assigned tasks expire at midnight in the **server’s local time**.
+Scratch-ticket limits reset every Monday in that same calendar context.
 
-[GitHub issues](https://github.com/VooZ2/kinkudos/issues) · [Network access →](../security/network-access.md) · [Backups →](../backups.md)
+[Network access →](../security/network-access.md) · [Backups →](../backups.md) · [Family administration →](../family-administration.md) · [Lietuviškai](settings.lt.md)

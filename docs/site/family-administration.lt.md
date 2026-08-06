@@ -21,7 +21,7 @@ duomenis ir atkūrimą.
 
 ## Saugiai pridėkite arba išjunkite paskyras
 
-**Tėvai → Nustatymai → Šeimos paskyros ir programos nustatymai** kiekvienam
+Per **Tėvai → Nustatymai → Paskyros** kiekvienam
 suaugusiajam sukurkite atskirą tėvų paskyrą. Nesidalykite slaptažodžiais. El.
 pašto adresas reikalingas slaptažodžio atkūrimui, kai sukonfigūruotas SMTP.
 
@@ -31,8 +31,8 @@ išsaugoma istorija; jo duomenys neperduodami kitam vaikui.
 
 ## Profilis, įrenginys ir PIN yra skirtingi dalykai
 
-- **Vaiko profilis** saugo vardą, temą, avatarą, balansą, kredito ribą,
-  gimtadienį, nutrinamų bilietų nustatymą ir istoriją.
+- **Vaiko profilis** saugo vardą, temą, avatarą, išleidžiamą balansą, kreditą,
+  gimtadienį, nutrinamų bilietų nustatymą ir Istoriją.
 - **Susietas įrenginys** yra konkreti naršyklė, telefonas, planšetė ar įdiegta
   PWA, kuriai leista rodyti vaikų profilius.
 - **PIN** yra vaiko keturių skaitmenų prisijungimo žingsnis susietame įrenginyje.

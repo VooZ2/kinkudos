@@ -18,10 +18,10 @@ Darbas → pateikimas → tėvų sprendimas → taškai → prizas arba tikslas 
 | --- | --- |
 | **Užduotys** | Vaikai gali pasirinkti katalogo užduotį, ją pateikti su pasirenkama nuotrauka, o tėvai patvirtina, grąžina taisyti arba atmeta. Tėvai taip pat gali iškart užskaityti matytą atliktą užduotį. |
 | **Dienos užduotys** | Tėvai vaikui paskiria šiandienos užduotis. Užbaigus kiekvieną, taškai pridedami iškart. |
-| **Prizai ir tikslai** | Vaikai prašo prizų arba siūlo naują prizą ar taupymo tikslą. Tėvai nusprendžia ir nustato kainą. |
+| **Prizai ir tikslai** | Vaikai prašo prizų arba siūlo naują prizą ar taupymo tikslą. Tėvai nusprendžia ir nustato kainą; tikslas gali naudoti turimus taškus arba taupyti atskirai. |
 | **Taškai ir istorija** | Kiekvienas pridėjimas, atėmimas, dovana, bilietas ar korekcija sukuria nekintamą istorijos įrašą. |
 | **Kreditas** | Vaikas gali išleisti iki tėvų nustatyto neigiamo balanso. Išnaudojus pusę kredito, nauji prizų prašymai stabdomi. |
-| **Nutrinami bilietai** | Pasirenkami tėvų valdomi nutrinami bilietai turi kainą, savaitinį limitą, aiškius rezultatus ir niekada neperžengia kredito limito. |
+| **Nutrinami bilietai** | Pasirenkami tėvų valdomi nutrinami bilietai turi kainą, savaitinį limitą, aiškius rezultatus ir niekada nenuleidžia balanso žemiau nustatytos ribos. |
 | **Vaiko temos ir išvaizda** | Vaikai renkasi temas, avatarą, kasdienę atsitiktinę temą, keičia savo PIN ir siūlo prizus ar tikslus. |
 | **Pranešimai** | Tėvai ir vaikai gali įjungti naršyklės pranešimus. „iPhone“ ir „iPad“ programą pirmiausia reikia įdiegti į pradžios ekraną. |
 | **Privatūs atsiliepimai** | Tėvai ir vaikai programoje gali išsaugoti privatų pasiūlymą ar problemą su pasirenkama ekrano nuotrauka. |

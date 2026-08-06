@@ -11,51 +11,65 @@ schema.
 
 ### Pridėta
 
-- Taupymo tikslai dabar gali rodyti gyvą dabartinio tikslo pažangą arba atskirai
-  saugomus taškus, palaiko atominius pervedimus ir grąžinimus, tėvų tvirtinamą
-  užbaigimą, tikslų istoriją bei vaiko ir tėvų valdymo sąsają.
+- Taupymo tikslai dabar turi du būdus: gyvą **Dabartinio tikslo** pažangą iš
+  turimų taškų arba konkrečiam tikslui atskirai išsaugotus taškus.
+- Patvirtinto taupymo tikslo kortelėje vaikas dabar gali pasirinkti taupymo
+  būdą.
+- Atskirai išsaugoti taškai palaiko atominius pervedimus ir grąžinimus, tėvų
+  tvirtinamą užbaigimą, tikslų istoriją bei vaiko ir tėvų valdymo sąsają.
+- Istorija dabar apima taupymo būdo pasirinkimą, taškų perkėlimus ir
+  grąžinimus, Dabartinio tikslo pakeitimus, tikslo užbaigimą ir ištrynimą.
+- Tėvų darbo erdvėje pasiekiamas atskiras tikslų valdymas ir Istorijos filtrai.
 
 ### Pakeista
 
-- Tėvų erdvėje dabar yra atskiros Darbų, Nuobaudų, Prizų ir Tikslų valdymo
-  skiltys, glaustos vaikų suvestinės ir filtruojama veiksmų istorija.
+- Tėvų erdvėje dabar yra Pradžios, Tvarkyti, Nustatymų ir Istorijos navigacija,
+  o „Tvarkyti“ turi atskiras Darbų, Nuobaudų, Prizų ir Tikslų skiltis.
+- Tėvų Pradžioje yra kompaktiška laukiančių prašymų tuščia būsena, aiškesnės
+  vaikų kortelės, išleidžiamų ir išsaugotų taškų suvestinės, tikslų suvestinės
+  bei pavadinti greitieji veiksmai.
+- Nustatymai suskirstyti į prisitaikančias Šeimos, Taškų ir darbų, Nutrinamų
+  bilietų, Duomenų ir saugojimo, prieigos, paslaugų, paskyrų ir atsiliepimų
+  grupes.
+- Vaiko tikslų kortelėse, kai pakanka vietos, darbalaukyje naudojamas dviejų
+  stulpelių išdėstymas, išlaikant teminę vaiko išvaizdą.
+- Tėvų ir vaikų valdikliai naudoja vientisas vietines SVG ikonas ir prieinamus
+  veiksmų pavadinimus, išlaikant tikslo emoji personalizavimą.
 
 ### Pataisyta
 
 - Valdymo skilčių nuorodos dabar palieka atidarytą tėvų skydelį ir išskleidžia
   pasirinktą Darbų, Nuobaudų, Prizų arba Tikslų skiltį.
-- Vaiko taupymo tikslų kortelės dabar turi aiškų vertikalų tarpą ir nebesiliečia
-  bei nepersidengia viena su kita.
-- Išsaugoto tikslo sumos peržiūra dabar vienoje eilutėje rodo etiketę, sumą ir
-  vienetą.
-- Tikslų valdymo eilutėse progreso ir taupymo būdo stulpeliai dabar išlieka
-  vienoje vietoje, net kai eilutėse yra skirtingas veiksmų mygtukų skaičius.
-- Tėvų ir vaikų sąsajos ikonos dabar naudoja tikslius „Font Awesome Free 7.3.1“
-  SVG kelius ir vienodus paspaudimo laukus, išlaikant tikslų emoji
-  personalizavimą.
-- Tėvų skydelio greitųjų veiksmų ikonos dabar yra vientisos ir vienodo dydžio,
-  „Kredito“ ir bilietų eilutės kompaktiškesnės, o atsarginių kopijų įspėjimas
-  rodomas atskirame, aiškiai atskirtame bloke.
-- Taupymo tikslų pasiūlymų tarpai ir sumos tipografija tėvų patvirtinimų
-  sąraše dabar sutampa su darbų ir prizų prašymais, o siūloma suma
-  išlieka neutralios spalvos.
-- Tėvų katalogų redagavimo veiksmai dabar naudoja oficialią reguliarią
-  `pen-to-square` ikoną, matomumo jungikliai naudoja suderintą `eye`/`eye-slash`
-  porą, o išskleistame tikslo redaktoriuje galima ištrinti tikslą su aiškiu
-  patvirtinimu.
+- Išsaugoto tikslo **Po** peržiūra ir jos etiketė bei vienetas lieka vienoje
+  eilutėje, o suma atsinaujina renkantis vertę.
+- Taupymo būdo dialogo veiksmai nebesidengia, o katalogo rodymo/slėpimo
+  valdikliai išlaiko suderintas ikonas ir prieinamus pavadinimus.
+- Tikslų valdymo eilutėse progreso ir taupymo būdo stulpeliai išlieka vienoje
+  vietoje, o tikslo kortelės nebesiliečia ir nepersidengia.
+- Taupymo tikslų pasiūlymų tarpai ir suma sutampa su darbų bei prizų prašymais,
+  o siūloma suma išlieka neutralios spalvos.
+- Tėvų katalogų redagavimas naudoja oficialią reguliarią `pen-to-square` ikoną,
+  o išskleistame tikslo redaktoriuje rodomas tik tekstinis **Trinti** veiksmas
+  su aiškiu patvirtinimu.
 - Istorijos vaiko pasirinkimas dabar pritaikomas iškart ir išsaugo kitus
   aktyvius URL filtrus.
+- **Pridėti taškų** peržiūroje pasirinkimas **Visi** apribojamas turimais
+  taškais ir iki tikslo likusia suma.
+- Veiksmų istorijos eilutėse neberodomos klaidinančios kalendoriaus ikonos,
+  o **Informational** ženklelis neutralus ir veiklos ikona rodoma rezultato
+  srityje.
 - Ištrinant tikslą jo išsaugoti taškai atominėje transakcijoje grąžinami,
-  laukiantys tikslo užbaigimo prašymai atšaukiami, o tikslo įvykių istorija
-  išsaugoma minkštuoju ištrynimu.
-- Tikslo redagavimo veiksmas dabar yra tik tekstinis `Delete`, o veiksmų
-  istorijos eilutėse kairėje paliekamas tik vaiko avataras, veiksmo ikona
-  perkeliama prie dešinėje esančio rezultato, pašalinamos datos ikonos ir
-  „Informational“ ženklelis tampa neutralaus pilko atspalvio.
+  laukiantys užbaigimo prašymai atšaukiami, o įvykių istorija išsaugoma.
+- Tėvų skydelio greitųjų veiksmų ikonos bei kompaktiškos kredito ir bilietų
+  eilutės yra vienodo dydžio, o kopijų įspėjimai atskirti.
 - Tik vėliavas rodantis kalbos meniu dabar lieka tiksliai centruotas po savo
   mygtuku siauruose ir plačiuose ekranuose bei neuždengia kitų antraštės veiksmų.
 - Tėvų istorija dabar apriboja kiekvieną veiklos šaltinį prieš sujungdama 50
   naujausių įrašų, todėl „Bet kada“ nebekrauna neribotos istorijos į atmintį.
+
+Po migracijos esamas vaikas, turintis vieną aktyvų tikslą, išlaiko turimus
+taškus naudojančią pažangą. Vaikai, turintys kelis aktyvius tikslus, taupymo
+būdą pasirenka patys, o tikslas nenustatomas spėjant.
 
 ### Saugumas
 

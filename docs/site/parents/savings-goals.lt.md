@@ -1,30 +1,134 @@
 # Taupymo tikslai ir vaiko pasiūlymai
 
-Taupymo tikslas vienam vaikui suteikia matomą siekį. Tai nėra atskira piniginė:
-jis rodo pažangą pagal bendrą vaiko balansą.
+Vaikas gali turėti kelis aktyvius taupymo tikslus. Kiekvienas aktyvus tikslas
+naudoja vieną taupymo būdą: **Naudoti turimus taškus** arba **Taupyti
+atskirai**. Būdas pasirenkamas konkrečiam tikslui, o ne bendruose nustatymuose.
 
 > **Kam:** Tėvams ir vaikams<br>
-> **Rezultatas:** Vaikas gali sekti norimą prizą neužrakinant taškų
+> **Rezultatas:** Matomas tikslas ir aiškus jo pažangos paaiškinimas
 
-## Leiskite vaikui pasiūlyti idėją
+## Pasiūlykite tikslą
 
-Vaiko aplinkoje vaikas gali pasirinkti **Pasiūlyti prizą arba tikslą** ir
-įrašyti pavadinimą, tipą, siūlomą kainą ir pasirenkamą emoji. Idėja atsiranda
-**Tėvai → Pradžia → Laukiantys prašymai**.
+Vaiko aplinkoje pasirinkite **Pasiūlyk prizą ar tikslą**, pasirinkite
+**Taupymo tikslas** ir įrašykite pavadinimą, siūlomą sumą bei pasirenkamą emoji.
+Taupymo būdas pasirenkamas tėvams patvirtinus pasiūlymą: naujame tiksle
+pasirodo **Pasirinkite režimą**, kuris atidaro **Pasirinkite, kaip taupyti**,
+kur vaikas pasirenka vieną iš būdų:
 
-| Tėvų sprendimas | Rezultatas |
-| --- | --- |
-| Patvirtinti prizo idėją | Sukuria bendro katalogo prizą. |
-| Patvirtinti tikslo idėją | Sukuria asmeninį taupymo tikslą tam vaikui. |
-| Atmesti | Reikalauja priežasties ir nekeičia taškų. |
+- **Naudoti turimus taškus**;
+- **Taupyti atskirai**.
 
-Tėvai pasirenka galutinę taškų vertę; ji neprivalo sutapti su vaiko pasiūlymu.
+Pačiame pasiūlyme taškai nerezervuojami ir taupymo būdas neišsaugomas. Jei
+vaikas tikslui pasirenka **Naudoti turimus taškus**, kai kitas tikslas jau yra
+**Dabartinis tikslas**, naujas pasirinkimas tampa dabartiniu. Taškai dėl to
+neperkeliami ir balanso operacija nesukuriama.
 
-## Kaip veikia tikslas
+Pasiūlymas rodomas **Tėvai → Pradžia → Laukiantys prašymai**. Tėvai parenka
+galutinę sumą; ji neprivalo sutapti su pasiūlymu. Patvirtinus prizo pasiūlymą
+sukuriamas bendras prizas, o patvirtinus tikslo pasiūlymą – asmeninis vaiko
+tikslas. Atmetant pasiūlymą reikia priežasties, balansas nesikeičia.
 
-Tikslo pažanga seka dabartinį vaiko balansą. Jis nerezervuoja ir neužrakina
-taškų, todėl patvirtinus prizą ar atlikus korekciją rodoma pažanga gali
-pasikeisti. Paaiškinkite tai prieš naudodami tikslą kaip pažadą, kad taškų
-negalima išleisti.
+## Naudoti turimus taškus
 
-[Prizai →](create-and-manage-rewards.lt.md) · [Vaiko aplinka →](child-space.lt.md) · [English](savings-goals.md)
+Vaikui rodomos būsenos gali būti **Dabartinis tikslas** ir **Naudoja turimus
+taškus**.
+
+- Pažanga skaičiuojama iš teigiamo išleidžiamo balanso.
+- Šiuos taškus vis dar galima naudoti prizams.
+- Nusipirkus prizą ar atlikus kitą taškų pokytį pažanga gali sumažėti.
+- Kreditas į pažangą neįskaičiuojamas.
+- Nulinis arba neigiamas balansas reiškia nulinę pažangą.
+- Vienu metu tik vienas aktyvus vaiko tikslas gali naudoti turimus taškus.
+- Pakeitus **Dabartinį tikslą** tik pakeičiama, kuris tikslas seka balansą;
+  taškai neperkeliami ir žurnalo operacija nesukuriama.
+
+Tėvų skiltyje **Tvarkyti → Tikslai** toks būdas rodomas kaip **Naudoja turimus
+taškus**. Informacijos lange paaiškinama, kad taškus vis dar galima išleisti,
+todėl pažanga gali mažėti.
+
+## Taupyti atskirai
+
+Vaikui rodomos būsenos gali būti **Išsaugota** ir **Taupoma atskirai**.
+
+- Vaikas iš teigiamo turimo balanso į tikslą perkelia pasirinktą sumą.
+- Išleidžiamas balansas sumažėja.
+- Išsaugotų taškų nebegalima naudoti prizams.
+- Kredito į tikslą perkelti negalima.
+- Suma negali viršyti teigiamo išleidžiamo balanso.
+- Suma negali viršyti iki tikslo likusios sumos.
+- Išsaugoti taškai lieka susieti su tuo konkrečiu tikslu.
+
+Tėvų skiltyje **Tvarkyti → Tikslai** rodoma **Taupoma atskirai**. Išsaugota
+suma taip pat įtraukiama į vaiko kortelės išsaugotų taškų suvestinę.
+
+## Pridėkite taškų
+
+Prie atskiro tikslo pasirinkite **Pridėti taškų**. Lange rodoma **Turimas
+balansas** ir greiti pasirinkimai `10`, `25`, `50` bei **Visi**, taip pat
+**Sava suma**.
+
+Peržiūra **Po** rodo, kiek taškų iš viso bus išsaugota tiksle pridėjus pasirinktą
+sumą; turimas balansas rodomas atskirai. **Visi** apribojama ir turimais
+teigiamais taškais, ir iki tikslo likusia suma. Vaiko sąsaja naudoja pasirinktos
+temos taškų vieneto pavadinimą.
+
+## Tėvų valdymas
+
+Eikite į **Tėvai → Tvarkyti → Tikslai**. Skiltyje pateikiama:
+
+- vaiko filtras;
+- tikslo būdas **Dabartinis tikslas** arba **Taupoma atskirai**;
+- dabartinė pažanga, tikslas ir pažangos juosta;
+- **Redaguoti**;
+- **Pridėti taškų** prie atskiro tikslo;
+- **Grąžinti išsaugotus taškus**;
+- **Trinti**.
+
+Grąžinus išsaugotus taškus sukuriamas teigiamas **Istorijos** įrašas, taškai
+vėl tampa išleidžiami. Prieš keičiant būdą ar uždarant tikslą atskirai
+išsaugotus taškus reikia grąžinti.
+
+![Tėvų skiltis „Tvarkyti → Tikslai“ darbalaukyje](../assets/parent-manage-goals-desktop-26-6-0.png)
+
+Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
+
+## Trinti
+
+Naudokite tekstinį veiksmą **Trinti** ir patvirtinkite pasirinkimą.
+
+- Tikslas be atskirai išsaugotų taškų pašalinamas iš aktyvaus naudojimo.
+- Tikslui turint išsaugotų taškų, jie prieš pašalinimą grąžinami į vaiko
+  išleidžiamą balansą.
+- Ištrynus **Dabartinį tikslą** ši būsena panaikinama, bet taškai neperkeliami.
+- Laukiantys tikslo užbaigimo prašymai atšaukiami.
+- **Istorija** lieka pasiekiama: joje išsaugomas ištrynimas ir grąžinti taškai.
+  Istoriniai įrašai neištrinami, nors tikslas nebėra aktyvus.
+
+## Užbaikite tikslą
+
+Vaikas gali prašyti užbaigti tikslą pasiekęs jo sumą. Prašymas siunčiamas į
+**Tėvai → Pradžia → Laukiantys prašymai**, kur jį patvirtina tėvai.
+
+### Tikslas su turimais taškais
+
+Vaikas pasiekia tikslą naudodamas dabartinį teigiamą išleidžiamą balansą.
+Prašymo pateikimo metu taškai neišleidžiami. Tėvams tvirtinant balansas
+patikrinamas dar kartą. Jei jis tapo per mažas, užbaigti negalima, kol vėl
+nepakaks turimų taškų. Patvirtinus tikslas nuskaitomas vieną kartą.
+
+### Atskirai taupomas tikslas
+
+Tikslą pasiekia išsaugoti taškai. Tėvams patvirtinus sunaudojamas tas
+išsaugotas paskirstymas, o išleidžiamas balansas antrą kartą nemažinamas.
+
+Jei tvirtinimo metu tikslo pažanga nebepasiekia sumos, rodoma validacijos
+klaida ir dalinis užbaigimas neatliekamas.
+
+## Esami tikslai po atnaujinimo
+
+26.6.0 migracija esamam vaikui, turinčiam vieną aktyvų tikslą, priskiria būdą
+**Naudoti turimus taškus**. Jei vaikas jau turi kelis aktyvius tikslus, nė
+vienas automatiškai nepasirenkamas – vaiko prašoma pasirinkti taupymo būdą.
+Taip nereikia spėti, kuris senas tikslas turėtų tapti Dabartiniu tikslu.
+
+[Veiksmų istorija ir filtrai →](history.lt.md) · [Prizai, tikslai ir nutrinami bilietai →](rewards-goals-and-lottery.lt.md) · [Vaiko aplinka →](child-space.lt.md) · [English](savings-goals.md)

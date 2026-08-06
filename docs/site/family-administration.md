@@ -20,7 +20,7 @@ the server role also includes Docker, HTTPS, updates, credentials, and recovery.
 
 ## Add or retire accounts safely
 
-In **Parents → Settings → Family accounts and application settings**, give each
+In **Parents → Settings → Accounts**, give each
 adult a separate parent account. Do not share passwords. An email address is
 needed for password recovery when SMTP is configured.
 
@@ -31,8 +31,8 @@ another child.
 
 ## Profile, device, and PIN are different
 
-- A **child profile** contains the child’s name, theme, avatar, balance,
-  credit limit, birthday, lottery setting, and history.
+- A **child profile** contains the child’s name, theme, avatar, spendable
+  balance, credit, birthday, scratch-ticket setting, and History.
 - A **paired device** is a specific browser, phone, tablet, or installed PWA
   allowed to display child profiles.
 - A **PIN** is the child’s four-digit sign-in step on a paired device.

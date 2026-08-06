@@ -33,4 +33,4 @@ balanso nekeičia.
 Jeigu patvirtintas įrašas buvo neteisingas, netaisykite praeities. Sukurkite
 aiškią korekciją per [Koreguoti taškus](points-and-corrections.lt.md).
 
-[Kurti užduotis →](create-and-manage-tasks.lt.md) · [English](review-completed-tasks.md)
+[Kurti užduotis →](create-and-manage-tasks.lt.md) · [Veiksmų istorija →](history.lt.md) · [English](review-completed-tasks.md)

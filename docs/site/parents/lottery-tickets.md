@@ -12,7 +12,7 @@ rules.
 
 Agree with the child about the ticket price, the weekly limit, and the fact
 that a ticket may win points, return no points, or lose points. A result can
-never take the child below their credit limit.
+never take the child below their lower balance limit.
 
 The ticket’s outcome is chosen before the child reveals it. The child scratches
 all nine fields to reveal the result. KinKudos records the ticket price and the
@@ -28,7 +28,7 @@ Both settings must allow tickets:
    child.
 
 The week runs Monday through Sunday. One child can have only one unfinished
-ticket at a time. A child must have enough earned points for the ticket price,
+ticket at a time. A child must have enough spendable points for the ticket price,
 must not be blocked by assigned work, and must not be at the credit pause.
 
 Disabling tickets stops new purchases and reminders, but a ticket already open

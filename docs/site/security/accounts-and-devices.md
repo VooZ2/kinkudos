@@ -10,7 +10,9 @@ Removing a parent deactivates the account while preserving its history. The last
 
 ## Child profiles
 
-A child profile stores the child’s name, PIN hash, balance, credit limit, individual lottery option, birthday, avatar, theme preference, and history. Children see only their own private data.
+A child profile stores the child’s name, PIN hash, spendable balance, credit,
+individual scratch-ticket setting, birthday, avatar, theme preference, and
+History. Children see only their own private data.
 
 Removing a child deactivates the profile and preserves history. It does not erase the child’s point record or transfer it to another child.
 

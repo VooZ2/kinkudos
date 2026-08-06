@@ -1,7 +1,7 @@
 # Assign tasks for today
 
 Assigning work gives one child a small, explicit list for the current day. Use
-the arrow action on that child’s card in **Parents → Home**.
+**Assign tasks for today** on that child’s card in **Parents → Home**.
 
 > **For:** Parents<br>
 > **Result:** The child receives a list of tasks that expires at midnight in
@@ -36,4 +36,4 @@ immediately. There is no separate parent-approval step for that completion.
 Use a normal child-submitted task when the work does not have to be completed
 today or should wait for parent review. See [review completed tasks](review-completed-tasks.md).
 
-[Parent dashboard →](dashboard-and-child-cards.md) · [Lietuviškai](assign-tasks-today.lt.md)
+[Parent dashboard →](dashboard-and-child-cards.md) · [Activity history →](history.md) · [Lietuviškai](assign-tasks-today.lt.md)

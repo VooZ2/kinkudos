@@ -10,7 +10,9 @@ Panaikinus tėvą paskyra išjungiama, bet jos istorija išlieka. Paskutinės ak
 
 ## Vaikų profiliai
 
-Vaiko profilis saugo vardą, PIN maišą, balansą, kredito limitą, individualų loterijos leidimą, gimtadienį, avatarą, temą ir istoriją. Vaikas mato tik savo privačius duomenis.
+Vaiko profilis saugo vardą, PIN maišą, išleidžiamą balansą, kreditą, individualų
+nutrinamų bilietų leidimą, gimtadienį, avatarą, temą ir Istoriją. Vaikas mato tik
+savo privačius duomenis.
 
 Panaikinus vaiką profilis išjungiamas, o istorija lieka. Ji neištrinama ir neperduodama kitam vaikui.
 

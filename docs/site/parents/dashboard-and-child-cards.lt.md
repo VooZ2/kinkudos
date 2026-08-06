@@ -1,60 +1,119 @@
 # Tėvų skydelis ir vaikų kortelės
 
-Kelias: **Tėvai → Pradžia**. Tai kasdienis valdymo centras: čia rodoma kiekvieno vaiko kortelė, sprendimo laukiantys prašymai ir trumpa veiklos istorija.
+Kelias: **Tėvai → Pradžia**. Pradžia yra greitų veiksmų centras: pirmiausia
+rodomi laukiantys prašymai, o po jais – vaikų kortelės.
 
-## Keturios tėvų meniu sritys
+## Pradžios hierarchija
 
-| Meniu | Kam jis skirtas |
+1. **Laukiantys prašymai** – sprendimai, kurių reikia tėvams.
+2. **Vaikų kortelės** – kiekvieno vaiko patikra ir greitas veiksmas.
+
+Kai nėra prašymų, kompaktiška tuščia būsena rodo **Nėra laukiančių prašymų**.
+Vaikų kortelės lieka tiesiai po ja.
+
+![Tėvų Pradžia su laukiančiais prašymais telefone](../assets/parent-home-pending-requests-mobile-26-6-0.png)
+
+Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
+
+## Vaikų kortelės
+
+Kortelėje gali būti rodoma:
+
+- vaiko avataras ir vardas;
+- dabartinis išleidžiamų taškų balansas;
+- kreditas, t. y. žemiausia balanso riba;
+- nutrinamų bilietų naudojimas, kai jie įjungti;
+- atskirai išsaugotų taškų suma, kai ji didesnė už nulį;
+- vieno aktualaus taupymo tikslo suvestinė, kai vaikas turi aktyvų tikslą;
+- penki greitieji veiksmai.
+
+Kompaktiški rodikliai gali atrodyti taip:
+
+| Rodiklis | Reikšmė |
 | --- | --- |
-| **Pradžia** | Tikrinti balansus, priimti greitą sprendimą, paskirti šiandienos darbus ir atsakyti į prašymus. |
-| **Darbai ir prizai** | Kurti bei prižiūrėti bendrus darbų, nuobaudų ir prizų katalogus. |
-| **Nustatymai** | Valdyti šeimos taisykles, paskyras, įrenginius, paslaugas, saugumą ir atsiliepimus. |
-| **Istorija** | Patikrinti, kas ir kada gavo ar išleido taškus. Įrašai yra apskaita, o ne redaguojamas balansas. |
+| `463 Taškai` | Dabar išleidžiami taškai. |
+| `Kreditas -100` | Žemiausias balansas, iki kurio vaikas gali išleisti taškus; tai nėra 100 papildomų taškų. |
+| `Bilietai 0/3` | Panaudoti nutrinami bilietai ir savaitinis limitas. |
+| `50 išsaugota` | Atskirai tikslams išsaugoti taškai. |
 
-## Kaip skaityti vaiko kortelę
+Taškai yra išleidžiamas balansas. Tikslui atskirai išsaugoti taškai į jį
+neįtraukiami ir negali būti naudojami prizams. Naudojamus taškus naudojantis
+tikslas, kai balansas nulis arba neigiamas, turi nulinę pažangą. **Bilietų**
+eilutė slepiama, kai nutrinami bilietai išjungti. `Išsaugota` rodoma tik tada,
+kai vaikas turi išsaugotų taškų; `0 išsaugota` nerodoma. Vaikas be tikslų neturi
+tuščio tikslo bloko ar vietos žymeklio.
 
-Didelis skaičius yra dabartinis vaiko balansas. Teigiamas skaičius reiškia uždirbtus ir išleidžiamus taškus. Neigiamas skaičius reiškia, kad vaikas panaudojo dalį leistino kredito.
+![Tėvų Pradžia su vaikų kortelėmis telefone](../assets/parent-home-child-cards-mobile-26-6-0.png)
 
-### Kredito limitas
+Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 
-**Kredito limitas** yra žemiausias balansas, iki kurio tėvai gali patvirtinti prizą. Pavyzdžiui, `-100` leidžia išleisti iki `-100`; tai nėra papildomi 100 taškų.
+## Tikslo suvestinė
 
-Išnaudojus pusę kredito, KinKudos sustabdo naujus prizų prašymus, kol balansas pagerėja. Taip vaikas neprašo naujų prizų jau būdamas giliai minuse. Esamus prašymus tėvai vis dar gali spręsti, o darbų veiksmai nesustoja.
+Vaiko kortelėje gali būti rodomas vienas aktualus tikslas. Pirmenybė teikiama:
 
-### Nutrinamų bilietų eilutė
+1. pasiektam tikslui, laukiančiam tėvų sprendimo;
+2. **Dabartiniam tikslui**;
+3. atskirai taupomam tikslui, esančiam arčiausiai pabaigos.
 
-Jei nutrinami bilietai įjungti, kortelė rodo, kiek bilietų vaikas dar gali nusipirkti einamą pirmadienio–sekmadienio savaitę. Ji taip pat įspėja, jei vienas bilietas dar nebaigtas. Užrašas **Nutrinami bilietai išjungti** reiškia, kad išjungtas bendras šeimos arba šio vaiko jungiklis.
+Suvestinėje gali būti tikslo pavadinimas, dabartinė pažanga ir tikslas,
+pažangos juosta bei būsena **Dabartinis tikslas**, **Naudoja turimus taškus**,
+**Išsaugota** arba **Tikslas pasiektas**. Atskirai taupomas tikslas gali būti
+pažymėtas **Taupoma atskirai**, o papildomų tikslų skaičius parodo, kad jų yra
+daugiau.
 
-## Penkios greitųjų veiksmų ikonos
+Pasirinkus suvestinę atidaroma **Tvarkyti → Tikslai**.
 
-| Ikona ir veiksmas | Ką daro | Kada naudoti |
-| --- | --- | --- |
-| ✓ **Atliktas darbas** | Iškart skiria taškus už vieną ar daugiau katalogo darbų. | Jūs patys patikrinote darbą ir nereikia vaiko pateikimo. |
-| ⚑ **Skirti nuobaudą** | Pritaiko vieną ar daugiau iš anksto sukurtų neigiamų įrašų, galima pridėti priežastį. | Naudokite aiškiai iš anksto sutartą pasekmę, o ne atsitiktinį atskaitymą. |
-| ⇢ **Paskirti darbus šiandienai** | Nusiunčia pasirinktas katalogo užduotis ir, jei reikia, vieną savo užduotį iki vidurnakčio. Užbaigimas iškart prideda taškus. | Kai norite parinkti dienos darbus, o ne laukti, kol vaikas juos pasirinks. |
-| ± **Koreguoti taškus** | Prideda arba atima bet kokį taškų skaičių ir išsaugo privalomą priežastį. | Taisant klaidą ar atliekant vienkartinį pakeitimą, kuris nėra darbas, prizas ar nuobauda. |
-| ▭ **Keisti kreditą** | Pakeičia mažiausią leidžiamą šio vaiko balansą. | Kai vienam vaikui reikia kitokio išlaidų limito. |
+## Penki greitieji veiksmai
 
-### Paskirti darbai šiandienai
+Remkitės prieinamais veiksmų pavadinimais, o ne ikona:
 
-Paskirtas darbas veikia tik tą dieną, kai išsiunčiamas. Vidurnaktį nebaigti darbai pasibaigia ir lieka tėvų istorijoje, bet vaiko nebevaržo.
+| Veiksmas | Kam skirtas |
+| --- | --- |
+| **Pridėti atliktą darbą** | Iškart skirti taškus už patikrintus katalogo darbus. |
+| **Skirti nuobaudą** | Pritaikyti sutartus nuobaudų šablonus ir pasirenkamą bendrą priežastį. |
+| **Paskirti darbus šiandienai** | Iki vidurnakčio išsiųsti katalogo darbus ir, jei reikia, vieną savo užduotį. |
+| **Koreguoti taškus** | Pridėti arba atimti taškus su privaloma priežastimi. |
+| **Nustatyti kreditą** | Pakeisti šio vaiko žemiausią išlaidų ribą. |
 
-Galite pasirinkti **Blokuoti prizų pirkimus, kol šie darbai nebaigti**. Tai blokuoja tik *naujus* vaiko prizų prašymus. Jau laukiantis prašymas neatšaukiamas, kiti veiksmai taip pat veikia. Toje pačioje kortelėje galima atšaukti atskirą nebaigtą darbą arba visą likusį rinkinį.
+Tik ikoną turintys valdikliai savo veiksmą pateikia patarime ir prieinamame
+ženkle. Šeimai skirtoje dokumentacijoje nepasikliaujama ikonų forma.
+
+## Šiandienai paskirti darbai
+
+Paskirtas darbas galioja tik tą dieną, kai išsiunčiamas. Vidurnaktį pagal
+serverio vietinį laiką nebaigti darbai pasibaigia ir lieka suprantami
+**Istorijoje**, tačiau vaiko nebevaržo.
+
+Galima pasirinkti **Blokuoti prizų pirkimus, kol šie darbai nebaigti**. Tai
+blokuoja tik naujus vaiko prizų prašymus, neatšaukia jau laukiančio prašymo ir
+netrukdo kitiems veiksmams. Atskirą nebaigtą darbą arba visą likusį rinkinį
+galima atšaukti toje pačioje kortelėje.
 
 ## Laukiantys prašymai
 
-Skiltis **Laukiantys prašymai** prašymus sugrupuoja pagal vaiką. Kiekvienam prašymui siūlomas aiškus sprendimas:
+Prašymai sugrupuoti pagal vaiką. Galimi sprendimai:
 
-- **Patvirtinti** (varnelė) priima darbą, prizą, pasiūlymą arba gimtadienio datos keitimą. Patvirtinus darbą pridedami rodomi taškai, patvirtinus prizą atimama jo kaina.
-- **Prašyti pataisyti** (grįžimo rodyklė) galimas pateiktam darbui. Pridėkite pasirenkamą paaiškinimą; vaikas gali pataisyti ir pateikti iš naujo.
-- **Atmesti** (stop ikona) uždaro prašymą nepridedant taškų ir neskiriant prizo. Prizui bei pasiūlymui priežastis privaloma, darbo komentaras pasirenkamas.
+- **Patvirtinti** – priimti darbą, prizą, pasiūlymą ar gimtadienio datos
+  keitimą.
+- **Prašyti pataisyti** – grąžinti pateiktą darbą vaikui su pasirenkamu
+  paaiškinimu; jį galima pateikti iš naujo.
+- **Atmesti** – uždaryti prašymą nepridedant taškų ir neskiriant prizo.
+  Priežastis privaloma prizams ir pasiūlymams.
 
-Jei darbas turi nuotrauką, pasirinkite miniatiūrą ir peržiūrėkite ją viso dydžio. Darbo nuotraukos yra privatūs šeimos duomenys ir saugomos pagal [Tėvų nustatymų](settings.lt.md) taisyklę.
+Jei darbas turi nuotrauką, pasirinkite miniatiūrą ir peržiūrėkite ją viso
+dydžio. Nuotraukos yra privatūs šeimos duomenys ir saugomos pagal [Tėvų
+nustatymų](settings.lt.md) taisyklę.
 
 ## Istorija
 
-Naudokite **Istoriją**, kai kyla klausimas „Ar prizas tikrai patvirtintas?“ arba „Kodėl pasikeitė balansas?“. Kiekvienas balanso pakeitimas yra atskiras, nuolatinis įrašas. Jei reikia taisyti, naudokite **Koreguoti taškus** ir sukurkite aiškų naują įrašą, o ne perrašykite praeitį.
+Naudokite **Istoriją**, kai kyla klausimas „Ar prizas patvirtintas?“ arba
+„Kodėl pasikeitė balansas?“. Taškų pokytis yra nuolatinis įrašas. Jei reikia
+taisyti, naudokite **Koreguoti taškus** ir sukurkite aiškų naują įrašą, o ne
+perrašykite praeitį.
 
-Užimtoje šeimos istorijoje pasirinkite vieną vaiką **Istorijos** filtre. Atmesti darbų ir prizų sprendimai su tėvų priežastimi taip pat rodomi, nors taškai nepasikeitė. Kameros ikona reiškia, kad darbo nuotrauka dar pasiekiama, o išblukusi kamera – kad ji pašalinta pagal saugojimo nustatymą.
+Vaiko pasirinkimas Istorijos filtre pritaikomas iškart ir išsaugo kitus
+aktyvius filtrus. Atmesti sprendimai taip pat išsaugomi, net jei taškai
+nepajudėjo. Visą įvykių ir filtrų sąrašą rasite [Veiksmų istorija ir
+filtrai](history.lt.md).
 
-[Darbai ir patvirtinimai →](tasks-and-approvals.lt.md) · [Vaiko aplinka →](child-space.lt.md)
+[Užduotys ir patvirtinimai →](tasks-and-approvals.lt.md) · [Veiksmų istorija →](history.lt.md) · [Vaiko aplinka →](child-space.lt.md)

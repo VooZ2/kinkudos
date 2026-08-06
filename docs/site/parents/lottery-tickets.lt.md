@@ -11,7 +11,7 @@ jeigu suaugusieji sąmoningai nenori tokios sėkmės dalies šeimos taškų tais
 
 Su vaiku sutarkite dėl bilieto kainos, savaitinio limito ir fakto, kad bilietas
 gali laimėti taškų, negrąžinti taškų arba jų atimti. Rezultatas niekada negali
-nuleisti vaiko žemiau jo kredito ribos.
+nuleisti vaiko žemiau jo žemiausios balanso ribos.
 
 Bilieto rezultatas parenkamas prieš vaikui jį atidengiant. Vaikas nutrina visas
 devynias langelių vietas, kad atskleistų rezultatą. KinKudos Istorijoje atskirai

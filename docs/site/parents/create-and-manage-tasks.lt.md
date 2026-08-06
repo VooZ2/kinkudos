@@ -1,7 +1,7 @@
 # Kurti ir valdyti užduotis
 
-Naudokite užduočių katalogą pasikartojančioms šeimos užduotims apibrėžti. Eikite į
-**Tėvai → Darbai ir prizai → Darbai**.
+Naudokite užduočių katalogą pasikartojančioms šeimos užduotims apibrėžti. Eikite
+į **Tėvai → Tvarkyti → Darbai**.
 
 > **Kam:** Tėvams<br>
 > **Reikia:** Tėvų paskyros<br>
@@ -17,32 +17,35 @@ Naudokite užduočių katalogą pasikartojančioms šeimos užduotims apibrėžt
 4. Išsaugokite užduotį ir patikrinkite, kad ji aktyvi.
 
 Bendras katalogas pats užduoties nepaskiria. Vaikas gali pasirinkti aktyvią jam
-matomą užduotį ir ją pateikti, o tėvai gali ją naudoti tiesioginiam užskaitymui
-ar dienos užduočiai.
+matomą užduotį ir ją pateikti, o tėvai gali ją naudoti veiksmams **Pridėti
+atliktą darbą** arba **Paskirti darbus šiandienai**.
 
-## Keiskite, išjunkite arba šalinkite užduotį
+## Katalogo veiksmai
 
-Redaguokite užduotį, kai ateityje turi keistis jos pavadinimas, taškai ar emoji.
-Pakeitimas taikomas tik naujiems veiksmams; senoje istorijoje lieka tuo metu
+Naudokite eilutės veiksmus pagal pavadinimą:
+
+- **Redaguoti** – pakeisti būsimų naudojimų pavadinimą, taškus ar emoji;
+- **Paslėpti** – išsaugoti įrašą ir istoriją, bet pašalinti jį iš vaiko
+  pasirinkimo;
+- **Rodyti** – vėl padaryti jį prieinamą;
+- **Trinti** – pašalinti iš aktyvaus naudojimo pagal programoje įdiegtą
+  šalinimo elgseną.
+
+Šie veiksmai neperrašo ankstesnių **Istorijos** įrašų. Juose lieka tuo metu
 galiojęs pavadinimas, ikona ir taškų vertė.
 
-Išjunkite užduotį, jeigu galbūt naudosite ją vėliau. Ji neberodoma kaip naujas
-pasirinkimas, bet katalogo įrašas ir šeimos istorija lieka. Šalinkite tik tada,
-kai jos tikrai nebereikia. Pašalinimas taip pat nekeičia anksčiau skirtų taškų.
-
-## Pasirinkite tinkamą atliktos užduoties užrašymo būdą
-
-KinKudos siūlo du būdus užrašyti atliktą užduotį:
+## Pasirinkite atlikto darbo užrašymo būdą
 
 | Būdas | Kas vyksta | Kada rinktis |
 | --- | --- | --- |
-| **Vaiko pateikimas** | Vaikas pateikia užduotį; vėliau tėvai ją patvirtina, grąžina taisyti arba atmeta. | Vaikas turi pats pranešti apie atliktą užduotį ar pridėti įrodymą. |
-| **Atliktas darbas** | Tėvai vaiko kortelėje pasirenka katalogo užduotis ir iš karto skiria taškus. | Suaugęs jau matė rezultatą arba vaikas per mažas pateikti užduotį pats. |
+| **Vaiko pateikimas** | Vaikas pateikia užduotį; tėvai ją patvirtina, prašo pataisyti arba atmeta. | Vaikas turi pats pranešti apie darbą ar pridėti įrodymą. |
+| **Pridėti atliktą darbą** | Tėvai vaiko kortelėje pasirenka katalogo darbus ir iškart skiria taškus. | Suaugęs matė rezultatą arba vaikas per mažas pateikti užduotį. |
 
 ## Susiję vadovai
 
 - [Peržiūrėti atliktas užduotis](review-completed-tasks.lt.md)
 - [Paskirti užduotis šiandienai](assign-tasks-today.lt.md)
 - [Taškai, nuobaudos ir korekcijos](points-and-corrections.lt.md)
+- [Veiksmų istorija ir filtrai](history.lt.md)
 
 [Tėvų skydelis →](dashboard-and-child-cards.lt.md) · [English](create-and-manage-tasks.md)

@@ -42,8 +42,8 @@ something goes wrong.
 
     ---
 
-    Create tasks and rewards, review requests, understand points, and help a
-    child use their own space.
+    Use Manage to create tasks, penalties, rewards, and goals; review requests,
+    understand points, and help a child use their own space.
 
     [Open the parent guide →](parents/dashboard-and-child-cards.md)
 
@@ -71,6 +71,7 @@ Update, back up, restore, inspect logs, and use CLI recovery tools.
 - [Set up your first family](start/first-15-minutes.md)
 - [Pair a child device](start/pair-a-child-device.md)
 - [Create and manage tasks](parents/tasks-and-approvals.md)
+- [Activity history and filters](parents/history.md)
 - [Create rewards, goals, and scratch ticket rules](parents/rewards-goals-and-lottery.md)
 - [Install KinKudos on a phone or tablet](security/notifications-and-pwa.md)
 - [Fix sign-in or a child PIN](security/pin-and-sign-in.md)

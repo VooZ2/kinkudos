@@ -9,6 +9,7 @@ workflow.
 | --- | --- |
 | Family settings, accounts, profiles, points, and history | KinKudos database on the family server. |
 | Task evidence, avatars, and feedback screenshots | Private uploaded media on the family server. |
+| Savings goals and goal events | Goal records and event history in the family database; separately saved allocations are linked to their specific goal. |
 | Secrets and provider credentials | Separately protected server files; never shown in the public repository. |
 | Optional remote backups | Encrypted restic snapshots of the database and uploaded media. |
 
@@ -24,9 +25,19 @@ The public documentation has separate cookie-free analytics only.
 | Task/feedback image upload | JPEG, PNG, WebP, HEIC, or HEIF up to 12 MB. |
 | Avatar upload | The same formats up to 5 MB; cropped to a square. |
 | Assigned task deadline | Midnight in the server’s local time. |
-| Lottery week | Monday through Sunday. |
+| Scratch-ticket week | Monday through Sunday. |
 | Completed task-photo retention | Family choice: indefinitely, 7, 30, or 90 days. |
 | Resolved-feedback image retention | Family choice: indefinitely, 7, 30, or 90 days. |
+
+## Points and savings-goal accounting
+
+`LedgerEntry` remains the source of truth for spendable points. Separately
+saved goal allocations are not spendable. Moving points into a separately
+saved goal creates a negative ledger entry; returning them creates a positive
+spendable ledger entry. Selecting or switching a **Current goal** changes no
+ledger balance. Separately saved goal completion consumes the saved allocation
+without deducting the points again, while available-points completion deducts
+the target once after parent approval.
 
 ## Related policies
 

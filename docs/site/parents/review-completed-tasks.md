@@ -33,4 +33,4 @@ change the balance.
 If an approved entry was wrong, do not edit the past. Create a transparent
 correction with [Adjust points](points-and-corrections.md).
 
-[Create tasks →](create-and-manage-tasks.md) · [Lietuviškai](review-completed-tasks.lt.md)
+[Create tasks →](create-and-manage-tasks.md) · [Activity history →](history.md) · [Lietuviškai](review-completed-tasks.lt.md)
