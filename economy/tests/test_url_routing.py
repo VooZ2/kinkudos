@@ -176,6 +176,7 @@ class LegacyUrlCompatibilityTests(TestCase):
             ("/prisijungti/?next=%2F%2Fevil.example", "/login/"),
             ("/prisijungti/?next=https%3A%2F%2Fevil.example", "/login/"),
             ("/prisijungti/?next=%2F%5C%5Cevil.example", "/login/"),
+            ("/prisijungti/?next=%2F%2F%5Bevil", "/login/"),
         )
         for old_path, expected_path in cases:
             with self.subTest(old_path=old_path):

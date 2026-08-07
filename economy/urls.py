@@ -110,12 +110,15 @@ def _legacy_query_string(request, url_name):
     if len(next_values) != 1:
         return ""
     next_url = next_values[0]
-    parsed = urlsplit(next_url)
     if (
         not next_url.startswith("/")
         or next_url.startswith("//")
         or "\\" in next_url
-        or parsed.scheme
+    ):
+        return ""
+    parsed = urlsplit(next_url)
+    if (
+        parsed.scheme
         or parsed.netloc
         or not url_has_allowed_host_and_scheme(
             next_url,
