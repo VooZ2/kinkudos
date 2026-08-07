@@ -2,8 +2,14 @@
 __MACOSX/
 ._*
 .env
+.env.*
+!.env.example
 .venv/
 __pycache__/
+*.db
+uploads/
+.pytest_cache/
+.ruff_cache/
 *.py[cod]
 *.sqlite3
 *.sqlite3-*
