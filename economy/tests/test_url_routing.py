@@ -165,6 +165,30 @@ class LegacyUrlCompatibilityTests(TestCase):
         self.assertEqual(response.status_code, 301)
         self.assertEqual(response["Location"], "/changes/?page=2")
 
+    def test_legacy_redirect_drops_unknown_and_unsafe_query_values(self):
+        cases = (
+            ("/pakeitimai/?page=https://evil.example", "/changes/"),
+            ("/pakeitimai/?page=//evil.example", "/changes/"),
+            ("/pakeitimai/?page=%2F%2Fevil.example", "/changes/"),
+            ("/pakeitimai/?page=2&next=https://evil.example", "/changes/?page=2"),
+            ("/prisijungti/?next=https://evil.example", "/login/"),
+            ("/prisijungti/?next=//evil.example", "/login/"),
+            ("/prisijungti/?next=%2F%2Fevil.example", "/login/"),
+            ("/prisijungti/?next=https%3A%2F%2Fevil.example", "/login/"),
+            ("/prisijungti/?next=%2F%5C%5Cevil.example", "/login/"),
+        )
+        for old_path, expected_path in cases:
+            with self.subTest(old_path=old_path):
+                response = self.client.get(old_path)
+                self.assertEqual(response.status_code, 301)
+                self.assertEqual(response["Location"], expected_path)
+
+    def test_legacy_login_redirect_preserves_one_safe_internal_next(self):
+        response = self.client.get("/prisijungti/?next=%2Fchild%2F")
+
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response["Location"], "/login/?next=%2Fchild%2F")
+
     def test_legacy_dynamic_gets_redirect_to_dynamic_canonical_paths(self):
         cases = (
             (

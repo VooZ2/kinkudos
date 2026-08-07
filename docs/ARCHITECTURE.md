@@ -194,7 +194,9 @@ where needed and do not change with the selected interface language. Named URL
 reversing is the source for application links, polling, Push payloads, and
 emails. Changed public GET paths retain permanent redirects from their previous
 Lithuanian paths; legacy mutating paths call the same view so the HTTP method
-and request body remain intact.
+and request body remain intact. Legacy redirect query strings are rebuilt from
+a small allowlist; `next` is retained only as a validated internal relative URL,
+and unknown or unsafe values are discarded.
 
 The systemd deployment installs a daily maintenance timer and a separate
 30-minute lottery-reminder timer. Generic deployments must schedule the

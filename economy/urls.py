@@ -1,7 +1,9 @@
 from functools import wraps
+from urllib.parse import urlencode, urlsplit
 
 from django.http import HttpResponsePermanentRedirect
 from django.urls import path, reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 
 from .views import (
     ParentLoginView,
@@ -92,6 +94,39 @@ from .views import (
 )
 
 
+def _legacy_query_string(request, url_name):
+    """Keep only known, safe query parameters during a legacy redirect."""
+
+    if url_name == "changelog":
+        page = request.GET.get("page", "")
+        if page and page.isascii() and page.isdigit():
+            return urlencode({"page": page})
+        return ""
+
+    if url_name != "parent_login":
+        return ""
+
+    next_values = request.GET.getlist("next")
+    if len(next_values) != 1:
+        return ""
+    next_url = next_values[0]
+    parsed = urlsplit(next_url)
+    if (
+        not next_url.startswith("/")
+        or next_url.startswith("//")
+        or "\\" in next_url
+        or parsed.scheme
+        or parsed.netloc
+        or not url_has_allowed_host_and_scheme(
+            next_url,
+            allowed_hosts={request.get_host()},
+            require_https=request.is_secure(),
+        )
+    ):
+        return ""
+    return urlencode({"next": next_url})
+
+
 def _legacy_route(view, url_name):
     """Redirect legacy GETs while preserving mutating request semantics."""
 
@@ -99,7 +134,7 @@ def _legacy_route(view, url_name):
     def route(request, *args, **kwargs):
         if request.method in {"GET", "HEAD"}:
             destination = reverse(url_name, args=args, kwargs=kwargs)
-            query_string = request.META.get("QUERY_STRING")
+            query_string = _legacy_query_string(request, url_name)
             if query_string:
                 destination = f"{destination}?{query_string}"
             return HttpResponsePermanentRedirect(destination)
