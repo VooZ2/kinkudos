@@ -1,0 +1,119 @@
+name: KinKudos CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - "release/**"
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: KinKudos CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Classify pull request changes
+        id: changes
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          mapfile -t changed_files < <(git diff --name-only "$BASE_SHA" "$HEAD_SHA")
+          if (( ${#changed_files[@]} == 0 )); then
+            echo "docs_only=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          docs_only=true
+          for path in "${changed_files[@]}"; do
+            case "$path" in
+              docs/site/*) ;;
+              *)
+                docs_only=false
+                break
+                ;;
+            esac
+          done
+          echo "docs_only=$docs_only" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5
+        with:
+          python-version: "3.12"
+
+      - name: Install locked product dependencies
+        if: steps.changes.outputs.docs_only == 'false'
+        run: python -m pip install --disable-pip-version-check --requirement requirements.lock
+
+      - name: Install Ruff
+        if: steps.changes.outputs.docs_only == 'false'
+        run: python -m pip install --disable-pip-version-check ruff==0.16.2
+
+      - name: Run Ruff
+        if: steps.changes.outputs.docs_only == 'false'
+        run: python -m ruff check .
+
+      - name: Run normal Django system check
+        if: steps.changes.outputs.docs_only == 'false'
+        env:
+          KINKUDOS_DEBUG: "false"
+          KINKUDOS_SECRET_KEY: ci-deploy-check-only-9Fq7wR2mX8vK4pL6sN1cD5hJ3tB0zA7yE9uQ
+          KINKUDOS_ALLOWED_HOSTS: test.example.com
+          KINKUDOS_CSRF_TRUSTED_ORIGINS: https://test.example.com
+          KINKUDOS_SECURE_COOKIES: "true"
+          KINKUDOS_SECURE_SSL_REDIRECT: "true"
+          KINKUDOS_HSTS_SECONDS: "31536000"
+        run: python manage.py check
+
+      - name: Run production Django deployment check
+        if: steps.changes.outputs.docs_only == 'false'
+        env:
+          KINKUDOS_DEBUG: "false"
+          KINKUDOS_SECRET_KEY: ci-deploy-check-only-9Fq7wR2mX8vK4pL6sN1cD5hJ3tB0zA7yE9uQ
+          KINKUDOS_ALLOWED_HOSTS: test.example.com
+          KINKUDOS_CSRF_TRUSTED_ORIGINS: https://test.example.com
+          KINKUDOS_SECURE_COOKIES: "true"
+          KINKUDOS_SECURE_SSL_REDIRECT: "true"
+          KINKUDOS_HSTS_SECONDS: "31536000"
+        run: python scripts/check_deploy.py
+
+      - name: Check for missing migrations
+        if: steps.changes.outputs.docs_only == 'false'
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Check installed dependencies
+        if: steps.changes.outputs.docs_only == 'false'
+        run: python -m pip check
+
+      - name: Collect static assets for tests
+        if: steps.changes.outputs.docs_only == 'false'
+        env:
+          KINKUDOS_DEBUG: "false"
+          KINKUDOS_SECRET_KEY: ci-deploy-check-only-9Fq7wR2mX8vK4pL6sN1cD5hJ3tB0zA7yE9uQ
+          KINKUDOS_ALLOWED_HOSTS: test.example.com
+          KINKUDOS_CSRF_TRUSTED_ORIGINS: https://test.example.com
+          KINKUDOS_SECURE_COOKIES: "true"
+          KINKUDOS_SECURE_SSL_REDIRECT: "true"
+          KINKUDOS_HSTS_SECONDS: "31536000"
+        run: python manage.py collectstatic --noinput
+
+      - name: Run Django tests
+        if: steps.changes.outputs.docs_only == 'false'
+        run: python manage.py test
+
+      - name: Install documentation build dependencies
+        if: steps.changes.outputs.docs_only == 'true'
+        run: python -m pip install --disable-pip-version-check mkdocs-material==9.7.7
+
+      - name: Build documentation with strict validation
+        if: steps.changes.outputs.docs_only == 'true'
+        run: python -m mkdocs build --strict --config-file docs/site/mkdocs.yml --site-dir "$RUNNER_TEMP/kinkudos-docs-site"
