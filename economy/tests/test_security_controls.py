@@ -96,8 +96,14 @@ class NetworkAccessTests(TestCase):
         family.allowed_networks = "192.0.2.0/24"
         family.save(update_fields=["network_access_mode", "allowed_networks"])
 
-        child_response = self.client.get("/vaikas/", REMOTE_ADDR="198.51.100.2")
-        parent_response = self.client.get("/prisijungti/", REMOTE_ADDR="198.51.100.2")
+        child_response = self.client.get(
+            reverse("child_select"),
+            REMOTE_ADDR="198.51.100.2",
+        )
+        parent_response = self.client.get(
+            reverse("parent_login"),
+            REMOTE_ADDR="198.51.100.2",
+        )
 
         self.assertEqual(child_response.status_code, 403)
         self.assertEqual(parent_response.status_code, 200)

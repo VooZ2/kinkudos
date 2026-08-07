@@ -8,6 +8,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
+from django.urls import reverse
 from django.utils.translation import override
 from py_vapid import Vapid
 
@@ -117,7 +118,10 @@ class ChildDecisionPushTests(TestCase):
         payload = json.loads(webpush.call_args.kwargs["data"])
         self.assertEqual(payload["title"], "Šiandienos užburti darbai")
         self.assertIn("vidurnaktį", payload["body"])
-        self.assertEqual(payload["url"], "/vaikas/mano/#paskirti-darbai")
+        self.assertEqual(
+            payload["url"],
+            f"{reverse('child_dashboard')}#paskirti-darbai",
+        )
 
     @patch("economy.push.webpush")
     def test_task_decision_targets_only_the_affected_child(self, webpush):
@@ -140,7 +144,7 @@ class ChildDecisionPushTests(TestCase):
         payload = json.loads(webpush.call_args.kwargs["data"])
         self.assertEqual(payload["title"], "Tavo darbas patvirtintas")
         self.assertEqual(payload["body"], "Paklota lova: +20 taškų")
-        self.assertEqual(payload["url"], "/vaikas/mano/#darbai")
+        self.assertEqual(payload["url"], f"{reverse('child_dashboard')}#darbai")
 
     def test_lithuanian_notification_currency_uses_correct_forms(self):
         with override("lt"):
@@ -195,7 +199,7 @@ class ChildDecisionPushTests(TestCase):
         payload = json.loads(webpush.call_args.kwargs["data"])
         self.assertEqual(payload["title"], "Tavo prizo prašymas atmestas")
         self.assertIn("Pirmiausia atlik darbus.", payload["body"])
-        self.assertEqual(payload["url"], "/vaikas/mano/#prizai")
+        self.assertEqual(payload["url"], f"{reverse('child_dashboard')}#prizai")
 
     @patch("economy.push.webpush")
     def test_parent_approval_requests_target_parent_subscriptions(self, webpush):

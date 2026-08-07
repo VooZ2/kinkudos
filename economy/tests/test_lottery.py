@@ -382,7 +382,7 @@ class LotteryReminderTests(TestCase):
         self.assertEqual(payload["title"], "Bambukų staigmena")
         self.assertIn("gali laimėti", payload["body"])
         self.assertIn("prarasti taškų", payload["body"])
-        self.assertEqual(payload["url"], "/vaikas/mano/#prizai")
+        self.assertEqual(payload["url"], f"{reverse('child_dashboard')}#prizai")
 
 
 class LotteryViewTests(TestCase):

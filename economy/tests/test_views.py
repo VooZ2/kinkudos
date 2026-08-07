@@ -720,7 +720,7 @@ class AccessAndWorkflowTests(TestCase):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, "v26.6.2")
-        self.assertContains(response, 'href="/pakeitimai/"', html=False)
+        self.assertContains(response, f'href="{reverse("changelog")}"', html=False)
         self.assertContains(response, "taškai")
         self.assertContains(response, "Kreditas -100")
         self.assertContains(response, 'class="push-icon"', html=False)

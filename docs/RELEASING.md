@@ -86,7 +86,7 @@ For each product release:
 4. Record new functionality under `Added`.
 5. Record behaviour changes under `Changed`, bug fixes under `Fixed`, and
    security changes under `Security`.
-6. Verify that `/pakeitimai/` presents the release content as “What's new?” and
+6. Verify that `/changes/` presents the release content as “What's new?” and
    “What was fixed?”.
 7. Run the full test suite and Django checks in Python 3.12 with
    `requirements.lock`. Run the checks with production-like settings:
@@ -139,7 +139,7 @@ documentation do not belong in the product changelog and do not change the
 product version.
 
 The version shown in the application header must always remain a link to
-`/pakeitimai/`.
+`/changes/`.
 
 The repository Actions secret `DOCKERHUB_TOKEN` must contain only the Docker
 Hub access-token value, without a username or `username:` prefix. The
