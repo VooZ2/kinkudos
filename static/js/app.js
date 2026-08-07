@@ -191,13 +191,13 @@ document.querySelectorAll(".evidence-form").forEach(form => {
 });
 
 const lightbox = document.getElementById("evidence-lightbox");
-document.querySelectorAll("[data-evidence-full]").forEach(button => {
-  button.addEventListener("click", () => {
-    const image = lightbox?.querySelector("[data-lightbox-image]");
-    if (!image) return;
-    image.src = button.dataset.evidenceFull;
-    lightbox.showModal();
-  });
+document.addEventListener("click", event => {
+  const button = event.target.closest?.("[data-evidence-full]");
+  if (!button) return;
+  const image = lightbox?.querySelector("[data-lightbox-image]");
+  if (!image) return;
+  image.src = button.dataset.evidenceFull;
+  lightbox.showModal();
 });
 
 const parentShell = document.querySelector("[data-parent-shell]");
@@ -905,25 +905,10 @@ document.querySelectorAll("[data-proposal-form]").forEach(form => {
   syncProposalType();
 });
 
-let languageNavigationPending = false;
-document.querySelectorAll(".language-switcher form").forEach(form => {
-  form.addEventListener("submit", event => {
-    if (languageNavigationPending) {
-      event.preventDefault();
-      return;
-    }
-    languageNavigationPending = true;
+document.querySelectorAll(".language-switcher-menu").forEach(form => {
+  form.addEventListener("submit", () => {
     const next = form.querySelector("[name=next]");
     if (next) next.value = `${window.location.pathname}${window.location.search}${window.location.hash}`;
-    document.querySelectorAll(".language-switcher-option").forEach(button => {
-      button.setAttribute("aria-disabled", "true");
-    });
-    window.setTimeout(() => {
-      languageNavigationPending = false;
-      document.querySelectorAll(".language-switcher-option").forEach(button => {
-        button.removeAttribute("aria-disabled");
-      });
-    }, 8000);
   });
 });
 
@@ -1110,10 +1095,24 @@ if (document.body.classList.contains("session-sensitive-page")) {
   });
 }
 
+const REFRESH_INTERVAL_MS = 10000;
+const REFRESH_MAX_BACKOFF_MS = 60000;
+const REFRESH_REQUEST_TIMEOUT_MS = 8000;
+const STATE_CHANGED_MESSAGE = "kinkudos-state-changed";
+
+function refreshBackoffDelay(failures) {
+  return Math.min(REFRESH_INTERVAL_MS * (2 ** failures), REFRESH_MAX_BACKOFF_MS);
+}
+
 const childStateUrl = window.KINKUDOS?.childStateUrl;
 let childStateSignature = window.KINKUDOS?.childStateSignature || "";
 let childRefreshDeferred = false;
 let childStateRequestRunning = false;
+let childStateRequestController = null;
+let childRefreshTimer = null;
+let childRefreshFailures = 0;
+let childRefreshForcePending = false;
+let childRefreshStopped = false;
 
 function childPageHasUnsavedWork() {
   return Boolean(
@@ -1130,27 +1129,84 @@ function reloadChildPageWhenSafe() {
   window.location.reload();
 }
 
+function stopChildRefresh() {
+  childRefreshStopped = true;
+  if (childRefreshTimer !== null) window.clearTimeout(childRefreshTimer);
+  childRefreshTimer = null;
+  childStateRequestController?.abort();
+}
+
+function scheduleChildStateCheck(delay = REFRESH_INTERVAL_MS) {
+  if (
+    !childStateUrl ||
+    childRefreshStopped ||
+    document.visibilityState !== "visible"
+  ) return;
+  if (childRefreshTimer !== null) window.clearTimeout(childRefreshTimer);
+  childRefreshTimer = window.setTimeout(() => {
+    childRefreshTimer = null;
+    checkChildState();
+  }, delay);
+}
+
+function forceChildStateCheck() {
+  if (!childStateUrl || childRefreshStopped || document.visibilityState !== "visible") return;
+  if (childStateRequestRunning) {
+    childRefreshForcePending = true;
+    childStateRequestController?.abort();
+    return;
+  }
+  scheduleChildStateCheck(0);
+}
+
 async function checkChildState() {
-  if (!childStateUrl || document.visibilityState !== "visible" || childStateRequestRunning) return;
+  if (
+    !childStateUrl ||
+    childRefreshStopped ||
+    document.visibilityState !== "visible" ||
+    childStateRequestRunning
+  ) return;
   childStateRequestRunning = true;
+  const controller = new AbortController();
+  childStateRequestController = controller;
+  const timeout = window.setTimeout(() => controller.abort(), REFRESH_REQUEST_TIMEOUT_MS);
   try {
     const response = await fetch(childStateUrl, {
       credentials: "same-origin",
       cache: "no-store",
-      headers: { Accept: "application/json" }
+      headers: { Accept: "application/json" },
+      signal: controller.signal,
     });
-    if (!response.ok) return;
+    if (
+      response.redirected ||
+      response.status === 401 ||
+      response.status === 403 ||
+      !response.headers.get("content-type")?.includes("application/json")
+    ) {
+      stopChildRefresh();
+      return;
+    }
+    if (!response.ok) throw new Error(`Child state request failed: ${response.status}`);
     const state = await response.json();
+    childRefreshFailures = 0;
     if (!childStateSignature) {
       childStateSignature = state.signature;
     } else if (state.signature && state.signature !== childStateSignature) {
       childStateSignature = state.signature;
       reloadChildPageWhenSafe();
     }
-  } catch (_) {
-    // A temporary connection problem should not interrupt the child.
+  } catch (error) {
+    if (error.name !== "AbortError") childRefreshFailures += 1;
   } finally {
+    window.clearTimeout(timeout);
+    if (childStateRequestController === controller) childStateRequestController = null;
     childStateRequestRunning = false;
+    if (childRefreshForcePending && !childRefreshStopped) {
+      childRefreshForcePending = false;
+      scheduleChildStateCheck(0);
+    } else {
+      scheduleChildStateCheck(refreshBackoffDelay(childRefreshFailures));
+    }
   }
 }
 
@@ -1165,78 +1221,274 @@ if (childStateUrl) {
   });
   document.addEventListener("close", () => {
     if (childRefreshDeferred && !childPageHasUnsavedWork()) {
+      childRefreshDeferred = false;
       window.location.reload();
     }
   }, true);
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") checkChildState();
+    if (document.visibilityState === "visible") forceChildStateCheck();
+    else if (childRefreshTimer !== null) {
+      window.clearTimeout(childRefreshTimer);
+      childRefreshTimer = null;
+    }
   });
-  window.addEventListener("focus", checkChildState);
+  window.addEventListener("focus", forceChildStateCheck);
+  window.addEventListener("pageshow", forceChildStateCheck);
+  window.addEventListener("online", forceChildStateCheck);
+  window.addEventListener("pagehide", () => childStateRequestController?.abort());
+  window.addEventListener("beforeunload", () => childStateRequestController?.abort());
   navigator.serviceWorker?.addEventListener("message", event => {
-    if (event.data?.type === "kinkudos-state-changed") checkChildState();
+    if (event.data?.type === STATE_CHANGED_MESSAGE) forceChildStateCheck();
   });
-  window.setInterval(checkChildState, 15000);
+  scheduleChildStateCheck();
 }
 
-let pendingRequestsRefreshRunning = false;
+const parentWorkspace = document.querySelector("[data-parent-shell]");
+const initialPendingFragment = document.querySelector("[data-pending-requests-fragment]");
+const parentStateUrl = parentWorkspace && initialPendingFragment
+  ? window.KINKUDOS?.parentStateUrl
+  : "";
+const parentRefreshStatus = document.querySelector("[data-parent-refresh-status]");
+const parentRefreshMessage = parentRefreshStatus?.querySelector("[data-parent-refresh-message]");
+const applyPendingRefreshButton = parentRefreshStatus?.querySelector("[data-apply-pending-refresh]");
+let parentStateRevision = initialPendingFragment?.dataset.pendingRevision || "";
+let parentStateCount = Number(initialPendingFragment?.dataset.pendingCount || 0);
+let parentStateRequestRunning = false;
+let parentStateRequestController = null;
+let parentStateTimer = null;
+let parentStateFailures = 0;
+let parentStateForcePending = false;
+let parentStateStopped = false;
+let deferredPendingHtml = "";
+
+function currentPendingFragment() {
+  return document.querySelector("[data-pending-requests-fragment]");
+}
 
 function pendingRequestsHaveActiveInteraction(fragment) {
   return Boolean(
-    document.querySelector("dialog[open]") ||
-    fragment.contains(document.activeElement)
+    fragment && (
+      fragment.contains(document.activeElement) ||
+      fragment.querySelector("dialog[open]")
+    )
   );
+}
+
+function pendingCountLabel(count) {
+  return `${count} ${t(count === 1 ? "pendingRequestSingular" : "pendingRequestPlural")}`;
 }
 
 function updatePendingNavigationCount(count) {
   const navItem = document.querySelector('[data-parent-nav="home"]');
-  if (!navItem) return;
-  let badge = navItem.querySelector(".nav-count");
-  if (!count) {
-    badge?.remove();
+  const badges = [...document.querySelectorAll("[data-parent-home-badge]")];
+  if (!badges.length && navItem) {
+    const badge = document.createElement("strong");
+    badge.className = "nav-count";
+    badge.dataset.parentHomeBadge = "";
+    navItem.append(badge);
+    badges.push(badge);
+  }
+  badges.forEach(badge => {
+    badge.textContent = String(count);
+    badge.hidden = count === 0;
+    badge.setAttribute("aria-label", pendingCountLabel(count));
+  });
+}
+
+function setParentRefreshStatus(message = "", showButton = false) {
+  if (!parentRefreshMessage) return;
+  parentRefreshMessage.textContent = message;
+  if (applyPendingRefreshButton) applyPendingRefreshButton.hidden = !showButton;
+}
+
+function announceNewParentRequest() {
+  setParentRefreshStatus(t("newRequestReceived"), Boolean(deferredPendingHtml));
+  window.setTimeout(() => {
+    if (!deferredPendingHtml) setParentRefreshStatus();
+  }, 5000);
+}
+
+function deferPendingReplacement(html) {
+  deferredPendingHtml = html;
+  setParentRefreshStatus(t("refreshRequests"), true);
+}
+
+function parsePendingReplacement(html) {
+  return new DOMParser()
+    .parseFromString(html, "text/html")
+    .querySelector("[data-pending-requests-fragment]");
+}
+
+function applyPendingReplacement({allowFragmentFocus = false} = {}) {
+  if (!deferredPendingHtml) return false;
+  const fragment = currentPendingFragment();
+  if (!fragment) return false;
+  const activeElement = document.activeElement;
+  if (!allowFragmentFocus && pendingRequestsHaveActiveInteraction(fragment)) return false;
+  if (allowFragmentFocus && fragment.querySelector("dialog[open]")) return false;
+  const focusTarget = allowFragmentFocus ? activeElement?.dataset?.openDialog : "";
+  const replacement = parsePendingReplacement(deferredPendingHtml);
+  if (!replacement) {
+    deferredPendingHtml = "";
+    return false;
+  }
+  fragment.replaceWith(replacement);
+  deferredPendingHtml = "";
+  setParentRefreshStatus();
+  if (focusTarget) {
+    [...replacement.querySelectorAll("[data-open-dialog]")]
+      .find(element => element.dataset.openDialog === focusTarget)
+      ?.focus();
+  }
+  return true;
+}
+
+function maybeApplyDeferredPendingReplacement() {
+  if (!pendingRequestsHaveActiveInteraction(currentPendingFragment())) applyPendingReplacement();
+}
+
+function applyDeferredPendingAfterDialogClose(event) {
+  window.setTimeout(() => {
+    const closedDialog = event.target;
+    const fragment = currentPendingFragment();
+    if (
+      closedDialog?.matches?.("dialog") &&
+      fragment?.contains(closedDialog) &&
+      !fragment.querySelector("dialog[open]")
+    ) {
+      applyPendingReplacement({allowFragmentFocus: true});
+    } else {
+      maybeApplyDeferredPendingReplacement();
+    }
+  }, 0);
+}
+
+function handleParentState(state) {
+  const count = Number(state.count || 0);
+  const revision = state.revision || "";
+  const previousRevision = parentStateRevision;
+  const previousCount = parentStateCount;
+  const changed = Boolean(revision && revision !== previousRevision);
+  parentStateRevision = revision || parentStateRevision;
+  parentStateCount = count;
+  updatePendingNavigationCount(count);
+  if (!changed) {
+    maybeApplyDeferredPendingReplacement();
     return;
   }
-  if (!badge) {
-    badge = document.createElement("strong");
-    badge.className = "nav-count";
-    navItem.append(badge);
+  if (previousRevision && count > previousCount) announceNewParentRequest();
+  if (!state.html) return;
+  const fragment = currentPendingFragment();
+  if (!fragment || pendingRequestsHaveActiveInteraction(fragment)) {
+    deferPendingReplacement(state.html);
+    return;
   }
-  badge.textContent = String(count);
+  const replacement = parsePendingReplacement(state.html);
+  if (!replacement) return;
+  fragment.replaceWith(replacement);
+  setParentRefreshStatus();
 }
 
-async function refreshPendingRequests() {
-  const fragment = document.querySelector("[data-pending-requests-fragment]");
+function stopParentRefresh() {
+  parentStateStopped = true;
+  if (parentStateTimer !== null) window.clearTimeout(parentStateTimer);
+  parentStateTimer = null;
+  parentStateRequestController?.abort();
+}
+
+function scheduleParentStateCheck(delay = REFRESH_INTERVAL_MS) {
+  if (!parentStateUrl || parentStateStopped || document.visibilityState !== "visible") return;
+  if (parentStateTimer !== null) window.clearTimeout(parentStateTimer);
+  parentStateTimer = window.setTimeout(() => {
+    parentStateTimer = null;
+    checkParentState();
+  }, delay);
+}
+
+function forceParentStateCheck() {
+  if (!parentStateUrl || parentStateStopped || document.visibilityState !== "visible") return;
+  if (parentStateRequestRunning) {
+    parentStateForcePending = true;
+    parentStateRequestController?.abort();
+    return;
+  }
+  scheduleParentStateCheck(0);
+}
+
+async function checkParentState() {
   if (
-    !fragment ||
+    !parentStateUrl ||
+    parentStateStopped ||
     document.visibilityState !== "visible" ||
-    pendingRequestsRefreshRunning ||
-    pendingRequestsHaveActiveInteraction(fragment)
+    parentStateRequestRunning
   ) return;
-  pendingRequestsRefreshRunning = true;
+  parentStateRequestRunning = true;
+  const controller = new AbortController();
+  parentStateRequestController = controller;
+  const timeout = window.setTimeout(() => controller.abort(), REFRESH_REQUEST_TIMEOUT_MS);
   try {
-    const response = await fetch(fragment.dataset.pendingUrl, {
+    const headers = { Accept: "application/json", "X-Requested-With": "XMLHttpRequest" };
+    if (parentStateRevision) headers["If-None-Match"] = `"${parentStateRevision}"`;
+    const response = await fetch(parentStateUrl, {
       credentials: "same-origin",
       cache: "no-store",
-      headers: { Accept: "text/html", "X-Requested-With": "XMLHttpRequest" },
+      headers,
+      signal: controller.signal,
     });
-    if (!response.ok) return;
-    const html = await response.text();
-    const replacement = new DOMParser()
-      .parseFromString(html, "text/html")
-      .querySelector("[data-pending-requests-fragment]");
-    if (!replacement || !fragment.isConnected) return;
-    fragment.replaceWith(replacement);
-    updatePendingNavigationCount(Number(replacement.dataset.pendingCount || 0));
-  } catch (_) {
-    // A temporary connection problem should not interrupt the parent.
+    if (
+      response.redirected ||
+      response.status === 401 ||
+      response.status === 403 ||
+      (response.status !== 304 && !response.headers.get("content-type")?.includes("application/json"))
+    ) {
+      stopParentRefresh();
+      return;
+    }
+    if (response.status === 304) {
+      parentStateFailures = 0;
+      maybeApplyDeferredPendingReplacement();
+      return;
+    }
+    if (!response.ok) throw new Error(`Parent state request failed: ${response.status}`);
+    const state = await response.json();
+    parentStateFailures = 0;
+    handleParentState(state);
+  } catch (error) {
+    if (error.name !== "AbortError") parentStateFailures += 1;
   } finally {
-    pendingRequestsRefreshRunning = false;
+    window.clearTimeout(timeout);
+    if (parentStateRequestController === controller) parentStateRequestController = null;
+    parentStateRequestRunning = false;
+    if (parentStateForcePending && !parentStateStopped) {
+      parentStateForcePending = false;
+      scheduleParentStateCheck(0);
+    } else {
+      scheduleParentStateCheck(refreshBackoffDelay(parentStateFailures));
+    }
   }
 }
 
-if (document.querySelector("[data-pending-requests-fragment]")) {
-  window.setInterval(refreshPendingRequests, 15000);
-  window.addEventListener("focus", refreshPendingRequests);
+if (parentStateUrl) {
+  applyPendingRefreshButton?.addEventListener("click", applyPendingReplacement);
+  document.addEventListener("close", applyDeferredPendingAfterDialogClose, true);
+  document.addEventListener("focusin", maybeApplyDeferredPendingReplacement);
+  document.addEventListener("focusout", () => window.setTimeout(maybeApplyDeferredPendingReplacement, 0));
+  document.addEventListener("pointerup", () => window.setTimeout(maybeApplyDeferredPendingReplacement, 0));
+  document.addEventListener("keyup", () => window.setTimeout(maybeApplyDeferredPendingReplacement, 0));
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") refreshPendingRequests();
+    if (document.visibilityState === "visible") forceParentStateCheck();
+    else if (parentStateTimer !== null) {
+      window.clearTimeout(parentStateTimer);
+      parentStateTimer = null;
+    }
   });
+  window.addEventListener("focus", forceParentStateCheck);
+  window.addEventListener("pageshow", forceParentStateCheck);
+  window.addEventListener("online", forceParentStateCheck);
+  window.addEventListener("pagehide", () => parentStateRequestController?.abort());
+  window.addEventListener("beforeunload", () => parentStateRequestController?.abort());
+  navigator.serviceWorker?.addEventListener("message", event => {
+    if (event.data?.type === STATE_CHANGED_MESSAGE) forceParentStateCheck();
+  });
+  scheduleParentStateCheck();
 }

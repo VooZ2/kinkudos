@@ -43,6 +43,25 @@ mkdir -p \
   "$project_root/data" \
   "$project_root/backups" \
   "$project_root/backup-state"
+
+protect_directory() {
+  if [ -L "$1" ] || [ ! -d "$1" ]; then
+    echo "Expected a real KinKudos directory: $1" >&2
+    exit 1
+  fi
+  chmod 0700 "$1"
+}
+
+protect_directory "$secrets_dir/backup"
+protect_directory "$secrets_dir/smtp"
+protect_directory "$project_root/backups"
+protect_directory "$project_root/backup-state"
+for backup_file in "$project_root/backups"/kinkudos-*.sqlite3; do
+  if [ -f "$backup_file" ] && [ ! -L "$backup_file" ]; then
+    chmod 0600 "$backup_file"
+  fi
+done
+
 if [ ! -s "$secrets_dir/backup_agent_token" ]; then
   openssl rand -base64 48 | tr -d '\n' > "$secrets_dir/backup_agent_token"
 fi

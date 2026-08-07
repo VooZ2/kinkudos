@@ -7,7 +7,6 @@ from .models import EMOJI_SUGGESTIONS, FamilySettings
 PUBLIC_HEADER_ROUTES = {
     "home",
     "changelog",
-    "offline",
     "parent_login",
     "password_reset",
     "password_reset_done",

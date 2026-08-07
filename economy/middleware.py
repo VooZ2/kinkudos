@@ -12,7 +12,14 @@ from .setup import setup_is_available
 
 
 class SetupRequiredMiddleware:
-    public_prefixes = ("/setup/", "/health/", "/static/", "/manifest.webmanifest", "/service-worker.js", "/offline/", "/i18n/")
+    public_prefixes = (
+        "/setup/",
+        "/health/",
+        "/static/",
+        "/manifest.webmanifest",
+        "/service-worker.js",
+        "/i18n/",
+    )
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -67,7 +74,6 @@ class NetworkAccessMiddleware:
         "/static/",
         "/manifest.webmanifest",
         "/service-worker.js",
-        "/offline/",
     )
     child_prefixes = (
         "/vaikas/",

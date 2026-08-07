@@ -9,6 +9,39 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 Nothing yet.
 
+## [26.6.2] - 2026-08-07
+
+### Added
+
+- Parent and child pages now detect relevant family-state changes automatically,
+  with visibility-aware polling, request backoff, and optional Web Push signals.
+
+### Changed
+
+- The Service Worker now handles Web Push and lightweight state-change signals
+  without intercepting document navigation or maintaining an offline HTML
+  fallback.
+
+### Fixed
+
+- The language menu now remains above public welcome and sign-in page content,
+  so its English and Lithuanian flag buttons receive clicks and switch language
+  through the native Django POST and redirect flow.
+- Parent pending requests now refresh as one revisioned fragment without
+  interrupting an active dialog or focused control, and newly inserted evidence
+  photos continue to open in the lightbox.
+- Parent polling is limited to the Parent dashboard, while child polling remains
+  limited to an active child session; both stop safely when authorization is no
+  longer valid.
+
+### Security
+
+- The production dependency lock now pins `cryptography` 50.0.0.
+- Backup configuration, status, and KinKudos database-copy paths now enforce
+  owner-only permissions and reject unsafe directory symlinks.
+- The release workflow now installs the locked Python 3.12 dependencies and
+  rejects unexpected Django deployment-check warnings before image publication.
+
 ## [26.6.1] - 2026-08-06
 
 ### Changed

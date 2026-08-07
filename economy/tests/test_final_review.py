@@ -188,16 +188,17 @@ class FinalReviewTests(TestCase):
 
     def test_frontend_source_covers_date_goal_language_and_balance_behaviour(self):
         response = self.parent_response()
-        self.assertContains(response, 'name="language" type="hidden" value="en"', html=False)
-        self.assertContains(response, 'name="language" type="hidden" value="lt"', html=False)
+        self.assertContains(response, 'name="language" value="en" type="submit"', html=False)
+        self.assertContains(response, 'name="language" value="lt" type="submit"', html=False)
         script = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
         self.assertIn("data-clear-history-filters", script)
         self.assertIn('dateSelect.value = "any"', script)
         self.assertIn('dateSelect.value = "custom"', script)
         self.assertIn("available - Math.min(amount, max)", script)
-        self.assertIn('document.querySelectorAll(".language-switcher form")', script)
-        self.assertEqual(script.count("let languageNavigationPending = false"), 1)
-        self.assertIn('button.setAttribute("aria-disabled", "true")', script)
+        self.assertIn('document.querySelectorAll(".language-switcher-menu")', script)
+        self.assertNotIn("languageNavigationPending", script)
+        self.assertNotIn("requestSubmit", script)
+        self.assertNotIn('button.setAttribute("aria-disabled", "true")', script)
 
     def test_numeric_point_fields_have_a_five_digit_guard_and_backend_limit(self):
         response = self.parent_response()
@@ -222,7 +223,7 @@ class FinalReviewTests(TestCase):
     def test_mobile_footer_has_compact_labels_and_dynamic_version(self):
         response = self.parent_response()
         self.assertContains(response, 'class="footer-release"', html=False)
-        self.assertContains(response, "v26.6.1")
+        self.assertContains(response, "v26.6.2")
         self.assertContains(response, 'class="footer-docs-short">Docs', html=False)
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".footer-product, .footer-docs-long { display: none; }", css)

@@ -135,7 +135,7 @@ class Patch0121Tests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, 'class="brand-mark brand-logo"', html=False)
         self.assertContains(response, 'class="footer-product">KinKudos · ', html=False)
-        self.assertContains(response, "v26.6.1")
+        self.assertContains(response, "v26.6.2")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_reward_approval_uses_task_decision_icons(self):
@@ -148,17 +148,17 @@ class Patch0121Tests(TestCase):
         )
         self.client.force_login(self.parent)
 
-        response = self.client.get(reverse("parent_pending_requests"))
+        response = self.client.get(reverse("parent_pending_state"))
+        fragment = response.json()["html"]
 
-        self.assertContains(
-            response,
+        self.assertIn(
             'class="pending-request-row',
-            html=False,
+            fragment,
         )
-        self.assertContains(response, 'href="#icon-circle-check"', html=False)
-        self.assertContains(response, 'href="#icon-circle-xmark"', html=False)
-        self.assertContains(response, 'aria-label="Approve"', html=False)
-        self.assertContains(response, 'aria-label="Reject"', html=False)
+        self.assertIn('href="#icon-circle-check"', fragment)
+        self.assertIn('href="#icon-circle-xmark"', fragment)
+        self.assertIn('aria-label="Approve"', fragment)
+        self.assertIn('aria-label="Reject"', fragment)
 
     def test_account_creation_actions_use_short_lithuanian_labels(self):
         self.client.cookies["django_language"] = "lt"

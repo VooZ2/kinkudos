@@ -35,7 +35,6 @@ from .views import (
     health,
     home,
     manifest,
-    offline,
     pair_device_via_link,
     parent_add_goal_points,
     parent_adjust_balance,
@@ -66,7 +65,7 @@ from .views import (
     parent_edit_parent_account,
     parent_generate_pairing_link,
     parent_pair_device,
-    parent_pending_requests,
+    parent_pending_state,
     parent_remove_child_account,
     parent_remove_parent_account,
     parent_rename_device,
@@ -96,7 +95,6 @@ urlpatterns = [
     path("health/", health, name="health"),
     path("manifest.webmanifest", manifest, name="manifest"),
     path("service-worker.js", service_worker, name="service_worker"),
-    path("offline/", offline, name="offline"),
     path("atsiliepimas/", submit_feedback, name="submit_feedback"),
     path(
         "atsiliepimas/<int:report_id>/nuotrauka/",
@@ -203,9 +201,9 @@ urlpatterns = [
     path("vaikas/avataras/", child_set_avatar, name="child_set_avatar"),
     path("tevai/", parent_dashboard, name="parent_dashboard"),
     path(
-        "tevai/laukiantys-prasymai/",
-        parent_pending_requests,
-        name="parent_pending_requests",
+        "tevai/laukianciu-prasymu-busena/",
+        parent_pending_state,
+        name="parent_pending_state",
     ),
     path(
         "tevai/tikslai/<int:goal_id>/prideti/",

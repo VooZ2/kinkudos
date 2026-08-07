@@ -76,24 +76,16 @@
         <summary class="language-switcher-face" aria-label="{% translate 'Language' %}">
           <span aria-hidden="true">{% if LANGUAGE_CODE == "lt" %}🇱🇹{% else %}🇬🇧{% endif %}</span>
         </summary>
-        <div class="language-switcher-menu" role="group" aria-label="{% translate 'Language' %}">
-          <form action="{% url 'set_language' %}" method="post">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.get_full_path }}">
-            <input name="language" type="hidden" value="en">
-            <button class="language-switcher-option" type="submit" aria-label="{% translate 'English' %}"{% if LANGUAGE_CODE == "en" %} aria-current="true"{% endif %}>
-              <span aria-hidden="true">🇬🇧</span><span class="sr-only">{% translate "English" %}</span>
-            </button>
-          </form>
-          <form action="{% url 'set_language' %}" method="post">
-            {% csrf_token %}
-            <input name="next" type="hidden" value="{{ request.get_full_path }}">
-            <input name="language" type="hidden" value="lt">
-            <button class="language-switcher-option" type="submit" aria-label="{% translate 'Lithuanian' %}"{% if LANGUAGE_CODE == "lt" %} aria-current="true"{% endif %}>
-              <span aria-hidden="true">🇱🇹</span><span class="sr-only">{% translate "Lithuanian" %}</span>
-            </button>
-          </form>
-        </div>
+        <form class="language-switcher-menu" action="{% url 'set_language' %}" method="post" role="group" aria-label="{% translate 'Language' %}">
+          {% csrf_token %}
+          <input name="next" type="hidden" value="{{ request.get_full_path }}">
+          <button class="language-switcher-option" name="language" value="en" type="submit" aria-label="{% translate 'English' %}"{% if LANGUAGE_CODE == "en" %} aria-current="true"{% endif %}>
+            <span aria-hidden="true">🇬🇧</span><span class="sr-only">{% translate "English" %}</span>
+          </button>
+          <button class="language-switcher-option" name="language" value="lt" type="submit" aria-label="{% translate 'Lithuanian' %}"{% if LANGUAGE_CODE == "lt" %} aria-current="true"{% endif %}>
+            <span aria-hidden="true">🇱🇹</span><span class="sr-only">{% translate "Lithuanian" %}</span>
+          </button>
+        </form>
       </details>
       {% block header_actions %}{% endblock %}
     </div>
@@ -190,6 +182,7 @@
       vapidPublicKey: "{{ vapid_public_key|escapejs }}",
       pushUrl: "{% if user.is_authenticated %}{% url 'push_subscribe' %}{% else %}{% url 'child_push_subscribe' %}{% endif %}",
       pushUnsubscribeUrl: "{% if user.is_authenticated %}{% url 'push_unsubscribe' %}{% else %}{% url 'child_push_unsubscribe' %}{% endif %}",
+      {% block parent_state_config %}{% endblock %}
       childStateUrl: "{% if request.session.child_id %}{% url 'child_state' %}{% endif %}",
       childStateSignature: "{% block child_state_signature %}{% endblock %}",
       csrfToken: "{{ csrf_token }}",
@@ -203,6 +196,10 @@
         notificationsEnabled: "{% translate "Notifications on" %}",
         notificationsDisabled: "{% translate "Notifications off" %}",
         notificationsFailed: "{% translate "Could not change the notification setting." %}",
+        newRequestReceived: "{% translate "New request received" %}",
+        refreshRequests: "{% translate "Refresh requests" %}",
+        pendingRequestSingular: "{% translate "pending request" %}",
+        pendingRequestPlural: "{% translate "pending requests" %}",
         goalAmountTooHigh: "{% translate "You can add at most {max} points." %}",
         historyDateOrder: "{% translate "From date must not be later than To date." %}",
         evidenceSelected: "{% translate "Photo selected" %}",

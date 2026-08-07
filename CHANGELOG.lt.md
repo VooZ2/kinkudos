@@ -11,6 +11,40 @@ schema.
 
 Kol kas nieko.
 
+## [26.6.2] - 2026-08-07
+
+### Pridėta
+
+- Tėvų ir vaikų puslapiai dabar automatiškai aptinka susijusius šeimos būsenos
+  pakeitimus, naudodami matomumą įvertinančią apklausą, užklausų atsitraukimą ir
+  pasirenkamus Web Push signalus.
+
+### Pakeista
+
+- Service Worker dabar tvarko Web Push ir lengvus būsenos pasikeitimo signalus,
+  tačiau nebeperima dokumentų navigacijos ir nebelaiko offline HTML atsarginio
+  puslapio.
+
+### Pataisyta
+
+- Kalbų meniu dabar lieka virš viešo pasveikinimo ir prisijungimo puslapių
+  turinio, todėl anglų bei lietuvių vėliavų mygtukai priima paspaudimus ir kalbą
+  pakeičia įprastu Django POST bei peradresavimo keliu.
+- Tėvų laukiantys prašymai dabar atnaujinami kaip vienas versijuotas fragmentas,
+  nepertraukiant aktyvaus dialogo ar fokusuoto valdiklio, o naujai įterptos
+  įrodymų nuotraukos toliau atidaromos lightbox peržiūroje.
+- Tėvų apklausa vykdoma tik Tėvų skydelyje, o vaikų – tik aktyvioje vaiko
+  sesijoje; nebegaliojant autorizacijai abi saugiai sustabdomos.
+
+### Saugumas
+
+- Produkcinis priklausomybių lock failas dabar fiksuoja `cryptography` 50.0.0.
+- Atsarginių kopijų konfigūracijos, būsenos ir KinKudos duomenų bazės kopijų
+  keliams dabar taikomos tik savininkui skirtos teisės ir atmetamos nesaugios
+  katalogų simbolinės nuorodos.
+- Release workflow dabar įdiegia užfiksuotas Python 3.12 priklausomybes ir prieš
+  publikuodamas atvaizdus atmeta netikėtus Django diegimo patikros įspėjimus.
+
 ## [26.6.1] - 2026-08-06
 
 ### Pakeista

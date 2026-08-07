@@ -31,8 +31,9 @@ from django.core.paginator import Paginator
 from django.db import transaction
 from django.db.models import Q, Sum, Value
 from django.db.models.functions import Coalesce
-from django.http import FileResponse, Http404, JsonResponse
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -40,7 +41,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 
 from .auth import child_required, current_child, current_device, parent_required
 from .backups import backup_status, configure_backup, request_manual_backup
@@ -1155,46 +1156,176 @@ def child_set_birth_date(request):
 
 
 def _child_state_payload(child):
+    family_settings = FamilySettings.load()
     latest_ledger = child.ledger_entries.order_by("-pk").values_list(
         "pk", "created_at"
     ).first()
     task_states = list(
-        child.task_claims.order_by("-submitted_at", "-pk")
-        .values_list("pk", "status", "submitted_at", "decided_at")[:20]
+        child.task_claims.order_by("-submitted_at", "-pk").values_list(
+            "pk",
+            "task_id",
+            "task_title",
+            "reward_snapshot",
+            "photo_bonus_snapshot",
+            "status",
+            "rejection_reason",
+            "revision_note",
+            "evidence_image",
+            "evidence_thumbnail",
+            "submitted_at",
+            "decided_at",
+            "child_acknowledged_at",
+        )
     )
     reward_states = list(
-        child.reward_requests.order_by("-submitted_at", "-pk")
-        .values_list("pk", "status", "submitted_at", "decided_at")[:20]
+        child.reward_requests.order_by("-submitted_at", "-pk").values_list(
+            "pk",
+            "reward_id",
+            "reward_title",
+            "cost_snapshot",
+            "status",
+            "rejection_reason",
+            "submitted_at",
+            "decided_at",
+        )
     )
     assigned_task_states = list(
         AssignedTask.objects.filter(batch__child=child)
         .order_by("-batch__created_at", "-pk")
-        .values_list("pk", "status", "batch__assigned_on", "completed_at")[:20]
+        .values_list(
+            "pk",
+            "batch_id",
+            "batch__assigned_on",
+            "batch__blocks_rewards",
+            "batch__created_at",
+            "title_snapshot",
+            "icon_snapshot",
+            "reward_snapshot",
+            "status",
+            "completed_at",
+            "cancelled_at",
+        )
     )
     lottery_states = list(
-        child.lottery_tickets.order_by("-purchased_at", "-pk").values_list(
+        child.lottery_tickets.order_by("-purchased_at", "-pk").values(
             "pk",
-            "status",
             "week_start",
+            "values",
+            "prize_amount",
+            "applied_delta",
+            "status",
             "purchased_at",
             "revealed_at",
-        )[:12]
+        )
     )
     goal_states = list(
-        child.goals.order_by("-created_at", "-pk").values_list(
-            "pk", "mode", "status", "target_amount"
+        child.goals.annotate(
+            _saved_amount=Coalesce(
+                Sum(
+                    "contributions__amount",
+                    filter=Q(contributions__state="active"),
+                ),
+                Value(0),
+            )
         )
+        .order_by("-created_at", "-pk")
+        .values_list(
+            "pk",
+            "title",
+            "icon",
+            "mode",
+            "status",
+            "target_amount",
+            "_saved_amount",
+            "created_at",
+        )
+    )
+    goal_completion_states = list(
+        GoalCompletionRequest.objects.filter(goal__child=child)
+        .order_by("-requested_at", "-pk")
+        .values_list("pk", "goal_id", "status", "requested_at", "decided_at")
+    )
+    goal_event_states = list(
+        SavingsGoalEvent.objects.filter(goal__child=child)
+        .order_by("-created_at", "-pk")
+        .values_list("pk", "goal_id", "event_type", "description", "amount", "created_at")
+    )
+    proposal_states = list(
+        child.proposals.order_by("-created_at", "-pk").values_list(
+            "pk",
+            "proposal_type",
+            "title",
+            "icon",
+            "suggested_cost",
+            "goal_mode",
+            "final_cost",
+            "status",
+            "parent_note",
+            "created_at",
+            "decided_at",
+        )
+    )
+    birth_date_states = list(
+        child.birth_date_change_requests.order_by("-requested_at", "-pk").values_list(
+            "pk",
+            "previous_birth_date",
+            "requested_birth_date",
+            "status",
+            "requested_at",
+            "decided_at",
+        )
+    )
+    task_catalog = list(
+        Task.objects.filter(is_active=True, is_deleted=False)
+        .order_by("sort_order", "title", "pk")
+        .values_list("pk", "title", "icon", "reward")
+    )
+    reward_catalog = list(
+        Reward.objects.filter(is_active=True, is_deleted=False)
+        .order_by("sort_order", "title", "pk")
+        .values_list("pk", "title", "icon", "cost")
+    )
+    task_completion_states = list(
+        TaskCompletion.objects.filter(child=child)
+        .order_by("-completed_on", "-pk")
+        .values_list("pk", "task_id", "completed_on", "created_at")
     )
     raw_state = json.dumps(
         {
             "local_date": timezone.localdate(),
-            "balance": child.balance,
+            "child": [
+                child.pk,
+                child.name,
+                child.theme,
+                child.theme_selected,
+                child.randomize_theme_daily,
+                child.theme_randomized_on,
+                child.birth_date,
+                child.birth_date_initialized,
+                child.avatar.name if child.avatar else "",
+                child.balance,
+                child.min_balance,
+                child.lottery_enabled,
+            ],
+            "family": [
+                family_settings.photo_bonus_points,
+                family_settings.lottery_enabled,
+                family_settings.lottery_ticket_cost,
+                family_settings.lottery_weekly_limit,
+            ],
             "ledger": latest_ledger,
             "tasks": task_states,
             "rewards": reward_states,
             "assigned_tasks": assigned_task_states,
             "lottery": lottery_states,
             "goals": goal_states,
+            "goal_completions": goal_completion_states,
+            "goal_events": goal_event_states,
+            "proposals": proposal_states,
+            "birth_dates": birth_date_states,
+            "task_catalog": task_catalog,
+            "reward_catalog": reward_catalog,
+            "task_completions": task_completion_states,
         },
         default=str,
         sort_keys=True,
@@ -1598,6 +1729,14 @@ def _pending_request_items(goals_by_child):
         .select_related("goal", "goal__child")
         .order_by("requested_at", "pk")
     )
+    goals_by_id = {
+        goal.pk: goal
+        for goals in goals_by_child.values()
+        for goal in goals
+    }
+    for completion in pending_goal_completions:
+        if completion.goal_id in goals_by_id:
+            completion.goal = goals_by_id[completion.goal_id]
     pending_birth_date_changes = list(
         BirthDateChangeRequest.objects.filter(
             status=RequestStatus.PENDING,
@@ -1657,26 +1796,158 @@ def _pending_request_items(goals_by_child):
     return pending_requests
 
 
-@parent_required
-def parent_pending_requests(request):
+def _pending_request_revision(pending_requests):
+    """Return a stable fingerprint for the rendered pending-request state."""
+
+    state = []
+    for item in pending_requests:
+        child = item["child"]
+        common = [
+            item["kind"],
+            child.pk,
+            child.name,
+            child.avatar.name if child.avatar else "",
+            item["submitted_at"],
+        ]
+        if item["kind"] == "task":
+            claim = item["claim"]
+            state.append(
+                [
+                    *common,
+                    claim.pk,
+                    claim.status,
+                    claim.task_title,
+                    claim.reward_snapshot,
+                    claim.photo_bonus_snapshot,
+                    claim.evidence_image.name if claim.evidence_image else "",
+                    claim.evidence_thumbnail.name if claim.evidence_thumbnail else "",
+                ]
+            )
+        elif item["kind"] == "reward":
+            reward_request = item["reward_request"]
+            state.append(
+                [
+                    *common,
+                    reward_request.pk,
+                    reward_request.status,
+                    reward_request.reward_title,
+                    reward_request.cost_snapshot,
+                ]
+            )
+        elif item["kind"] == "proposal":
+            proposal = item["proposal"]
+            state.append(
+                [
+                    *common,
+                    proposal.pk,
+                    proposal.status,
+                    proposal.proposal_type,
+                    proposal.title,
+                    proposal.suggested_cost,
+                    proposal.goal_mode,
+                    proposal.replaces_current_goal,
+                ]
+            )
+        elif item["kind"] == "goal":
+            completion = item["completion"]
+            goal = completion.goal
+            state.append(
+                [
+                    *common,
+                    completion.pk,
+                    completion.status,
+                    goal.pk,
+                    goal.title,
+                    goal.mode,
+                    goal.progress_amount,
+                    goal.target_amount,
+                ]
+            )
+        else:
+            change = item["change"]
+            state.append(
+                [
+                    *common,
+                    change.pk,
+                    change.status,
+                    change.previous_birth_date,
+                    change.requested_birth_date,
+                ]
+            )
+    canonical = json.dumps(
+        {"count": len(pending_requests), "items": state},
+        default=str,
+        separators=(",", ":"),
+        sort_keys=True,
+    )
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+def _parent_pending_state_data():
     children = list(ChildProfile.objects.filter(is_active=True))
     goals = list(
         SavingsGoal.objects.filter(child__is_active=True)
         .select_related("child")
+        .annotate(
+            _saved_amount=Coalesce(
+                Sum(
+                    "contributions__amount",
+                    filter=Q(contributions__state="active"),
+                ),
+                Value(0),
+            )
+        )
     )
     goals_by_child = {child.pk: [] for child in children}
     for goal in goals:
         goals_by_child.setdefault(goal.child_id, []).append(goal)
     pending_requests = _pending_request_items(goals_by_child)
-    return render(
-        request,
+    return pending_requests, _pending_request_revision(pending_requests)
+
+
+def _pending_requests_fragment(request, pending_requests, pending_revision):
+    return render_to_string(
         "economy/includes/pending_requests.html",
         {
             "pending_requests": pending_requests,
             "pending_count": len(pending_requests),
-            "pending_requests_fragment": True,
+            "pending_revision": pending_revision,
         },
+        request=request,
     )
+
+
+@parent_required
+@require_GET
+def parent_pending_state(request):
+    pending_requests, pending_revision = _parent_pending_state_data()
+    etag = f'"{pending_revision}"'
+    response_headers = {
+        "Cache-Control": "private, no-store",
+        "Vary": "Cookie",
+        "ETag": etag,
+    }
+    supplied_etags = {
+        value.strip()
+        for value in request.headers.get("If-None-Match", "").split(",")
+    }
+    if etag in supplied_etags or pending_revision in supplied_etags:
+        response = HttpResponse(status=304)
+    else:
+        response = JsonResponse(
+            {
+                "count": len(pending_requests),
+                "revision": pending_revision,
+                "html": _pending_requests_fragment(
+                    request,
+                    pending_requests,
+                    pending_revision,
+                ),
+            }
+        )
+    for header, value in response_headers.items():
+        response[header] = value
+    return response
 
 
 @parent_required
@@ -2041,6 +2312,7 @@ def parent_dashboard(request):
         "adjustments": _("Point adjustments"),
     }.get(history_activity, "")
     pending_requests = _pending_request_items(goals_by_child)
+    pending_revision = _pending_request_revision(pending_requests)
     parent_accounts = list(get_user_model().objects.filter(is_active=True).order_by("username"))
 
     return render(
@@ -2051,6 +2323,7 @@ def parent_dashboard(request):
             "today": today,
             "pending_requests": pending_requests,
             "pending_count": len(pending_requests),
+            "pending_revision": pending_revision,
             "tasks": Task.objects.filter(is_deleted=False),
             "active_tasks": Task.objects.filter(is_active=True, is_deleted=False),
             "penalties": PenaltyTemplate.objects.filter(is_deleted=False),
@@ -3130,7 +3403,3 @@ def service_worker(request):
     response["Service-Worker-Allowed"] = "/"
     response["Cache-Control"] = "no-store, no-cache, must-revalidate"
     return response
-
-
-def offline(request):
-    return render(request, "economy/offline.html")

@@ -2,6 +2,7 @@
 {% load economy_tags i18n %}
 {% block title %}{% translate "Parent area" %} – {{ project_name }}{% endblock %}
 {% block body_class %}parent-area{% endblock %}
+{% block parent_state_config %}parentStateUrl: "{% url 'parent_pending_state' %}",{% endblock %}
 {% block header_actions %}
 <button id="enable-push" class="push-control push-checking" type="button" title="{% translate 'Checking notifications' %}">
   <svg class="push-icon" aria-hidden="true"><use href="#icon-bell"></use></svg>
@@ -24,7 +25,7 @@
     <a class="parent-nav-item is-active" href="#parent-home" data-parent-nav="home">
       <svg class="action-icon" aria-hidden="true"><use href="#icon-house"></use></svg>
       <span>{% translate "Home" %}</span>
-      {% if pending_count %}<strong class="nav-count">{{ pending_count }}</strong>{% endif %}
+      <strong id="parent-home-count-badge" class="nav-count" data-parent-home-badge {% if not pending_count %}hidden{% endif %} aria-label="{{ pending_count }} {% if pending_count == 1 %}{% translate 'pending request' %}{% else %}{% translate 'pending requests' %}{% endif %}">{{ pending_count }}</strong>
     </a>
     <a class="parent-nav-item" href="#parent-catalogs" data-parent-nav="catalogs">
       <svg class="action-icon" aria-hidden="true"><use href="#icon-table-list"></use></svg>
@@ -39,6 +40,10 @@
       <span>{% translate "Settings" %}</span>
     </a>
   </nav>
+  <div id="parent-refresh-status" class="parent-refresh-status" data-parent-refresh-status aria-live="polite" aria-atomic="true">
+    <span data-parent-refresh-message></span>
+    <button class="text-button" type="button" data-apply-pending-refresh hidden>{% translate "Refresh requests" %}</button>
+  </div>
   <div class="parent-workspace">
   <section id="parent-home" class="parent-panel parent-home-panel" data-parent-panel="home">
 <section class="content-section parent-children-section">

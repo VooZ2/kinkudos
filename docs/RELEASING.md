@@ -38,7 +38,15 @@ Kiekvienai versijai privaloma:
    `Fixed`, o saugumo pakeitimus – `Security`.
 5. Patikrinti, kad `/pakeitimai/` visa tai parodo kaip „Kas naujo?“ ir
    „Kas pataisyta?“.
-6. Paleisti visus testus ir `python manage.py check`.
+6. Paleisti visus testus ir Django patikras Python 3.12 aplinkoje su
+   `requirements.lock`. Abi patikras vykdyti su gamybai artimais nustatymais
+   (`KINKUDOS_DEBUG=false`, laikinas CI `KINKUDOS_SECRET_KEY`, realistiški
+   `KINKUDOS_ALLOWED_HOSTS` ir `KINKUDOS_CSRF_TRUSTED_ORIGINS`):
+   `python manage.py check` ir `python scripts/check_deploy.py`; pastarasis
+   paleidžia `python manage.py check --deploy` ir atmeta netikėtus įspėjimus.
+   Deploy patikra neturi būti vykdoma su įprastais kūrimo numatytaisiais
+   nustatymais; dabartinės sąmoningos HSTS politikos rekomendacijos yra W005 ir
+   W021, o nauji įspėjimai turi sustabdyti release workflow.
 7. GitHub Release notes rašyti tik angliškai, išlaikant tokią pačią struktūrą
    kaip atitinkamas `CHANGELOG.md` leidimo įrašas. Leidimo tekstą galima
    tiesiogiai kopijuoti iš `CHANGELOG.md`.

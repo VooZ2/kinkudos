@@ -81,7 +81,8 @@ body.system-page::after {
   background: radial-gradient(circle, rgba(109, 40, 217, .16) 0%, transparent 68%);
   pointer-events: none;
 }
-.system-page .topbar, .system-page .page, .system-page .site-footer { position: relative; z-index: 1; }
+.system-page .topbar { position: relative; z-index: 10; }
+.system-page .page, .system-page .site-footer { position: relative; z-index: 1; }
 button, input, select, textarea { font: inherit; }
 a { color: inherit; }
 .topbar { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 12px max(20px, env(safe-area-inset-left)); border-bottom: 1px solid var(--line); backdrop-filter: blur(18px); position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 78%, transparent); }
@@ -96,10 +97,10 @@ a { color: inherit; }
 .language-switcher-face > span { white-space: nowrap; }
 .language-switcher:focus-within .language-switcher-face,
 .language-switcher[open] .language-switcher-face { border-color: var(--primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 16%, transparent); }
-.language-switcher-menu { position: absolute; top: calc(100% + 8px); left: 50%; z-index: 50; display: grid; gap: 4px; min-width: 56px; padding: 6px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-solid); box-shadow: var(--shadow); transform: translateX(-50%); }
-.language-switcher-menu form { margin: 0; }
-.language-switcher-option { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 9px; color: var(--text); background: transparent; font: inherit; font-size: 1.15rem; cursor: pointer; }
-.language-switcher-option:hover, .language-switcher-option:focus-visible, .language-switcher-option[aria-current="true"] { color: var(--primary); background: color-mix(in srgb, var(--primary) 10%, var(--surface-solid)); outline: none; }
+.language-switcher-menu { position: absolute; top: calc(100% + 8px); left: 50%; z-index: 50; display: grid; gap: 4px; min-width: 56px; margin: 0; padding: 6px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-solid); box-shadow: var(--shadow); transform: translateX(-50%); }
+.language-switcher-option { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 9px; color: var(--text); background: transparent; font: inherit; font-size: 1.15rem; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transition: color .14s, background .14s, transform .14s; }
+.language-switcher-option:hover, .language-switcher-option:focus-visible, .language-switcher-option:active, .language-switcher-option[aria-current="true"] { color: var(--primary); background: color-mix(in srgb, var(--primary) 10%, var(--surface-solid)); outline: none; }
+.language-switcher-option:active { transform: scale(.94); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 850; text-decoration: none; letter-spacing: -.02em; }
 .app-version { color: var(--muted); font-size: .68rem; font-weight: 750; letter-spacing: .02em; text-decoration: none; border-radius: 7px; padding: 4px 5px; }
@@ -308,6 +309,9 @@ select.field-control, .stack-form select {
 .stat-card { padding: 22px; }
 .stat-card h2, .stat-card p { margin-top: 0; }
 .parent-title { margin-bottom: 28px; }
+.parent-refresh-status { display: flex; align-items: center; justify-content: flex-end; gap: 10px; min-height: 0; margin: -16px 0 14px; color: var(--muted); font-size: .82rem; font-weight: 700; }
+.parent-refresh-status:has(span:empty) { display: none; }
+.parent-refresh-status .text-button { min-height: 32px; padding: 4px 8px; }
 .child-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
 .child-card-header h2 { margin: 0; }
 .child-balance-row { display: flex; align-items: baseline; justify-content: flex-start; flex-wrap: nowrap; gap: 8px 16px; margin: 12px 0 14px; }

@@ -719,7 +719,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.6.1")
+        self.assertContains(response, "v26.6.2")
         self.assertContains(response, 'href="/pakeitimai/"', html=False)
         self.assertContains(response, "taškai")
         self.assertContains(response, "Kreditas -100")
@@ -802,7 +802,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
         self.assertContains(response, 'class="footer-product">KinKudos · ', html=False)
-        self.assertContains(response, "v26.6.1")
+        self.assertContains(response, "v26.6.2")
         self.assertContains(response, "Dokumentacija")
         self.assertContains(response, "https://docs.kinkudos.app/index.lt/")
         self.assertContains(response, "https://github.com/VooZ2/kinkudos")
@@ -1181,10 +1181,10 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.6.1")
+        self.assertContains(response, "v26.6.2")
         self.assertContains(response, "Dabartinė versija")
         current_release = response.context["releases"][0]
-        self.assertEqual(current_release["version"], "26.6.1")
+        self.assertEqual(current_release["version"], "26.6.2")
         self.assertEqual(len(response.context["releases"]), 5)
         self.assertEqual(response.context["release_page"].paginator.per_page, 5)
         current_copy = " ".join(current_release["new"] + current_release["fixed"]).lower()
@@ -1192,7 +1192,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotIn("demo", current_copy)
         next_page = self.client.get(reverse("changelog"), {"page": 2})
         self.assertEqual(next_page.status_code, 200)
-        self.assertNotContains(next_page, "<h2>v26.6.1</h2>", html=False)
+        self.assertNotContains(next_page, "<h2>v26.6.2</h2>", html=False)
         self.assertContains(next_page, "Pakeitimų istorijos puslapiai")
 
     def test_parent_can_create_another_parent_account(self):
@@ -1533,13 +1533,14 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Kids")
         self.assertNotContains(response, "Kids info")
         self.assertContains(response, 'data-pending-requests-fragment', html=False)
-        self.assertContains(response, reverse("parent_pending_requests"), html=False)
+        self.assertContains(response, reverse("parent_pending_state"), html=False)
 
-        fragment = self.client.get(reverse("parent_pending_requests"))
-        self.assertEqual(fragment.status_code, 200)
-        self.assertContains(fragment, 'data-pending-requests-fragment', html=False)
-        self.assertContains(fragment, 'class="pending-request-row', html=False)
-        self.assertNotContains(fragment, "<html", html=False)
+        state = self.client.get(reverse("parent_pending_state"))
+        self.assertEqual(state.status_code, 200)
+        fragment = state.json()["html"]
+        self.assertIn("data-pending-requests-fragment", fragment)
+        self.assertIn('class="pending-request-row', fragment)
+        self.assertNotIn("<html", fragment)
 
     def test_parent_dashboard_colors_positive_and_negative_balances(self):
         post_ledger_entry(
@@ -1710,10 +1711,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.6.1',
+            '/static/icons/favicon-32.png?v=26.6.2',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.6.1")
-        self.assertContains(home, "/static/js/app.js?v=26.6.1")
+        self.assertContains(home, "/static/css/app.css?v=26.6.2")
+        self.assertContains(home, "/static/js/app.js?v=26.6.2")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1721,14 +1722,15 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.6.1",
+            "/static/icons/icon-192.png?v=26.6.2",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.6.1")
-        self.assertContains(worker, 'kinkudos-app-shell-26.6.1')
-        self.assertContains(worker, '"/prisijungti/"')
-        self.assertContains(worker, "isSensitiveNavigation(url)")
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.6.2")
+        self.assertContains(worker, 'self.addEventListener("push"', html=False)
+        self.assertContains(worker, 'self.addEventListener("notificationclick"', html=False)
+        self.assertNotContains(worker, 'self.addEventListener("fetch"', html=False)
+        self.assertNotContains(worker, "respondWith", html=False)
         self.assertEqual(worker["Service-Worker-Allowed"], "/")
         self.assertEqual(
             worker["Cache-Control"],

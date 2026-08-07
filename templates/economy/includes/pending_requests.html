@@ -1,5 +1,5 @@
 {% load economy_tags i18n %}
-<div class="pending-requests-fragment" data-pending-requests-fragment data-pending-url="{% url 'parent_pending_requests' %}" data-pending-count="{{ pending_count }}">
+<div id="parent-pending-requests-fragment" class="pending-requests-fragment" data-pending-requests-fragment data-pending-count="{{ pending_count }}" data-pending-revision="{{ pending_revision }}">
   <div class="section-heading"><h2>{% translate "Pending requests" %}{% if pending_count %} ({{ pending_count }}){% endif %}</h2></div>
   <div class="pending-requests-panel">
     {% if pending_requests %}

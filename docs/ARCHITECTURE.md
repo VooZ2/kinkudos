@@ -182,10 +182,12 @@ names, currencies, and copy are KinKudos-authored and avoid third-party marks.
 
 ## PWA
 `manifest.webmanifest`, dedicated icons, `display: standalone`. The service
-worker caches only static assets and the offline fallback page — balances
-and pending requests are never cached long-term. Push subscriptions
-available to both parent and child sessions. iOS requires the app to be
-added to the home screen for Web Push to work.
+worker handles Web Push and may send `kinkudos-state-changed` messages to open
+clients as a fast refresh signal, but it does not intercept normal HTML
+document navigation. Lightweight Parent workspace and Child session state
+polling runs where configured and remains the reliable refresh fallback. Push
+subscriptions are available to both parent and child sessions. iOS requires
+the app to be added to the home screen for Web Push to work.
 
 The systemd deployment installs a daily maintenance timer and a separate
 30-minute lottery-reminder timer. Generic deployments must schedule the

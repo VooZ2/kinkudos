@@ -1522,6 +1522,9 @@ msgstr "Naujas tėvų slaptažodis: "
 msgid "New password"
 msgstr "Naujas slaptažodis"
 
+msgid "New request received"
+msgstr "Gautas naujas prašymas"
+
 msgid "New reward requests are paused after half of the credit limit is used. They will be available again when the balance improves."
 msgstr "Naujų prizų prašymai pristabdomi išnaudojus pusę kredito. Jie vėl bus prieinami pagerėjus balansui."
 
@@ -1599,9 +1602,6 @@ msgstr "Pranešimai nepalaikomi"
 
 msgid "Number of child profiles [1]: "
 msgstr "Vaikų profilių skaičius [1]: "
-
-msgid "Offline"
-msgstr "Nėra ryšio"
 
 msgid "On iPhone and iPad, notifications only work in the installed app. In Safari tap Share, choose Add to Home Screen, enable Open as Web App, then launch the app from its icon."
 msgstr "iPhone ir iPad pranešimai veikia tik įdiegtoje programoje. Safari paspauskite „Dalintis“, pasirinkite „Įtraukti į pradžios ekraną“, įjunkite „Atidaryti kaip žiniatinklio programą“, tada paleiskite programą iš jos ikonos."
@@ -1920,6 +1920,9 @@ msgstr "Naujausi atsarginių kopijų veiksmai"
 
 msgid "Recipient"
 msgstr "Kam dovanoji"
+
+msgid "Refresh requests"
+msgstr "Atnaujinti prašymus"
 
 msgid "Region"
 msgstr "Regionas"
@@ -2869,9 +2872,6 @@ msgstr "Per daug prisijungimo bandymų. Bandykite vėliau."
 msgid "Treat Chest"
 msgstr "Skanėstų skrynėlė"
 
-msgid "Try again"
-msgstr "Bandyti dar kartą"
-
 msgid "Turn scratch tickets on or off for every child."
 msgstr "Įjunkite arba išjunkite nutrinamus bilietus visiems vaikams."
 
@@ -3126,6 +3126,12 @@ msgstr "paslėpta"
 
 msgid "one ticket is unfinished"
 msgstr "vienas bilietas neužbaigtas"
+
+msgid "pending request"
+msgstr "laukiantis prašymas"
+
+msgid "pending requests"
+msgstr "laukiantys prašymai"
 
 msgid "photo bonus"
 msgstr "priedas už nuotrauką"

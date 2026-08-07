@@ -107,8 +107,32 @@ def load_status():
 STATUS = load_status()
 
 
+def ensure_private_directory(path):
+    path = Path(path)
+    if path.is_symlink():
+        raise RuntimeError(f"Refusing to use symlink as a private directory: {path}")
+    try:
+        path.mkdir(parents=True, exist_ok=True, mode=0o700)
+        if path.is_symlink() or not path.is_dir():
+            raise RuntimeError(f"Private directory is not a real directory: {path}")
+        os.chmod(path, 0o700, follow_symlinks=False)
+    except OSError as exc:
+        raise RuntimeError(f"Could not protect private directory: {path}") from exc
+    return path
+
+
+def protect_existing_backup_files():
+    for candidate in OUTPUT_DIR.glob("kinkudos-*.sqlite3"):
+        if candidate.is_symlink() or not candidate.is_file():
+            continue
+        try:
+            os.chmod(candidate, 0o600, follow_symlinks=False)
+        except OSError as exc:
+            raise RuntimeError(f"Could not protect local database backup: {candidate}") from exc
+
+
 def save_status():
-    STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    ensure_private_directory(STATE_PATH.parent)
     with NamedTemporaryFile(
         "w", encoding="utf-8", dir=STATE_PATH.parent, delete=False
     ) as temporary:
@@ -184,7 +208,7 @@ def write_config(payload):
     }
     if region:
         values["AWS_DEFAULT_REGION"] = region
-    ENV_PATH.parent.mkdir(parents=True, exist_ok=True)
+    ensure_private_directory(ENV_PATH.parent)
     previous = ENV_PATH.read_bytes() if ENV_PATH.exists() else None
     with NamedTemporaryFile("w", encoding="utf-8", dir=ENV_PATH.parent, delete=False) as temp:
         temp.write("# Managed by the KinKudos backup agent. Do not commit.\n")
@@ -210,9 +234,12 @@ def write_config(payload):
 def create_database_backup():
     if not DATABASE_PATH.is_file():
         raise RuntimeError("KinKudos database was not found.")
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    ensure_private_directory(OUTPUT_DIR)
+    protect_existing_backup_files()
     local_now = datetime.now().astimezone()
     destination = OUTPUT_DIR / f"kinkudos-{local_now:%Y%m%d-%H%M%S}.sqlite3"
+    if destination.is_symlink():
+        raise RuntimeError(f"Refusing to overwrite symlink backup: {destination}")
     source_uri = f"{DATABASE_PATH.resolve().as_uri()}?mode=ro"
     try:
         source = sqlite3.connect(source_uri, uri=True)
@@ -226,6 +253,12 @@ def create_database_backup():
     except sqlite3.OperationalError as exc:
         source.close()
         raise RuntimeError("Could not create the local database backup.") from exc
+    try:
+        os.chmod(destination, 0o600, follow_symlinks=False)
+    except OSError as exc:
+        source.close()
+        target.close()
+        raise RuntimeError("Could not protect the local database backup.") from exc
     with closing(source), closing(target):
         source.backup(target)
         result = target.execute("PRAGMA integrity_check").fetchone()[0]
@@ -234,6 +267,8 @@ def create_database_backup():
         raise RuntimeError(f"Database integrity check failed: {result}")
     cutoff = local_now - timedelta(days=31)
     for candidate in OUTPUT_DIR.glob("kinkudos-*.sqlite3"):
+        if candidate.is_symlink() or not candidate.is_file():
+            continue
         if datetime.fromtimestamp(candidate.stat().st_mtime, tz=local_now.tzinfo) < cutoff:
             candidate.unlink()
     return destination

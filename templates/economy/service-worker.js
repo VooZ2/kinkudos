@@ -1,40 +1,32 @@
-/* {% load i18n %} */
-const CACHE = "kinkudos-app-shell-{{ app_version }}";
-const OFFLINE_URL = "/offline/";
-const SENSITIVE_PATHS = [
-  "/setup/",
-  "/prisijungti/",
-  "/atsijungti/",
-  "/slaptazodis/",
-  "/susieti-irengini/",
-  "/vaikas/",
-];
+const DEFAULT_NOTIFICATION_TITLE = "KinKudos";
+const DEFAULT_NOTIFICATION_BODY = "There is an update.";
 
-function isSensitiveNavigation(url) {
-  return SENSITIVE_PATHS.some(path => url.pathname.startsWith(path));
-}
-
-self.addEventListener("install", event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll([OFFLINE_URL])));
+// Keep document navigation on the network; this worker handles Push and
+// lightweight client update signals only.
+self.addEventListener("install", () => {
   self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key))))
-  );
-  self.clients.claim();
+  event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener("fetch", event => {
-  if (event.request.method !== "GET" || event.request.mode !== "navigate") return;
-  const url = new URL(event.request.url);
-  if (url.origin !== self.location.origin || isSensitiveNavigation(url)) return;
-  event.respondWith(fetch(event.request).catch(() => caches.match(OFFLINE_URL)));
-});
+function notifyOpenClients() {
+  return self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(windows =>
+    Promise.all(
+      windows.map(client =>
+        Promise.resolve().then(() => client.postMessage({ type: "kinkudos-state-changed" })).catch(() => {})
+      )
+    )
+  );
+}
 
 self.addEventListener("push", event => {
-  let data = { title: "{{ family_settings.display_name|escapejs }}", body: "{% translate 'There is an update.' %}", url: "/tevai/" };
+  let data = {
+    title: DEFAULT_NOTIFICATION_TITLE,
+    body: DEFAULT_NOTIFICATION_BODY,
+    url: "/tevai/",
+  };
   if (event.data) {
     try { data = { ...data, ...event.data.json() }; } catch (_) {}
   }
@@ -47,9 +39,7 @@ self.addEventListener("push", event => {
         tag: data.tag || "family-app",
         data: { url: data.url }
       }),
-      self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(windows =>
-        Promise.all(windows.map(client => client.postMessage({ type: "kinkudos-state-changed" })))
-      )
+      notifyOpenClients()
     ])
   );
 });

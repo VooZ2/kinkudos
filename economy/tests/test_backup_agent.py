@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import stat
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from subprocess import CompletedProcess
@@ -11,6 +12,10 @@ from scripts import backup_agent
 
 
 class BackupAgentTests(TestCase):
+    @staticmethod
+    def mode(path):
+        return stat.S_IMODE(path.stat().st_mode)
+
     def test_placeholder_repository_is_not_exposed_as_a_configured_target(self):
         with TemporaryDirectory() as directory:
             env_path = Path(directory) / "restic.env"
@@ -53,7 +58,10 @@ class BackupAgentTests(TestCase):
 
     def test_write_config_verifies_repository_and_keeps_secrets_out_of_result(self):
         with TemporaryDirectory() as directory:
-            env_path = Path(directory) / "restic.env"
+            config_dir = Path(directory) / "backup"
+            config_dir.mkdir()
+            config_dir.chmod(0o755)
+            env_path = config_dir / "restic.env"
             with (
                 patch.object(backup_agent, "ENV_PATH", env_path),
                 patch.object(
@@ -80,6 +88,7 @@ class BackupAgentTests(TestCase):
             self.assertEqual(key_hint, "1234")
             self.assertIn("never-return-this", env_path.read_text(encoding="utf-8"))
             self.assertNotIn("never-return-this", repository)
+            self.assertEqual(self.mode(config_dir), 0o700)
             run_command.assert_called_once()
 
     def test_repository_command_retries_temporary_dns_failure(self):
@@ -144,7 +153,55 @@ class BackupAgentTests(TestCase):
             with sqlite3.connect(created) as connection:
                 value = connection.execute("SELECT value FROM sample").fetchone()[0]
             self.assertEqual(value, "kept")
+            self.assertEqual(self.mode(output), 0o700)
+            self.assertEqual(self.mode(created), 0o600)
             self.assertFalse(expired.exists())
+
+    def test_database_backup_repairs_existing_loose_kinkudos_copy_only(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            database = root / "kinkudos.sqlite3"
+            output = root / "backups"
+            output.mkdir()
+            output.chmod(0o755)
+            with sqlite3.connect(database) as connection:
+                connection.execute("CREATE TABLE sample (value TEXT)")
+
+            existing = output / "kinkudos-20990101-000000.sqlite3"
+            existing.touch()
+            existing.chmod(0o644)
+            unrelated = output / "unrelated.sqlite3"
+            unrelated.touch()
+            unrelated.chmod(0o644)
+
+            with (
+                patch.object(backup_agent, "DATABASE_PATH", database),
+                patch.object(backup_agent, "OUTPUT_DIR", output),
+            ):
+                backup_agent.create_database_backup()
+
+            self.assertEqual(self.mode(output), 0o700)
+            self.assertEqual(self.mode(existing), 0o600)
+            self.assertEqual(self.mode(unrelated), 0o644)
+
+    def test_status_directory_and_atomic_status_file_are_private(self):
+        with TemporaryDirectory() as directory:
+            state_dir = Path(directory) / "backup-state"
+            state_dir.mkdir()
+            state_dir.chmod(0o755)
+            status_path = state_dir / "status.json"
+            status_path.write_text('{"old": true}\n', encoding="utf-8")
+            status_path.chmod(0o644)
+
+            with (
+                patch.object(backup_agent, "STATE_PATH", status_path),
+                patch.object(backup_agent, "STATUS", {"health": "ready"}),
+            ):
+                backup_agent.save_status()
+
+            self.assertEqual(self.mode(state_dir), 0o700)
+            self.assertEqual(self.mode(status_path), 0o600)
+            self.assertIn('"health": "ready"', status_path.read_text(encoding="utf-8"))
 
     def test_database_source_is_opened_query_only(self):
         with TemporaryDirectory() as directory:

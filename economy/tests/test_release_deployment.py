@@ -82,6 +82,18 @@ class ReleaseDeploymentTests(SimpleTestCase):
 
             fake_bin = root / "bin"
             fake_bin.mkdir()
+            backups = root / "backups"
+            backups.mkdir()
+            backups.chmod(0o755)
+            backup_state = root / "backup-state"
+            backup_state.mkdir()
+            backup_state.chmod(0o755)
+            existing_backup = backups / "kinkudos-20990101-000000.sqlite3"
+            existing_backup.touch()
+            existing_backup.chmod(0o644)
+            unrelated_backup = backups / "unrelated.sqlite3"
+            unrelated_backup.touch()
+            unrelated_backup.chmod(0o644)
             chown_log = root / "chown.log"
             fake_chown = fake_bin / "chown"
             fake_chown.write_text(
@@ -99,7 +111,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.6.1",
+                    "26.6.2",
                     str(root),
                 ],
                 env=environment,
@@ -116,6 +128,10 @@ class ReleaseDeploymentTests(SimpleTestCase):
             self.assertIn(str(root / "backup-state"), ownership)
             self.assertIn(str(root / "secrets" / "backup" / "restic.env"), ownership)
             self.assertIn(str(root / "secrets" / "smtp"), ownership)
+            self.assertEqual(stat.S_IMODE(backups.stat().st_mode), 0o700)
+            self.assertEqual(stat.S_IMODE(backup_state.stat().st_mode), 0o700)
+            self.assertEqual(stat.S_IMODE(existing_backup.stat().st_mode), 0o600)
+            self.assertEqual(stat.S_IMODE(unrelated_backup.stat().st_mode), 0o644)
 
     def test_public_installer_verifies_release_and_refuses_existing_install(self):
         installer = (ROOT / "deploy" / "install.sh").read_text(encoding="utf-8")
@@ -145,7 +161,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
 
             environment = os.environ.copy()
             environment["PATH"] = f"{fake_bin}:{environment['PATH']}"
-            environment["KINKUDOS_VERSION"] = "26.6.1"
+            environment["KINKUDOS_VERSION"] = "26.6.2"
             environment["KINKUDOS_INSTALL_ROOT"] = str(install_root)
             result = subprocess.run(
                 ["sh", str(ROOT / "deploy" / "install.sh")],
@@ -164,7 +180,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
             encoding="utf-8"
         )
 
-        self.assertIn("image: vooz2/kinkudos:26.6.1", compose)
+        self.assertIn("image: vooz2/kinkudos:26.6.2", compose)
         self.assertIn("kinkudos-data:/app/data", compose)
         self.assertIn('      - "8000"', compose)
         self.assertIn("KINKUDOS_RUNTIME_SECRETS_DIR", compose)
@@ -189,6 +205,36 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertIn(
             "docker compose -f deploy/hostinger/compose.yaml config --quiet", workflow
         )
+
+    def test_release_workflow_runs_locked_production_deploy_checks(self):
+        workflow = (ROOT / ".github" / "workflows" / "release-image.yml").read_text(
+            encoding="utf-8"
+        )
+        validator = (ROOT / "scripts" / "check_deploy.py").read_text(encoding="utf-8")
+
+        self.assertIn('python-version: "3.12"', workflow)
+        self.assertIn("python -m pip install --disable-pip-version-check --requirement requirements.lock", workflow)
+        self.assertIn("python manage.py check", workflow)
+        self.assertIn("python scripts/check_deploy.py", workflow)
+        self.assertEqual(workflow.count("python scripts/check_deploy.py"), 1)
+        self.assertIn('"--deploy"', validator)
+        for setting in (
+            "KINKUDOS_DEBUG: \"false\"",
+            "KINKUDOS_SECRET_KEY: ci-deploy-check-only-",
+            "KINKUDOS_ALLOWED_HOSTS: test.example.com",
+            "KINKUDOS_CSRF_TRUSTED_ORIGINS: https://test.example.com",
+            "KINKUDOS_SECURE_COOKIES: \"true\"",
+            "KINKUDOS_SECURE_SSL_REDIRECT: \"true\"",
+            "KINKUDOS_HSTS_SECONDS: \"31536000\"",
+        ):
+            self.assertIn(setting, workflow)
+        self.assertIn("security.W005", validator)
+        self.assertIn("security.W021", validator)
+        self.assertNotIn("SILENCED_SYSTEM_CHECKS", workflow + validator)
+        for script_name in ("bootstrap.sh", "install-release.sh"):
+            script = (ROOT / "deploy" / script_name).read_text(encoding="utf-8")
+            self.assertIn("chmod 0700", script)
+            self.assertIn('"$project_root/backups"/kinkudos-*.sqlite3', script)
 
     def test_legacy_hostinger_caddy_profile_is_removed(self):
         legacy_paths = (
@@ -241,7 +287,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.6.1",
+                    "26.6.2",
                     str(root),
                 ],
                 capture_output=True,
