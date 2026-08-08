@@ -234,9 +234,9 @@ class ChildDecisionPushTests(TestCase):
                     webpush.call_args.kwargs["subscription_info"]["endpoint"],
                     "https://push.example/parent",
                 )
-                self.assertEqual(
-                    json.loads(webpush.call_args.kwargs["data"])["title"], expected_title,
-                )
+                payload = json.loads(webpush.call_args.kwargs["data"])
+                self.assertEqual(payload["title"], expected_title)
+                self.assertEqual(payload["url"], reverse("parent_dashboard"))
 
     @patch("economy.push.webpush")
     def test_proposal_and_birthday_decisions_target_affected_child(self, webpush):
