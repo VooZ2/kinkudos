@@ -30,31 +30,31 @@
 <table>
   <tr>
     <td width="50%" valign="top">
-      <img src="docs/screenshots/welcome-desktop-2026.png" width="100%" alt="KinKudos welcome screen">
+      <img src="docs/screenshots/welcome-desktop-2026.webp" width="100%" alt="KinKudos welcome screen">
       <p align="center"><sub><strong>Welcome</strong><br>A simple starting point for children and parents.</sub></p>
     </td>
     <td width="50%" valign="top">
-      <img src="docs/screenshots/child-missions-desktop-2026.png" width="100%" alt="KinKudos child missions dashboard">
-      <p align="center"><sub><strong>Tasks and progress</strong><br>Children see clear missions, themed points, and visible progress.</sub></p>
+      <img src="docs/screenshots/child-missions-desktop-2026.webp" width="100%" alt="KinKudos child missions dashboard">
+      <p align="center"><sub><strong>Child missions</strong><br>Tasks, themed points, rewards, and visible progress.</sub></p>
     </td>
   </tr>
   <tr>
     <td colspan="2">
-      <img src="docs/screenshots/parent-settings-2026.png" width="100%" alt="KinKudos parent settings">
-      <p align="center"><sub><strong>Family controls</strong><br>Parents manage family rules, points, scratch tickets, and other settings.</sub></p>
+      <img src="docs/screenshots/parent-settings-2026.webp" width="100%" alt="KinKudos parent settings">
+      <p align="center"><sub><strong>Parent controls</strong><br>Parents manage family rules, points, scratch tickets, and other settings.</sub></p>
     </td>
   </tr>
 </table>
 
 <p align="center">
-  <img src="docs/screenshots/mobile-welcome-2026.png" width="31%" alt="KinKudos mobile welcome screen">
-  <img src="docs/screenshots/mobile-parent-dashboard-2026.png" width="31%" alt="KinKudos mobile parent dashboard">
-  <img src="docs/screenshots/mobile-child-dashboard-2026.png" width="31%" alt="KinKudos mobile child dashboard">
+  <img src="docs/screenshots/mobile-welcome-2026.webp" width="31%" alt="KinKudos mobile welcome screen">
+  <img src="docs/screenshots/mobile-parent-dashboard-2026.webp" width="31%" alt="KinKudos mobile parent dashboard">
+  <img src="docs/screenshots/mobile-child-dashboard-2026.webp" width="31%" alt="KinKudos mobile child dashboard">
 </p>
-<p align="center"><sub>Add KinKudos to a supported phone, tablet, or computer as a Progressive Web App.</sub></p>
+<p align="center"><sub>Use KinKudos comfortably from a phone, tablet, or computer.</sub></p>
 
 <p align="center">
-  <img src="docs/screenshots/child-magic-academy-2026.png" width="90%" alt="KinKudos Magic Academy child theme">
+  <img src="docs/screenshots/child-magic-academy-2026.webp" width="90%" alt="KinKudos Magic Academy child theme">
 </p>
 <p align="center"><sub><strong>A world of their own</strong><br>Children can choose visual themes with their own wording and point units.</sub></p>
 
