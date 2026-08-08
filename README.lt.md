@@ -26,31 +26,34 @@
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/screenshots/parent-dashboard-2026.png" alt="KinKudos tėvų suvestinė su laukiančiais šeimos prašymais"></td>
-    <td width="50%"><img src="docs/site/assets/parent-settings-2026.png" alt="KinKudos šeimos nustatymai ir valdikliai"></td>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/welcome-desktop-2026.webp" width="100%" alt="KinKudos pradžios ekranas">
+      <p align="center"><sub><strong>Pradžia</strong><br>Paprasta pradžia vaikams ir tėvams.</sub></p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/child-missions-desktop-2026.webp" width="100%" alt="KinKudos vaiko misijų suvestinė">
+      <p align="center"><sub><strong>Vaiko misijos</strong><br>Darbai, teminiai taškai, prizai ir matoma pažanga.</sub></p>
+    </td>
   </tr>
   <tr>
-    <td align="center"><sub><strong>Tėvų suvestinė</strong><br>Peržiūrėkite prašymus ir priimkite sprendimus vienoje vietoje.</sub></td>
-    <td align="center"><sub><strong>Šeimos valdymas</strong><br>Tvarkykite prizus, privatumą, įrenginius ir šeimos nustatymus.</sub></td>
-  </tr>
-</table>
-
-<table>
-  <tr>
-    <td width="50%"><img src="docs/screenshots/child-panda-dashboard-2026.png" alt="KinKudos Panda Pet vaiko suvestinė"></td>
-    <td width="50%"><img src="docs/screenshots/child-block-world-dashboard-2026.png" alt="KinKudos Block World vaiko suvestinė"></td>
-  </tr>
-  <tr>
-    <td align="center"><sub><strong>Savas pasaulis</strong><br>Vaikas gali pasirinkti temą, kuri pažangą paverčia asmeniška.</sub></td>
-    <td align="center"><sub><strong>Darbai, prizai ir tikslai</strong><br>Kasdieniai įpročiai tampa aiškiomis misijomis ir matoma pažanga.</sub></td>
+    <td colspan="2">
+      <img src="docs/screenshots/parent-settings-2026.webp" width="100%" alt="KinKudos tėvų nustatymai">
+      <p align="center"><sub><strong>Tėvų valdymas</strong><br>Tėvai tvarko šeimos taisykles, taškus, nutrinamus bilietus ir kitus nustatymus.</sub></p>
+    </td>
   </tr>
 </table>
 
 <p align="center">
-  <img src="docs/screenshots/mobile-welcome-2026.png" width="31%" alt="KinKudos mobilus pradžios ekranas">
-  <img src="docs/screenshots/mobile-parent-dashboard-2026.png" width="31%" alt="KinKudos mobili tėvų suvestinė">
+  <img src="docs/screenshots/mobile-welcome-2026.webp" width="31%" alt="KinKudos mobilus pradžios ekranas">
+  <img src="docs/screenshots/mobile-parent-dashboard-2026.webp" width="31%" alt="KinKudos mobili tėvų suvestinė">
+  <img src="docs/screenshots/mobile-child-dashboard-2026.webp" width="31%" alt="KinKudos mobili vaiko suvestinė">
 </p>
-<p align="center"><sub>Pridėkite KinKudos prie palaikomo telefono, planšetės ar kompiuterio kaip progresyviąją žiniatinklio programą.</sub></p>
+<p align="center"><sub>Patogiai naudokite KinKudos telefone, planšetėje ar kompiuteryje.</sub></p>
+
+<p align="center">
+  <img src="docs/screenshots/child-magic-academy-2026.webp" width="90%" alt="KinKudos Magic Academy vaiko tema">
+</p>
+<p align="center"><sub><strong>Savas pasaulis</strong><br>Vaikai gali pasirinkti vaizdinę temą su savais tekstais ir taškų vienetais.</sub></p>
 
 *Ekrano nuotraukose naudojami išgalvoti demonstraciniai duomenys.*
 

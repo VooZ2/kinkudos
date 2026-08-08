@@ -76,7 +76,9 @@ class NetworkAccessMiddleware:
         "/service-worker.js",
     )
     child_prefixes = (
+        "/child/",
         "/vaikas/",
+        "/pair-device/",
         "/susieti-irengini/",
     )
 

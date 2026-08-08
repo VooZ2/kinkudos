@@ -85,8 +85,8 @@ class FeedbackWorkflowTests(TestCase):
             {
                 "report_type": "idea",
                 "description": "Please add a weekly summary.",
-                "page_path": "/tevai/?secret=hidden#parent-settings",
-                "next": "/tevai/#parent-settings",
+                "page_path": f"{reverse('parent_dashboard')}?secret=hidden#parent-settings",
+                "next": f"{reverse('parent_dashboard')}#parent-settings",
             },
             HTTP_USER_AGENT="Feedback Browser",
             follow=True,
@@ -98,8 +98,8 @@ class FeedbackWorkflowTests(TestCase):
         self.assertIsNone(report.child)
         self.assertEqual(report.reporter_role, "parent")
         self.assertEqual(report.family_name, "Aurora")
-        self.assertEqual(report.page_path, "/tevai/")
-        self.assertEqual(report.app_version, "26.6.2")
+        self.assertEqual(report.page_path, reverse("parent_dashboard"))
+        self.assertEqual(report.app_version, "26.6.3")
         self.assertEqual(report.user_agent, "Feedback Browser")
         self.assertIsNotNone(report.email_notified_at)
         self.assertEqual(len(mail.outbox), 1)
@@ -114,13 +114,17 @@ class FeedbackWorkflowTests(TestCase):
             {
                 "report_type": "bug",
                 "description": "The mission button does not work.",
-                "page_path": "/vaikas/",
-                "next": "/vaikas/",
+                "page_path": reverse("child_select"),
+                "next": reverse("child_select"),
                 "screenshot": self.screenshot(),
             },
         )
 
-        self.assertRedirects(response, "/vaikas/", fetch_redirect_response=False)
+        self.assertRedirects(
+            response,
+            reverse("child_select"),
+            fetch_redirect_response=False,
+        )
         report = FeedbackReport.objects.get()
         self.assertEqual(report.child, self.child)
         self.assertIsNone(report.parent)
@@ -184,8 +188,8 @@ class FeedbackWorkflowTests(TestCase):
             {
                 "report_type": "bug",
                 "description": "This report must remain saved.",
-                "page_path": "/tevai/",
-                "next": "/tevai/",
+                "page_path": reverse("parent_dashboard"),
+                "next": reverse("parent_dashboard"),
             },
             follow=True,
         )
@@ -213,7 +217,7 @@ class FeedbackWorkflowTests(TestCase):
                 {
                     "report_type": "bug",
                     "description": f"Valid report number {number}",
-                    "next": "/vaikas/",
+                    "next": reverse("child_select"),
                 },
             )
         response = self.client.post(
@@ -221,7 +225,7 @@ class FeedbackWorkflowTests(TestCase):
             {
                 "report_type": "bug",
                 "description": "This fourth report must be rejected.",
-                "next": "/vaikas/",
+                "next": reverse("child_select"),
             },
         )
         self.assertEqual(response.status_code, 302)
@@ -234,7 +238,7 @@ class FeedbackWorkflowTests(TestCase):
             {
                 "report_type": "bug",
                 "description": "This upload is not really an image.",
-                "next": "/vaikas/",
+                "next": reverse("child_select"),
                 "screenshot": SimpleUploadedFile(
                     "fake.png",
                     b"not an image",

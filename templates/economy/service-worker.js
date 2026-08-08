@@ -25,7 +25,7 @@ self.addEventListener("push", event => {
   let data = {
     title: DEFAULT_NOTIFICATION_TITLE,
     body: DEFAULT_NOTIFICATION_BODY,
-    url: "/tevai/",
+    url: "{% url 'parent_dashboard' %}",
   };
   if (event.data) {
     try { data = { ...data, ...event.data.json() }; } catch (_) {}
@@ -46,5 +46,5 @@ self.addEventListener("push", event => {
 
 self.addEventListener("notificationclick", event => {
   event.notification.close();
-  event.waitUntil(clients.openWindow(event.notification.data.url || "/tevai/"));
+  event.waitUntil(clients.openWindow(event.notification.data.url || "{% url 'parent_dashboard' %}"));
 });

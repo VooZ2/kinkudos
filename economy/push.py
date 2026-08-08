@@ -2,6 +2,7 @@ import json
 import logging
 
 from django.conf import settings
+from django.urls import reverse
 from django.utils.translation import gettext as _
 from pywebpush import WebPushException, webpush
 
@@ -13,6 +14,14 @@ logger = logging.getLogger(__name__)
 
 def _currency_amount(value, child):
     return f"{value} {currency_unit(value, child.theme)}"
+
+
+def _parent_dashboard_url():
+    return reverse("parent_dashboard")
+
+
+def _child_dashboard_url(fragment):
+    return f"{reverse('child_dashboard')}#{fragment}"
 
 
 def _send(payload, subscriptions):
@@ -48,7 +57,7 @@ def notify_task_claim(claim):
         {
             "title": _("A new task is awaiting approval"),
             "body": f"{claim.child.name}: {claim.task_title} (+{claim.total_reward})",
-            "url": "/tevai/",
+            "url": _parent_dashboard_url(),
             "tag": f"task-claim-{claim.pk}",
         },
         PushSubscription.objects.filter(user__isnull=False),
@@ -60,7 +69,7 @@ def notify_reward_request(reward_request):
         {
             "title": _("A reward is awaiting approval"),
             "body": f"{reward_request.child.name}: {reward_request.reward_title}",
-            "url": "/tevai/",
+            "url": _parent_dashboard_url(),
             "tag": f"reward-request-{reward_request.pk}",
         },
         PushSubscription.objects.filter(user__isnull=False),
@@ -72,7 +81,7 @@ def notify_proposal(proposal):
         {
             "title": _("A new suggestion is awaiting approval"),
             "body": f"{proposal.child.name}: {proposal.title}",
-            "url": "/tevai/",
+            "url": _parent_dashboard_url(),
             "tag": f"proposal-{proposal.pk}",
         },
         PushSubscription.objects.filter(user__isnull=False),
@@ -84,7 +93,7 @@ def notify_birth_date_change(change):
         {
             "title": _("A birthday change is awaiting approval"),
             "body": change.child.name,
-            "url": "/tevai/",
+            "url": _parent_dashboard_url(),
             "tag": f"birthday-change-{change.pk}",
         },
         PushSubscription.objects.filter(user__isnull=False),
@@ -96,7 +105,7 @@ def notify_assigned_tasks(batch):
         {
             "title": str(theme_text(batch.child.theme, "assigned_title")),
             "body": str(theme_text(batch.child.theme, "assigned_help")),
-            "url": "/vaikas/mano/#paskirti-darbai",
+            "url": _child_dashboard_url("paskirti-darbai"),
             "tag": f"assigned-tasks-{batch.pk}",
         },
         PushSubscription.objects.filter(child=batch.child),
@@ -111,7 +120,7 @@ def notify_task_revision(claim):
         {
             "title": _("A task needs a little more work"),
             "body": body,
-            "url": "/vaikas/mano/#darbai",
+            "url": _child_dashboard_url("darbai"),
             "tag": f"task-revision-{claim.pk}",
         },
         PushSubscription.objects.filter(child=claim.child),
@@ -136,7 +145,7 @@ def notify_task_decision(claim, *, approved):
         {
             "title": title,
             "body": body,
-            "url": "/vaikas/mano/#darbai",
+            "url": _child_dashboard_url("darbai"),
             "tag": f"task-{state}-{claim.pk}",
         },
         PushSubscription.objects.filter(child=claim.child),
@@ -158,7 +167,7 @@ def notify_reward_decision(reward_request, *, approved):
         {
             "title": title,
             "body": body,
-            "url": "/vaikas/mano/#prizai",
+            "url": _child_dashboard_url("prizai"),
             "tag": f"reward-{state}-{reward_request.pk}",
         },
         PushSubscription.objects.filter(child=reward_request.child),
@@ -180,7 +189,7 @@ def notify_proposal_decision(proposal, *, approved):
         {
             "title": title,
             "body": body,
-            "url": "/vaikas/mano/#prizai",
+            "url": _child_dashboard_url("prizai"),
             "tag": f"proposal-{state}-{proposal.pk}",
         },
         PushSubscription.objects.filter(child=proposal.child),
@@ -194,7 +203,7 @@ def notify_birth_date_decision(change, *, approved):
             if approved
             else _("Your birthday change was rejected"),
             "body": "",
-            "url": "/vaikas/mano/#profilis",
+            "url": _child_dashboard_url("profilis"),
             "tag": f"birthday-change-{'approved' if approved else 'rejected'}-{change.pk}",
         },
         PushSubscription.objects.filter(child=change.child),
@@ -209,7 +218,7 @@ def notify_gift_received(gift):
                 "name": gift.sender.name,
                 "currency": currency_unit(10, gift.recipient.theme),
             },
-            "url": "/vaikas/mano/#istorija",
+            "url": _child_dashboard_url("istorija"),
             "tag": f"point-gift-{gift.pk}",
         },
         PushSubscription.objects.filter(child=gift.recipient),
@@ -223,7 +232,7 @@ def notify_birthday_award(award):
             "body": _("You received %(amount)s for your birthday") % {
                 "amount": _currency_amount(award.points, award.child),
             },
-            "url": "/vaikas/mano/#istorija",
+            "url": _child_dashboard_url("istorija"),
             "tag": f"birthday-award-{award.pk}",
         },
         PushSubscription.objects.filter(child=award.child),
@@ -244,7 +253,7 @@ def notify_lottery_reminder(child):
                 )
                 % {"cost": _currency_amount(ticket_cost, child)}
             ),
-            "url": "/vaikas/mano/#prizai",
+            "url": _child_dashboard_url("prizai"),
             "tag": f"lottery-reminder-{child.pk}",
         },
         PushSubscription.objects.filter(child=child),

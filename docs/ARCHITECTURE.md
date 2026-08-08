@@ -189,6 +189,15 @@ polling runs where configured and remains the reliable refresh fallback. Push
 subscriptions are available to both parent and child sessions. iOS requires
 the app to be added to the home screen for Web Push to work.
 
+Application URL paths are canonical, lowercase English paths using kebab-case
+where needed and do not change with the selected interface language. Named URL
+reversing is the source for application links, polling, Push payloads, and
+emails. Changed public GET paths retain permanent redirects from their previous
+Lithuanian paths; legacy mutating paths call the same view so the HTTP method
+and request body remain intact. Legacy redirect query strings are rebuilt from
+a small allowlist; `next` is retained only as a validated internal relative URL,
+and unknown or unsafe values are discarded.
+
 The systemd deployment installs a daily maintenance timer and a separate
 30-minute lottery-reminder timer. Generic deployments must schedule the
 corresponding Django commands themselves.
