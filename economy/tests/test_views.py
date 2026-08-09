@@ -691,7 +691,99 @@ class AccessAndWorkflowTests(TestCase):
         self.child_two.vocative_name = "Second child"
         self.child_two.save(update_fields=["vocative_name"])
         response = self.login_child(self.child_two, "5678")
-        self.assertContains(response, "Labas, Second child")
+        self.assertContains(response, "Labas, Second child!")
+        self.assertContains(response, "Šiandienos darbai laukia!")
+        self.assertNotContains(response, "It's great to see you")
+
+    def test_child_dashboard_uses_personalized_english_greeting(self):
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+        response = self.login_child(self.child_one, "1234")
+        self.assertContains(response, "Hello, Child One!")
+        self.assertContains(response, "Ready for today's tasks?")
+        self.assertNotContains(response, '<p class="eyebrow">Hello, Child One', html=False)
+        self.assertNotContains(response, "It's great to see you")
+
+    def test_child_dashboard_falls_back_when_child_name_is_unavailable(self):
+        self.child_one.name = ""
+        self.child_one.save(update_fields=["name"])
+
+        for language, expected in (("en", "Hello!"), ("lt", "Labas!")):
+            with self.subTest(language=language):
+                self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = language
+                response = self.login_child(self.child_one, "1234")
+                self.assertContains(response, expected)
+                self.assertNotContains(response, "undefined")
+                self.assertNotContains(response, "null")
+                self.assertNotContains(response, "Hello, !")
+                self.assertNotContains(response, "Labas, !")
+
+    def test_child_dashboard_escapes_diacritics_and_long_names(self):
+        long_name = "Ąžuolė Žvaigždžių Tyrinėtoja su Lietuviškais Diakritiniais Ženklais"
+        self.child_one.name = long_name
+        self.child_one.save(update_fields=["name"])
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+
+        response = self.login_child(self.child_one, "1234")
+
+        self.assertContains(response, f"Hello, {long_name}!")
+        self.assertContains(response, 'class="child-greeting-supporting"', html=False)
+
+        self.child_one.name = "<img src=x>"
+        self.child_one.save(update_fields=["name"])
+        response = self.client.get(reverse("child_dashboard"))
+        self.assertContains(response, "Hello, &lt;img src=x&gt;!")
+        self.assertNotContains(response, "Hello, <img src=x>!")
+
+    def test_child_dashboard_uses_one_greeting_across_all_themes(self):
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+        themes = (
+            "neutral",
+            "magic_academy",
+            "block_world",
+            "hero_hq",
+            "art_studio",
+            "panda_pet",
+            "blockville",
+        )
+
+        for theme in themes:
+            with self.subTest(theme=theme):
+                self.child_one.theme = theme
+                self.child_one.save(update_fields=["theme"])
+                response = self.login_child(self.child_one, "1234")
+                self.assertContains(response, "Hello, Child One!")
+                self.assertContains(response, "Ready for today's tasks?")
+                self.assertNotContains(response, "It's great to see you")
+
+    def test_child_dashboard_greeting_layout_wraps_without_collisions(self):
+        stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(
+            encoding="utf-8"
+        )
+
+        identity_rule = re.search(r"\.child-identity \{([^}]+)\}", stylesheet)
+        greeting_rule = re.search(r"\.child-greeting \{([^}]+)\}", stylesheet)
+        greeting_heading_rule = re.search(
+            r"\.child-greeting h1 \{([^}]+)\}", stylesheet
+        )
+        supporting_rule = re.search(
+            r"\.child-greeting-supporting \{([^}]+)\}", stylesheet
+        )
+        hero_rule = re.search(r"\.child-hero \{([^}]+)\}", stylesheet)
+
+        self.assertIsNotNone(identity_rule)
+        self.assertIsNotNone(greeting_rule)
+        self.assertIsNotNone(greeting_heading_rule)
+        self.assertIsNotNone(supporting_rule)
+        self.assertIsNotNone(hero_rule)
+        self.assertIn("min-width: 0", identity_rule.group(1))
+        self.assertIn("min-width: 0", greeting_rule.group(1))
+        self.assertIn("overflow-wrap: anywhere", greeting_heading_rule.group(1))
+        self.assertIn(
+            "font-size: clamp(1.05rem, 2.2vw, 1.9rem)",
+            supporting_rule.group(1),
+        )
+        self.assertIn("overflow-wrap: anywhere", supporting_rule.group(1))
+        self.assertIn("flex-wrap: wrap", hero_rule.group(1))
 
     def test_magic_theme_uses_correct_owl_accusative(self):
         self.child_one.theme = "magic_academy"

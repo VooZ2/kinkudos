@@ -1249,8 +1249,11 @@ msgstr "Būstinės arsenalas"
 msgid "Happy birthday!"
 msgstr "Su gimtadieniu!"
 
-msgid "Hello, %(name)s"
-msgstr "Labas, %(name)s"
+msgid "Hello!"
+msgstr "Labas!"
+
+msgid "Hello, %(name)s!"
+msgstr "Labas, %(name)s!"
 
 msgid "Help the panda finish every task before bedtime at midnight."
 msgstr "Padėk pandai atlikti visus darbus iki miego vidurnaktį."
@@ -1335,9 +1338,6 @@ msgstr "Netinkamas IP adresas arba tinklas: %(value)s"
 
 msgid "It costs %(cost)s earned %(unit)s. You may win up to 150 points, get nothing, or lose up to 50 points. The result cannot reduce your balance below your credit limit."
 msgstr "Jis kainuoja %(cost)s uždirbtų %(unit)s. Gali laimėti iki 150 taškų, nieko negauti arba prarasti iki 50 taškų. Rezultatas negali sumažinti balanso žemiau tavo kredito limito."
-
-msgid "It's great to see you"
-msgstr "Smagu Tave matyti"
 
 msgid "JPEG, PNG, WebP, HEIC, or HEIF, up to 5 MB. The image will be cropped to a square."
 msgstr "JPEG, PNG, WebP, HEIC arba HEIF, iki 5 MB. Nuotrauka bus apkirpta kvadratu."
@@ -1908,6 +1908,9 @@ msgstr "Užduotis atlikta"
 
 msgid "Reached goal"
 msgstr "Tikslas pasiektas"
+
+msgid "Ready for today's tasks?"
+msgstr "Šiandienos darbai laukia!"
 
 msgid "Reason"
 msgstr "Paaiškinimas"

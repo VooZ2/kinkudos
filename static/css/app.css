@@ -215,8 +215,11 @@ select.field-control, .stack-form select {
 .profile-avatar { width: 86px; height: 86px; border-radius: 29px; font-size: 2rem; }
 .profile-mini { width: 42px; height: 42px; border-radius: 14px; margin: 0; }
 .profile-photo { object-fit: cover; display: block; }
-.child-identity { display: flex; align-items: center; gap: 18px; }
+.child-identity { display: flex; flex: 1 1 auto; align-items: center; gap: 18px; min-width: 0; }
 .hero-avatar { width: 92px; height: 92px; border-radius: 28px; object-fit: cover; box-shadow: var(--shadow); border: 2px solid color-mix(in srgb, var(--surface-solid) 72%, transparent); }
+.child-greeting { min-width: 0; }
+.child-greeting h1 { overflow-wrap: anywhere; text-wrap: balance; }
+.child-greeting-supporting { max-width: 36rem; margin: 10px 0 0; color: var(--muted); font-size: clamp(1.05rem, 2.2vw, 1.9rem); font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
 .pin-dialog, .action-dialog { width: min(440px, calc(100% - 28px)); max-height: calc(100dvh - 28px); overflow-y: auto; border: 1px solid var(--line); border-radius: 24px; color: var(--text); background: var(--surface-solid); padding: 32px; box-shadow: var(--shadow); font-family: inherit; }
 .pin-dialog::backdrop, .action-dialog::backdrop { background: rgba(8, 6, 18, .66); backdrop-filter: blur(8px); }
 .action-dialog h2 { margin-top: 0; padding-right: 24px; }
@@ -237,9 +240,9 @@ select.field-control, .stack-form select {
 .choice-value { color: var(--success); font-size: .9rem; font-weight: 820; line-height: 1.2; white-space: nowrap; }
 .choice-value-negative { color: var(--danger); }
 .button:disabled { cursor: not-allowed; opacity: .55; transform: none; filter: none; }
-.child-hero { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 0 30px; }
+.child-hero { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; padding: 16px 0 30px; }
 .child-hero h1 { font-size: clamp(2.4rem, 7vw, 4.6rem); }
-.balance-orb { min-width: 152px; min-height: 152px; display: grid; place-content: center; text-align: center; border-radius: 50%; color: #fff; background: radial-gradient(circle at 30% 20%, var(--accent), var(--primary)); box-shadow: 0 20px 55px color-mix(in srgb, var(--primary) 36%, transparent); }
+.balance-orb { flex: 0 0 auto; min-width: 152px; min-height: 152px; display: grid; place-content: center; text-align: center; border-radius: 50%; color: #fff; background: radial-gradient(circle at 30% 20%, var(--accent), var(--primary)); box-shadow: 0 20px 55px color-mix(in srgb, var(--primary) 36%, transparent); }
 .balance-orb strong { font-size: 2.6rem; line-height: 1; }
 .balance-orb span { font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; }
 .tabbar { display: flex; gap: 6px; overflow-x: auto; position: sticky; top: 82px; z-index: 8; padding: 8px; margin: 0 0 34px; border: 1px solid var(--line); border-radius: 17px; background: var(--surface); backdrop-filter: blur(20px); }

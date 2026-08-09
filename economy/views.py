@@ -608,6 +608,10 @@ def parent_rename_device(request, device_id):
 @child_required
 def child_dashboard(request):
     child = request.child
+    try:
+        greeting_name = (child.address_name or "").strip()
+    except (AttributeError, TypeError):
+        greeting_name = ""
     child.available_goal_balance = max(0, child.balance)
     today = timezone.localdate()
     active_assigned_tasks = (
@@ -749,6 +753,7 @@ def child_dashboard(request):
         "economy/child_dashboard.html",
         {
             "child": child,
+            "greeting_name": greeting_name,
             "tasks": Task.objects.filter(is_active=True, is_deleted=False),
             "rewards": rewards,
             "pending_task_ids": pending_task_ids,
