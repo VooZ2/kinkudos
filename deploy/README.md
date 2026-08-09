@@ -164,14 +164,15 @@ proxy to obtain a TLS certificate.
 
 ### Manual verified installation
 
-For a manual installation from a new empty deployment root, download and
-verify a specific release, keep its source as `app`, copy out the deployment
-directory, and start the same guided setup:
+For a manual installation from a new empty deployment root, set
+`KINKUDOS_VERSION` to the release you want, then download and verify it, keep
+its source as `app`, copy out the deployment directory, and start the same
+guided setup:
 
 ```bash
 sudo install -d -o "$USER" -g "$(id -gn)" /opt/kinkudos
 cd /opt/kinkudos
-version=26.4.9
+version=${KINKUDOS_VERSION:?Set KINKUDOS_VERSION before running this block}
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -225,11 +226,11 @@ after browser setup the server permanently disables the setup route.
 ## Updating an existing installation
 
 Run these commands from the deployment root (the directory containing
-`app`, `deploy`, `data`, and `secrets`). Replace `OWNER/REPOSITORY` and the
-version with the release you want to install:
+`app`, `deploy`, `data`, and `secrets`). Set `KINKUDOS_VERSION` to the release
+you want to install before running this block:
 
 ```bash
-version=26.4.9
+version=${KINKUDOS_VERSION:?Set KINKUDOS_VERSION before running this block}
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"

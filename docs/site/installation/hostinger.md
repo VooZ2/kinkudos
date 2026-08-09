@@ -1,6 +1,6 @@
 ---
 title: Install KinKudos on a Hostinger VPS
-description: Deploy KinKudos 26.6.3 with Hostinger Docker Manager, the managed Traefik reverse proxy, HTTPS, and a persistent named volume.
+description: Deploy KinKudos with Hostinger Docker Manager, the managed Traefik reverse proxy, HTTPS, and a persistent named volume.
 ---
 
 # Install KinKudos on a Hostinger VPS
@@ -8,11 +8,11 @@ description: Deploy KinKudos 26.6.3 with Hostinger Docker Manager, the managed T
 This is the simplest supported Hostinger route. It uses Hostinger's **Ubuntu
 24.04 with Docker** VPS template, Docker Manager, the Traefik reverse proxy
 installed with that template, and the dedicated KinKudos Compose file from
-the `26.6.3` release.
+the current KinKudos deployment configuration.
 
-The KinKudos Compose definition uses the public `vooz2/kinkudos:26.6.3` image
-and one persistent named volume for the application database, media, and
-runtime secrets. Hostinger VPS is paid and self-managed: you remain
+The KinKudos Compose definition uses the current public KinKudos image and one
+persistent named volume for the application database, media, and runtime
+secrets. Hostinger VPS is paid and self-managed: you remain
 responsible for the VPS, domain, updates, and snapshots.
 
 ## 1. Before you start
@@ -65,16 +65,16 @@ kinkudos
 ```
 
 Open the **.yaml editor**. Replace its complete contents, including the initial
-`services:` line, with the exact release file from:
+`services:` line, with the current official file from:
 
 ```text
-https://raw.githubusercontent.com/VooZ2/kinkudos/v26.6.3/deploy/hostinger/compose.yaml
+https://raw.githubusercontent.com/VooZ2/kinkudos/main/deploy/hostinger/compose.yaml
 ```
 
 You can inspect the same file in
-[GitHub](https://github.com/VooZ2/kinkudos/blob/v26.6.3/deploy/hostinger/compose.yaml).
-It defines the `app` service, the `vooz2/kinkudos:26.6.3` image, the Hostinger
-Traefik labels, and the named volume `kinkudos-data`.
+[GitHub](https://github.com/VooZ2/kinkudos/blob/main/deploy/hostinger/compose.yaml).
+It defines the `app` service, the current KinKudos image, the Hostinger Traefik
+labels, and the named volume `kinkudos-data`.
 
 ## 4. Add the two required values
 
