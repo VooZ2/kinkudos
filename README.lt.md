@@ -162,8 +162,8 @@ failus iš [`deploy/` katalogo](deploy/). Pradėkite nuo jame esančio
 `compose.yml`, o ne nuo atskiros Compose ištraukos.
 
 Tai nėra pirmo diegimo komanda. Compose failas prijungia paslaptis iš serverio
-`../secrets/` katalogo, o Docker Compose pats šių failų nesugeneruoja. Naujoje
-Prieš paruošdami turėkite domeną, HTTPS, tinkamai sukonfigūruotą proxy ir
+`../secrets/` katalogo, o Docker Compose pats šių failų nesugeneruoja. Prieš
+paruošdami turėkite domeną, HTTPS, tinkamai sukonfigūruotą proxy ir
 reikiamus aplinkos kintamuosius. Naujoje diegimo šaknyje pirmiausia, ne root
 naudotoju, ją paruoškite:
 

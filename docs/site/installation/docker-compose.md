@@ -29,6 +29,54 @@ The base Compose file starts `app` and `backup-agent`. It publishes no applicati
 
 Never publish port `8000` to the internet. Terminate HTTPS at the proxy and forward the original host and protocol.
 
+## Choose the proxy mode before running the installer
+
+The `bootstrap.sh` prompt does not install or configure a reverse proxy. It
+selects the Compose overlay that matches a proxy you have already prepared.
+Choose the mode according to the infrastructure that is already running:
+
+| Prompt choice | Choose this when | What must already exist |
+|---|---|---|
+| `host` | Caddy or Nginx runs directly on the VPS | A proxy site for your hostname, DNS pointing to the VPS, and public ports 80/443 available |
+| `traefik` | Traefik runs as a Docker service | The external Traefik network, `web` by default, and a working certificate resolver |
+| `container` | Nginx Proxy Manager or another proxy runs in Docker | The external proxy network, `proxy` by default, and a route to the `app` service on port `8000` |
+
+The hostname prompt takes the hostname only, without `https://` or a trailing
+slash. The proxy mode prompt accepts exactly `host`, `traefik`, or `container`.
+These choices describe how traffic is connected; they are not shell commands.
+
+For `host`, configure the proxy upstream before starting KinKudos. A minimal
+Caddy site is:
+
+```caddyfile
+family.example.com {
+    reverse_proxy 127.0.0.1:8000
+}
+```
+
+Replace `family.example.com` with the hostname you entered during setup. For
+Nginx, proxy the site to `http://127.0.0.1:8000` and pass the `Host`,
+`X-Forwarded-Proto`, and `X-Forwarded-For` headers. Validate and reload the
+proxy before expecting the public HTTPS address to work. For example:
+
+```bash
+sudo caddy validate --config /etc/caddy/Caddyfile
+sudo systemctl reload caddy
+```
+
+For Nginx, use `sudo nginx -t` and `sudo systemctl reload nginx` instead.
+
+For `traefik` or `container`, set `KINKUDOS_PROXY_NETWORK` to the exact existing
+Docker network name if it is not the default. For example:
+
+```bash
+KINKUDOS_PROXY_NETWORK=traefik-public ./bootstrap.sh
+```
+
+Select `traefik` only when Traefik is attached to that network. Select
+`container` only when the other proxy is attached to it and is configured to
+route to the KinKudos `app` service on port `8000`.
+
 ## Manual Docker Compose setup
 
 Download a specific GitHub release archive and SHA256 file, verify it, and use
@@ -71,7 +119,7 @@ Choose a predictable release by keeping the image tag in `compose.yml` pinned:
 image: vooz2/kinkudos:<version>
 ```
 
-From the directory containing your configured `compose.yaml` (or the copied
+From the directory containing your configured `compose.yml` (or the copied
 release Compose files), start the application with:
 
 ```bash
@@ -82,6 +130,16 @@ The command pulls the selected image, starts the app and backup agent, and
 keeps persistent data in the host directories. Using `latest` is possible only
 as a conscious choice to follow the newest stable image; a version tag is
 recommended for predictable deployments.
+
+Check the result before opening the site:
+
+```bash
+docker compose ps
+```
+
+Wait for `app` to become `healthy`. If it does not, inspect
+`docker compose logs --tail=100 app` and do not repeat the fresh installer over
+the existing deployment.
 
 For a fresh prepared server where you prefer an interactive setup, use the
 [Guided server installer](guided-installer.md) instead. After Compose starts,

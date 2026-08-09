@@ -15,6 +15,14 @@ Use this method only for a **new, empty installation** on a server that already 
 
 The installer does not install Docker or create the reverse proxy. It refuses a non-empty installation root and must not be used to update an existing installation.
 
+Before running it, choose the proxy mode that matches the proxy already running
+on the server. Use `host` for Caddy or Nginx installed on the host, `traefik`
+for an existing Traefik service and its external Docker network, or `container`
+for an existing Docker-based proxy such as Nginx Proxy Manager. The installer
+only selects the Compose overlay; it does not create DNS records, install a
+proxy, or create an external Docker network. See [Choose the proxy mode](docker-compose.md#choose-the-proxy-mode-before-running-the-installer)
+for the prerequisites and examples.
+
 !!! warning "Docker access is privileged"
     Docker access effectively grants administrative control of the server. Use a dedicated deployment account, but treat it as privileged and protect its credentials.
 
@@ -35,7 +43,13 @@ Choose:
 2. the exact public hostname;
 3. the already prepared proxy mode: `host`, `traefik`, or `container`.
 
+Enter the hostname only, without `https://` or a trailing slash. The proxy mode
+must match the infrastructure you prepared before starting the installer.
+
 The installer generates server secrets, writes the local `.env`, selects the proxy overlay, checks directory ownership, pulls the image pinned to the selected KinKudos release, and starts `app` and `backup-agent`.
+
+When the installer finishes, run `docker compose ps` from `/opt/kinkudos/deploy`
+and wait for `app` to become `healthy` before opening the HTTPS hostname.
 
 ## Expected result
 

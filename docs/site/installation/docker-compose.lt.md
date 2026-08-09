@@ -29,6 +29,55 @@ Pagrindinis Compose failas paleidžia `app` ir `backup-agent`, bet neviešina pr
 
 Niekada neviešinkite `8000` prievado internete. HTTPS turi užbaigti proxy, perduodantis tikrą domeną ir protokolą.
 
+## Prieš diegiklį pasirinkite proxy režimą
+
+`bootstrap.sh` paraginimas neįdiegia ir nesukonfigūruoja atvirkštinio tarpinio
+serverio (proxy). Jis tik parenka Compose papildinį pagal jau paruoštą proxy.
+Režimą rinkitės pagal tai, kas jau veikia serveryje:
+
+| Paraginimo pasirinkimas | Kada rinktis | Kas turi būti paruošta |
+|---|---|---|
+| `host` | Caddy arba Nginx veikia tiesiogiai VPS serveryje | Proxy svetainė jūsų domenui, DNS įrašas į VPS ir vieši 80/443 prievadai |
+| `traefik` | Traefik veikia kaip Docker paslauga | Išorinis Traefik tinklas, pagal nutylėjimą `web`, ir veikiantis sertifikatų resolveris |
+| `container` | Nginx Proxy Manager ar kitas proxy veikia Docker konteineryje | Išorinis proxy tinklas, pagal nutylėjimą `proxy`, ir maršrutas į `app` servisą per `8000` prievadą |
+
+Domeno paraginime įrašykite tik domeną, be `https://` ir be pasvirojo brūkšnio
+pabaigoje. Proxy režimo paraginimas priima tik `host`, `traefik` arba
+`container`. Šie pasirinkimai aprašo tinklo ryšį, o ne terminalo komandas.
+
+Pasirinkę `host`, proxy upstream paruoškite prieš paleisdami KinKudos. Minimalus
+„Caddy“ aprašas:
+
+```caddyfile
+family.example.com {
+    reverse_proxy 127.0.0.1:8000
+}
+```
+
+`family.example.com` pakeiskite domenu, kurį įvedėte diegimo metu. Naudodami
+Nginx nukreipkite svetainę į `http://127.0.0.1:8000` ir perduokite `Host`,
+`X-Forwarded-Proto` bei `X-Forwarded-For` antraštes. Prieš tikėdamiesi viešo
+HTTPS patikrinkite konfigūraciją ir perkraukite proxy, pavyzdžiui:
+
+```bash
+sudo caddy validate --config /etc/caddy/Caddyfile
+sudo systemctl reload caddy
+```
+
+Naudodami Nginx vietoje to vykdykite `sudo nginx -t` ir `sudo systemctl reload nginx`.
+
+Naudodami `traefik` arba `container`, kintamąjį `KINKUDOS_PROXY_NETWORK`
+nustatykite į tikslų jau egzistuojančio Docker tinklo pavadinimą, jei jis nėra
+numatytasis. Pavyzdžiui:
+
+```bash
+KINKUDOS_PROXY_NETWORK=traefik-public ./bootstrap.sh
+```
+
+`traefik` rinkitės tik tada, kai Traefik prijungtas prie šio tinklo. `container`
+rinksitės tik tada, kai kitas proxy prijungtas prie jo ir nukreiptas į KinKudos
+`app` servisą per `8000` prievadą.
+
 ## Rankinis Docker Compose diegimas
 
 Parsisiųskite konkretaus GitHub leidimo archyvą ir SHA256 failą, juos
@@ -71,7 +120,7 @@ Nuspėjamam diegimui `compose.yml` palikite konkrečios versijos atvaizdą:
 image: vooz2/kinkudos:<version>
 ```
 
-Kataloge, kuriame yra sukonfigūruotas `compose.yaml` (arba nukopijuoti leidimo
+Kataloge, kuriame yra sukonfigūruotas `compose.yml` (arba nukopijuoti leidimo
 Compose failai), paleiskite:
 
 ```bash
@@ -82,6 +131,16 @@ Komanda parsiunčia pasirinktą atvaizdą, paleidžia programą ir kopijų agent
 o nuolatinius duomenis palieka serverio kataloguose. `latest` galima naudoti
 tik sąmoningai pasirinkus visada sekti naujausią stabilią versiją; nuspėjamam
 diegimui rekomenduojama konkreti versijos žyma.
+
+Prieš atverdami svetainę patikrinkite rezultatą:
+
+```bash
+docker compose ps
+```
+
+Palaukite, kol `app` būsena taps `healthy`. Jei taip neįvyksta, peržiūrėkite
+`docker compose logs --tail=100 app` ir nekartokite naujo diegimo vedlio esamame
+diegime.
 
 Jei naujam paruoštam serveriui norite interaktyvios eigos, rinkitės [vedamąjį
 serverio diegiklį](guided-installer.lt.md). Paleidę Compose atverkite savo HTTPS

@@ -15,6 +15,13 @@ description: Įdiekite patikrintą KinKudos leidimą paruoštame Linux serveryje
 
 Diegiklis neįdiegia Docker ir nesukuria proxy. Jis atsisako naudoti netuščią diegimo katalogą ir nėra skirtas esamam diegimui atnaujinti.
 
+Prieš paleisdami pasirinkite režimą pagal serveryje jau veikiantį proxy.
+`host` rinkitės serveryje įdiegtam Caddy arba Nginx, `traefik` – veikiančiam
+Traefik ir jo išoriniam Docker tinklui, o `container` – Docker veikiantiems
+proxy, pavyzdžiui, Nginx Proxy Manager. Diegiklis tik parenka Compose papildinį:
+jis nesukuria DNS įrašų, neįdiegia proxy ir nesukuria išorinio Docker tinklo.
+Reikalavimus bei pavyzdžius rasite puslapyje [Proxy režimo pasirinkimas](docker-compose.lt.md#pries-diegikli-pasirinkite-proxy-rezima).
+
 !!! warning "Docker prieiga yra privilegijuota"
     Docker prieiga praktiškai suteikia administracinę serverio kontrolę. Naudokite atskirą diegimo paskyrą, tačiau laikykite ją privilegijuota ir saugokite jos prisijungimo duomenis.
 
@@ -35,7 +42,14 @@ Pasirinkite:
 2. tikslų viešą domeną;
 3. jau paruošto proxy režimą: `host`, `traefik` arba `container`.
 
+Domeno paraginime įrašykite tik domeną, be `https://` ir be pasvirojo brūkšnio
+pabaigoje. Proxy režimas turi atitikti prieš diegiklį paruoštą infrastruktūrą.
+
 Diegiklis sugeneruoja serverio paslaptis, įrašo vietinį `.env`, parenka proxy papildinį, patikrina katalogų savininkus, parsiunčia pasirinktam KinKudos leidimui priskirtą programos atvaizdą ir paleidžia `app` bei `backup-agent`.
+
+Diegikliui baigus darbą kataloge `/opt/kinkudos/deploy` vykdykite
+`docker compose ps` ir prieš atverdami HTTPS domeną palaukite, kol `app` būsena
+taps `healthy`.
 
 ## Laukiamas rezultatas
 
