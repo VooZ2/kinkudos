@@ -167,17 +167,32 @@ The command is for a **new installation**. Existing installations must use the d
 ### Manual Docker Compose setup
 
 For a custom or already managed server, use the official release files in the
-[`deploy/` directory](deploy/). Start from the configured `compose.yaml` in
-that directory, not from an isolated Compose snippet:
+[`deploy/` directory](deploy/). Start from the configured `compose.yml` in
+that directory, not from an isolated Compose snippet.
+
+This is not a first-install command. The Compose file mounts secrets from the
+server's `../secrets/` directory; Docker Compose does not generate those files.
+Before initialization, prepare the hostname or domain, HTTPS, reverse proxy,
+and any required environment variables.
+
+On a new deployment root, initialize it first as the non-root deployment user:
+
+```bash
+cd /opt/kinkudos/deploy
+./bootstrap.sh
+```
+
+The bootstrap script creates the persistent directories, generates the Django,
+VAPID, setup, backup-agent, and restic secrets, creates the local proxy overlay,
+and starts the services. It also creates an empty `smtp_password` file when
+SMTP is disabled. Only after this initialization should you use the raw Compose
+command below to start an already prepared deployment:
 
 ```bash
 docker compose up -d --pull always
 ```
 
-Before running it, prepare the required environment variables and secret files,
-persistent storage, a hostname or domain, HTTPS, and a correctly configured
-reverse proxy. Keep the image pinned to a released version for predictable
-deployments:
+Keep the image pinned to a released version for predictable deployments:
 
 ```yaml
 image: vooz2/kinkudos:<version>

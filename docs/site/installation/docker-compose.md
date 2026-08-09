@@ -35,10 +35,35 @@ Download a specific GitHub release archive and SHA256 file, verify it, and use
 the release's `deploy/compose.yml` together with the matching proxy overlay.
 The official files are maintained in the [deployment directory](https://github.com/VooZ2/kinkudos/tree/main/deploy).
 
-Before starting, prepare the required environment variables and secret files,
-persistent `data/`, `backups/`, and `secrets/` directories, a hostname or
-domain, HTTPS, and a correctly configured reverse proxy. The `host`, `traefik`,
-and `container` overlays in `deploy/` are the supported proxy choices.
+Before starting, prepare the hostname or domain, HTTPS, a correctly configured
+reverse proxy, and the persistent `data/`, `backups/`, `backup-state/`, and
+`secrets/` directories. The `host`, `traefik`, and `container` overlays in
+`deploy/` are the supported proxy choices.
+
+The Compose file expects these host secret files to exist; Docker Compose does
+not generate them:
+
+```text
+secrets/django_secret_key
+secrets/setup_token
+secrets/vapid_private.pem
+secrets/vapid_public.txt
+secrets/smtp_password       # may be empty when SMTP is disabled
+secrets/restic_password
+secrets/backup_agent_token
+```
+
+The backup agent also mounts `secrets/backup/`. The bootstrap script creates
+that directory and a placeholder `restic.env`; configure that file when remote
+backups are enabled.
+
+Do not run the raw Compose command on an empty deployment root. Docker will warn
+about missing secret files and then fail with an error such as
+`invalid mount config ... secrets/restic_password`. For a new generic server,
+use the [Guided server installer](guided-installer.md). For a verified manual
+release installation, run `./bootstrap.sh` from the deployment directory as the
+non-root deployment user first; it creates these files, the persistent
+directories, and the selected proxy overlay before starting the services.
 
 Choose a predictable release by keeping the image tag in `compose.yml` pinned:
 

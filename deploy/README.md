@@ -25,11 +25,21 @@ The `secrets` directory contains:
 - `vapid_public.txt`;
 - `restic_password`;
 - `backup_agent_token`;
-- `restic.env` (only when external `restic` backups are used);
-- `smtp_password` (only when email is enabled).
+- `backup/restic.env` (created as a placeholder by the bootstrap script and
+  configured when external `restic` backups are used);
+- `smtp_password` (the file is required by Compose but may be empty when email
+  is disabled).
 
 Secret files must be owned by the deployment administrator and have `0600`
 permissions. Never commit `.env` or the `secrets` directory.
+
+The base Compose file does not create these host files. Do not run a raw
+`docker compose up` from an empty deployment root: Docker will report missing
+secret files and fail when it tries to bind-mount one of them. On a fresh
+generic installation, run `./bootstrap.sh` from this directory as the non-root
+deployment user. It creates the required files and persistent directories,
+selects the proxy overlay, and starts the services. Use the raw Compose command
+only after the deployment has been initialized.
 
 ## Installation
 

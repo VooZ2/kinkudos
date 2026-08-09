@@ -19,6 +19,13 @@ kinkudos/
 `restic` ir, jei įjungtas el. paštas, SMTP slaptažodžiai. Failai turi priklausyti serverio
 administratoriui, turėti `0600` teises ir niekada nepatekti į Git.
 
+Pagrindinis Compose failas šių serverio failų nesukuria. Nepaleiskite paprasto
+`docker compose up` tuščioje diegimo šaknyje: Docker praneš apie trūkstamas
+paslaptis ir nepavyks prijungti vieno iš failų. Naujam bendram diegimui šiame
+kataloge ne root naudotoju paleiskite `./bootstrap.sh`. Jis sukuria reikiamus
+failus ir nuolatinius katalogus, parenka proxy papildinį ir paleidžia paslaugas.
+Paprastą Compose komandą naudokite tik jau paruoštam diegimui.
+
 ## Diegimas
 
 Reikalavimai:

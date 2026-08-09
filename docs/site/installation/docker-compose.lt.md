@@ -35,10 +35,35 @@ Parsisiųskite konkretaus GitHub leidimo archyvą ir SHA256 failą, juos
 patikrinkite, tada naudokite leidimo `deploy/compose.yml` kartu su atitinkamu
 proxy papildiniu. Oficialūs failai prižiūrimi [deploy kataloge](https://github.com/VooZ2/kinkudos/tree/main/deploy).
 
-Prieš paleisdami paruoškite būtinus aplinkos kintamuosius ir paslapčių failus,
-nuolatinius `data/`, `backups/` ir `secrets/` katalogus, domeną, HTTPS bei
-tinkamai sukonfigūruotą atvirkštinį tarpinį serverį. Palaikomi `host`, `traefik`
-ir `container` papildiniai iš `deploy/`.
+Prieš paleisdami paruoškite domeną, HTTPS, tinkamai sukonfigūruotą atvirkštinį
+tarpinį serverį ir nuolatinius `data/`, `backups/`, `backup-state/` bei
+`secrets/` katalogus. Palaikomi `host`, `traefik` ir `container` papildiniai iš
+`deploy/`.
+
+Compose failas tikisi, kad šie serverio paslapčių failai jau egzistuoja; Docker
+Compose jų nesugeneruoja:
+
+```text
+secrets/django_secret_key
+secrets/setup_token
+secrets/vapid_private.pem
+secrets/vapid_public.txt
+secrets/smtp_password       # gali būti tuščias, kai SMTP išjungtas
+secrets/restic_password
+secrets/backup_agent_token
+```
+
+Kopijų agentas taip pat prijungia `secrets/backup/` katalogą. Paruošimo scenarijus
+sukuria šį katalogą ir tuščią `restic.env` šabloną; jį sukonfigūruokite, kai
+įjungsite nuotolines kopijas.
+
+Nepaleiskite paprastos Compose komandos tuščioje diegimo šaknyje. Docker
+įspės apie trūkstamus paslapčių failus ir vėliau gali baigti darbą klaida,
+pavyzdžiui, `invalid mount config ... secrets/restic_password`. Naujame
+bendrajame serveryje rinkitės [vedamąjį serverio diegiklį](guided-installer.lt.md).
+Rankiniam patikrinto leidimo diegimui pirmiausia ne root naudotoju iš diegimo
+katalogo paleiskite `./bootstrap.sh`; jis sukuria šiuos failus, nuolatinius
+katalogus ir pasirinktą proxy papildinį, tada paleidžia paslaugas.
 
 Nuspėjamam diegimui `compose.yml` palikite konkrečios versijos atvaizdą:
 
