@@ -51,6 +51,34 @@ schema.
   bazių, įkeltų failų, atsarginių kopijų, paslapčių, podėlių ir kitų vietinių
   vykdymo artefaktų.
 
+## [26.6.3] - 2026-08-08
+
+### Pakeista
+
+- Programos URL dabar naudoja kanoninius mažosiomis raidėmis rašomus angliškus
+  kelius nepriklausomai nuo pasirinktos sąsajos kalbos. Esamos lietuviškos
+  nuorodos išlieka naudojamos per nuolatinius GET peradresavimus, o keičiamosios
+  užklausos ir toliau pasiekia tuos pačius rodinius neprarasdamos metodo ar
+  turinio.
+- Push pranešimai, atsiliepimų eiga, tinklo apribojimai ir Service Worker dabar
+  naudoja pavadintus kanoninius kelius, todėl URL pakeitimai visoje programoje
+  išlieka nuoseklūs.
+- Pull request dabar vykdo užfiksuotų Python priklausomybių, Ruff, Django,
+  diegimo, migracijų, priklausomybių ir testų patikras, o tik dokumentacijos
+  pakeitimams taiko griežtą dokumentacijos patikrą.
+
+### Pataisyta
+
+- Seni peradresavimai dabar išsaugo tik tinkamą pakeitimų istorijos puslapiavimą
+  ir saugias vidines prisijungimo paskirties vietas; nežinomos, sugadintos ar
+  nesaugios užklausos reikšmės pašalinamos.
+
+### Saugumas
+
+- Git ir Docker kūrimo kontekstai dabar neįtraukia aplinkos failų, duomenų
+  bazių, įkeltų failų, atsarginių kopijų, paslapčių, podėlių ir kitų vietinių
+  vykdymo artefaktų.
+
 ## [26.6.2] - 2026-08-07
 
 ### Pridėta
