@@ -7,7 +7,44 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ### Changed
 
-Nothing yet.
+- Paired child devices now receive automatic device icons, broad browser/device
+  identification, a stable short ID, last-seen status, and rolling cookie
+  renewal while actively used. Device controls are more compact on mobile.
+
+### Security
+
+- Production settings now default `DEBUG` to `False` and require an explicit
+  secret key when debug is disabled.
+- Application responses now include a nonce-based Content Security Policy,
+  while preserving the existing local scripts, image previews, and styles.
+- CI now audits the locked Python dependency set with `pip-audit`, and
+  Dependabot monitors Python and GitHub Actions dependencies.
+
+## [26.6.3] - 2026-08-08
+
+### Changed
+
+- Application URLs now use canonical lowercase English paths independently of
+  the selected interface language. Existing Lithuanian links remain usable
+  through permanent GET redirects, while mutating requests continue to reach
+  the same views without losing their method or body.
+- Push notifications, feedback flows, network restrictions, and the Service
+  Worker now use named canonical routes, keeping URL changes consistent across
+  the application.
+- Pull requests now run locked Python dependency, Ruff, Django, deployment,
+  migration, dependency, and test checks, with strict documentation checks for
+  docs-only changes.
+
+### Fixed
+
+- Legacy redirects now preserve only valid changelog pagination and safe
+  internal login destinations; unknown, malformed, or unsafe query values are
+  discarded.
+
+### Security
+
+- Git and Docker build contexts now exclude environment files, databases,
+  uploads, backups, secrets, caches, and other local runtime artifacts.
 
 ## [26.6.3] - 2026-08-08
 

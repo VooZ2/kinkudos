@@ -9,7 +9,47 @@ schema.
 
 ### Pakeista
 
-Kol kas nieko.
+- Susieti vaikų įrenginiai dabar automatiškai gauna įrenginio ikoną, bendrą
+  naršyklės ir įrenginio tipą, stabilų trumpą ID, paskutinio naudojimo būseną,
+  o aktyviai naudojant poravimo slapukas pratęsiamas. Įrenginių veiksmai
+  mobiliajame ekrane užima mažiau vietos.
+
+### Saugumas
+
+- Produkciniai nustatymai dabar numatytai išjungia `DEBUG` ir, kai derinimo
+  režimas išjungtas, reikalauja aiškiai pateikto slapto rakto.
+- Programos atsakymuose dabar pateikiama nonce pagrįsta Content Security
+  Policy, išlaikant esamus vietinius skriptus, vaizdų peržiūras ir stilius.
+- CI dabar tikrina užfiksuotą Python priklausomybių rinkinį su `pip-audit`, o
+  Dependabot stebi Python ir GitHub Actions priklausomybes.
+
+## [26.6.3] - 2026-08-08
+
+### Pakeista
+
+- Programos URL dabar naudoja kanoninius mažosiomis raidėmis rašomus angliškus
+  kelius nepriklausomai nuo pasirinktos sąsajos kalbos. Esamos lietuviškos
+  nuorodos išlieka naudojamos per nuolatinius GET peradresavimus, o keičiamosios
+  užklausos ir toliau pasiekia tuos pačius rodinius neprarasdamos metodo ar
+  turinio.
+- Push pranešimai, atsiliepimų eiga, tinklo apribojimai ir Service Worker dabar
+  naudoja pavadintus kanoninius kelius, todėl URL pakeitimai visoje programoje
+  išlieka nuoseklūs.
+- Pull request dabar vykdo užfiksuotų Python priklausomybių, Ruff, Django,
+  diegimo, migracijų, priklausomybių ir testų patikras, o tik dokumentacijos
+  pakeitimams taiko griežtą dokumentacijos patikrą.
+
+### Pataisyta
+
+- Seni peradresavimai dabar išsaugo tik tinkamą pakeitimų istorijos puslapiavimą
+  ir saugias vidines prisijungimo paskirties vietas; nežinomos, sugadintos ar
+  nesaugios užklausos reikšmės pašalinamos.
+
+### Saugumas
+
+- Git ir Docker kūrimo kontekstai dabar neįtraukia aplinkos failų, duomenų
+  bazių, įkeltų failų, atsarginių kopijų, paslapčių, podėlių ir kitų vietinių
+  vykdymo artefaktų.
 
 ## [26.6.3] - 2026-08-08
 

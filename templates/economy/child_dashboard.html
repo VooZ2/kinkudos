@@ -15,7 +15,7 @@
 {% endblock %}
 {% block content %}
 <section class="child-hero">
-  <div class="child-identity">{% if child.avatar %}<img class="hero-avatar" src="{% url 'child_avatar' child.pk %}" alt="">{% endif %}<div><p class="eyebrow">{% blocktranslate with name=child.address_name %}Hello, {{ name }}{% endblocktranslate %}</p><h1>{% translate "It's great to see you" %}</h1></div></div>
+  <div class="child-identity">{% if child.avatar %}<img class="hero-avatar" src="{% url 'child_avatar' child.pk %}" alt="">{% endif %}<div class="child-greeting">{% if greeting_name %}<h1>{% blocktranslate with name=greeting_name %}Hello, {{ name }}!{% endblocktranslate %}</h1>{% else %}<h1>{% translate "Hello!" %}</h1>{% endif %}<p class="child-greeting-supporting">{% translate "Ready for today's tasks?" %}</p></div></div>
   <div class="balance-orb"><strong>{{ child.balance }}</strong><span>{{ child.balance|currency_unit:child.theme }}</span></div>
 </section>
 

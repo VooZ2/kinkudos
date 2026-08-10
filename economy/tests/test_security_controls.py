@@ -1,3 +1,4 @@
+import re
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
@@ -85,6 +86,48 @@ class ClientIpTests(TestCase):
         )(request)
 
         self.assertEqual(response.content, b"|")
+
+
+class ContentSecurityPolicyTests(TestCase):
+    def setUp(self):
+        self.parent = get_user_model().objects.create_user(
+            "csp-parent",
+            password="Safe-csp-parent-password-123!",
+        )
+
+    def test_responses_use_nonce_protected_inline_scripts(self):
+        responses = [
+            self.client.get(url)
+            for url in (
+                reverse("parent_login"),
+                reverse("pair_device_via_link"),
+            )
+        ]
+        self.client.force_login(self.parent)
+        responses.append(
+            self.client.post(reverse("parent_generate_pairing_link"))
+        )
+
+        for response in responses:
+            self.assertEqual(response.status_code, 200)
+            policy = response["Content-Security-Policy"]
+            match = re.search(r"script-src 'self' 'nonce-([^']+)'", policy)
+            self.assertIsNotNone(match)
+            nonce = match.group(1)
+            script_tags = re.findall(
+                r"<script(?:\s[^>]*)?>",
+                response.content.decode(),
+                flags=re.IGNORECASE,
+            )
+            inline_script_tags = [tag for tag in script_tags if " src=" not in tag]
+
+            self.assertTrue(inline_script_tags)
+            self.assertTrue(
+                all(f'nonce="{nonce}"' in tag for tag in inline_script_tags)
+            )
+            self.assertNotIn("'unsafe-inline'", match.group(0))
+            self.assertIn("object-src 'none'", policy)
+            self.assertIn("frame-ancestors 'none'", policy)
 
 
 @override_settings(DEVICE_PAIRING_REQUIRED=False)

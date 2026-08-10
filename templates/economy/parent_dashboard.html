@@ -455,17 +455,18 @@
       {% for device in paired_devices %}
         <div class="account-row">
           <div class="account-summary">
-            <span class="profile-mini">{{ device.label|default:"D"|first|upper }}</span>
-            <span class="account-name">
-              <strong>{% if device.label %}{{ device.label }}{% else %}{% translate "Child device" %}{% endif %}{% if current_device.pk == device.pk %} <small>({% translate "this device" %})</small>{% endif %}</strong>
-              <small>{% translate "Last used" %}: {{ device.last_used_at|default:device.created_at|date:"Y-m-d H:i" }}</small>
+            <span class="device-icon" aria-hidden="true"><svg class="action-icon"><use href="#{{ device.device_icon }}"></use></svg></span>
+            <span class="device-copy">
+              <strong>{{ device.display_name }}{% if current_device.pk == device.pk %} <small>({% translate "this device" %})</small>{% endif %}</strong>
+              <small>{{ device.device_summary }} · {% translate "ID" %} {{ device.device_code }}</small>
+              <small>{% translate "Last used" %}: {{ device.last_seen_at|date:"Y-m-d H:i" }}{% if device.is_inactive %} · <span class="device-status device-status-inactive">{% translate "Not used recently" %}</span>{% endif %}</small>
             </span>
           </div>
           <div class="catalog-actions">
             <button class="icon-button" type="button" data-toggle-edit="device-{{ device.pk }}" aria-label="{% translate 'Rename device' %}" title="{% translate 'Rename device' %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
             <form method="post" action="{% url 'parent_revoke_device' device.pk %}">
               {% csrf_token %}
-              <button class="button button-danger" type="submit" data-confirm="{% translate 'Revoke child access for this device?' %}">{% translate "Revoke" %}</button>
+              <button class="button button-danger device-revoke-button" type="submit" aria-label="{% translate 'Revoke child access for this device?' %}" title="{% translate 'Revoke' %}" data-confirm="{% translate 'Revoke child access for this device?' %}"><span class="device-revoke-label">{% translate "Revoke" %}</span><span class="device-revoke-icon" aria-hidden="true"><svg class="action-icon"><use href="#icon-trash-can"></use></svg></span></button>
             </form>
           </div>
           <form id="edit-device-{{ device.pk }}" method="post" action="{% url 'parent_rename_device' device.pk %}" class="account-edit-form stack-form" hidden>
@@ -644,28 +645,34 @@
   </article>
   </details>
   <details class="settings-section settings-section-standalone parent-accordion"><summary>{% translate "Accounts" %}</summary>
-  <h3 class="account-section-title">{% translate "Create new accounts" %}</h3>
-  <div class="account-grid">
-    <details class="panel parent-accordion">
-      <summary>{% translate "New parent account" %}</summary>
-      <form method="post" action="{% url 'parent_create_parent_account' %}" class="stack-form">
+  <div class="account-management">
+    <section class="panel account-create-panel">
+      <div class="account-section-heading">
+        <h3>{% translate "Create account" %}</h3>
+      </div>
+      <label class="account-type-picker">
+        <span>{% translate "Account type" %}</span>
+        <select class="field-control" data-account-create-type aria-controls="create-parent-account-form create-child-profile-form">
+          <option value="parent">{% translate "Parent account" %}</option>
+          <option value="child">{% translate "Child profile" %}</option>
+        </select>
+      </label>
+      <form id="create-parent-account-form" method="post" action="{% url 'parent_create_parent_account' %}" class="stack-form account-create-form" data-account-create-form="parent">
         {% csrf_token %}{{ parent_account_form.as_p }}
         <button class="button button-primary" type="submit">{% translate "Create account" %}</button>
       </form>
-    </details>
-    <details class="panel parent-accordion">
-      <summary>{% translate "New child profile" %}</summary>
-      <form method="post" action="{% url 'parent_create_child_account' %}" class="stack-form">
+      <form id="create-child-profile-form" method="post" action="{% url 'parent_create_child_account' %}" class="stack-form account-create-form" data-account-create-form="child" hidden>
         {% csrf_token %}{{ child_account_form.as_p }}
         <button class="button button-primary" type="submit">{% translate "Create profile" %}</button>
       </form>
-    </details>
-  </div>
-  <h3 class="account-section-title">{% translate "Edit accounts" %}</h3>
-  <div class="account-grid">
-    <details class="panel parent-accordion">
-      <summary>{% translate "Parent accounts" %}</summary>
+    </section>
+
+    <section class="panel existing-accounts-panel">
+      <div class="account-section-heading">
+        <h3>{% translate "Existing accounts" %}</h3>
+      </div>
       <div class="account-list">
+        <h4 class="account-list-heading">{% translate "Parent accounts" %}</h4>
         {% for item in parent_account_items %}
         <div class="account-row">
           <div class="account-summary">
@@ -676,7 +683,7 @@
             </span>
           </div>
           <div class="catalog-actions">
-            <button class="icon-button" type="button" data-toggle-edit="parent-account-{{ item.account.pk }}" aria-label="{% translate "Edit" %} {{ item.account.username }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
+            <button class="icon-button" type="button" data-open-dialog="edit-parent-account-{{ item.account.pk }}" aria-label="{% translate "Edit" %} {{ item.account.username }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
             {% if item.account.pk != user.pk %}
             <form method="post" action="{% url 'parent_remove_parent_account' item.account.pk %}">
               {% csrf_token %}
@@ -684,17 +691,22 @@
             </form>
             {% endif %}
           </div>
-          <form id="edit-parent-account-{{ item.account.pk }}" method="post" action="{% url 'parent_edit_parent_account' item.account.pk %}" class="account-edit-form stack-form" hidden>
-            {% csrf_token %}{{ item.form.as_p }}
-            <button class="button button-primary" type="submit">{% translate "Save" %}</button>
-          </form>
         </div>
+        <dialog id="edit-parent-account-{{ item.account.pk }}" class="action-dialog account-edit-dialog" data-reset-on-close>
+          <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
+          <h2>{% translate "Edit parent account" %}</h2>
+          <p class="dialog-context">{{ item.account.username }}</p>
+          <form method="post" action="{% url 'parent_edit_parent_account' item.account.pk %}" class="stack-form">
+            {% csrf_token %}{{ item.form.as_p }}
+            <div class="dialog-actions">
+              <button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button>
+              <button class="button button-primary" type="submit">{% translate "Save" %}</button>
+            </div>
+          </form>
+        </dialog>
         {% endfor %}
-      </div>
-    </details>
-    <details class="panel parent-accordion">
-      <summary>{% translate "Child profiles" %}</summary>
-      <div class="account-list">
+
+        <h4 class="account-list-heading">{% translate "Child profiles" %}</h4>
         {% for item in child_account_items %}
         <div class="account-row">
           <div class="account-summary">
@@ -703,23 +715,31 @@
             {% else %}
               <span class="profile-mini">{{ item.child.name|first }}</span>
             {% endif %}
-            <strong>{{ item.child.name }}</strong>
+            <span class="account-name"><strong>{{ item.child.name }}</strong></span>
           </div>
           <div class="catalog-actions">
-            <button class="icon-button" type="button" data-toggle-edit="child-account-{{ item.child.pk }}" aria-label="{% translate "Edit" %} {{ item.child.name }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
+            <button class="icon-button" type="button" data-open-dialog="edit-child-account-{{ item.child.pk }}" aria-label="{% translate "Edit" %} {{ item.child.name }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
             <form method="post" action="{% url 'parent_remove_child_account' item.child.pk %}">
               {% csrf_token %}
               <button class="icon-button danger" type="submit" data-confirm="{% blocktranslate with name=item.child.name %}Remove child profile “{{ name }}”? History will be preserved.{% endblocktranslate %}" aria-label="{% translate "Remove" %} {{ item.child.name }}" title="{% translate "Remove" %}"><svg class="action-icon"><use href="#icon-trash"></use></svg></button>
             </form>
           </div>
-          <form id="edit-child-account-{{ item.child.pk }}" method="post" action="{% url 'parent_edit_child_account' item.child.pk %}" class="account-edit-form stack-form" hidden>
-            {% csrf_token %}{{ item.form.as_p }}
-            <button class="button button-primary" type="submit">{% translate "Save" %}</button>
-          </form>
         </div>
+        <dialog id="edit-child-account-{{ item.child.pk }}" class="action-dialog account-edit-dialog" data-reset-on-close>
+          <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
+          <h2>{% translate "Edit child profile" %}</h2>
+          <p class="dialog-context">{{ item.child.name }}</p>
+          <form method="post" action="{% url 'parent_edit_child_account' item.child.pk %}" class="stack-form">
+            {% csrf_token %}{{ item.form.as_p }}
+            <div class="dialog-actions">
+              <button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button>
+              <button class="button button-primary" type="submit">{% translate "Save" %}</button>
+            </div>
+          </form>
+        </dialog>
         {% endfor %}
       </div>
-    </details>
+    </section>
   </div>
   </details>
   <details class="settings-section settings-section-standalone parent-accordion"><summary>{% translate "Family feedback" %}</summary>
