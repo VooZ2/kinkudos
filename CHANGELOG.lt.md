@@ -9,10 +9,19 @@ schema.
 
 ### Pakeista
 
-- Susieti vaikų įrenginiai dabar automatiškai gauna įrenginio ikoną, bendrą
-  naršyklės ir įrenginio tipą, stabilų trumpą ID, paskutinio naudojimo būseną,
-  o aktyviai naudojant poravimo slapukas pratęsiamas. Įrenginių veiksmai
-  mobiliajame ekrane užima mažiau vietos.
+- Kol kas nieko.
+
+## [26.6.4] - 2026-08-11
+
+### Pakeista
+
+- Vaikų skydeliuose dabar rodomas suasmenintas pasisveikinimas, o nepasiekiamam
+  vardui naudojamas saugus atsarginis tekstas.
+- Susieti vaikų įrenginiai dabar automatiškai gauna ikonas, bendrą, privatumo
+  nepažeidžiantį naršyklės ir įrenginio tipą, stabilų trumpą ID, paskutinio
+  naudojimo būseną, o aktyviai naudojant pratęsiamas poravimo slapukas.
+- Tėvų paskyrų nustatymuose dabar naudojamas aiškesnis paskyros tipo
+  pasirinkimas ir redagavimo dialogai, o laukiantys prašymai labiau išryškinami.
 
 ### Saugumas
 

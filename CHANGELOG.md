@@ -7,9 +7,20 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ### Changed
 
-- Paired child devices now receive automatic device icons, broad browser/device
-  identification, a stable short ID, last-seen status, and rolling cookie
-  renewal while actively used. Device controls are more compact on mobile.
+- Nothing yet.
+
+## [26.6.4] - 2026-08-11
+
+### Changed
+
+- Child dashboards now show a personalized greeting with a safe fallback when a
+  name is unavailable.
+- Paired child devices now receive automatic icons, broad non-fingerprinting
+  browser/device identification, a stable short ID, last-seen status, and
+  rolling cookie renewal while actively used.
+- Parent account settings now use a clearer account-type selector and
+  dialog-based editing, while pending requests receive stronger visual
+  emphasis.
 
 ### Security
 
