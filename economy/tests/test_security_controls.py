@@ -114,7 +114,11 @@ class ContentSecurityPolicyTests(TestCase):
             match = re.search(r"script-src 'self' 'nonce-([^']+)'", policy)
             self.assertIsNotNone(match)
             nonce = match.group(1)
-            script_tags = re.findall(r"<script(?:\s[^>]*)?>", response.content.decode())
+            script_tags = re.findall(
+                r"<script(?:\s[^>]*)?>",
+                response.content.decode(),
+                flags=re.IGNORECASE,
+            )
             inline_script_tags = [tag for tag in script_tags if " src=" not in tag]
 
             self.assertTrue(inline_script_tags)

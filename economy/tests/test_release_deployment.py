@@ -250,6 +250,11 @@ class ReleaseDeploymentTests(SimpleTestCase):
         )
         self.assertIn("inputs: requirements.lock", workflow)
         self.assertIn("no-deps: true", workflow)
+        migration_check = workflow.split(
+            "      - name: Check for missing migrations\n", 1
+        )[1].split("      - name:", 1)[0]
+        self.assertIn('KINKUDOS_DEBUG: "false"', migration_check)
+        self.assertIn("KINKUDOS_SECRET_KEY: ci-test-only-", migration_check)
 
     def test_legacy_hostinger_caddy_profile_is_removed(self):
         legacy_paths = (

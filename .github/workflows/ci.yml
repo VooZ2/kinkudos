@@ -88,6 +88,9 @@ jobs:
 
       - name: Check for missing migrations
         if: steps.changes.outputs.docs_only == 'false'
+        env:
+          KINKUDOS_DEBUG: "false"
+          KINKUDOS_SECRET_KEY: ci-test-only-9Fq7wR2mX8vK4pL6sN1cD5hJ3tB0zA7yE9uQ
         run: python manage.py makemigrations --check --dry-run
 
       - name: Check installed dependencies
