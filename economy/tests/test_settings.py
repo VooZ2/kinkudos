@@ -1,14 +1,42 @@
+import os
+import subprocess
+import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase, override_settings
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
 
 from economy.email_config import smtp_config
 from economy.forms import ChildEditForm
 from economy.models import ChildProfile, FamilySettings, PenaltyTemplate, Reward, Task
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+class DefaultSettingsTests(SimpleTestCase):
+    def test_debug_defaults_to_false_without_environment_override(self):
+        environment = os.environ.copy()
+        environment.pop("KINKUDOS_DEBUG", None)
+        environment["KINKUDOS_SECRET_KEY"] = "test-only-secret"
+
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                "from kinkudos import settings; print(settings.DEBUG)",
+            ],
+            cwd=ROOT,
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.strip(), "False")
 
 
 @override_settings(LANGUAGE_CODE="en")

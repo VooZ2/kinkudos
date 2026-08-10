@@ -5,9 +5,14 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
-### Changed
+### Security
 
-Nothing yet.
+- Production settings now default `DEBUG` to `False` and require an explicit
+  secret key when debug is disabled.
+- Application responses now include a nonce-based Content Security Policy,
+  while preserving the existing local scripts, image previews, and styles.
+- CI now audits the locked Python dependency set with `pip-audit`, and
+  Dependabot monitors Python and GitHub Actions dependencies.
 
 ## [26.6.3] - 2026-08-08
 

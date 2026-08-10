@@ -228,6 +228,10 @@ the shared parent palette.
 - Django admin is disabled in production unless explicitly enabled.
 - Django `SECURE_PROXY_SSL_HEADER`; `HttpOnly`, `SameSite=Lax` cookies.
 - CSRF protection on all mutating requests. No CORS — same-origin only.
+- `DEBUG` defaults to `False`; production requires an explicit secret key.
+  Application responses include a nonce-based Content Security Policy that
+  restricts scripts, forms, frames, workers, and plugins to the application
+  origin; local image previews and existing inline styles remain supported.
 - Every parent/child request is authorized server-side.
 - Balance-changing operations use `transaction.atomic()` with row locking.
 - Secrets are read only from Docker secret files or server environment

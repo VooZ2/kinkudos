@@ -94,6 +94,13 @@ jobs:
         if: steps.changes.outputs.docs_only == 'false'
         run: python -m pip check
 
+      - name: Audit locked dependencies
+        if: steps.changes.outputs.docs_only == 'false'
+        uses: pypa/gh-action-pip-audit@1220774d901786e6f652ae159f7b6bc8fea6d266 # v1.1.0
+        with:
+          inputs: requirements.lock
+          no-deps: true
+
       - name: Collect static assets for tests
         if: steps.changes.outputs.docs_only == 'false'
         env:
@@ -108,6 +115,11 @@ jobs:
 
       - name: Run Django tests
         if: steps.changes.outputs.docs_only == 'false'
+        env:
+          KINKUDOS_DEBUG: "false"
+          KINKUDOS_SECRET_KEY: ci-test-only-9Fq7wR2mX8vK4pL6sN1cD5hJ3tB0zA7yE9uQ
+          KINKUDOS_SECURE_SSL_REDIRECT: "false"
+          KINKUDOS_DEVICE_PAIRING_REQUIRED: "false"
         run: python manage.py test
 
       - name: Install documentation build dependencies

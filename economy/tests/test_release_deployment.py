@@ -236,6 +236,21 @@ class ReleaseDeploymentTests(SimpleTestCase):
             self.assertIn("chmod 0700", script)
             self.assertIn('"$project_root/backups"/kinkudos-*.sqlite3', script)
 
+    def test_dependency_security_monitoring_is_configured(self):
+        dependabot = (ROOT / ".github" / "dependabot.yml").read_text(encoding="utf-8")
+        workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn('package-ecosystem: "pip"', dependabot)
+        self.assertIn('package-ecosystem: "github-actions"', dependabot)
+        self.assertIn(
+            "pypa/gh-action-pip-audit@1220774d901786e6f652ae159f7b6bc8fea6d266",
+            workflow,
+        )
+        self.assertIn("inputs: requirements.lock", workflow)
+        self.assertIn("no-deps: true", workflow)
+
     def test_legacy_hostinger_caddy_profile_is_removed(self):
         legacy_paths = (
             "Caddyfile.hostinger",

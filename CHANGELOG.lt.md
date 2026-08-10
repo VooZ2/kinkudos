@@ -7,9 +7,14 @@ schema.
 
 ## [Unreleased]
 
-### Pakeista
+### Saugumas
 
-Kol kas nieko.
+- Produkciniai nustatymai dabar numatytai išjungia `DEBUG` ir, kai derinimo
+  režimas išjungtas, reikalauja aiškiai pateikto slapto rakto.
+- Programos atsakymuose dabar pateikiama nonce pagrįsta Content Security
+  Policy, išlaikant esamus vietinius skriptus, vaizdų peržiūras ir stilius.
+- CI dabar tikrina užfiksuotą Python priklausomybių rinkinį su `pip-audit`, o
+  Dependabot stebi Python ir GitHub Actions priklausomybes.
 
 ## [26.6.3] - 2026-08-08
 

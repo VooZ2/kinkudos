@@ -14,7 +14,7 @@
   </form>
   <noscript><p class="form-error">{% translate "JavaScript is required to use the private pairing link." %}</p></noscript>
 </section>
-<script>
+<script nonce="{{ request.csp_nonce }}">
 (() => {
   const token = window.location.hash.slice(1);
   const form = document.querySelector("[data-pairing-form]");

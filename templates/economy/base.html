@@ -177,7 +177,7 @@
     {% for emoji in emoji_suggestions %}<option value="{{ emoji }}">{% endfor %}
   </datalist>
 
-  <script>
+  <script nonce="{{ request.csp_nonce }}">
     window.KINKUDOS = {
       vapidPublicKey: "{{ vapid_public_key|escapejs }}",
       pushUrl: "{% if user.is_authenticated %}{% url 'push_subscribe' %}{% else %}{% url 'child_push_subscribe' %}{% endif %}",
