@@ -19,6 +19,13 @@ kinkudos/
 `restic` ir, jei įjungtas el. paštas, SMTP slaptažodžiai. Failai turi priklausyti serverio
 administratoriui, turėti `0600` teises ir niekada nepatekti į Git.
 
+Pagrindinis Compose failas šių serverio failų nesukuria. Nepaleiskite paprasto
+`docker compose up` tuščioje diegimo šaknyje: Docker praneš apie trūkstamas
+paslaptis ir nepavyks prijungti vieno iš failų. Naujam bendram diegimui šiame
+kataloge ne root naudotoju paleiskite `./bootstrap.sh`. Jis sukuria reikiamus
+failus ir nuolatinius katalogus, parenka proxy papildinį ir paleidžia paslaugas.
+Paprastą Compose komandą naudokite tik jau paruoštam diegimui.
+
 ## Diegimas
 
 Reikalavimai:
@@ -143,14 +150,15 @@ nukreiptas į šį serverį.
 
 ### Rankinis patikrintas diegimas
 
-Diegdami rankiniu būdu, naujame tuščiame diegimo šakniniame kataloge
-parsisiųskite ir patikrinkite konkretų leidimą, jo kodą palikite kaip `app`,
-iškelkite diegimo katalogą ir paleiskite tą patį vedamą paruošimą:
+Diegdami rankiniu būdu, naujame tuščiame diegimo šakniniame kataloge nustatykite
+`KINKUDOS_VERSION` į norimą leidimą, tada jį parsisiųskite ir patikrinkite, jo
+kodą palikite kaip `app`, iškelkite diegimo katalogą ir paleiskite tą patį
+vedamą paruošimą:
 
 ```bash
 sudo install -d -o "$USER" -g "$(id -gn)" /opt/kinkudos
 cd /opt/kinkudos
-version=26.4.9
+version=${KINKUDOS_VERSION:?Prieš šį bloką nustatykite KINKUDOS_VERSION}
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"
@@ -200,11 +208,11 @@ Kalbą vėliau galima pakeisti pačioje programoje; pasirinkimas išsaugomas tam
 ## Esamos instaliacijos atnaujinimas
 
 Šias komandas paleiskite diegimo šakniniame kataloge, kuriame yra `app`,
-`deploy`, `data` ir `secrets`. `OWNER/REPOSITORY` bei versiją pakeiskite
-norimo diegti leidimo reikšmėmis:
+`deploy`, `data` ir `secrets`. Prieš šį bloką nustatykite
+`KINKUDOS_VERSION` į norimą įdiegti leidimą:
 
 ```bash
-version=26.4.9
+version=${KINKUDOS_VERSION:?Prieš šį bloką nustatykite KINKUDOS_VERSION}
 repository=VooZ2/kinkudos
 gh release download "v$version" --repo "$repository" \
   --pattern "kinkudos-$version.tar.gz*"

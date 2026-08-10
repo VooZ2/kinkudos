@@ -5,7 +5,7 @@ description: Integrate KinKudos with an existing Caddy, Nginx, Traefik, or Nginx
 
 # Advanced deployment
 
-Use this page when you already operate Docker and an HTTPS proxy. KinKudos does not require a provider-specific image: all methods use the same pinned application and backup-agent images.
+Use this page when you already operate Docker and an HTTPS proxy. KinKudos does not require a provider-specific image: all methods use the same pinned application and backup-agent images. Start with [Choose the proxy mode](docker-compose.md#choose-the-proxy-mode-before-running-the-installer) before running `bootstrap.sh`.
 
 - Host Caddy or Nginx: use the `host` overlay and proxy to `127.0.0.1:8000`.
 - Traefik: use the provided Traefik overlay and the exact external network.

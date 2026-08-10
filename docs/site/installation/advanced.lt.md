@@ -5,7 +5,7 @@ description: Integruokite KinKudos į turimą Caddy, Nginx, Traefik ar Nginx Pro
 
 # Pažangus diegimas
 
-Šis puslapis skirtas jau administruojantiems Docker ir HTTPS proxy. KinKudos nereikia atskiro tiekėjo atvaizdo: visi būdai naudoja tuos pačius konkrečia versija pažymėtus programos ir kopijų agento atvaizdus.
+Šis puslapis skirtas jau administruojantiems Docker ir HTTPS proxy. KinKudos nereikia atskiro tiekėjo atvaizdo: visi būdai naudoja tuos pačius konkrečia versija pažymėtus programos ir kopijų agento atvaizdus. Prieš paleisdami `bootstrap.sh`, pradėkite nuo puslapio [Proxy režimo pasirinkimas](docker-compose.lt.md#pries-diegikli-pasirinkite-proxy-rezima).
 
 - Serveryje veikiantis Caddy ar Nginx: naudokite `host` papildinį ir proxy į `127.0.0.1:8000`.
 - Traefik: naudokite pateiktą Traefik papildinį ir tikslų išorinį tinklą.
