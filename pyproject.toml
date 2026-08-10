@@ -7,7 +7,7 @@ requires-python = ">=3.12"
 license = "MIT"
 authors = [{ name = "KinKudos contributors" }]
 dependencies = [
-  "Django==5.2.16",
+  "Django==6.1",
   "argon2-cffi==25.1.0",
   "gunicorn==26.0.0",
   "Pillow==12.3.0",
