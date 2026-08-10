@@ -375,7 +375,7 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .pending-child-heading { display: flex; align-items: center; gap: 12px; padding: 15px 18px; border-bottom: 1px solid var(--line); }
 .pending-child-heading h3 { margin: 0; font-size: 1.2rem; }
 .pending-requests-fragment > .section-heading { margin-bottom: 14px; }
-.pending-requests-panel { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+.pending-requests-panel { overflow: hidden; border: 2px solid color-mix(in srgb, var(--accent) 62%, var(--line)); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
 .pending-request-list { display: grid; }
 .pending-request-row { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); }
 .pending-request-row:last-child { border-bottom: 0; }

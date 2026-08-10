@@ -1611,6 +1611,14 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotIn('class="pending-request-row"><span class="item-icon"', content)
         self.assertIn("Vaikai", content)
 
+    def test_pending_requests_panel_uses_attention_border(self):
+        stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
+
+        self.assertIn(
+            ".pending-requests-panel { overflow: hidden; border: 2px solid color-mix(in srgb, var(--accent) 62%, var(--line));",
+            stylesheet,
+        )
+
     def test_pending_requests_render_english_children_heading_and_fragment(self):
         self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
         self.child_one.task_claims.create(
