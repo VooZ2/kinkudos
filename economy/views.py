@@ -479,13 +479,17 @@ def child_select(request):
 @parent_required
 @require_POST
 def parent_pair_device(request):
-    label = request.POST.get("label", "").strip() or _("Child device")
+    label = request.POST.get("label", "").strip()
     actor = request.user
-    device, raw_token = DeviceToken.issue(created_by=actor, label=label)
+    device, raw_token = DeviceToken.issue(
+        created_by=actor,
+        label=label,
+        user_agent=request.headers.get("User-Agent", ""),
+    )
     SecurityAuditEvent.objects.create(
         actor=actor,
         action=SecurityAuditEvent.Action.DEVICE_PAIRED,
-        detail=device.label,
+        detail=device.display_name,
     )
     request.session.flush()
     response = redirect("child_select")
@@ -497,6 +501,10 @@ def parent_pair_device(request):
         httponly=True,
         samesite="Lax",
         path="/",
+    )
+    messages.success(
+        request,
+        _("This device is paired as %(device)s.") % {"device": device.display_name},
     )
     return response
 
@@ -551,14 +559,14 @@ def pair_device_via_link(request):
             return redirect("pair_device_via_link")
         device, device_token = DeviceToken.issue(
             created_by=link.created_by,
-            label=_("Child device"),
+            user_agent=request.headers.get("User-Agent", ""),
         )
         link.used_at = timezone.now()
         link.save(update_fields=["used_at"])
         SecurityAuditEvent.objects.create(
             actor=link.created_by,
             action=SecurityAuditEvent.Action.DEVICE_PAIRED,
-            detail=device.label,
+            detail=device.display_name,
         )
     request.session.flush()
     response = redirect("child_select")
@@ -570,6 +578,10 @@ def pair_device_via_link(request):
         httponly=True,
         samesite="Lax",
         path="/",
+    )
+    messages.success(
+        request,
+        _("This device is paired as %(device)s.") % {"device": device.display_name},
     )
     return response
 
@@ -585,7 +597,7 @@ def parent_revoke_device(request, device_id):
         SecurityAuditEvent.objects.create(
             actor=request.user,
             action=SecurityAuditEvent.Action.DEVICE_REVOKED,
-            detail=device.label,
+            detail=device.display_name,
         )
     messages.success(request, _("Device access revoked."))
     return redirect(f"{reverse('parent_dashboard')}#parent-settings")

@@ -857,6 +857,22 @@ document.querySelectorAll("[data-toggle-edit]").forEach(button => {
   });
 });
 
+const accountCreateType = document.querySelector("[data-account-create-type]");
+if (accountCreateType) {
+  const accountCreateForms = [...document.querySelectorAll("[data-account-create-form]")];
+  const syncAccountCreateForm = () => {
+    accountCreateForms.forEach(form => {
+      form.hidden = form.dataset.accountCreateForm !== accountCreateType.value;
+    });
+  };
+  accountCreateType.addEventListener("change", syncAccountCreateForm);
+  syncAccountCreateForm();
+}
+
+document.querySelectorAll("dialog[data-reset-on-close]").forEach(dialog => {
+  dialog.addEventListener("close", () => dialog.querySelector("form")?.reset());
+});
+
 document.querySelectorAll("[data-goal-add-dialog]").forEach(dialog => {
   const input = dialog.querySelector("[data-goal-amount-input]");
   const after = dialog.querySelector("[data-goal-after]");

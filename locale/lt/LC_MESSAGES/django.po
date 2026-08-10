@@ -100,6 +100,9 @@ msgstr "Prieiga iš šio tinklo neleidžiama"
 msgid "Access restricted"
 msgstr "Prieiga apribota"
 
+msgid "Account type"
+msgstr "Paskyros tipas"
+
 msgid "Accounts"
 msgstr "Paskyros"
 
@@ -189,6 +192,12 @@ msgstr "Leisti šiame įrenginyje"
 
 msgid "Allowed IP addresses and networks"
 msgstr "Leidžiami IP adresai ir tinklai"
+
+msgid "Android phone"
+msgstr "Android telefonas"
+
+msgid "Android tablet"
+msgstr "Android planšetė"
 
 msgid "Annual Blockville Gift!"
 msgstr "Metinė Blockville dovana!"
@@ -547,6 +556,9 @@ msgstr "Vaikų puslapiai ir tėvų sritis pasiekiami tik iš leidžiamų IP adre
 msgid "Child pages are available only from the allowed IP addresses. Parent access is not restricted by IP."
 msgstr "Vaikų puslapiai pasiekiami tik iš leidžiamų IP adresų. Tėvų prieiga pagal IP neribojama."
 
+msgid "Child profile"
+msgstr "Vaiko profilis"
+
 msgid "Child profile “%(name)s” created."
 msgstr "Vaiko profilis „%(name)s“ sukurtas."
 
@@ -557,7 +569,7 @@ msgid "Child profile “%(name)s” updated."
 msgstr "Vaiko profilis „%(name)s“ atnaujintas."
 
 msgid "Child profiles"
-msgstr "Vaikų paskyros"
+msgstr "Vaikų profiliai"
 
 msgid "Child's name"
 msgstr "Vaiko vardas"
@@ -733,6 +745,9 @@ msgstr "Užbaigtas tikslas: %(title)s"
 msgid "Completed task"
 msgstr "Atliktas darbas"
 
+msgid "Computer"
+msgstr "Kompiuteris"
+
 msgid "Configure email now"
 msgstr "Nustatyti el. paštą dabar"
 
@@ -767,7 +782,7 @@ msgid "Create a prize idea"
 msgstr "Sukurti prizo idėją"
 
 msgid "Create account"
-msgstr "Sukurti paskyrą"
+msgstr "Kurti paskyrą"
 
 msgid "Create new accounts"
 msgstr "Kurti naujas paskyras"
@@ -934,11 +949,17 @@ msgstr "Redaguoti"
 msgid "Edit accounts"
 msgstr "Redaguoti paskyras"
 
+msgid "Edit child profile"
+msgstr "Redaguoti vaiko profilį"
+
 msgid "Edit email settings"
 msgstr "Keisti el. pašto nustatymus"
 
 msgid "Edit goal"
 msgstr "Redaguoti tikslą"
+
+msgid "Edit parent account"
+msgstr "Redaguoti tėvų paskyrą"
 
 msgid "Edit settings"
 msgstr "Keisti nustatymus"
@@ -1056,6 +1077,9 @@ msgstr "Įvesk PIN"
 
 msgid "Exchange galleons"
 msgstr "Išsikeisti galeonus"
+
+msgid "Existing accounts"
+msgstr "Esamos paskyros"
 
 msgid "Expired"
 msgstr "Baigė galioti"
@@ -1288,6 +1312,9 @@ msgstr "Turiu idėją"
 msgid "I understand"
 msgstr "Supratau"
 
+msgid "ID"
+msgstr "ID"
+
 msgid "IP restrictions add an optional security layer on top of device pairing and sign-in limits."
 msgstr "IP ribojimai suteikia pasirenkamą papildomą apsaugos sluoksnį virš įrenginių susiejimo ir prisijungimo limitų."
 
@@ -1378,6 +1405,9 @@ msgstr "Palikite tuščią, jei PIN nekeičiate."
 msgid "Leave blank to keep the current password."
 msgstr "Palikite tuščią, jei slaptažodžio nekeičiate."
 
+msgid "Linux PC"
+msgstr "Linux kompiuteris"
+
 msgid "Lithuanian"
 msgstr "Lietuvių"
 
@@ -1395,6 +1425,9 @@ msgstr "Loterija"
 
 msgid "Lucky Ticket"
 msgstr "Laimės bilietas"
+
+msgid "Mac"
+msgstr "Mac"
 
 msgid "Magic Academy"
 msgstr "Magijos akademija"
@@ -1575,6 +1608,9 @@ msgstr "Nepakanka taškų"
 
 msgid "Not now"
 msgstr "Ne dabar"
+
+msgid "Not used recently"
+msgstr "Ilgai nenaudotas"
 
 msgid "Not used while IP restrictions are disabled"
 msgstr "Nenaudojama, kol IP ribojimai išjungti"
@@ -1791,6 +1827,9 @@ msgstr "Laukiančių ir grąžintų pataisyti darbų nuotraukos nešalinamos."
 
 msgid "Pending requests"
 msgstr "Laukiantys prašymai"
+
+msgid "Phone"
+msgstr "Telefonas"
 
 msgid "Photo for %(task)s"
 msgstr "Darbo „%(task)s“ nuotrauka"
@@ -2407,6 +2446,9 @@ msgstr "Superherojų būstinė"
 msgid "Switch profile"
 msgstr "Keisti profilį"
 
+msgid "Tablet"
+msgstr "Planšetė"
+
 msgid "Take from the chest"
 msgstr "Pasiimti iš skrynios"
 
@@ -2725,6 +2767,9 @@ msgstr "Šis kodas daugiau nebus parodytas."
 msgid "This device is not set up yet"
 msgstr "Šis įrenginys dar neparuoštas"
 
+msgid "This device is paired as %(device)s."
+msgstr "Šis įrenginys susietas kaip %(device)s."
+
 msgid "This email address is already in use."
 msgstr "Šis el. pašto adresas jau naudojamas."
 
@@ -2893,6 +2938,9 @@ msgstr "Įvesk darbo pavadinimą"
 msgid "Unavailable today"
 msgstr "Šiandien nepasiekiamas"
 
+msgid "Unknown device"
+msgstr "Nežinomas įrenginys"
+
 msgid "Unlock profile"
 msgstr "Atrakinti profilį"
 
@@ -2988,6 +3036,12 @@ msgstr "Kas šiandien renka taškus?"
 
 msgid "Who is earning tokens today?"
 msgstr "Kas šiandien renka tokenus?"
+
+msgid "Windows PC"
+msgstr "Windows kompiuteris"
+
+msgid "Windows phone"
+msgstr "Windows telefonas"
 
 msgid "Write in the spellbook"
 msgstr "Užrašyti į burtų knygą"
@@ -3126,6 +3180,12 @@ msgstr "už nuotrauką"
 
 msgid "hidden"
 msgstr "paslėpta"
+
+msgid "iPad"
+msgstr "iPad"
+
+msgid "iPhone"
+msgstr "iPhone"
 
 msgid "one ticket is unfinished"
 msgstr "vienas bilietas neužbaigtas"

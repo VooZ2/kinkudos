@@ -60,8 +60,11 @@ configuration.
 
 **DeviceToken** / **DevicePairingLink** — a paired child browser/PWA and its
 short-lived, single-use bootstrap link. Only SHA-256 token digests are stored.
-Child sessions and child Web Push subscriptions are bound to a non-revoked
-device. Revocation removes that device's child push subscriptions immediately.
+Each pairing also receives a broad, non-fingerprinting device profile and a
+short public identifier for parent-side recognition. Child sessions and child
+Web Push subscriptions are bound to a non-revoked device. Active device cookies
+are renewed while the device is used, while revocation removes that device's
+child push subscriptions immediately.
 
 **AttemptCounter** — shared fixed-window authentication counters stored in
 SQLite so limits remain consistent across Gunicorn workers. Keys are HMAC

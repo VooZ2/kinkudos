@@ -49,6 +49,7 @@ MIDDLEWARE = [
     "economy.middleware.ContentSecurityPolicyMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "economy.middleware.DeviceCookieRefreshMiddleware",
     "economy.middleware.SetupRequiredMiddleware",
     "economy.middleware.DefaultLanguageMiddleware",
     "django.middleware.locale.LocaleMiddleware",

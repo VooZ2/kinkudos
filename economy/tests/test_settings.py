@@ -311,9 +311,27 @@ class ParentSettingsTests(TestCase):
             stylesheet,
         )
         self.assertIn(
-            ".account-grid > .parent-accordion.panel:not([open]) { padding: 0; }",
+            ".account-management { display: grid; gap: 18px; }",
             stylesheet,
         )
+
+    def test_existing_accounts_use_one_list_and_dialog_editing(self):
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("parent_dashboard"))
+        script = (Path(__file__).resolve().parents[2] / "static" / "js" / "app.js").read_text(
+            encoding="utf-8",
+        )
+
+        self.assertContains(response, '<h3>Existing accounts</h3>', html=False)
+        self.assertContains(response, 'data-account-create-type', html=False)
+        self.assertContains(response, 'class="account-list-heading">Parent accounts', html=False)
+        self.assertContains(response, 'class="account-list-heading">Child profiles', html=False)
+        self.assertContains(response, 'data-open-dialog="edit-parent-account-', html=False)
+        self.assertContains(response, 'class="action-dialog account-edit-dialog"', html=False)
+        self.assertNotContains(response, 'data-toggle-edit="parent-account-', html=False)
+        self.assertIn('document.querySelector("[data-account-create-type]")', script)
+        self.assertIn('dialog[data-reset-on-close]', script)
 
     def test_settings_are_grouped_without_a_redundant_category_heading(self):
         self.client.force_login(self.admin)

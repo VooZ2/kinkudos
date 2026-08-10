@@ -5,6 +5,12 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+### Changed
+
+- Paired child devices now receive automatic device icons, broad browser/device
+  identification, a stable short ID, last-seen status, and rolling cookie
+  renewal while actively used. Device controls are more compact on mobile.
+
 ### Security
 
 - Production settings now default `DEBUG` to `False` and require an explicit

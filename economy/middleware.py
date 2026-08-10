@@ -40,6 +40,29 @@ class ContentSecurityPolicyMiddleware:
         return response
 
 
+class DeviceCookieRefreshMiddleware:
+    """Keep an actively used paired-device cookie from expiring silently."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        device = getattr(request, "_kinkudos_device", None)
+        raw_token = request.COOKIES.get(settings.DEVICE_COOKIE_NAME)
+        if device is not None and raw_token:
+            response.set_cookie(
+                settings.DEVICE_COOKIE_NAME,
+                raw_token,
+                max_age=settings.DEVICE_COOKIE_MAX_AGE,
+                secure=settings.SESSION_COOKIE_SECURE,
+                httponly=True,
+                samesite="Lax",
+                path="/",
+            )
+        return response
+
+
 class SetupRequiredMiddleware:
     public_prefixes = (
         "/setup/",

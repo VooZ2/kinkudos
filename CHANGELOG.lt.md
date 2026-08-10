@@ -7,6 +7,13 @@ schema.
 
 ## [Unreleased]
 
+### Pakeista
+
+- Susieti vaikų įrenginiai dabar automatiškai gauna įrenginio ikoną, bendrą
+  naršyklės ir įrenginio tipą, stabilų trumpą ID, paskutinio naudojimo būseną,
+  o aktyviai naudojant poravimo slapukas pratęsiamas. Įrenginių veiksmai
+  mobiliajame ekrane užima mažiau vietos.
+
 ### Saugumas
 
 - Produkciniai nustatymai dabar numatytai išjungia `DEBUG` ir, kai derinimo

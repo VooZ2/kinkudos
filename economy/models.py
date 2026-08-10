@@ -13,6 +13,14 @@ from django.utils import timezone
 from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
+from .device_detection import identify_device
+
+DEVICE_CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+
+
+def generate_device_code():
+    return "".join(secrets.choice(DEVICE_CODE_ALPHABET) for _ in range(6))
+
 
 class FamilySettings(models.Model):
     class NetworkAccessMode(models.TextChoices):
@@ -119,8 +127,22 @@ class BackupAuditEvent(models.Model):
 
 
 class DeviceToken(models.Model):
+    class Kind(models.TextChoices):
+        PHONE = "phone", _("Phone")
+        TABLET = "tablet", _("Tablet")
+        COMPUTER = "computer", _("Computer")
+        UNKNOWN = "unknown", _("Unknown device")
+
     token_hash = models.CharField(max_length=64, unique=True)
     label = models.CharField(max_length=80, blank=True)
+    device_code = models.CharField(max_length=6, unique=True, blank=True, editable=False)
+    device_kind = models.CharField(
+        max_length=16,
+        choices=Kind.choices,
+        default=Kind.UNKNOWN,
+    )
+    device_platform = models.CharField(max_length=16, default="unknown")
+    device_browser = models.CharField(max_length=16, default="unknown")
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -139,14 +161,69 @@ class DeviceToken(models.Model):
         return hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
 
     @classmethod
-    def issue(cls, *, created_by, label=""):
+    def issue(cls, *, created_by, label="", user_agent=""):
         raw_token = secrets.token_urlsafe(32)
+        profile = identify_device(user_agent)
+        device_code = generate_device_code()
+        while cls.objects.filter(device_code=device_code).exists():
+            device_code = generate_device_code()
         instance = cls.objects.create(
             token_hash=cls.digest(raw_token),
             label=label.strip()[:80],
+            device_code=device_code,
+            device_kind=profile.kind,
+            device_platform=profile.platform,
+            device_browser=profile.browser,
             created_by=created_by,
         )
         return instance, raw_token
+
+    @property
+    def device_icon(self):
+        return {
+            self.Kind.PHONE: "icon-mobile-screen-button",
+            self.Kind.TABLET: "icon-tablet-screen-button",
+            self.Kind.COMPUTER: "icon-desktop",
+            self.Kind.UNKNOWN: "icon-circle-info",
+        }.get(self.device_kind, "icon-circle-info")
+
+    @property
+    def device_summary(self):
+        device_names = {
+            (self.Kind.PHONE, "ios"): _("iPhone"),
+            (self.Kind.PHONE, "android"): _("Android phone"),
+            (self.Kind.PHONE, "windows"): _("Windows phone"),
+            (self.Kind.TABLET, "ios"): _("iPad"),
+            (self.Kind.TABLET, "android"): _("Android tablet"),
+            (self.Kind.COMPUTER, "macos"): _("Mac"),
+            (self.Kind.COMPUTER, "windows"): _("Windows PC"),
+            (self.Kind.COMPUTER, "linux"): _("Linux PC"),
+        }
+        name = device_names.get(
+            (self.device_kind, self.device_platform),
+            self.get_device_kind_display(),
+        )
+        browser_names = {
+            "chrome": "Chrome",
+            "edge": "Edge",
+            "firefox": "Firefox",
+            "opera": "Opera",
+            "safari": "Safari",
+        }
+        browser = browser_names.get(self.device_browser)
+        return f"{name} · {browser}" if browser else str(name)
+
+    @property
+    def display_name(self):
+        return self.label or self.device_summary
+
+    @property
+    def last_seen_at(self):
+        return self.last_used_at or self.created_at
+
+    @property
+    def is_inactive(self):
+        return self.last_seen_at < timezone.now() - timedelta(days=30)
 
     @property
     def is_revoked(self):
