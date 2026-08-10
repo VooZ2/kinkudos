@@ -2,23 +2,35 @@
 
 Path: **Parents → Settings**. The page is organised into the same groups as
 the application. On a phone, groups are compact expandable sections: selecting
-one reveals its fields, and empty sections are not shown. On a wide screen,
-paired account cards may use two columns while large service and security areas
-remain full width.
+one reveals its fields, and empty sections are not shown. The **Accounts**
+section has one account-creation panel and one list of existing accounts; its
+edit forms open in dialogs that also fit small screens.
 
 > **Who can change what?** Every parent can use ordinary family settings and
 > manage accounts. The parent administrator is the only person who can change
 > network access, SMTP, backup credentials, run a backup, or revoke every child
 > device.
 
-<img class="screenshot-image" src="../../assets/parent-settings-2026.png" alt="English parent settings" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-settings-devices-26-6-4.png" alt="Parent settings with paired devices" loading="lazy">
 
 <details class="screenshot-disclosure">
-<summary>View English parent settings on mobile</summary>
-<img class="screenshot-image" src="../../assets/parent-settings-mobile-26-6-0.png" alt="English parent settings on mobile" loading="lazy">
+<summary>View paired devices on mobile</summary>
+<img class="screenshot-image" src="../../assets/parent-settings-devices-mobile-26-6-4.png" alt="Paired devices in parent settings on mobile" loading="lazy">
 </details>
 
-The screenshot uses fictional demonstration data.
+<details class="screenshot-disclosure">
+<summary>View Accounts on desktop and mobile</summary>
+<img class="screenshot-image" src="../../assets/parent-settings-accounts-26-6-4.png" alt="Accounts in parent settings on desktop" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-settings-accounts-mobile-26-6-4.png" alt="Accounts in parent settings on mobile" loading="lazy">
+</details>
+
+<details class="screenshot-disclosure">
+<summary>View the account edit dialog</summary>
+<img class="screenshot-image" src="../../assets/parent-settings-account-edit-26-6-4.png" alt="Child profile edit dialog in parent settings" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-settings-account-edit-mobile-26-6-4.png" alt="Child profile edit dialog on mobile" loading="lazy">
+</details>
+
+The screenshots use fictional demonstration data.
 
 ## Family
 
@@ -41,7 +53,7 @@ existing History entries.
 ## Scratch tickets
 
 These family-wide controls work together with the individual switch in
-**Accounts → Child profiles**:
+**Parents → Settings → Accounts**, under **Child profiles**:
 
 | Field | What it means |
 | --- | --- |
@@ -68,19 +80,26 @@ history or point records.
 
 Only a paired device can list child profiles or accept a child PIN. A profile
 stores the child’s rules and history; a device is the browser, phone, tablet,
-or PWA allowed to use that profile.
+or PWA allowed to use that profile. KinKudos classifies a paired device broadly
+as a phone, tablet, computer, or unknown device from its browser information.
+This is a convenience label, not an exact model or fingerprint.
 
 | Control | Result |
 | --- | --- |
-| **Device name** | Names the device before pairing it, for example “Kitchen tablet”. |
-| **Allow children on this device** | Pairs the current browser/PWA immediately. It can then select a child and accept a PIN. |
-| **Create private pairing link** | Creates a single-use link that expires after **10 minutes**. Open it only on the intended device. |
-| **Rename** | Changes a device label without interrupting access. |
-| **Revoke** | Removes child access and notifications from one lost or retired device. It must be paired again before sign-in. |
+| **Device name** | Optional label for the device, for example “Kitchen tablet”. If left blank, KinKudos uses the detected device summary after pairing. |
+| **Allow on this device** | Pairs the current browser/PWA immediately. It can then select a child and accept a PIN. |
+| **Send a link** | Creates a single-use private link that expires after **10 minutes**. Open it only on the intended device. |
+| **Device summary** | Shows a broad icon and description such as **iPhone · Safari**, **Android phone · Chrome**, **iPad · Safari**, **Android tablet · Chrome**, **Mac**, **Windows PC**, or **Linux PC**. Unknown devices remain labelled as unknown. |
+| **ID** | Shows a short, stable six-character identifier so a parent can distinguish entries. It is not a pairing credential. |
+| **Last used** | Shows when the device was last active. After 30 days without use, the list also shows **Not used recently**. |
+| **Rename** | Opens an inline form for changing the device label without interrupting access. |
+| **Revoke** | Removes child access and notifications from one lost or retired device. On mobile, this is shown as a compact trash-can icon. The device must be paired again before sign-in. |
 | **Revoke all child devices** | Administrator-only. Requires the administrator’s password and forces every child browser/PWA to pair again. |
 
 Read [Pair a child device](../start/pair-a-child-device.md) before using a
-private link.
+private link. When a paired device is actively used, its access cookie is
+renewed so an active pairing should not quietly expire. Revoking the device
+still invalidates it immediately; it must be paired again.
 
 ### Network and security
 
@@ -153,20 +172,28 @@ not a substitute for a restore test.
 
 ## Accounts
 
-### Parent accounts
+The **Accounts** section has two panels:
+
+1. **Create account**: choose **Parent account** or **Child profile** from
+   **Account type**. Only the form for the selected type is shown. In the
+   Lithuanian interface, the choices are **Tėvų paskyra** and **Vaiko
+   profilis**.
+2. **Existing accounts**: one list with separate **Parent accounts** and
+   **Child profiles** headings.
 
 Create a separate parent account for each adult with a username, email address,
-and strong password. Edit a parent account to change its username, email, or
-password. Leaving new-password fields empty keeps the existing password.
+and strong password. Create a child profile with the child’s name, optional
+Lithuanian greeting form, starting PIN, credit, individual scratch-ticket
+switch, and birthday. The child chooses a theme on first sign-in.
 
-Removing a parent deactivates the account and preserves its History. The final
-active parent cannot be removed.
+Select the edit icon beside an existing account to open its edit dialog. Close
+the dialog with **X**, **Cancel**, or **Escape**, or choose **Save** to keep the
+changes. Closing it without saving resets the form and discards unsaved edits.
+On mobile, the account list and dialog are arranged for a narrow screen.
 
-### Child profiles
-
-Create a child profile with the child’s name, optional Lithuanian greeting
-form, starting PIN, credit, individual scratch-ticket switch, and birthday.
-The child chooses a theme on first sign-in.
+Leaving new-password fields empty keeps the existing password. Removing a
+parent deactivates the account and preserves its History. The final active
+parent cannot be removed.
 
 | Field | What it changes |
 | --- | --- |

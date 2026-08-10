@@ -8,7 +8,9 @@ Each parent has a separate username and password. Passwords must be at least 12 
 
 Use one account per adult. Do not share a parent password with a child, even if the child knows the device PIN.
 
-Parents can change their own account details in **Parents → Settings → Parent accounts**. Password-reset email is available only after an administrator has configured SMTP.
+Parents can change their own account details in **Parents → Settings → Accounts**,
+under **Parent accounts**. Password-reset email is available only after an
+administrator has configured SMTP.
 
 ### Reset a parent password
 

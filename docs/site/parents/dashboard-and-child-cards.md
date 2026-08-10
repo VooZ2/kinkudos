@@ -13,7 +13,7 @@ requests**. The child cards remain directly below it.
 
 <details class="screenshot-disclosure">
 <summary>View Parent Home pending requests on mobile</summary>
-<img class="screenshot-image" src="../../assets/parent-home-pending-requests-mobile-26-6-0.png" alt="Parent Home pending requests on mobile" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-home-pending-requests-mobile-26-6-4.png" alt="Parent Home pending requests on mobile" loading="lazy">
 </details>
 
 The screenshot uses fictional demonstration data.
@@ -48,7 +48,7 @@ goal block or placeholder.
 
 <details class="screenshot-disclosure">
 <summary>View Parent Home child cards on mobile</summary>
-<img class="screenshot-image" src="../../assets/parent-home-child-cards-mobile-26-6-0.png" alt="Parent Home child cards on mobile" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-home-child-cards-mobile-26-6-4.png" alt="Parent Home child cards on mobile" loading="lazy">
 </details>
 
 The screenshot uses fictional demonstration data.

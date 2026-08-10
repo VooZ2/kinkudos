@@ -2,23 +2,35 @@
 
 Kelias: **Tėvai → Nustatymai**. Puslapis suskirstytas į tas pačias grupes kaip
 programoje. Telefone grupės yra kompaktiškos išskleidžiamos skiltys: pasirinkus
-atsiveria laukai, o tuščios skiltys nerodomos. Plačiame ekrane susietų paskyrų
-kortelės gali būti dviejuose stulpeliuose, o didelės paslaugų ir saugumo sritys
-lieka per visą plotį.
+atsiveria laukai, o tuščios skiltys nerodomos. Skiltyje **Paskyros** yra vienas
+paskyros kūrimo blokas ir vienas esamų paskyrų sąrašas; redagavimo formos
+atsidaro dialoguose, pritaikytuose ir mažam ekranui.
 
 > **Kas gali ką keisti?** Visi tėvai gali naudoti įprastus šeimos nustatymus ir
 > tvarkyti paskyras. Tėvų administratorius vienintelis gali keisti tinklo
 > prieigą, SMTP, kopijų duomenis, paleisti kopiją ir atšaukti visus vaikų
 > įrenginius.
 
-<img class="screenshot-image" src="../../assets/parent-settings-2026.png" alt="Angliški tėvų nustatymai" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-settings-devices-26-6-4.png" alt="Tėvų nustatymai su susietais įrenginiais" loading="lazy">
 
 <details class="screenshot-disclosure">
-<summary>Peržiūrėti angliškus tėvų nustatymus telefone</summary>
-<img class="screenshot-image" src="../../assets/parent-settings-mobile-26-6-0.png" alt="Angliški tėvų nustatymai telefone" loading="lazy">
+<summary>Peržiūrėti susietus įrenginius telefone</summary>
+<img class="screenshot-image" src="../../assets/parent-settings-devices-mobile-26-6-4.png" alt="Susieti įrenginiai tėvų nustatymuose telefone" loading="lazy">
 </details>
 
-Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
+<details class="screenshot-disclosure">
+<summary>Peržiūrėti paskyras darbalaukyje ir telefone</summary>
+<img class="screenshot-image" src="../../assets/parent-settings-accounts-26-6-4.png" alt="Paskyros tėvų nustatymuose darbalaukyje" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-settings-accounts-mobile-26-6-4.png" alt="Paskyros tėvų nustatymuose telefone" loading="lazy">
+</details>
+
+<details class="screenshot-disclosure">
+<summary>Peržiūrėti paskyros redagavimo dialogą</summary>
+<img class="screenshot-image" src="../../assets/parent-settings-account-edit-26-6-4.png" alt="Vaiko profilio redagavimo dialogas tėvų nustatymuose" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-settings-account-edit-mobile-26-6-4.png" alt="Vaiko profilio redagavimo dialogas telefone" loading="lazy">
+</details>
+
+Ekrano nuotraukose naudojami tik išgalvoti demonstraciniai duomenys.
 
 ## Šeima
 
@@ -40,7 +52,7 @@ esamų **Istorijos** įrašų.
 ## Nutrinami bilietai
 
 Šie šeimos valdikliai veikia kartu su individualiu jungikliu skiltyje
-**Paskyros → Vaikų profiliai**:
+**Tėvai → Nustatymai → Paskyros**, po antrašte **Vaikų profiliai**:
 
 | Laukelis | Reikšmė |
 | --- | --- |
@@ -66,19 +78,28 @@ taškų įrašų trynimą.
 
 Tik susietas įrenginys gali rodyti vaikų profilius arba priimti vaiko PIN.
 Profilis saugo vaiko taisykles ir Istoriją, o įrenginys yra naršyklė,
-telefonas, planšetė ar PWA, kuriai leista tuo profiliu naudotis.
+telefonas, planšetė ar PWA, kuriai leista tuo profiliu naudotis. KinKudos
+įrenginį plačiai priskiria telefonui, planšetei, kompiuteriui arba nežinomam
+įrenginiui pagal naršyklės informaciją. Tai patogumo žyma, o ne tikslus modelio
+ar piršto atspaudo nustatymas.
 
 | Valdiklis | Rezultatas |
 | --- | --- |
-| **Įrenginio pavadinimas** | Pavadina įrenginį prieš susiejant, pvz., „Virtuvės planšetė“. |
-| **Leisti vaikams naudoti šį įrenginį** | Iškart susieja dabartinę naršyklę/PWA. Tada galima pasirinkti vaiką ir įvesti PIN. |
-| **Sukurti privačią susiejimo nuorodą** | Sukuria vienkartinę nuorodą, galiojančią **10 minučių**. Atidarykite tik numatytame įrenginyje. |
-| **Pervadinti** | Pakeičia tik įrenginio pavadinimą. |
-| **Atšaukti** | Pašalina vaiko prieigą ir pranešimus iš vieno prarasto ar nebenaudojamo įrenginio. Norint prisijungti reikės susieti iš naujo. |
+| **Įrenginio pavadinimas** | Pasirenkama žyma, pvz., „Virtuvės planšetė“. Jei paliksite tuščią, po susiejimo KinKudos naudos aptiktą įrenginio aprašą. |
+| **Leisti šiame įrenginyje** | Iškart susieja dabartinę naršyklę/PWA. Tada galima pasirinkti vaiką ir įvesti PIN. |
+| **Siųsti nuorodą** | Sukuria vienkartinę privačią nuorodą, galiojančią **10 minučių**. Atidarykite tik numatytame įrenginyje. |
+| **Įrenginio aprašas** | Rodo bendrą ikoną ir aprašą, pvz., **iPhone · Safari**, **Android telefonas · Chrome**, **iPad · Safari**, **Android planšetė · Chrome**, **Mac**, **Windows kompiuteris** arba **Linux kompiuteris**. Nežinomi įrenginiai taip ir pažymimi. |
+| **ID** | Trumpas stabilus šešių simbolių identifikatorius, padedantis atskirti įrašus. Tai nėra susiejimo prisijungimo duomuo. |
+| **Naudotas paskutinį kartą** | Rodo, kada įrenginys paskutinį kartą buvo aktyvus. Nenaudojus 30 dienų papildomai rodoma **Ilgai nenaudotas**. |
+| **Pervadinti** | Atveria įrenginio pavadinimo keitimo formą; prieiga nenutraukiama. |
+| **Atšaukti** | Pašalina vaiko prieigą ir pranešimus iš vieno prarasto ar nebenaudojamo įrenginio. Telefone tai rodoma kompaktiška šiukšliadėžės ikona. Norint prisijungti reikės susieti iš naujo. |
 | **Atšaukti visus vaikų įrenginius** | Tik administratoriui. Reikia jo slaptažodžio ir visus įrenginius teks susieti iš naujo. |
 
 Prieš naudodami privačią nuorodą perskaitykite [vaiko įrenginio susiejimo
-vadovą](../start/pair-a-child-device.lt.md).
+vadovą](../start/pair-a-child-device.lt.md). Aktyviai naudojant susietą
+įrenginį jo prieigos slapukas pratęsiamas, todėl aktyvus susiejimas neturėtų
+tyliai nustoti galioti. Atšaukus įrenginį prieiga iškart panaikinama ir jį
+reikia susieti iš naujo.
 
 ### Tinklas ir saugumas
 
@@ -148,20 +169,25 @@ apsaugotuose serverio failuose. Žalia būsena nepakeičia bandomojo atkūrimo.
 
 ## Paskyros
 
-### Tėvų paskyros
+Skiltyje **Paskyros** yra du blokai:
+
+1. **Kurti paskyrą**: per **Paskyros tipas** pasirinkite **Tėvų paskyra** arba
+   **Vaiko profilis**. Rodoma tik pasirinkto tipo forma.
+2. **Esamos paskyros**: vienas sąrašas su atskiromis **Tėvų paskyros** ir
+   **Vaikų profiliai** antraštėmis.
 
 Kiekvienam suaugusiajam sukurkite atskirą tėvų paskyrą su naudotojo vardu, el.
-paštu ir stipriu slaptažodžiu. Redaguokite naudotojo vardą, el. paštą ar
-slaptažodį; tušti naujo slaptažodžio laukai palieka senąjį.
+paštu ir stipriu slaptažodžiu. Kurdami vaiko profilį nustatykite vaiko vardą,
+pasirenkamą lietuvišką kreipinį, pradinį PIN, kreditą, individualų nutrinamų
+bilietų jungiklį ir gimtadienį. Pirmą kartą prisijungęs vaikas pasirenka temą.
 
-Pašalinus tėvą paskyra išjungiama, o jos Istorija lieka. Paskutinio aktyvaus
-tėvo išjungti negalima.
+Prie esamos paskyros pasirinkus redagavimo ikoną atsidaro dialogas. Jį galima
+uždaryti per **X**, **Atšaukti** arba **Escape**, o pakeitimus išsaugoti per
+**Išsaugoti**. Uždarius neišsaugoti pakeitimai atmetami, o forma atkuriama.
+Telefone paskyrų sąrašas ir dialogas pritaikyti mažam ekranui.
 
-### Vaikų profiliai
-
-Kurdami profilį nustatykite vaiko vardą, pasirenkamą lietuvišką kreipinį,
-pradinį PIN, kreditą, individualų nutrinamų bilietų jungiklį ir gimtadienį.
-Pirmą kartą prisijungęs vaikas pasirenka temą.
+Tušti naujo slaptažodžio laukai palieka senąjį. Pašalinus tėvą paskyra
+išjungiama, o jos Istorija lieka. Paskutinio aktyvaus tėvo išjungti negalima.
 
 | Laukelis | Kas pasikeičia |
 | --- | --- |

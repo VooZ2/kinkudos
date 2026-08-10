@@ -40,7 +40,7 @@ Istorija filtruojama iškart; vien norint pakeisti vaiką nereikia atidaryti
 
 <details class="screenshot-disclosure">
 <summary>Peržiūrėti tėvų veiksmų istoriją telefone</summary>
-<img class="screenshot-image" src="../../assets/parent-activity-history-mobile-26-6-0.png" alt="Tėvų veiksmų istorija telefone" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-activity-history-mobile-26-6-4.png" alt="Tėvų veiksmų istorija telefone" loading="lazy">
 </details>
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.

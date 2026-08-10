@@ -7,16 +7,37 @@ Vaiko profilis ir vaiko įrenginys yra skirtingi dalykai. Profilis saugo vardą,
 1. Vaiko įrenginyje prisijunkite tėvų paskyra.
 2. Atidarykite **Tėvai → Nustatymai → Vaikų įrenginiai**.
 3. Įrašykite aiškų pavadinimą, pvz., „Virtuvės planšetė“.
-4. Spauskite **Leisti vaikams naudoti šį įrenginį**.
+4. Spauskite **Leisti šiame įrenginyje**.
 5. Atsijunkite arba atidarykite vaiko prisijungimą. Vaikas gali pasirinkti savo profilį ir įvesti PIN.
 
 ## Susiekite kitą įrenginį privačia nuoroda
 
 1. Bet kuriame tėvų įrenginyje atidarykite **Tėvai → Nustatymai → Vaikų įrenginiai**.
-2. Spauskite **Sukurti privačią susiejimo nuorodą**.
+2. Spauskite **Siųsti nuorodą**.
 3. Saugiai perduokite nuorodą numatytam įrenginiui ir atidarykite ją ten. Neskelbkite grupės pokalbyje ir nepalikite bendrame užraše.
 4. Nuoroda susieja vieną kartą ir nustoja galioti po **10 minučių**.
 
-Įrenginių sąrašas rodo pavadinimą ir paskutinį naudojimą. Pamestą, parduotą, ilgam paskolintą ar nebe šeimai priklausantį įrenginį iškart atšaukite. Taip panaikinama prieiga ir pranešimai, bet neištrinamas profilis ar istorija.
+Susiejus KinKudos parodo patvirtinimą, pvz., **Šis įrenginys susietas kaip Mac ·
+Chrome**. Jei pasirinktas savas pavadinimas nebuvo įrašytas, patvirtinime ir
+įrenginių sąraše rodomas automatiškai priskirtas bendras įrenginio aprašas.
+
+<img class="screenshot-image" src="../../assets/device-pairing-success-26-6-4.png" alt="Poravimo sėkmės pranešimas vaiko profilio ekrane" loading="lazy">
+
+Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
+
+Įrenginių sąrašas rodo bendrą įrenginio ikoną, pasirenkamą pavadinimą, aprašą,
+pvz., **iPhone · Safari** arba **Android planšetė · Chrome**, stabilų šešių
+simbolių ID ir paskutinio naudojimo laiką. Klasifikavimas apima telefono,
+planšetės, kompiuterio ir nežinomo įrenginio kategorijas; tikslus modelis
+nenustatomas. Nenaudojus 30 dienų papildomai rodoma **Ilgai nenaudotas**.
+
+Įrenginio pavadinimą galima pakeisti, kad jį būtų lengva atpažinti. Telefone
+**Atšaukti** rodoma kompaktiška šiukšliadėžės ikona. Pamestą, parduotą, ilgam
+paskolintą ar nebe šeimai priklausantį įrenginį iškart atšaukite. Taip
+panaikinama prieiga ir pranešimai, bet neištrinamas profilis ar istorija.
+
+Aktyviai naudojamo susieto įrenginio prieigos slapukas pratęsiamas, todėl
+aktyvus susiejimas neturėtų tyliai nustoti galioti. Atšaukus įrenginį prieiga
+iškart panaikinama ir jį reikia susieti iš naujo.
 
 [Paskyros ir įrenginiai →](../security/accounts-and-devices.lt.md) · [PIN ir prisijungimo apsauga →](../security/pin-and-sign-in.lt.md) · [English](pair-a-child-device.md)

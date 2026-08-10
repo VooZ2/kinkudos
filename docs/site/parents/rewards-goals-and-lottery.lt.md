@@ -45,15 +45,15 @@ taškai. Išnaudojus pusę kredito, nauji prizų prašymai stabdomi; jau laukian
 prašymai lieka sprendžiami.
 
 Reikšmę keiskite vaiko kortelėje naudodami **Nustatyti kreditą** arba per
-**Nustatymai → Paskyros → Vaikų profiliai**.
+**Tėvai → Nustatymai → Paskyros**, po antrašte **Vaikų profiliai**.
 
 ## Nutrinami bilietai
 
 Nutrinami bilietai yra pasirenkami ir veikia tik įjungus abu jungiklius:
 
 1. šeimai įjungta **Nustatymai → Įjungti nutrinamus bilietus**; ir
-2. vaikui įjungta **Nustatymai → Paskyros → Vaikų profiliai → Įjungti
-   nutrinamus bilietus šiam vaikui**.
+2. **Tėvai → Nustatymai → Paskyros**, po antrašte **Vaikų profiliai**, vaikui
+   įjungta **Įjungti nutrinamus bilietus šiam vaikui**.
 
 Šeimos nustatymai nurodo kainą ir savaitinį limitą nuo pirmadienio iki
 sekmadienio. Vienas vaikas vienu metu gali turėti tik vieną nebaigtą bilietą.
