@@ -46,32 +46,6 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 - Git and Docker build contexts now exclude environment files, databases,
   uploads, backups, secrets, caches, and other local runtime artifacts.
 
-## [26.6.3] - 2026-08-08
-
-### Changed
-
-- Application URLs now use canonical lowercase English paths independently of
-  the selected interface language. Existing Lithuanian links remain usable
-  through permanent GET redirects, while mutating requests continue to reach
-  the same views without losing their method or body.
-- Push notifications, feedback flows, network restrictions, and the Service
-  Worker now use named canonical routes, keeping URL changes consistent across
-  the application.
-- Pull requests now run locked Python dependency, Ruff, Django, deployment,
-  migration, dependency, and test checks, with strict documentation checks for
-  docs-only changes.
-
-### Fixed
-
-- Legacy redirects now preserve only valid changelog pagination and safe
-  internal login destinations; unknown, malformed, or unsafe query values are
-  discarded.
-
-### Security
-
-- Git and Docker build contexts now exclude environment files, databases,
-  uploads, backups, secrets, caches, and other local runtime artifacts.
-
 ## [26.6.2] - 2026-08-07
 
 ### Added
