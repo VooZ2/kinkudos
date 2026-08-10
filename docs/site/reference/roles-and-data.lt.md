@@ -21,6 +21,8 @@ Slapukų nenaudojanti analitika naudojama tik viešoje dokumentacijoje.
 | Taisyklė | Reikšmė ar elgsena |
 | --- | --- |
 | Vaiko įrenginio susiejimo nuoroda | Vienkartinė; baigiasi po 10 minučių. |
+| Susieto įrenginio profilis | Bendra telefono, planšetės, kompiuterio arba nežinomo įrenginio kategorija, trumpas stabilus šešių simbolių ID, naršyklės aprašas ir paskutinio naudojimo laikas. Po 30 dienų sąraše rodoma **Ilgai nenaudotas**. |
+| Aktyvi susieto įrenginio prieiga | Aktyviai naudojant prieigos slapukas pratęsiamas. Atšaukus įrenginį vaiko prieiga ir pranešimai iškart panaikinami. |
 | Vaiko PIN | Keturi skaitmenys; profiliui pirmiausia reikia susieto įrenginio. |
 | Darbo / atsiliepimo vaizdo įkėlimas | JPEG, PNG, WebP, HEIC arba HEIF iki 12 MB. |
 | Avataro įkėlimas | Tie patys formatai iki 5 MB; apkerpama į kvadratą. |

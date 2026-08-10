@@ -6,7 +6,9 @@ entfernte Sicherungen können warten, bis der grundlegende Familienablauf stimmt
 ## Eine funktionierende Ersteinrichtung
 
 1. Öffnen Sie **Eltern → Einstellungen**. Geben Sie der Familie einen Namen und lassen Sie die erweiterten Bereiche zunächst unverändert.
-2. Erstellen Sie unter **Familienkonten und App-Einstellungen → Neues Kinderprofil** ein Kind. Wählen Sie eine vierstellige PIN und ein sinnvolles Kreditlimit wie `-100` oder `0`.
+2. Öffnen Sie unter **Eltern → Einstellungen → Konten** den Bereich **Konto
+   erstellen**, wählen Sie **Kinderprofil** und erstellen Sie ein Kind. Wählen
+   Sie eine vierstellige PIN und ein sinnvolles Kreditlimit wie `-100` oder `0`.
 3. [Verbinden Sie das Kindergerät](pair-a-child-device.de.md). Erst dann kann das Gerät Kinderprofile anzeigen und eine Kinder-PIN akzeptieren.
 4. Erstellen Sie unter **Eltern → Aufgaben und Belohnungen** zwei kurze, eindeutig prüfbare Aufgaben und legen Sie Punkte sowie ein Emoji fest.
 5. Erstellen Sie im selben Menü eine erreichbare Belohnung, etwa „Heute das Dessert auswählen“.
@@ -17,7 +19,7 @@ entfernte Sicherungen können warten, bis der grundlegende Familienablauf stimmt
 Damit funktioniert der wichtigste Kreislauf: Aktion des Kindes → Entscheidung
 der Eltern → sichtbarer, dauerhafter Eintrag.
 
-![Englische Eltern-Einstellungen mit fiktiven Demodaten](../assets/parent-settings-2026.png)
+![Eltern-Einstellungen mit verbundenen Geräten](../assets/parent-settings-devices-26-6-4.png)
 
 Der Screenshot enthält ausschließlich fiktive Demonstrationsdaten.
 

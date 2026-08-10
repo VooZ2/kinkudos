@@ -13,7 +13,7 @@ Vaikų kortelės lieka tiesiai po ja.
 
 <details class="screenshot-disclosure">
 <summary>Peržiūrėti tėvų Pradžią su laukiančiais prašymais telefone</summary>
-<img class="screenshot-image" src="../../assets/parent-home-pending-requests-mobile-26-6-0.png" alt="Tėvų Pradžia su laukiančiais prašymais telefone" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-home-pending-requests-mobile-26-6-4.png" alt="Tėvų Pradžia su laukiančiais prašymais telefone" loading="lazy">
 </details>
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
@@ -48,7 +48,7 @@ tuščio tikslo bloko ar vietos žymeklio.
 
 <details class="screenshot-disclosure">
 <summary>Peržiūrėti tėvų Pradžią su vaikų kortelėmis telefone</summary>
-<img class="screenshot-image" src="../../assets/parent-home-child-cards-mobile-26-6-0.png" alt="Tėvų Pradžia su vaikų kortelėmis telefone" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-home-child-cards-mobile-26-6-4.png" alt="Tėvų Pradžia su vaikų kortelėmis telefone" loading="lazy">
 </details>
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.

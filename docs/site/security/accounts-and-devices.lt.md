@@ -4,7 +4,7 @@ Kiekvienas suaugusysis turi naudoti atskirą slaptažodžiu apsaugotą tėvų pa
 
 ## Tėvų paskyros
 
-Kiekvienam suaugusiajam, kuris peržiūri darbus, tvirtina prizus ar valdo šeimos nustatymus, sukurkite atskirą paskyrą. Nesidalinkite slaptažodžiais. El. pašto adresas svarbus įjungus SMTP slaptažodžio atkūrimui.
+Kiekvienam suaugusiajam, kuris peržiūri darbus, tvirtina prizus ar valdo šeimos nustatymus, sukurkite atskirą paskyrą. **Tėvai → Nustatymai → Paskyros** pasirinkite **Kurti paskyrą**, tada **Tėvų paskyrą** arba **Vaiko profilį** ir užpildykite rodomą formą. Nesidalinkite slaptažodžiais. El. pašto adresas svarbus įjungus SMTP slaptažodžio atkūrimui.
 
 Panaikinus tėvą paskyra išjungiama, bet jos istorija išlieka. Paskutinės aktyvios tėvų paskyros išjungti negalima. Pirmoji diegimo metu sukurta paskyra yra administratorius ir valdo jautrius nustatymus; kiti tėvai vis tiek turi įprastas šeimos funkcijas.
 
@@ -12,14 +12,26 @@ Panaikinus tėvą paskyra išjungiama, bet jos istorija išlieka. Paskutinės ak
 
 Vaiko profilis saugo vardą, PIN maišą, išleidžiamą balansą, kreditą, individualų
 nutrinamų bilietų leidimą, gimtadienį, avatarą, temą ir Istoriją. Vaikas mato tik
-savo privačius duomenis.
+savo privačius duomenis. Esamų paskyrų sąraše **Tėvų paskyros** ir **Vaikų
+profiliai** rodomi po atskiromis antraštėmis.
+
+Pasirinkus redagavimo ikoną atsidaro paskyros redagavimo dialogas. Jį galima
+uždaryti per **X**, **Atšaukti** arba **Escape**, o **Išsaugoti** pritaiko
+pakeitimus. Uždarius neišsaugoti pakeitimai atmetami, o forma atkuriama. Sąrašas
+ir dialogai telefone pritaikyti mažam ekranui.
 
 Panaikinus vaiką profilis išjungiamas, o istorija lieka. Ji neištrinama ir neperduodama kitam vaikui.
 
 ## Susieti įrenginiai
 
-Susiejimas yra pirmas vaikų saugumo vartas. Kol naršyklė ar PWA nesusieta, ji negali nei rodyti vaikų vardų, nei priimti PIN. Įrenginius aiškiai pavadinkite, peržiūrėkite paskutinio naudojimo laiką ir iškart atšaukite prarastą ar nebe šeimos valdomą įrenginį.
+Susiejimas yra pirmas vaikų saugumo vartas. Kol naršyklė ar PWA nesusieta, ji negali nei rodyti vaikų vardų, nei priimti PIN. Kiekvienas įrenginys rodomas su bendra telefono, planšetės, kompiuterio arba nežinomo įrenginio kategorija, naršyklės aprašu, stabiliu šešių simbolių ID ir paskutinio naudojimo laiku. Tai patogumo klasifikavimas, nenustatantis tikslaus modelio. Nenaudojus 30 dienų rodoma **Ilgai nenaudotas**. Įrenginius aiškiai pavadinkite, peržiūrėkite paskutinio naudojimo laiką ir iškart atšaukite prarastą ar nebe šeimos valdomą įrenginį.
 
-Administratorius, patvirtinęs savo slaptažodį, gali atšaukti visus vaikų įrenginius. Tuomet pašalinamos vaiko pranešimų prenumeratos ir kiekvieną naršyklę/PWA reikia susieti iš naujo.
+Aktyviai naudojamo susieto įrenginio prieigos slapukas pratęsiamas, todėl aktyvus
+susiejimas neturėtų tyliai nustoti galioti. Atšaukus įrenginį jo vaiko prieiga ir
+pranešimų prenumerata iškart panaikinamos; įrenginį reikia susieti iš naujo.
+
+Administratorius, patvirtinęs savo slaptažodį, gali atšaukti visus vaikų
+įrenginius. Tuomet pašalinamos vaiko pranešimų prenumeratos ir kiekvieną
+naršyklę/PWA reikia susieti iš naujo.
 
 [Vaiko įrenginio susiejimas →](../start/pair-a-child-device.lt.md) · [PIN ir prisijungimo apsauga →](pin-and-sign-in.lt.md) · [English](accounts-and-devices.md)

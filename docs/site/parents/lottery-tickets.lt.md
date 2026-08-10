@@ -23,8 +23,8 @@ Bilietus turi leisti abu nustatymai:
 
 1. **Tėvai → Nustatymai** įjunkite **Įjungti nutrinamus bilietus** šeimai ir
    nustatykite teigiamą kainą bei kiekvieno vaiko savaitinį limitą.
-2. **Nustatymai → Vaikų profiliai** įjunkite nutrinamus bilietus konkrečiam
-   vaikui.
+2. **Tėvai → Nustatymai → Paskyros**, po antrašte **Vaikų profiliai**, įjunkite
+   nutrinamus bilietus konkrečiam vaikui.
 
 Savaitė tęsiasi nuo pirmadienio iki sekmadienio. Vienas vaikas gali turėti tik
 vieną nebaigtą bilietą. Jis turi turėti pakankamai uždirbtų taškų kainai,

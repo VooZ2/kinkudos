@@ -72,7 +72,7 @@ taisyklei.
 
 Vaikas gali pasikeisti savo keturių skaitmenų PIN įvesdamas dabartinį PIN, naują
 PIN ir pakartotą naują PIN. Tėvai PIN taip pat gali nustatyti iš naujo per
-**Tėvai → Nustatymai → Paskyros → Vaikų profiliai**.
+**Tėvai → Nustatymai → Paskyros**, po antrašte **Vaikų profiliai**.
 
 ## Kam vis dar reikia tėvų
 
