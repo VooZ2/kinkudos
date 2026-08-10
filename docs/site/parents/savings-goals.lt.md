@@ -88,7 +88,7 @@ Grąžinus išsaugotus taškus sukuriamas teigiamas **Istorijos** įrašas, taš
 vėl tampa išleidžiami. Prieš keičiant būdą ar uždarant tikslą atskirai
 išsaugotus taškus reikia grąžinti.
 
-<img class="screenshot-image" src="../../assets/parent-manage-goals-desktop-26-6-0.png" alt="Tėvų skiltis „Tvarkyti → Tikslai“ darbalaukyje" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-manage-goals-desktop-26-6-4.png" alt="Tėvų skiltis „Tvarkyti → Tikslai“ darbalaukyje" loading="lazy">
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 

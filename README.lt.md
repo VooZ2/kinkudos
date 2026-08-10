@@ -155,6 +155,40 @@ Vedlys parsisiunčia naujausią KinKudos leidimą, patikrina jo SHA256 kontrolin
 
 Komanda skirta **naujai instaliacijai**. Esamas instaliacijas būtina atnaujinti pagal dokumentuotą procesą.
 
+### Rankinis Docker Compose diegimas
+
+Jei naudojate nestandartinį ar jau valdomą serverį, naudokite oficialius leidimo
+failus iš [`deploy/` katalogo](deploy/). Pradėkite nuo jame esančio
+`compose.yml`, o ne nuo atskiros Compose ištraukos.
+
+Tai nėra pirmo diegimo komanda. Compose failas prijungia paslaptis iš serverio
+`../secrets/` katalogo, o Docker Compose pats šių failų nesugeneruoja. Prieš
+paruošdami turėkite domeną, HTTPS, tinkamai sukonfigūruotą proxy ir
+reikiamus aplinkos kintamuosius. Naujoje diegimo šaknyje pirmiausia, ne root
+naudotoju, ją paruoškite:
+
+```bash
+cd /opt/kinkudos/deploy
+./bootstrap.sh
+```
+
+Paruošimo scenarijus sukuria nuolatinius katalogus, sugeneruoja Django, VAPID,
+setup, atsarginių kopijų agento ir restic paslaptis, sukuria vietinį proxy
+papildinį ir paleidžia paslaugas. Išjungus SMTP jis taip pat sukuria tuščią
+`smtp_password` failą. Tik paruoštam diegimui vėliau naudokite paprastą Compose
+paleidimą:
+
+```bash
+docker compose up -d --pull always
+```
+
+Nuspėjamam diegimui `compose.yml` palikite konkrečios išleistos versijos
+atvaizdą:
+
+```yaml
+image: vooz2/kinkudos:<version>
+```
+
 👉 **[Pasirinkite diegimo būdą](https://docs.kinkudos.app/installation/index.lt/)**
 
 Dokumentacijoje taip pat aprašomi HTTPS, atnaujinimai, kopijos, atkūrimas, diagnostika ir problemų sprendimas.

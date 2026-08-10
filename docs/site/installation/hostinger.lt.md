@@ -1,6 +1,6 @@
 ---
 title: Įdiekite KinKudos Hostinger VPS serveryje
-description: Įdiekite KinKudos 26.6.3 naudodami Hostinger Docker Manager, valdomą Traefik atvirkštinį tarpinį serverį, HTTPS ir nuolatinį named volume.
+description: Įdiekite KinKudos naudodami Hostinger Docker Manager, valdomą Traefik atvirkštinį tarpinį serverį, HTTPS ir nuolatinį named volume.
 ---
 
 # Įdiekite KinKudos Hostinger VPS serveryje
@@ -8,11 +8,11 @@ description: Įdiekite KinKudos 26.6.3 naudodami Hostinger Docker Manager, valdo
 Tai paprasčiausias palaikomas Hostinger kelias. Naudojamas Hostinger VPS
 **Ubuntu 24.04 with Docker** šablonas, Docker Manager, kartu su šiuo šablonu
 įdiegtas Traefik atvirkštinis tarpinis serveris ir specialus KinKudos Compose
-failas iš `26.6.3` leidimo.
+oficiali dabartinė KinKudos diegimo konfigūracija.
 
-KinKudos Compose aprašas naudoja viešą `vooz2/kinkudos:26.6.3` atvaizdą ir
-vieną nuolatinį named volume programos duomenų bazei, medijai bei vykdymo
-paslaptims. Hostinger VPS yra mokama, jūsų administruojama paslauga: jūs
+KinKudos Compose aprašas naudoja dabartinį viešą KinKudos atvaizdą ir vieną
+nuolatinį named volume programos duomenų bazei, medijai bei vykdymo paslaptims.
+Hostinger VPS yra mokama, jūsų administruojama paslauga: jūs
 atsakote už VPS, domeną, atnaujinimus ir snapshot kopijas.
 
 ## 1. Prieš pradėdami
@@ -64,16 +64,16 @@ kinkudos
 ```
 
 Atverkite **.yaml editor**. Visą jo turinį, įskaitant pradinę `services:`
-eilutę, pakeiskite tiksliu leidimo failu iš šio adreso:
+eilutę, pakeiskite dabartiniu oficialiu failu iš šio adreso:
 
 ```text
-https://raw.githubusercontent.com/VooZ2/kinkudos/v26.6.3/deploy/hostinger/compose.yaml
+https://raw.githubusercontent.com/VooZ2/kinkudos/main/deploy/hostinger/compose.yaml
 ```
 
 Tą patį failą galite peržiūrėti
-[GitHub](https://github.com/VooZ2/kinkudos/blob/v26.6.3/deploy/hostinger/compose.yaml).
-Jame aprašyta `app` paslauga, `vooz2/kinkudos:26.6.3` atvaizdas, Hostinger
-Traefik žymos ir named volume `kinkudos-data`.
+[GitHub](https://github.com/VooZ2/kinkudos/blob/main/deploy/hostinger/compose.yaml).
+Jame aprašyta `app` paslauga, dabartinis KinKudos atvaizdas, Hostinger Traefik
+žymos ir named volume `kinkudos-data`.
 
 ## 4. Įrašykite dvi privalomas reikšmes
 

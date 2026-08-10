@@ -71,7 +71,7 @@ rule.
 
 The child can change their own four-digit PIN by entering the current PIN, the
 new PIN, and the new PIN again. A parent can also reset a child PIN from
-**Parents → Settings → Accounts → Child profiles**.
+**Parents → Settings → Accounts**, under **Child profiles**.
 
 ## What still needs a parent
 

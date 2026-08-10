@@ -90,7 +90,7 @@ Go to **Parents → Manage → Goals**. The section provides:
 Returning saved points creates a positive spendable History entry. A saved
 goal’s points can be returned before changing its method or closing it.
 
-<img class="screenshot-image" src="../../assets/parent-manage-goals-desktop-26-6-0.png" alt="Parent Manage Goals on desktop" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-manage-goals-desktop-26-6-4.png" alt="Parent Manage Goals on desktop" loading="lazy">
 
 The screenshot uses fictional demonstration data.
 

@@ -111,7 +111,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.6.3",
+                    "26.6.4",
                     str(root),
                 ],
                 env=environment,
@@ -161,7 +161,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
 
             environment = os.environ.copy()
             environment["PATH"] = f"{fake_bin}:{environment['PATH']}"
-            environment["KINKUDOS_VERSION"] = "26.6.3"
+            environment["KINKUDOS_VERSION"] = "26.6.4"
             environment["KINKUDOS_INSTALL_ROOT"] = str(install_root)
             result = subprocess.run(
                 ["sh", str(ROOT / "deploy" / "install.sh")],
@@ -180,7 +180,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
             encoding="utf-8"
         )
 
-        self.assertIn("image: vooz2/kinkudos:26.6.3", compose)
+        self.assertIn("image: vooz2/kinkudos:26.6.4", compose)
         self.assertIn("kinkudos-data:/app/data", compose)
         self.assertIn('      - "8000"', compose)
         self.assertIn("KINKUDOS_RUNTIME_SECRETS_DIR", compose)
@@ -236,6 +236,26 @@ class ReleaseDeploymentTests(SimpleTestCase):
             self.assertIn("chmod 0700", script)
             self.assertIn('"$project_root/backups"/kinkudos-*.sqlite3', script)
 
+    def test_dependency_security_monitoring_is_configured(self):
+        dependabot = (ROOT / ".github" / "dependabot.yml").read_text(encoding="utf-8")
+        workflow = (ROOT / ".github" / "workflows" / "ci.yml").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn('package-ecosystem: "pip"', dependabot)
+        self.assertIn('package-ecosystem: "github-actions"', dependabot)
+        self.assertIn(
+            "pypa/gh-action-pip-audit@1220774d901786e6f652ae159f7b6bc8fea6d266",
+            workflow,
+        )
+        self.assertIn("inputs: requirements.lock", workflow)
+        self.assertIn("no-deps: true", workflow)
+        migration_check = workflow.split(
+            "      - name: Check for missing migrations\n", 1
+        )[1].split("      - name:", 1)[0]
+        self.assertIn('KINKUDOS_DEBUG: "false"', migration_check)
+        self.assertIn("KINKUDOS_SECRET_KEY: ci-test-only-", migration_check)
+
     def test_legacy_hostinger_caddy_profile_is_removed(self):
         legacy_paths = (
             "Caddyfile.hostinger",
@@ -287,7 +307,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
                     str(ROOT / "deploy" / "install-release.sh"),
                     str(archive),
                     str(checksum),
-                    "26.6.3",
+                    "26.6.4",
                     str(root),
                 ],
                 capture_output=True,

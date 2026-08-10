@@ -15,7 +15,7 @@
     <a class="button button-secondary" href="{% url 'parent_dashboard' %}#parent-settings">{% translate "Back to settings" %}</a>
   </div>
 </section>
-<script>
+<script nonce="{{ request.csp_nonce }}">
 document.querySelector("[data-copy-pairing]").addEventListener("click", async (event) => {
   await navigator.clipboard.writeText(document.querySelector("[data-pairing-link]").value);
   event.currentTarget.textContent = "{% translate 'Copied' %}";

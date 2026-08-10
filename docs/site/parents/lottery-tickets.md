@@ -24,8 +24,8 @@ Both settings must allow tickets:
 
 1. In **Parents → Settings**, turn on **Enable scratch tickets** for the
    family and set a positive ticket price plus each child’s weekly limit.
-2. In **Settings → Child profiles**, turn on scratch tickets for the individual
-   child.
+2. In **Parents → Settings → Accounts**, under **Child profiles**, turn on
+   scratch tickets for the individual child.
 
 The week runs Monday through Sunday. One child can have only one unfinished
 ticket at a time. A child must have enough spendable points for the ticket price,

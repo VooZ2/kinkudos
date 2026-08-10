@@ -4,7 +4,7 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "26.6.3")
+APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "26.6.4")
 
 
 def env_bool(name, default=False):
@@ -22,7 +22,7 @@ def secret_value(name, default=""):
     return os.environ.get(name, default)
 
 
-DEBUG = env_bool("KINKUDOS_DEBUG", True)
+DEBUG = env_bool("KINKUDOS_DEBUG", False)
 SECRET_KEY = secret_value("KINKUDOS_SECRET_KEY", "development-only-change-me")
 if not DEBUG and SECRET_KEY == "development-only-change-me":
     raise RuntimeError("KINKUDOS_SECRET_KEY arba KINKUDOS_SECRET_KEY_FILE privalomas gamyboje")
@@ -46,8 +46,10 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "economy.middleware.TrustedProxyMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "economy.middleware.ContentSecurityPolicyMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "economy.middleware.DeviceCookieRefreshMiddleware",
     "economy.middleware.SetupRequiredMiddleware",
     "economy.middleware.DefaultLanguageMiddleware",
     "django.middleware.locale.LocaleMiddleware",

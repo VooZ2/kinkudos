@@ -135,7 +135,7 @@ class Patch0121Tests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, 'class="brand-mark brand-logo"', html=False)
         self.assertContains(response, 'class="footer-product">KinKudos · ', html=False)
-        self.assertContains(response, "v26.6.3")
+        self.assertContains(response, "v26.6.4")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_reward_approval_uses_task_decision_icons(self):
@@ -166,10 +166,14 @@ class Patch0121Tests(TestCase):
 
         response = self.client.get(reverse("parent_dashboard"))
 
-        self.assertContains(response, ">Sukurti paskyrą</button>", html=False)
+        self.assertContains(response, ">Kurti paskyrą</button>", html=False)
         self.assertContains(response, ">Sukurti profilį</button>", html=False)
-        self.assertNotContains(response, ">Sukurti tėvų paskyrą</button>", html=False)
-        self.assertNotContains(response, ">Sukurti vaiko profilį</button>", html=False)
+        self.assertContains(response, ">Paskyros tipas</span>", html=False)
+        self.assertContains(response, ">Tėvų paskyra</option>", html=False)
+        self.assertContains(response, ">Vaiko profilis</option>", html=False)
+        self.assertContains(response, ">Esamos paskyros</h3>", html=False)
+        self.assertContains(response, ">Vaikų profiliai</h4>", html=False)
+        self.assertNotContains(response, ">Kurti naujas paskyras</h3>", html=False)
 
     def test_child_history_identifies_reward_approver_and_rejector(self):
         self.child.balance = 100

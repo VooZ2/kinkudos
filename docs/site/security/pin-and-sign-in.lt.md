@@ -8,7 +8,9 @@ Kiekvienas tėvas naudoja atskirą naudotojo vardą ir slaptažodį. Slaptažodi
 
 Kiekvienam suaugusiajam sukurkite atskirą paskyrą. Nesidalinkite tėvų slaptažodžiu su vaiku, net jei jis žino įrenginio PIN.
 
-Tėvai savo paskyros duomenis gali keisti per **Tėvai → Nustatymai → Tėvų paskyros**. Slaptažodžio atkūrimas el. paštu veikia tik administratoriui sukonfigūravus SMTP.
+Tėvai savo paskyros duomenis gali keisti per **Tėvai → Nustatymai → Paskyros**,
+po antrašte **Tėvų paskyros**. Slaptažodžio atkūrimas el. paštu veikia tik
+administratoriui sukonfigūravus SMTP.
 
 ### Atkurti tėvų slaptažodį
 

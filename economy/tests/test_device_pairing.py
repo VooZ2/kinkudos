@@ -79,6 +79,11 @@ class DevicePairingTests(TestCase):
         response = self.client.post(
             reverse("parent_pair_device"),
             {"label": "Kitchen tablet"},
+            HTTP_USER_AGENT=(
+                "Mozilla/5.0 (iPad; CPU OS 17_0 like Mac OS X) "
+                "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 "
+                "Mobile/15E148 Safari/604.1"
+            ),
         )
 
         self.assertRedirects(response, reverse("child_select"))
@@ -87,6 +92,10 @@ class DevicePairingTests(TestCase):
         self.assertTrue(cookie["httponly"])
         device = DeviceToken.objects.get()
         self.assertEqual(device.label, "Kitchen tablet")
+        self.assertEqual(device.device_kind, DeviceToken.Kind.TABLET)
+        self.assertEqual(device.device_platform, "ios")
+        self.assertEqual(device.device_browser, "safari")
+        self.assertRegex(device.device_code, r"^[A-Z2-9]{6}$")
         self.assertNotEqual(device.token_hash, cookie.value)
 
         response = self.client.post(
@@ -96,6 +105,23 @@ class DevicePairingTests(TestCase):
         self.assertRedirects(response, reverse("child_dashboard"))
         self.assertEqual(self.client.session["child_device_id"], device.pk)
 
+    def test_active_device_cookie_is_renewed_when_the_device_is_used(self):
+        _device, raw_token = DeviceToken.issue(
+            created_by=self.parent,
+            user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)",
+        )
+        self.client.cookies[settings.DEVICE_COOKIE_NAME] = raw_token
+
+        response = self.client.get(reverse("child_select"))
+
+        refreshed_cookie = response.cookies[settings.DEVICE_COOKIE_NAME]
+        self.assertEqual(
+            refreshed_cookie["max-age"],
+            settings.DEVICE_COOKIE_MAX_AGE,
+        )
+        self.assertTrue(refreshed_cookie["secure"])
+        self.assertTrue(refreshed_cookie["httponly"])
+
     def test_pairing_actions_share_a_two_column_row(self):
         self.client.force_login(self.parent)
 
@@ -104,6 +130,25 @@ class DevicePairingTests(TestCase):
         self.assertContains(response, 'class="device-pairing-actions"', html=False)
         self.assertContains(response, "Allow on this device")
         self.assertContains(response, "Send a link")
+
+    def test_parent_dashboard_identifies_devices_without_avatar_initials(self):
+        device, _raw_token = DeviceToken.issue(
+            created_by=self.parent,
+            user_agent=(
+                "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) "
+                "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 "
+                "Mobile/15E148 Safari/604.1"
+            ),
+        )
+        self.client.force_login(self.parent)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, 'href="#icon-mobile-screen-button"', html=False)
+        self.assertContains(response, "iPhone · Safari")
+        self.assertContains(response, device.device_code)
+        self.assertContains(response, "device-revoke-button", html=False)
+        self.assertContains(response, 'class="device-revoke-icon"', html=False)
 
     def test_pairing_link_is_single_use_and_expires(self):
         link, raw_token = DevicePairingLink.issue(created_by=self.parent)

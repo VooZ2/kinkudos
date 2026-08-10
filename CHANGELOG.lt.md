@@ -9,7 +9,28 @@ schema.
 
 ### Pakeista
 
-Kol kas nieko.
+- Kol kas nieko.
+
+## [26.6.4] - 2026-08-11
+
+### Pakeista
+
+- Vaikų skydeliuose dabar rodomas suasmenintas pasisveikinimas, o nepasiekiamam
+  vardui naudojamas saugus atsarginis tekstas.
+- Susieti vaikų įrenginiai dabar automatiškai gauna ikonas, bendrą, privatumo
+  nepažeidžiantį naršyklės ir įrenginio tipą, stabilų trumpą ID, paskutinio
+  naudojimo būseną, o aktyviai naudojant pratęsiamas poravimo slapukas.
+- Tėvų paskyrų nustatymuose dabar naudojamas aiškesnis paskyros tipo
+  pasirinkimas ir redagavimo dialogai, o laukiantys prašymai labiau išryškinami.
+
+### Saugumas
+
+- Produkciniai nustatymai dabar numatytai išjungia `DEBUG` ir, kai derinimo
+  režimas išjungtas, reikalauja aiškiai pateikto slapto rakto.
+- Programos atsakymuose dabar pateikiama nonce pagrįsta Content Security
+  Policy, išlaikant esamus vietinius skriptus, vaizdų peržiūras ir stilius.
+- CI dabar tikrina užfiksuotą Python priklausomybių rinkinį su `pip-audit`, o
+  Dependabot stebi Python ir GitHub Actions priklausomybes.
 
 ## [26.6.3] - 2026-08-08
 

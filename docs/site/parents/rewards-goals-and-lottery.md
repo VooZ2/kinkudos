@@ -45,8 +45,8 @@ limits how far a reward can reduce the balance; it is not extra points. New
 reward requests pause after half of the available credit is used. Existing
 pending requests remain available for a parent decision.
 
-Change the value with **Set credit** on the child card or in **Settings →
-Accounts → Child profiles**.
+Change the value with **Set credit** on the child card or in **Parents →
+Settings → Accounts**, under **Child profiles**.
 
 ## Scratch tickets
 
@@ -54,8 +54,8 @@ Scratch tickets are optional and should be treated as a family choice, not a
 required reward. They are available only when both switches are on:
 
 1. **Settings → Enable scratch tickets** is on for the family; and
-2. **Settings → Accounts → Child profiles → Enable scratch tickets for this
-   child** is on.
+2. **Parents → Settings → Accounts**, under **Child profiles**, has **Enable
+   scratch tickets for this child** turned on.
 
 The family settings set the ticket price and per-child weekly limit. The week
 runs Monday through Sunday. One child can have only one unfinished ticket at a

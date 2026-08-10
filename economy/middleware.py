@@ -1,4 +1,6 @@
+import base64
 import ipaddress
+import secrets
 
 from django.conf import settings
 from django.http import HttpResponseForbidden
@@ -9,6 +11,56 @@ from .models import AttemptCounter, FamilySettings
 from .net import FORWARDED_HEADERS, client_ip, direct_peer_is_trusted, parse_allowed_networks
 from .rate_limit import register_attempt
 from .setup import setup_is_available
+
+
+class ContentSecurityPolicyMiddleware:
+    """Attach a nonce-based policy to every application response."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        nonce = base64.b64encode(secrets.token_bytes(16)).decode("ascii")
+        request.csp_nonce = nonce
+        response = self.get_response(request)
+        response["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "base-uri 'self'; "
+            "connect-src 'self'; "
+            "font-src 'self'; "
+            "form-action 'self'; "
+            "frame-ancestors 'none'; "
+            "img-src 'self' data: blob:; "
+            "manifest-src 'self'; "
+            "object-src 'none'; "
+            f"script-src 'self' 'nonce-{nonce}'; "
+            "style-src 'self' 'unsafe-inline'; "
+            "worker-src 'self'"
+        )
+        return response
+
+
+class DeviceCookieRefreshMiddleware:
+    """Keep an actively used paired-device cookie from expiring silently."""
+
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        device = getattr(request, "_kinkudos_device", None)
+        raw_token = request.COOKIES.get(settings.DEVICE_COOKIE_NAME)
+        if device is not None and raw_token:
+            response.set_cookie(
+                settings.DEVICE_COOKIE_NAME,
+                raw_token,
+                max_age=settings.DEVICE_COOKIE_MAX_AGE,
+                secure=settings.SESSION_COOKIE_SECURE,
+                httponly=True,
+                samesite="Lax",
+                path="/",
+            )
+        return response
 
 
 class SetupRequiredMiddleware:

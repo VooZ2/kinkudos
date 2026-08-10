@@ -691,7 +691,99 @@ class AccessAndWorkflowTests(TestCase):
         self.child_two.vocative_name = "Second child"
         self.child_two.save(update_fields=["vocative_name"])
         response = self.login_child(self.child_two, "5678")
-        self.assertContains(response, "Labas, Second child")
+        self.assertContains(response, "Labas, Second child!")
+        self.assertContains(response, "Šiandienos darbai laukia!")
+        self.assertNotContains(response, "It's great to see you")
+
+    def test_child_dashboard_uses_personalized_english_greeting(self):
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+        response = self.login_child(self.child_one, "1234")
+        self.assertContains(response, "Hello, Child One!")
+        self.assertContains(response, "Ready for today's tasks?")
+        self.assertNotContains(response, '<p class="eyebrow">Hello, Child One', html=False)
+        self.assertNotContains(response, "It's great to see you")
+
+    def test_child_dashboard_falls_back_when_child_name_is_unavailable(self):
+        self.child_one.name = ""
+        self.child_one.save(update_fields=["name"])
+
+        for language, expected in (("en", "Hello!"), ("lt", "Labas!")):
+            with self.subTest(language=language):
+                self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = language
+                response = self.login_child(self.child_one, "1234")
+                self.assertContains(response, expected)
+                self.assertNotContains(response, "undefined")
+                self.assertNotContains(response, "null")
+                self.assertNotContains(response, "Hello, !")
+                self.assertNotContains(response, "Labas, !")
+
+    def test_child_dashboard_escapes_diacritics_and_long_names(self):
+        long_name = "Ąžuolė Žvaigždžių Tyrinėtoja su Lietuviškais Diakritiniais Ženklais"
+        self.child_one.name = long_name
+        self.child_one.save(update_fields=["name"])
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+
+        response = self.login_child(self.child_one, "1234")
+
+        self.assertContains(response, f"Hello, {long_name}!")
+        self.assertContains(response, 'class="child-greeting-supporting"', html=False)
+
+        self.child_one.name = "<img src=x>"
+        self.child_one.save(update_fields=["name"])
+        response = self.client.get(reverse("child_dashboard"))
+        self.assertContains(response, "Hello, &lt;img src=x&gt;!")
+        self.assertNotContains(response, "Hello, <img src=x>!")
+
+    def test_child_dashboard_uses_one_greeting_across_all_themes(self):
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+        themes = (
+            "neutral",
+            "magic_academy",
+            "block_world",
+            "hero_hq",
+            "art_studio",
+            "panda_pet",
+            "blockville",
+        )
+
+        for theme in themes:
+            with self.subTest(theme=theme):
+                self.child_one.theme = theme
+                self.child_one.save(update_fields=["theme"])
+                response = self.login_child(self.child_one, "1234")
+                self.assertContains(response, "Hello, Child One!")
+                self.assertContains(response, "Ready for today's tasks?")
+                self.assertNotContains(response, "It's great to see you")
+
+    def test_child_dashboard_greeting_layout_wraps_without_collisions(self):
+        stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(
+            encoding="utf-8"
+        )
+
+        identity_rule = re.search(r"\.child-identity \{([^}]+)\}", stylesheet)
+        greeting_rule = re.search(r"\.child-greeting \{([^}]+)\}", stylesheet)
+        greeting_heading_rule = re.search(
+            r"\.child-greeting h1 \{([^}]+)\}", stylesheet
+        )
+        supporting_rule = re.search(
+            r"\.child-greeting-supporting \{([^}]+)\}", stylesheet
+        )
+        hero_rule = re.search(r"\.child-hero \{([^}]+)\}", stylesheet)
+
+        self.assertIsNotNone(identity_rule)
+        self.assertIsNotNone(greeting_rule)
+        self.assertIsNotNone(greeting_heading_rule)
+        self.assertIsNotNone(supporting_rule)
+        self.assertIsNotNone(hero_rule)
+        self.assertIn("min-width: 0", identity_rule.group(1))
+        self.assertIn("min-width: 0", greeting_rule.group(1))
+        self.assertIn("overflow-wrap: anywhere", greeting_heading_rule.group(1))
+        self.assertIn(
+            "font-size: clamp(1.05rem, 2.2vw, 1.9rem)",
+            supporting_rule.group(1),
+        )
+        self.assertIn("overflow-wrap: anywhere", supporting_rule.group(1))
+        self.assertIn("flex-wrap: wrap", hero_rule.group(1))
 
     def test_magic_theme_uses_correct_owl_accusative(self):
         self.child_one.theme = "magic_academy"
@@ -719,7 +811,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.6.3")
+        self.assertContains(response, "v26.6.4")
         self.assertContains(response, f'href="{reverse("changelog")}"', html=False)
         self.assertContains(response, "taškai")
         self.assertContains(response, "Kreditas -100")
@@ -802,7 +894,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
         self.assertContains(response, 'class="footer-product">KinKudos · ', html=False)
-        self.assertContains(response, "v26.6.3")
+        self.assertContains(response, "v26.6.4")
         self.assertContains(response, "Dokumentacija")
         self.assertContains(response, "https://docs.kinkudos.app/index.lt/")
         self.assertContains(response, "https://github.com/VooZ2/kinkudos")
@@ -1181,10 +1273,10 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.6.3")
+        self.assertContains(response, "v26.6.4")
         self.assertContains(response, "Dabartinė versija")
         current_release = response.context["releases"][0]
-        self.assertEqual(current_release["version"], "26.6.3")
+        self.assertEqual(current_release["version"], "26.6.4")
         self.assertEqual(len(response.context["releases"]), 5)
         self.assertEqual(response.context["release_page"].paginator.per_page, 5)
         current_copy = " ".join(current_release["new"] + current_release["fixed"]).lower()
@@ -1192,7 +1284,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotIn("demo", current_copy)
         next_page = self.client.get(reverse("changelog"), {"page": 2})
         self.assertEqual(next_page.status_code, 200)
-        self.assertNotContains(next_page, "<h2>v26.6.3</h2>", html=False)
+        self.assertNotContains(next_page, "<h2>v26.6.4</h2>", html=False)
         self.assertContains(next_page, "Pakeitimų istorijos puslapiai")
 
     def test_parent_can_create_another_parent_account(self):
@@ -1519,6 +1611,14 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotIn('class="pending-request-row"><span class="item-icon"', content)
         self.assertIn("Vaikai", content)
 
+    def test_pending_requests_panel_uses_attention_border(self):
+        stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
+
+        self.assertIn(
+            ".pending-requests-panel { overflow: hidden; border: 2px solid color-mix(in srgb, var(--accent) 62%, var(--line));",
+            stylesheet,
+        )
+
     def test_pending_requests_render_english_children_heading_and_fragment(self):
         self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
         self.child_one.task_claims.create(
@@ -1711,10 +1811,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.6.3',
+            '/static/icons/favicon-32.png?v=26.6.4',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.6.3")
-        self.assertContains(home, "/static/js/app.js?v=26.6.3")
+        self.assertContains(home, "/static/css/app.css?v=26.6.4")
+        self.assertContains(home, "/static/js/app.js?v=26.6.4")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1722,11 +1822,11 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.6.3",
+            "/static/icons/icon-192.png?v=26.6.4",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.6.3")
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.6.4")
         self.assertContains(worker, 'self.addEventListener("push"', html=False)
         self.assertContains(worker, 'self.addEventListener("notificationclick"', html=False)
         self.assertNotContains(worker, 'self.addEventListener("fetch"', html=False)

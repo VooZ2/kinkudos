@@ -62,7 +62,7 @@ class FinalReviewTests(TestCase):
 
     def test_parent_accordions_and_settings_use_shared_compact_surface(self):
         response = self.parent_response()
-        self.assertContains(response, "parent-accordion", count=18)
+        self.assertContains(response, "parent-accordion", count=14)
         self.assertContains(
             response,
             'class="settings-section settings-section-standalone parent-accordion"',
@@ -223,7 +223,7 @@ class FinalReviewTests(TestCase):
     def test_mobile_footer_has_compact_labels_and_dynamic_version(self):
         response = self.parent_response()
         self.assertContains(response, 'class="footer-release"', html=False)
-        self.assertContains(response, "v26.6.3")
+        self.assertContains(response, "v26.6.4")
         self.assertContains(response, 'class="footer-docs-short">Docs', html=False)
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".footer-product, .footer-docs-long { display: none; }", css)

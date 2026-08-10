@@ -60,8 +60,11 @@ configuration.
 
 **DeviceToken** / **DevicePairingLink** — a paired child browser/PWA and its
 short-lived, single-use bootstrap link. Only SHA-256 token digests are stored.
-Child sessions and child Web Push subscriptions are bound to a non-revoked
-device. Revocation removes that device's child push subscriptions immediately.
+Each pairing also receives a broad, non-fingerprinting device profile and a
+short public identifier for parent-side recognition. Child sessions and child
+Web Push subscriptions are bound to a non-revoked device. Active device cookies
+are renewed while the device is used, while revocation removes that device's
+child push subscriptions immediately.
 
 **AttemptCounter** — shared fixed-window authentication counters stored in
 SQLite so limits remain consistent across Gunicorn workers. Keys are HMAC
@@ -228,6 +231,10 @@ the shared parent palette.
 - Django admin is disabled in production unless explicitly enabled.
 - Django `SECURE_PROXY_SSL_HEADER`; `HttpOnly`, `SameSite=Lax` cookies.
 - CSRF protection on all mutating requests. No CORS — same-origin only.
+- `DEBUG` defaults to `False`; production requires an explicit secret key.
+  Application responses include a nonce-based Content Security Policy that
+  restricts scripts, forms, frames, workers, and plugins to the application
+  origin; local image previews and existing inline styles remain supported.
 - Every parent/child request is authorized server-side.
 - Balance-changing operations use `transaction.atomic()` with row locking.
 - Secrets are read only from Docker secret files or server environment

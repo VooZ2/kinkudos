@@ -7,7 +7,29 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ### Changed
 
-Nothing yet.
+- Nothing yet.
+
+## [26.6.4] - 2026-08-11
+
+### Changed
+
+- Child dashboards now show a personalized greeting with a safe fallback when a
+  name is unavailable.
+- Paired child devices now receive automatic icons, broad non-fingerprinting
+  browser/device identification, a stable short ID, last-seen status, and
+  rolling cookie renewal while actively used.
+- Parent account settings now use a clearer account-type selector and
+  dialog-based editing, while pending requests receive stronger visual
+  emphasis.
+
+### Security
+
+- Production settings now default `DEBUG` to `False` and require an explicit
+  secret key when debug is disabled.
+- Application responses now include a nonce-based Content Security Policy,
+  while preserving the existing local scripts, image previews, and styles.
+- CI now audits the locked Python dependency set with `pip-audit`, and
+  Dependabot monitors Python and GitHub Actions dependencies.
 
 ## [26.6.3] - 2026-08-08
 

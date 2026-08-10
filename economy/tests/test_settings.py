@@ -1,14 +1,42 @@
+import os
+import subprocess
+import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase, override_settings
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
 
 from economy.email_config import smtp_config
 from economy.forms import ChildEditForm
 from economy.models import ChildProfile, FamilySettings, PenaltyTemplate, Reward, Task
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+class DefaultSettingsTests(SimpleTestCase):
+    def test_debug_defaults_to_false_without_environment_override(self):
+        environment = os.environ.copy()
+        environment.pop("KINKUDOS_DEBUG", None)
+        environment["KINKUDOS_SECRET_KEY"] = "test-only-secret"
+
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                "from kinkudos import settings; print(settings.DEBUG)",
+            ],
+            cwd=ROOT,
+            env=environment,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.strip(), "False")
 
 
 @override_settings(LANGUAGE_CODE="en")
@@ -283,9 +311,27 @@ class ParentSettingsTests(TestCase):
             stylesheet,
         )
         self.assertIn(
-            ".account-grid > .parent-accordion.panel:not([open]) { padding: 0; }",
+            ".account-management { display: grid; gap: 18px; }",
             stylesheet,
         )
+
+    def test_existing_accounts_use_one_list_and_dialog_editing(self):
+        self.client.force_login(self.admin)
+
+        response = self.client.get(reverse("parent_dashboard"))
+        script = (Path(__file__).resolve().parents[2] / "static" / "js" / "app.js").read_text(
+            encoding="utf-8",
+        )
+
+        self.assertContains(response, '<h3>Existing accounts</h3>', html=False)
+        self.assertContains(response, 'data-account-create-type', html=False)
+        self.assertContains(response, 'class="account-list-heading">Parent accounts', html=False)
+        self.assertContains(response, 'class="account-list-heading">Child profiles', html=False)
+        self.assertContains(response, 'data-open-dialog="edit-parent-account-', html=False)
+        self.assertContains(response, 'class="action-dialog account-edit-dialog"', html=False)
+        self.assertNotContains(response, 'data-toggle-edit="parent-account-', html=False)
+        self.assertIn('document.querySelector("[data-account-create-type]")', script)
+        self.assertIn('dialog[data-reset-on-close]', script)
 
     def test_settings_are_grouped_without_a_redundant_category_heading(self):
         self.client.force_login(self.admin)
