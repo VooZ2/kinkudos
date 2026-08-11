@@ -63,16 +63,21 @@ class FinalReviewTests(TestCase):
     def test_parent_accordions_and_settings_use_shared_compact_surface(self):
         response = self.parent_response()
         self.assertContains(response, "parent-accordion", count=14)
-        self.assertContains(
+        self.assertContains(response, 'class="settings-section parent-accordion"', count=10, html=False)
+        self.assertNotContains(
             response,
-            'class="settings-section settings-section-standalone parent-accordion"',
-            count=6,
+            "settings-section-standalone",
             html=False,
         )
+        self.assertContains(response, 'id="settings-everyday-heading"', html=False)
+        self.assertContains(response, 'id="settings-people-heading"', html=False)
+        self.assertContains(response, 'id="settings-server-heading"', html=False)
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".parent-accordion:not([open]) > summary", css)
         self.assertIn("min-height: 68px", css)
         self.assertIn("min-height: 60px", css)
+        self.assertIn(".settings-block-heading", css)
+        self.assertNotIn("position: sticky; bottom: 0", css.split(".settings-save-actions")[1].split("}")[0])
 
     def test_child_card_metadata_keeps_credit_and_ticket_controls_together(self):
         response = self.parent_response()
@@ -85,8 +90,10 @@ class FinalReviewTests(TestCase):
         self.assertIn('href="#icon-ticket-simple"', row)
         self.assertIn("Tickets", row)
         self.assertIn('aria-label="About scratch tickets"', row)
+        self.assertIn("meta-info-button", row)
+        self.assertNotIn("child-meta-sep", row)
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
-        self.assertIn("justify-content: center", css)
+        self.assertIn(".meta-info-button", css)
 
         family = FamilySettings.load()
         family.lottery_enabled = False

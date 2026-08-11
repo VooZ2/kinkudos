@@ -36,6 +36,7 @@ document.addEventListener("click", event => {
   }
   const openButton = event.target.closest?.("[data-open-dialog]");
   if (openButton) {
+    openButton.closest("dialog")?.close();
     document.getElementById(openButton.dataset.openDialog)?.showModal();
   }
 });

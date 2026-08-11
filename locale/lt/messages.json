@@ -1080,5 +1080,15 @@
   "Account type": "Paskyros tipas",
   "Edit parent account": "Redaguoti tėvų paskyrą",
   "Edit child profile": "Redaguoti vaiko profilį",
-  "Existing accounts": "Esamos paskyros"
+  "Existing accounts": "Esamos paskyros",
+
+  "Everyday": "Kasdieniai",
+  "People and devices": "Žmonės ir įrenginiai",
+  "Server": "Serveris",
+  "Saves family preferences only.": "Išsaugo tik šeimos nustatymus.",
+  "Add task": "Pridėti darbą",
+  "Assign today": "Paskirti šiandien",
+  "More": "Daugiau",
+  "More actions": "Daugiau veiksmų",
+  "Assign": "Paskirti"
 }

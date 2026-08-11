@@ -139,6 +139,9 @@ msgstr "Pridėti naują"
 msgid "Add points"
 msgstr "Pridėti taškų"
 
+msgid "Add task"
+msgstr "Pridėti darbą"
+
 msgid "Added by"
 msgstr "Pridėjo"
 
@@ -244,6 +247,9 @@ msgstr "Paprašyk tėvų leisti vaikų prieigą šiame įrenginyje arba atidaryk
 msgid "Ask to improve"
 msgstr "Paprašyti pataisyti"
 
+msgid "Assign"
+msgstr "Paskirti"
+
 msgid "Assign penalty"
 msgstr "Skirti nuobaudą"
 
@@ -252,6 +258,9 @@ msgstr "Skirti pažymėtas nuobaudas"
 
 msgid "Assign tasks for today"
 msgstr "Paskirti darbus šiandienai"
+
+msgid "Assign today"
+msgstr "Paskirti šiandien"
 
 msgid "Assigned by"
 msgstr "Priskyrė"
@@ -1075,6 +1084,9 @@ msgstr "Įveskite šiam diegimui nustatytą paruošimo kodą."
 msgid "Enter your PIN"
 msgstr "Įvesk PIN"
 
+msgid "Everyday"
+msgstr "Kasdieniai"
+
 msgid "Exchange galleons"
 msgstr "Išsikeisti galeonus"
 
@@ -1474,6 +1486,12 @@ msgstr "Misija atlikta"
 msgid "Missions"
 msgstr "Misijos"
 
+msgid "More"
+msgstr "Daugiau"
+
+msgid "More actions"
+msgstr "Daugiau veiksmų"
+
 msgid "More information"
 msgstr "Daugiau informacijos"
 
@@ -1830,6 +1848,9 @@ msgstr "Laukiančių ir grąžintų pataisyti darbų nuotraukos nešalinamos."
 
 msgid "Pending requests"
 msgstr "Laukiantys prašymai"
+
+msgid "People and devices"
+msgstr "Žmonės ir įrenginiai"
 
 msgid "Phone"
 msgstr "Telefonas"
@@ -2233,6 +2254,9 @@ msgstr "Taupoma atskirai"
 msgid "Saved to goal"
 msgstr "Išsaugota tikslui"
 
+msgid "Saves family preferences only."
+msgstr "Išsaugo tik šeimos nustatymus."
+
 msgid "Savings goal"
 msgstr "Taupymo tikslas"
 
@@ -2337,6 +2361,9 @@ msgstr "Ar dovanoti {amount} taškų vaikui {recipient}?"
 
 msgid "Sender email address"
 msgstr "Siuntėjo el. pašto adresas"
+
+msgid "Server"
+msgstr "Serveris"
 
 msgid "Set a new password here:"
 msgstr "Naują slaptažodį nustatykite čia:"

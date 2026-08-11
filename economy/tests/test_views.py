@@ -845,7 +845,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, '<details class="settings-section" open>', html=False)
         self.assertNotContains(
             response,
-            '<details class="settings-section settings-section-standalone" open>',
+            "settings-section-standalone",
             html=False,
         )
         self.assertContains(response, 'class="language-switcher-option"', count=2, html=False)
@@ -1172,9 +1172,10 @@ class AccessAndWorkflowTests(TestCase):
         html = response.content.decode()
         action_markers = [
             f'data-open-dialog="task-{self.child_one.pk}"',
-            f'data-open-dialog="child-penalty-{self.child_one.pk}"',
             f'data-open-dialog="assign-tasks-{self.child_one.pk}"',
+            f'data-open-dialog="child-more-{self.child_one.pk}"',
             f'data-open-dialog="custom-{self.child_one.pk}"',
+            f'data-open-dialog="child-penalty-{self.child_one.pk}"',
             f'data-open-dialog="credit-{self.child_one.pk}"',
         ]
 
@@ -1183,15 +1184,33 @@ class AccessAndWorkflowTests(TestCase):
         quick_action_html = html[html.index('<div class="child-quick-actions"'):]
         quick_action_html = quick_action_html[:quick_action_html.index('</div>')]
         self.assertEqual(
-            re.findall(r'<button class="quick-action".*?<use href="#(icon-[^"]+)"', quick_action_html, re.S),
+            re.findall(r'<button class="quick-action[^"]*".*?<use href="#(icon-[^"]+)"', quick_action_html, re.S),
             [
                 "icon-clipboard-check",
-                "icon-circle-minus",
                 "icon-calendar-plus",
-                "icon-coins",
-                "icon-credit-card",
+                "icon-ellipsis-vertical",
             ],
         )
+        self.assertIn(">Pridėti<", quick_action_html)
+        self.assertIn(">Paskirti<", quick_action_html)
+        self.assertIn('class="sr-only">Daugiau</span>', quick_action_html)
+        more_dialog = html[html.index(f'id="child-more-{self.child_one.pk}"') :]
+        more_dialog = more_dialog[: more_dialog.index("</dialog>") + len("</dialog>")]
+        self.assertIn("Daugiau veiksmų", more_dialog)
+        self.assertIn(f'data-open-dialog="custom-{self.child_one.pk}"', more_dialog)
+        self.assertIn(f'data-open-dialog="child-penalty-{self.child_one.pk}"', more_dialog)
+        self.assertIn(f'data-open-dialog="credit-{self.child_one.pk}"', more_dialog)
+        self.assertIn("icon-coins", more_dialog)
+        self.assertIn("icon-circle-minus", more_dialog)
+        self.assertIn("icon-credit-card", more_dialog)
+        self.assertIn("Koreguoti taškus", more_dialog)
+        self.assertIn("Skirti nuobaudą", more_dialog)
+        self.assertIn("Nustatyti kreditą", more_dialog)
+        meta_row = html[html.index('<div class="child-metadata-row">') :]
+        meta_row = meta_row[: meta_row.index("</div>")]
+        self.assertIn("Kreditas -100", meta_row)
+        self.assertLess(meta_row.index("Kreditas"), meta_row.index("Bilietai"))
+        self.assertNotIn("child-meta-sep", meta_row)
         nav_html = html[html.index('<nav class="parent-navigation"'):]
         nav_html = nav_html[:nav_html.index('</nav>')]
         self.assertEqual(
@@ -1624,8 +1643,11 @@ class AccessAndWorkflowTests(TestCase):
         self.client.login(username="tevai", password=self.parent_password)
         content = self.client.get(reverse("parent_dashboard")).content.decode()
         self.assertLess(content.index("Pirmas prašymas"), content.index("Antras prašymas"))
-        self.assertIn("Laukiantys prašymai (3)", content)
+        self.assertIn("Laukiantys prašymai", content)
+        self.assertIn('class="pending-count-badge"', content)
+        self.assertRegex(content, r'class="pending-count-badge"[^>]*>\s*3\s*<')
         self.assertEqual(content.count('class="pending-requests-panel"'), 1)
+        self.assertEqual(content.count('class="pending-panel-heading"'), 1)
         self.assertEqual(content.count('class="pending-request-row'), 3)
         self.assertEqual(content.count('class="pending-request-avatar"'), 3)
         self.assertNotIn("pending-child-group", content)
@@ -1639,7 +1661,16 @@ class AccessAndWorkflowTests(TestCase):
         stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
 
         self.assertIn(
-            ".pending-requests-panel { overflow: hidden; border: 2px solid color-mix(in srgb, var(--accent) 62%, var(--line));",
+            "border: 2px solid color-mix(in srgb, var(--accent) 62%, var(--line));",
+            stylesheet,
+        )
+        self.assertIn(
+            "background: color-mix(in srgb, var(--accent) 8%, var(--surface));",
+            stylesheet,
+        )
+        self.assertIn(".pending-panel-heading", stylesheet)
+        self.assertIn(
+            ".pending-request-actions { grid-column: 2; justify-content: flex-start;",
             stylesheet,
         )
 

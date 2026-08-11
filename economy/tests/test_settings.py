@@ -337,8 +337,19 @@ class ParentSettingsTests(TestCase):
         self.client.force_login(self.admin)
 
         response = self.client.get(reverse("parent_dashboard"))
+        content = response.content.decode()
+        settings = content[content.index('id="parent-settings"') : content.index('id="parent-history"')]
 
         self.assertNotContains(response, "Children and access")
+        self.assertIn('id="settings-everyday-heading"', settings)
+        self.assertIn("Everyday", settings)
+        self.assertIn("People and devices", settings)
+        self.assertIn(">Server<", settings)
+        self.assertIn("Saves family preferences only.", settings)
+        self.assertLess(
+            settings.index("existing-accounts-panel"),
+            settings.index("account-create-panel"),
+        )
         for heading in (
             "Family",
             "Points and tasks",
@@ -351,7 +362,11 @@ class ParentSettingsTests(TestCase):
             "Accounts",
             "Family feedback",
         ):
-            self.assertContains(response, f"<summary>{heading}</summary>", html=False)
+            self.assertIn(
+                f'class="settings-summary-label">{heading}</span>',
+                settings,
+            )
+        self.assertEqual(settings.count("settings-summary-status"), 3)
         self.assertNotContains(response, ">Rewards and goals<", html=False)
 
     def smtp_payload(self, **overrides):
