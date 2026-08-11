@@ -20,7 +20,10 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertIn("      - backup", app_service)
         self.assertNotIn("traefik.", app_service)
         self.assertNotIn("ports:", app_service)
-        self.assertIn("image: vooz2/kinkudos:", app_service)
+        self.assertIn(
+            "image: vooz2/kinkudos:${KINKUDOS_IMAGE_TAG:-26.6.5}",
+            app_service,
+        )
         self.assertIn("      - app-egress", app_service)
 
     def test_proxy_overlays_keep_direct_port_private(self):
@@ -153,6 +156,8 @@ class ReleaseDeploymentTests(SimpleTestCase):
         backup_script = (ROOT / "deploy" / "backup.sh").read_text(encoding="utf-8")
 
         self.assertIn('"$release_dir/deploy/$helper" "$deploy_dir/$helper"', installer)
+        self.assertIn('image_tag=${KINKUDOS_IMAGE_TAG:-$version}', installer)
+        self.assertIn('export KINKUDOS_IMAGE_TAG="$image_tag"', installer)
         self.assertIn("  backup.sh \\", installer)
         self.assertIn("  install.sh \\", installer)
         self.assertIn("  kinkudos-lottery-reminders.service \\", installer)
@@ -235,6 +240,8 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertIn("Unsafe archive member", installer)
         self.assertIn("releases/latest", installer)
         self.assertIn('KINKUDOS_INSTALL_ROOT:-/opt/kinkudos', installer)
+        self.assertIn("KINKUDOS_RELEASE_BASE_URL", installer)
+        self.assertIn("KINKUDOS_IMAGE_TAG", installer)
         self.assertIn("is not empty; use the upgrade guide", installer)
         self.assertIn("./bootstrap.sh", installer)
         self.assertIn("is not writable by the current user", installer)
@@ -275,7 +282,10 @@ class ReleaseDeploymentTests(SimpleTestCase):
             encoding="utf-8"
         )
 
-        self.assertIn("image: vooz2/kinkudos:26.6.5", compose)
+        self.assertIn(
+            "image: vooz2/kinkudos:${KINKUDOS_IMAGE_TAG:-26.6.5}",
+            compose,
+        )
         self.assertIn("kinkudos-data:/app/data", compose)
         self.assertIn('      - "8000"', compose)
         self.assertIn("KINKUDOS_RUNTIME_SECRETS_DIR", compose)

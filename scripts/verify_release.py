@@ -14,7 +14,10 @@ def version_from(path: Path, pattern: str) -> str:
     match = re.search(pattern, path.read_text(encoding="utf-8"))
     if not match:
         raise SystemExit(f"Could not read the version from {path.relative_to(ROOT)}")
-    return match.group(1)
+    for group in match.groups():
+        if group is not None:
+            return group
+    raise SystemExit(f"Could not read the version from {path.relative_to(ROOT)}")
 
 
 dockerignore_rules = {
@@ -39,11 +42,11 @@ versions = {
     ),
     "deploy/compose.yml": version_from(
         ROOT / "deploy" / "compose.yml",
-        r"(?m)^\s*image: vooz2/kinkudos:([0-9]+\.[0-9]+\.[0-9]+)\s*$",
+        r"(?m)^\s*image: vooz2/kinkudos:(?:([0-9]+\.[0-9]+\.[0-9]+)|\$\{KINKUDOS_IMAGE_TAG:-([0-9]+\.[0-9]+\.[0-9]+)\})\s*$",
     ),
     "deploy/hostinger/compose.yaml": version_from(
         ROOT / "deploy" / "hostinger" / "compose.yaml",
-        r"(?m)^\s*image: vooz2/kinkudos:([0-9]+\.[0-9]+\.[0-9]+)\s*$",
+        r"(?m)^\s*image: vooz2/kinkudos:(?:([0-9]+\.[0-9]+\.[0-9]+)|\$\{KINKUDOS_IMAGE_TAG:-([0-9]+\.[0-9]+\.[0-9]+)\})\s*$",
     ),
 }
 if len(set(versions.values())) != 1:
