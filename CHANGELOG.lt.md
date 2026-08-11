@@ -11,6 +11,26 @@ schema.
 
 - Kol kas nieko.
 
+## [26.6.6] - 2026-08-11
+
+### Pakeista
+
+- Leidimo ir diegimo dokumentacija dabar atskiria leidimo kandidatų atvaizdus
+  nuo gamybinių numatytųjų atvaizdų ir atnaujina ekrano nuotraukų bei tinklo
+  prieigos paaiškinimus.
+
+### Pataisyta
+
+- Tėvų paskyros išjungimas dabar išsaugo paskutinį aktyvų tėvą ir paskutinį
+  aktyvų tėvą administratorių, o išjungto tėvo „Push“ prenumeratos išvalomos.
+- Vaikų tinklo režime tėvų prisijungimas ir slaptažodžio atkūrimas dabar lieka
+  pasiekiami įrenginyje su aktyvia vaiko sesija.
+
+### Saugumas
+
+- Django atnaujintas iki 5.2.17, įtraukiant naujausius palaikomus saugos
+  pataisymus.
+
 ## [26.6.5] - 2026-08-11
 
 ### Pakeista

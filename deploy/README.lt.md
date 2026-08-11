@@ -250,7 +250,7 @@ env` leidimo atnaujintojui ir dar kartą kiekvienai vėlesnei Compose komandai,
 kuri iš naujo parenka ar iš naujo sukuria atvaizdą, pavyzdžiui:
 
 ```bash
-candidate_tag=26.6.5-rc.<short-sha>
+candidate_tag=26.6.6-rc.<short-sha>
 sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
   KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
 sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
@@ -258,9 +258,9 @@ sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
 ```
 
 Šie perrašymai tyčia neišsaugomi produkciniame `.env`. Tai nėra įprastas
-stabilaus leidimo naudotojo atnaujinimo kelias. Atnaujindami stabilų `26.6.5`,
+stabilaus leidimo naudotojo atnaujinimo kelias. Atnaujindami stabilų `26.6.6`,
 naudokite aukščiau pateiktą procedūrą be abiejų perrašymų: Compose numatytosios
-reikšmės yra gamybinis `vooz2/kinkudos` paketas ir `26.6.5`.
+reikšmės yra gamybinis `vooz2/kinkudos` paketas ir `26.6.6`.
 
 Atnaujintojas patikrina kontrolinę sumą ir leidimo duomenis, parsiunčia bei
 išbando paskelbtą atvaizdą, patikrina serverio katalogų nuosavybę, sukuria
