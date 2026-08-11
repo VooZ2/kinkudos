@@ -183,10 +183,11 @@ publishing Docker ID is `vooz2`.
 Pushing a `release/<version>` branch runs
 `.github/workflows/release-candidate.yml`. The workflow validates the exact
 source commit, builds `linux/amd64` and `linux/arm64` images, and publishes
-only the immutable candidate tag `<version>-rc.<short-sha>` to GHCR and Docker
-Hub. It also uploads `kinkudos-<version>.tar.gz` and its checksum to the
-prerelease `v<version>-rc.<short-sha>`. It never updates a stable version tag,
-a minor-series tag, or `latest`.
+only the immutable candidate tag `<version>-rc.<short-sha>` to the dedicated
+`ghcr.io/vooz2/kinkudos-rc` and `vooz2/kinkudos-rc` packages. It also uploads
+`kinkudos-<version>.tar.gz` and its checksum to the prerelease
+`v<version>-rc.<short-sha>`. It never writes to the production `kinkudos`
+packages or updates a stable version tag, a minor-series tag, or `latest`.
 
 For fresh-install acceptance testing, use the installer from the exact source
 commit and point it at the candidate assets:
@@ -199,6 +200,7 @@ curl -fsSL "https://raw.githubusercontent.com/VooZ2/kinkudos/$source_sha/deploy/
   -o /tmp/kinkudos-install.sh
 KINKUDOS_VERSION="$version" \
 KINKUDOS_RELEASE_BASE_URL="https://github.com/VooZ2/kinkudos/releases/download/v$candidate_tag" \
+KINKUDOS_IMAGE_REPOSITORY="vooz2/kinkudos-rc" \
 KINKUDOS_IMAGE_TAG="$candidate_tag" \
 sh /tmp/kinkudos-install.sh
 ```
@@ -215,7 +217,8 @@ gh release download "v$candidate_tag" --repo VooZ2/kinkudos \
   --pattern "kinkudos-$version.tar.gz.sha256"
 sha256sum -c "kinkudos-$version.tar.gz.sha256"
 tar -xzf "kinkudos-$version.tar.gz"
-sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" sh \
+sudo env KINKUDOS_IMAGE_REPOSITORY="vooz2/kinkudos-rc" \
+  KINKUDOS_IMAGE_TAG="$candidate_tag" sh \
   "kinkudos-$version/deploy/install-release.sh" \
   "kinkudos-$version.tar.gz" \
   "kinkudos-$version.tar.gz.sha256" \
@@ -223,18 +226,21 @@ sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" sh \
   "$(pwd)/kinkudos-$version"
 ```
 
-`KINKUDOS_IMAGE_TAG` is an explicit release-candidate-only override. During
-acceptance testing, pass it again to every Compose command that resolves or
-recreates images, for example:
+`KINKUDOS_IMAGE_REPOSITORY` and `KINKUDOS_IMAGE_TAG` are explicit
+release-candidate-only overrides. During acceptance testing, pass both again to
+every Compose command that resolves or recreates images, for example:
 
 ```sh
-sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
-sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose up -d --force-recreate
+sudo env KINKUDOS_IMAGE_REPOSITORY="vooz2/kinkudos-rc" \
+  KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
+sudo env KINKUDOS_IMAGE_REPOSITORY="vooz2/kinkudos-rc" \
+  KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose up -d --force-recreate
 ```
 
-The override does not need to be persisted in the production `.env`. It is not
-part of the normal stable-user update workflow: after `26.6.5` is published,
-the stable Compose default is `26.6.5` and no RC override is required.
+These overrides do not need to be persisted in the production `.env`. They are
+not part of the normal stable-user update workflow: after `26.6.5` is
+published, the Compose defaults are the production `vooz2/kinkudos` package and
+`26.6.5`, so no RC override is required.
 
 Record the workflow's source SHA, candidate manifest digest, both image
 architectures, prerelease asset URLs, and checksum before beginning VPS tests.

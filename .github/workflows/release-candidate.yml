@@ -179,8 +179,8 @@ jobs:
         uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
         with:
           images: |
-            ghcr.io/vooz2/kinkudos
-            vooz2/kinkudos
+            ghcr.io/vooz2/kinkudos-rc
+            vooz2/kinkudos-rc
           tags: |
             type=raw,value=${{ steps.metadata.outputs.candidate_tag }}
           labels: |
@@ -212,8 +212,8 @@ jobs:
 
       - name: Inspect candidate manifests
         run: |
-          docker buildx imagetools inspect "ghcr.io/vooz2/kinkudos:${{ steps.metadata.outputs.candidate_tag }}"
-          docker buildx imagetools inspect "vooz2/kinkudos:${{ steps.metadata.outputs.candidate_tag }}"
+          docker buildx imagetools inspect "ghcr.io/vooz2/kinkudos-rc:${{ steps.metadata.outputs.candidate_tag }}"
+          docker buildx imagetools inspect "vooz2/kinkudos-rc:${{ steps.metadata.outputs.candidate_tag }}"
 
       - name: Publish candidate archive and checksum
         env:

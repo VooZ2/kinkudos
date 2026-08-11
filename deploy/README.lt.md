@@ -234,21 +234,23 @@ rm -f "$install_script" "$compose_file"
 
 ### Leidimo kandidato priėmimo testavimas (tik prižiūrėtojams)
 
-`KINKUDOS_IMAGE_TAG` yra aiškus, tik RC skirtas perrašymas. Testuodami leidimo
-kandidato atvaizdą, perduokite jį per `sudo env` leidimo atnaujintojui ir dar
-kartą perduokite kiekvienai vėlesnei Compose komandai, kuri iš naujo parenka ar
-iš naujo sukuria atvaizdą, pavyzdžiui:
+`KINKUDOS_IMAGE_REPOSITORY` ir `KINKUDOS_IMAGE_TAG` yra aiškūs, tik RC skirti
+perrašymai. Testuodami leidimo kandidato atvaizdą, abu perduokite per `sudo
+env` leidimo atnaujintojui ir dar kartą kiekvienai vėlesnei Compose komandai,
+kuri iš naujo parenka ar iš naujo sukuria atvaizdą, pavyzdžiui:
 
 ```bash
 candidate_tag=26.6.5-rc.<short-sha>
-sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
-sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose up -d --force-recreate
+sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
+  KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
+sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
+  KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose up -d --force-recreate
 ```
 
-Šis perrašymas tyčia neišsaugomas produkciniame `.env`. Tai nėra įprastas
+Šie perrašymai tyčia neišsaugomi produkciniame `.env`. Tai nėra įprastas
 stabilaus leidimo naudotojo atnaujinimo kelias. Atnaujindami stabilų `26.6.5`,
-naudokite aukščiau pateiktą procedūrą be `KINKUDOS_IMAGE_TAG`: Compose numatytoji
-reikšmė jau yra `26.6.5`.
+naudokite aukščiau pateiktą procedūrą be abiejų perrašymų: Compose numatytosios
+reikšmės yra gamybinis `vooz2/kinkudos` paketas ir `26.6.5`.
 
 Atnaujintojas patikrina kontrolinę sumą ir leidimo duomenis, parsiunčia bei
 išbando paskelbtą atvaizdą, patikrina serverio katalogų nuosavybę, sukuria

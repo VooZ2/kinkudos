@@ -33,6 +33,12 @@ case "$image_tag" in
 esac
 export KINKUDOS_IMAGE_TAG="$image_tag"
 
+image_repository=${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}
+case "$image_repository" in
+  ""|*[!0-9A-Za-z._/-]*|/*|*/|*//* ) fail "invalid Docker image repository: $image_repository" ;;
+esac
+export KINKUDOS_IMAGE_REPOSITORY="$image_repository"
+
 if [ -n "$release_base_url" ]; then
   case "$release_base_url" in
     https://*) release_url=${release_base_url%/} ;;

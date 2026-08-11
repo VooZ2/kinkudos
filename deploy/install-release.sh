@@ -21,6 +21,12 @@ case "$image_tag" in
 esac
 export KINKUDOS_IMAGE_TAG="$image_tag"
 
+image_repository=${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}
+case "$image_repository" in
+  ""|*[!0-9A-Za-z._/-]*|/*|*/|*//* ) echo "Invalid Docker image repository: $image_repository" >&2; exit 2 ;;
+esac
+export KINKUDOS_IMAGE_REPOSITORY="$image_repository"
+
 archive=$(realpath "$archive")
 checksum_file=$(realpath "$checksum_file")
 project_root=$(realpath "$project_root")
@@ -29,7 +35,7 @@ secrets_dir="$project_root/secrets"
 releases_dir="$project_root/releases"
 release_dir="$releases_dir/$version"
 staging_dir="$releases_dir/.staging-$version-$$"
-image="vooz2/kinkudos:$image_tag"
+image="$image_repository:$image_tag"
 container="kinkudos-app-1"
 
 test -f "$archive"
