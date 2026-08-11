@@ -97,6 +97,8 @@ from .lottery import (
     reveal_lottery_ticket,
 )
 from .models import (
+    CHILD_PUSH_SUBSCRIPTION_LIMIT,
+    PARENT_PUSH_SUBSCRIPTION_LIMIT,
     AssignedTask,
     AssignedTaskBatch,
     AssignedTaskStatus,
@@ -130,6 +132,7 @@ from .models import (
     Task,
     TaskClaim,
     TaskCompletion,
+    validate_push_subscription_data,
 )
 from .net import client_ip
 from .push import (
@@ -156,11 +159,14 @@ from .services import (
     assigned_tasks_block_rewards,
     cancel_assigned_task,
     cancel_assigned_task_batch,
+    cancel_reward_request,
     close_savings_goal,
     complete_assigned_task,
     delete_savings_goal,
     keep_goal_active,
     post_ledger_entry,
+    reject_proposal,
+    reject_reward_request,
     reject_task_claim,
     request_goal_completion,
     request_task_revision,
@@ -1027,11 +1033,10 @@ def child_cancel_reward(request, request_id):
         RewardRequest,
         pk=request_id,
         child=request.child,
-        status=RequestStatus.PENDING,
     )
-    reward_request.status = RequestStatus.CANCELLED
-    reward_request.decided_at = timezone.now()
-    reward_request.save(update_fields=["status", "decided_at"])
+    cancelled = cancel_reward_request(request=reward_request, child=request.child)
+    if not cancelled:
+        return redirect("child_dashboard")
     messages.success(request, _("The reward request was cancelled."))
     return redirect("child_dashboard")
 
@@ -2415,6 +2420,7 @@ def parent_dashboard(request):
                     "account": account,
                     "form": ParentEditForm(
                         account=account,
+                        actor=request.user,
                         auto_id=f"id_parent_{account.pk}_%s",
                     ),
                 }
@@ -2478,7 +2484,13 @@ def parent_create_child_account(request):
 @require_POST
 def parent_edit_parent_account(request, account_id):
     account = get_object_or_404(get_user_model(), pk=account_id, is_active=True)
-    form = ParentEditForm(request.POST, account=account)
+    if account.is_staff and not request.user.is_staff:
+        messages.error(
+            request,
+            _("Only a parent administrator can manage an administrator account."),
+        )
+        return redirect("parent_dashboard")
+    form = ParentEditForm(request.POST, account=account, actor=request.user)
     if form.is_valid():
         form.save()
         if account.pk == request.user.pk and form.cleaned_data.get("new_password"):
@@ -2495,12 +2507,31 @@ def parent_remove_parent_account(request, account_id):
     account = get_object_or_404(get_user_model(), pk=account_id, is_active=True)
     if account.pk == request.user.pk:
         messages.error(request, _("You cannot remove the account you are currently using."))
+    elif account.is_staff and not request.user.is_staff:
+        messages.error(
+            request,
+            _("Only a parent administrator can manage an administrator account."),
+        )
+    elif account.is_staff and get_user_model().objects.filter(
+        is_active=True,
+        is_staff=True,
+    ).count() <= 1:
+        messages.error(request, _("You cannot remove the last active parent administrator."))
     elif get_user_model().objects.filter(is_active=True).count() <= 1:
         messages.error(request, _("You cannot remove the last active parent account."))
     else:
-        account.is_active = False
-        account.save(update_fields=["is_active"])
-        messages.success(request, _("Parent account “%(username)s” removed.") % {"username": account.username})
+        with transaction.atomic():
+            deactivated = get_user_model().objects.filter(
+                pk=account.pk,
+                is_active=True,
+            ).update(is_active=False)
+            if deactivated:
+                PushSubscription.objects.filter(user=account).delete()
+        if deactivated:
+            messages.success(
+                request,
+                _("Parent account “%(username)s” removed.") % {"username": account.username},
+            )
     return redirect("parent_dashboard")
 
 
@@ -2670,22 +2701,11 @@ def parent_decide_reward(request, request_id, decision):
             form = RejectForm(request.POST)
             if not form.is_valid():
                 raise ValidationError(_("A rejection reason is required."))
-            with transaction.atomic():
-                locked = RewardRequest.objects.select_for_update().get(pk=reward_request.pk)
-                if locked.status != RequestStatus.PENDING:
-                    raise ValidationError(_("This request has already been resolved."))
-                locked.status = RequestStatus.REJECTED
-                locked.rejection_reason = form.cleaned_data["reason"]
-                locked.decided_by = request.user
-                locked.decided_at = timezone.now()
-                locked.save(
-                    update_fields=[
-                        "status",
-                        "rejection_reason",
-                        "decided_by",
-                        "decided_at",
-                    ]
-                )
+            locked = reject_reward_request(
+                request=reward_request,
+                actor=request.user,
+                reason=form.cleaned_data["reason"],
+            )
             notify_reward_decision(locked, approved=False)
             messages.success(request, _("Reward request rejected."))
         else:
@@ -2717,12 +2737,10 @@ def parent_decide_proposal(request, proposal_id, decision):
             form = RejectForm(request.POST)
             if not form.is_valid():
                 raise ValidationError(_("A rejection reason is required."))
-            proposal.status = RequestStatus.REJECTED
-            proposal.parent_note = form.cleaned_data["reason"]
-            proposal.decided_by = request.user
-            proposal.decided_at = timezone.now()
-            proposal.save(
-                update_fields=["status", "parent_note", "decided_by", "decided_at"]
+            proposal = reject_proposal(
+                proposal=proposal,
+                actor=request.user,
+                reason=form.cleaned_data["reason"],
             )
             notify_proposal_decision(proposal, approved=False)
             messages.success(request, _("Suggestion rejected."))
@@ -3301,38 +3319,59 @@ def parent_run_backup(request):
     return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
 
+def _push_payload(request):
+    try:
+        payload = json.loads(request.body)
+        if not isinstance(payload, dict):
+            raise ValueError
+        keys = payload["keys"]
+        if not isinstance(keys, dict):
+            raise ValueError
+        endpoint, p256dh, auth = validate_push_subscription_data(
+            payload["endpoint"],
+            keys["p256dh"],
+            keys["auth"],
+        )
+    except (KeyError, TypeError, ValueError, UnicodeDecodeError, ValidationError):
+        return None
+    return endpoint, p256dh, auth
+
+
 @parent_required
 @require_POST
 def push_subscribe(request):
-    import json
-
-    try:
-        payload = json.loads(request.body)
-        keys = payload["keys"]
+    payload = _push_payload(request)
+    if payload is None:
+        return JsonResponse({"ok": False}, status=400)
+    endpoint, p256dh, auth = payload
+    with transaction.atomic():
+        existing = PushSubscription.objects.filter(endpoint=endpoint).first()
+        if (
+            existing is None
+            or existing.user_id != request.user.pk
+            or existing.child_id is not None
+        ) and PushSubscription.objects.filter(user=request.user).count() >= PARENT_PUSH_SUBSCRIPTION_LIMIT:
+            return JsonResponse({"ok": False}, status=429)
         PushSubscription.objects.update_or_create(
-            endpoint=payload["endpoint"],
+            endpoint=endpoint,
             defaults={
                 "user": request.user,
                 "child": None,
                 "device": None,
-                "p256dh": keys["p256dh"],
-                "auth": keys["auth"],
+                "p256dh": p256dh,
+                "auth": auth,
                 "user_agent": request.headers.get("User-Agent", "")[:255],
             },
         )
-    except (KeyError, TypeError, ValueError):
-        return JsonResponse({"ok": False}, status=400)
     return JsonResponse({"ok": True})
 
 
 @parent_required
 @require_POST
 def push_unsubscribe(request):
-    import json
-
     try:
         endpoint = json.loads(request.body)["endpoint"]
-    except (KeyError, TypeError, ValueError):
+    except (KeyError, TypeError, ValueError, UnicodeDecodeError):
         return JsonResponse({"ok": False}, status=400)
     PushSubscription.objects.filter(user=request.user, endpoint=endpoint).delete()
     return JsonResponse({"ok": True})
@@ -3341,43 +3380,50 @@ def push_unsubscribe(request):
 @child_required
 @require_POST
 def child_push_subscribe(request):
-    import json
-
-    try:
-        payload = json.loads(request.body)
-        keys = payload["keys"]
-        device = current_device(request)
-        if device is None and settings.DEVICE_PAIRING_REQUIRED:
-            return JsonResponse({"ok": False}, status=403)
-        if device is None:
-            device, _unused_token = DeviceToken.issue(
-                created_by=None,
-                label=_("Development device"),
-            )
+    payload = _push_payload(request)
+    if payload is None:
+        return JsonResponse({"ok": False}, status=400)
+    endpoint, p256dh, auth = payload
+    device = current_device(request)
+    if device is None and settings.DEVICE_PAIRING_REQUIRED:
+        return JsonResponse({"ok": False}, status=403)
+    if device is None:
+        device, _unused_token = DeviceToken.issue(
+            created_by=None,
+            label=_("Development device"),
+        )
+    with transaction.atomic():
+        existing = PushSubscription.objects.filter(endpoint=endpoint).first()
+        same_device = (
+            existing is not None
+            and existing.child_id == request.child.pk
+            and existing.device_id == device.pk
+        )
+        if not same_device and PushSubscription.objects.filter(
+            child=request.child,
+            device=device,
+        ).count() >= CHILD_PUSH_SUBSCRIPTION_LIMIT:
+            return JsonResponse({"ok": False}, status=429)
         PushSubscription.objects.update_or_create(
-            endpoint=payload["endpoint"],
+            endpoint=endpoint,
             defaults={
                 "user": None,
                 "child": request.child,
                 "device": device,
-                "p256dh": keys["p256dh"],
-                "auth": keys["auth"],
+                "p256dh": p256dh,
+                "auth": auth,
                 "user_agent": request.headers.get("User-Agent", "")[:255],
             },
         )
-    except (KeyError, TypeError, ValueError):
-        return JsonResponse({"ok": False}, status=400)
     return JsonResponse({"ok": True})
 
 
 @child_required
 @require_POST
 def child_push_unsubscribe(request):
-    import json
-
     try:
         endpoint = json.loads(request.body)["endpoint"]
-    except (KeyError, TypeError, ValueError):
+    except (KeyError, TypeError, ValueError, UnicodeDecodeError):
         return JsonResponse({"ok": False}, status=400)
     PushSubscription.objects.filter(
         child=request.child,

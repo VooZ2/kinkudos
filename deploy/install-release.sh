@@ -169,10 +169,6 @@ if ! docker compose config --images | grep -Fx "$image" >/dev/null; then
   exit 1
 fi
 
-old_image_id=$(
-  docker inspect "$container" --format '{{.Image}}' 2>/dev/null || true
-)
-
 docker compose exec -T app \
   python manage.py backup_database --output-dir /app/backups
 
@@ -203,11 +199,8 @@ done
 
 if [ "$healthy" != "true" ]; then
   docker compose logs --tail=100 app >&2 || true
-  if [ -n "$old_image_id" ]; then
-    docker tag "$old_image_id" "$image"
-    docker compose up -d --no-build --force-recreate app || true
-  fi
-  echo "Health check failed; the previous image was restored when available." >&2
+  echo "Health check failed; the database may contain migrations from $version." >&2
+  echo "The previous image was not restored automatically. Resolve the release compatibility issue before restarting an older image." >&2
   exit 1
 fi
 

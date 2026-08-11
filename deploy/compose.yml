@@ -52,6 +52,7 @@ services:
       - ../secrets/smtp:/run/smtp
     networks:
       - backup
+      - app-egress
     healthcheck:
       test:
         - CMD
@@ -101,6 +102,7 @@ services:
 networks:
   backup:
     internal: true
+  app-egress:
   backup-egress:
 
 secrets:

@@ -31,6 +31,8 @@ TOKEN_FILE = Path(
     os.environ.get("KINKUDOS_BACKUP_AGENT_TOKEN_FILE", "/run/secrets/backup_agent_token")
 )
 BACKUP_HOUR = int(os.environ.get("KINKUDOS_BACKUP_HOUR", "3"))
+SCHEDULED_RETRY_BASE_SECONDS = 5 * 60
+SCHEDULED_RETRY_MAX_SECONDS = 60 * 60
 LOCK = threading.Lock()
 
 
@@ -88,6 +90,10 @@ def initial_status():
         "last_success_at": None,
         "last_check_at": None,
         "last_scheduled_date": None,
+        "scheduled_retry_date": None,
+        "scheduled_retry_attempts": 0,
+        "scheduled_retry_not_before": None,
+        "scheduled_retry_deadline": None,
         "error": "",
     }
 
@@ -174,6 +180,40 @@ def run_repository_command(command, *, env):
         time.sleep(1)
         result = run_command(command, env=env)
     return result
+
+
+def scheduled_retry_deadline(local_now):
+    next_day = local_now.date() + timedelta(days=1)
+    return local_now.replace(
+        year=next_day.year,
+        month=next_day.month,
+        day=next_day.day,
+        hour=0,
+        minute=0,
+        second=0,
+        microsecond=0,
+    )
+
+
+def scheduled_retry_is_due(local_now):
+    today = local_now.date().isoformat()
+    if STATUS.get("scheduled_retry_date") != today:
+        return True
+    deadline_value = STATUS.get("scheduled_retry_deadline")
+    if deadline_value:
+        try:
+            if local_now >= datetime.fromisoformat(deadline_value):
+                return False
+        except ValueError:
+            return False
+    not_before_value = STATUS.get("scheduled_retry_not_before")
+    if not_before_value:
+        try:
+            if local_now < datetime.fromisoformat(not_before_value):
+                return False
+        except ValueError:
+            return False
+    return True
 
 
 def repository_error(result):
@@ -278,6 +318,23 @@ def perform_backup(*, scheduled=False, lock_acquired=False):
     if not lock_acquired and not LOCK.acquire(blocking=False):
         raise RuntimeError("A backup is already running.")
     try:
+        local_now = datetime.now().astimezone()
+        if scheduled:
+            today = local_now.date().isoformat()
+            if STATUS.get("scheduled_retry_date") != today:
+                STATUS.update(
+                    {
+                        "scheduled_retry_date": today,
+                        "scheduled_retry_attempts": 0,
+                        "scheduled_retry_not_before": None,
+                        "scheduled_retry_deadline": scheduled_retry_deadline(
+                            local_now
+                        ).isoformat(),
+                    }
+                )
+            STATUS["scheduled_retry_attempts"] = int(
+                STATUS.get("scheduled_retry_attempts", 0)
+            ) + 1
         STATUS.update(
             {
                 "running": True,
@@ -285,8 +342,6 @@ def perform_backup(*, scheduled=False, lock_acquired=False):
                 "error": "",
             }
         )
-        if scheduled:
-            STATUS["last_scheduled_date"] = datetime.now().astimezone().date().isoformat()
         save_status()
         env = restic_environment()
         if not env.get("RESTIC_REPOSITORY") or env["RESTIC_REPOSITORY"] == "REPLACE_WITH_REPOSITORY":
@@ -324,10 +379,26 @@ def perform_backup(*, scheduled=False, lock_acquired=False):
                 "error": "",
             }
         )
+        if scheduled:
+            STATUS.update(
+                {
+                    "last_scheduled_date": local_now.date().isoformat(),
+                    "scheduled_retry_not_before": None,
+                }
+            )
     # The daemon records any command, filesystem, or configuration failure in
     # status instead of terminating its scheduler thread.
     except Exception as exc:  # noqa: BLE001
         STATUS.update({"health": "error", "error": str(exc)[-500:]})
+        if scheduled:
+            attempts = max(1, int(STATUS.get("scheduled_retry_attempts", 1)))
+            delay = min(
+                SCHEDULED_RETRY_BASE_SECONDS * (2 ** (attempts - 1)),
+                SCHEDULED_RETRY_MAX_SECONDS,
+            )
+            STATUS["scheduled_retry_not_before"] = (
+                datetime.now().astimezone() + timedelta(seconds=delay)
+            ).isoformat()
     finally:
         STATUS["running"] = False
         save_status()
@@ -370,6 +441,7 @@ def schedule_loop():
             STATUS.get("configured")
             and local_now.hour >= BACKUP_HOUR
             and STATUS.get("last_scheduled_date") != today
+            and scheduled_retry_is_due(local_now)
         ):
             perform_backup(scheduled=True)
         time.sleep(60)
