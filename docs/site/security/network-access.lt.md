@@ -15,6 +15,12 @@ vaiko sesijai naudojant bendrą maršrutą, pavyzdžiui, atsiliepimų ar ekrano
 nuotraukos prieigą. Ribojimas taikomas ne tik URL, prasidedantiems `/child/`.
 Šiuo režimu autentifikuotas tėvas nelaikomas vaiko sesija.
 
+Tėvų prisijungimo ir slaptažodžio atkūrimo puslapiai lieka pasiekiami net tada,
+kai naršyklėje aktyvi vaiko sesija. Taip tėvas gali prisijungti arba atkurti
+paskyrą iš to paties įrenginio. Tėvui autentifikavusis, užklausa vertinama kaip
+tėvų prieiga; tik vaikams skirti ir susiejimo veiksmai lieka ribojami kaip vaikų
+maršrutai.
+
 ## Prieš išsaugant taisyklę
 
 1. Formoje patikrinkite rodomą **Dabartinį IP adresą**.

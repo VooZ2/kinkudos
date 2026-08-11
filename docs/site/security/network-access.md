@@ -17,6 +17,11 @@ session uses a shared route such as feedback or screenshot access. It is not
 limited to URLs beginning with `/child/`. An authenticated parent is not treated
 as a child session for this mode.
 
+Parent login and password-recovery pages remain available even when the browser
+has an active child session. This lets a parent sign in or recover the account
+from that device. Once the parent is authenticated, the request is evaluated as
+parent access; child-only and pairing flows remain restricted as child routes.
+
 ## Before saving a rule
 
 1. Check the **Current IP address** shown in the Settings form.

@@ -11,8 +11,8 @@ rodomi laukiantys prašymai, o po jais – vaikų kortelės.
 Kai nėra prašymų, kompaktiška tuščia būsena rodo **Nėra laukiančių prašymų**.
 Vaikų kortelės lieka tiesiai po ja.
 
-<details class="screenshot-disclosure">
-<summary>Peržiūrėti tėvų Pradžią su laukiančiais prašymais telefone</summary>
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti tėvų Pradžią su laukiančiais prašymais telefone</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-home-pending-requests-mobile-26-6-4.png" alt="Tėvų Pradžia su laukiančiais prašymais telefone" loading="lazy">
 </details>
 
@@ -46,8 +46,8 @@ eilutė slepiama, kai nutrinami bilietai išjungti. `Išsaugota` rodoma tik tada
 kai vaikas turi išsaugotų taškų; `0 išsaugota` nerodoma. Vaikas be tikslų neturi
 tuščio tikslo bloko ar vietos žymeklio.
 
-<details class="screenshot-disclosure">
-<summary>Peržiūrėti tėvų Pradžią su vaikų kortelėmis telefone</summary>
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti tėvų Pradžią su vaikų kortelėmis telefone</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-home-child-cards-mobile-26-6-4.png" alt="Tėvų Pradžia su vaikų kortelėmis telefone" loading="lazy">
 </details>
 
