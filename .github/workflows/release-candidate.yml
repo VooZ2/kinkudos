@@ -1,0 +1,246 @@
+name: Build release candidate
+
+on:
+  push:
+    branches:
+      - "release/**"
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: Release branch or commit to build
+        required: true
+        default: release/26.6.5
+        type: string
+
+concurrency:
+  group: release-candidate-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  id-token: write
+  packages: write
+
+jobs:
+  candidate:
+    name: Build and publish release candidate
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    env:
+      KINKUDOS_DEBUG: "false"
+      KINKUDOS_SECRET_KEY: ci-candidate-only-9Fq7wR2mX8vK4pL6sN1cD5hJ3tB0zA7yE9uQ
+      KINKUDOS_ALLOWED_HOSTS: test.example.com
+      KINKUDOS_CSRF_TRUSTED_ORIGINS: https://test.example.com
+      KINKUDOS_SECURE_COOKIES: "true"
+      KINKUDOS_SECURE_SSL_REDIRECT: "true"
+      KINKUDOS_HSTS_SECONDS: "31536000"
+
+    steps:
+      - name: Check out candidate source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || github.sha }}
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5
+        with:
+          python-version: "3.12"
+
+      - name: Install locked product dependencies
+        run: python -m pip install --disable-pip-version-check --requirement requirements.lock
+
+      - name: Install Ruff
+        run: python -m pip install --disable-pip-version-check ruff==0.16.2
+
+      - name: Read candidate metadata
+        id: metadata
+        shell: bash
+        env:
+          SOURCE_REF: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || github.ref_name }}
+        run: |
+          set -euo pipefail
+          source_ref="$SOURCE_REF"
+          if [[ ! "$source_ref" =~ ^release/ ]]; then
+            if [[ ! "$source_ref" =~ ^[0-9a-f]{40}$ ]] || ! git for-each-ref --format='%(refname)' --contains HEAD 'refs/remotes/origin/release/*' | grep -q .; then
+              echo "Release candidate builds require a release/* ref or a commit contained by one." >&2
+              exit 1
+            fi
+          fi
+          version="$(sed -n 's/^version = "\([^"]*\)"$/\1/p' pyproject.toml)"
+          source_sha="$(git rev-parse HEAD)"
+          short_sha="$(git rev-parse --short=7 HEAD)"
+          candidate_tag="${version}-rc.${short_sha}"
+          release_tag="v${candidate_tag}"
+          {
+            echo "version=$version"
+            echo "source_sha=$source_sha"
+            echo "short_sha=$short_sha"
+            echo "candidate_tag=$candidate_tag"
+            echo "release_tag=$release_tag"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Run release verification
+        run: python scripts/verify_release.py
+
+      - name: Run Ruff
+        run: python -m ruff check .
+
+      - name: Run Django system check
+        run: python manage.py check
+
+      - name: Run deployment check
+        run: python scripts/check_deploy.py
+
+      - name: Check for missing migrations
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Check installed dependencies
+        run: python -m pip check
+
+      - name: Audit locked dependencies
+        uses: pypa/gh-action-pip-audit@1220774d901786e6f652ae159f7b6bc8fea6d266 # v1.1.0
+        with:
+          inputs: requirements.lock
+          no-deps: true
+
+      - name: Collect static assets
+        run: python manage.py collectstatic --noinput
+
+      - name: Run Django tests
+        env:
+          KINKUDOS_DEBUG: "false"
+          KINKUDOS_SECRET_KEY: ci-test-candidate-only-9Fq7wR2mX8vK4pL6sN1cD5hJ3tB0zA7yE9uQ
+          KINKUDOS_SECURE_SSL_REDIRECT: "false"
+          KINKUDOS_DEVICE_PAIRING_REQUIRED: "false"
+        run: python manage.py test
+
+      - name: Build strict documentation
+        run: python -m mkdocs build --strict --config-file docs/site/mkdocs.yml --site-dir "$RUNNER_TEMP/kinkudos-candidate-docs"
+
+      - name: Create and verify release archive
+        env:
+          KINKUDOS_DEBUG: "true"
+          KINKUDOS_DATABASE_PATH: ${{ runner.temp }}/kinkudos-package-check.sqlite3
+          KINKUDOS_LOG_LEVEL: CRITICAL
+          KINKUDOS_SECURE_SSL_REDIRECT: "false"
+          KINKUDOS_DEVICE_PAIRING_REQUIRED: "false"
+        run: |
+          python scripts/package_release.py
+          (cd dist && sha256sum -c "kinkudos-${{ steps.metadata.outputs.version }}.tar.gz.sha256")
+          python - "dist/kinkudos-${{ steps.metadata.outputs.version }}.tar.gz" <<'PY'
+          import sys
+          import tarfile
+          from pathlib import PurePosixPath
+
+          expected = f"kinkudos-${{ steps.metadata.outputs.version }}"
+          with tarfile.open(sys.argv[1], "r:gz") as archive:
+              members = archive.getmembers()
+              roots = {PurePosixPath(member.name).parts[0] for member in members}
+              if roots != {expected}:
+                  raise SystemExit(f"Unexpected archive roots: {sorted(roots)}")
+              names = {member.name for member in members}
+              for required in (
+                  f"{expected}/deploy/compose.yml",
+                  f"{expected}/deploy/install-release.sh",
+              ):
+                  if required not in names:
+                      raise SystemExit(f"Missing archive member: {required}")
+              for member in members:
+                  parts = PurePosixPath(member.name).parts
+                  if any(part in {".git", ".env", "secrets", "data", "backups"} for part in parts):
+                      raise SystemExit(f"Private archive member: {member.name}")
+          PY
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+        with:
+          username: vooz2
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract candidate image metadata
+        id: image
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
+        with:
+          images: |
+            ghcr.io/vooz2/kinkudos
+            vooz2/kinkudos
+          tags: |
+            type=raw,value=${{ steps.metadata.outputs.candidate_tag }}
+          labels: |
+            org.opencontainers.image.title=KinKudos
+            org.opencontainers.image.description=Self-hosted family tasks, points, and rewards PWA
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ steps.metadata.outputs.source_sha }}
+            org.opencontainers.image.version=${{ steps.metadata.outputs.candidate_tag }}
+
+      - name: Build and push candidate images
+        id: build
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.image.outputs.tags }}
+          labels: ${{ steps.image.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: mode=max
+          sbom: true
+
+      - name: Record candidate image identity
+        run: |
+          echo "Source commit: ${{ steps.metadata.outputs.source_sha }}"
+          echo "Candidate tag: ${{ steps.metadata.outputs.candidate_tag }}"
+          echo "Candidate manifest digest: ${{ steps.build.outputs.digest }}"
+
+      - name: Inspect candidate manifests
+        run: |
+          docker buildx imagetools inspect "ghcr.io/vooz2/kinkudos:${{ steps.metadata.outputs.candidate_tag }}"
+          docker buildx imagetools inspect "vooz2/kinkudos:${{ steps.metadata.outputs.candidate_tag }}"
+
+      - name: Publish candidate archive and checksum
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.metadata.outputs.version }}
+          SOURCE_SHA: ${{ steps.metadata.outputs.source_sha }}
+          RELEASE_TAG: ${{ steps.metadata.outputs.release_tag }}
+        run: |
+          set -euo pipefail
+          notes_file="$(mktemp)"
+          {
+            echo "This is a pre-release KinKudos ${VERSION} candidate for VPS deployment acceptance testing."
+            echo
+            awk -v version="$VERSION" '
+              index($0, "## [" version "] - ") == 1 { found=1; next }
+              found && /^## \[/ { exit }
+              found { print }
+            ' CHANGELOG.md
+          } > "$notes_file"
+          archive="dist/kinkudos-${VERSION}.tar.gz"
+          checksum="${archive}.sha256"
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "$archive" "$checksum" --repo "$GITHUB_REPOSITORY" --clobber
+          else
+            gh release create "$RELEASE_TAG" \
+              --repo "$GITHUB_REPOSITORY" \
+              --target "$SOURCE_SHA" \
+              --title "KinKudos ${VERSION} release candidate" \
+              --notes-file "$notes_file" \
+              --prerelease \
+              "$archive" "$checksum"
+          fi
+          echo "Candidate release: https://github.com/$GITHUB_REPOSITORY/releases/tag/$RELEASE_TAG"
