@@ -117,6 +117,23 @@ class FinalReviewTests(TestCase):
         self.assertContains(response, "data-clear-history-filters", count=1, html=False)
         self.assertContains(response, 'href="#icon-filter-circle-xmark"', html=False)
 
+    def test_history_mobile_polish_styles_align_actions_and_touch_targets(self):
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn(".history-filter-chips button { min-height: 44px;", css)
+        self.assertIn(".history-row-actions > .amount { margin-left: auto; }", css)
+        self.assertIn(
+            ".history-decision-informational .history-decision-label { position: absolute;",
+            css,
+        )
+        self.assertIn("border-radius: 24px 24px 0 0;", css)
+        self.assertIn("inset: auto 0 0;", css)
+        self.assertIn(".history-filter-dialog .dialog-actions", css)
+        self.assertIn("position: sticky;", css)
+        self.assertIn(".history-photo-button", css)
+        template = (ROOT / "templates/economy/parent_dashboard.html").read_text(encoding="utf-8")
+        self.assertIn('class="history-decision-label"', template)
+        self.assertIn('aria-label="{% translate \'Informational\' %}"', template)
+
     def test_history_custom_dates_normalize_and_validate(self):
         response = self.parent_response(
             {

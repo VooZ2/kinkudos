@@ -296,11 +296,11 @@ select.field-control, .stack-form select {
 .goal-mode-form .dialog-actions { flex-wrap: nowrap; }
 .goal-mode-form .dialog-actions .button { min-width: 0; }
 .ledger-row { justify-content: initial; }
-.ledger-row > div { flex: 1; display: grid; }
+.ledger-row > div { flex: 1; display: grid; gap: 2px; align-content: start; min-width: 0; }
 .ledger-row small { color: var(--muted); }
 .ledger-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; background: color-mix(in srgb, var(--primary) 10%, transparent); font-weight: 850; }
 .ledger-icon .action-icon { width: 20px; height: 20px; fill: currentColor; }
-.history-row-actions { display: flex; flex: 0 0 auto; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 10px; row-gap: 6px; }
+.history-row-actions { display: flex; flex: 0 0 auto; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px 10px; }
 .history-kind-icon { display: grid; flex: 0 0 30px; place-items: center; width: 30px; height: 30px; border-radius: 9px; color: var(--primary); background: color-mix(in srgb, var(--primary) 10%, var(--surface-solid)); }
 .history-kind-icon .action-icon { width: 17px; height: 17px; }
 .history-decision { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 6px; min-height: 34px; padding: 6px 9px; border-radius: 99px; font-size: .76rem; font-weight: 850; white-space: nowrap; }
@@ -308,7 +308,7 @@ select.field-control, .stack-form select {
 .history-decision-approved { color: var(--success); background: color-mix(in srgb, var(--success) 12%, var(--surface-solid)); }
 .history-decision-rejected { color: var(--danger); background: color-mix(in srgb, var(--danger) 12%, var(--surface-solid)); }
 .history-decision-informational { color: var(--muted); background: color-mix(in srgb, var(--muted) 14%, var(--surface-solid)); }
-.history-rejection-reason { margin-top: 4px; color: var(--danger) !important; overflow-wrap: anywhere; }
+.history-rejection-reason { margin-top: 2px; color: var(--danger) !important; overflow-wrap: anywhere; }
 .stat-card { padding: 22px; }
 .stat-card h2, .stat-card p { margin-top: 0; }
 .parent-title { margin-bottom: 28px; }
@@ -576,8 +576,8 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .history-filter.is-loading .field-control { cursor: wait; }
 .history-filter-button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; width: fit-content; min-height: 44px; }
 .history-filter-button strong { min-width: 20px; padding: 2px 5px; border-radius: 99px; color: #fff; background: var(--primary); font-size: .72rem; }
-.history-filter-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 22px 14px; }
-.history-filter-chips button { min-height: 32px; padding: 5px 9px; border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--line)); border-radius: 99px; color: var(--primary); background: color-mix(in srgb, var(--primary) 8%, var(--surface-solid)); font: inherit; font-size: .78rem; font-weight: 750; cursor: pointer; }
+.history-filter-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 0 22px 14px; }
+.history-filter-chips button { min-height: 44px; padding: 8px 12px; border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--line)); border-radius: 99px; color: var(--primary); background: color-mix(in srgb, var(--primary) 8%, var(--surface-solid)); font: inherit; font-size: .78rem; font-weight: 750; cursor: pointer; }
 .history-filter-chips .history-clear-filters, .history-clear-filters { display: inline-grid; place-items: center; flex: 0 0 44px; width: 44px; min-width: 44px; height: 44px; min-height: 44px; padding: 0; border-radius: 12px; }
 .history-clear-filters .action-icon { width: 20px; height: 20px; }
 .history-empty-state { display: block; }
@@ -707,8 +707,8 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .parent-home-panel { display: flex; flex-direction: column; gap: 16px; }
 .parent-pending-section { order: -1; padding-top: 0; }
 .parent-children-section { order: 0; }
-.info-button, .photo-history-button { display: inline-grid; flex: 0 0 auto; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 9px; color: var(--muted); background: transparent; cursor: pointer; }
-.info-button:hover, .photo-history-button:hover { color: var(--primary); background: color-mix(in srgb, var(--primary) 10%, transparent); }
+.info-button, .photo-history-button, .history-photo-button { display: inline-grid; flex: 0 0 auto; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 9px; color: var(--muted); background: transparent; cursor: pointer; }
+.info-button:hover, .photo-history-button:hover, .history-photo-button:hover { color: var(--primary); background: color-mix(in srgb, var(--primary) 10%, transparent); }
 .manage-tabs { display: flex; gap: 7px; overflow-x: auto; margin: 0 0 18px; padding: 5px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
 .manage-tabs a { display: inline-flex; align-items: center; gap: 6px; min-height: 42px; padding: 8px 12px; border-radius: 10px; color: var(--muted); font-weight: 780; text-decoration: none; white-space: nowrap; }
 .manage-tabs a:hover, .manage-tabs a:focus-visible { color: var(--primary); background: color-mix(in srgb, var(--primary) 10%, transparent); }
@@ -1202,13 +1202,22 @@ details .stack-form, details .inline-form { margin-top: 14px; }
   .history-filter { grid-template-columns: minmax(0, 1fr) auto; }
   .history-filter .history-filter-button { width: 44px; min-width: 44px; padding: 0; }
   .history-filter-button span { display: none; }
-  .history-filter { padding-inline: 16px; }
+  .history-filter { padding: 16px 16px 12px; }
   .history-filter-chips { padding-inline: 16px; }
   .history-custom-range { grid-template-columns: 1fr; }
-  .ledger-row { padding-inline: 14px; }
-  .ledger-row { align-items: flex-start; flex-wrap: wrap; }
-  .ledger-row > div { min-width: calc(100% - 58px); }
-  .history-row-actions { width: calc(100% - 58px); margin-left: 58px; }
+  .ledger-row { padding: 10px 14px; gap: 8px 10px; align-items: flex-start; flex-wrap: wrap; }
+  .ledger-row > div { min-width: calc(100% - 52px); gap: 1px; }
+  .history-row-actions {
+    width: calc(100% - 52px);
+    margin-left: 52px;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+  .history-row-actions > .amount { margin-left: auto; }
+  .history-row-actions > .history-kind-icon:last-child { margin-left: auto; }
+  .history-row-actions > .amount + .history-kind-icon { margin-left: 0; }
+  .history-decision-informational { min-width: 34px; justify-content: center; padding-inline: 8px; }
+  .history-decision-informational .history-decision-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
   .parent-accordion:not([open]) > summary { min-height: 60px; padding: 14px 16px; }
   .child-metadata-row {
     flex-direction: column;
@@ -1229,7 +1238,42 @@ details .stack-form, details .inline-form { margin-top: 14px; }
   .parent-nav-item > span { text-align: center; }
   .parent-nav-item .nav-count { position: absolute; top: 2px; left: calc(50% + 7px); min-width: 19px; padding: 2px 5px; }
   .parent-title { display: none; }
-.action-dialog { position: fixed; inset: auto 0 0; width: 100%; max-width: none; max-height: calc(100dvh - 10px); margin: 0; border-width: 1px 1px 0; border-radius: 24px 24px 0 0; padding: 26px 18px calc(18px + env(safe-area-inset-bottom)); }
+  .action-dialog {
+    position: fixed;
+    inset: auto 0 0;
+    width: 100%;
+    max-width: none;
+    max-height: min(90svh, calc(100dvh - 12px));
+    margin: 0;
+    border-width: 1px 1px 0;
+    border-radius: 24px 24px 0 0;
+    padding: 22px 18px calc(16px + env(safe-area-inset-bottom));
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .history-filter-dialog {
+    width: 100%;
+    max-width: none;
+  }
+  .history-filter-dialog h2 {
+    margin: 0 0 14px;
+  }
+  .history-filter-dialog .stack-form {
+    display: grid;
+    gap: 14px;
+    margin-top: 0;
+  }
+  .history-filter-dialog .dialog-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    margin-top: 2px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+    background: var(--surface-solid);
+  }
   .manage-tabs a { flex: 0 0 auto; }
   .dialog-actions { align-items: stretch; }
   .dialog-actions .button, .dialog-actions form { flex: 1 1 auto; }
