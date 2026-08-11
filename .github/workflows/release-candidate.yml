@@ -115,6 +115,9 @@ jobs:
           KINKUDOS_DEVICE_PAIRING_REQUIRED: "false"
         run: python manage.py test
 
+      - name: Install documentation build dependencies
+        run: python -m pip install --disable-pip-version-check mkdocs-material==9.7.7
+
       - name: Build strict documentation
         run: python -m mkdocs build --strict --config-file docs/site/mkdocs.yml --site-dir "$RUNNER_TEMP/kinkudos-candidate-docs"
 
