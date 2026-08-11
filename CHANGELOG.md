@@ -5,9 +5,9 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
-### Changed
+### Security
 
-- Nothing yet.
+- Django is updated to 5.2.17 for the latest supported security fixes.
 
 ## [26.6.5] - 2026-08-11
 
