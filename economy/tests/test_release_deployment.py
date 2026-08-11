@@ -3,6 +3,7 @@ import os
 import stat
 import subprocess
 import sys
+import tarfile
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -20,6 +21,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertNotIn("traefik.", app_service)
         self.assertNotIn("ports:", app_service)
         self.assertIn("image: vooz2/kinkudos:", app_service)
+        self.assertIn("      - app-egress", app_service)
 
     def test_proxy_overlays_keep_direct_port_private(self):
         host = (ROOT / "deploy" / "compose.host-proxy.yml").read_text(
@@ -50,6 +52,99 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertNotIn("../data:/source:ro", backup_service)
         self.assertIn("  backup:\n    internal: true", networks)
         self.assertIn("  backup-egress:", networks)
+        self.assertIn("  app-egress:", networks)
+        self.assertNotIn("      - app-egress", backup_service)
+
+    def test_failed_upgrade_does_not_silently_restore_an_old_image(self):
+        installer = (ROOT / "deploy" / "install-release.sh").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("database may contain migrations", installer)
+        self.assertIn("previous image was not restored automatically", installer)
+        self.assertNotIn('docker tag "$old_image_id" "$image"', installer)
+        self.assertNotIn("old_image_id=", installer)
+
+    def test_failed_health_check_exits_without_runtime_image_restore(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "source"
+            (source / "deploy").mkdir(parents=True)
+            (source / "scripts").mkdir()
+            (source / "pyproject.toml").write_text(
+                'version = "26.6.4"\n',
+                encoding="utf-8",
+            )
+            (source / "scripts" / "verify_release.py").write_text(
+                "print('verified')\n",
+                encoding="utf-8",
+            )
+            (source / "deploy" / "compose.yml").write_text(
+                "services:\n  app:\n    image: vooz2/kinkudos:26.6.4\n",
+                encoding="utf-8",
+            )
+            (source / "deploy" / "compose.traefik.yml").write_text(
+                "services: {}\n",
+                encoding="utf-8",
+            )
+            ownership = source / "deploy" / "check-ownership.sh"
+            ownership.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+            ownership.chmod(0o755)
+
+            archive = root / "release.tar.gz"
+            with tarfile.open(archive, "w:gz") as bundle:
+                bundle.add(source, arcname="release")
+            checksum = root / "release.tar.gz.sha256"
+            checksum.write_text(
+                f"{hashlib.sha256(archive.read_bytes()).hexdigest()}  release.tar.gz\n",
+                encoding="utf-8",
+            )
+
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            docker_log = root / "docker.log"
+            fake_docker = fake_bin / "docker"
+            fake_docker.write_text(
+                "#!/bin/sh\n"
+                'printf "%s\\n" "$*" >> "$DOCKER_LOG"\n'
+                'if [ "$1" = "inspect" ]; then printf "unhealthy\\n"; fi\n'
+                'if [ "$1" = "compose" ] && [ "$2" = "config" ] && [ "$3" = "--images" ]; then printf "vooz2/kinkudos:26.6.4\\n"; fi\n'
+                "exit 0\n",
+                encoding="utf-8",
+            )
+            fake_docker.chmod(0o755)
+            fake_sleep = fake_bin / "sleep"
+            fake_sleep.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+            fake_sleep.chmod(0o755)
+
+            project_root = root / "installation"
+            (project_root / "deploy").mkdir(parents=True)
+            (project_root / "deploy" / "compose.yml").write_text(
+                "services:\n  app:\n    image: vooz2/kinkudos:26.6.4\n",
+                encoding="utf-8",
+            )
+            environment = os.environ.copy()
+            environment["PATH"] = f"{fake_bin}:{environment['PATH']}"
+            environment["DOCKER_LOG"] = str(docker_log)
+            result = subprocess.run(
+                [
+                    "sh",
+                    str(ROOT / "deploy" / "install-release.sh"),
+                    str(archive),
+                    str(checksum),
+                    "26.6.4",
+                    str(project_root),
+                ],
+                env=environment,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("database may contain migrations", result.stderr)
+            self.assertIn("previous image was not restored automatically", result.stderr)
+            self.assertNotIn(" tag ", docker_log.read_text(encoding="utf-8"))
 
     def test_release_updater_refreshes_versioned_deployment_helpers(self):
         installer = (ROOT / "deploy" / "install-release.sh").read_text(

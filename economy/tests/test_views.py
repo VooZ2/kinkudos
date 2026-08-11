@@ -229,6 +229,30 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, ">Patvirtinti</button>", html=False)
         self.assertNotContains(response, ">Atmesti</button>", html=False)
 
+    @patch("economy.views.notify_proposal_decision")
+    def test_proposal_decision_is_one_time_and_notifies_only_after_success(self, notify):
+        proposal = Proposal.objects.create(
+            child=self.child_one,
+            proposal_type=ProposalType.REWARD,
+            title="Cinema",
+            suggested_cost=50,
+        )
+        self.client.force_login(self.parent)
+
+        self.client.post(
+            reverse("parent_decide_proposal", args=[proposal.pk, "approve"]),
+            {"final_cost": 50},
+        )
+        self.client.post(
+            reverse("parent_decide_proposal", args=[proposal.pk, "reject"]),
+            {"reason": "Too late"},
+        )
+
+        proposal.refresh_from_db()
+        self.assertEqual(proposal.status, RequestStatus.APPROVED)
+        self.assertEqual(notify.call_count, 1)
+        self.assertEqual(Reward.objects.filter(title="Cinema").count(), 1)
+
     def test_child_dashboard_shows_only_five_latest_history_entries(self):
         for index in range(7):
             post_ledger_entry(

@@ -1,3 +1,4 @@
+import base64
 import json
 import tempfile
 from datetime import date
@@ -266,3 +267,127 @@ class ChildDecisionPushTests(TestCase):
                 self.assertEqual(
                     json.loads(webpush.call_args.kwargs["data"])["title"], expected_title,
                 )
+
+
+class PushSubscriptionValidationTests(TestCase):
+    def setUp(self):
+        self.parent = get_user_model().objects.create_user(
+            "push-parent",
+            password="Safe-push-parent-123!",
+        )
+        self.child = ChildProfile.objects.create(
+            name="Push child",
+            theme_selected=True,
+        )
+
+    @staticmethod
+    def keys():
+        return {
+            "p256dh": base64.urlsafe_b64encode(b"\x04" + b"p" * 64)
+            .rstrip(b"=")
+            .decode(),
+            "auth": base64.urlsafe_b64encode(b"a" * 16).rstrip(b"=").decode(),
+        }
+
+    def payload(self, endpoint="https://push.example.test/subscription"):
+        return json.dumps({"endpoint": endpoint, "keys": self.keys()})
+
+    def subscribe_parent(self, endpoint="https://push.example.test/subscription"):
+        self.client.force_login(self.parent)
+        return self.client.post(
+            reverse("push_subscribe"),
+            data=self.payload(endpoint),
+            content_type="application/json",
+        )
+
+    def test_valid_https_endpoint_and_keys_are_saved(self):
+        response = self.subscribe_parent()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(
+            PushSubscription.objects.filter(
+                user=self.parent,
+                endpoint="https://push.example.test/subscription",
+            ).exists()
+        )
+
+    def test_http_local_and_private_endpoints_are_rejected(self):
+        for endpoint in (
+            "http://push.example.test/subscription",
+            "https://localhost/subscription",
+            "https://127.0.0.1/subscription",
+            "https://192.168.1.20/subscription",
+        ):
+            with self.subTest(endpoint=endpoint):
+                response = self.subscribe_parent(endpoint)
+                self.assertEqual(response.status_code, 400)
+
+    def test_oversized_endpoint_and_malformed_keys_are_rejected(self):
+        oversized = self.subscribe_parent(
+            "https://push.example.test/" + "x" * 2048,
+        )
+        self.assertEqual(oversized.status_code, 400)
+
+        self.client.force_login(self.parent)
+        malformed = self.client.post(
+            reverse("push_subscribe"),
+            data=json.dumps(
+                {
+                    "endpoint": "https://push.example.test/malformed",
+                    "keys": {"p256dh": "not-a-key", "auth": "also-not-a-key"},
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(malformed.status_code, 400)
+
+    def test_parent_subscription_limit_is_enforced(self):
+        for number in range(10):
+            response = self.subscribe_parent(f"https://push.example.test/{number}")
+            self.assertEqual(response.status_code, 200)
+
+        response = self.subscribe_parent("https://push.example.test/too-many")
+
+        self.assertEqual(response.status_code, 429)
+        self.assertEqual(PushSubscription.objects.filter(user=self.parent).count(), 10)
+
+    @override_settings(DEVICE_PAIRING_REQUIRED=False)
+    def test_child_subscription_uses_the_same_validation(self):
+        session = self.client.session
+        session["child_id"] = self.child.pk
+        session.save()
+
+        response = self.client.post(
+            reverse("child_push_subscribe"),
+            data=self.payload("https://push.example.test/child"),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(PushSubscription.objects.filter(child=self.child).exists())
+
+
+class InactiveParentPushTests(TestCase):
+    @patch("economy.push.webpush")
+    def test_inactive_parent_subscriptions_are_not_notified(self, webpush):
+        parent = get_user_model().objects.create_user("inactive-parent")
+        parent.is_active = False
+        parent.save(update_fields=["is_active"])
+        child = ChildProfile.objects.create(name="Child", theme_selected=True)
+        reward = Reward.objects.create(title="Reward", cost=10)
+        request = RewardRequest.objects.create(
+            child=child,
+            reward=reward,
+            reward_title=reward.title,
+            cost_snapshot=reward.cost,
+        )
+        PushSubscription.objects.create(
+            user=parent,
+            endpoint="https://push.example.test/inactive",
+            p256dh="key",
+            auth="auth",
+        )
+
+        notify_reward_request(request)
+
+        webpush.assert_not_called()

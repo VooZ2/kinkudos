@@ -18,7 +18,7 @@ from economy.models import (
 from economy.services import approve_reward_request, approve_task_claim
 
 
-class Patch0121Tests(TestCase):
+class ParentWorkflowTests(TestCase):
     def setUp(self):
         self.parent = get_user_model().objects.create_user(
             "parent",
