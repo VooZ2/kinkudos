@@ -11,6 +11,30 @@ schema.
 
 - Kol kas nieko.
 
+## [26.6.5] - 2026-08-11
+
+### Pakeista
+
+- Tėvų paskyrų valdymas dabar atskiria įprastus tėvus nuo tėvų
+  administratorių, o suplanuotos atsarginės kopijos laikinų klaidų atveju tą
+  pačią dieną kartojamos su ribotu laukimo didėjimu.
+- Diegimo Compose tinklas programai suteikia tik reikalingą išėjimą į išorę,
+  o kopijų valdymo ryšys lieka vidiniame tinkle.
+
+### Pataisyta
+
+- Pasiūlymų, prizų ir kitų laukiančios būsenos pakeitimai dabar sąlygiškai
+  pasiima eilutę, todėl lygiagrečios SQLite užklausos negali abi laimėti.
+- Nepavykęs atnaujinimas dabar sustoja su suderinamumo įspėjimu, o ne tyliai
+  paleidžia senesnį atvaizdą po galimai pritaikytų duomenų bazės migracijų.
+
+### Saugumas
+
+- „Web Push“ prenumeratos dabar tikrina viešus HTTPS adresus ir struktūriškai
+  tinkamus raktus, taiko prenumeratų ribas ir neįtraukia neaktyvių tėvų paskyrų.
+- Vaikų tinklo apribojimas dabar taikomas ir aktyvioms vaiko sesijoms bendruose
+  atsiliepimų bei ekrano nuotraukų maršrutuose.
+
 ## [26.6.4] - 2026-08-11
 
 ### Pakeista

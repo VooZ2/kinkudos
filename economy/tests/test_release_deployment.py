@@ -275,7 +275,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
             encoding="utf-8"
         )
 
-        self.assertIn("image: vooz2/kinkudos:26.6.4", compose)
+        self.assertIn("image: vooz2/kinkudos:26.6.5", compose)
         self.assertIn("kinkudos-data:/app/data", compose)
         self.assertIn('      - "8000"', compose)
         self.assertIn("KINKUDOS_RUNTIME_SECRETS_DIR", compose)
