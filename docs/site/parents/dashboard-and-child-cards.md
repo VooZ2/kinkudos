@@ -11,8 +11,8 @@ requests first and child cards underneath them.
 When there are no requests, the compact empty state says **No pending
 requests**. The child cards remain directly below it.
 
-<details class="screenshot-disclosure">
-<summary>View Parent Home pending requests on mobile</summary>
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View Parent Home pending requests on mobile</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-home-pending-requests-mobile-26-6-4.png" alt="Parent Home pending requests on mobile" loading="lazy">
 </details>
 
@@ -46,8 +46,8 @@ scratch tickets are disabled. The `saved` line is shown only when the child
 has saved points; `0 saved` is not shown. A child without goals has no empty
 goal block or placeholder.
 
-<details class="screenshot-disclosure">
-<summary>View Parent Home child cards on mobile</summary>
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View Parent Home child cards on mobile</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-home-child-cards-mobile-26-6-4.png" alt="Parent Home child cards on mobile" loading="lazy">
 </details>
 
