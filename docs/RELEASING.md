@@ -112,12 +112,29 @@ For each product release:
 8. Write GitHub Release notes in English and keep the same structure as the
    corresponding `CHANGELOG.md` entry. The release text may be copied directly
    from `CHANGELOG.md`.
-9. After creating the version tag, wait for the container workflow to build and
+9. Create and upload the required custom GitHub Release assets:
+   `kinkudos-<version>.tar.gz` and `kinkudos-<version>.tar.gz.sha256`. These are
+   separate from GitHub's automatically generated `Source code (zip)` and
+   `Source code (tar.gz)` downloads, and the documented installation and
+   upgrade flows depend on these named assets. Create the archive from the
+   exact validated release commit, with the top-level directory
+   `kinkudos-<version>/`; it must contain every public file required by those
+   flows, including at minimum
+   `kinkudos-<version>/deploy/install-release.sh` and
+   `kinkudos-<version>/deploy/compose.yml`. Do not include `.git`, local
+   environment files, databases, uploads, backups, secrets, caches, logs, or
+   other private runtime state. The checksum file must reference exactly
+   `kinkudos-<version>.tar.gz` and pass
+   `sha256sum -c kinkudos-<version>.tar.gz.sha256`. Upload both files to the
+   GitHub Release and verify that they are remotely downloadable and pass
+   checksum and documented archive-extraction checks before considering
+   publication complete.
+10. After creating the version tag, wait for the container workflow to build and
    publish both AMD64 and ARM64 images to GHCR and Docker Hub. The workflow
    publishes the immutable full version (for example `26.4.7`), the current
    patch series (for example `26.4`), and `latest`. Production deployments must
    always use the full version rather than a floating tag.
-10. For deployment or setup changes, additionally validate:
+11. For deployment or setup changes, additionally validate:
     - a clean Hostinger Ubuntu 24.04 Docker-profile installation on an empty
       VPS;
     - a clean installation with the general guided installer;
@@ -130,7 +147,7 @@ For each product release:
     - creating a backup and performing an isolated restore test;
     - Hostinger HTTP-to-HTTPS redirect, certificate issuance, health check, and
       safe container removal without deleting data or certificates.
-11. For documentation changes, run a strict MkDocs build and validate internal
+12. For documentation changes, run a strict MkDocs build and validate internal
     and external links, old-URL redirects, canonical URLs, `hreflang`, the
     sitemap, `robots.txt`, and that every sitemap URL returns `200` directly.
 
