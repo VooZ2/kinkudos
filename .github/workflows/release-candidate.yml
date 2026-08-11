@@ -9,7 +9,7 @@ on:
       source_ref:
         description: Release branch or commit to build
         required: true
-        default: release/26.6.5
+        default: release/26.6.6
         type: string
 
 concurrency:
