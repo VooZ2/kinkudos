@@ -134,6 +134,13 @@ class FinalReviewTests(TestCase):
         self.assertIn('class="history-decision-label"', template)
         self.assertIn('aria-label="{% translate \'Informational\' %}"', template)
 
+    def test_choice_fieldset_radios_use_inline_option_cards(self):
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn('.stack-form input[type="radio"]', css)
+        self.assertIn(".choice-fieldset > label {", css)
+        self.assertIn("display: flex;", css)
+        self.assertIn(".choice-fieldset > label:has(input:checked)", css)
+
     def test_history_custom_dates_normalize_and_validate(self):
         response = self.parent_response(
             {

@@ -164,7 +164,8 @@ a { color: inherit; }
 .stack-form { display: grid; gap: 16px; }
 .stack-form p, .stack-form label { margin: 0; display: grid; gap: 7px; color: var(--text); font-weight: 750; }
 .field-control, .stack-form input, .stack-form select, .stack-form textarea, .pin-input { width: 100%; min-height: 48px; color: var(--text); background-color: var(--surface-solid); border: 1px solid var(--border); border-radius: 13px; padding: 12px 13px; outline: none; font-weight: 650; line-height: 1.35; }
-.stack-form input[type="checkbox"] { width: 22px; height: 22px; min-height: 22px; padding: 0; margin: 0; accent-color: var(--primary); }
+.stack-form input[type="checkbox"],
+.stack-form input[type="radio"] { width: 22px; height: 22px; min-height: 22px; padding: 0; margin: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; accent-color: var(--primary); }
 .stack-form p:has(> input[type="checkbox"]) { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .stack-form p:has(> input[type="checkbox"]) > label { display: inline; cursor: pointer; }
 .stack-form p:has(> input[type="checkbox"]) > input[type="checkbox"] { flex: 0 0 22px; }
@@ -228,8 +229,43 @@ select.field-control, .stack-form select {
 .pin-input { font-size: 2rem; text-align: center; letter-spacing: .35em; }
 .dialog-close { position: absolute; right: 14px; top: 12px; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 11px; background: none; color: var(--muted); cursor: pointer; }
 .dialog-close:hover, .dialog-close:focus-visible { background: color-mix(in srgb, var(--muted) 10%, transparent); }
-.choice-fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
-.choice-fieldset legend { margin-bottom: 9px; color: var(--text); font-weight: 750; }
+.choice-fieldset { min-width: 0; margin: 0; padding: 0; border: 0; display: grid; gap: 10px; }
+.choice-fieldset legend {
+  display: block;
+  float: left;
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 0;
+  color: var(--text);
+  font-weight: 750;
+  line-height: 1.35;
+}
+.choice-fieldset > label {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-height: 48px;
+  margin: 0;
+  padding: 12px 13px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 720;
+  cursor: pointer;
+}
+.choice-fieldset > label:has(input:checked) {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 11%, var(--surface-solid));
+}
+.choice-fieldset > label > input[type="radio"],
+.choice-fieldset > label > input[type="checkbox"] {
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  min-height: 22px;
+  margin: 0;
+}
 .choice-list { max-height: min(46vh, 420px); overflow-y: auto; display: grid; gap: 8px; padding: 2px; }
 .choice-option { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 11px 12px; color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 13px; cursor: pointer; }
 .choice-option:hover { border-color: color-mix(in srgb, var(--primary) 45%, var(--line)); }
