@@ -5,6 +5,25 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [Unreleased]
 
+### Changed
+
+- Nothing yet.
+
+## [26.6.6] - 2026-08-11
+
+### Changed
+
+- Release and installation documentation now separates release-candidate images
+  from production image defaults and refreshes screenshot and network-access
+  guidance.
+
+### Fixed
+
+- Parent account deactivation now preserves the last active parent and the last
+  active parent administrator while cleaning up that parent's push subscriptions.
+- Child-only network access now leaves parent login and password recovery
+  available from a device with an active child session.
+
 ### Security
 
 - Django is updated to 5.2.17 for the latest supported security fixes.
