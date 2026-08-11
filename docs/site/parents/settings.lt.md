@@ -7,9 +7,10 @@ paskyros kūrimo blokas ir vienas esamų paskyrų sąrašas; redagavimo formos
 atsidaro dialoguose, pritaikytuose ir mažam ekranui.
 
 > **Kas gali ką keisti?** Visi tėvai gali naudoti įprastus šeimos nustatymus ir
-> tvarkyti paskyras. Tėvų administratorius vienintelis gali keisti tinklo
-> prieigą, SMTP, kopijų duomenis, paleisti kopiją ir atšaukti visus vaikų
-> įrenginius.
+> tvarkyti įprastas tėvų paskyras bei vaikų profilius. Įprastas tėvas negali
+> redaguoti ar išjungti tėvų administratoriaus. Tėvų administratorius
+> vienintelis gali valdyti administratoriaus paskyrą arba keisti tinklo prieigą,
+> SMTP, kopijų duomenis, paleisti kopiją ir atšaukti visus vaikų įrenginius.
 
 <img class="screenshot-image" src="../../assets/parent-settings-devices-26-6-4.png" alt="Tėvų nustatymai su susietais įrenginiais" loading="lazy">
 
@@ -151,6 +152,10 @@ Būsena gali būti **Įjungta**, **Kopijuojama**, **Neįjungta** arba **Reikia
 dėmesio**. Skydelyje taip pat rodomas tiekėjas, saugykla, **Paskutinė sėkminga
 kopija**, **Paskutinė vientisumo patikra**, klaidos ir naujausi kopijų veiksmai.
 
+Nepavykęs suplanuotas bandymas tos dienos sėkme neįrašomas. Kopijų paslauga gali
+vėliau tą pačią dieną bandyti dar kartą su ribotu laukimo didėjimu; sėkmingai
+įvykus suplanuotai kopijai, tą dieną ji nebekartojama.
+
 **Kurti kopiją dabar** paprašo papildomos kopijos; ji neatkuria duomenų ir
 nepaleidžiama, kol kita kopija vyksta. Prieš keisdami duomenis išsaugokite repo
 slaptažodį ne serveryje ir suplanuokite atkūrimo bandymą.
@@ -187,7 +192,10 @@ uždaryti per **X**, **Atšaukti** arba **Escape**, o pakeitimus išsaugoti per
 Telefone paskyrų sąrašas ir dialogas pritaikyti mažam ekranui.
 
 Tušti naujo slaptažodžio laukai palieka senąjį. Pašalinus tėvą paskyra
-išjungiama, o jos Istorija lieka. Paskutinio aktyvaus tėvo išjungti negalima.
+išjungiama, o jos Istorija lieka. Administratoriaus paskyrą gali redaguoti ar
+išjungti tik tėvų administratorius. Paskutinio aktyvaus tėvo išjungti negalima,
+taip pat negalima išjungti paskutinio aktyvaus tėvų administratoriaus. Išjungus
+tėvų paskyrą panaikinamos ir jos „push“ prenumeratos.
 
 | Laukelis | Kas pasikeičia |
 | --- | --- |

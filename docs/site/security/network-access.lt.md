@@ -7,8 +7,13 @@ Jis naudingiausias stabiliam namų tinklui ar VPN. Jo nereikia šeimai, kurios I
 | Režimas | Poveikis |
 | --- | --- |
 | **Prieiga iš interneto** | Jokie IP neblokuojami – įprastas numatytas režimas. |
-| **Riboti vaikų prieigą** | Vaikų puslapiai veikia tik iš įrašytų adresų ar tinklų; tėvų puslapiai lieka pasiekiami. |
+| **Riboti vaikų prieigą** | Vaikų puslapiai ir aktyvios vaiko sesijos naudojami bendri maršrutai veikia tik iš įrašytų adresų ar tinklų; tėvų puslapiai lieka pasiekiami iš kitų adresų. |
 | **Riboti visą prieigą** | Vaikų ir tėvų puslapiai veikia tik iš įrašytų adresų. |
+
+Įjungus **Riboti vaikų prieigą**, leidžiamų adresų sąrašas taikomas ir aktyviai
+vaiko sesijai naudojant bendrą maršrutą, pavyzdžiui, atsiliepimų ar ekrano
+nuotraukos prieigą. Ribojimas taikomas ne tik URL, prasidedantiems `/child/`.
+Šiuo režimu autentifikuotas tėvas nelaikomas vaiko sesija.
 
 ## Prieš išsaugant taisyklę
 

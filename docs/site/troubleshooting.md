@@ -73,7 +73,11 @@ docker compose ps
 docker compose logs --tail=100 app
 ```
 
-The updater may restore the previous application image after a failed health check, but does not provide a general database rollback. Do not overwrite the live DB with an older copy. See [Updating](installation/updating.md).
+The updater stops after a failed health check and does not restore or restart
+the previous application image automatically. The new image may already have
+applied database migrations. Preserve the updater output and logs; do not start
+an older image or overwrite the live database with an older copy without a
+separately verified recovery plan. See [Updating](installation/updating.md).
 
 ## Disk space is low
 

@@ -239,6 +239,12 @@ konteinerio būklę ir atnaujina versijuojamus `deploy` valdymo scenarijus.
 Vietinis `deploy/.env`, šeimos duomenys, nuotraukos, kopijos ir paslaptys
 nekeičiami bei nepatenka į leidimo archyvą.
 
+Jei naujas konteineris po paleidimo nepraeina sveikatos patikros, atnaujintojas
+sustoja su aiškiu suderinamumo įspėjimu. Jis automatiškai neatkuria seno
+atvaizdo, nes naujas atvaizdas jau galėjo pritaikyti duomenų bazės migracijas.
+Prieš pasirinkdami senesnį atvaizdą išspręskite suderinamumo problemą arba
+naudokite atskirai patikrintą atkūrimą.
+
 ## Reverse proxy ir kliento IP
 
 Bazinis Compose failas neviešina programos prievado ir nėra susietas su vienu
@@ -340,7 +346,9 @@ Tą pačią patikrintą kopiją serveryje galima paleisti:
 Kopijos automatiškai kuriamos kartą per dieną po 03:00 serverio laiku.
 Kitą valandą galima nustatyti `deploy/.env` reikšme `KINKUDOS_BACKUP_HOUR`.
 Vietinės DB ir kasdienės nuotolinės kopijos laikomos 31 dieną; sėkminga būsena
-įrašoma tik praėjus `restic check`.
+įrašoma tik praėjus `restic check`. Nepavykęs suplanuotas bandymas tos dienos
+sėkme neįrašomas: agentas vėliau tą pačią dieną bando dar kartą su ribotu
+laukimo didėjimu, o sėkminga suplanuota kopija tą dieną nebekartojama.
 
 `secrets/restic_password` kopiją laikykite atskirai nuo serverio. Atkūrimas
 sąmoningai paliktas serverio administratoriui ir turi būti išbandytas atskirame

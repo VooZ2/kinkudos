@@ -6,7 +6,7 @@ Every adult should use their own password-protected parent account. Every child 
 
 Create a separate parent account for each adult who needs to review tasks, approve rewards, or manage family settings. In **Parents → Settings → Accounts**, use **Create account**, choose **Parent account** or **Child profile**, and complete the selected form. Do not share passwords. An email address is important when SMTP password recovery is enabled.
 
-Removing a parent deactivates the account while preserving its history. The last active parent cannot be removed. The first parent created during setup is the parent administrator and controls sensitive settings; another parent may still use all ordinary family features.
+Removing a parent deactivates the account while preserving its history. The last active parent cannot be removed. The first parent created during setup is the parent administrator and controls sensitive settings; another parent may still use all ordinary family features and manage ordinary parent accounts. A normal parent cannot edit or deactivate an administrator account, and the last active administrator cannot be deactivated. Deactivating a parent also removes that account's push subscriptions.
 
 ## Child profiles
 

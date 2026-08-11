@@ -1,6 +1,6 @@
 ---
 title: Update KinKudos safely
-description: Back up a KinKudos installation, install a verified release, check container health, and understand the limited automatic image rollback.
+description: Back up a KinKudos installation, install a verified release, check container health, and recover safely when an update fails.
 ---
 
 # Update KinKudos safely
@@ -38,4 +38,10 @@ route, HTTPS URL, login, and family data in the browser.
 
 ## If an update fails
 
-If the new container never becomes healthy, the updater attempts to restore the previous image when available. This is a limited application-image recovery, **not** a general database or schema rollback. Do not manually restore an older database over a newer live installation. Preserve the failure output and use [Troubleshooting](../troubleshooting.md).
+If the new container never becomes healthy, the updater stops and does not
+restore or restart the previous image automatically. The new image may already
+have applied database migrations. A consistent database backup was created
+before the replacement, but it is not automatically restored. Preserve the
+updater output and container logs, do not start an older image or overwrite the
+live database with an older copy without a separately verified recovery plan,
+and use [Troubleshooting](../troubleshooting.md).

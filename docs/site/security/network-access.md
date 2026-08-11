@@ -9,8 +9,13 @@ It is most useful for a stable home network or VPN. It is not a good first step 
 | Mode | Effect |
 | --- | --- |
 | **Internet access** | No IP addresses are blocked. This is the normal default. |
-| **Restrict child access** | Child pages work only from listed IP addresses or networks. Parent pages remain available from other addresses. |
+| **Restrict child access** | Child pages and shared routes used by an active child session work only from listed IP addresses or networks. Parent pages remain available from other addresses. |
 | **Restrict all access** | Both parent and child pages work only from listed addresses or networks. |
+
+With **Restrict child access**, the allowlist also applies when an active child
+session uses a shared route such as feedback or screenshot access. It is not
+limited to URLs beginning with `/child/`. An authenticated parent is not treated
+as a child session for this mode.
 
 ## Before saving a rule
 

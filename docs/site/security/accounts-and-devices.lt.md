@@ -6,7 +6,7 @@ Kiekvienas suaugusysis turi naudoti atskirą slaptažodžiu apsaugotą tėvų pa
 
 Kiekvienam suaugusiajam, kuris peržiūri darbus, tvirtina prizus ar valdo šeimos nustatymus, sukurkite atskirą paskyrą. **Tėvai → Nustatymai → Paskyros** pasirinkite **Kurti paskyrą**, tada **Tėvų paskyrą** arba **Vaiko profilį** ir užpildykite rodomą formą. Nesidalinkite slaptažodžiais. El. pašto adresas svarbus įjungus SMTP slaptažodžio atkūrimui.
 
-Panaikinus tėvą paskyra išjungiama, bet jos istorija išlieka. Paskutinės aktyvios tėvų paskyros išjungti negalima. Pirmoji diegimo metu sukurta paskyra yra administratorius ir valdo jautrius nustatymus; kiti tėvai vis tiek turi įprastas šeimos funkcijas.
+Panaikinus tėvą paskyra išjungiama, bet jos istorija išlieka. Paskutinės aktyvios tėvų paskyros išjungti negalima. Pirmoji diegimo metu sukurta paskyra yra administratorius ir valdo jautrius nustatymus; kiti tėvai vis tiek turi įprastas šeimos funkcijas ir gali valdyti įprastas tėvų paskyras. Įprastas tėvas negali redaguoti ar išjungti administratoriaus paskyros, o paskutinio aktyvaus administratoriaus išjungti negalima. Išjungus tėvų paskyrą taip pat panaikinamos jos „push“ prenumeratos.
 
 ## Vaikų profiliai
 

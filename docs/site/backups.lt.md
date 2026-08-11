@@ -11,7 +11,7 @@ Patikimas kopijų planas saugo daugiau nei veikiantį konteinerį. KinKudos SQLi
 
 Izoliuotas `backup-agent` sukuria nuoseklią veikiančios SQLite DB kopiją, įtraukia privačią mediją ir per restic siunčia šifruotus snapshots į Backblaze B2 arba bendrą S3 suderinamą saugyklą. Pirmas tėvų administratorius ją nustato skiltyje **Nustatymai → Atsarginės kopijos**.
 
-Naudokite atskirą bucket ir ribotų teisių raktą. `secrets/restic_password` kopiją laikykite ne serveryje – be jos šifruotų snapshots atkurti nepavyks. Kopijos vykdomos kasdien po nustatytos valandos, vietinės DB ir nuotolinės dienos kopijos laikomos 31 dieną, o sėkminga eiga apima `restic check`.
+Naudokite atskirą bucket ir ribotų teisių raktą. `secrets/restic_password` kopiją laikykite ne serveryje – be jos šifruotų snapshots atkurti nepavyks. Kopijos vykdomos kasdien po nustatytos valandos, vietinės DB ir nuotolinės dienos kopijos laikomos 31 dieną, o sėkminga eiga apima `restic check`. Nepavykęs suplanuotas bandymas tos dienos sėkme neįrašomas: vėliau tą pačią dieną bandoma dar kartą su ribotu laukimo didėjimu, o sėkminga suplanuota kopija tą dieną nebekartojama.
 Vietinės SQLite atsarginės kopijos ir KinKudos valdomi kopijų bei būsenos katalogai saugomi tik jų savininkui prieinamomis failų sistemos teisėmis.
 
 Tėvų administratorius gali pasirinkti **Kurti kopiją dabar**, o serverio administratorius `deploy` kataloge vykdyti:

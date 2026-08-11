@@ -253,9 +253,18 @@ rm -f "$install_script" "$compose_file"
 The updater validates the checksum and release metadata, pulls and smoke-tests
 the published image, checks host-directory ownership, backs up the live
 database, switches the app only after those checks pass, verifies container
-health, and refreshes versioned `deploy` management scripts. The local
+health, and refreshes versioned `deploy` management scripts. The application
+has outbound access for DNS, HTTPS, SMTP, and Web Push through a dedicated
+non-internal Compose network, while the backup-agent control network remains
+internal and its backup storage network is separate. The local
 `deploy/.env`, runtime data, uploads, backups, and secrets remain untouched and
 are never included in the release archive.
+
+If the new container fails its health check after startup, the updater stops
+with an explicit compatibility warning. It does not silently restore the old
+image because the new image may already have applied database migrations; an
+operator must resolve the compatibility issue or perform a separately verified
+restore before choosing an older image.
 
 ## Reverse proxy and client IPs
 
@@ -358,7 +367,9 @@ To request the same verified backup from the server:
 Backups run automatically once per day after 03:00 server time. Set
 `KINKUDOS_BACKUP_HOUR` in `deploy/.env` to choose another hour. Local database
 copies and remote daily snapshots are retained for 31 days. A successful run
-includes `restic check`.
+includes `restic check`. A failed scheduled attempt is not recorded as that
+day's success; the agent retries later the same day with bounded backoff, and a
+successful scheduled run is not repeated that day.
 
 Keep an offline copy of `secrets/restic_password`. Restore is intentionally a
 server-administrator procedure and must be tested in a separate directory.

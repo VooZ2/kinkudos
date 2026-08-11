@@ -155,6 +155,22 @@ Documentation changes to `docs.kinkudos.app`, the README, or other
 documentation do not belong in the product changelog and do not change the
 product version.
 
+## Migration and rollback contract
+
+The application image runs Django migrations before starting Gunicorn. Release
+migrations must therefore follow an expand/contract policy: add nullable or
+defaulted schema first, deploy code that can read both representations, migrate
+existing data, and remove old representations only in a later release after
+all supported images have moved forward.
+
+`deploy/install-release.sh` creates a database backup before replacing the
+running containers and health-checks the new image. If the new image fails its
+health check, the updater fails loudly and does not retag or restart the old
+image: migrations may already have changed the live database, and silently
+starting an older image could leave it incompatible with that schema. Restore
+is an explicit, separately verified operator action; the updater never
+automatically overwrites newer family data with a pre-upgrade backup.
+
 The version shown in the application header must always remain a link to
 `/changes/`.
 

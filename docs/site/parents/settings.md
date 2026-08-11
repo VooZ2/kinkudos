@@ -7,9 +7,10 @@ section has one account-creation panel and one list of existing accounts; its
 edit forms open in dialogs that also fit small screens.
 
 > **Who can change what?** Every parent can use ordinary family settings and
-> manage accounts. The parent administrator is the only person who can change
-> network access, SMTP, backup credentials, run a backup, or revoke every child
-> device.
+> manage ordinary parent accounts and child profiles. A normal parent cannot
+> edit or deactivate a parent administrator. The parent administrator is the
+> only person who can manage an administrator account or change network access,
+> SMTP, backup credentials, run a backup, or revoke every child device.
 
 <img class="screenshot-image" src="../../assets/parent-settings-devices-26-6-4.png" alt="Parent settings with paired devices" loading="lazy">
 
@@ -153,6 +154,10 @@ The status can be **Enabled**, **Copying**, **Not enabled**, or **Attention
 needed**. The panel also shows the provider, repository, **Last successful
 backup**, **Last integrity check**, errors, and recent backup actions.
 
+A scheduled failure is not recorded as that day's success. The backup service
+may retry later on the same day with bounded backoff; after a scheduled run
+succeeds, it does not repeat that day's backup.
+
 **Back up now** requests an additional copy; it never restores data and does
 not run while another backup is in progress. Before changing credentials, keep
 the repository password outside the server and plan a restore test.
@@ -192,8 +197,11 @@ changes. Closing it without saving resets the form and discards unsaved edits.
 On mobile, the account list and dialog are arranged for a narrow screen.
 
 Leaving new-password fields empty keeps the existing password. Removing a
-parent deactivates the account and preserves its History. The final active
-parent cannot be removed.
+parent deactivates the account and preserves its History. Only the parent
+administrator can edit or deactivate an administrator account. The final active
+parent cannot be removed, and the final active parent administrator cannot be
+deactivated. Deactivating a parent also removes that account's push
+subscriptions.
 
 | Field | What it changes |
 | --- | --- |
