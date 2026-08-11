@@ -21,7 +21,7 @@ pillow-heif==1.5.0
 propcache==0.5.2
 py-vapid==1.9.4
 pycparser==3.0
-pywebpush==2.3.0
+pywebpush==2.4.0
 requests==2.34.2
 sqlparse==0.5.5
 typing_extensions==4.16.0
