@@ -232,6 +232,16 @@ sudo sh "$install_script" \
 rm -f "$install_script" "$compose_file"
 ```
 
+### RC kūrimas — tik kai reikia VPS / diegiklio priėmimo patikros
+
+Leidimo kandidatas nėra būtinas kiekvienam leidimui ar kiekvienam commit'ui.
+Realiai VPS, diegiklio ar diegimo priėmimo patikrai atverkite GitHub Actions →
+**Build release candidate** → **Run workflow** ir `source_ref` nurodykite
+reikiamą `release/<version>` šaką arba pilną commit SHA, priklausantį leidimo
+šakai. Įprastas push į `release/<version>` RC nesukuria. RC yra skirtas tik QA;
+stabilus leidimas publikuojamas atskiru procesu, o leidimas, kuriam nereikia
+VPS / diegimo priėmimo patikros, gali būti tęsiamas be RC.
+
 ### Leidimo kandidato priėmimo testavimas (tik prižiūrėtojams)
 
 `KINKUDOS_IMAGE_REPOSITORY` ir `KINKUDOS_IMAGE_TAG` yra aiškūs, tik RC skirti

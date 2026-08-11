@@ -250,6 +250,16 @@ sudo sh "$install_script" \
 rm -f "$install_script" "$compose_file"
 ```
 
+### RC build — only when VPS / installer acceptance is needed
+
+A release candidate is not required for every release or every commit. For real
+VPS, installer, or deployment acceptance, open GitHub Actions → **Build release
+candidate** → **Run workflow** and set `source_ref` to the relevant
+`release/<version>` branch or a full commit SHA contained by a release branch.
+A normal push to `release/<version>` does not create an RC. The RC is QA-only;
+stable publication remains a separate process, and a release that does not need
+VPS/deployment acceptance may proceed without an RC.
+
 ### Release-candidate acceptance testing (maintainers only)
 
 `KINKUDOS_IMAGE_REPOSITORY` and `KINKUDOS_IMAGE_TAG` are explicit RC-only
