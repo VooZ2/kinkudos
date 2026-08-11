@@ -233,8 +233,10 @@ the shared parent palette.
 - An optional Django-level IPv4/IPv6 allowlist can restrict child routes or
   the whole application independently of the chosen proxy. In child-only
   mode, an active child session is restricted even on shared routes such as
-  feedback and screenshot access; parent authentication is evaluated before
-  child-session restrictions. Child selection and pairing routes remain
+  feedback and screenshot access, while parent login and password-recovery
+  routes remain available so a parent can authenticate or recover the account
+  from that device. After authentication, the parent session is evaluated
+  before child-session restrictions. Child selection and pairing routes remain
   explicitly restricted. A server-side management command provides recovery
   from an accidental lockout.
 - Django admin is disabled in production unless explicitly enabled.

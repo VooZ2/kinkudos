@@ -134,6 +134,17 @@ class NetworkAccessMiddleware:
         "/pair-device/",
         "/susieti-irengini/",
     )
+    parent_auth_prefixes = (
+        "/login/",
+        "/prisijungti/",
+        "/password/reset/",
+        "/password/new/",
+        "/password/changed/",
+        "/slaptazodis/atkurti/",
+        "/slaptazodis/issiusta/",
+        "/slaptazodis/naujas/",
+        "/slaptazodis/pakeistas/",
+    )
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -148,8 +159,11 @@ class NetworkAccessMiddleware:
         restricted = mode == FamilySettings.NetworkAccessMode.ALL or (
             mode == FamilySettings.NetworkAccessMode.CHILDREN
             and (
-                request.path.startswith(self.child_prefixes)
-                or active_child is not None
+                not request.path.startswith(self.parent_auth_prefixes)
+                and (
+                    request.path.startswith(self.child_prefixes)
+                    or active_child is not None
+                )
             )
         )
         if restricted:

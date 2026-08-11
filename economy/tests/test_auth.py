@@ -3,6 +3,7 @@ from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from economy.models import PushSubscription
+from economy.services import deactivate_parent_account
 
 
 @override_settings(LANGUAGE_CODE="en")
@@ -93,3 +94,15 @@ class ParentAccountPermissionTests(TestCase):
         self.assertContains(response, "You cannot remove the account you are currently using.")
         self.admin.refresh_from_db()
         self.assertTrue(self.admin.is_active)
+
+    def test_deactivation_guard_keeps_the_last_active_administrator(self):
+        self.assertEqual(deactivate_parent_account(self.admin), 0)
+        self.admin.refresh_from_db()
+        self.assertTrue(self.admin.is_active)
+
+    def test_deactivation_guard_keeps_the_last_active_parent(self):
+        self.admin.delete()
+
+        self.assertEqual(deactivate_parent_account(self.parent), 0)
+        self.parent.refresh_from_db()
+        self.assertTrue(self.parent.is_active)

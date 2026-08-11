@@ -1,5 +1,6 @@
 import re
 from datetime import timedelta
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
@@ -164,6 +165,43 @@ class NetworkAccessTests(TestCase):
 
         self.assertEqual(child_response.status_code, 403)
         self.assertEqual(parent_response.status_code, 200)
+
+    def test_active_child_session_does_not_block_parent_login(self):
+        parent = get_user_model().objects.create_user(
+            "parent",
+            password="Safe-parent-pass-123!",
+        )
+        self.restrict_children()
+        self.sign_in_child()
+
+        response = self.client.post(
+            reverse("parent_login"),
+            {
+                "username": parent.username,
+                "password": "Safe-parent-pass-123!",
+            },
+            REMOTE_ADDR="198.51.100.2",
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("parent_dashboard"),
+            fetch_redirect_response=False,
+        )
+        self.assertNotIn("child_id", self.client.session)
+
+    @patch("economy.views.smtp_config", return_value={"enabled": True})
+    def test_active_child_session_does_not_block_parent_password_recovery(self, smtp_config):
+        self.restrict_children()
+        self.sign_in_child()
+
+        response = self.client.get(
+            reverse("password_reset"),
+            REMOTE_ADDR="198.51.100.2",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        smtp_config.assert_called()
 
     def test_restricted_child_session_cannot_submit_feedback(self):
         self.restrict_children()

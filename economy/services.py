@@ -1,8 +1,9 @@
 import random
 
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
-from django.db.models import Sum
+from django.db.models import Exists, Sum
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
@@ -22,6 +23,7 @@ from .models import (
     PointGift,
     Proposal,
     ProposalType,
+    PushSubscription,
     RequestStatus,
     Reward,
     RewardRequest,
@@ -33,6 +35,31 @@ from .models import (
     TaskCompletion,
     Theme,
 )
+
+
+def deactivate_parent_account(account):
+    """Deactivate an active parent while preserving account invariants."""
+
+    user_model = get_user_model()
+    other_active_parents = user_model.objects.filter(
+        is_active=True,
+    ).exclude(pk=account.pk)
+    deactivation = user_model.objects.filter(
+        pk=account.pk,
+        is_active=True,
+    ).filter(Exists(other_active_parents))
+    if account.is_staff:
+        other_active_administrators = user_model.objects.filter(
+            is_active=True,
+            is_staff=True,
+        ).exclude(pk=account.pk)
+        deactivation = deactivation.filter(Exists(other_active_administrators))
+
+    with transaction.atomic():
+        deactivated = deactivation.update(is_active=False)
+        if deactivated:
+            PushSubscription.objects.filter(user=account).delete()
+    return deactivated
 
 
 @transaction.atomic
