@@ -223,6 +223,19 @@ sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" sh \
   "$(pwd)/kinkudos-$version"
 ```
 
+`KINKUDOS_IMAGE_TAG` is an explicit release-candidate-only override. During
+acceptance testing, pass it again to every Compose command that resolves or
+recreates images, for example:
+
+```sh
+sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
+sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose up -d --force-recreate
+```
+
+The override does not need to be persisted in the production `.env`. It is not
+part of the normal stable-user update workflow: after `26.6.5` is published,
+the stable Compose default is `26.6.5` and no RC override is required.
+
 Record the workflow's source SHA, candidate manifest digest, both image
 architectures, prerelease asset URLs, and checksum before beginning VPS tests.
 Candidate QA is not stable-release authorization: do not merge to `main`,
