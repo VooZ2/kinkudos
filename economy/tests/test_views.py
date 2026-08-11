@@ -1605,17 +1605,21 @@ class AccessAndWorkflowTests(TestCase):
         balance_start = template.index('<div class="child-balance-row">')
         balance_end = template.index("</div>", balance_start)
         balance_row = template[balance_start:balance_end]
+        metadata_start = template.index('<div class="child-metadata-row">')
 
         self.assertLess(
             balance_row.index('class="stat-value'),
             balance_row.index('class="saved-total"'),
         )
+        self.assertLess(balance_start, metadata_start)
+        self.assertIn("credit-caption", template[metadata_start:])
         self.assertLess(
-            template.index('class="saved-total"'),
-            template.index('class="credit-caption"'),
+            template.index("credit-caption", metadata_start),
+            template.index("child-quick-actions", metadata_start),
         )
         stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".child-balance-row { display: flex; align-items: baseline; justify-content: flex-start;", stylesheet)
+        self.assertIn(".child-metadata-row {", stylesheet)
 
     def test_pending_requests_are_one_shared_chronological_list(self):
         older = self.child_one.task_claims.create(
