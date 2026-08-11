@@ -14,19 +14,19 @@ atsidaro dialoguose, pritaikytuose ir mažam ekranui.
 
 <img class="screenshot-image" src="../../assets/parent-settings-devices-26-6-4.png" alt="Tėvų nustatymai su susietais įrenginiais" loading="lazy">
 
-<details class="screenshot-disclosure">
-<summary>Peržiūrėti susietus įrenginius telefone</summary>
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti susietus įrenginius telefone</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-settings-devices-mobile-26-6-4.png" alt="Susieti įrenginiai tėvų nustatymuose telefone" loading="lazy">
 </details>
 
-<details class="screenshot-disclosure">
-<summary>Peržiūrėti paskyras darbalaukyje ir telefone</summary>
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti paskyras darbalaukyje ir telefone</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-settings-accounts-26-6-4.png" alt="Paskyros tėvų nustatymuose darbalaukyje" loading="lazy">
 <img class="screenshot-image" src="../../assets/parent-settings-accounts-mobile-26-6-4.png" alt="Paskyros tėvų nustatymuose telefone" loading="lazy">
 </details>
 
-<details class="screenshot-disclosure">
-<summary>Peržiūrėti paskyros redagavimo dialogą</summary>
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti paskyros redagavimo dialogą</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-settings-account-edit-26-6-4.png" alt="Vaiko profilio redagavimo dialogas tėvų nustatymuose" loading="lazy">
 <img class="screenshot-image" src="../../assets/parent-settings-account-edit-mobile-26-6-4.png" alt="Vaiko profilio redagavimo dialogas telefone" loading="lazy">
 </details>
@@ -117,6 +117,12 @@ vaikų PIN ir įrenginių susiejimas veikia ir išjungus IP ribojimus.
 tinklą eilutėje, pvz., `192.0.2.25`, `192.0.2.0/24` arba `2001:db8::/64`.
 Prieš pasirinkdami **Riboti visą prieigą** įrašykite puslapyje rodomą dabartinį
 IP. Neteisinga taisyklė gali užrakinti visus ir reikės serverio administratoriaus.
+
+Veikiant režimui **Riboti vaikų prieigą**, tėvų prisijungimo ir slaptažodžio
+atkūrimo puslapiai lieka pasiekiami net tada, kai naršyklėje aktyvi vaiko sesija.
+Todėl tėvas gali prisijungti arba atkurti paskyrą iš to paties įrenginio.
+Autentifikavus tėvą, užklausa vertinama kaip tėvų prieiga; tik vaikams skirti ir
+susiejimo veiksmai lieka ribojami kaip vaikų maršrutai.
 
 ## El. paštas ir pranešimai
 
