@@ -1,9 +1,6 @@
 name: Build release candidate
 
 on:
-  push:
-    branches:
-      - "release/**"
   workflow_dispatch:
     inputs:
       source_ref:
@@ -25,7 +22,6 @@ jobs:
   candidate:
     name: Build and publish release candidate
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     env:
       KINKUDOS_DEBUG: "false"
       KINKUDOS_SECRET_KEY: ci-candidate-only-9Fq7wR2mX8vK4pL6sN1cD5hJ3tB0zA7yE9uQ
@@ -40,7 +36,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || github.sha }}
+          ref: ${{ inputs.source_ref }}
 
       - name: Set up Python 3.12
         uses: actions/setup-python@0a5c61591373683505ea898e09a3ea4f39ef2b9c # v5
@@ -57,7 +53,7 @@ jobs:
         id: metadata
         shell: bash
         env:
-          SOURCE_REF: ${{ github.event_name == 'workflow_dispatch' && inputs.source_ref || github.ref_name }}
+          SOURCE_REF: ${{ inputs.source_ref }}
         run: |
           set -euo pipefail
           source_ref="$SOURCE_REF"

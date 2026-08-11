@@ -180,14 +180,28 @@ publishing Docker ID is `vooz2`.
 
 ## Release candidate QA
 
-Pushing a `release/<version>` branch runs
-`.github/workflows/release-candidate.yml`. The workflow validates the exact
-source commit, builds `linux/amd64` and `linux/arm64` images, and publishes
-only the immutable candidate tag `<version>-rc.<short-sha>` to the dedicated
+### RC build — only when VPS / installer acceptance is needed
+
+A release candidate is not required for every release or every commit.
+
+When real VPS, installer, or deployment acceptance testing is needed, a
+maintainer manually starts the `Build release candidate` workflow in GitHub
+Actions by selecting **Run workflow**. Set `source_ref` to the relevant
+`release/<version>` branch or to a full commit SHA that is contained by a
+release branch. A normal push to `release/<version>` does not start this
+workflow and does not create an RC.
+
+The workflow validates the exact selected source commit, builds
+`linux/amd64` and `linux/arm64` images, and publishes only the immutable
+candidate tag `<version>-rc.<short-sha>` to the dedicated
 `ghcr.io/vooz2/kinkudos-rc` and `vooz2/kinkudos-rc` packages. It also uploads
 `kinkudos-<version>.tar.gz` and its checksum to the prerelease
 `v<version>-rc.<short-sha>`. It never writes to the production `kinkudos`
 packages or updates a stable version tag, a minor-series tag, or `latest`.
+
+These are QA-only artifacts, not production releases. If a release does not
+require VPS or deployment acceptance, it may proceed from normal release
+validation directly to the separate stable publication process without an RC.
 
 For fresh-install acceptance testing, use the installer from the exact source
 commit and point it at the candidate assets:

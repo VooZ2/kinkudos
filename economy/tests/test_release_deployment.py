@@ -312,6 +312,11 @@ class ReleaseDeploymentTests(SimpleTestCase):
             encoding="utf-8"
         )
 
+        self.assertIn("  workflow_dispatch:\n", workflow)
+        self.assertNotIn("\n  push:\n", workflow)
+        self.assertNotIn("github.event_name", workflow)
+        self.assertIn("ref: ${{ inputs.source_ref }}", workflow)
+        self.assertIn("SOURCE_REF: ${{ inputs.source_ref }}", workflow)
         self.assertIn("ghcr.io/vooz2/kinkudos-rc", workflow)
         self.assertIn("vooz2/kinkudos-rc", workflow)
         self.assertNotIn("ghcr.io/vooz2/kinkudos\n", workflow)
