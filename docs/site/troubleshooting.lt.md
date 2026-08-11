@@ -73,7 +73,11 @@ docker compose ps
 docker compose logs --tail=100 app
 ```
 
-Nepraėjus sveikatos patikrai atnaujintojas gali grąžinti ankstesnį programos atvaizdą, bet tai nėra bendras DB rollback. Neperrašykite gyvos DB senesne kopija. Skaitykite [atnaujinimo vadovą](installation/updating.lt.md).
+Nepraėjus sveikatos patikrai atnaujintojas sustoja ir automatiškai negrąžina bei
+nepaleidžia ankstesnio programos atvaizdo. Naujas atvaizdas jau galėjo pritaikyti
+duomenų bazės migracijas. Išsaugokite atnaujintojo išvestį ir žurnalus;
+nepaleiskite senesnio atvaizdo ir neperrašykite gyvos DB senesne kopija be
+atskirai patikrinto atkūrimo plano. Skaitykite [atnaujinimo vadovą](installation/updating.lt.md).
 
 ## Trūksta vietos diske
 

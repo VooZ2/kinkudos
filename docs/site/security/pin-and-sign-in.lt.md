@@ -35,6 +35,6 @@ Laikykite vaiko PIN privačiu kodu, o ne bendra šeimos paslaptimi. Susiekite ti
 
 ## Tėvų administratorius
 
-Pirmas diegimo metu sukurtas tėvas yra tėvų administratorius. Jis turi įprastas tėvų teises ir papildomai gali keisti tinklo ribojimus, SMTP, nuotolinių kopijų prisijungimo duomenis, paleisti rankinę kopiją ir atšaukti visus vaikų įrenginius. Kiti tėvai vis tiek gali naudoti kasdienį tėvų meniu ir matyti kopijų būseną.
+Pirmas diegimo metu sukurtas tėvas yra tėvų administratorius. Jis turi įprastas tėvų teises ir papildomai gali keisti tinklo ribojimus, SMTP, nuotolinių kopijų prisijungimo duomenis, paleisti rankinę kopiją ir atšaukti visus vaikų įrenginius. Kiti tėvai vis tiek gali naudoti kasdienį tėvų meniu, valdyti įprastas tėvų paskyras ir matyti kopijų būseną, tačiau negali redaguoti ar išjungti administratoriaus paskyros. Paskutinio aktyvaus administratoriaus išjungti negalima.
 
 [Paskyros ir įrenginiai →](accounts-and-devices.lt.md) · [Tinklo prieiga →](network-access.lt.md)

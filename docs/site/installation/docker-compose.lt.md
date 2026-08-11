@@ -29,6 +29,13 @@ Pagrindinis Compose failas paleidžia `app` ir `backup-agent`, bet neviešina pr
 
 Niekada neviešinkite `8000` prievado internete. HTTPS turi užbaigti proxy, perduodantis tikrą domeną ir protokolą.
 
+Standartiniame Compose diegime `app` naudoja vidinį programos ir kopijų agento
+tinklą bei atskirą neviešą egress tinklą DNS, HTTPS, SMTP ir „Web Push“ ryšiui.
+`backup-agent` vidinį valdymo tinklą laiko atskirai nuo savo išorinio ryšio ir
+neturi viešo kopijų prievado. `host` režimu vienintelė programos publikacija
+serveryje yra lokali jungtis `127.0.0.1:8000`; jos negalima pakeisti į
+`0.0.0.0:8000`.
+
 ## Prieš diegiklį pasirinkite proxy režimą
 
 `bootstrap.sh` paraginimas neįdiegia ir nesukonfigūruoja atvirkštinio tarpinio

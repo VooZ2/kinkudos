@@ -7,6 +7,7 @@ from django.http import HttpResponseForbidden
 from django.shortcuts import redirect, render
 from django.utils import timezone
 
+from .auth import current_child
 from .models import AttemptCounter, FamilySettings
 from .net import FORWARDED_HEADERS, client_ip, direct_peer_is_trusted, parse_allowed_networks
 from .rate_limit import register_attempt
@@ -142,9 +143,14 @@ class NetworkAccessMiddleware:
             return self.get_response(request)
         family = FamilySettings.load()
         mode = family.network_access_mode
+        authenticated_parent = getattr(request.user, "is_authenticated", False)
+        active_child = None if authenticated_parent else current_child(request)
         restricted = mode == FamilySettings.NetworkAccessMode.ALL or (
             mode == FamilySettings.NetworkAccessMode.CHILDREN
-            and request.path.startswith(self.child_prefixes)
+            and (
+                request.path.startswith(self.child_prefixes)
+                or active_child is not None
+            )
         )
         if restricted:
             networks, _errors = parse_allowed_networks(family.allowed_networks)

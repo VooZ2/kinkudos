@@ -19,6 +19,12 @@ Atnaujinimas skirtas išsaugoti vietinę diegimo aplinką, veikiančius duomenis
 archyvu. Prieš atnaujindami perskaitykite leidimo pastabas ir turėkite žinomą
 veikiančią kopiją.
 
+Jei naujas atvaizdas nepraeina sveikatos patikros, atnaujintojas saugiai sustoja:
+senas atvaizdas tyliai neatkuriamas ir nepaleidžiamas. Migracijos jau galėjo
+pakeisti gyvą duomenų bazę. Išsaugokite diagnostiką ir prieš rinkdamiesi senesnį
+atvaizdą naudokite atskirai patikrintą atkūrimo planą; atnaujintojas prieš
+atnaujinimą sukurtos DB kopijos automatiškai neatkuria.
+
 ## Kopijos saugo, bet nepakeičia atkūrimo bandymo
 
 Nuotolinės šifruotos kopijos apima šeimos duomenų bazę ir įkeltą mediją. Kopijų

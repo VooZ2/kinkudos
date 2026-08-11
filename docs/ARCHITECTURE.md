@@ -31,7 +31,10 @@ administrator (`is_staff=True`). The installer generates a high-entropy setup
 code, stored as a local secret, so a person who merely reaches a fresh public
 hostname cannot claim the first account. Setup creates the first parent and
 family settings atomically; after it succeeds, server-side checks permanently
-disable it. All parents may see backup health, but only the parent
+disable it. Ordinary parents can manage ordinary parent accounts, but cannot
+edit or deactivate an administrator. The last active administrator cannot be
+deactivated. Deactivating any parent also removes that parent's push
+subscriptions. All parents may see backup health, but only the parent
 administrator may change backup credentials or request a manual backup.
 
 **Children** — multiple `ChildProfile` records managed by parents. Before a
@@ -166,11 +169,13 @@ calendar year, linked to its ledger entry.
 parent-approved; one pending request per child at a time.
 
 **PushSubscription** — Web Push subscription for either a parent user or a
-paired child device (exactly one owner, enforced by a DB constraint). Parents are
-notified of new/revised task submissions, reward requests, suggestions, and
-birthday-change requests; children are notified of task, reward, suggestion,
-and birthday-change decisions, newly assigned daily work, point gifts, and
-birthday awards.
+paired child device (exactly one owner, enforced by a DB constraint). Browser
+endpoints must be public HTTPS URLs with bounded, structurally valid Web Push
+keys; subscription counts are bounded per parent and child device. Parent
+queries include only active users. Parents are notified of new/revised task
+submissions, reward requests, suggestions, and birthday-change requests;
+children are notified of task, reward, suggestion, and birthday-change
+decisions, newly assigned daily work, point gifts, and birthday awards.
 
 **FeedbackReport** — in-app bug/idea report from a parent or child, with an
 optional screenshot and a review-status workflow.
@@ -226,8 +231,12 @@ the shared parent palette.
   single-use, expire after ten minutes, and pass their secret in the URL
   fragment so it is not written to normal HTTP access logs.
 - An optional Django-level IPv4/IPv6 allowlist can restrict child routes or
-  the whole application independently of the chosen proxy. A server-side
-  management command provides recovery from an accidental lockout.
+  the whole application independently of the chosen proxy. In child-only
+  mode, an active child session is restricted even on shared routes such as
+  feedback and screenshot access; parent authentication is evaluated before
+  child-session restrictions. Child selection and pairing routes remain
+  explicitly restricted. A server-side management command provides recovery
+  from an accidental lockout.
 - Django admin is disabled in production unless explicitly enabled.
 - Django `SECURE_PROXY_SSL_HEADER`; `HttpOnly`, `SameSite=Lax` cookies.
 - CSRF protection on all mutating requests. No CORS — same-origin only.
@@ -237,6 +246,9 @@ the shared parent palette.
   origin; local image previews and existing inline styles remain supported.
 - Every parent/child request is authorized server-side.
 - Balance-changing operations use `transaction.atomic()` with row locking.
+  Proposal, reward-approval, reward-rejection, and reward-cancellation state
+  changes also claim `pending` rows with conditional updates, so SQLite does
+  not depend on `select_for_update()` alone for one-winner transitions.
 - Secrets are read only from Docker secret files or server environment
   variables — no default passwords/PINs/family data ship in the image.
 - Automatic Watchtower updates are disabled.
@@ -261,7 +273,10 @@ root, and then hands control to the versioned interactive `bootstrap.sh`.
 Production Compose files pin the full release tag from the public
 `vooz2/kinkudos` Docker Hub repository; `latest` and partial-version tags are
 published for discovery but are not used by supported deployments.
-The installer prepares secrets, verifies and starts the containers, then prints
+The application joins an internal app↔backup network and a separate non-
+internal app-egress network. The backup agent keeps its internal app network
+separate from its own outbound network; neither service publishes a backup
+port. The installer prepares secrets, verifies and starts the containers, then prints
 the application URL and setup code; it never collects family account details
 or PINs in the terminal. SMTP remains optional and can be skipped during
 browser setup or configured later by the parent administrator.
@@ -307,10 +322,13 @@ Only provider, repository target, timestamps, health, and masked key metadata
 are exposed to parents.
 
 Backups run once daily after the configured hour and can be requested manually
-by a parent administrator. Only one run can execute at a time. A run is
-successful only after the remote upload, retention/prune operation, and
-`restic check` all succeed. Green health means the latest successful remote
-copy is no older than seven days; an error is shown separately.
+by a parent administrator. Only one run can execute at a time. A scheduled
+attempt is successful only after the remote upload, retention/prune operation,
+and `restic check` all succeed; the scheduled date is recorded only then.
+Temporary failures retry later on the same day with bounded exponential
+backoff, rather than retrying every scheduler minute. Green health means the
+latest successful remote copy is no older than seven days; an error is shown
+separately.
 
 Provider credentials, the `restic` repository password, and agent token remain
 in separately permissioned files under `secrets/`. Configuration changes and

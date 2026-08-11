@@ -4,7 +4,7 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "26.6.4")
+APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "26.6.5")
 
 
 def env_bool(name, default=False):

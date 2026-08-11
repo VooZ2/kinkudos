@@ -24,6 +24,17 @@ def _child_dashboard_url(fragment):
     return f"{reverse('child_dashboard')}#{fragment}"
 
 
+def _parent_subscriptions():
+    return PushSubscription.objects.filter(
+        user__isnull=False,
+        user__is_active=True,
+    )
+
+
+def _child_subscriptions(child):
+    return PushSubscription.objects.filter(child=child, child__is_active=True)
+
+
 def _send(payload, subscriptions):
     if not settings.VAPID_PRIVATE_KEY:
         return
@@ -60,7 +71,7 @@ def notify_task_claim(claim):
             "url": _parent_dashboard_url(),
             "tag": f"task-claim-{claim.pk}",
         },
-        PushSubscription.objects.filter(user__isnull=False),
+        _parent_subscriptions(),
     )
 
 
@@ -72,7 +83,7 @@ def notify_reward_request(reward_request):
             "url": _parent_dashboard_url(),
             "tag": f"reward-request-{reward_request.pk}",
         },
-        PushSubscription.objects.filter(user__isnull=False),
+        _parent_subscriptions(),
     )
 
 
@@ -84,7 +95,7 @@ def notify_proposal(proposal):
             "url": _parent_dashboard_url(),
             "tag": f"proposal-{proposal.pk}",
         },
-        PushSubscription.objects.filter(user__isnull=False),
+        _parent_subscriptions(),
     )
 
 
@@ -96,7 +107,7 @@ def notify_birth_date_change(change):
             "url": _parent_dashboard_url(),
             "tag": f"birthday-change-{change.pk}",
         },
-        PushSubscription.objects.filter(user__isnull=False),
+        _parent_subscriptions(),
     )
 
 
@@ -108,7 +119,7 @@ def notify_assigned_tasks(batch):
             "url": _child_dashboard_url("paskirti-darbai"),
             "tag": f"assigned-tasks-{batch.pk}",
         },
-        PushSubscription.objects.filter(child=batch.child),
+        _child_subscriptions(batch.child),
     )
 
 
@@ -123,7 +134,7 @@ def notify_task_revision(claim):
             "url": _child_dashboard_url("darbai"),
             "tag": f"task-revision-{claim.pk}",
         },
-        PushSubscription.objects.filter(child=claim.child),
+        _child_subscriptions(claim.child),
     )
 
 
@@ -148,7 +159,7 @@ def notify_task_decision(claim, *, approved):
             "url": _child_dashboard_url("darbai"),
             "tag": f"task-{state}-{claim.pk}",
         },
-        PushSubscription.objects.filter(child=claim.child),
+        _child_subscriptions(claim.child),
     )
 
 
@@ -170,7 +181,7 @@ def notify_reward_decision(reward_request, *, approved):
             "url": _child_dashboard_url("prizai"),
             "tag": f"reward-{state}-{reward_request.pk}",
         },
-        PushSubscription.objects.filter(child=reward_request.child),
+        _child_subscriptions(reward_request.child),
     )
 
 
@@ -192,7 +203,7 @@ def notify_proposal_decision(proposal, *, approved):
             "url": _child_dashboard_url("prizai"),
             "tag": f"proposal-{state}-{proposal.pk}",
         },
-        PushSubscription.objects.filter(child=proposal.child),
+        _child_subscriptions(proposal.child),
     )
 
 
@@ -206,7 +217,7 @@ def notify_birth_date_decision(change, *, approved):
             "url": _child_dashboard_url("profilis"),
             "tag": f"birthday-change-{'approved' if approved else 'rejected'}-{change.pk}",
         },
-        PushSubscription.objects.filter(child=change.child),
+        _child_subscriptions(change.child),
     )
 
 
@@ -221,7 +232,7 @@ def notify_gift_received(gift):
             "url": _child_dashboard_url("istorija"),
             "tag": f"point-gift-{gift.pk}",
         },
-        PushSubscription.objects.filter(child=gift.recipient),
+        _child_subscriptions(gift.recipient),
     )
 
 
@@ -235,7 +246,7 @@ def notify_birthday_award(award):
             "url": _child_dashboard_url("istorija"),
             "tag": f"birthday-award-{award.pk}",
         },
-        PushSubscription.objects.filter(child=award.child),
+        _child_subscriptions(award.child),
     )
 
 
@@ -256,5 +267,5 @@ def notify_lottery_reminder(child):
             "url": _child_dashboard_url("prizai"),
             "tag": f"lottery-reminder-{child.pk}",
         },
-        PushSubscription.objects.filter(child=child),
+        _child_subscriptions(child),
     )

@@ -29,6 +29,13 @@ The base Compose file starts `app` and `backup-agent`. It publishes no applicati
 
 Never publish port `8000` to the internet. Terminate HTTPS at the proxy and forward the original host and protocol.
 
+In the standard Compose deployment, `app` uses an internal app-to-backup
+network and a separate non-internal egress network for DNS, HTTPS, SMTP, and
+Web Push. The `backup-agent` keeps its internal control network separate from
+its own outbound network and has no published backup port. In `host` mode, the
+only application host publication is the loopback binding
+`127.0.0.1:8000`; it must not be changed to `0.0.0.0:8000`.
+
 ## Choose the proxy mode before running the installer
 
 The `bootstrap.sh` prompt does not install or configure a reverse proxy. It

@@ -1,6 +1,6 @@
 [project]
 name = "kinkudos"
-version = "26.6.4"
+version = "26.6.5"
 description = "Self-hosted family tasks, points, and rewards PWA"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -12,7 +12,7 @@ dependencies = [
   "gunicorn==26.0.0",
   "Pillow==12.3.0",
   "pillow-heif==1.5.0",
-  "pywebpush==2.3.0",
+  "pywebpush==2.4.0",
   "whitenoise==6.12.0",
 ]
 

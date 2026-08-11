@@ -35,6 +35,6 @@ Treat the child PIN as private, not as a shared family code. Pair only devices t
 
 ## Parent administrator
 
-The first parent created during setup is the parent administrator. This account has the normal parent abilities plus the sensitive controls: network restrictions, SMTP, remote backup credentials, manual backups, and revoking all child devices. Other parent accounts can still use the everyday parent menu and see backup status.
+The first parent created during setup is the parent administrator. This account has the normal parent abilities plus the sensitive controls: network restrictions, SMTP, remote backup credentials, manual backups, and revoking all child devices. Other parent accounts can still use the everyday parent menu, manage ordinary parent accounts, and see backup status, but cannot edit or deactivate an administrator account. The last active administrator cannot be deactivated.
 
 [Accounts and devices →](accounts-and-devices.md) · [Network access →](network-access.md)

@@ -15,6 +15,13 @@ keičiant prieigą ar peržiūrint nustatymą, o ne kasdieniams darbų sprendima
 | **Tėvų administratorius** | Turi visas tėvų teises, taip pat tinklo prieigą, SMTP, kopijų duomenis ir rankinį kopijavimą bei visų vaiko įrenginių atšaukimą. Paprastai tai pirmas diegimo metu sukurtas tėvas. |
 | **Vaikas** | Naudoja susietą naršyklę/PWA ir keturių skaitmenų PIN; mato savo duomenis bei bendrus katalogus, bet ne kitų vaikų privačią informaciją. |
 
+Kiekvienas tėvas gali kurti ir valdyti įprastas tėvų paskyras bei vaikų
+profilius. Įprastas tėvas negali redaguoti ar išjungti tėvų administratoriaus.
+Administratoriaus paskyrą gali valdyti tik tėvų administratorius, o paskutinio
+aktyvaus tėvų administratoriaus išjungti negalima. Išjungus tėvų paskyrą taip
+pat panaikinamos jos naršyklės „push“ prenumeratos, todėl ji nebegaus tėvams
+skirtų pranešimų.
+
 Vienas suaugęs žmogus gali būti ir tėvų, ir serverio administratorius, tačiau
 serverio vaidmuo papildomai apima Docker, HTTPS, atnaujinimus, prisijungimo
 duomenis ir atkūrimą.

@@ -241,3 +241,61 @@ class BackupAgentTests(TestCase):
                 self.assertEqual(source.execute("PRAGMA query_only").fetchone()[0], 1)
                 with self.assertRaises(sqlite3.OperationalError):
                     source.execute("INSERT INTO sample VALUES ('blocked')")
+
+    def test_failed_scheduled_backup_keeps_date_unmarked_and_sets_backoff(self):
+        status = backup_agent.initial_status()
+        status["configured"] = True
+        now = datetime.now().astimezone()
+        with (
+            patch.object(backup_agent, "STATUS", status),
+            patch.object(backup_agent, "save_status"),
+            patch.object(
+                backup_agent,
+                "create_database_backup",
+                side_effect=RuntimeError("storage unavailable"),
+            ),
+        ):
+            backup_agent.perform_backup(scheduled=True)
+            self.assertFalse(backup_agent.scheduled_retry_is_due(now))
+
+        self.assertIsNone(status["last_scheduled_date"])
+        self.assertEqual(status["scheduled_retry_attempts"], 1)
+        retry_at = datetime.fromisoformat(status["scheduled_retry_not_before"])
+        self.assertGreaterEqual(
+            retry_at,
+            now + timedelta(seconds=backup_agent.SCHEDULED_RETRY_BASE_SECONDS - 1),
+        )
+
+    def test_scheduled_backup_retries_after_backoff_and_marks_success(self):
+        status = backup_agent.initial_status()
+        status["configured"] = True
+        status["scheduled_retry_date"] = datetime.now().astimezone().date().isoformat()
+        status["scheduled_retry_attempts"] = 1
+        status["scheduled_retry_not_before"] = (
+            datetime.now().astimezone() - timedelta(minutes=1)
+        ).isoformat()
+        status["scheduled_retry_deadline"] = (
+            datetime.now().astimezone() + timedelta(hours=1)
+        ).isoformat()
+        successful_command = CompletedProcess([], 0, "", "")
+        with (
+            patch.object(backup_agent, "STATUS", status),
+            patch.object(backup_agent, "save_status"),
+            patch.object(backup_agent, "create_database_backup", return_value=Path("/tmp/backup")),
+            patch.object(
+                backup_agent,
+                "restic_environment",
+                return_value={"RESTIC_REPOSITORY": "s3:https://example.test/family"},
+            ),
+            patch.object(
+                backup_agent,
+                "run_command",
+                side_effect=[successful_command, successful_command, successful_command],
+            ),
+        ):
+            backup_agent.perform_backup(scheduled=True)
+
+        today = datetime.now().astimezone().date().isoformat()
+        self.assertEqual(status["last_scheduled_date"], today)
+        self.assertIsNone(status["scheduled_retry_not_before"])
+        self.assertEqual(status["health"], "healthy")

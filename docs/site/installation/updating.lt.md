@@ -1,6 +1,6 @@
 ---
 title: Saugus KinKudos atnaujinimas
-description: Sukurkite kopiją, įdiekite patikrintą KinKudos leidimą, patikrinkite konteinerių būseną ir supraskite ribotą automatinį atvaizdo grąžinimą.
+description: Sukurkite kopiją, įdiekite patikrintą KinKudos leidimą, patikrinkite konteinerių būseną ir saugiai elkitės nepavykus atnaujinimui.
 ---
 
 # Saugiai atnaujinkite KinKudos
@@ -39,4 +39,10 @@ Traefik maršrutą, HTTPS adresą, prisijungimą ir šeimos duomenis naršyklėj
 
 ## Jei atnaujinimas nepavyko
 
-Naujai programai netapus sveikai, atnaujintojas mėgina grąžinti ankstesnį atvaizdą, jei jis pasiekiamas. Tai ribotas programos atvaizdo atkūrimas, **ne** bendras duomenų bazės ar schemos rollback. Neperrašykite naujesnės gyvos DB senesne kopija. Išsaugokite klaidos tekstą ir naudokite [problemų sprendimo vadovą](../troubleshooting.lt.md).
+Naujai programai netapus sveikai, atnaujintojas sustoja ir automatiškai
+negrąžina bei nepaleidžia ankstesnio atvaizdo. Naujas atvaizdas jau galėjo
+pritaikyti duomenų bazės migracijas. Prieš pakeitimą sukurta nuosekli DB kopija
+automatiškai neatkuriama. Išsaugokite atnaujintojo išvestį ir konteinerių
+žurnalus, nepaleiskite senesnio atvaizdo ir neperrašykite gyvos DB senesne kopija
+be atskirai patikrinto atkūrimo plano, tada naudokite [problemų sprendimo
+vadovą](../troubleshooting.lt.md).

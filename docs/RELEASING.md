@@ -155,9 +155,89 @@ Documentation changes to `docs.kinkudos.app`, the README, or other
 documentation do not belong in the product changelog and do not change the
 product version.
 
+## Migration and rollback contract
+
+The application image runs Django migrations before starting Gunicorn. Release
+migrations must therefore follow an expand/contract policy: add nullable or
+defaulted schema first, deploy code that can read both representations, migrate
+existing data, and remove old representations only in a later release after
+all supported images have moved forward.
+
+`deploy/install-release.sh` creates a database backup before replacing the
+running containers and health-checks the new image. If the new image fails its
+health check, the updater fails loudly and does not retag or restart the old
+image: migrations may already have changed the live database, and silently
+starting an older image could leave it incompatible with that schema. Restore
+is an explicit, separately verified operator action; the updater never
+automatically overwrites newer family data with a pre-upgrade backup.
+
 The version shown in the application header must always remain a link to
 `/changes/`.
 
 The repository Actions secret `DOCKERHUB_TOKEN` must contain only the Docker
 Hub access-token value, without a username or `username:` prefix. The
 publishing Docker ID is `vooz2`.
+
+## Release candidate QA
+
+Pushing a `release/<version>` branch runs
+`.github/workflows/release-candidate.yml`. The workflow validates the exact
+source commit, builds `linux/amd64` and `linux/arm64` images, and publishes
+only the immutable candidate tag `<version>-rc.<short-sha>` to GHCR and Docker
+Hub. It also uploads `kinkudos-<version>.tar.gz` and its checksum to the
+prerelease `v<version>-rc.<short-sha>`. It never updates a stable version tag,
+a minor-series tag, or `latest`.
+
+For fresh-install acceptance testing, use the installer from the exact source
+commit and point it at the candidate assets:
+
+```sh
+version=26.6.5
+candidate_tag=26.6.5-rc.<short-sha>
+source_sha=<full-source-sha>
+curl -fsSL "https://raw.githubusercontent.com/VooZ2/kinkudos/$source_sha/deploy/install.sh" \
+  -o /tmp/kinkudos-install.sh
+KINKUDOS_VERSION="$version" \
+KINKUDOS_RELEASE_BASE_URL="https://github.com/VooZ2/kinkudos/releases/download/v$candidate_tag" \
+KINKUDOS_IMAGE_TAG="$candidate_tag" \
+sh /tmp/kinkudos-install.sh
+```
+
+For upgrade acceptance testing, download both named assets from the candidate
+prerelease, then pass the candidate image tag through `sudo` so the extracted
+Compose files pull the RC image:
+
+```sh
+version=26.6.5
+candidate_tag=26.6.5-rc.<short-sha>
+gh release download "v$candidate_tag" --repo VooZ2/kinkudos \
+  --pattern "kinkudos-$version.tar.gz" \
+  --pattern "kinkudos-$version.tar.gz.sha256"
+sha256sum -c "kinkudos-$version.tar.gz.sha256"
+tar -xzf "kinkudos-$version.tar.gz"
+sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" sh \
+  "kinkudos-$version/deploy/install-release.sh" \
+  "kinkudos-$version.tar.gz" \
+  "kinkudos-$version.tar.gz.sha256" \
+  "$version" \
+  "$(pwd)/kinkudos-$version"
+```
+
+`KINKUDOS_IMAGE_TAG` is an explicit release-candidate-only override. During
+acceptance testing, pass it again to every Compose command that resolves or
+recreates images, for example:
+
+```sh
+sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
+sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose up -d --force-recreate
+```
+
+The override does not need to be persisted in the production `.env`. It is not
+part of the normal stable-user update workflow: after `26.6.5` is published,
+the stable Compose default is `26.6.5` and no RC override is required.
+
+Record the workflow's source SHA, candidate manifest digest, both image
+architectures, prerelease asset URLs, and checksum before beginning VPS tests.
+Candidate QA is not stable-release authorization: do not merge to `main`,
+create a stable `v<version>` tag, publish stable image aliases, or deploy from
+the candidate workflow.

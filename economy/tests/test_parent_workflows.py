@@ -18,7 +18,7 @@ from economy.models import (
 from economy.services import approve_reward_request, approve_task_claim
 
 
-class Patch0121Tests(TestCase):
+class ParentWorkflowTests(TestCase):
     def setUp(self):
         self.parent = get_user_model().objects.create_user(
             "parent",
@@ -135,7 +135,7 @@ class Patch0121Tests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, 'class="brand-mark brand-logo"', html=False)
         self.assertContains(response, 'class="footer-product">KinKudos · ', html=False)
-        self.assertContains(response, "v26.6.4")
+        self.assertContains(response, "v26.6.5")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_reward_approval_uses_task_decision_icons(self):

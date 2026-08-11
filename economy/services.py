@@ -870,8 +870,19 @@ def submit_reward_request(*, child, reward):
 
 @transaction.atomic
 def approve_reward_request(*, request, actor):
-    locked = RewardRequest.objects.select_for_update().select_related("child").get(pk=request.pk)
+    locked = RewardRequest.objects.select_related("child").get(pk=request.pk)
     if locked.status != RequestStatus.PENDING:
+        raise ValidationError(_("This request has already been resolved."))
+    decided_at = timezone.now()
+    claimed = RewardRequest.objects.filter(
+        pk=locked.pk,
+        status=RequestStatus.PENDING,
+    ).update(
+        status=RequestStatus.APPROVED,
+        decided_by=actor,
+        decided_at=decided_at,
+    )
+    if not claimed:
         raise ValidationError(_("This request has already been resolved."))
     entry = post_ledger_entry(
         child=locked.child,
@@ -882,26 +893,40 @@ def approve_reward_request(*, request, actor):
         source_id=locked.pk,
         enforce_limit=True,
     )
-    locked.status = RequestStatus.APPROVED
-    locked.decided_by = actor
-    locked.decided_at = timezone.now()
-    locked.save(update_fields=["status", "decided_by", "decided_at"])
     return entry
 
 
 @transaction.atomic
 def approve_proposal(*, proposal, actor, final_cost, goal_mode=None):
-    locked = Proposal.objects.select_for_update().select_related("child").get(pk=proposal.pk)
+    locked = Proposal.objects.select_related("child").get(pk=proposal.pk)
     if locked.status != RequestStatus.PENDING:
         raise ValidationError(_("This proposal has already been resolved."))
     if final_cost <= 0:
         raise ValidationError(_("The cost must be greater than zero."))
+    selected_goal_mode = None
     if locked.proposal_type == ProposalType.REWARD:
-        created = Reward.objects.create(title=locked.title, icon=locked.icon, cost=final_cost)
+        goal_mode_value = None
     else:
         selected_goal_mode = locked.goal_mode or goal_mode
         if selected_goal_mode not in GoalMode.values:
             raise ValidationError(_("Choose how this savings goal should save points."))
+        goal_mode_value = selected_goal_mode
+    decided_at = timezone.now()
+    claimed = Proposal.objects.filter(
+        pk=locked.pk,
+        status=RequestStatus.PENDING,
+    ).update(
+        status=RequestStatus.APPROVED,
+        final_cost=final_cost,
+        goal_mode=goal_mode_value,
+        decided_by=actor,
+        decided_at=decided_at,
+    )
+    if not claimed:
+        raise ValidationError(_("This proposal has already been resolved."))
+    if locked.proposal_type == ProposalType.REWARD:
+        created = Reward.objects.create(title=locked.title, icon=locked.icon, cost=final_cost)
+    else:
         created = create_savings_goal(
             child=locked.child,
             title=locked.title,
@@ -910,11 +935,51 @@ def approve_proposal(*, proposal, actor, final_cost, goal_mode=None):
             actor=actor,
             mode=selected_goal_mode,
         )
-    locked.status = RequestStatus.APPROVED
-    locked.final_cost = final_cost
-    if locked.proposal_type == ProposalType.GOAL and not locked.goal_mode:
-        locked.goal_mode = selected_goal_mode
-    locked.decided_by = actor
-    locked.decided_at = timezone.now()
-    locked.save(update_fields=["status", "final_cost", "goal_mode", "decided_by", "decided_at"])
     return created
+
+
+@transaction.atomic
+def reject_reward_request(*, request, actor, reason):
+    decided_at = timezone.now()
+    claimed = RewardRequest.objects.filter(
+        pk=request.pk,
+        status=RequestStatus.PENDING,
+    ).update(
+        status=RequestStatus.REJECTED,
+        rejection_reason=reason.strip(),
+        decided_by=actor,
+        decided_at=decided_at,
+    )
+    if not claimed:
+        raise ValidationError(_("This request has already been resolved."))
+    return RewardRequest.objects.get(pk=request.pk)
+
+
+@transaction.atomic
+def reject_proposal(*, proposal, actor, reason):
+    claimed = Proposal.objects.filter(
+        pk=proposal.pk,
+        status=RequestStatus.PENDING,
+    ).update(
+        status=RequestStatus.REJECTED,
+        parent_note=reason.strip(),
+        decided_by=actor,
+        decided_at=timezone.now(),
+    )
+    if not claimed:
+        raise ValidationError(_("This proposal has already been resolved."))
+    return Proposal.objects.get(pk=proposal.pk)
+
+
+@transaction.atomic
+def cancel_reward_request(*, request, child):
+    return bool(
+        RewardRequest.objects.filter(
+            pk=request.pk,
+            child=child,
+            status=RequestStatus.PENDING,
+        ).update(
+            status=RequestStatus.CANCELLED,
+            decided_at=timezone.now(),
+        )
+    )

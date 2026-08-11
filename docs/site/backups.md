@@ -11,7 +11,7 @@ A working backup plan protects more than a running container. KinKudos stores it
 
 The isolated `backup-agent` creates a consistent SQLite online backup, includes private uploaded media, and sends encrypted snapshots through restic to Backblaze B2 or generic S3-compatible storage. Configure it as the first parent under **Settings → Backups**.
 
-Use a dedicated bucket and restricted key. Keep an offline copy of `secrets/restic_password`; without it, encrypted snapshots cannot be restored. Backups run daily after the configured hour, local DB copies and remote daily snapshots are retained for 31 days, and a successful run includes `restic check`.
+Use a dedicated bucket and restricted key. Keep an offline copy of `secrets/restic_password`; without it, encrypted snapshots cannot be restored. Backups run daily after the configured hour, local DB copies and remote daily snapshots are retained for 31 days, and a successful run includes `restic check`. A failed scheduled attempt is not recorded as that day's success; it is retried later the same day with bounded backoff, and a successful scheduled run is not repeated that day.
 Local SQLite backup copies and KinKudos-managed backup/state storage are protected with owner-only filesystem permissions.
 
 The parent administrator can request **Back up now**, or the server administrator can run from `deploy`:

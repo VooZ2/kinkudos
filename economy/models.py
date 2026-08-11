@@ -1,7 +1,12 @@
+import base64
+import binascii
 import hashlib
+import ipaddress
+import re
 import secrets
 from datetime import timedelta
 from typing import ClassVar
+from urllib.parse import urlsplit
 
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
@@ -16,6 +21,85 @@ from django.utils.translation import gettext_lazy as _
 from .device_detection import identify_device
 
 DEVICE_CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+PARENT_PUSH_SUBSCRIPTION_LIMIT = 10
+CHILD_PUSH_SUBSCRIPTION_LIMIT = 5
+PUSH_ENDPOINT_MAX_LENGTH = 2048
+PUSH_KEY_MAX_LENGTH = 128
+
+
+def _decode_web_push_key(value, *, expected_length, field_name):
+    if not isinstance(value, str) or not value or len(value) > PUSH_KEY_MAX_LENGTH:
+        raise ValidationError({field_name: _("The Web Push key is invalid.")})
+    if "=" in value or not re.fullmatch(r"[A-Za-z0-9_-]+", value):
+        raise ValidationError({field_name: _("The Web Push key is invalid.")})
+    try:
+        decoded = base64.urlsafe_b64decode(value + "=" * (-len(value) % 4))
+    except (ValueError, binascii.Error) as exc:
+        raise ValidationError({field_name: _("The Web Push key is invalid.")}) from exc
+    if len(decoded) != expected_length:
+        raise ValidationError({field_name: _("The Web Push key is invalid.")})
+    return decoded
+
+
+def validate_push_subscription_data(endpoint, p256dh, auth):
+    """Validate browser-supplied Web Push data before it reaches the database."""
+
+    if not isinstance(endpoint, str) or len(endpoint) > PUSH_ENDPOINT_MAX_LENGTH:
+        raise ValidationError({"endpoint": _("The Web Push endpoint is invalid.")})
+    try:
+        parsed = urlsplit(endpoint)
+        hostname = parsed.hostname
+        port = parsed.port
+    except ValueError as exc:
+        raise ValidationError({"endpoint": _("The Web Push endpoint is invalid.")}) from exc
+    if (
+        parsed.scheme.lower() != "https"
+        or not parsed.netloc
+        or not hostname
+        or parsed.username is not None
+        or parsed.password is not None
+        or parsed.fragment
+        or port is not None and not 1 <= port <= 65535
+    ):
+        raise ValidationError({"endpoint": _("The Web Push endpoint is invalid.")})
+
+    try:
+        address = ipaddress.ip_address(hostname)
+    except ValueError:
+        address = None
+    if address is not None:
+        if not address.is_global:
+            raise ValidationError({"endpoint": _("The Web Push endpoint is invalid.")})
+    else:
+        try:
+            ascii_hostname = hostname.encode("idna").decode("ascii").lower().rstrip(".")
+        except UnicodeError as exc:
+            raise ValidationError({"endpoint": _("The Web Push endpoint is invalid.")}) from exc
+        labels = ascii_hostname.split(".")
+        if (
+            len(ascii_hostname) > 253
+            or any(not label or len(label) > 63 for label in labels)
+            or any(
+                not re.fullmatch(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", label)
+                for label in labels
+            )
+            or all(label.isdigit() for label in labels)
+        ):
+            raise ValidationError({"endpoint": _("The Web Push endpoint is invalid.")})
+        if ascii_hostname == "localhost" or ascii_hostname.endswith(
+            (".localhost", ".local", ".internal", ".home.arpa")
+        ):
+            raise ValidationError({"endpoint": _("The Web Push endpoint is invalid.")})
+
+    public_key = _decode_web_push_key(
+        p256dh,
+        expected_length=65,
+        field_name="p256dh",
+    )
+    if not public_key.startswith(b"\x04"):
+        raise ValidationError({"p256dh": _("The Web Push key is invalid.")})
+    _decode_web_push_key(auth, expected_length=16, field_name="auth")
+    return endpoint, p256dh, auth
 
 
 def generate_device_code():
@@ -1035,9 +1119,9 @@ class PushSubscription(models.Model):
         on_delete=models.CASCADE,
         related_name="push_subscriptions",
     )
-    endpoint = models.TextField(unique=True)
-    p256dh = models.TextField()
-    auth = models.TextField()
+    endpoint = models.CharField(max_length=PUSH_ENDPOINT_MAX_LENGTH, unique=True)
+    p256dh = models.CharField(max_length=PUSH_KEY_MAX_LENGTH)
+    auth = models.CharField(max_length=PUSH_KEY_MAX_LENGTH)
     user_agent = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     last_used_at = models.DateTimeField(auto_now=True)
@@ -1052,6 +1136,10 @@ class PushSubscription(models.Model):
                 name="push_subscription_has_one_owner",
             )
         ]
+
+    def clean(self):
+        super().clean()
+        validate_push_subscription_data(self.endpoint, self.p256dh, self.auth)
 
 
 class FeedbackType(models.TextChoices):

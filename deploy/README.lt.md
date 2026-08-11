@@ -232,12 +232,36 @@ sudo sh "$install_script" \
 rm -f "$install_script" "$compose_file"
 ```
 
+### Leidimo kandidato priėmimo testavimas (tik prižiūrėtojams)
+
+`KINKUDOS_IMAGE_TAG` yra aiškus, tik RC skirtas perrašymas. Testuodami leidimo
+kandidato atvaizdą, perduokite jį per `sudo env` leidimo atnaujintojui ir dar
+kartą perduokite kiekvienai vėlesnei Compose komandai, kuri iš naujo parenka ar
+iš naujo sukuria atvaizdą, pavyzdžiui:
+
+```bash
+candidate_tag=26.6.5-rc.<short-sha>
+sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
+sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose up -d --force-recreate
+```
+
+Šis perrašymas tyčia neišsaugomas produkciniame `.env`. Tai nėra įprastas
+stabilaus leidimo naudotojo atnaujinimo kelias. Atnaujindami stabilų `26.6.5`,
+naudokite aukščiau pateiktą procedūrą be `KINKUDOS_IMAGE_TAG`: Compose numatytoji
+reikšmė jau yra `26.6.5`.
+
 Atnaujintojas patikrina kontrolinę sumą ir leidimo duomenis, parsiunčia bei
 išbando paskelbtą atvaizdą, patikrina serverio katalogų nuosavybę, sukuria
 veikiančios duomenų bazės kopiją, tik tada perjungia programą, patikrina
 konteinerio būklę ir atnaujina versijuojamus `deploy` valdymo scenarijus.
 Vietinis `deploy/.env`, šeimos duomenys, nuotraukos, kopijos ir paslaptys
 nekeičiami bei nepatenka į leidimo archyvą.
+
+Jei naujas konteineris po paleidimo nepraeina sveikatos patikros, atnaujintojas
+sustoja su aiškiu suderinamumo įspėjimu. Jis automatiškai neatkuria seno
+atvaizdo, nes naujas atvaizdas jau galėjo pritaikyti duomenų bazės migracijas.
+Prieš pasirinkdami senesnį atvaizdą išspręskite suderinamumo problemą arba
+naudokite atskirai patikrintą atkūrimą.
 
 ## Reverse proxy ir kliento IP
 
@@ -340,7 +364,9 @@ Tą pačią patikrintą kopiją serveryje galima paleisti:
 Kopijos automatiškai kuriamos kartą per dieną po 03:00 serverio laiku.
 Kitą valandą galima nustatyti `deploy/.env` reikšme `KINKUDOS_BACKUP_HOUR`.
 Vietinės DB ir kasdienės nuotolinės kopijos laikomos 31 dieną; sėkminga būsena
-įrašoma tik praėjus `restic check`.
+įrašoma tik praėjus `restic check`. Nepavykęs suplanuotas bandymas tos dienos
+sėkme neįrašomas: agentas vėliau tą pačią dieną bando dar kartą su ribotu
+laukimo didėjimu, o sėkminga suplanuota kopija tą dieną nebekartojama.
 
 `secrets/restic_password` kopiją laikykite atskirai nuo serverio. Atkūrimas
 sąmoningai paliktas serverio administratoriui ir turi būti išbandytas atskirame

@@ -4,6 +4,7 @@ set -eu
 repository=${KINKUDOS_REPOSITORY:-VooZ2/kinkudos}
 install_root=${KINKUDOS_INSTALL_ROOT:-/opt/kinkudos}
 version=${KINKUDOS_VERSION:-}
+release_base_url=${KINKUDOS_RELEASE_BASE_URL:-}
 
 fail() {
   echo "KinKudos installer: $*" >&2
@@ -26,6 +27,21 @@ case "$version" in
   *[!0-9.]*|.*|*..*|*.) fail "invalid release version: $version" ;;
 esac
 
+image_tag=${KINKUDOS_IMAGE_TAG:-$version}
+case "$image_tag" in
+  ""|*[!0-9A-Za-z._-]*) fail "invalid Docker image tag: $image_tag" ;;
+esac
+export KINKUDOS_IMAGE_TAG="$image_tag"
+
+if [ -n "$release_base_url" ]; then
+  case "$release_base_url" in
+    https://*) release_url=${release_base_url%/} ;;
+    *) fail "KINKUDOS_RELEASE_BASE_URL must use HTTPS." ;;
+  esac
+else
+  release_url="https://github.com/$repository/releases/download/v$version"
+fi
+
 if [ -e "$install_root" ] && [ -n "$(find "$install_root" -mindepth 1 -print -quit 2>/dev/null)" ]; then
   fail "$install_root is not empty; use the upgrade guide for an existing installation."
 fi
@@ -38,7 +54,6 @@ trap cleanup EXIT INT TERM
 
 archive="kinkudos-$version.tar.gz"
 checksum="$archive.sha256"
-release_url="https://github.com/$repository/releases/download/v$version"
 
 echo "Downloading KinKudos $version..."
 curl -fL --retry 3 -o "$work_dir/$archive" "$release_url/$archive"

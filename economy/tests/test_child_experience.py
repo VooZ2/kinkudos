@@ -18,7 +18,7 @@ from economy.services import randomize_daily_themes
 
 
 @override_settings(LANGUAGE_CODE="en")
-class Patch0122ParentResponseTests(TestCase):
+class ChildExperienceTests(TestCase):
     def setUp(self):
         self.child = ChildProfile.objects.create(
             name="Child Two",

@@ -855,8 +855,9 @@ class ParentEditForm(StyledFormMixin, forms.Form):
         widget=forms.PasswordInput(),
     )
 
-    def __init__(self, *args, account, **kwargs):
+    def __init__(self, *args, account, actor, **kwargs):
         self.account = account
+        self.actor = actor
         kwargs.setdefault("initial", {"username": account.username, "email": account.email})
         super().__init__(*args, **kwargs)
 
@@ -879,6 +880,11 @@ class ParentEditForm(StyledFormMixin, forms.Form):
 
     def clean(self):
         cleaned = super().clean()
+        if self.account.is_staff and self.actor is not None and not self.actor.is_staff:
+            self.add_error(
+                None,
+                _("Only a parent administrator can manage an administrator account."),
+            )
         password = cleaned.get("new_password", "")
         confirmation = cleaned.get("confirm_password", "")
         if password != confirmation:

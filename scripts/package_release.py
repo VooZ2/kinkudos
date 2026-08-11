@@ -7,6 +7,7 @@ import hashlib
 import os
 import re
 import subprocess
+import sys
 import tarfile
 import tempfile
 from pathlib import Path
@@ -96,9 +97,7 @@ def sha256(path: Path) -> str:
 
 def main() -> None:
     version = project_version()
-    python = str(ROOT / ".venv" / "bin" / "python")
-    if not Path(python).is_file():
-        raise SystemExit("Project virtual environment is missing: .venv/bin/python")
+    python = sys.executable
 
     run(python, "scripts/verify_release.py")
     run(python, "scripts/compile_translations.py")

@@ -1660,6 +1660,9 @@ msgstr "El. pašto nustatymus gali keisti tik tėvų administratorius."
 msgid "Only a parent administrator can change network access."
 msgstr "Tinklo prieigą gali keisti tik tėvų administratorius."
 
+msgid "Only a parent administrator can manage an administrator account."
+msgstr "Administratoriaus paskyrą gali tvarkyti tik tėvų administratorius."
+
 msgid "Only a parent administrator can revoke all devices."
 msgstr "Visus įrenginius gali atšaukti tik tėvų administratorius."
 
@@ -3072,6 +3075,9 @@ msgstr "Negalima pašalinti paskyros, kuria dabar esate prisijungę."
 
 msgid "You cannot remove the last active parent account."
 msgstr "Negalima pašalinti paskutinės aktyvios tėvų paskyros."
+
+msgid "You cannot remove the last active parent administrator."
+msgstr "Negalima pašalinti paskutinio aktyvaus tėvų administratoriaus."
 
 msgid "You do not have enough points for this reward."
 msgstr "Šiam prizui nepakanka taškų."

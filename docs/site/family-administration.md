@@ -15,6 +15,13 @@ changing access, or reviewing a setting — not for everyday task decisions.
 | **Parent administrator** | Has all parent access plus network access, SMTP, backup credentials and manual backups, and revoking every child device. Normally this is the first parent created during setup. |
 | **Child** | Uses a paired browser/PWA and four-digit PIN; sees their own data and shared catalogues, not other children’s private information. |
 
+Every parent can create and manage ordinary parent accounts and child profiles.
+A normal parent cannot edit or deactivate a parent administrator. Only a parent
+administrator can manage an administrator account, and the last active parent
+administrator cannot be deactivated. Deactivating a parent also removes that
+account's browser push subscriptions, so it no longer receives parent
+notifications.
+
 One adult may be both the parent administrator and server administrator, but
 the server role also includes Docker, HTTPS, updates, credentials, and recovery.
 

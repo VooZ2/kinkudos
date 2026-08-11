@@ -20,6 +20,12 @@ data, uploads, backups, and secrets. Do not replace those paths manually with
 a release archive. Read the release notes before updating and keep a known
 working backup.
 
+If the new image fails its health check, the updater fails closed: it does not
+silently restore or restart the old image. Migrations may already have changed
+the live database. Preserve the diagnostics and use a separately verified
+recovery plan before choosing an older image; the updater does not automatically
+restore the pre-update database backup.
+
 ## Backups are protection, not a restore test
 
 Remote encrypted backups include the family database and uploaded media. The

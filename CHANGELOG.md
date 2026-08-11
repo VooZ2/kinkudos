@@ -9,6 +9,30 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Nothing yet.
 
+## [26.6.5] - 2026-08-11
+
+### Changed
+
+- Parent account management now distinguishes ordinary parents from parent
+  administrators, while scheduled backups retry temporary failures with bounded
+  same-day backoff.
+- The deployment Compose network now gives the application only the outbound
+  access it needs while keeping backup control traffic internal.
+
+### Fixed
+
+- Proposal, reward, and related pending-state transitions now claim rows
+  conditionally so concurrent requests cannot both win on SQLite.
+- Failed upgrades now stop with a compatibility warning instead of silently
+  restoring an older image after migrations may have changed the database.
+
+### Security
+
+- Web Push subscriptions now validate public HTTPS endpoints and structurally
+  valid keys, enforce per-owner limits, and exclude inactive parent accounts.
+- Child-only network restrictions now also cover active child sessions on shared
+  feedback and screenshot routes.
+
 ## [26.6.4] - 2026-08-11
 
 ### Changed

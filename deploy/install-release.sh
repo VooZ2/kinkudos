@@ -15,6 +15,12 @@ case "$version" in
   *[!0-9.]*|.*|*..*|*.) echo "Invalid release version: $version" >&2; exit 2 ;;
 esac
 
+image_tag=${KINKUDOS_IMAGE_TAG:-$version}
+case "$image_tag" in
+  ""|*[!0-9A-Za-z._-]*) echo "Invalid Docker image tag: $image_tag" >&2; exit 2 ;;
+esac
+export KINKUDOS_IMAGE_TAG="$image_tag"
+
 archive=$(realpath "$archive")
 checksum_file=$(realpath "$checksum_file")
 project_root=$(realpath "$project_root")
@@ -23,7 +29,7 @@ secrets_dir="$project_root/secrets"
 releases_dir="$project_root/releases"
 release_dir="$releases_dir/$version"
 staging_dir="$releases_dir/.staging-$version-$$"
-image="vooz2/kinkudos:$version"
+image="vooz2/kinkudos:$image_tag"
 container="kinkudos-app-1"
 
 test -f "$archive"
@@ -169,10 +175,6 @@ if ! docker compose config --images | grep -Fx "$image" >/dev/null; then
   exit 1
 fi
 
-old_image_id=$(
-  docker inspect "$container" --format '{{.Image}}' 2>/dev/null || true
-)
-
 docker compose exec -T app \
   python manage.py backup_database --output-dir /app/backups
 
@@ -203,11 +205,8 @@ done
 
 if [ "$healthy" != "true" ]; then
   docker compose logs --tail=100 app >&2 || true
-  if [ -n "$old_image_id" ]; then
-    docker tag "$old_image_id" "$image"
-    docker compose up -d --no-build --force-recreate app || true
-  fi
-  echo "Health check failed; the previous image was restored when available." >&2
+  echo "Health check failed; the database may contain migrations from $version." >&2
+  echo "The previous image was not restored automatically. Resolve the release compatibility issue before restarting an older image." >&2
   exit 1
 fi
 
