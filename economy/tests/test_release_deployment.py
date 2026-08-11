@@ -21,7 +21,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertNotIn("traefik.", app_service)
         self.assertNotIn("ports:", app_service)
         self.assertIn(
-            "image: vooz2/kinkudos:${KINKUDOS_IMAGE_TAG:-26.6.5}",
+            "image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.6.5}",
             app_service,
         )
         self.assertIn("      - app-egress", app_service)
@@ -158,6 +158,9 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertIn('"$release_dir/deploy/$helper" "$deploy_dir/$helper"', installer)
         self.assertIn('image_tag=${KINKUDOS_IMAGE_TAG:-$version}', installer)
         self.assertIn('export KINKUDOS_IMAGE_TAG="$image_tag"', installer)
+        self.assertIn('image_repository=${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}', installer)
+        self.assertIn('export KINKUDOS_IMAGE_REPOSITORY="$image_repository"', installer)
+        self.assertIn('image="$image_repository:$image_tag"', installer)
         self.assertIn("  backup.sh \\", installer)
         self.assertIn("  install.sh \\", installer)
         self.assertIn("  kinkudos-lottery-reminders.service \\", installer)
@@ -283,7 +286,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
         )
 
         self.assertIn(
-            "image: vooz2/kinkudos:${KINKUDOS_IMAGE_TAG:-26.6.5}",
+            "image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.6.5}",
             compose,
         )
         self.assertIn("kinkudos-data:/app/data", compose)
@@ -303,6 +306,16 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertNotIn("network_mode", compose)
         self.assertNotIn("ports:", compose)
         self.assertNotIn("../", compose)
+
+    def test_rc_workflow_uses_dedicated_candidate_repositories(self):
+        workflow = (ROOT / ".github" / "workflows" / "release-candidate.yml").read_text(
+            encoding="utf-8"
+        )
+
+        self.assertIn("ghcr.io/vooz2/kinkudos-rc", workflow)
+        self.assertIn("vooz2/kinkudos-rc", workflow)
+        self.assertNotIn("ghcr.io/vooz2/kinkudos\n", workflow)
+        self.assertNotIn("vooz2/kinkudos\n", workflow)
 
         workflow = (ROOT / ".github" / "workflows" / "release-image.yml").read_text(
             encoding="utf-8"

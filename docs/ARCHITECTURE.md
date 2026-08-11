@@ -274,7 +274,10 @@ and its SHA256 file, verifies the checksum, refuses a non-empty installation
 root, and then hands control to the versioned interactive `bootstrap.sh`.
 Production Compose files pin the full release tag from the public
 `vooz2/kinkudos` Docker Hub repository; `latest` and partial-version tags are
-published for discovery but are not used by supported deployments.
+published for discovery but are not used by supported deployments. Release
+candidate builds use the separate `ghcr.io/vooz2/kinkudos-rc` and
+`vooz2/kinkudos-rc` packages, selected only through explicit maintainer/QA
+overrides and never through the stable deployment defaults.
 The application joins an internal app↔backup network and a separate non-
 internal app-egress network. The backup agent keeps its internal app network
 separate from its own outbound network; neither service publishes a backup

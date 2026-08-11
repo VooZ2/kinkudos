@@ -252,20 +252,23 @@ rm -f "$install_script" "$compose_file"
 
 ### Release-candidate acceptance testing (maintainers only)
 
-`KINKUDOS_IMAGE_TAG` is an explicit RC-only override. When testing a candidate
-image, pass it through `sudo env` to the release updater and pass it again to
-every later Compose command that resolves or recreates images, for example:
+`KINKUDOS_IMAGE_REPOSITORY` and `KINKUDOS_IMAGE_TAG` are explicit RC-only
+overrides. When testing a candidate image, pass both through `sudo env` to the
+release updater and pass them again to every later Compose command that resolves
+or recreates images, for example:
 
 ```bash
 candidate_tag=26.6.5-rc.<short-sha>
-sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
-sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose up -d --force-recreate
+sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
+  KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
+sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
+  KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose up -d --force-recreate
 ```
 
-The override is intentionally not persisted in the production `.env`. This is
+The overrides are intentionally not persisted in the production `.env`. This is
 not the normal stable-user update workflow. For a stable `26.6.5` update, use
-the procedure above without `KINKUDOS_IMAGE_TAG`; the Compose default is already
-`26.6.5`.
+the procedure above without either override; the Compose defaults are the
+production `vooz2/kinkudos` package and `26.6.5`.
 
 The updater validates the checksum and release metadata, pulls and smoke-tests
 the published image, checks host-directory ownership, backs up the live

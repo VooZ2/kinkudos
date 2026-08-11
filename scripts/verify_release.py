@@ -42,11 +42,11 @@ versions = {
     ),
     "deploy/compose.yml": version_from(
         ROOT / "deploy" / "compose.yml",
-        r"(?m)^\s*image: vooz2/kinkudos:(?:([0-9]+\.[0-9]+\.[0-9]+)|\$\{KINKUDOS_IMAGE_TAG:-([0-9]+\.[0-9]+\.[0-9]+)\})\s*$",
+        r"(?m)^\s*image: \$\{KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos\}:\$\{KINKUDOS_IMAGE_TAG:-([0-9]+\.[0-9]+\.[0-9]+)\}\s*$",
     ),
     "deploy/hostinger/compose.yaml": version_from(
         ROOT / "deploy" / "hostinger" / "compose.yaml",
-        r"(?m)^\s*image: vooz2/kinkudos:(?:([0-9]+\.[0-9]+\.[0-9]+)|\$\{KINKUDOS_IMAGE_TAG:-([0-9]+\.[0-9]+\.[0-9]+)\})\s*$",
+        r"(?m)^\s*image: \$\{KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos\}:\$\{KINKUDOS_IMAGE_TAG:-([0-9]+\.[0-9]+\.[0-9]+)\}\s*$",
     ),
 }
 if len(set(versions.values())) != 1:
