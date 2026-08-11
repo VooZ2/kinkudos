@@ -190,7 +190,7 @@ class NetworkAccessTests(TestCase):
         )
         self.assertNotIn("child_id", self.client.session)
 
-    @patch("economy.views.smtp_config", return_value={"enabled": True})
+    @patch("economy.views.session.smtp_config", return_value={"enabled": True})
     def test_active_child_session_does_not_block_parent_password_recovery(self, smtp_config):
         self.restrict_children()
         self.sign_in_child()

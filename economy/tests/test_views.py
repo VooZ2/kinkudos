@@ -229,7 +229,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, ">Patvirtinti</button>", html=False)
         self.assertNotContains(response, ">Atmesti</button>", html=False)
 
-    @patch("economy.views.notify_proposal_decision")
+    @patch("economy.views.parent_actions.notify_proposal_decision")
     def test_proposal_decision_is_one_time_and_notifies_only_after_success(self, notify):
         proposal = Proposal.objects.create(
             child=self.child_one,
@@ -421,7 +421,7 @@ class AccessAndWorkflowTests(TestCase):
             ).exists()
         )
 
-    @patch("economy.views.notify_reward_request")
+    @patch("economy.views.child.notify_reward_request")
     def test_reward_request_notifies_parents(self, notify):
         self.login_child(self.child_one, "1234")
 
@@ -451,7 +451,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Veiksmų istorija")
         self.assertContains(response, "Child One · Testas")
 
-    @patch("economy.views.notify_task_decision")
+    @patch("economy.views.parent_actions.notify_task_decision")
     def test_task_approval_and_rejection_notify_the_affected_child(self, notify):
         self.client.login(username="tevai", password=self.parent_password)
         approved = self.child_one.task_claims.create(
@@ -478,7 +478,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(notify.call_args.args[0].child, self.child_one)
         self.assertFalse(notify.call_args.kwargs["approved"])
 
-    @patch("economy.views.notify_reward_decision")
+    @patch("economy.views.parent_actions.notify_reward_decision")
     def test_reward_approval_and_rejection_notify_the_affected_child(self, notify):
         post_ledger_entry(
             child=self.child_one,
@@ -1530,7 +1530,7 @@ class AccessAndWorkflowTests(TestCase):
             return post_ledger_entry(**kwargs)
 
         with patch(
-            "economy.views.post_ledger_entry",
+            "economy.views.parent_actions.post_ledger_entry",
             side_effect=fail_on_second_entry,
         ):
             with self.assertRaises(RuntimeError):

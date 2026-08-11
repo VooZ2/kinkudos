@@ -179,7 +179,7 @@ class FeedbackWorkflowTests(TestCase):
         self.assertNotIn("Before posting on GitHub", content)
         self.assertIn('href="https://github.com/VooZ2/kinkudos"', content)
 
-    @patch("economy.views.send_mail", side_effect=RuntimeError("SMTP unavailable"))
+    @patch("economy.views.feedback.send_mail", side_effect=RuntimeError("SMTP unavailable"))
     def test_smtp_failure_does_not_lose_feedback(self, _send_mail):
         self.client.login(username="parent", password="Safe-feedback-test-123!")
 

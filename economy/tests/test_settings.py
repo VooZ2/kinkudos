@@ -178,7 +178,7 @@ class ParentSettingsTests(TestCase):
         self.assertEqual(family.lottery_ticket_cost, 15)
         self.assertEqual(family.lottery_weekly_limit, 3)
 
-    @patch("economy.views.verify_smtp")
+    @patch("economy.views.parent_settings.verify_smtp")
     def test_admin_password_is_required_before_saving_smtp(self, verify):
         with TemporaryDirectory() as directory:
             path = Path(directory) / "settings.json"
@@ -192,7 +192,7 @@ class ParentSettingsTests(TestCase):
                 verify.assert_not_called()
                 self.assertFalse(path.exists())
 
-    @patch("economy.views.verify_smtp")
+    @patch("economy.views.parent_settings.verify_smtp")
     def test_admin_can_verify_and_save_smtp_outside_database(self, verify):
         with TemporaryDirectory() as directory:
             path = Path(directory) / "settings.json"
@@ -215,7 +215,7 @@ class ParentSettingsTests(TestCase):
                     "smtp-secret",
                 )
 
-    @patch("economy.views.verify_smtp")
+    @patch("economy.views.parent_settings.verify_smtp")
     def test_non_admin_cannot_change_smtp(self, verify):
         self.client.force_login(self.parent)
         self.client.post(reverse("parent_configure_smtp"), self.smtp_payload())
