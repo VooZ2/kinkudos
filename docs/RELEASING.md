@@ -177,3 +177,54 @@ The version shown in the application header must always remain a link to
 The repository Actions secret `DOCKERHUB_TOKEN` must contain only the Docker
 Hub access-token value, without a username or `username:` prefix. The
 publishing Docker ID is `vooz2`.
+
+## Release candidate QA
+
+Pushing a `release/<version>` branch runs
+`.github/workflows/release-candidate.yml`. The workflow validates the exact
+source commit, builds `linux/amd64` and `linux/arm64` images, and publishes
+only the immutable candidate tag `<version>-rc.<short-sha>` to GHCR and Docker
+Hub. It also uploads `kinkudos-<version>.tar.gz` and its checksum to the
+prerelease `v<version>-rc.<short-sha>`. It never updates a stable version tag,
+a minor-series tag, or `latest`.
+
+For fresh-install acceptance testing, use the installer from the exact source
+commit and point it at the candidate assets:
+
+```sh
+version=26.6.5
+candidate_tag=26.6.5-rc.<short-sha>
+source_sha=<full-source-sha>
+curl -fsSL "https://raw.githubusercontent.com/VooZ2/kinkudos/$source_sha/deploy/install.sh" \
+  -o /tmp/kinkudos-install.sh
+KINKUDOS_VERSION="$version" \
+KINKUDOS_RELEASE_BASE_URL="https://github.com/VooZ2/kinkudos/releases/download/v$candidate_tag" \
+KINKUDOS_IMAGE_TAG="$candidate_tag" \
+sh /tmp/kinkudos-install.sh
+```
+
+For upgrade acceptance testing, download both named assets from the candidate
+prerelease, then pass the candidate image tag through `sudo` so the extracted
+Compose files pull the RC image:
+
+```sh
+version=26.6.5
+candidate_tag=26.6.5-rc.<short-sha>
+gh release download "v$candidate_tag" --repo VooZ2/kinkudos \
+  --pattern "kinkudos-$version.tar.gz" \
+  --pattern "kinkudos-$version.tar.gz.sha256"
+sha256sum -c "kinkudos-$version.tar.gz.sha256"
+tar -xzf "kinkudos-$version.tar.gz"
+sudo env KINKUDOS_IMAGE_TAG="$candidate_tag" sh \
+  "kinkudos-$version/deploy/install-release.sh" \
+  "kinkudos-$version.tar.gz" \
+  "kinkudos-$version.tar.gz.sha256" \
+  "$version" \
+  "$(pwd)/kinkudos-$version"
+```
+
+Record the workflow's source SHA, candidate manifest digest, both image
+architectures, prerelease asset URLs, and checksum before beginning VPS tests.
+Candidate QA is not stable-release authorization: do not merge to `main`,
+create a stable `v<version>` tag, publish stable image aliases, or deploy from
+the candidate workflow.
