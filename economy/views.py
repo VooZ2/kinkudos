@@ -162,6 +162,7 @@ from .services import (
     cancel_reward_request,
     close_savings_goal,
     complete_assigned_task,
+    deactivate_parent_account,
     delete_savings_goal,
     keep_goal_active,
     post_ledger_entry,
@@ -2512,21 +2513,8 @@ def parent_remove_parent_account(request, account_id):
             request,
             _("Only a parent administrator can manage an administrator account."),
         )
-    elif account.is_staff and get_user_model().objects.filter(
-        is_active=True,
-        is_staff=True,
-    ).count() <= 1:
-        messages.error(request, _("You cannot remove the last active parent administrator."))
-    elif get_user_model().objects.filter(is_active=True).count() <= 1:
-        messages.error(request, _("You cannot remove the last active parent account."))
     else:
-        with transaction.atomic():
-            deactivated = get_user_model().objects.filter(
-                pk=account.pk,
-                is_active=True,
-            ).update(is_active=False)
-            if deactivated:
-                PushSubscription.objects.filter(user=account).delete()
+        deactivated = deactivate_parent_account(account)
         if deactivated:
             messages.success(
                 request,
