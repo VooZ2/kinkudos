@@ -38,8 +38,8 @@ Vaiko pasirinkimas yra atskiras nuo išplėstinio filtrų lango. Pasirinkus vaik
 Istorija filtruojama iškart; vien norint pakeisti vaiką nereikia atidaryti
 **Filtrų** ar dar kartą spausti **Taikyti**. Kiti aktyvūs URL filtrai išlieka.
 
-<details class="screenshot-disclosure">
-<summary>Peržiūrėti tėvų veiksmų istoriją telefone</summary>
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti tėvų veiksmų istoriją telefone</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-activity-history-mobile-26-6-4.png" alt="Tėvų veiksmų istorija telefone" loading="lazy">
 </details>
 

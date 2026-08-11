@@ -14,19 +14,19 @@ edit forms open in dialogs that also fit small screens.
 
 <img class="screenshot-image" src="../../assets/parent-settings-devices-26-6-4.png" alt="Parent settings with paired devices" loading="lazy">
 
-<details class="screenshot-disclosure">
-<summary>View paired devices on mobile</summary>
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View paired devices on mobile</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-settings-devices-mobile-26-6-4.png" alt="Paired devices in parent settings on mobile" loading="lazy">
 </details>
 
-<details class="screenshot-disclosure">
-<summary>View Accounts on desktop and mobile</summary>
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View Accounts on desktop and mobile</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-settings-accounts-26-6-4.png" alt="Accounts in parent settings on desktop" loading="lazy">
 <img class="screenshot-image" src="../../assets/parent-settings-accounts-mobile-26-6-4.png" alt="Accounts in parent settings on mobile" loading="lazy">
 </details>
 
-<details class="screenshot-disclosure">
-<summary>View the account edit dialog</summary>
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View the account edit dialog</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-settings-account-edit-26-6-4.png" alt="Child profile edit dialog in parent settings" loading="lazy">
 <img class="screenshot-image" src="../../assets/parent-settings-account-edit-mobile-26-6-4.png" alt="Child profile edit dialog on mobile" loading="lazy">
 </details>
@@ -118,6 +118,12 @@ address, or CIDR network per line, such as `192.0.2.25`, `192.0.2.0/24`, or
 `2001:db8::/64`. Before choosing **Restrict all access**, include the current IP
 shown on the page. A wrong rule can lock everyone out and requires server
 administrator recovery.
+
+In **Restrict child access** mode, parent login and password-recovery pages
+remain available even when the browser has an active child session. A parent can
+therefore authenticate or recover the account from that device. After
+authentication, the request is evaluated as parent access; child-only and pairing
+flows remain restricted as child routes.
 
 ## Email and notifications
 
