@@ -4,7 +4,7 @@ from pathlib import Path
 from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "26.6.7")
+APP_VERSION = os.environ.get("KINKUDOS_APP_VERSION", "26.6.8")
 
 
 def env_bool(name, default=False):
@@ -87,7 +87,12 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": Path(os.environ.get("KINKUDOS_DATABASE_PATH", BASE_DIR / "data" / "kinkudos.sqlite3")),
-        "OPTIONS": {"timeout": 20},
+        "OPTIONS": {
+            "timeout": 20,
+            # Begin write transactions immediately so concurrent workers fail
+            # cleanly on SQLite instead of racing under deferred locks.
+            "transaction_mode": "IMMEDIATE",
+        },
     }
 }
 
@@ -149,7 +154,7 @@ DEVICE_COOKIE_MAX_AGE = int(
 )
 TRUSTED_PROXY_NETWORKS = env_list(
     "KINKUDOS_TRUSTED_PROXIES",
-    "127.0.0.0/8,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16",
+    "127.0.0.0/8,::1/128",
 )
 CLIENT_IP_HEADER = os.environ.get(
     "KINKUDOS_CLIENT_IP_HEADER",
@@ -157,6 +162,11 @@ CLIENT_IP_HEADER = os.environ.get(
 )
 DJANGO_ADMIN_ENABLED = env_bool("KINKUDOS_DJANGO_ADMIN_ENABLED", False)
 SETUP_TOKEN = secret_value("KINKUDOS_SETUP_TOKEN")
+SETUP_TOKEN_MIN_LENGTH = int(os.environ.get("KINKUDOS_SETUP_TOKEN_MIN_LENGTH", "32"))
+SMTP_ALLOW_PRIVATE_DESTINATIONS = env_bool(
+    "KINKUDOS_SMTP_ALLOW_PRIVATE_DESTINATIONS",
+    False,
+)
 
 EMAIL_ENABLED = env_bool("KINKUDOS_EMAIL_ENABLED", False)
 EMAIL_BACKEND = "economy.email_backend.EmailBackend"

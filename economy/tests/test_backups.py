@@ -4,7 +4,18 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from economy.backups import backup_status
 from economy.models import BackupAuditEvent
+
+
+@override_settings(LANGUAGE_CODE="en")
+class BackupStatusHelperTests(TestCase):
+    @patch("economy.backups._request", side_effect=RuntimeError("secret agent detail"))
+    def test_backup_status_does_not_expose_exception_text(self, _request):
+        status = backup_status()
+        self.assertFalse(status["available"])
+        self.assertEqual(status["error"], "")
+        self.assertNotIn("secret agent detail", status.values())
 
 
 @override_settings(LANGUAGE_CODE="en")
@@ -21,7 +32,10 @@ class BackupSettingsTests(TestCase):
             password="Safe-backup-viewer-123!",
         )
 
-    @patch("economy.views.parent_dashboard.backup_status")
+    def _status_response(self):
+        return self.client.get(reverse("parent_backup_status"))
+
+    @patch("economy.views.parent_settings.backup_status")
     def test_all_parents_can_see_status_but_only_admin_sees_controls(self, status):
         status.return_value = {
             "available": True,
@@ -35,13 +49,16 @@ class BackupSettingsTests(TestCase):
             "error": "",
         }
         self.client.force_login(self.parent)
-        response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "Backups")
-        self.assertContains(response, "Enabled")
-        self.assertNotContains(response, "Edit settings")
-        self.assertNotContains(response, "Back up now")
+        payload = self._status_response().json()
+        self.assertEqual(payload["summary_label"], "Enabled")
+        self.assertTrue(payload["can_run"])
 
-    @patch("economy.views.parent_dashboard.backup_status")
+        dashboard = self.client.get(reverse("parent_dashboard"))
+        self.assertContains(dashboard, "Backups")
+        self.assertNotContains(dashboard, "Edit settings")
+        self.assertNotContains(dashboard, "Back up now")
+
+    @patch("economy.views.parent_settings.backup_status")
     def test_unconfigured_backup_uses_neutral_values_and_negative_status(self, status):
         status.return_value = {
             "available": True,
@@ -56,17 +73,19 @@ class BackupSettingsTests(TestCase):
         }
         self.client.force_login(self.admin)
 
-        response = self.client.get(reverse("parent_dashboard"))
+        payload = self._status_response().json()
+        self.assertEqual(payload["summary_label"], "Not enabled")
+        self.assertEqual(payload["summary_class"], "service-status-bad")
+        self.assertEqual(payload["last_success_display"], "—")
+        self.assertFalse(payload["can_run"])
 
-        self.assertContains(response, "Not enabled")
-        self.assertContains(response, "service-status-bad")
-        self.assertNotContains(response, "REPLACE_WITH_REPOSITORY")
-        self.assertNotContains(response, "Backups not completed")
-        self.assertContains(response, "Edit settings")
-        self.assertContains(response, "Your account password", count=3)
-        self.assertNotContains(response, "Your current parent password")
+        dashboard = self.client.get(reverse("parent_dashboard"))
+        self.assertContains(dashboard, "Edit settings")
+        self.assertContains(dashboard, "Your account password", count=3)
+        self.assertNotContains(dashboard, "Your current parent password")
+        self.assertNotContains(dashboard, "REPLACE_WITH_REPOSITORY")
 
-    @patch("economy.views.parent_dashboard.backup_status")
+    @patch("economy.views.parent_settings.backup_status")
     def test_unavailable_backup_warning_uses_separate_warning_block(self, status):
         status.return_value = {
             "available": False,
@@ -81,15 +100,14 @@ class BackupSettingsTests(TestCase):
         }
         self.client.force_login(self.parent)
 
-        response = self.client.get(reverse("parent_dashboard"))
-
-        self.assertContains(response, 'class="danger-warning backup-warning"', html=False)
-        self.assertContains(
-            response,
+        payload = self._status_response().json()
+        self.assertIn(
             "The backup service is unavailable. Ask the server administrator to check the backup container.",
+            payload["unavailable_message"],
         )
+        self.assertEqual(payload["summary_label"], "Attention needed")
 
-    @patch("economy.views.parent_dashboard.backup_status")
+    @patch("economy.views.parent_settings.backup_status")
     def test_admin_can_open_backup_settings_when_service_is_unavailable(self, status):
         status.return_value = {
             "available": False,
@@ -109,7 +127,7 @@ class BackupSettingsTests(TestCase):
         self.assertContains(response, ">Edit settings</button>")
         self.assertContains(response, 'data-open-dialog="backup-settings-dialog"', html=False)
 
-    @patch("economy.views.parent_dashboard.backup_status")
+    @patch("economy.views.parent_settings.backup_status")
     def test_configured_backup_without_success_uses_attention_status(self, status):
         status.return_value = {
             "available": True,
@@ -124,13 +142,12 @@ class BackupSettingsTests(TestCase):
         }
         self.client.force_login(self.admin)
 
-        response = self.client.get(reverse("parent_dashboard"))
+        payload = self._status_response().json()
+        self.assertEqual(payload["summary_label"], "Attention needed")
+        self.assertEqual(payload["last_success_display"], "Backups not completed")
+        self.assertTrue(payload["can_run"])
 
-        self.assertContains(response, "Attention needed")
-        self.assertContains(response, "Backups not completed")
-        self.assertContains(response, "danger-warning")
-
-    @patch("economy.views.parent_dashboard.backup_status")
+    @patch("economy.views.parent_settings.backup_status")
     def test_running_backup_uses_the_main_status_indicator(self, status):
         status.return_value = {
             "available": True,
@@ -145,11 +162,10 @@ class BackupSettingsTests(TestCase):
         }
         self.client.force_login(self.admin)
 
-        response = self.client.get(reverse("parent_dashboard"))
-
-        self.assertContains(response, "Copying")
-        self.assertContains(response, "service-status-warning")
-        self.assertNotContains(response, "Backup in progress")
+        payload = self._status_response().json()
+        self.assertEqual(payload["summary_label"], "Copying")
+        self.assertEqual(payload["summary_class"], "service-status-warning")
+        self.assertTrue(payload["running"])
 
     def test_only_five_latest_backup_actions_are_shown(self):
         for index in range(7):
@@ -163,6 +179,26 @@ class BackupSettingsTests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
 
         self.assertEqual(len(response.context["backup_audit_events"]), 5)
+
+    def test_parent_dashboard_does_not_query_backup_agent_on_html_render(self):
+        self.client.force_login(self.admin)
+        with patch("economy.views.parent_settings.backup_status") as settings_status:
+            settings_status.return_value = {
+                "available": True,
+                "configured": True,
+                "provider": "s3",
+                "target": "s3.example.invalid/test/kinkudos",
+                "is_fresh": True,
+                "running": False,
+                "last_success": None,
+                "last_check": None,
+                "error": "",
+            }
+            response = self.client.get(reverse("parent_dashboard"))
+            self.assertEqual(response.status_code, 200)
+            settings_status.assert_not_called()
+            self.assertContains(response, "data-backup-status-url")
+            self.assertContains(response, "Checking…")
 
     @patch("economy.views.parent_settings.configure_backup")
     def test_admin_can_verify_and_save_configuration(self, configure):

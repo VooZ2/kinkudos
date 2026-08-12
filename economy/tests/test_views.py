@@ -19,7 +19,6 @@ from economy.forms import PenaltyForm, RewardForm, TaskForm
 from economy.models import (
     ChildProfile,
     FamilySettings,
-    LedgerEntry,
     LedgerKind,
     PenaltyTemplate,
     Proposal,
@@ -319,7 +318,11 @@ class AccessAndWorkflowTests(TestCase):
 
     @override_settings(VAPID_PRIVATE_KEY="configured")
     @patch("economy.push.webpush", side_effect=ValueError("push error"))
-    def test_saved_task_is_not_reported_as_500_when_push_fails(self, webpush_mock):
+    @patch("economy.push.transaction.on_commit", side_effect=lambda func: func())
+    @patch("economy.push._start_push_thread", side_effect=lambda target, args: target(*args))
+    def test_saved_task_is_not_reported_as_500_when_push_fails(
+        self, _start_thread, _on_commit, webpush_mock
+    ):
         PushSubscription.objects.create(
             user=self.parent,
             endpoint="https://push.example.test/subscription",
@@ -835,7 +838,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.6.7")
+        self.assertContains(response, "v26.6.8")
         self.assertContains(response, f'href="{reverse("changelog")}"', html=False)
         self.assertContains(response, "taškai")
         self.assertContains(response, "Kreditas -100")
@@ -877,7 +880,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, "Taškai ir darbai")
         self.assertContains(response, "Duomenys ir saugojimas")
         self.assertContains(response, "Tinklas ir saugumas")
-        self.assertContains(response, "Bilietų limitas per savaitę")
+        self.assertContains(response, "Kortelių limitas per savaitę")
         self.assertContains(
             response,
             "Limitas atnaujinamas kiekvieną pirmadienį, kiekvienam vaikui. "
@@ -920,7 +923,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
         self.assertContains(response, 'class="footer-product">KinKudos · ', html=False)
-        self.assertContains(response, "v26.6.7")
+        self.assertContains(response, "v26.6.8")
         self.assertContains(response, "Dokumentacija")
         self.assertContains(response, "https://docs.kinkudos.app/index.lt/")
         self.assertContains(response, "https://github.com/VooZ2/kinkudos")
@@ -1135,8 +1138,8 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.context["history_activity"], "adjustments")
         self.assertEqual(response.context["history_date"], "any")
 
-    def test_parent_history_is_limited_to_fifty_entries_from_the_last_seven_days(self):
-        entries = [
+    def test_parent_history_paginates_beyond_fifty_entries_for_any_time(self):
+        for index in range(52):
             post_ledger_entry(
                 child=self.child_one,
                 delta=index + 1,
@@ -1144,28 +1147,30 @@ class AccessAndWorkflowTests(TestCase):
                 description=f"Recent history {index}",
                 actor=self.parent,
             )
-            for index in range(52)
-        ]
-        old_entry = entries[0]
-        LedgerEntry.objects.filter(pk=old_entry.pk).update(
-            created_at=timezone.now() - timedelta(days=8)
-        )
         self.client.login(username="tevai", password=self.parent_password)
-
-        response = self.client.get(reverse("parent_dashboard"))
-
-        self.assertEqual(response.context["ledger_page"].paginator.count, 50)
-        self.assertNotContains(response, "Recent history 0")
-        self.assertNotContains(response, "Recent history 1")
 
         response = self.client.get(
             reverse("parent_dashboard"),
-            {"history_date": "any"},
+            {"history_child": self.child_one.pk, "history_date": "any"},
         )
 
-        self.assertEqual(response.context["ledger_page"].paginator.count, 50)
+        # 52 child-one entries, no silent 50-cap; pagination keeps pages of 10.
+        self.assertEqual(response.context["ledger_page"].paginator.count, 52)
+        self.assertEqual(response.context["ledger_page"].paginator.num_pages, 6)
+        self.assertContains(response, "Recent history 51")
         self.assertNotContains(response, "Recent history 0")
-        self.assertNotContains(response, "Recent history 1")
+
+        last_page = self.client.get(
+            reverse("parent_dashboard"),
+            {
+                "history_child": self.child_one.pk,
+                "history_date": "any",
+                "history_page": 6,
+            },
+        )
+        self.assertContains(last_page, "Recent history 0")
+        self.assertContains(last_page, "Recent history 1")
+        self.assertNotContains(last_page, "Sibling private entry")
 
     def test_parent_quick_actions_use_clear_icons_and_requested_order(self):
         self.client.login(username="tevai", password=self.parent_password)
@@ -1211,7 +1216,7 @@ class AccessAndWorkflowTests(TestCase):
         meta_row = html[html.index('<div class="child-metadata-row">') :]
         meta_row = meta_row[: meta_row.index("</div>")]
         self.assertIn("Kreditas -100", meta_row)
-        self.assertLess(meta_row.index("Kreditas"), meta_row.index("Bilietai"))
+        self.assertLess(meta_row.index("Kreditas"), meta_row.index("Kortelės"))
         self.assertNotIn("child-meta-sep", meta_row)
         nav_html = html[html.index('<nav class="parent-navigation"'):]
         nav_html = nav_html[:nav_html.index('</nav>')]
@@ -1318,10 +1323,10 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.6.7")
+        self.assertContains(response, "v26.6.8")
         self.assertContains(response, "Dabartinė versija")
         current_release = response.context["releases"][0]
-        self.assertEqual(current_release["version"], "26.6.7")
+        self.assertEqual(current_release["version"], "26.6.8")
         self.assertEqual(len(response.context["releases"]), 5)
         self.assertEqual(response.context["release_page"].paginator.per_page, 5)
         current_copy = " ".join(current_release["new"] + current_release["fixed"]).lower()
@@ -1329,7 +1334,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotIn("demo", current_copy)
         next_page = self.client.get(reverse("changelog"), {"page": 2})
         self.assertEqual(next_page.status_code, 200)
-        self.assertNotContains(next_page, "<h2>v26.6.7</h2>", html=False)
+        self.assertNotContains(next_page, "<h2>v26.6.8</h2>", html=False)
         self.assertContains(next_page, "Pakeitimų istorijos puslapiai")
 
     def test_parent_can_create_another_parent_account(self):
@@ -1457,6 +1462,39 @@ class AccessAndWorkflowTests(TestCase):
         self.child_one.refresh_from_db()
         self.assertFalse(self.child_one.is_active)
         self.assertTrue(self.child_one.ledger_entries.filter(description="Istorinis įrašas").exists())
+
+    def test_parent_mutations_reject_deactivated_children(self):
+        self.client.login(username="tevai", password=self.parent_password)
+        self.client.post(reverse("parent_remove_child_account", args=[self.child_one.pk]))
+        self.child_one.refresh_from_db()
+        self.assertFalse(self.child_one.is_active)
+        penalty = PenaltyTemplate.objects.create(
+            title="Inactive child penalty",
+            amount=-5,
+            icon="📵",
+        )
+        endpoints = (
+            (
+                reverse("parent_adjust_balance", args=[self.child_one.pk]),
+                {"amount": "1", "description": "Nope"},
+            ),
+            (
+                reverse("parent_apply_penalty", args=[self.child_one.pk]),
+                {"penalty_id": str(penalty.pk), "reason": "Nope"},
+            ),
+            (
+                reverse("parent_set_min_balance", args=[self.child_one.pk]),
+                {"min_balance": "-10"},
+            ),
+            (
+                reverse("parent_unlock_child", args=[self.child_one.pk]),
+                {},
+            ),
+        )
+        for url, payload in endpoints:
+            with self.subTest(url=url):
+                response = self.client.post(url, payload)
+                self.assertEqual(response.status_code, 404)
 
     def test_parent_can_disable_lottery_for_one_child(self):
         self.client.login(username="tevai", password=self.parent_password)
@@ -1778,7 +1816,52 @@ class AccessAndWorkflowTests(TestCase):
         )
         self.assertContains(response, "Dabartinis PIN neteisingas")
         self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.failed_pin_attempts, 1)
         self.assertTrue(self.child_one.verify_pin("1234"))
+
+    def test_child_change_pin_lockout_blocks_further_attempts(self):
+        self.login_child(self.child_one, "1234")
+        for _ in range(5):
+            response = self.client.post(
+                reverse("child_change_pin"),
+                {
+                    "current_pin": "9999",
+                    "new_pin": "2468",
+                    "confirm_pin": "2468",
+                },
+                follow=True,
+            )
+            self.assertContains(response, "Dabartinis PIN neteisingas")
+
+        self.child_one.refresh_from_db()
+        self.assertTrue(self.child_one.is_locked)
+
+        response = self.client.post(
+            reverse("child_change_pin"),
+            {
+                "current_pin": "1234",
+                "new_pin": "2468",
+                "confirm_pin": "2468",
+            },
+            follow=True,
+        )
+        self.assertContains(response, "Profilis trumpam užrakintas")
+        self.child_one.refresh_from_db()
+        self.assertTrue(self.child_one.is_locked)
+        self.assertTrue(check_password("1234", self.child_one.pin_hash))
+        self.assertFalse(check_password("2468", self.child_one.pin_hash))
+
+    def test_last_child_badge_follows_ui_language(self):
+        self.client.cookies["kinkudos_last_child"] = str(self.child_one.pk)
+        response = self.client.get(reverse("child_select"))
+        self.assertContains(response, "profile-card-last-badge")
+        self.assertContains(response, ">Paskutinis</span>", html=False)
+        self.assertNotContains(response, 'content: "Paskutinis"')
+
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+        response = self.client.get(reverse("child_select"))
+        self.assertContains(response, ">Last</span>", html=False)
+        self.assertNotContains(response, ">Paskutinis</span>", html=False)
 
     def test_child_avatar_is_cropped_and_served_as_webp(self):
         image_bytes = BytesIO()
@@ -1872,10 +1955,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.6.7',
+            '/static/icons/favicon-32.png?v=26.6.8',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.6.7")
-        self.assertContains(home, "/static/js/app.js?v=26.6.7")
+        self.assertContains(home, "/static/css/app.css?v=26.6.8")
+        self.assertContains(home, "/static/js/app.js?v=26.6.8")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1883,11 +1966,11 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.6.7",
+            "/static/icons/icon-192.png?v=26.6.8",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.6.7")
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.6.8")
         self.assertContains(worker, 'self.addEventListener("push"', html=False)
         self.assertContains(worker, 'self.addEventListener("notificationclick"', html=False)
         self.assertNotContains(worker, 'self.addEventListener("fetch"', html=False)

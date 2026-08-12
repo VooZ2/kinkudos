@@ -21,7 +21,7 @@ Task → submission → parent decision → points → reward or goal → histor
 | **Rewards and goals** | Children request rewards or suggest a new reward/savings goal. Parents decide and set the final point cost. A goal can use available spendable points or save points separately. |
 | **Points and history** | Every addition, deduction, gift, ticket purchase, or correction creates an append-only history entry. Corrections are new entries, never hidden edits. |
 | **Credit** | A parent can allow a child to spend into a negative balance up to a chosen lower limit. New reward requests pause once half of that credit is used. |
-| **Scratch tickets** | Optional family-controlled scratch tickets have a configurable cost, per-child weekly limit, transparent outcomes, and no loss below the lower balance limit. |
+| **Scratch tickets** | Optional family-controlled scratch tickets have a configurable cost, per-child weekly limit, outcomes that stay opaque on the board until reveal, and no loss below the lower balance limit. |
 | **Child worlds** | Children can select built-in themes, upload an avatar, choose daily random themes, change their own PIN, and suggest rewards or goals. |
 | **Notifications** | Parents and children can opt into browser notifications for relevant decisions and requests. On iPhone and iPad, the app must first be installed to the Home Screen. |
 | **Private feedback** | Parents and children can save a private idea or problem report inside KinKudos, with an optional screenshot. |

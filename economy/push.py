@@ -1,7 +1,9 @@
 import json
 import logging
+import threading
 
 from django.conf import settings
+from django.db import close_old_connections, transaction
 from django.urls import reverse
 from django.utils.translation import gettext as _
 from pywebpush import WebPushException, webpush
@@ -35,32 +37,55 @@ def _child_subscriptions(child):
     return PushSubscription.objects.filter(child=child, child__is_active=True)
 
 
+def _deliver_webpush(data, subscription_rows):
+    close_old_connections()
+    try:
+        for row in subscription_rows:
+            try:
+                webpush(
+                    subscription_info={
+                        "endpoint": row["endpoint"],
+                        "keys": {"p256dh": row["p256dh"], "auth": row["auth"]},
+                    },
+                    data=data,
+                    vapid_private_key=settings.VAPID_PRIVATE_KEY,
+                    vapid_claims={"sub": settings.VAPID_SUBJECT},
+                    ttl=86400,
+                    # Never block a request worker forever on a blackholed push endpoint.
+                    timeout=10,
+                )
+            except WebPushException as exc:
+                status_code = getattr(getattr(exc, "response", None), "status_code", None)
+                if status_code in {404, 410}:
+                    PushSubscription.objects.filter(pk=row["pk"]).delete()
+                else:
+                    logger.warning("Could not send Web Push: %s", exc)
+            except Exception:
+                # Push is optional; provider or key failures must never turn an
+                # already-saved request into an HTTP 500 response.
+                logger.exception("Unexpected Web Push error")
+    finally:
+        close_old_connections()
+
+
+def _start_push_thread(target, args):
+    threading.Thread(target=target, args=args, daemon=True).start()
+
+
 def _send(payload, subscriptions):
     if not settings.VAPID_PRIVATE_KEY:
         return
+    subscription_rows = list(
+        subscriptions.values("pk", "endpoint", "p256dh", "auth")
+    )
+    if not subscription_rows:
+        return
     data = json.dumps(payload)
-    for subscription in subscriptions:
-        try:
-            webpush(
-                subscription_info={
-                    "endpoint": subscription.endpoint,
-                    "keys": {"p256dh": subscription.p256dh, "auth": subscription.auth},
-                },
-                data=data,
-                vapid_private_key=settings.VAPID_PRIVATE_KEY,
-                vapid_claims={"sub": settings.VAPID_SUBJECT},
-                ttl=86400,
-            )
-        except WebPushException as exc:
-            status_code = getattr(getattr(exc, "response", None), "status_code", None)
-            if status_code in {404, 410}:
-                subscription.delete()
-            else:
-                logger.warning("Could not send Web Push: %s", exc)
-        except Exception:
-            # Push is optional; provider or key failures must never turn an
-            # already-saved request into an HTTP 500 response.
-            logger.exception("Unexpected Web Push error")
+
+    def deliver():
+        _start_push_thread(_deliver_webpush, (data, subscription_rows))
+
+    transaction.on_commit(deliver)
 
 
 def notify_task_claim(claim):
@@ -259,8 +284,8 @@ def notify_lottery_reminder(child):
             "title": str(theme_text(child.theme, "lottery_title")),
             "body": str(
                 _(
-                    "You have not bought a scratch ticket this week. It costs %(cost)s "
-                    "and you may win, get nothing, or lose points."
+                    "You have not bought a surprise card this week. It costs %(cost)s. "
+                    "Your points may go up, stay the same, or go down."
                 )
                 % {"cost": _currency_amount(ticket_cost, child)}
             ),

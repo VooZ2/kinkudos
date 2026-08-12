@@ -2,7 +2,7 @@ name: kinkudos
 
 services:
   app:
-    image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.6.7}
+    image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.6.8}
     user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"
     restart: unless-stopped
     read_only: true
@@ -38,7 +38,7 @@ services:
       KINKUDOS_LOG_LEVEL: INFO
       KINKUDOS_DEFAULT_LANGUAGE: "${KINKUDOS_DEFAULT_LANGUAGE:-en}"
       KINKUDOS_DEVICE_PAIRING_REQUIRED: "true"
-      KINKUDOS_TRUSTED_PROXIES: "${KINKUDOS_TRUSTED_PROXIES:-127.0.0.0/8,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16}"
+      KINKUDOS_TRUSTED_PROXIES: "${KINKUDOS_TRUSTED_PROXIES:-127.0.0.0/8,::1/128}"
     secrets:
       - django_secret_key
       - setup_token
@@ -67,7 +67,7 @@ services:
       com.centurylinklabs.watchtower.enable: "false"
 
   backup-agent:
-    image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.6.7}
+    image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.6.8}
     entrypoint: ["python", "/app/scripts/backup_agent.py"]
     command: []
     user: "${KINKUDOS_UID:-1000}:${KINKUDOS_GID:-1000}"

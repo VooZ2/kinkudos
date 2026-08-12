@@ -52,7 +52,8 @@ def backup_status():
             "configured": False,
             "running": False,
             "health": "unavailable",
-            "error": str(exc),
+            # Keep exception text in logs only; parents see a generic unavailable state.
+            "error": "",
         }
     last_success = parse_datetime(status.get("last_success_at") or "")
     status["is_fresh"] = bool(

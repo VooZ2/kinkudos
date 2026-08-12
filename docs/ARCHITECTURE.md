@@ -17,7 +17,7 @@ container-based TLS reverse proxy.
 
 There is no Node.js toolchain, SPA, or public API. Small internal JSON
 endpoints are used where necessary, such as child-state polling for
-automatic refresh.
+automatic refresh and deferred parent backup-status loading.
 
 ## Accounts
 **Parents** — multiple Django `User` accounts managed in the application.
@@ -36,12 +36,17 @@ edit or deactivate an administrator. The last active administrator cannot be
 deactivated. Deactivating any parent also removes that parent's push
 subscriptions. All parents may see backup health, but only the parent
 administrator may change backup credentials or request a manual backup.
+Backup health is loaded through a dedicated JSON endpoint after the parent
+dashboard HTML renders, so ordinary page loads do not block on the backup
+agent.
 
 **Children** — multiple `ChildProfile` records managed by parents. Before a
 device can see child names or submit a PIN, a parent pairs it with a
 high-entropy, revocable `DeviceToken`. Children then sign in with a four-digit
-PIN hashed with Argon2, never stored raw. Device, profile, IP, and site-wide
-attempt limits protect the PIN flow; five failed profile attempts also lock
+PIN hashed with Argon2, never stored raw. Device, profile, and IP attempt
+limits protect the PIN flow; a site-wide counter is retained for monitoring
+and logs a warning when the household threshold is crossed, but does not
+hard-lock every child. Five failed profile attempts also lock
 the profile for five minutes, and a parent can unlock it immediately. Child
 sessions are bound to the paired device and last 48 hours
 (`KINKUDOS_CHILD_SESSION_SECONDS`). A device may remember the last selected
@@ -58,8 +63,9 @@ evidence/screenshot retention periods, optional application-level network
 access mode and allowed IPv4/IPv6 CIDRs, password-recovery code hash, initial
 setup completion state, default interface language, and family timezone. The
 timezone is activated for requests and lottery reminders so daily/weekly rules
-follow the household clock. Not a source of app versioning or general PWA
-configuration.
+follow the household clock. `FamilySettings.load()` is cached only for the
+duration of an HTTP request so repeated reads do not re-query the singleton.
+Not a source of app versioning or general PWA configuration.
 
 **DeviceToken** / **DevicePairingLink** — a paired child browser/PWA and its
 short-lived, single-use bootstrap link. Only SHA-256 token digests are stored.
@@ -100,8 +106,10 @@ same database transaction that closes the item and creates its
 `assigned_task` ledger entry. Catalog-backed completion also creates a
 `TaskCompletion` record for that child and calendar day. This prevents a
 catalog task from being assigned while it awaits approval, is already
-assigned, or has already been credited that day. Cancelled items can be
-assigned again; completed catalog tasks become available on the next day.
+assigned, or has already been credited that day. The database enforces that
+invariant with a unique constraint on `(child, task, completed_on)`.
+Cancelled items can be assigned again; completed catalog tasks become
+available on the next day.
 
 Pending items are active only when `AssignedTaskBatch.assigned_on` equals the
 server-local calendar date. At midnight they disappear from the child's
@@ -171,7 +179,9 @@ parent-approved; one pending request per child at a time.
 **PushSubscription** — Web Push subscription for either a parent user or a
 paired child device (exactly one owner, enforced by a DB constraint). Browser
 endpoints must be public HTTPS URLs with bounded, structurally valid Web Push
-keys; subscription counts are bounded per parent and child device. Parent
+keys; hostname endpoints are resolved and every address must be globally
+routable (literal private IPs and special local names are rejected).
+Subscription counts are bounded per parent and child device. Parent
 queries include only active users. Parents are notified of new/revised task
 submissions, reward requests, suggestions, and birthday-change requests;
 children are notified of task, reward, suggestion, and birthday-change
@@ -194,8 +204,10 @@ worker handles Web Push and may send `kinkudos-state-changed` messages to open
 clients as a fast refresh signal, but it does not intercept normal HTML
 document navigation. Lightweight Parent workspace and Child session state
 polling runs where configured and remains the reliable refresh fallback. Push
-subscriptions are available to both parent and child sessions. iOS requires
-the app to be added to the home screen for Web Push to work.
+delivery is best-effort after the database commit on a short-lived background
+thread, with a hard per-endpoint timeout; push failures must not fail the user
+action. Push subscriptions are available to both parent and child sessions.
+iOS requires the app to be added to the home screen for Web Push to work.
 
 Application URL paths are canonical, lowercase English paths using kebab-case
 where needed and do not change with the selected interface language. Named URL
@@ -224,9 +236,14 @@ the shared parent palette.
 - TLS terminates at the operator's supported reverse proxy; Gunicorn is never
   published directly to the internet.
 - Forwarded client IP and scheme headers are honored only from configured
-  trusted proxy networks. Authentication limits use the resolved address.
-- Parent login, password recovery, device pairing, child PIN, and optional
-  Django admin endpoints have shared database-backed attempt limits.
+  trusted proxy networks. The default trusts loopback only
+  (`127.0.0.0/8`, `::1/128`); Traefik/NPM/Hostinger installs must set
+  `KINKUDOS_TRUSTED_PROXIES` to the reverse-proxy or Docker network CIDR.
+  Authentication limits use the resolved address.
+- Parent login, password recovery, device pairing, child PIN, initial setup
+  claim, and optional Django admin endpoints have shared database-backed
+  attempt limits. Operator-supplied setup tokens must meet a minimum length
+  floor (32 characters by default).
 - Child profiles are hidden until a parent pairs the device. Pairing links are
   single-use, expire after ten minutes, and pass their secret in the URL
   fragment so it is not written to normal HTTP access logs.
@@ -247,10 +264,12 @@ the shared parent palette.
   restricts scripts, forms, frames, workers, and plugins to the application
   origin; local image previews and existing inline styles remain supported.
 - Every parent/child request is authorized server-side.
-- Balance-changing operations use `transaction.atomic()` with row locking.
-  Proposal, reward-approval, reward-rejection, and reward-cancellation state
-  changes also claim `pending` rows with conditional updates, so SQLite does
-  not depend on `select_for_update()` alone for one-winner transitions.
+- Balance-changing operations use `transaction.atomic()`. SQLite is configured
+  with `transaction_mode=IMMEDIATE` and a matching `busy_timeout`. One-winner
+  state changes (task claims, assigned-task completion/cancel, reward and
+  proposal decisions, lottery reveal) claim rows with conditional
+  `UPDATE ... WHERE status=...` so SQLite does not depend on
+  `select_for_update()` alone.
 - Secrets are read only from Docker secret files or server environment
   variables — no default passwords/PINs/family data ship in the image.
 - Automatic Watchtower updates are disabled.
@@ -345,7 +364,11 @@ remain operator responsibilities.
 
 SMTP settings are editable only by the parent administrator after password
 confirmation. The SMTP password is stored in a separately permissioned local
-file under `secrets/`, never in the database, logs, or repository.
+file under `secrets/`, never in the database, logs, or repository. SMTP
+verification resolves the configured host and, by default, refuses
+non-global destinations (private, loopback, link-local). Self-hosted LAN
+SMTP requires an explicit `KINKUDOS_SMTP_ALLOW_PRIVATE_DESTINATIONS=true`
+escape hatch.
 
 ## Versioning
 MIT license, calendar-based `YY.FEATURE.FIX` versioning, and `main` must always

@@ -77,6 +77,7 @@ from economy.views.parent_dashboard import (
     parent_pending_state,
 )
 from economy.views.parent_settings import (
+    parent_backup_status,
     parent_configure_backup,
     parent_configure_smtp,
     parent_run_backup,
@@ -150,6 +151,7 @@ __all__ = [
     "parent_assign_penalty",
     "parent_assign_tasks",
     "parent_award_task",
+    "parent_backup_status",
     "parent_cancel_assigned_task",
     "parent_cancel_assigned_task_batch",
     "parent_close_goal",

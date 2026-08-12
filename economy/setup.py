@@ -27,9 +27,16 @@ def setup_is_available():
     )
 
 
+def setup_token_meets_entropy_floor(value):
+    token = (value or "").strip()
+    return len(token) >= settings.SETUP_TOKEN_MIN_LENGTH
+
+
 def token_is_valid(value):
     expected = settings.SETUP_TOKEN
-    return bool(expected and value and secrets.compare_digest(expected, value))
+    if not expected or not setup_token_meets_entropy_floor(expected):
+        return False
+    return bool(value and secrets.compare_digest(expected, value))
 
 
 def complete_setup(*, username, email, password, family_name, language, timezone_name):

@@ -14,9 +14,10 @@ Agree with the child about the ticket price, the weekly limit, and the fact
 that a ticket may win points, return no points, or lose points. A result can
 never take the child below their lower balance limit.
 
-The ticket’s outcome is chosen before the child reveals it. The child scratches
-all nine fields to reveal the result. KinKudos records the ticket price and the
-result separately in History.
+The ticket’s outcome is chosen before the child reveals it. Board cell values
+are not shown in the page until reveal; the child scratches all nine fields to
+see the preselected result. KinKudos records the ticket price and the result
+separately in History.
 
 ## Turn the feature on or off
 

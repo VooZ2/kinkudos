@@ -1,4 +1,6 @@
 
+import logging
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import (
@@ -34,6 +36,8 @@ from economy.models import (
 )
 from economy.net import client_ip
 from economy.rate_limit import register_attempt, reset_attempts
+
+logger = logging.getLogger("economy.views")
 
 
 @method_decorator(never_cache, name="dispatch")
@@ -179,13 +183,18 @@ def child_select(request):
                     300,
                     30,
                 ),
-                (
-                    AttemptCounter.Scope.CHILD_PIN_SITE,
-                    "site",
-                    300,
-                    60,
-                ),
             )
+            site_allowed = register_attempt(
+                AttemptCounter.Scope.CHILD_PIN_SITE,
+                "site",
+                window_seconds=300,
+                limit=60,
+            )
+            if not site_allowed:
+                logger.warning(
+                    "Child PIN site-wide attempt threshold exceeded for %s",
+                    client_ip(request),
+                )
             attempts_allowed = all(
                 register_attempt(
                     scope,

@@ -8,6 +8,7 @@ from datetime import timedelta
 from typing import ClassVar
 from urllib.parse import urlsplit
 
+from asgiref.local import Local
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.core.exceptions import ValidationError
@@ -19,6 +20,9 @@ from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
 from .device_detection import identify_device
+from .net import require_global_destination
+
+_family_settings_cache = Local()
 
 DEVICE_CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 PARENT_PUSH_SUBSCRIPTION_LIMIT = 10
@@ -90,6 +94,12 @@ def validate_push_subscription_data(endpoint, p256dh, auth):
             (".localhost", ".local", ".internal", ".home.arpa")
         ):
             raise ValidationError({"endpoint": _("The Web Push endpoint is invalid.")})
+        try:
+            require_global_destination(ascii_hostname, port or 443)
+        except ValueError as exc:
+            raise ValidationError(
+                {"endpoint": _("The Web Push endpoint is invalid.")}
+            ) from exc
 
     public_key = _decode_web_push_key(
         p256dh,
@@ -163,12 +173,45 @@ class FamilySettings(models.Model):
 
     def save(self, *args, **kwargs):
         self.pk = 1
+        update_fields = kwargs.get("update_fields")
+        if update_fields is not None and not type(self).objects.filter(pk=1).exists():
+            # Avoid update_fields against a missing singleton (stale request-local
+            # instance after a rolled-back transaction, or first insert).
+            kwargs = {
+                key: value
+                for key, value in kwargs.items()
+                if key not in {"update_fields", "force_update"}
+            }
+            self._state.adding = True
         super().save(*args, **kwargs)
+        if getattr(_family_settings_cache, "active", False):
+            _family_settings_cache.instance = self
 
     @classmethod
     def load(cls):
+        if getattr(_family_settings_cache, "active", False):
+            cached = getattr(_family_settings_cache, "instance", None)
+            if cached is not None:
+                return cached
         instance, _ = cls.objects.get_or_create(pk=1)
+        if getattr(_family_settings_cache, "active", False):
+            _family_settings_cache.instance = instance
         return instance
+
+    @classmethod
+    def clear_load_cache(cls):
+        if hasattr(_family_settings_cache, "instance"):
+            del _family_settings_cache.instance
+
+    @classmethod
+    def activate_load_cache(cls):
+        cls.clear_load_cache()
+        _family_settings_cache.active = True
+
+    @classmethod
+    def deactivate_load_cache(cls):
+        cls.clear_load_cache()
+        _family_settings_cache.active = False
 
     @property
     def display_name(self):
@@ -351,6 +394,7 @@ class AttemptCounter(models.Model):
         PASSWORD_RESET_ACCOUNT = "password_reset_account", _("Password reset by account")
         DEVICE_PAIRING = "device_pairing", _("Device pairing")
         ADMIN_LOGIN_IP = "admin_login_ip", _("Admin login by IP")
+        SETUP_CLAIM_IP = "setup_claim_ip", _("Initial setup by IP")
 
     scope = models.CharField(max_length=32, choices=Scope.choices)
     key_hash = models.CharField(max_length=64)
@@ -649,10 +693,10 @@ class TaskCompletion(models.Model):
 
     class Meta:
         ordering: ClassVar = ["-created_at", "-pk"]
-        indexes: ClassVar = [
-            models.Index(
+        constraints: ClassVar = [
+            models.UniqueConstraint(
                 fields=["child", "task", "completed_on"],
-                name="task_done_child_day_idx",
+                name="unique_task_completion_per_child_day",
             )
         ]
 
@@ -903,7 +947,7 @@ class LedgerKind(models.TextChoices):
     ASSIGNED_TASK = "assigned_task", _("Assigned task")
     PENALTY = "penalty", _("Penalty")
     REWARD = "reward", _("Reward")
-    LOTTERY = "lottery", _("Lottery")
+    LOTTERY = "lottery", _("Surprise card")
     ADJUSTMENT = "adjustment", _("Adjustment")
     GIFT = "gift", _("Gift")
     BIRTHDAY = "birthday", _("Birthday")

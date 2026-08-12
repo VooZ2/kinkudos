@@ -43,6 +43,23 @@ from economy.push import (
 )
 
 
+class SyncPushDeliveryMixin:
+    def setUp(self):
+        super().setUp()
+        self._on_commit = patch(
+            "economy.push.transaction.on_commit",
+            side_effect=lambda func: func(),
+        )
+        self._thread = patch(
+            "economy.push._start_push_thread",
+            side_effect=lambda target, args: target(*args),
+        )
+        self._on_commit.start()
+        self._thread.start()
+        self.addCleanup(self._on_commit.stop)
+        self.addCleanup(self._thread.stop)
+
+
 class VapidFilePathTests(TestCase):
     def test_docker_secret_pem_path_is_accepted_by_vapid_library(self):
         key = ec.generate_private_key(ec.SECP256R1())
@@ -70,8 +87,9 @@ class VapidFilePathTests(TestCase):
     VAPID_PRIVATE_KEY="test-private-key",
     VAPID_SUBJECT="mailto:test@example.com",
 )
-class ChildDecisionPushTests(TestCase):
+class ChildDecisionPushTests(SyncPushDeliveryMixin, TestCase):
     def setUp(self):
+        super().setUp()
         self.parent = get_user_model().objects.create_user("parent")
         self.child = ChildProfile.objects.create(name="Child One", theme_selected=True)
         self.other_child = ChildProfile.objects.create(name="Child Two", theme_selected=True)
@@ -123,6 +141,22 @@ class ChildDecisionPushTests(TestCase):
             payload["url"],
             f"{reverse('child_dashboard')}#paskirti-darbai",
         )
+        self.assertEqual(webpush.call_args.kwargs["timeout"], 10)
+
+    @patch("economy.push.webpush")
+    def test_webpush_calls_use_an_explicit_timeout(self, webpush):
+        task = Task.objects.create(title="Paklota lova", reward=20)
+        claim = TaskClaim.objects.create(
+            child=self.child,
+            task=task,
+            task_title=task.title,
+            reward_snapshot=task.reward,
+        )
+
+        notify_task_decision(claim, approved=True)
+
+        webpush.assert_called_once()
+        self.assertEqual(webpush.call_args.kwargs["timeout"], 10)
 
     @patch("economy.push.webpush")
     def test_task_decision_targets_only_the_affected_child(self, webpush):
@@ -279,6 +313,12 @@ class PushSubscriptionValidationTests(TestCase):
             name="Push child",
             theme_selected=True,
         )
+        self.resolve_patcher = patch(
+            "economy.models.require_global_destination",
+            return_value=[],
+        )
+        self.resolve_patcher.start()
+        self.addCleanup(self.resolve_patcher.stop)
 
     @staticmethod
     def keys():
@@ -367,7 +407,7 @@ class PushSubscriptionValidationTests(TestCase):
         self.assertTrue(PushSubscription.objects.filter(child=self.child).exists())
 
 
-class InactiveParentPushTests(TestCase):
+class InactiveParentPushTests(SyncPushDeliveryMixin, TestCase):
     @patch("economy.push.webpush")
     def test_inactive_parent_subscriptions_are_not_notified(self, webpush):
         parent = get_user_model().objects.create_user("inactive-parent")

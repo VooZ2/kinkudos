@@ -62,6 +62,38 @@ class EconomyServiceTests(TestCase):
         with self.assertRaises(ValidationError):
             entry.delete()
 
+    def test_double_task_approval_is_one_winner(self):
+        claim = submit_task(child=self.child, task=self.task)
+        first = approve_task_claim(claim=claim, actor=self.parent)
+        with self.assertRaisesMessage(
+            ValidationError,
+            "This request has already been resolved.",
+        ):
+            approve_task_claim(claim=claim, actor=self.parent)
+        self.child.refresh_from_db()
+        self.assertEqual(self.child.balance, 50)
+        self.assertEqual(
+            LedgerEntry.objects.filter(
+                child=self.child,
+                kind=LedgerKind.TASK,
+                source_id=claim.pk,
+            ).count(),
+            1,
+        )
+        self.assertEqual(first.balance_after, 50)
+
+    def test_double_task_rejection_is_one_winner(self):
+        claim = submit_task(child=self.child, task=self.task)
+        reject_task_claim(claim=claim, actor=self.parent, reason="No")
+        with self.assertRaisesMessage(
+            ValidationError,
+            "This request has already been resolved.",
+        ):
+            reject_task_claim(claim=claim, actor=self.parent, reason="Again")
+        claim.refresh_from_db()
+        self.assertEqual(claim.status, RequestStatus.REJECTED)
+        self.assertEqual(claim.rejection_reason, "No")
+
     def test_duplicate_pending_task_is_rejected(self):
         submit_task(child=self.child, task=self.task)
         with self.assertRaises(ValidationError):

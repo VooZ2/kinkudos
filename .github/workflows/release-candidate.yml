@@ -6,7 +6,7 @@ on:
       source_ref:
         description: Release branch or commit to build
         required: true
-        default: release/26.6.6
+        default: release/26.6.8
         type: string
 
 concurrency:

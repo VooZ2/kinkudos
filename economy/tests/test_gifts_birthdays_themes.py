@@ -149,6 +149,16 @@ class ThemeAndViewTests(TestCase):
         self.assertContains(response, reverse("child_give_points"))
         self.assertContains(response, reverse("child_set_birth_date"))
         self.assertContains(response, "Hero Missions")
+        self.assertContains(response, "gift-launcher", count=1)
+        self.assertContains(response, 'data-open-dialog="gift-dialog"', count=1)
+        self.assertContains(response, 'class="floating-actions"', html=False)
+        body = response.content.decode()
+        floating = body[body.index('class="floating-actions"') :]
+        floating = floating[: floating.index("</div>")]
+        self.assertIn("gift-launcher", floating)
+        self.assertIn("feedback-launcher", floating)
+        page_main = body[body.index('<main class="page">') : body.index("</main>")]
+        self.assertNotIn("gift-launcher", page_main)
 
     def test_blockville_theme_has_currency_and_game_copy(self):
         child = ChildProfile.objects.create(

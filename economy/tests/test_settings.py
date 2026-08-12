@@ -16,6 +16,22 @@ from economy.models import ChildProfile, FamilySettings, PenaltyTemplate, Reward
 ROOT = Path(__file__).resolve().parents[2]
 
 
+class FamilySettingsSingletonTests(TestCase):
+    def test_update_fields_save_recovers_when_singleton_row_is_missing(self):
+        FamilySettings.objects.filter(pk=1).delete()
+        ghost = FamilySettings(pk=1, family_name="Ghost", currency_name="Old")
+        ghost._state.adding = False
+        ghost._state.db = "default"
+        ghost.family_name = "Aurora"
+        ghost.currency_name = "Tokenai"
+
+        ghost.save(update_fields=["family_name", "currency_name"])
+
+        family = FamilySettings.objects.get(pk=1)
+        self.assertEqual(family.family_name, "Aurora")
+        self.assertEqual(family.currency_name, "Tokenai")
+
+
 class DefaultSettingsTests(SimpleTestCase):
     def test_debug_defaults_to_false_without_environment_override(self):
         environment = os.environ.copy()
@@ -85,8 +101,8 @@ class ParentSettingsTests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
 
         self.assertContains(response, "Points for a task photo")
-        self.assertContains(response, "Scratch ticket price")
-        self.assertContains(response, "Weekly ticket limit")
+        self.assertContains(response, "Surprise card price")
+        self.assertContains(response, "Weekly card limit")
         self.assertContains(response, "Keep feedback images for")
         self.assertContains(response, 'class="catalog-divider"', count=3)
 
@@ -271,7 +287,7 @@ class ParentSettingsTests(TestCase):
 
         self.assertContains(response, 'class="settings-row"', count=7, html=False)
         self.assertContains(response, 'class="settings-row checkbox-field"', count=1)
-        self.assertContains(response, "Weekly ticket limit")
+        self.assertContains(response, "Weekly card limit")
         self.assertContains(
             response,
             "The limit resets every Monday for each child. The default is 3.",
@@ -286,7 +302,7 @@ class ParentSettingsTests(TestCase):
         child = ChildProfile.objects.create(name="Checkbox child")
         self.assertEqual(
             ChildEditForm(child=child).fields["lottery_enabled"].label,
-            "Enable scratch tickets",
+            "Enable surprise cards",
         )
 
         stylesheet = (Path(__file__).resolve().parents[2] / "static" / "css" / "app.css").read_text(
@@ -357,7 +373,7 @@ class ParentSettingsTests(TestCase):
         for heading in (
             "Family",
             "Points and tasks",
-            "Scratch tickets",
+            "Surprise cards",
             "Data and retention",
             "Child devices",
             "Network and security",

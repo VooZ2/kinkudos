@@ -14,4 +14,6 @@ Installing gives KinKudos its own home-screen or app icon and is required for no
 
 Sign in on the device, then select the bell icon in the top bar and accept the browser permission prompt. Repeat this for each device that should receive notifications. An active parent receives alerts for child submissions, reward requests, suggestions, and birthday-change requests; a child receives relevant parent decisions, assigned work, gifts, birthday awards, and an optional lottery reminder. Deactivating a parent removes that account's push subscriptions, so it no longer receives parent notifications.
 
+Delivery is best-effort after the database commit on a short background thread with a hard per-endpoint timeout; a slow or failed push must not fail the user action. Always confirm state in the app itself.
+
 The browser subscription must use a normal public HTTPS Web Push endpoint. Obvious invalid, local, private, or non-HTTPS endpoints are rejected. If the bell reports that notifications cannot be enabled, check browser/site notification permissions, open the installed PWA on iPhone/iPad, make sure the device has internet access, and retry from the public HTTPS address. Revoking a child device removes its child notification subscription. Notifications are a convenience, so always check the app itself for the current state.

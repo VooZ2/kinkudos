@@ -147,20 +147,20 @@ def purchase_lottery_ticket(*, child, rng=None, current_date=None):
     )
     state = lottery_state(locked_child, current_date)
     errors = {
-        "open": _("Finish your open scratch ticket before buying another."),
-        "disabled": _("Scratch tickets are disabled."),
+        "open": _("Finish your open surprise card before buying another."),
+        "disabled": _("Surprise cards are disabled."),
         "weekly_limit": _(
-            "You have already used all %(limit)s scratch tickets this week."
+            "You have already used all %(limit)s surprise cards this week."
         )
         % {"limit": state["weekly_limit"]},
         "assigned_tasks": _(
-            "Complete the assigned tasks before buying a scratch ticket."
+            "Complete the assigned tasks before buying a surprise card."
         ),
         "credit_paused": _(
-            "Scratch tickets are paused until your point balance improves."
+            "Surprise cards are paused until your point balance improves."
         ),
         "balance": _(
-            "A scratch ticket can be bought only with %(cost)s points you have earned."
+            "A surprise card can be bought only with %(cost)s points you have earned."
         )
         % {"cost": state["ticket_cost"]},
     }
@@ -178,7 +178,7 @@ def purchase_lottery_ticket(*, child, rng=None, current_date=None):
         child=locked_child,
         delta=-state["ticket_cost"],
         kind=LedgerKind.LOTTERY,
-        description=_("Scratch ticket"),
+        description=_("Surprise card"),
         source_id=ticket.pk,
     )
     ticket.purchase_ledger_entry = purchase_entry
@@ -192,12 +192,24 @@ def reveal_lottery_ticket(*, ticket, child):
         pk=child.pk,
         is_active=True,
     )
-    locked_ticket = LotteryTicket.objects.select_for_update().get(
+    locked_ticket = LotteryTicket.objects.get(
         pk=ticket.pk,
         child=locked_child,
     )
     if locked_ticket.status == LotteryTicketStatus.REVEALED:
         return locked_ticket
+
+    revealed_at = timezone.now()
+    claimed = LotteryTicket.objects.filter(
+        pk=locked_ticket.pk,
+        child=locked_child,
+        status=LotteryTicketStatus.OPEN,
+    ).update(
+        status=LotteryTicketStatus.REVEALED,
+        revealed_at=revealed_at,
+    )
+    if not claimed:
+        return LotteryTicket.objects.get(pk=locked_ticket.pk)
 
     applied_delta = locked_ticket.prize_amount
     if applied_delta < 0:
@@ -212,21 +224,14 @@ def reveal_lottery_ticket(*, ticket, child):
         child=locked_child,
         delta=applied_delta,
         kind=LedgerKind.LOTTERY,
-        description=_("Scratch ticket result"),
+        description=_("Surprise card result"),
         source_id=locked_ticket.pk,
     )
-    locked_ticket.applied_delta = applied_delta
-    locked_ticket.result_ledger_entry = result_entry
-    locked_ticket.status = LotteryTicketStatus.REVEALED
-    locked_ticket.revealed_at = timezone.now()
-    locked_ticket.save(
-        update_fields=[
-            "applied_delta",
-            "result_ledger_entry",
-            "status",
-            "revealed_at",
-        ]
+    LotteryTicket.objects.filter(pk=locked_ticket.pk).update(
+        applied_delta=applied_delta,
+        result_ledger_entry=result_entry,
     )
+    locked_ticket.refresh_from_db()
     return locked_ticket
 
 

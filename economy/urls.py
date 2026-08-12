@@ -48,6 +48,7 @@ from .views import (
     parent_assign_penalty,
     parent_assign_tasks,
     parent_award_task,
+    parent_backup_status,
     parent_cancel_assigned_task,
     parent_cancel_assigned_task_batch,
     parent_close_goal,
@@ -451,6 +452,11 @@ urlpatterns = [
         "parents/settings/backup/",
         parent_configure_backup,
         name="parent_configure_backup",
+    ),
+    path(
+        "parents/settings/backup/status/",
+        parent_backup_status,
+        name="parent_backup_status",
     ),
     path(
         "parents/settings/email/",

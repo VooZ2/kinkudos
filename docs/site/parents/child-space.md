@@ -1,8 +1,8 @@
 # Child space
 
-Children see their own tasks, rewards, savings goals, recent History, and
-profile settings. They cannot see another child’s private information, PIN,
-balance, or requests.
+Children see their own tasks, rewards, savings goals, History (the five
+latest entries), and profile settings. They cannot see another child’s private
+information, PIN, balance, or requests.
 
 ## What a child can do
 
@@ -13,8 +13,12 @@ balance, or requests.
 | **Rewards** | Request an available reward when the spendable balance and credit rule allow it. A child may cancel their own request while it is pending. |
 | **Goals and suggestions** | Suggest a reward or savings goal. After a parent approves a goal suggestion, choose **Use available points** or **Save separately** from the goal card. |
 | **Scratch tickets** | Buy an optional ticket only when enabled for both the family and the child, the child has enough spendable points, and the weekly limit allows it. An open ticket must be finished before buying another. |
-| **Give points** | If another active child exists, send only points already earned to them. A child cannot transfer credit or points they do not have. |
-| **Feedback** | Send a private idea or problem report to the parents, optionally with a screenshot. |
+| **Give points** | If another active child exists, send only points already earned to them. Open the floating **Gift** control on the child dashboard. A child cannot transfer credit or points they do not have. |
+| **Feedback** | Send a private idea or problem report to the parents from the floating **Feedback** control, optionally with a screenshot. |
+
+Give points and Feedback sit in one floating action stack on the child
+dashboard so they stay spaced and do not cover task buttons; the page leaves
+room at the bottom for both controls.
 
 ## Balances and goals
 

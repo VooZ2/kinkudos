@@ -17,7 +17,6 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET
 
 from economy.auth import current_device, parent_required
-from economy.backups import backup_status
 from economy.email_config import public_smtp_config
 from economy.forms import (
     BackupSettingsForm,
@@ -535,8 +534,8 @@ def parent_dashboard(request):
         )
     else:
         history_child_id = ""
-    ledger_entries = list(ledger_query.order_by("-created_at", "-pk")[:50])
-    reward_decisions = list(reward_decisions.order_by("-decided_at", "-pk")[:50])
+    ledger_entries = list(ledger_query.order_by("-created_at", "-pk"))
+    reward_decisions = list(reward_decisions.order_by("-decided_at", "-pk"))
     reward_decisions_by_id = {
         reward_request.pk: reward_request
         for reward_request in reward_decisions
@@ -557,15 +556,15 @@ def parent_dashboard(request):
         reward_request.history_timestamp = reward_request.decided_at
         rejected_reward_decisions.append(reward_request)
     rejected_task_decisions = []
-    for task_claim in task_decisions.order_by("-decided_at", "-pk")[:50]:
+    for task_claim in task_decisions.order_by("-decided_at", "-pk"):
         task_claim.history_type = "task_decision"
         task_claim.history_timestamp = task_claim.decided_at
         rejected_task_decisions.append(task_claim)
-    proposal_history = list(proposal_decisions.order_by("-decided_at", "-pk")[:50])
+    proposal_history = list(proposal_decisions.order_by("-decided_at", "-pk"))
     for proposal in proposal_history:
         proposal.history_type = "proposal_decision"
         proposal.history_timestamp = proposal.decided_at
-    goal_events = list(goal_events_query.order_by("-created_at", "-pk")[:50])
+    goal_events = list(goal_events_query.order_by("-created_at", "-pk"))
     for event in goal_events:
         event.history_type = "goal_event"
         event.history_timestamp = event.created_at
@@ -580,7 +579,7 @@ def parent_dashboard(request):
         ],
         key=lambda entry: (entry.history_timestamp, entry.pk),
         reverse=True,
-    )[:50]
+    )
     ledger_page = Paginator(history_entries, 10).get_page(
         request.GET.get("history_page", 1)
     )
@@ -686,7 +685,7 @@ def parent_dashboard(request):
         "rewards": _("Rewards"),
         "goals": _("Goals"),
         "gifts": _("Gifts"),
-        "scratch": _("Scratch tickets"),
+        "scratch": _("Surprise cards"),
         "adjustments": _("Point adjustments"),
     }.get(history_activity, "")
     pending_requests = _pending_request_items(goals_by_child)
@@ -758,7 +757,6 @@ def parent_dashboard(request):
                 revoked_at__isnull=True
             ).select_related("created_by"),
             "current_device": current_device(request),
-            "backup_status": backup_status(),
             "backup_settings_form": BackupSettingsForm(),
             "smtp_status": public_smtp_config(),
             "smtp_settings_form": SmtpSettingsForm(

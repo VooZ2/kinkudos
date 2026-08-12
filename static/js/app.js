@@ -573,7 +573,7 @@ if (lotteryDialog) {
   const result = lotteryDialog.querySelector("[data-lottery-result]");
   const resultTitle = lotteryDialog.querySelector("[data-lottery-result-title]");
   const resultCopy = lotteryDialog.querySelector("[data-lottery-result-copy]");
-  const values = [...lotteryDialog.querySelectorAll("[data-lottery-value]")];
+  const values = [...lotteryDialog.querySelectorAll("[data-lottery-cell]")];
   const storageKey = `kinkudos-lottery-${lotteryDialog.dataset.ticketId}`;
   const revealed = new Set();
   let drawing = false;
@@ -665,6 +665,18 @@ if (lotteryDialog) {
     };
   }
 
+  function applyBoardValues(board) {
+    values.forEach((cell, index) => {
+      const value = Number(board[index] ?? 0);
+      cell.dataset.lotteryValue = String(value);
+      cell.textContent = value > 0 ? `+${value}` : String(value);
+      cell.classList.toggle("scratch-positive", value > 0);
+      cell.classList.toggle("scratch-negative", value <= 0);
+      cell.classList.remove("scratch-hidden");
+      cell.removeAttribute("aria-hidden");
+    });
+  }
+
   function clearCell(index) {
     const context = canvas.getContext("2d");
     const bounds = cellBounds(index);
@@ -714,6 +726,10 @@ if (lotteryDialog) {
       });
       const payload = await response.json();
       if (!response.ok || !payload.ok) throw new Error("Lottery reveal failed");
+      if (!Array.isArray(payload.values) || payload.values.length !== values.length) {
+        throw new Error("Lottery board missing");
+      }
+      applyBoardValues(payload.values);
       values.forEach(value => {
         if (Number(value.dataset.lotteryValue) === payload.matching_value && payload.matching_value !== 0) {
           value.classList.add("scratch-match");
@@ -1539,3 +1555,69 @@ if (parentStateUrl) {
   });
   scheduleParentStateCheck();
 }
+
+function escapeBackupText(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+async function loadBackupStatus() {
+  const section = document.querySelector("[data-backup-section]");
+  if (!section) return;
+  const statusUrl = section.dataset.backupStatusUrl;
+  if (!statusUrl) return;
+  try {
+    const response = await fetch(statusUrl, {
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: { Accept: "application/json", "X-Requested-With": "XMLHttpRequest" },
+    });
+    if (!response.ok || !response.headers.get("content-type")?.includes("application/json")) {
+      return;
+    }
+    const status = await response.json();
+    const summary = section.querySelector("[data-backup-summary]");
+    const summaryLabel = section.querySelector("[data-backup-summary-label]");
+    const details = section.querySelector("[data-backup-details]");
+    const runForm = section.querySelector("[data-backup-run-form]");
+    const runButton = section.querySelector("[data-backup-run-button]");
+    if (summary) {
+      summary.className = `service-status settings-summary-status ${status.summary_class}`;
+    }
+    if (summaryLabel) summaryLabel.textContent = status.summary_label;
+    if (details) {
+      if (status.unavailable_message) {
+        details.innerHTML = `<p class="danger-warning backup-warning">${escapeBackupText(status.unavailable_message)}</p>`;
+      } else {
+        const provider = escapeBackupText(status.provider || "—");
+        const target = escapeBackupText(status.target || "—");
+        const lastSuccess = escapeBackupText(status.last_success_display);
+        const lastCheck = escapeBackupText(status.last_check_display);
+        const error = status.error
+          ? `<p class="danger-warning backup-warning">${escapeBackupText(status.error)}</p>`
+          : "";
+        details.innerHTML = `
+          <dl class="service-details">
+            <div><dt>${escapeBackupText(section.dataset.labelProvider)}</dt><dd>${provider}</dd></div>
+            <div><dt>${escapeBackupText(section.dataset.labelRepository)}</dt><dd>${target}</dd></div>
+            <div><dt>${escapeBackupText(section.dataset.labelLastSuccess)}</dt><dd>${lastSuccess}</dd></div>
+            <div><dt>${escapeBackupText(section.dataset.labelLastCheck)}</dt><dd>${lastCheck}</dd></div>
+          </dl>
+          ${error}
+        `;
+      }
+    }
+    if (runForm) {
+      runForm.hidden = !status.can_run;
+      if (runButton) runButton.disabled = Boolean(status.running);
+    }
+  } catch (_error) {
+    // Keep the checking placeholder if the backup agent is unreachable.
+  }
+}
+
+loadBackupStatus();

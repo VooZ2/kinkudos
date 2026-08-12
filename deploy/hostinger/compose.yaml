@@ -1,6 +1,6 @@
 services:
   app:
-    image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.6.7}
+    image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.6.8}
     restart: unless-stopped
     read_only: true
     tmpfs:
@@ -23,7 +23,7 @@ services:
       KINKUDOS_HSTS_SECONDS: "31536000"
       KINKUDOS_LOG_LEVEL: INFO
       KINKUDOS_DEVICE_PAIRING_REQUIRED: "true"
-      KINKUDOS_TRUSTED_PROXIES: "127.0.0.0/8,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+      KINKUDOS_TRUSTED_PROXIES: "${KINKUDOS_TRUSTED_PROXIES:-10.0.0.0/8,172.16.0.0/12}"
     volumes:
       - kinkudos-data:/app/data
     expose:

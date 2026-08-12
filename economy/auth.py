@@ -4,7 +4,7 @@ from functools import wraps
 from django.conf import settings
 from django.contrib.auth.views import redirect_to_login
 from django.http import Http404
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 
 from .models import ChildProfile, DeviceToken
@@ -79,7 +79,7 @@ def child_required(view):
 
 
 def child_object_or_404(request, queryset, **lookup):
-    child = current_child(request)
+    child = getattr(request, "child", None) or current_child(request)
     if child is None:
         raise Http404
-    return queryset.get(child=child, **lookup)
+    return get_object_or_404(queryset, child=child, **lookup)

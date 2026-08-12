@@ -560,9 +560,9 @@ class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
             "family_name": _("Family name"),
             "photo_bonus_points": _("Points for a task photo"),
             "birthday_points": _("Birthday points"),
-            "lottery_enabled": _("Enable scratch tickets"),
-            "lottery_ticket_cost": _("Scratch ticket price"),
-            "lottery_weekly_limit": _("Weekly ticket limit"),
+            "lottery_enabled": _("Enable surprise cards"),
+            "lottery_ticket_cost": _("Surprise card price"),
+            "lottery_weekly_limit": _("Weekly card limit"),
             "evidence_retention_days": _("Keep task photos for"),
             "feedback_screenshot_retention_days": _("Keep feedback images for"),
         }
@@ -575,10 +575,10 @@ class FamilyPreferencesForm(StyledFormMixin, forms.ModelForm):
                 "Each child receives this many points once a year on their birthday. Use 0 to disable birthday gifts."
             ),
             "lottery_enabled": _(
-                "Turn scratch tickets on or off for every child."
+                "Turn surprise cards on or off for every child."
             ),
             "lottery_ticket_cost": _(
-                "The new price is used for every future ticket purchase."
+                "The new price is used for every future card purchase."
             ),
             "lottery_weekly_limit": _(
                 "The limit resets every Monday for each child. The default is 3."
@@ -994,10 +994,10 @@ class ChildEditForm(StyledFormMixin, forms.Form):
         label=_("Credit"), min_value=-MAX_POINT_AMOUNT, max_value=0
     )
     lottery_enabled = forms.BooleanField(
-        label=_("Enable scratch tickets"),
+        label=_("Enable surprise cards"),
         required=False,
         help_text=_(
-            "The family-wide scratch ticket switch must also be enabled."
+            "The family-wide surprise card switch must also be enabled."
         ),
     )
     birth_date = forms.DateField(

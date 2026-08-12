@@ -268,7 +268,7 @@ release updater and pass them again to every later Compose command that resolves
 or recreates images, for example:
 
 ```bash
-candidate_tag=26.6.6-rc.<short-sha>
+candidate_tag=26.6.8-rc.<short-sha>
 sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
   KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
 sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
@@ -276,9 +276,9 @@ sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
 ```
 
 The overrides are intentionally not persisted in the production `.env`. This is
-not the normal stable-user update workflow. For a stable `26.6.6` update, use
+not the normal stable-user update workflow. For a stable `26.6.8` update, use
 the procedure above without either override; the Compose defaults are the
-production `vooz2/kinkudos` package and `26.6.6`.
+production `vooz2/kinkudos` package and `26.6.8`.
 
 The updater validates the checksum and release metadata, pulls and smoke-tests
 the published image, checks host-directory ownership, backs up the live
@@ -334,8 +334,9 @@ WebSocket support, and use the same external network configured by
 `KINKUDOS_PROXY_NETWORK`.
 
 KinKudos trusts forwarded client-IP headers only when the direct peer belongs
-to `KINKUDOS_TRUSTED_PROXIES`. Set this to the exact proxy address or Docker
-subnet, not to the entire internet. The optional parent setting
+to `KINKUDOS_TRUSTED_PROXIES`. The application default is loopback only; set
+this to the exact proxy address or Docker subnet for Traefik/NPM, not to the
+entire internet. The optional parent setting
 Settings → Network access can then restrict child pages or the entire
 application to explicit IP/CIDR networks. It is disabled by default and is an
 additional layer, not a replacement for HTTPS, device pairing, or strong

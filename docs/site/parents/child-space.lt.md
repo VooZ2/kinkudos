@@ -1,8 +1,8 @@
 # Vaiko aplinka
 
-Vaikas mato savo darbus, prizus, taupymo tikslus, naujausią **Istoriją** ir
-profilio nustatymus. Jis nemato kito vaiko privačios informacijos, PIN, balanso
-ar prašymų.
+Vaikas mato savo darbus, prizus, taupymo tikslus, **Istoriją** (tik
+penkis naujausius įrašus) ir profilio nustatymus. Jis nemato kito
+vaiko privačios informacijos, PIN, balanso ar prašymų.
 
 ## Ką vaikas gali daryti
 
@@ -13,8 +13,12 @@ ar prašymų.
 | **Prizai** | Prašyti galimo prizo, jei tai leidžia išleidžiamas balansas ir kredito taisyklė. Kol prašymas laukia, vaikas gali jį atšaukti. |
 | **Tikslai ir pasiūlymai** | Pasirinkti **Pasiūlyk prizą ar tikslą** ir pasiūlyti prizą ar taupymo tikslą. Tėvams patvirtinus tikslo pasiūlymą, tikslo kortelėje pasirinkti **Naudoti turimus taškus** arba **Taupyti atskirai**. |
 | **Nutrinami bilietai** | Pirkti pasirenkamą bilietą tik jei jis įjungtas šeimai ir vaikui, pakanka išleidžiamų taškų bei leidžia savaitės limitas. Prieš kitą pirkimą reikia užbaigti atidarytą bilietą. |
-| **Dovanoti taškus** | Jei yra kitas aktyvus vaikas, perduoti jam tik jau uždirbtus taškus. Kredito ar neturimų taškų perduoti negalima. |
-| **Atsiliepimai** | Nusiųsti tėvams privatų pasiūlymą ar problemos pranešimą, prireikus pridėjus ekrano nuotrauką. |
+| **Dovanoti taškus** | Jei yra kitas aktyvus vaikas, perduoti jam tik jau uždirbtus taškus. Atidarykite plaukiojantį **Dovana** valdiklį vaiko pradžios lange. Kredito ar neturimų taškų perduoti negalima. |
+| **Atsiliepimai** | Nusiųsti tėvams privatų pasiūlymą ar problemos pranešimą iš plaukiojančio **Atsiliepimai** valdiklio, prireikus pridėjus ekrano nuotrauką. |
+
+Dovana ir Atsiliepimai vaiko pradžios lange sudėti į vieną plaukiojančių
+veiksmų stulpelį, kad nestumtų vienas kito ir neuždengtų darbų mygtukų;
+puslapio apačioje palikta vietos abiem valdikliams.
 
 ## Balansai ir tikslai
 

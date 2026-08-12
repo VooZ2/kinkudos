@@ -23,11 +23,12 @@ A child signs in with exactly four digits, but only from a [paired device](../st
 KinKudos protects the PIN screen in several ways:
 
 - a device must be paired before it can even list child profiles or accept a PIN;
-- incorrect attempts are limited by child profile, device, IP address, and the whole site;
+- incorrect attempts are limited by child profile, device, and IP address;
+- a household-wide counter logs an alarm when the family threshold is crossed, but does not lock every child;
 - after five incorrect attempts for one child profile, that profile is locked for five minutes; and
 - a parent can use **Unlock profile** on that child’s parent card instead of waiting.
 
-Changing the PIN immediately makes the old PIN unusable. Revoking a device signs out child access on that device; the child must use a newly paired device and the current PIN to return.
+Changing the PIN uses the same per-profile lockout as PIN sign-in. Revoking a device signs out child access on that device; the child must use a newly paired device and the current PIN to return.
 
 ## A simple family rule
 

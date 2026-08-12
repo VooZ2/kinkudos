@@ -76,9 +76,9 @@
       {% if child.lottery_feature_enabled or child.lottery_ticket_open %}
         <p class="child-meta-item lottery-parent-status">
           <svg class="action-icon" aria-hidden="true"><use href="#icon-ticket-simple"></use></svg>
-          <span class="ticket-label">{% translate "Tickets" %}</span>
+          <span class="ticket-label">{% translate "Cards" %}</span>
           <span>{{ child.lottery_tickets_used }}/{{ child.lottery_weekly_limit }}</span>
-          <button class="info-button meta-info-button" type="button" data-open-dialog="ticket-info-{{ child.pk }}" aria-label="{% translate 'About scratch tickets' %}" title="{% translate 'About scratch tickets' %}">
+          <button class="info-button meta-info-button" type="button" data-open-dialog="ticket-info-{{ child.pk }}" aria-label="{% translate 'About surprise cards' %}" title="{% translate 'About surprise cards' %}">
             <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg>
           </button>
         </p>
@@ -215,7 +215,7 @@
     <p>{% blocktranslate with limit=child.min_balance %}This child can spend points down to {{ limit }}.{% endblocktranslate %}</p>
   </dialog>
   <dialog id="saved-info-{{ child.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Saved points" %}</h2><p>{% translate "Points saved separately for goals. They cannot be used for rewards." %}</p></dialog>
-  {% if child.lottery_feature_enabled or child.lottery_ticket_open %}<dialog id="ticket-info-{{ child.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Scratch tickets" %}</h2><p>{% translate "Scratch tickets used this week. The limit resets every Monday." %}</p></dialog>{% endif %}
+  {% if child.lottery_feature_enabled or child.lottery_ticket_open %}<dialog id="ticket-info-{{ child.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Surprise cards" %}</h2><p>{% translate "Surprise cards used this week. The limit resets every Monday." %}</p></dialog>{% endif %}
   <dialog id="child-penalty-{{ child.pk }}" class="action-dialog">
     <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
     <h2>{% translate "Assign penalty" %}</h2><p class="dialog-context">{{ child.name }}</p>
@@ -458,7 +458,7 @@
         </div>
       </details>
     <details class="settings-section parent-accordion">
-        <summary><span class="settings-summary-label">{% translate "Scratch tickets" %}</span></summary>
+        <summary><span class="settings-summary-label">{% translate "Surprise cards" %}</span></summary>
         <div class="settings-group">
         <p class="settings-row checkbox-field">
           {{ family_preferences_form.lottery_enabled.label_tag }}
@@ -854,44 +854,24 @@
     {% endif %}
   </article>
   </details>
-    <details class="settings-section parent-accordion">
+    <details class="settings-section parent-accordion" data-backup-section data-backup-status-url="{% url 'parent_backup_status' %}" data-label-provider="{% translate 'Provider' %}" data-label-repository="{% translate 'Repository' %}" data-label-last-success="{% translate 'Last successful backup' %}" data-label-last-check="{% translate 'Last integrity check' %}">
       <summary><span class="settings-summary-label">{% translate "Backups" %}</span>
-        <span class="service-status settings-summary-status {% if backup_status.running %}service-status-warning{% elif backup_status.available and backup_status.configured and backup_status.is_fresh %}service-status-good{% else %}service-status-bad{% endif %}">
+        <span class="service-status settings-summary-status service-status-bad" data-backup-summary>
           <span aria-hidden="true"></span>
-          {% if backup_status.running %}
-            {% translate "Copying" %}
-          {% elif not backup_status.available %}
-            {% translate "Attention needed" %}
-          {% elif not backup_status.configured %}
-            {% translate "Not enabled" %}
-          {% elif backup_status.is_fresh %}
-            {% translate "Enabled" %}
-          {% else %}
-            {% translate "Attention needed" %}
-          {% endif %}
+          <span data-backup-summary-label>{% translate "Checking…" %}</span>
         </span></summary>
   <article class="panel backup-panel">
     <div class="backup-heading">
       <p class="settings-description">{% translate "Daily encrypted copies protect the family database and uploaded photos." %}</p>
     </div>
-    {% if not backup_status.available %}
-      <p class="danger-warning backup-warning">{% translate "The backup service is unavailable. Ask the server administrator to check the backup container." %}</p>
-    {% else %}
-      <dl class="service-details">
-        <div><dt>{% translate "Provider" %}</dt><dd>{{ backup_status.provider|default:"—" }}</dd></div>
-        <div><dt>{% translate "Repository" %}</dt><dd>{{ backup_status.target|default:"—" }}</dd></div>
-        <div><dt>{% translate "Last successful backup" %}</dt><dd>{% if backup_status.last_success %}{{ backup_status.last_success|date:"Y-m-d H:i" }}{% elif backup_status.configured %}{% translate "Backups not completed" %}{% else %}—{% endif %}</dd></div>
-        <div><dt>{% translate "Last integrity check" %}</dt><dd>{% if backup_status.last_check %}{{ backup_status.last_check|date:"Y-m-d H:i" }}{% else %}—{% endif %}</dd></div>
-      </dl>
-      {% if backup_status.error %}<p class="danger-warning backup-warning">{{ backup_status.error }}</p>{% endif %}
-    {% endif %}
+    <div data-backup-details>
+      <p class="help-text" data-backup-loading>{% translate "Checking…" %}</p>
+    </div>
     {% if user.is_staff %}
       <div class="backup-actions">
-        {% if backup_status.available and backup_status.configured %}
-          <form method="post" action="{% url 'parent_run_backup' %}">{% csrf_token %}
-            <button class="button button-primary" type="submit"{% if backup_status.running %} disabled{% endif %}>{% translate "Back up now" %}</button>
-          </form>
-        {% endif %}
+        <form method="post" action="{% url 'parent_run_backup' %}" data-backup-run-form hidden>{% csrf_token %}
+          <button class="button button-primary" type="submit" data-backup-run-button>{% translate "Back up now" %}</button>
+        </form>
         <button class="button button-primary" type="button" data-open-dialog="backup-settings-dialog">{% translate "Edit settings" %}</button>
       </div>
       <dialog id="backup-settings-dialog" class="action-dialog backup-dialog">
@@ -936,7 +916,7 @@
       <button class="button button-secondary history-filter-button" type="button" data-open-dialog="history-filters" aria-label="{% translate 'Filters' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-filter"></use></svg><span>{% translate "Filters" %}</span>{% if history_filter_count %}<strong>{{ history_filter_count }}</strong>{% endif %}</button>
     </form>
     {% if history_filters_active %}<div class="history-filter-chips">{% if history_child_id %}<button type="button" data-remove-history-filter="history_child">{{ history_child_name }} ×</button>{% endif %}{% if history_activity %}<button type="button" data-remove-history-filter="history_activity">{{ history_activity_label }} ×</button>{% endif %}{% if history_date != "any" %}<button type="button" data-remove-history-filter="history_date">{% if history_date == "week" %}{% translate "This week" %}{% elif history_date == "month" %}{% translate "This month" %}{% else %}{% translate "Custom range" %}{% endif %} ×</button>{% endif %}<button class="history-clear-filters" type="button" data-clear-history-filters aria-label="{% translate 'Clear all filters' %}" title="{% translate 'Clear all filters' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-filter-circle-xmark"></use></svg></button></div>{% endif %}
-    <dialog id="history-filters" class="action-dialog history-filter-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Filters" %}</h2><form class="stack-form" method="get" action="#parent-history" data-history-filter-form><input type="hidden" name="history_child" value="{{ history_child_id }}"><label>{% translate "Activity type" %}<select class="field-control" name="history_activity"><option value="">{% translate "All activity" %}</option><option value="tasks"{% if history_activity == "tasks" %} selected{% endif %}>{% translate "Tasks" %}</option><option value="penalties"{% if history_activity == "penalties" %} selected{% endif %}>{% translate "Penalties" %}</option><option value="rewards"{% if history_activity == "rewards" %} selected{% endif %}>{% translate "Rewards" %}</option><option value="goals"{% if history_activity == "goals" %} selected{% endif %}>{% translate "Goals" %}</option><option value="gifts"{% if history_activity == "gifts" %} selected{% endif %}>{% translate "Gifts" %}</option><option value="scratch"{% if history_activity == "scratch" %} selected{% endif %}>{% translate "Scratch tickets" %}</option><option value="adjustments"{% if history_activity == "adjustments" %} selected{% endif %}>{% translate "Point adjustments" %}</option></select></label><label class="history-filter-label">{% translate "Date" %}<select class="field-control" name="history_date"><option value="any"{% if history_date == "any" %} selected{% endif %}>{% translate "Any time" %}</option><option value="week"{% if history_date == "week" %} selected{% endif %}>{% translate "This week" %}</option><option value="month"{% if history_date == "month" %} selected{% endif %}>{% translate "This month" %}</option><option value="custom"{% if history_date == "custom" %} selected{% endif %}>{% translate "Custom range" %}</option></select></label><div class="history-custom-range" data-history-custom-range{% if history_date != "custom" %} hidden{% endif %}><label>{% translate "From" %}<input class="field-control" type="date" name="history_start" value="{% if history_date == 'custom' %}{{ history_custom_start }}{% endif %}"{% if history_date != "custom" %} disabled{% endif %}></label><label>{% translate "To" %}<input class="field-control" type="date" name="history_end" value="{% if history_date == 'custom' %}{{ history_custom_end }}{% endif %}"{% if history_date != "custom" %} disabled{% endif %}></label></div><p class="field-error" data-history-date-error{% if not history_date_error %} hidden{% endif %}>{{ history_date_error }}</p><div class="dialog-actions"><button class="button button-secondary" type="button" data-history-reset>{% translate "Reset" %}</button><button class="button button-primary" type="submit">{% translate "Apply" %}</button></div></form></dialog>
+    <dialog id="history-filters" class="action-dialog history-filter-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Filters" %}</h2><form class="stack-form" method="get" action="#parent-history" data-history-filter-form><input type="hidden" name="history_child" value="{{ history_child_id }}"><label>{% translate "Activity type" %}<select class="field-control" name="history_activity"><option value="">{% translate "All activity" %}</option><option value="tasks"{% if history_activity == "tasks" %} selected{% endif %}>{% translate "Tasks" %}</option><option value="penalties"{% if history_activity == "penalties" %} selected{% endif %}>{% translate "Penalties" %}</option><option value="rewards"{% if history_activity == "rewards" %} selected{% endif %}>{% translate "Rewards" %}</option><option value="goals"{% if history_activity == "goals" %} selected{% endif %}>{% translate "Goals" %}</option><option value="gifts"{% if history_activity == "gifts" %} selected{% endif %}>{% translate "Gifts" %}</option><option value="scratch"{% if history_activity == "scratch" %} selected{% endif %}>{% translate "Surprise cards" %}</option><option value="adjustments"{% if history_activity == "adjustments" %} selected{% endif %}>{% translate "Point adjustments" %}</option></select></label><label class="history-filter-label">{% translate "Date" %}<select class="field-control" name="history_date"><option value="any"{% if history_date == "any" %} selected{% endif %}>{% translate "Any time" %}</option><option value="week"{% if history_date == "week" %} selected{% endif %}>{% translate "This week" %}</option><option value="month"{% if history_date == "month" %} selected{% endif %}>{% translate "This month" %}</option><option value="custom"{% if history_date == "custom" %} selected{% endif %}>{% translate "Custom range" %}</option></select></label><div class="history-custom-range" data-history-custom-range{% if history_date != "custom" %} hidden{% endif %}><label>{% translate "From" %}<input class="field-control" type="date" name="history_start" value="{% if history_date == 'custom' %}{{ history_custom_start }}{% endif %}"{% if history_date != "custom" %} disabled{% endif %}></label><label>{% translate "To" %}<input class="field-control" type="date" name="history_end" value="{% if history_date == 'custom' %}{{ history_custom_end }}{% endif %}"{% if history_date != "custom" %} disabled{% endif %}></label></div><p class="field-error" data-history-date-error{% if not history_date_error %} hidden{% endif %}>{{ history_date_error }}</p><div class="dialog-actions"><button class="button button-secondary" type="button" data-history-reset>{% translate "Reset" %}</button><button class="button button-primary" type="submit">{% translate "Apply" %}</button></div></form></dialog>
     <div class="ledger">
       {% for entry in ledger_page %}
       <div class="ledger-row">
@@ -983,7 +963,7 @@
         {% else %}
           <div>
             <strong>{{ entry.child.name }} · {{ entry.description }}</strong>
-            <small>{{ entry.created_at|date:"Y-m-d H:i" }} · {% if entry.kind == "lottery" %}{% translate "Scratch ticket" %}{% else %}{{ entry.get_kind_display }}{% endif %}</small>
+            <small>{{ entry.created_at|date:"Y-m-d H:i" }} · {% if entry.kind == "lottery" %}{% translate "Surprise card" %}{% else %}{{ entry.get_kind_display }}{% endif %}</small>
             {% if entry.history_actor and entry.history_actor_label %}<small class="history-actor">{{ entry.history_actor_label }}: {{ entry.history_actor|user_display_name }}</small>{% endif %}
           </div>
           <span class="history-row-actions">
