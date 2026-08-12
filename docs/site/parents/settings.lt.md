@@ -234,7 +234,9 @@ administratoriaus veiksmas. Išskleidžiamos skilties santraukos antraštėje ga
 rodyti būsenos žymę, pvz., **Reikia dėmesio**.
 
 Būsena gali būti **Įjungta**, **Kopijuojama**, **Neįjungta** arba **Reikia
-dėmesio**. Skydelyje taip pat rodomas tiekėjas, saugykla, **Paskutinė sėkminga
+dėmesio**. Kopijų sveikata įkeliama po Nustatymų puslapio atidarymo iš skirto
+būsenos užklausimo, todėl Nustatymai nelaukia kopijų agento. Skydelyje taip pat
+rodomas tiekėjas, saugykla, **Paskutinė sėkminga
 kopija**, **Paskutinė vientisumo patikra**, klaidos ir naujausi kopijų veiksmai.
 
 Nepavykęs suplanuotas bandymas tos dienos sėkme neįrašomas. Kopijų paslauga gali

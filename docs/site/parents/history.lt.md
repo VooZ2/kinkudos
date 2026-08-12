@@ -56,6 +56,10 @@ ekrane – kaip dialogas. Galima pasirinkti:
 - laikotarpį: Šią savaitę, Bet kada, Šį mėnesį arba Pasirinktinį laikotarpį;
 - pasirinktiniam laikotarpiui – datas **Nuo** ir **Iki**.
 
+Pasirinktiems filtrams Istorija puslapiuojama (**Ankstesnis** / **Kitas**).
+**Bet kada** nėra trumpas langas — senesnius įrašus pasiekite puslapiais
+(ir filtrais).
+
 **Filtrų** valdiklis rodo aktyvių filtrų skaičių. Aktyvūs filtrai taip pat
 rodomi pašalinamais ženkleliais, kurių aukštis bent 44 px. Telefone
 **Informacinis** ženklelis gali būti tik ikona. **Atkurti** išvalo

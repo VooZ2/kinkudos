@@ -236,7 +236,9 @@ button. The accordion summary can show a status chip such as **Attention
 needed**.
 
 The status can be **Enabled**, **Copying**, **Not enabled**, or **Attention
-needed**. The panel also shows the provider, repository, **Last successful
+needed**. Backup health loads after the Settings page opens, via a dedicated
+status request, so opening Settings does not wait on the backup agent. The
+panel also shows the provider, repository, **Last successful
 backup**, **Last integrity check**, errors, and recent backup actions.
 
 A scheduled failure is not recorded as that day's success. The backup service
