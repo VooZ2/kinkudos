@@ -4,7 +4,18 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from economy.backups import backup_status
 from economy.models import BackupAuditEvent
+
+
+@override_settings(LANGUAGE_CODE="en")
+class BackupStatusHelperTests(TestCase):
+    @patch("economy.backups._request", side_effect=RuntimeError("secret agent detail"))
+    def test_backup_status_does_not_expose_exception_text(self, _request):
+        status = backup_status()
+        self.assertFalse(status["available"])
+        self.assertEqual(status["error"], "")
+        self.assertNotIn("secret agent detail", status.values())
 
 
 @override_settings(LANGUAGE_CODE="en")
