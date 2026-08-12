@@ -13,15 +13,16 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ### Changed
 
-- Parent and child History now paginate the full filtered result with
-  Previous/Next; Any time is no longer a silent short window.
+- Parent History now paginates the full filtered result with Previous/Next;
+  Any time is no longer a silent short window. The child dashboard still
+  shows only the five latest History entries.
 - Surprise-card boards stay opaque until reveal, and in-app copy uses Surprise
   cards instead of lottery or win wording.
 - Child Gift and Feedback sit in one floating action stack so mobile task
   buttons stay reachable.
 - Backup health on Settings loads after the page opens, so opening Settings
   does not wait on the backup agent.
-- Official documentation now matches 26.6.8 History pagination, surprise-card
+- Official documentation now matches 26.6.8 Parent History pagination, surprise-card
   reveal, PIN alarm behaviour, backup status loading, background push, trusted
   proxies, and the child floating-action stack.
 

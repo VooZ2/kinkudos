@@ -1,7 +1,7 @@
 # Vaiko aplinka
 
-Vaikas mato savo darbus, prizus, taupymo tikslus, **Istoriją** (su
-puslapiavimu kaip tėvų Istorijoje) ir profilio nustatymus. Jis nemato kito
+Vaikas mato savo darbus, prizus, taupymo tikslus, **Istoriją** (tik
+penkis naujausius įrašus) ir profilio nustatymus. Jis nemato kito
 vaiko privačios informacijos, PIN, balanso ar prašymų.
 
 ## Ką vaikas gali daryti

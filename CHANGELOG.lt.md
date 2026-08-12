@@ -15,15 +15,16 @@ schema.
 
 ### Pakeista
 
-- Tėvų ir vaikų Istorija dabar puslapiuoja visą filtro rezultatą
-  („Ankstesnis“ / „Kitas“); „Bet kada“ nebėra tyliai sutrumpintas langas.
+- Tėvų Istorija dabar puslapiuoja visą filtro rezultatą („Ankstesnis“ /
+  „Kitas“); „Bet kada“ nebėra tyliai sutrumpintas langas. Vaiko pradžios
+  lange Istorija vis dar rodo tik penkis naujausius įrašus.
 - Staigmenų kortelių lentos lieka paslėptos iki atskleidimo, o programos
   tekstas vartoja „Staigmenų kortelės“, o ne laimėjimo ar žaidimo formuluotes.
 - Vaiko „Dovana“ ir „Atsiliepimai“ sudėti į vieną plaukiojančių veiksmų
   stulpelį, kad mobiliajame liktų pasiekiami darbų mygtukai.
 - Kopijų sveikata Nustatymuose įkeliama po puslapio atidarymo, todėl
   Nustatymai nelaukia kopijų agento.
-- Oficiali dokumentacija dabar atitinka 26.6.8 Istorijos puslapiavimą,
+- Oficiali dokumentacija dabar atitinka 26.6.8 tėvų Istorijos puslapiavimą,
   staigmenų kortelių atskleidimą, PIN įspėjimo elgesį, kopijų būsenos
   įkėlimą, foninį push, patikimus proxy ir vaiko plaukiojančių veiksmų
   stulpelį.

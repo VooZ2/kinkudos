@@ -1,7 +1,7 @@
 # Child space
 
-Children see their own tasks, rewards, savings goals, History (paged like
-parent History), and profile settings. They cannot see another child’s private
+Children see their own tasks, rewards, savings goals, History (the five
+latest entries), and profile settings. They cannot see another child’s private
 information, PIN, balance, or requests.
 
 ## What a child can do
