@@ -686,7 +686,6 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .catalog-edit-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .catalog-delete-action { width: 100%; margin-top: 4px; }
 .catalog-create { margin-top: 8px; }
-.empty-state-hint { margin: 0; color: var(--muted); font-size: .9rem; font-weight: 500; line-height: 1.45; }
 .catalog-divider { display: flex; align-items: center; gap: 10px; margin: 4px 0 18px; color: var(--primary); font-size: .82rem; font-weight: 850; text-transform: uppercase; letter-spacing: .11em; }
 .catalog-divider > span { padding: 5px 10px; border-radius: 99px; background: color-mix(in srgb, var(--primary) 9%, var(--surface-solid)); }
 .catalog-divider::before, .catalog-divider::after { content: ""; height: 1px; flex: 1; background: color-mix(in srgb, var(--primary) 24%, var(--line)); }
@@ -1066,7 +1065,7 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .lottery-card-copy p { margin: 4px 0; }
 .lottery-system-label { margin: 0; color: var(--primary); font-size: .76rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
 .lottery-price { color: var(--danger); font-size: 1.05rem; font-weight: 900; }
-.lottery-weekly-status, .lottery-parent-status { color: var(--muted); font-size: .88rem; font-weight: 700; }
+.lottery-weekly-status { color: var(--muted); font-size: .88rem; font-weight: 700; }
 .lottery-card-action { min-width: 160px; text-align: right; }
 .lottery-purchase-dialog, .lottery-ticket-dialog { width: min(94vw, 560px); }
 .lottery-risk-warning { margin: 16px 0; padding: 14px 16px; border: 2px solid color-mix(in srgb, var(--danger) 46%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--danger) 9%, var(--surface-solid)); }
