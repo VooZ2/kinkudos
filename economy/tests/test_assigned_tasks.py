@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -180,6 +181,26 @@ class AssignedTaskServiceTests(TestCase):
             completed_on=yesterday
         )
         self.assertNotIn(self.task.pk, unavailable_assignment_task_ids(self.child))
+
+    def test_task_completion_is_unique_per_child_task_and_day(self):
+        today = timezone.localdate()
+        TaskCompletion.objects.create(
+            child=self.child,
+            task=self.task,
+            completed_on=today,
+        )
+        with self.assertRaises(IntegrityError):
+            with transaction.atomic():
+                TaskCompletion.objects.create(
+                    child=self.child,
+                    task=self.task,
+                    completed_on=today,
+                )
+        TaskCompletion.objects.create(
+            child=self.child,
+            task=self.task,
+            completed_on=today - timedelta(days=1),
+        )
 
 
 class AssignedTaskViewTests(TestCase):

@@ -106,8 +106,10 @@ same database transaction that closes the item and creates its
 `assigned_task` ledger entry. Catalog-backed completion also creates a
 `TaskCompletion` record for that child and calendar day. This prevents a
 catalog task from being assigned while it awaits approval, is already
-assigned, or has already been credited that day. Cancelled items can be
-assigned again; completed catalog tasks become available on the next day.
+assigned, or has already been credited that day. The database enforces that
+invariant with a unique constraint on `(child, task, completed_on)`.
+Cancelled items can be assigned again; completed catalog tasks become
+available on the next day.
 
 Pending items are active only when `AssignedTaskBatch.assigned_on` equals the
 server-local calendar date. At midnight they disappear from the child's

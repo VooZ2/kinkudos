@@ -693,10 +693,10 @@ class TaskCompletion(models.Model):
 
     class Meta:
         ordering: ClassVar = ["-created_at", "-pk"]
-        indexes: ClassVar = [
-            models.Index(
+        constraints: ClassVar = [
+            models.UniqueConstraint(
                 fields=["child", "task", "completed_on"],
-                name="task_done_child_day_idx",
+                name="unique_task_completion_per_child_day",
             )
         ]
 

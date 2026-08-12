@@ -556,6 +556,21 @@ def parent_award_task(request, child_id):
         return redirect("parent_dashboard")
 
     tasks = list(form.cleaned_data["task_ids"])
+    today = timezone.localdate()
+    already_credited = set(
+        TaskCompletion.objects.filter(
+            child=child,
+            task__in=tasks,
+            completed_on=today,
+        ).values_list("task_id", flat=True)
+    )
+    tasks = [task for task in tasks if task.pk not in already_credited]
+    if not tasks:
+        messages.error(
+            request,
+            _("Those tasks were already credited to this child today."),
+        )
+        return redirect("parent_dashboard")
     with transaction.atomic():
         for task in tasks:
             post_ledger_entry(
@@ -709,7 +724,7 @@ def parent_set_min_balance(request, child_id):
 @parent_required
 @require_POST
 def parent_unlock_child(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id)
+    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
     child.failed_pin_attempts = 0
     child.locked_until = None
     child.save(update_fields=["failed_pin_attempts", "locked_until"])
