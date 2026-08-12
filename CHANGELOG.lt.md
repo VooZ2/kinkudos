@@ -11,6 +11,29 @@ schema.
 
 - Kol kas nieko.
 
+## [26.6.7] - 2026-08-12
+
+### Pakeista
+
+- Tėvų Pradžios vaikų kortelėse dabar naudojami „Pridėti“ / „Paskirti“ ir
+  „Daugiau“ meniu koregavimui, nuobaudai bei kreditui, o kredito ir bilietų
+  metaduomenys aiškesni.
+- Laukiantys prašymai lengviau peržvelgiami: skydelio antraštė su skaičiaus
+  žyme ir aiškesni veiksmai mobiliajame.
+- Tėvų Nustatymai sugrupuoti į „Kasdieniai“, „Žmonės ir įrenginiai“ ir
+  „Serveris“ skyrius, su aiškesniais būsenos žymekliais ir išsaugojimo nuoroda.
+- Tėvų Istorijos eilutės ir filtrų mygtukai kompaktiškesni, o filtrų dialogas
+  mobiliajame lieka patogus kaip apatinis lapas su prilipusiais veiksmais.
+- „Tvarkyti“ naudoja vieną skyrių navigaciją „Darbams“, „Prizams“,
+  „Nuobaudoms“ ir „Tikslams“, su aiškesniu redagavimu ir tuščiomis būsenomis.
+- Oficiali tėvų dokumentacija ir ekrano nuotraukos dabar atitinka 26.6.7
+  Pradžios, Nustatymų, Istorijos ir „Tvarkyti“ sąsają.
+
+### Pataisyta
+
+- Tikslų patvirtinimo dialogo išsaugojimo režimo radijo mygtukų išdėstymas ir
+  legendos tarpai.
+
 ## [26.6.6] - 2026-08-11
 
 ### Pakeista

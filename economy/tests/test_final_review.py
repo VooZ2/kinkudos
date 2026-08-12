@@ -13,6 +13,7 @@ from economy.models import (
     Proposal,
     ProposalType,
     SavingsGoal,
+    Task,
 )
 from economy.services import approve_proposal, post_ledger_entry
 
@@ -62,17 +63,53 @@ class FinalReviewTests(TestCase):
 
     def test_parent_accordions_and_settings_use_shared_compact_surface(self):
         response = self.parent_response()
-        self.assertContains(response, "parent-accordion", count=14)
-        self.assertContains(
+        self.assertContains(response, "parent-accordion", count=10)
+        self.assertContains(response, 'class="settings-section parent-accordion"', count=10, html=False)
+        self.assertNotContains(
             response,
-            'class="settings-section settings-section-standalone parent-accordion"',
-            count=6,
+            "settings-section-standalone",
             html=False,
         )
+        self.assertContains(response, 'id="settings-everyday-heading"', html=False)
+        self.assertContains(response, 'id="settings-people-heading"', html=False)
+        self.assertContains(response, 'id="settings-server-heading"', html=False)
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".parent-accordion:not([open]) > summary", css)
         self.assertIn("min-height: 68px", css)
         self.assertIn("min-height: 60px", css)
+        self.assertIn(".settings-block-heading", css)
+        self.assertNotIn("position: sticky; bottom: 0", css.split(".settings-save-actions")[1].split("}")[0])
+
+    def test_manage_uses_tabbed_sections_with_edit_and_hidden_states(self):
+        Task.objects.create(title="Review chore", reward=10, icon="🧹", is_active=False)
+        response = self.parent_response()
+        content = response.content.decode()
+        manage = content[content.index('id="parent-catalogs"') :]
+        manage = manage[: manage.index('id="parent-settings"')]
+        self.assertIn('class="manage-tabs"', manage)
+        self.assertIn("data-manage-section", manage)
+        self.assertNotIn("parent-accordion", manage)
+        self.assertIn("catalog-edit-actions", manage)
+        self.assertIn("data-cancel-edit", manage)
+        self.assertIn("catalog-delete-action", manage)
+        self.assertIn("catalog-row is-inactive", manage)
+        self.assertIn("Hidden", manage)
+        self.assertIn("manage-empty", manage)
+        self.assertIn(
+            "Children can propose goals from their area. Approved goals appear here.",
+            manage,
+        )
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn(".manage-tabs a.is-active", css)
+        self.assertIn(".catalog-row.is-inactive", css)
+        self.assertIn(".manage-empty", css)
+        self.assertIn("text-align: center", css.split(".manage-empty {")[1].split("}")[0])
+        self.assertIn("min-height: 44px", css.split(".manage-tabs a {")[1].split("}")[0])
+        self.assertIn(".catalog-edit-actions", css)
+        js = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
+        self.assertIn("[data-manage-section]", js)
+        self.assertIn("data-cancel-edit", js)
+        self.assertIn("closeCatalogEdit", js)
 
     def test_child_card_metadata_keeps_credit_and_ticket_controls_together(self):
         response = self.parent_response()
@@ -85,8 +122,10 @@ class FinalReviewTests(TestCase):
         self.assertIn('href="#icon-ticket-simple"', row)
         self.assertIn("Tickets", row)
         self.assertIn('aria-label="About scratch tickets"', row)
+        self.assertIn("meta-info-button", row)
+        self.assertNotIn("child-meta-sep", row)
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
-        self.assertIn("justify-content: center", css)
+        self.assertIn(".meta-info-button", css)
 
         family = FamilySettings.load()
         family.lottery_enabled = False
@@ -109,6 +148,30 @@ class FinalReviewTests(TestCase):
         self.assertContains(response, "No activity matches these filters.")
         self.assertContains(response, "data-clear-history-filters", count=1, html=False)
         self.assertContains(response, 'href="#icon-filter-circle-xmark"', html=False)
+
+    def test_history_mobile_polish_styles_align_actions_and_touch_targets(self):
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn(".history-filter-chips button { min-height: 44px;", css)
+        self.assertIn(".history-row-actions > .amount { margin-left: auto; }", css)
+        self.assertIn(
+            ".history-decision-informational .history-decision-label { position: absolute;",
+            css,
+        )
+        self.assertIn("border-radius: 24px 24px 0 0;", css)
+        self.assertIn("inset: auto 0 0;", css)
+        self.assertIn(".history-filter-dialog .dialog-actions", css)
+        self.assertIn("position: sticky;", css)
+        self.assertIn(".history-photo-button", css)
+        template = (ROOT / "templates/economy/parent_dashboard.html").read_text(encoding="utf-8")
+        self.assertIn('class="history-decision-label"', template)
+        self.assertIn('aria-label="{% translate \'Informational\' %}"', template)
+
+    def test_choice_fieldset_radios_use_inline_option_cards(self):
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn('.stack-form input[type="radio"]', css)
+        self.assertIn(".choice-fieldset > label {", css)
+        self.assertIn("display: flex;", css)
+        self.assertIn(".choice-fieldset > label:has(input:checked)", css)
 
     def test_history_custom_dates_normalize_and_validate(self):
         response = self.parent_response(
@@ -223,7 +286,7 @@ class FinalReviewTests(TestCase):
     def test_mobile_footer_has_compact_labels_and_dynamic_version(self):
         response = self.parent_response()
         self.assertContains(response, 'class="footer-release"', html=False)
-        self.assertContains(response, "v26.6.6")
+        self.assertContains(response, "v26.6.7")
         self.assertContains(response, 'class="footer-docs-short">Docs', html=False)
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".footer-product, .footer-docs-long { display: none; }", css)

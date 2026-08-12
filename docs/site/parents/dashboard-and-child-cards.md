@@ -8,12 +8,14 @@ requests first and child cards underneath them.
 1. **Pending requests** — review decisions that need a parent.
 2. **Child cards** — check each child and open a quick action.
 
-When there are no requests, the compact empty state says **No pending
-requests**. The child cards remain directly below it.
+The pending panel always has an in-panel **Pending requests** heading. When
+requests exist, a count badge appears beside that heading. When there are none,
+the compact empty state says **No pending requests**. The child cards remain
+directly below the panel.
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View Parent Home pending requests on mobile</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
-<img class="screenshot-image" src="../../assets/parent-home-pending-requests-mobile-26-6-4.png" alt="Parent Home pending requests on mobile" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-home-pending-requests-mobile-26-6-7.png" alt="Parent Home pending requests panel with heading and count badge on mobile" loading="lazy">
 </details>
 
 The screenshot uses fictional demonstration data.
@@ -28,7 +30,10 @@ Each card can show:
 - scratch-ticket usage when scratch tickets are enabled;
 - the separately saved-points total, when it is greater than zero;
 - one relevant savings-goal summary, when the child has an active goal;
-- five quick actions.
+- primary actions **Add** and **Assign**, plus **More**.
+
+Credit and Tickets appear as left-aligned metadata items on separate lines;
+there is no middle-dot separator between them.
 
 The compact indicators can look like this:
 
@@ -48,7 +53,7 @@ goal block or placeholder.
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View Parent Home child cards on mobile</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
-<img class="screenshot-image" src="../../assets/parent-home-child-cards-mobile-26-6-4.png" alt="Parent Home child cards on mobile" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-home-child-cards-mobile-26-6-7.png" alt="Parent Home child cards with Add, Assign, and More actions on mobile" loading="lazy">
 </details>
 
 The screenshot uses fictional demonstration data.
@@ -68,20 +73,22 @@ separately**, and an additional-goal count can show that more goals exist.
 
 Selecting the summary opens **Manage → Goals**.
 
-## Five quick actions
+## Child card actions
 
-Use the accessible action names rather than relying on an icon:
+The primary row shows two labelled actions and a **More** control. Use the
+accessible action names rather than relying on an icon:
 
-| Action | Use it for |
-| --- | --- |
-| **Add completed task** | Award selected catalogue tasks immediately after checking the work. |
-| **Assign penalty** | Apply agreed penalty templates and an optional shared reason. |
-| **Assign tasks for today** | Send catalogue tasks, plus one optional custom task, until midnight. |
-| **Adjust points** | Add or remove points with a required reason. |
-| **Set credit** | Change this child’s lower spending limit. |
+| Action | Where | Use it for |
+| --- | --- | --- |
+| **Add completed task** | Primary row (**Add**) | Award selected catalogue tasks immediately after checking the work. |
+| **Assign tasks for today** | Primary row (**Assign**) | Send catalogue tasks, plus one optional custom task, until midnight. |
+| **Adjust points** | **More** | Add or remove points with a required reason. |
+| **Assign penalty** | **More** | Apply agreed penalty templates and an optional shared reason. |
+| **Set credit** | **More** | Change this child’s lower spending limit. |
 
-Icon-only controls expose their action name through their tooltip and
-accessible label. Family documentation does not depend on icon shapes.
+**More** opens a short dialog titled **More actions**. Icon-only controls expose
+their action name through their tooltip and accessible label. Family
+documentation does not depend on icon shapes.
 
 ## Assigned tasks for today
 
@@ -96,13 +103,19 @@ unfinished tasks or the remaining set can be cancelled from the same card.
 
 ## Pending requests
 
-Requests are grouped by child. The available decisions are:
+Requests appear in the pending panel and are easy to scan by child. On a phone,
+decision actions sit left-aligned under the request copy. The available
+decisions are:
 
 - **Approve** — accepts the task, reward, proposal, or birthday-date change.
 - **Ask to improve** — returns a submitted task to the child with an optional
   explanation; it can be submitted again.
 - **Reject** — closes the request without awarding points or granting a
   reward. Reasons are required for rewards and proposals.
+
+When approving a savings-goal proposal that still needs a save mode, the dialog
+offers **Use available points** and **Save separately** as inline option cards
+(radio + label).
 
 For a task with a photo, select the thumbnail to view it at full size. Photos
 are private family data and follow the retention rule in [Parent

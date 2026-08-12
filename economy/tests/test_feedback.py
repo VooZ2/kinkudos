@@ -99,7 +99,7 @@ class FeedbackWorkflowTests(TestCase):
         self.assertEqual(report.reporter_role, "parent")
         self.assertEqual(report.family_name, "Aurora")
         self.assertEqual(report.page_path, reverse("parent_dashboard"))
-        self.assertEqual(report.app_version, "26.6.6")
+        self.assertEqual(report.app_version, "26.6.7")
         self.assertEqual(report.user_agent, "Feedback Browser")
         self.assertIsNotNone(report.email_notified_at)
         self.assertEqual(len(mail.outbox), 1)
@@ -179,7 +179,7 @@ class FeedbackWorkflowTests(TestCase):
         self.assertNotIn("Before posting on GitHub", content)
         self.assertIn('href="https://github.com/VooZ2/kinkudos"', content)
 
-    @patch("economy.views.send_mail", side_effect=RuntimeError("SMTP unavailable"))
+    @patch("economy.views.feedback.send_mail", side_effect=RuntimeError("SMTP unavailable"))
     def test_smtp_failure_does_not_lose_feedback(self, _send_mail):
         self.client.login(username="parent", password="Safe-feedback-test-123!")
 

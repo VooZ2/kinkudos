@@ -1,7 +1,10 @@
 {% load economy_tags i18n %}
 <div id="parent-pending-requests-fragment" class="pending-requests-fragment" data-pending-requests-fragment data-pending-count="{{ pending_count }}" data-pending-revision="{{ pending_revision }}">
-  <div class="section-heading"><h2>{% translate "Pending requests" %}{% if pending_count %} ({{ pending_count }}){% endif %}</h2></div>
   <div class="pending-requests-panel">
+    <header class="pending-panel-heading">
+      <h2>{% translate "Pending requests" %}</h2>
+      {% if pending_count %}<span class="pending-count-badge">{{ pending_count }}</span>{% endif %}
+    </header>
     {% if pending_requests %}
       <div class="pending-request-list" role="list">
         {% for pending_item in pending_requests %}
@@ -14,7 +17,7 @@
               {% endif %}
             </div>
             <div class="pending-request-copy">
-              <p class="pending-request-meta"><strong>{{ pending_item.child.name }}</strong><span aria-hidden="true"> · </span><span class="eyebrow">{% if pending_item.kind == "task" %}{% translate "Task" %}{% elif pending_item.kind == "reward" %}{% translate "Reward" %}{% elif pending_item.kind == "proposal" %}{{ pending_item.proposal.get_proposal_type_display }}{% elif pending_item.kind == "goal" %}{% translate "Reached goal" %}{% else %}{% translate "Birthday change" %}{% endif %}</span></p>
+              <p class="pending-request-meta"><strong>{{ pending_item.child.name }}</strong><span class="pending-request-sep" aria-hidden="true">·</span><span class="eyebrow">{% if pending_item.kind == "task" %}{% translate "Task" %}{% elif pending_item.kind == "reward" %}{% translate "Reward" %}{% elif pending_item.kind == "proposal" %}{{ pending_item.proposal.get_proposal_type_display }}{% elif pending_item.kind == "goal" %}{% translate "Reached goal" %}{% else %}{% translate "Birthday change" %}{% endif %}</span></p>
               {% if pending_item.kind == "task" %}
                 <h3>{{ pending_item.claim.task_title }}</h3>
                 <p class="amount positive">+{{ pending_item.claim.reward_snapshot }} {{ pending_item.claim.reward_snapshot|currency_unit:"neutral" }}</p>

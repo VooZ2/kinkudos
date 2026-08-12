@@ -34,21 +34,23 @@ when no points moved.
 
 ## Child selector
 
-The child selector is separate from the advanced filter dialog. Selecting a
-child filters History immediately; there is no need to open **Filters** or
-press another **Apply** action merely to switch children. Other active query
-filters remain in place.
+The child selector is separate from the advanced filters. Selecting a child
+filters History immediately; there is no need to open **Filters** or press
+another **Apply** action merely to switch children. Other active query filters
+remain in place.
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View Parent activity History on mobile</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
-<img class="screenshot-image" src="../../assets/parent-activity-history-mobile-26-6-4.png" alt="Parent activity History on mobile" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-activity-history-mobile-26-6-7.png" alt="Parent activity History compact rows on mobile" loading="lazy">
 </details>
 
 The screenshot uses fictional demonstration data.
 
 ## Advanced filters
 
-Open **Filters** when you need more control. You can choose:
+Open **Filters** when you need more control. On a phone, **Filters** opens as a
+full-width bottom sheet with a rounded top. On a wider screen it opens as a
+dialog. You can choose:
 
 - an activity type, such as Tasks, Penalties, Rewards, Goals, Gifts, Scratch
   tickets, or Point adjustments;
@@ -56,12 +58,21 @@ Open **Filters** when you need more control. You can choose:
 - From and To dates for a custom range.
 
 The **Filters** control shows the active-filter count when filters are set.
-Active filters also appear as removable chips. Use **Reset** to clear the
-advanced choices and **Apply** to submit them.
+Active filters also appear as removable chips that are at least 44px tall. On a
+phone, an **Informational** chip may show as an icon-only control. Use
+**Reset** to clear the advanced choices and **Apply** to submit them.
 
-History rows do not use a calendar icon beside every date. Activity icons and
-their responsive positions are visual aids; the readable action name and row
-text are the source of meaning.
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View History filters bottom sheet on mobile</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
+<img class="screenshot-image" src="../../assets/parent-history-filters-mobile-26-6-7.png" alt="Parent History filters bottom sheet on mobile" loading="lazy">
+</details>
+
+The screenshot uses fictional demonstration data.
+
+History rows are compact. On a phone, the amount and activity kind sit toward
+the trailing edge of the row. Rows do not use a calendar icon beside every
+date. Activity icons and their responsive positions are visual aids; the
+readable action name and row text are the source of meaning.
 
 ## Status and value meaning
 

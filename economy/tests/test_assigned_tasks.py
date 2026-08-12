@@ -206,7 +206,7 @@ class AssignedTaskViewTests(TestCase):
         session["child_id"] = (child or self.child).pk
         session.save()
 
-    @patch("economy.views.notify_assigned_tasks")
+    @patch("economy.views.parent_actions.notify_assigned_tasks")
     def test_parent_assigns_multiple_and_custom_tasks_with_push(self, notify):
         second = Task.objects.create(title="Dishes", reward=10, icon="🍽️")
         self.client.login(username="parent", password=self.parent_password)
@@ -358,7 +358,7 @@ class AssignedTaskViewTests(TestCase):
         self.login_child()
         today_response = self.client.get(reverse("child_state")).json()
         tomorrow = timezone.localdate() + timedelta(days=1)
-        with patch("economy.views.timezone.localdate", return_value=tomorrow):
+        with patch("economy.views.child.timezone.localdate", return_value=tomorrow):
             tomorrow_response = self.client.get(reverse("child_state")).json()
         self.assertNotEqual(
             today_response["signature"],

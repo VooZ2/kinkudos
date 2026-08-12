@@ -44,8 +44,8 @@ Kiekvienas vaikas turi savo žemiausią balanso ribą, pavyzdžiui, `-100`.
 taškai. Išnaudojus pusę kredito, nauji prizų prašymai stabdomi; jau laukiantys
 prašymai lieka sprendžiami.
 
-Reikšmę keiskite vaiko kortelėje naudodami **Nustatyti kreditą** arba per
-**Tėvai → Nustatymai → Paskyros**, po antrašte **Vaikų profiliai**.
+Reikšmę keiskite vaiko kortelėje naudodami **Daugiau → Nustatyti kreditą** arba
+per **Tėvai → Nustatymai → Paskyros**, po antrašte **Vaikų profiliai**.
 
 ## Nutrinami bilietai
 

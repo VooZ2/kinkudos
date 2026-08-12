@@ -12,8 +12,10 @@ currently available to them.
 
 Catalogue rows can expose these actions:
 
-- **Edit** changes the title, points, or emoji for future uses;
+- **Edit** opens one form at a time with **Save** and **Cancel**; **Delete**
+  is separated below;
 - **Hide** keeps the item and its history but removes it from child selection;
+  hidden rows look muted and show a **Hidden** state;
 - **Show** makes a hidden item available again;
 - **Delete** removes the item from active use according to the implemented
   catalogue behavior.
@@ -59,12 +61,12 @@ for the current day. You can also add one custom task and its point value.
 ## Penalties and adjustments
 
 Create penalty templates in **Parents → Manage → Penalties** with a clear title,
-negative point amount, and optional emoji. On a child card, **Assign penalty**
-applies selected templates and can include a shared reason. This creates a
-permanent negative History entry.
+negative point amount, and optional emoji. On a child card, open **More** and
+choose **Assign penalty** to apply selected templates with an optional shared
+reason. This creates a permanent negative History entry.
 
-Use **Adjust points** for a one-off correction or something that is not a task,
-reward, or penalty. Enter a positive or negative amount and a required reason.
-See [Activity history and filters](history.md) for the full record.
+Use **More → Adjust points** for a one-off correction or something that is not
+a task, reward, or penalty. Enter a positive or negative amount and a required
+reason. See [Activity history and filters](history.md) for the full record.
 
 [Parent dashboard and child cards →](dashboard-and-child-cards.md) · [Create and manage tasks →](create-and-manage-tasks.md) · [Activity history →](history.md) · [Lietuviškai](tasks-and-approvals.lt.md)

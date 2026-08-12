@@ -1,7 +1,9 @@
 # Kurti ir valdyti prizus
 
 Atidarykite **Tėvai → Tvarkyti → Prizai**, kad sukurtumėte dalykus, kurių
-vaikas gali prašyti naudodamas išleidžiamus taškus.
+vaikas gali prašyti naudodamas išleidžiamus taškus. Navigacija skiltyje
+**Tvarkyti** yra tik skirtukais (**Darbai**, **Nuobaudos**, **Prizai**,
+**Tikslai**); skirtukas **Prizai** rodo tik tą katalogą.
 
 > **Kam:** Tėvams<br>
 > **Rezultatas:** Aiškus prizų katalogas ir suprantami tėvų sprendimai
@@ -20,12 +22,15 @@ laukiantis prašymas išlaiko savo pradinę užrašytą kainą.
 
 Naudokite veiksmus pagal pavadinimą:
 
-- **Redaguoti** – pakeisti būsimą pavadinimą, kainą ar emoji;
-- **Paslėpti** – išsaugoti prizą ir jo istoriją, bet pašalinti iš vaiko
-  pasirinkimo;
+- **Redaguoti** atveria vieną įterptą formą su **Išsaugoti** ir **Atšaukti**;
+  **Trinti** atskirtas žemiau;
+- **Paslėpti** išsaugo prizą ir jo istoriją, bet pašalina iš vaiko pasirinkimo;
+  paslėpta eilutė atrodo prislopinta ir rodo būseną **Paslėpta**;
 - **Rodyti** – vėl padaryti jį prieinamą;
 - **Trinti** – pašalinti iš aktyvaus naudojimo pagal programoje įdiegtą
   šalinimo elgseną.
+
+Jei katalogas tuščias, centre rodoma tuščia būsena, kad prizų dar nėra.
 
 Po bet kurio katalogo veiksmo ankstesnė **Istorija** lieka suprantama.
 

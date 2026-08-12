@@ -66,33 +66,58 @@
       {% if child.saved_total %}<p class="saved-total"><span>{{ child.saved_total }} {% translate "saved" %}</span><button class="info-button" type="button" data-open-dialog="saved-info-{{ child.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button></p>{% endif %}
     </div>
     <div class="child-metadata-row">
-    <p class="credit-caption">
-      <svg class="action-icon" aria-hidden="true"><use href="#icon-credit-card"></use></svg>
-      <span>{% translate "Credit" %} {{ child.min_balance }}</span>
-      <button class="info-button" type="button" data-open-dialog="credit-info-{{ child.pk }}" aria-label="{% translate "About credit" %}" title="{% translate "About credit" %}">
-        <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg>
-      </button>
-    </p>
-    {% if child.lottery_feature_enabled or child.lottery_ticket_open %}<p class="lottery-parent-status"><svg class="action-icon" aria-hidden="true"><use href="#icon-ticket-simple"></use></svg><span class="ticket-label">{% translate "Tickets" %}</span> <span>{{ child.lottery_tickets_used }}/{{ child.lottery_weekly_limit }}</span><button class="info-button" type="button" data-open-dialog="ticket-info-{{ child.pk }}" aria-label="{% translate 'About scratch tickets' %}" title="{% translate 'About scratch tickets' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button></p>{% endif %}
+      <p class="child-meta-item credit-caption">
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-credit-card"></use></svg>
+        <span>{% translate "Credit" %} {{ child.min_balance }}</span>
+        <button class="info-button meta-info-button" type="button" data-open-dialog="credit-info-{{ child.pk }}" aria-label="{% translate "About credit" %}" title="{% translate "About credit" %}">
+          <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg>
+        </button>
+      </p>
+      {% if child.lottery_feature_enabled or child.lottery_ticket_open %}
+        <p class="child-meta-item lottery-parent-status">
+          <svg class="action-icon" aria-hidden="true"><use href="#icon-ticket-simple"></use></svg>
+          <span class="ticket-label">{% translate "Tickets" %}</span>
+          <span>{{ child.lottery_tickets_used }}/{{ child.lottery_weekly_limit }}</span>
+          <button class="info-button meta-info-button" type="button" data-open-dialog="ticket-info-{{ child.pk }}" aria-label="{% translate 'About scratch tickets' %}" title="{% translate 'About scratch tickets' %}">
+            <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg>
+          </button>
+        </p>
+      {% endif %}
     </div>
     {% if child.goal_summary %}<a class="parent-goal-summary" href="#parent-catalogs" data-parent-goal-target="{{ child.goal_summary.pk }}"><span class="goal-summary-title"><span>{{ child.goal_summary.icon|icon_symbol }}</span> {{ child.goal_summary.title }}</span><span class="goal-summary-progress">{{ child.goal_summary.progress_amount }}/{{ child.goal_summary.target_amount }} {% translate "Points" %}</span><span class="progress"><span style="width: {{ child.goal_summary.progress_percent }}%"></span></span><small class="goal-summary-status">{% if child.goal_summary.has_pending_completion %}{% translate "Reached goal" %}{% elif child.goal_summary.mode == "available" %}{% translate "Current goal" %}{% else %}{% translate "Saved" %}{% endif %} <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></small>{% if child.additional_goal_count %}<small>+{{ child.additional_goal_count }}</small>{% endif %}</a>{% endif %}
     <div class="child-quick-actions" aria-label="{{ child.name }} {% translate "actions" %}">
       <button class="quick-action" type="button" data-open-dialog="task-{{ child.pk }}" aria-label="{% translate "Add completed task" %}" title="{% translate "Add completed task" %}">
-        <svg class="action-icon"><use href="#icon-clipboard-check"></use></svg><span>{% translate "Add completed task" %}</span>
-      </button>
-      <button class="quick-action" type="button" data-open-dialog="child-penalty-{{ child.pk }}" aria-label="{% translate "Assign penalty" %}" title="{% translate "Assign penalty" %}">
-        <svg class="action-icon"><use href="#icon-circle-minus"></use></svg><span>{% translate "Assign penalty" %}</span>
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-clipboard-check"></use></svg>
+        <span>{% translate "Add" %}</span>
       </button>
       <button class="quick-action" type="button" data-open-dialog="assign-tasks-{{ child.pk }}" aria-label="{% translate "Assign tasks for today" %}" title="{% translate "Assign tasks for today" %}">
-        <svg class="action-icon"><use href="#icon-calendar-plus"></use></svg><span>{% translate "Assign tasks for today" %}</span>
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-calendar-plus"></use></svg>
+        <span>{% translate "Assign" %}</span>
       </button>
-      <button class="quick-action" type="button" data-open-dialog="custom-{{ child.pk }}" aria-label="{% translate "Adjust points" %}" title="{% translate "Adjust points" %}">
-        <svg class="action-icon"><use href="#icon-coins"></use></svg><span>{% translate "Adjust points" %}</span>
-      </button>
-      <button class="quick-action" type="button" data-open-dialog="credit-{{ child.pk }}" aria-label="{% translate "Set credit" %}" title="{% translate "Set credit" %}">
-        <svg class="action-icon"><use href="#icon-credit-card"></use></svg><span>{% translate "Set credit" %}</span>
+      <button class="quick-action quick-action-more" type="button" data-open-dialog="child-more-{{ child.pk }}" aria-label="{% translate "More actions" %}" title="{% translate "More actions" %}">
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-ellipsis-vertical"></use></svg>
+        <span class="sr-only">{% translate "More" %}</span>
       </button>
     </div>
+    <dialog id="child-more-{{ child.pk }}" class="action-dialog">
+      <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
+      <h2>{% translate "More actions" %}</h2>
+      <p class="dialog-context">{{ child.name }}</p>
+      <div class="child-more-actions">
+        <button class="child-more-action" type="button" data-open-dialog="custom-{{ child.pk }}">
+          <svg class="action-icon" aria-hidden="true"><use href="#icon-coins"></use></svg>
+          <span>{% translate "Adjust points" %}</span>
+        </button>
+        <button class="child-more-action" type="button" data-open-dialog="child-penalty-{{ child.pk }}">
+          <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-minus"></use></svg>
+          <span>{% translate "Assign penalty" %}</span>
+        </button>
+        <button class="child-more-action" type="button" data-open-dialog="credit-{{ child.pk }}">
+          <svg class="action-icon" aria-hidden="true"><use href="#icon-credit-card"></use></svg>
+          <span>{% translate "Set credit" %}</span>
+        </button>
+      </div>
+    </dialog>
     {% if child.is_locked %}
     <form method="post" action="{% url 'parent_unlock_child' child.pk %}">
       {% csrf_token %}<button class="button button-danger" type="submit">{% translate "Unlock profile" %}</button>
@@ -251,113 +276,150 @@
 <section id="parent-catalogs" class="parent-panel" data-parent-panel="catalogs" hidden>
 <section class="content-section">
   <div class="section-heading"><h2>{% translate "Manage" %}</h2></div>
-  <nav class="manage-tabs" aria-label="{% translate 'Manage sections' %}"><a href="#manage-tasks"><svg class="action-icon" aria-hidden="true"><use href="#icon-list-check"></use></svg>{% translate "Tasks" %}</a><a href="#manage-penalties"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-minus"></use></svg>{% translate "Penalties" %}</a><a href="#manage-rewards"><svg class="action-icon" aria-hidden="true"><use href="#icon-gift"></use></svg>{% translate "Rewards" %}</a><a href="#manage-goals"><svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Goals" %}</a></nav>
+  <nav class="manage-tabs" aria-label="{% translate 'Manage sections' %}">
+    <a href="#manage-tasks"><svg class="action-icon" aria-hidden="true"><use href="#icon-list-check"></use></svg>{% translate "Tasks" %}</a>
+    <a href="#manage-penalties"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-minus"></use></svg>{% translate "Penalties" %}</a>
+    <a href="#manage-rewards"><svg class="action-icon" aria-hidden="true"><use href="#icon-gift"></use></svg>{% translate "Rewards" %}</a>
+    <a href="#manage-goals"><svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Goals" %}</a>
+  </nav>
   <div class="catalog-grid">
-    <details id="manage-tasks" class="panel parent-accordion">
-      <summary>{% translate "Tasks" %}</summary>
+    <section id="manage-tasks" class="panel manage-section" data-manage-section hidden>
+      {% if tasks %}
       <div class="catalog-list">
         {% for item in tasks %}
-        <div class="catalog-row">
-          <div class="catalog-summary"><span class="catalog-emoji">{{ item.icon|icon_symbol }}</span><span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-positive">+{{ item.reward }} {{ item.reward|currency_unit:"neutral" }}</small></span></div>
+        <div class="catalog-row{% if not item.is_active %} is-inactive{% endif %}">
+          <div class="catalog-summary">
+            <span class="catalog-emoji">{{ item.icon|icon_symbol }}</span>
+            <span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-positive">+{{ item.reward }} {{ item.reward|currency_unit:"neutral" }}</small>{% if not item.is_active %} <span class="status-pill catalog-hidden-pill">{% translate "Hidden" %}</span>{% endif %}</span>
+          </div>
           <div class="catalog-actions">
-            <button class="icon-button" type="button" data-toggle-edit="task-{{ item.pk }}" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
+            <button class="icon-button" type="button" data-toggle-edit="task-{{ item.pk }}" aria-expanded="false" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
             <form method="post" action="{% url 'parent_toggle_catalog' 'task' item.pk %}">{% csrf_token %}<button class="icon-button" type="submit" aria-label="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %} {{ item.title }}" title="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %}"><svg class="action-icon"><use href="#icon-{% if item.is_active %}eye{% else %}eye-slash{% endif %}"></use></svg></button></form>
           </div>
           <form id="edit-task-{{ item.pk }}" method="post" action="{% url 'parent_edit_catalog' 'task' item.pk %}" class="catalog-edit-form stack-form" hidden>
             {% csrf_token %}
-            <label>{% translate "Task" %}:<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
-            <label>{% translate "Points" %}:<input class="field-control" name="reward" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ item.reward }}" required></label>
-            <label>{% translate "Icon" %}:<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
-            <div class="form-actions">
+            <label>{% translate "Task" %}<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
+            <label>{% translate "Points" %}<input class="field-control" name="reward" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ item.reward }}" required></label>
+            <label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
+            <div class="form-actions catalog-edit-actions">
               <button class="button button-primary" type="submit">{% translate "Save" %}</button>
-              <button class="button button-danger" type="submit" formaction="{% url 'parent_delete_catalog' 'task' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete task “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
+              <button class="button button-secondary" type="button" data-cancel-edit>{% translate "Cancel" %}</button>
             </div>
+            <button class="button button-danger catalog-delete-action" type="submit" formaction="{% url 'parent_delete_catalog' 'task' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete task “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
           </form>
         </div>
         {% endfor %}
       </div>
+      {% else %}
+      <div class="manage-empty">
+        <p class="empty-state">{% translate "There are no tasks yet." %}</p>
+      </div>
+      {% endif %}
       <div class="catalog-create">
         <div class="catalog-divider"><span>{% translate "Add new" %}</span></div>
         <form method="post" action="{% url 'parent_create_catalog' 'task' %}" class="stack-form">{% csrf_token %}{{ task_form.as_p }}<button class="button button-primary" type="submit">{% translate "Create task" %}</button></form>
       </div>
-    </details>
+    </section>
 
-    <details id="manage-penalties" class="panel parent-accordion">
-      <summary>{% translate "Penalties" %}</summary>
+    <section id="manage-penalties" class="panel manage-section" data-manage-section hidden>
+      {% if penalties %}
       <div class="catalog-list">
         {% for item in penalties %}
-        <div class="catalog-row">
-          <div class="catalog-summary"><span class="catalog-emoji">{{ item.icon|icon_symbol }}</span><span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-negative">{{ item.amount }} {{ item.amount|currency_unit:"neutral" }}</small></span></div>
+        <div class="catalog-row{% if not item.is_active %} is-inactive{% endif %}">
+          <div class="catalog-summary">
+            <span class="catalog-emoji">{{ item.icon|icon_symbol }}</span>
+            <span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-negative">{{ item.amount }} {{ item.amount|currency_unit:"neutral" }}</small>{% if not item.is_active %} <span class="status-pill catalog-hidden-pill">{% translate "Hidden" %}</span>{% endif %}</span>
+          </div>
           <div class="catalog-actions">
-            <button class="icon-button" type="button" data-toggle-edit="penalty-{{ item.pk }}" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
+            <button class="icon-button" type="button" data-toggle-edit="penalty-{{ item.pk }}" aria-expanded="false" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
             <form method="post" action="{% url 'parent_toggle_catalog' 'penalty' item.pk %}">{% csrf_token %}<button class="icon-button" type="submit" aria-label="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %} {{ item.title }}" title="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %}"><svg class="action-icon"><use href="#icon-{% if item.is_active %}eye{% else %}eye-slash{% endif %}"></use></svg></button></form>
           </div>
           <form id="edit-penalty-{{ item.pk }}" method="post" action="{% url 'parent_edit_catalog' 'penalty' item.pk %}" class="catalog-edit-form stack-form" hidden>
             {% csrf_token %}
-            <label>{% translate "Penalty" %}:<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
-            <label>{% translate "Points" %}:<input class="field-control" name="amount" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ item.amount|absolute }}" required></label>
-            <label>{% translate "Icon" %}:<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
-            <div class="form-actions">
+            <label>{% translate "Penalty" %}<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
+            <label>{% translate "Points" %}<input class="field-control" name="amount" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ item.amount|absolute }}" required></label>
+            <label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
+            <div class="form-actions catalog-edit-actions">
               <button class="button button-primary" type="submit">{% translate "Save" %}</button>
-              <button class="button button-danger" type="submit" formaction="{% url 'parent_delete_catalog' 'penalty' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete penalty “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
+              <button class="button button-secondary" type="button" data-cancel-edit>{% translate "Cancel" %}</button>
             </div>
+            <button class="button button-danger catalog-delete-action" type="submit" formaction="{% url 'parent_delete_catalog' 'penalty' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete penalty “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
           </form>
         </div>
         {% endfor %}
       </div>
+      {% else %}
+      <div class="manage-empty">
+        <p class="empty-state">{% translate "There are no penalties yet." %}</p>
+      </div>
+      {% endif %}
       <div class="catalog-create">
         <div class="catalog-divider"><span>{% translate "Add new" %}</span></div>
         <form method="post" action="{% url 'parent_create_catalog' 'penalty' %}" class="stack-form">{% csrf_token %}{{ penalty_form.as_p }}<button class="button button-primary" type="submit">{% translate "Create penalty" %}</button></form>
       </div>
-    </details>
+    </section>
 
-    <details id="manage-rewards" class="panel parent-accordion">
-      <summary>{% translate "Rewards" %}</summary>
+    <section id="manage-rewards" class="panel manage-section" data-manage-section hidden>
+      {% if rewards %}
       <div class="catalog-list">
         {% for item in rewards %}
-        <div class="catalog-row">
-          <div class="catalog-summary"><span class="catalog-emoji">{{ item.icon|icon_symbol }}</span><span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-negative">−{{ item.cost }} {{ item.cost|currency_unit:"neutral" }}</small></span></div>
+        <div class="catalog-row{% if not item.is_active %} is-inactive{% endif %}">
+          <div class="catalog-summary">
+            <span class="catalog-emoji">{{ item.icon|icon_symbol }}</span>
+            <span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-negative">−{{ item.cost }} {{ item.cost|currency_unit:"neutral" }}</small>{% if not item.is_active %} <span class="status-pill catalog-hidden-pill">{% translate "Hidden" %}</span>{% endif %}</span>
+          </div>
           <div class="catalog-actions">
-            <button class="icon-button" type="button" data-toggle-edit="reward-{{ item.pk }}" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
+            <button class="icon-button" type="button" data-toggle-edit="reward-{{ item.pk }}" aria-expanded="false" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
             <form method="post" action="{% url 'parent_toggle_catalog' 'reward' item.pk %}">{% csrf_token %}<button class="icon-button" type="submit" aria-label="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %} {{ item.title }}" title="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %}"><svg class="action-icon"><use href="#icon-{% if item.is_active %}eye{% else %}eye-slash{% endif %}"></use></svg></button></form>
           </div>
           <form id="edit-reward-{{ item.pk }}" method="post" action="{% url 'parent_edit_catalog' 'reward' item.pk %}" class="catalog-edit-form stack-form" hidden>
             {% csrf_token %}
-            <label>{% translate "Reward" %}:<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
-            <label>{% translate "Points" %}:<input class="field-control" name="cost" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ item.cost }}" required></label>
-            <label>{% translate "Icon" %}:<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
-            <div class="form-actions">
+            <label>{% translate "Reward" %}<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
+            <label>{% translate "Points" %}<input class="field-control" name="cost" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ item.cost }}" required></label>
+            <label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
+            <div class="form-actions catalog-edit-actions">
               <button class="button button-primary" type="submit">{% translate "Save" %}</button>
-              <button class="button button-danger" type="submit" formaction="{% url 'parent_delete_catalog' 'reward' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete reward “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
+              <button class="button button-secondary" type="button" data-cancel-edit>{% translate "Cancel" %}</button>
             </div>
+            <button class="button button-danger catalog-delete-action" type="submit" formaction="{% url 'parent_delete_catalog' 'reward' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete reward “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
           </form>
         </div>
         {% endfor %}
       </div>
+      {% else %}
+      <div class="manage-empty">
+        <p class="empty-state">{% translate "There are no rewards yet." %}</p>
+      </div>
+      {% endif %}
       <div class="catalog-create">
         <div class="catalog-divider"><span>{% translate "Add new" %}</span></div>
         <form method="post" action="{% url 'parent_create_catalog' 'reward' %}" class="stack-form">{% csrf_token %}{{ reward_form.as_p }}<button class="button button-primary" type="submit">{% translate "Create reward" %}</button></form>
       </div>
-    </details>
+    </section>
 
-    <details id="manage-goals" class="panel parent-accordion">
-      <summary>{% translate "Goals" %}</summary>
+    <section id="manage-goals" class="panel manage-section" data-manage-section hidden>
+      {% if goals %}
       <div class="goal-filter" aria-label="{% translate 'Goal child filter' %}"><a class="is-active" href="#manage-goals">{% translate "All" %}</a>{% for goal_child in goal_children %}<a href="#manage-goals-child-{{ goal_child.pk }}">{{ goal_child.name }}</a>{% endfor %}</div>
       <div class="goal-manage-list">
         {% for goal in goals %}
         <article id="goal-item-{{ goal.pk }}" class="goal-manage-row" data-goal-child="{{ goal.child.pk }}" data-goal-status="{{ goal.status }}">
           <div class="goal-manage-heading"><span class="catalog-emoji">{{ goal.icon|icon_symbol }}</span><div><strong>{{ goal.title }}</strong><small>{{ goal.child.name }}</small></div></div>
           <div class="goal-manage-progress"><span>{{ goal.progress_amount }}/{{ goal.target_amount }} {% translate "Points" %}</span><div class="progress"><span style="width: {{ goal.progress_percent }}%"></span></div></div>
-          <div class="goal-manage-status">{% if goal.status == "completed" %}<span class="status-pill">{% translate "Completed" %}</span>{% elif goal.status == "cancelled" %}<span class="status-pill">{% translate "Cancelled" %}</span>{% elif goal.has_pending_completion %}<span class="status-pill">{% translate "Reached goal" %}</span>{% elif goal.mode == "available" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Uses available points" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% elif goal.mode == "saved" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-piggy-bank"></use></svg>{% translate "Saved separately" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% else %}<svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Choose mode" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg>{% endif %}</div>
-          <div class="goal-manage-actions"><button class="icon-button" type="button" data-toggle-edit="goal-{{ goal.pk }}" aria-label="{% translate 'Edit goal' %}" title="{% translate 'Edit goal' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-pen-to-square"></use></svg></button>{% if goal.mode == "saved" %}<button class="icon-button" type="button" data-open-dialog="goal-parent-add-{{ goal.pk }}" aria-label="{% translate 'Add points' %}" title="{% translate 'Add points' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-plus"></use></svg></button><dialog id="goal-parent-add-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Add points" %}</h2><p>{% translate "Move available points into this goal." %}</p><form method="post" action="{% url 'parent_add_goal_points' goal.pk %}" class="stack-form">{% csrf_token %}<label>{% translate "Points to add" %}<input class="field-control" name="amount" type="number" min="1" required></label><div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><button class="button button-primary" type="submit">{% translate "Add" %}</button></div></form></dialog>{% if goal.saved_amount %}<button class="icon-button" type="button" data-open-dialog="goal-return-{{ goal.pk }}" aria-label="{% translate 'Move saved points back' %}" title="{% translate 'Move saved points back' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-right-left"></use></svg></button><dialog id="goal-return-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Move saved points back" %}</h2><p>{% translate "These points will become available for rewards again." %}</p><form method="post" action="{% url 'parent_return_goal_points' goal.pk %}" class="stack-form">{% csrf_token %}<button class="button button-primary" type="submit">{% translate "Move points back" %}</button><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button></form></dialog>{% endif %}{% endif %}{% if not goal.saved_amount %}<form method="post" action="{% url 'parent_close_goal' goal.pk %}">{% csrf_token %}<button class="icon-button danger" type="submit" data-confirm="{% translate 'Close this goal?' %}" aria-label="{% translate 'Close goal' %}" title="{% translate 'Close goal' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-box-archive"></use></svg></button></form>{% else %}<button class="icon-button" type="button" disabled aria-label="{% translate 'Return saved points before closing' %}" title="{% translate 'Return saved points before closing' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-box-archive"></use></svg></button>{% endif %}</div>
-          <form id="edit-goal-{{ goal.pk }}" method="post" action="{% url 'parent_edit_goal' goal.pk %}" class="catalog-edit-form stack-form" hidden>{% csrf_token %}<label>{% translate "Goal title" %}:<input class="field-control" name="title" value="{{ goal.title }}" maxlength="120" required></label><label>{% translate "Target amount" %}:<input class="field-control" name="target_amount" type="number" min="1" value="{{ goal.target_amount }}" required></label><label>{% translate "Icon" %}:<input class="field-control emoji-input" name="icon" value="{{ goal.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label><div class="form-actions"><button class="button button-primary" type="submit">{% translate "Save" %}</button><button class="button button-danger" type="button" data-open-dialog="delete-goal-{{ goal.pk }}">{% translate "Delete" %}</button></div></form>
+          <div class="goal-manage-status">{% if goal.status == "completed" %}<span class="status-pill">{% translate "Completed" %}</span>{% elif goal.status == "cancelled" %}<span class="status-pill">{% translate "Cancelled" %}</span>{% elif goal.has_pending_completion %}<span class="status-pill">{% translate "Reached goal" %}</span>{% elif goal.mode == "available" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Uses available points" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% elif goal.mode == "saved" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-piggy-bank"></use></svg>{% translate "Saved separately" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% else %}<svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Choose mode" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% endif %}</div>
+          <div class="goal-manage-actions"><button class="icon-button" type="button" data-toggle-edit="goal-{{ goal.pk }}" aria-expanded="false" aria-label="{% translate 'Edit goal' %}" title="{% translate 'Edit goal' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-pen-to-square"></use></svg></button>{% if goal.mode == "saved" %}<button class="icon-button" type="button" data-open-dialog="goal-parent-add-{{ goal.pk }}" aria-label="{% translate 'Add points' %}" title="{% translate 'Add points' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-plus"></use></svg></button><dialog id="goal-parent-add-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Add points" %}</h2><p>{% translate "Move available points into this goal." %}</p><form method="post" action="{% url 'parent_add_goal_points' goal.pk %}" class="stack-form">{% csrf_token %}<label>{% translate "Points to add" %}<input class="field-control" name="amount" type="number" min="1" required></label><div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><button class="button button-primary" type="submit">{% translate "Add" %}</button></div></form></dialog>{% if goal.saved_amount %}<button class="icon-button" type="button" data-open-dialog="goal-return-{{ goal.pk }}" aria-label="{% translate 'Move saved points back' %}" title="{% translate 'Move saved points back' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-right-left"></use></svg></button><dialog id="goal-return-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Move saved points back" %}</h2><p>{% translate "These points will become available for rewards again." %}</p><form method="post" action="{% url 'parent_return_goal_points' goal.pk %}" class="stack-form">{% csrf_token %}<div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><button class="button button-primary" type="submit">{% translate "Move points back" %}</button></div></form></dialog>{% endif %}{% endif %}{% if not goal.saved_amount %}<form method="post" action="{% url 'parent_close_goal' goal.pk %}">{% csrf_token %}<button class="icon-button danger" type="submit" data-confirm="{% translate 'Close this goal?' %}" aria-label="{% translate 'Close goal' %}" title="{% translate 'Close goal' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-box-archive"></use></svg></button></form>{% else %}<button class="icon-button" type="button" disabled aria-label="{% translate 'Return saved points before closing' %}" title="{% translate 'Return saved points before closing' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-box-archive"></use></svg></button>{% endif %}</div>
+          <form id="edit-goal-{{ goal.pk }}" method="post" action="{% url 'parent_edit_goal' goal.pk %}" class="catalog-edit-form stack-form" hidden>{% csrf_token %}<label>{% translate "Goal title" %}<input class="field-control" name="title" value="{{ goal.title }}" maxlength="120" required></label><label>{% translate "Target amount" %}<input class="field-control" name="target_amount" type="number" min="1" value="{{ goal.target_amount }}" required></label><label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ goal.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label><div class="form-actions catalog-edit-actions"><button class="button button-primary" type="submit">{% translate "Save" %}</button><button class="button button-secondary" type="button" data-cancel-edit>{% translate "Cancel" %}</button></div><button class="button button-danger catalog-delete-action" type="button" data-open-dialog="delete-goal-{{ goal.pk }}">{% translate "Delete" %}</button></form>
           <dialog id="delete-goal-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>{% if goal.saved_amount %}<h2>{% translate "Delete goal and return saved points?" %}</h2><p>{% blocktranslate with amount=goal.saved_amount child_name=goal.child.name %}{{ amount }} saved points will be returned to {{ child_name }}’s available balance before this goal is removed.{% endblocktranslate %}</p>{% else %}<h2>{% translate "Delete goal?" %}</h2><p>{% translate "This goal will be removed. This action cannot be undone." %}</p>{% endif %}<form method="post" action="{% url 'parent_delete_goal' goal.pk %}">{% csrf_token %}<div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><button class="button button-danger" type="submit"><svg class="action-icon" aria-hidden="true"><use href="#icon-trash-can"></use></svg>{% if goal.saved_amount %}{% translate "Return points and delete" %}{% else %}{% translate "Delete goal" %}{% endif %}</button></div></form></dialog>
         </article>
         <dialog id="goal-parent-info-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{{ goal.title }}</h2><p>{% if goal.mode == "saved" %}{% translate "These points are reserved for this goal." %}{% elif goal.mode == "available" %}{% translate "Available points count as progress and can still be spent." %}{% else %}{% translate "Choose a savings mode for this goal." %}{% endif %}</p></dialog>
-        {% empty %}<p class="empty-state">{% translate "There are no goals yet." %}</p>
         {% endfor %}
       </div>
-    </details>
+      {% else %}
+      <div class="manage-empty">
+        <p class="empty-state">{% translate "There are no goals yet." %}</p>
+        <p class="empty-state-hint">{% translate "Children can propose goals from their area. Approved goals appear here." %}</p>
+      </div>
+      {% endif %}
+    </section>
   </div>
 </section>
 </section>
@@ -365,11 +427,13 @@
 <section id="parent-settings" class="parent-panel" data-parent-panel="settings" hidden>
 <section class="content-section">
   <div class="section-heading"><h2>{% translate "Settings" %}</h2></div>
-  <article class="panel family-preferences">
+
+  <section class="settings-block" aria-labelledby="settings-everyday-heading">
+    <h3 id="settings-everyday-heading" class="settings-block-heading">{% translate "Everyday" %}</h3>
     <form method="post" action="{% url 'parent_update_family_preferences' %}" class="stack-form settings-form">
       {% csrf_token %}
-      <details class="settings-section parent-accordion">
-        <summary>{% translate "Family" %}</summary>
+    <details class="settings-section parent-accordion">
+        <summary><span class="settings-summary-label">{% translate "Family" %}</span></summary>
         <div class="settings-group">
           <p class="settings-row">
             {{ family_preferences_form.family_name.label_tag }}
@@ -378,8 +442,8 @@
           </p>
         </div>
       </details>
-      <details class="settings-section parent-accordion">
-        <summary>{% translate "Points and tasks" %}</summary>
+    <details class="settings-section parent-accordion">
+        <summary><span class="settings-summary-label">{% translate "Points and tasks" %}</span></summary>
         <div class="settings-group">
         <p class="settings-row">
           {{ family_preferences_form.photo_bonus_points.label_tag }}
@@ -393,8 +457,8 @@
         </p>
         </div>
       </details>
-      <details class="settings-section parent-accordion">
-        <summary>{% translate "Scratch tickets" %}</summary>
+    <details class="settings-section parent-accordion">
+        <summary><span class="settings-summary-label">{% translate "Scratch tickets" %}</span></summary>
         <div class="settings-group">
         <p class="settings-row checkbox-field">
           {{ family_preferences_form.lottery_enabled.label_tag }}
@@ -413,8 +477,8 @@
         </p>
         </div>
       </details>
-      <details class="settings-section parent-accordion">
-        <summary>{% translate "Data and retention" %}</summary>
+    <details class="settings-section parent-accordion">
+        <summary><span class="settings-summary-label">{% translate "Data and retention" %}</span></summary>
         <div class="settings-group">
         <p class="settings-row">
           {{ family_preferences_form.evidence_retention_days.label_tag }}
@@ -428,10 +492,18 @@
         </p>
         </div>
       </details>
-      <div class="settings-save-actions"><button class="button button-primary" type="submit">{% translate "Save" %}</button></div>
+      <div class="settings-save-actions">
+        <p class="settings-save-hint">{% translate "Saves family preferences only." %}</p>
+        <button class="button button-primary" type="submit">{% translate "Save" %}</button>
+      </div>
     </form>
-  </article>
-  <details class="settings-section settings-section-standalone parent-accordion"><summary>{% translate "Child devices" %}</summary>
+  </section>
+
+  <section class="settings-block" aria-labelledby="settings-people-heading">
+    <h3 id="settings-people-heading" class="settings-block-heading">{% translate "People and devices" %}</h3>
+    <div class="settings-block-list">
+    <details class="settings-section parent-accordion">
+      <summary><span class="settings-summary-label">{% translate "Child devices" %}</span></summary>
   <article class="panel">
     <p class="settings-description">{% translate "Only paired devices can see child profiles or enter a child PIN." %}</p>
     <div class="device-pairing-actions">
@@ -495,178 +567,9 @@
     {% endif %}
   </article>
   </details>
-  <details class="settings-section settings-section-standalone parent-accordion"><summary>{% translate "Network and security" %}</summary>
-  <article class="panel network-access-panel">
-    <div class="backup-heading">
-      <p class="settings-description">
-        {% if family_settings.network_access_mode == "open" %}
-          {% translate "No IP addresses are blocked. Device pairing and sign-in protections remain active." %}
-        {% elif family_settings.network_access_mode == "children" %}
-          {% translate "Child pages are available only from the allowed IP addresses. Parent access is not restricted by IP." %}
-        {% else %}
-          {% translate "Child pages and the parent area are available only from the allowed IP addresses." %}
-        {% endif %}
-      </p>
-      <span class="service-status {% if family_settings.network_access_mode == "open" %}service-status-bad{% else %}service-status-good{% endif %}">
-        <span aria-hidden="true"></span>
-        {% if family_settings.network_access_mode == "open" %}
-          {% translate "IP restrictions disabled" %}
-        {% elif family_settings.network_access_mode == "children" %}
-          {% translate "Child access restricted" %}
-        {% else %}
-          {% translate "All access restricted" %}
-        {% endif %}
-      </span>
-    </div>
-    <dl class="service-details">
-      <div><dt>{% translate "Current IP address" %}</dt><dd>{{ current_client_ip }}</dd></div>
-      <div>
-        <dt>{% translate "Allowed IP addresses and networks" %}</dt>
-        <dd>
-          {% if family_settings.network_access_mode == "open" %}
-            {% translate "Not used while IP restrictions are disabled" %}
-          {% elif family_settings.allowed_networks %}
-            {{ family_settings.allowed_networks|linebreaksbr }}
-          {% else %}
-            —
-          {% endif %}
-        </dd>
-      </div>
-    </dl>
-    {% if user.is_staff %}
-      <button class="button button-primary" type="button" data-open-dialog="network-access-dialog">{% translate "Edit settings" %}</button>
-      <dialog id="network-access-dialog" class="action-dialog backup-dialog">
-        <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
-        <h2>{% translate "Network access setup" %}</h2>
-        <p class="settings-description">{% translate "IP restrictions add an optional security layer on top of device pairing and sign-in limits." %}</p>
-        <form method="post" action="{% url 'parent_update_network_access' %}" class="stack-form settings-form">
-          {% csrf_token %}{{ network_access_form.as_p }}
-          <button class="button button-primary" type="submit">{% translate "Save" %}</button>
-        </form>
-      </dialog>
-    {% else %}
-      <p class="help-text">{% translate "Network access can be changed only by a parent administrator." %}</p>
-    {% endif %}
-  </article>
-  </details>
-  <details class="settings-section settings-section-standalone parent-accordion"><summary>{% translate "Email and notifications" %}</summary>
-  <article class="panel email-panel">
-    <div class="backup-heading">
-      <p class="settings-description">{% translate "SMTP is used for password recovery and optional feedback notifications." %}</p>
-      <span class="service-status {% if smtp_status.enabled %}service-status-good{% else %}service-status-bad{% endif %}">
-        <span aria-hidden="true"></span>
-        {% if smtp_status.enabled %}{% translate "Enabled" %}{% else %}{% translate "Disabled" %}{% endif %}
-      </span>
-    </div>
-    {% if smtp_status.enabled %}
-      <dl class="service-details">
-        <div><dt>{% translate "SMTP server" %}</dt><dd>{{ smtp_status.host }}:{{ smtp_status.port }}</dd></div>
-        <div><dt>{% translate "Sender email address" %}</dt><dd>{{ smtp_status.from_email }}</dd></div>
-        <div><dt>{% translate "Feedback recipient email address" %}</dt><dd>{{ smtp_status.feedback_email }}</dd></div>
-      </dl>
-    {% endif %}
-    {% if user.is_staff %}
-      <button class="button button-primary" type="button" data-open-dialog="smtp-settings-dialog">{% translate "Edit settings" %}</button>
-      <dialog id="smtp-settings-dialog" class="action-dialog backup-dialog">
-        <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
-        <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
-      </button>
-        <h2>{% translate "Email setup" %}</h2>
-        <p class="danger-warning">{% translate "Email credentials are sensitive. Your parent password is required and the SMTP password is never displayed." %}</p>
-        <form method="post" action="{% url 'parent_configure_smtp' %}" class="stack-form">
-          {% csrf_token %}{{ smtp_settings_form.as_p }}
-          <button class="button button-primary" type="submit">{% translate "Verify and save" %}</button>
-        </form>
-      </dialog>
-    {% else %}
-      <p class="help-text">{% translate "Email setup can be changed only by a parent administrator." %}</p>
-    {% endif %}
-  </article>
-  </details>
-  <details class="settings-section settings-section-standalone parent-accordion"><summary>{% translate "Backups" %}</summary>
-  <article class="panel backup-panel">
-    <div class="backup-heading">
-      <p class="settings-description">{% translate "Daily encrypted copies protect the family database and uploaded photos." %}</p>
-      <span class="service-status {% if backup_status.running %}service-status-warning{% elif backup_status.available and backup_status.configured and backup_status.is_fresh %}service-status-good{% else %}service-status-bad{% endif %}">
-        <span aria-hidden="true"></span>
-        {% if backup_status.running %}
-          {% translate "Copying" %}
-        {% elif not backup_status.available %}
-          {% translate "Attention needed" %}
-        {% elif not backup_status.configured %}
-          {% translate "Not enabled" %}
-        {% elif backup_status.is_fresh %}
-          {% translate "Enabled" %}
-        {% else %}
-          {% translate "Attention needed" %}
-        {% endif %}
-      </span>
-    </div>
-    {% if not backup_status.available %}
-      <p class="danger-warning backup-warning">{% translate "The backup service is unavailable. Ask the server administrator to check the backup container." %}</p>
-    {% else %}
-      <dl class="service-details">
-        <div><dt>{% translate "Provider" %}</dt><dd>{{ backup_status.provider|default:"—" }}</dd></div>
-        <div><dt>{% translate "Repository" %}</dt><dd>{{ backup_status.target|default:"—" }}</dd></div>
-        <div><dt>{% translate "Last successful backup" %}</dt><dd>{% if backup_status.last_success %}{{ backup_status.last_success|date:"Y-m-d H:i" }}{% elif backup_status.configured %}{% translate "Backups not completed" %}{% else %}—{% endif %}</dd></div>
-        <div><dt>{% translate "Last integrity check" %}</dt><dd>{% if backup_status.last_check %}{{ backup_status.last_check|date:"Y-m-d H:i" }}{% else %}—{% endif %}</dd></div>
-      </dl>
-      {% if backup_status.error %}<p class="danger-warning backup-warning">{{ backup_status.error }}</p>{% endif %}
-    {% endif %}
-    {% if user.is_staff %}
-      <div class="backup-actions">
-        {% if backup_status.available and backup_status.configured %}
-          <form method="post" action="{% url 'parent_run_backup' %}">{% csrf_token %}
-            <button class="button button-primary" type="submit"{% if backup_status.running %} disabled{% endif %}>{% translate "Back up now" %}</button>
-          </form>
-        {% endif %}
-        <button class="button button-primary" type="button" data-open-dialog="backup-settings-dialog">{% translate "Edit settings" %}</button>
-      </div>
-      <dialog id="backup-settings-dialog" class="action-dialog backup-dialog">
-        <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
-          <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
-        </button>
-        <h2>{% translate "Backup setup" %}</h2>
-        <p class="danger-warning">{% translate "Incorrect changes can stop future backups. Continue only if you understand the storage credentials and have saved the repository password outside this server." %}</p>
-        <form method="post" action="{% url 'parent_configure_backup' %}" class="stack-form">
-          {% csrf_token %}{{ backup_settings_form.as_p }}
-          <button class="button button-primary" type="submit">{% translate "Verify and save" %}</button>
-        </form>
-      </dialog>
-    {% else %}
-      <p class="help-text">{% translate "Backup setup can be changed only by a parent administrator." %}</p>
-    {% endif %}
-    {% if backup_audit_events %}
-      <details class="backup-audit">
-        <summary>{% translate "Recent backup actions" %}</summary>
-        <ul>{% for event in backup_audit_events %}<li>{{ event.created_at|date:"Y-m-d H:i" }} · {{ event.get_action_display }}{% if event.actor %} · {{ event.actor|user_display_name }}{% endif %}</li>{% endfor %}</ul>
-      </details>
-    {% endif %}
-  </article>
-  </details>
-  <details class="settings-section settings-section-standalone parent-accordion"><summary>{% translate "Accounts" %}</summary>
+    <details class="settings-section parent-accordion">
+      <summary><span class="settings-summary-label">{% translate "Accounts" %}</span></summary>
   <div class="account-management">
-    <section class="panel account-create-panel">
-      <div class="account-section-heading">
-        <h3>{% translate "Create account" %}</h3>
-      </div>
-      <label class="account-type-picker">
-        <span>{% translate "Account type" %}</span>
-        <select class="field-control" data-account-create-type aria-controls="create-parent-account-form create-child-profile-form">
-          <option value="parent">{% translate "Parent account" %}</option>
-          <option value="child">{% translate "Child profile" %}</option>
-        </select>
-      </label>
-      <form id="create-parent-account-form" method="post" action="{% url 'parent_create_parent_account' %}" class="stack-form account-create-form" data-account-create-form="parent">
-        {% csrf_token %}{{ parent_account_form.as_p }}
-        <button class="button button-primary" type="submit">{% translate "Create account" %}</button>
-      </form>
-      <form id="create-child-profile-form" method="post" action="{% url 'parent_create_child_account' %}" class="stack-form account-create-form" data-account-create-form="child" hidden>
-        {% csrf_token %}{{ child_account_form.as_p }}
-        <button class="button button-primary" type="submit">{% translate "Create profile" %}</button>
-      </form>
-    </section>
-
     <section class="panel existing-accounts-panel">
       <div class="account-section-heading">
         <h3>{% translate "Existing accounts" %}</h3>
@@ -740,9 +643,31 @@
         {% endfor %}
       </div>
     </section>
+
+    <section class="panel account-create-panel">
+      <div class="account-section-heading">
+        <h3>{% translate "Create account" %}</h3>
+      </div>
+      <label class="account-type-picker">
+        <span>{% translate "Account type" %}</span>
+        <select class="field-control" data-account-create-type aria-controls="create-parent-account-form create-child-profile-form">
+          <option value="parent">{% translate "Parent account" %}</option>
+          <option value="child">{% translate "Child profile" %}</option>
+        </select>
+      </label>
+      <form id="create-parent-account-form" method="post" action="{% url 'parent_create_parent_account' %}" class="stack-form account-create-form" data-account-create-form="parent">
+        {% csrf_token %}{{ parent_account_form.as_p }}
+        <button class="button button-primary" type="submit">{% translate "Create account" %}</button>
+      </form>
+      <form id="create-child-profile-form" method="post" action="{% url 'parent_create_child_account' %}" class="stack-form account-create-form" data-account-create-form="child" hidden>
+        {% csrf_token %}{{ child_account_form.as_p }}
+        <button class="button button-primary" type="submit">{% translate "Create profile" %}</button>
+      </form>
+    </section>
   </div>
   </details>
-  <details class="settings-section settings-section-standalone parent-accordion"><summary>{% translate "Family feedback" %}</summary>
+    <details class="settings-section parent-accordion">
+      <summary><span class="settings-summary-label">{% translate "Family feedback" %}</span></summary>
   <section class="panel feedback-admin">
     <p class="settings-description feedback-description">{% translate "Family feedback stays on this server and can be reviewed by parents." %}</p>
     {% if not feedback_email_configured %}
@@ -833,6 +758,167 @@
     {% endif %}
   </section>
   </details>
+    </div>
+  </section>
+
+  <section class="settings-block" aria-labelledby="settings-server-heading">
+    <h3 id="settings-server-heading" class="settings-block-heading">{% translate "Server" %}</h3>
+    <div class="settings-block-list">
+    <details class="settings-section parent-accordion">
+      <summary><span class="settings-summary-label">{% translate "Network and security" %}</span>
+        <span class="service-status settings-summary-status {% if family_settings.network_access_mode == "open" %}service-status-bad{% else %}service-status-good{% endif %}">
+          <span aria-hidden="true"></span>
+          {% if family_settings.network_access_mode == "open" %}
+            {% translate "IP restrictions disabled" %}
+          {% elif family_settings.network_access_mode == "children" %}
+            {% translate "Child access restricted" %}
+          {% else %}
+            {% translate "All access restricted" %}
+          {% endif %}
+        </span></summary>
+  <article class="panel network-access-panel">
+    <div class="backup-heading">
+      <p class="settings-description">
+        {% if family_settings.network_access_mode == "open" %}
+          {% translate "No IP addresses are blocked. Device pairing and sign-in protections remain active." %}
+        {% elif family_settings.network_access_mode == "children" %}
+          {% translate "Child pages are available only from the allowed IP addresses. Parent access is not restricted by IP." %}
+        {% else %}
+          {% translate "Child pages and the parent area are available only from the allowed IP addresses." %}
+        {% endif %}
+      </p>
+    </div>
+    <dl class="service-details">
+      <div><dt>{% translate "Current IP address" %}</dt><dd>{{ current_client_ip }}</dd></div>
+      <div>
+        <dt>{% translate "Allowed IP addresses and networks" %}</dt>
+        <dd>
+          {% if family_settings.network_access_mode == "open" %}
+            {% translate "Not used while IP restrictions are disabled" %}
+          {% elif family_settings.allowed_networks %}
+            {{ family_settings.allowed_networks|linebreaksbr }}
+          {% else %}
+            —
+          {% endif %}
+        </dd>
+      </div>
+    </dl>
+    {% if user.is_staff %}
+      <button class="button button-primary" type="button" data-open-dialog="network-access-dialog">{% translate "Edit settings" %}</button>
+      <dialog id="network-access-dialog" class="action-dialog backup-dialog">
+        <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
+        <h2>{% translate "Network access setup" %}</h2>
+        <p class="settings-description">{% translate "IP restrictions add an optional security layer on top of device pairing and sign-in limits." %}</p>
+        <form method="post" action="{% url 'parent_update_network_access' %}" class="stack-form settings-form">
+          {% csrf_token %}{{ network_access_form.as_p }}
+          <button class="button button-primary" type="submit">{% translate "Save" %}</button>
+        </form>
+      </dialog>
+    {% else %}
+      <p class="help-text">{% translate "Network access can be changed only by a parent administrator." %}</p>
+    {% endif %}
+  </article>
+  </details>
+    <details class="settings-section parent-accordion">
+      <summary><span class="settings-summary-label">{% translate "Email and notifications" %}</span>
+        <span class="service-status settings-summary-status {% if smtp_status.enabled %}service-status-good{% else %}service-status-bad{% endif %}">
+          <span aria-hidden="true"></span>
+          {% if smtp_status.enabled %}{% translate "Enabled" %}{% else %}{% translate "Disabled" %}{% endif %}
+        </span></summary>
+  <article class="panel email-panel">
+    <div class="backup-heading">
+      <p class="settings-description">{% translate "SMTP is used for password recovery and optional feedback notifications." %}</p>
+    </div>
+    {% if smtp_status.enabled %}
+      <dl class="service-details">
+        <div><dt>{% translate "SMTP server" %}</dt><dd>{{ smtp_status.host }}:{{ smtp_status.port }}</dd></div>
+        <div><dt>{% translate "Sender email address" %}</dt><dd>{{ smtp_status.from_email }}</dd></div>
+        <div><dt>{% translate "Feedback recipient email address" %}</dt><dd>{{ smtp_status.feedback_email }}</dd></div>
+      </dl>
+    {% endif %}
+    {% if user.is_staff %}
+      <button class="button button-primary" type="button" data-open-dialog="smtp-settings-dialog">{% translate "Edit settings" %}</button>
+      <dialog id="smtp-settings-dialog" class="action-dialog backup-dialog">
+        <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
+      </button>
+        <h2>{% translate "Email setup" %}</h2>
+        <p class="danger-warning">{% translate "Email credentials are sensitive. Your parent password is required and the SMTP password is never displayed." %}</p>
+        <form method="post" action="{% url 'parent_configure_smtp' %}" class="stack-form">
+          {% csrf_token %}{{ smtp_settings_form.as_p }}
+          <button class="button button-primary" type="submit">{% translate "Verify and save" %}</button>
+        </form>
+      </dialog>
+    {% else %}
+      <p class="help-text">{% translate "Email setup can be changed only by a parent administrator." %}</p>
+    {% endif %}
+  </article>
+  </details>
+    <details class="settings-section parent-accordion">
+      <summary><span class="settings-summary-label">{% translate "Backups" %}</span>
+        <span class="service-status settings-summary-status {% if backup_status.running %}service-status-warning{% elif backup_status.available and backup_status.configured and backup_status.is_fresh %}service-status-good{% else %}service-status-bad{% endif %}">
+          <span aria-hidden="true"></span>
+          {% if backup_status.running %}
+            {% translate "Copying" %}
+          {% elif not backup_status.available %}
+            {% translate "Attention needed" %}
+          {% elif not backup_status.configured %}
+            {% translate "Not enabled" %}
+          {% elif backup_status.is_fresh %}
+            {% translate "Enabled" %}
+          {% else %}
+            {% translate "Attention needed" %}
+          {% endif %}
+        </span></summary>
+  <article class="panel backup-panel">
+    <div class="backup-heading">
+      <p class="settings-description">{% translate "Daily encrypted copies protect the family database and uploaded photos." %}</p>
+    </div>
+    {% if not backup_status.available %}
+      <p class="danger-warning backup-warning">{% translate "The backup service is unavailable. Ask the server administrator to check the backup container." %}</p>
+    {% else %}
+      <dl class="service-details">
+        <div><dt>{% translate "Provider" %}</dt><dd>{{ backup_status.provider|default:"—" }}</dd></div>
+        <div><dt>{% translate "Repository" %}</dt><dd>{{ backup_status.target|default:"—" }}</dd></div>
+        <div><dt>{% translate "Last successful backup" %}</dt><dd>{% if backup_status.last_success %}{{ backup_status.last_success|date:"Y-m-d H:i" }}{% elif backup_status.configured %}{% translate "Backups not completed" %}{% else %}—{% endif %}</dd></div>
+        <div><dt>{% translate "Last integrity check" %}</dt><dd>{% if backup_status.last_check %}{{ backup_status.last_check|date:"Y-m-d H:i" }}{% else %}—{% endif %}</dd></div>
+      </dl>
+      {% if backup_status.error %}<p class="danger-warning backup-warning">{{ backup_status.error }}</p>{% endif %}
+    {% endif %}
+    {% if user.is_staff %}
+      <div class="backup-actions">
+        {% if backup_status.available and backup_status.configured %}
+          <form method="post" action="{% url 'parent_run_backup' %}">{% csrf_token %}
+            <button class="button button-primary" type="submit"{% if backup_status.running %} disabled{% endif %}>{% translate "Back up now" %}</button>
+          </form>
+        {% endif %}
+        <button class="button button-primary" type="button" data-open-dialog="backup-settings-dialog">{% translate "Edit settings" %}</button>
+      </div>
+      <dialog id="backup-settings-dialog" class="action-dialog backup-dialog">
+        <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
+          <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
+        </button>
+        <h2>{% translate "Backup setup" %}</h2>
+        <p class="danger-warning">{% translate "Incorrect changes can stop future backups. Continue only if you understand the storage credentials and have saved the repository password outside this server." %}</p>
+        <form method="post" action="{% url 'parent_configure_backup' %}" class="stack-form">
+          {% csrf_token %}{{ backup_settings_form.as_p }}
+          <button class="button button-primary" type="submit">{% translate "Verify and save" %}</button>
+        </form>
+      </dialog>
+    {% else %}
+      <p class="help-text">{% translate "Backup setup can be changed only by a parent administrator." %}</p>
+    {% endif %}
+    {% if backup_audit_events %}
+      <details class="backup-audit">
+        <summary>{% translate "Recent backup actions" %}</summary>
+        <ul>{% for event in backup_audit_events %}<li>{{ event.created_at|date:"Y-m-d H:i" }} · {{ event.get_action_display }}{% if event.actor %} · {{ event.actor|user_display_name }}{% endif %}</li>{% endfor %}</ul>
+      </details>
+    {% endif %}
+  </article>
+  </details>
+    </div>
+  </section>
+
 </section>
 </section>
 
@@ -890,7 +976,7 @@
           </span>
         {% elif entry.history_type == "goal_event" %}
           <div><strong>{{ entry.goal.child.name }} · {{ entry.description }}</strong><small>{{ entry.created_at|date:"Y-m-d H:i" }} · {% translate "Goal" %}</small>{% if entry.actor and entry.history_actor_label %}<small class="history-actor">{{ entry.history_actor_label }}: {{ entry.actor|user_display_name }}</small>{% endif %}</div>
-          <span class="history-row-actions"><span class="history-decision history-decision-informational"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg>{% translate "Informational" %}</span>{% if entry.amount %}<span class="amount">{{ entry.amount }} {% translate "Points" %}</span>{% endif %}{% include "economy/includes/history_kind_icon.html" %}</span>
+          <span class="history-row-actions"><span class="history-decision history-decision-informational" title="{% translate 'Informational' %}" aria-label="{% translate 'Informational' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg><span class="history-decision-label">{% translate "Informational" %}</span></span>{% if entry.amount %}<span class="amount">{{ entry.amount }} {% translate "Points" %}</span>{% endif %}{% include "economy/includes/history_kind_icon.html" %}</span>
         {% elif entry.history_type == "proposal_decision" %}
           <div><strong>{{ entry.child.name }} · {{ entry.title }}</strong><small>{{ entry.decided_at|date:"Y-m-d H:i" }} · {{ entry.get_proposal_type_display }}</small>{% if entry.decided_by %}<small class="history-actor">{{ entry.history_actor_label }}: {{ entry.decided_by|user_display_name }}</small>{% endif %}</div>
           <span class="history-row-actions"><span class="history-decision {% if entry.status == "approved" %}history-decision-approved{% else %}history-decision-rejected{% endif %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-{% if entry.status == "approved" %}circle-check{% else %}circle-xmark{% endif %}"></use></svg>{% if entry.status == "approved" %}{% translate "Approved" %}{% else %}{% translate "Rejected" %}{% endif %}</span>{% include "economy/includes/history_kind_icon.html" %}</span>

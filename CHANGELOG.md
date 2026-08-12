@@ -9,6 +9,27 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Nothing yet.
 
+## [26.6.7] - 2026-08-12
+
+### Changed
+
+- Parent Home child cards now use Add / Assign plus a More menu for adjust,
+  penalty, and credit actions, with clearer credit and lottery-ticket metadata.
+- Pending requests are easier to scan, with an in-panel heading and count badge
+  and clearer mobile actions.
+- Parent Settings are grouped into Everyday, People and devices, and Server
+  sections with clearer status chips and save guidance.
+- Parent History rows and mobile filter chips are tighter to scan, and the
+  filter dialog stays usable as a bottom sheet with sticky apply actions.
+- Manage uses a single section navigation for Tasks, Rewards, Penalties, and
+  Goals, with clearer edit flows and empty states.
+- Official parent documentation and screenshots now match the 26.6.7 Home,
+  Settings, History, and Manage UI.
+
+### Fixed
+
+- Approve-goal save-mode radio layout and legend spacing.
+
 ## [26.6.6] - 2026-08-11
 
 ### Changed

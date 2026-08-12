@@ -178,7 +178,7 @@ class ParentSettingsTests(TestCase):
         self.assertEqual(family.lottery_ticket_cost, 15)
         self.assertEqual(family.lottery_weekly_limit, 3)
 
-    @patch("economy.views.verify_smtp")
+    @patch("economy.views.parent_settings.verify_smtp")
     def test_admin_password_is_required_before_saving_smtp(self, verify):
         with TemporaryDirectory() as directory:
             path = Path(directory) / "settings.json"
@@ -192,7 +192,7 @@ class ParentSettingsTests(TestCase):
                 verify.assert_not_called()
                 self.assertFalse(path.exists())
 
-    @patch("economy.views.verify_smtp")
+    @patch("economy.views.parent_settings.verify_smtp")
     def test_admin_can_verify_and_save_smtp_outside_database(self, verify):
         with TemporaryDirectory() as directory:
             path = Path(directory) / "settings.json"
@@ -215,13 +215,13 @@ class ParentSettingsTests(TestCase):
                     "smtp-secret",
                 )
 
-    @patch("economy.views.verify_smtp")
+    @patch("economy.views.parent_settings.verify_smtp")
     def test_non_admin_cannot_change_smtp(self, verify):
         self.client.force_login(self.parent)
         self.client.post(reverse("parent_configure_smtp"), self.smtp_payload())
         verify.assert_not_called()
 
-    def test_catalog_edit_labels_have_colons(self):
+    def test_catalog_edit_labels_omit_trailing_colons(self):
         Task.objects.create(title="Tidy", reward=3)
         PenaltyTemplate.objects.create(title="Late", amount=-2)
         Reward.objects.create(title="Movie", cost=5)
@@ -229,10 +229,14 @@ class ParentSettingsTests(TestCase):
 
         response = self.client.get(reverse("parent_dashboard"))
 
-        self.assertContains(response, "Task:<input", count=1)
-        self.assertContains(response, "Penalty:<input", count=1)
-        self.assertContains(response, "Reward:<input", count=1)
-        self.assertContains(response, "Icon:<input", count=3)
+        self.assertContains(response, "<label>Task<input", count=1, html=False)
+        self.assertContains(response, "<label>Penalty<input", count=1, html=False)
+        self.assertContains(response, "<label>Reward<input", count=1, html=False)
+        self.assertContains(response, "<label>Icon<input", count=3, html=False)
+        self.assertNotContains(response, "Task:<input", html=False)
+        self.assertNotContains(response, "Penalty:<input", html=False)
+        self.assertNotContains(response, "Reward:<input", html=False)
+        self.assertNotContains(response, "Icon:<input", html=False)
 
     def test_email_status_uses_compact_details_and_short_edit_label(self):
         with TemporaryDirectory() as directory:
@@ -337,8 +341,19 @@ class ParentSettingsTests(TestCase):
         self.client.force_login(self.admin)
 
         response = self.client.get(reverse("parent_dashboard"))
+        content = response.content.decode()
+        settings = content[content.index('id="parent-settings"') : content.index('id="parent-history"')]
 
         self.assertNotContains(response, "Children and access")
+        self.assertIn('id="settings-everyday-heading"', settings)
+        self.assertIn("Everyday", settings)
+        self.assertIn("People and devices", settings)
+        self.assertIn(">Server<", settings)
+        self.assertIn("Saves family preferences only.", settings)
+        self.assertLess(
+            settings.index("existing-accounts-panel"),
+            settings.index("account-create-panel"),
+        )
         for heading in (
             "Family",
             "Points and tasks",
@@ -351,7 +366,11 @@ class ParentSettingsTests(TestCase):
             "Accounts",
             "Family feedback",
         ):
-            self.assertContains(response, f"<summary>{heading}</summary>", html=False)
+            self.assertIn(
+                f'class="settings-summary-label">{heading}</span>',
+                settings,
+            )
+        self.assertEqual(settings.count("settings-summary-status"), 3)
         self.assertNotContains(response, ">Rewards and goals<", html=False)
 
     def smtp_payload(self, **overrides):

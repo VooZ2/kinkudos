@@ -229,7 +229,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, ">Patvirtinti</button>", html=False)
         self.assertNotContains(response, ">Atmesti</button>", html=False)
 
-    @patch("economy.views.notify_proposal_decision")
+    @patch("economy.views.parent_actions.notify_proposal_decision")
     def test_proposal_decision_is_one_time_and_notifies_only_after_success(self, notify):
         proposal = Proposal.objects.create(
             child=self.child_one,
@@ -421,7 +421,7 @@ class AccessAndWorkflowTests(TestCase):
             ).exists()
         )
 
-    @patch("economy.views.notify_reward_request")
+    @patch("economy.views.child.notify_reward_request")
     def test_reward_request_notifies_parents(self, notify):
         self.login_child(self.child_one, "1234")
 
@@ -451,7 +451,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Veiksmų istorija")
         self.assertContains(response, "Child One · Testas")
 
-    @patch("economy.views.notify_task_decision")
+    @patch("economy.views.parent_actions.notify_task_decision")
     def test_task_approval_and_rejection_notify_the_affected_child(self, notify):
         self.client.login(username="tevai", password=self.parent_password)
         approved = self.child_one.task_claims.create(
@@ -478,7 +478,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(notify.call_args.args[0].child, self.child_one)
         self.assertFalse(notify.call_args.kwargs["approved"])
 
-    @patch("economy.views.notify_reward_decision")
+    @patch("economy.views.parent_actions.notify_reward_decision")
     def test_reward_approval_and_rejection_notify_the_affected_child(self, notify):
         post_ledger_entry(
             child=self.child_one,
@@ -835,7 +835,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.6.6")
+        self.assertContains(response, "v26.6.7")
         self.assertContains(response, f'href="{reverse("changelog")}"', html=False)
         self.assertContains(response, "taškai")
         self.assertContains(response, "Kreditas -100")
@@ -845,7 +845,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, '<details class="settings-section" open>', html=False)
         self.assertNotContains(
             response,
-            '<details class="settings-section settings-section-standalone" open>',
+            "settings-section-standalone",
             html=False,
         )
         self.assertContains(response, 'class="language-switcher-option"', count=2, html=False)
@@ -903,8 +903,10 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, ">Žurnalas<", html=False)
 
         stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
-        self.assertIn(".catalog-grid > details > summary::after", stylesheet)
+        self.assertNotIn(".catalog-grid > details > summary::after", stylesheet)
         self.assertIn("#parent-settings details > summary::after", stylesheet)
+        self.assertIn(".manage-tabs a.is-active", stylesheet)
+        self.assertContains(response, "data-manage-section", html=False)
 
     def test_home_title_contains_family_nickname_and_project_name(self):
         response = self.client.get(reverse("home"))
@@ -918,7 +920,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
         self.assertContains(response, 'class="footer-product">KinKudos · ', html=False)
-        self.assertContains(response, "v26.6.6")
+        self.assertContains(response, "v26.6.7")
         self.assertContains(response, "Dokumentacija")
         self.assertContains(response, "https://docs.kinkudos.app/index.lt/")
         self.assertContains(response, "https://github.com/VooZ2/kinkudos")
@@ -1172,9 +1174,10 @@ class AccessAndWorkflowTests(TestCase):
         html = response.content.decode()
         action_markers = [
             f'data-open-dialog="task-{self.child_one.pk}"',
-            f'data-open-dialog="child-penalty-{self.child_one.pk}"',
             f'data-open-dialog="assign-tasks-{self.child_one.pk}"',
+            f'data-open-dialog="child-more-{self.child_one.pk}"',
             f'data-open-dialog="custom-{self.child_one.pk}"',
+            f'data-open-dialog="child-penalty-{self.child_one.pk}"',
             f'data-open-dialog="credit-{self.child_one.pk}"',
         ]
 
@@ -1183,15 +1186,33 @@ class AccessAndWorkflowTests(TestCase):
         quick_action_html = html[html.index('<div class="child-quick-actions"'):]
         quick_action_html = quick_action_html[:quick_action_html.index('</div>')]
         self.assertEqual(
-            re.findall(r'<button class="quick-action".*?<use href="#(icon-[^"]+)"', quick_action_html, re.S),
+            re.findall(r'<button class="quick-action[^"]*".*?<use href="#(icon-[^"]+)"', quick_action_html, re.S),
             [
                 "icon-clipboard-check",
-                "icon-circle-minus",
                 "icon-calendar-plus",
-                "icon-coins",
-                "icon-credit-card",
+                "icon-ellipsis-vertical",
             ],
         )
+        self.assertIn(">Pridėti<", quick_action_html)
+        self.assertIn(">Paskirti<", quick_action_html)
+        self.assertIn('class="sr-only">Daugiau</span>', quick_action_html)
+        more_dialog = html[html.index(f'id="child-more-{self.child_one.pk}"') :]
+        more_dialog = more_dialog[: more_dialog.index("</dialog>") + len("</dialog>")]
+        self.assertIn("Daugiau veiksmų", more_dialog)
+        self.assertIn(f'data-open-dialog="custom-{self.child_one.pk}"', more_dialog)
+        self.assertIn(f'data-open-dialog="child-penalty-{self.child_one.pk}"', more_dialog)
+        self.assertIn(f'data-open-dialog="credit-{self.child_one.pk}"', more_dialog)
+        self.assertIn("icon-coins", more_dialog)
+        self.assertIn("icon-circle-minus", more_dialog)
+        self.assertIn("icon-credit-card", more_dialog)
+        self.assertIn("Koreguoti taškus", more_dialog)
+        self.assertIn("Skirti nuobaudą", more_dialog)
+        self.assertIn("Nustatyti kreditą", more_dialog)
+        meta_row = html[html.index('<div class="child-metadata-row">') :]
+        meta_row = meta_row[: meta_row.index("</div>")]
+        self.assertIn("Kreditas -100", meta_row)
+        self.assertLess(meta_row.index("Kreditas"), meta_row.index("Bilietai"))
+        self.assertNotIn("child-meta-sep", meta_row)
         nav_html = html[html.index('<nav class="parent-navigation"'):]
         nav_html = nav_html[:nav_html.index('</nav>')]
         self.assertEqual(
@@ -1297,10 +1318,10 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.6.6")
+        self.assertContains(response, "v26.6.7")
         self.assertContains(response, "Dabartinė versija")
         current_release = response.context["releases"][0]
-        self.assertEqual(current_release["version"], "26.6.6")
+        self.assertEqual(current_release["version"], "26.6.7")
         self.assertEqual(len(response.context["releases"]), 5)
         self.assertEqual(response.context["release_page"].paginator.per_page, 5)
         current_copy = " ".join(current_release["new"] + current_release["fixed"]).lower()
@@ -1308,7 +1329,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotIn("demo", current_copy)
         next_page = self.client.get(reverse("changelog"), {"page": 2})
         self.assertEqual(next_page.status_code, 200)
-        self.assertNotContains(next_page, "<h2>v26.6.6</h2>", html=False)
+        self.assertNotContains(next_page, "<h2>v26.6.7</h2>", html=False)
         self.assertContains(next_page, "Pakeitimų istorijos puslapiai")
 
     def test_parent_can_create_another_parent_account(self):
@@ -1511,7 +1532,7 @@ class AccessAndWorkflowTests(TestCase):
             return post_ledger_entry(**kwargs)
 
         with patch(
-            "economy.views.post_ledger_entry",
+            "economy.views.parent_actions.post_ledger_entry",
             side_effect=fail_on_second_entry,
         ):
             with self.assertRaises(RuntimeError):
@@ -1586,17 +1607,21 @@ class AccessAndWorkflowTests(TestCase):
         balance_start = template.index('<div class="child-balance-row">')
         balance_end = template.index("</div>", balance_start)
         balance_row = template[balance_start:balance_end]
+        metadata_start = template.index('<div class="child-metadata-row">')
 
         self.assertLess(
             balance_row.index('class="stat-value'),
             balance_row.index('class="saved-total"'),
         )
+        self.assertLess(balance_start, metadata_start)
+        self.assertIn("credit-caption", template[metadata_start:])
         self.assertLess(
-            template.index('class="saved-total"'),
-            template.index('class="credit-caption"'),
+            template.index("credit-caption", metadata_start),
+            template.index("child-quick-actions", metadata_start),
         )
         stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".child-balance-row { display: flex; align-items: baseline; justify-content: flex-start;", stylesheet)
+        self.assertIn(".child-metadata-row {", stylesheet)
 
     def test_pending_requests_are_one_shared_chronological_list(self):
         older = self.child_one.task_claims.create(
@@ -1624,8 +1649,11 @@ class AccessAndWorkflowTests(TestCase):
         self.client.login(username="tevai", password=self.parent_password)
         content = self.client.get(reverse("parent_dashboard")).content.decode()
         self.assertLess(content.index("Pirmas prašymas"), content.index("Antras prašymas"))
-        self.assertIn("Laukiantys prašymai (3)", content)
+        self.assertIn("Laukiantys prašymai", content)
+        self.assertIn('class="pending-count-badge"', content)
+        self.assertRegex(content, r'class="pending-count-badge"[^>]*>\s*3\s*<')
         self.assertEqual(content.count('class="pending-requests-panel"'), 1)
+        self.assertEqual(content.count('class="pending-panel-heading"'), 1)
         self.assertEqual(content.count('class="pending-request-row'), 3)
         self.assertEqual(content.count('class="pending-request-avatar"'), 3)
         self.assertNotIn("pending-child-group", content)
@@ -1639,7 +1667,16 @@ class AccessAndWorkflowTests(TestCase):
         stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
 
         self.assertIn(
-            ".pending-requests-panel { overflow: hidden; border: 2px solid color-mix(in srgb, var(--accent) 62%, var(--line));",
+            "border: 2px solid color-mix(in srgb, var(--accent) 62%, var(--line));",
+            stylesheet,
+        )
+        self.assertIn(
+            "background: color-mix(in srgb, var(--accent) 8%, var(--surface));",
+            stylesheet,
+        )
+        self.assertIn(".pending-panel-heading", stylesheet)
+        self.assertIn(
+            ".pending-request-actions { grid-column: 2; justify-content: flex-start;",
             stylesheet,
         )
 
@@ -1835,10 +1872,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.6.6',
+            '/static/icons/favicon-32.png?v=26.6.7',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.6.6")
-        self.assertContains(home, "/static/js/app.js?v=26.6.6")
+        self.assertContains(home, "/static/css/app.css?v=26.6.7")
+        self.assertContains(home, "/static/js/app.js?v=26.6.7")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1846,11 +1883,11 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.6.6",
+            "/static/icons/icon-192.png?v=26.6.7",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.6.6")
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.6.7")
         self.assertContains(worker, 'self.addEventListener("push"', html=False)
         self.assertContains(worker, 'self.addEventListener("notificationclick"', html=False)
         self.assertNotContains(worker, 'self.addEventListener("fetch"', html=False)

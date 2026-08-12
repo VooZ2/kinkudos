@@ -1,10 +1,20 @@
 # Tėvų nustatymai
 
-Kelias: **Tėvai → Nustatymai**. Puslapis suskirstytas į tas pačias grupes kaip
-programoje. Telefone grupės yra kompaktiškos išskleidžiamos skiltys: pasirinkus
-atsiveria laukai, o tuščios skiltys nerodomos. Skiltyje **Paskyros** yra vienas
+Kelias: **Tėvai → Nustatymai**. Puslapis suskirstytas į tris pagrindines grupes,
+atitinkančias programą:
+
+1. **Kasdieniai** — Šeima, Taškai ir darbai, Nutrinami bilietai ir Duomenys ir
+   saugojimas.
+2. **Žmonės ir įrenginiai** — Vaikų įrenginiai, Paskyros ir Šeimos atsiliepimai.
+3. **Serveris** — Tinklas ir saugumas, El. paštas ir pranešimai ir Kopijos.
+
+Šiose grupėse temos pateikiamos kompaktiškomis išskleidžiamomis skiltimis:
+pasirinkus atsiveria laukai, o tuščios skiltys nerodomos. Kasdienių skiltyje
+**Išsaugoti** išsaugo tik šeimos nuostatas; jis nekeičia įrenginių, paskyrų,
+tinklo, el. pašto ar kopijų nustatymų. Skiltyje **Paskyros** yra vienas
 paskyros kūrimo blokas ir vienas esamų paskyrų sąrašas; redagavimo formos
-atsidaro dialoguose, pritaikytuose ir mažam ekranui.
+atsidaro dialoguose, pritaikytuose ir mažam ekranui. Tinklo, el. pašto ir kopijų
+santraukos antraštėje gali rodyti būsenos žymę.
 
 > **Kas gali ką keisti?** Visi tėvai gali naudoti įprastus šeimos nustatymus ir
 > tvarkyti įprastas tėvų paskyras bei vaikų profilius. Įprastas tėvas negali
@@ -12,10 +22,16 @@ atsidaro dialoguose, pritaikytuose ir mažam ekranui.
 > vienintelis gali valdyti administratoriaus paskyrą arba keisti tinklo prieigą,
 > SMTP, kopijų duomenis, paleisti kopiją ir atšaukti visus vaikų įrenginius.
 
-<img class="screenshot-image" src="../../assets/parent-settings-devices-26-6-4.png" alt="Tėvų nustatymai su susietais įrenginiais" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-settings-overview-desktop-26-6-7.png" alt="Tėvų nustatymų apžvalga su Kasdieniai, Žmonės ir įrenginiai bei Serveris grupėmis darbalaukyje" loading="lazy">
+
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti nustatymų apžvalgą telefone</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
+<img class="screenshot-image" src="../../assets/parent-settings-overview-mobile-26-6-7.png" alt="Tėvų nustatymų apžvalga su Kasdieniai ir Žmonės ir įrenginiai grupėmis telefone" loading="lazy">
+</details>
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti susietus įrenginius telefone</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
+<img class="screenshot-image" src="../../assets/parent-settings-devices-26-6-4.png" alt="Tėvų nustatymai su susietais įrenginiais" loading="lazy">
 <img class="screenshot-image" src="../../assets/parent-settings-devices-mobile-26-6-4.png" alt="Susieti įrenginiai tėvų nustatymuose telefone" loading="lazy">
 </details>
 
@@ -33,14 +49,14 @@ atsidaro dialoguose, pritaikytuose ir mažam ekranui.
 
 Ekrano nuotraukose naudojami tik išgalvoti demonstraciniai duomenys.
 
-## Šeima
+## Kasdieniai
 
-### Šeimos pavadinimas
+### Šeima
 
 **Šeimos pavadinimas** rodomas šeimai skirtose antraštėse ir žinutėse. Jis
 keičia tik rodomą pavadinimą, o ne paskyrų vardus, domeną ar prieigą.
 
-## Taškai ir darbai
+### Taškai ir darbai
 
 Šios reikšmės taikomos būsimiems veiksmams ir neperrašo užbaigtų darbų ar
 esamų **Istorijos** įrašų.
@@ -50,7 +66,7 @@ esamų **Istorijos** įrašų.
 | **Taškai už darbo nuotrauką** | Papildomi taškai, kai vaikas pateikia darbą su nuotrauka. `0` išjungia priedą. Reikšmė užfiksuojama pateikimo metu. |
 | **Gimtadienio taškai** | Kartą per metus skiriama dovana pagal išsaugotą vaiko gimtadienį. `0` išjungia. Tais pačiais kalendoriniais metais tas pats vaikas neapdovanojamas du kartus. |
 
-## Nutrinami bilietai
+### Nutrinami bilietai
 
 Šie šeimos valdikliai veikia kartu su individualiu jungikliu skiltyje
 **Tėvai → Nustatymai → Paskyros**, po antrašte **Vaikų profiliai**:
@@ -63,7 +79,7 @@ esamų **Istorijos** įrašų.
 
 Nutrinami bilietai pasirenkami; jie nebūtini įprastiems darbams ar prizams.
 
-## Duomenys ir saugojimas
+### Duomenys ir saugojimas
 
 Šie laukai valdo automatinį įkeltų vaizdų šalinimą, o ne paskyrų istorijos ar
 taškų įrašų trynimą.
@@ -73,7 +89,10 @@ taškų įrašų trynimą.
 | **Saugoti darbų nuotraukas** | Užbaigtų darbų nuotraukų saugojimas: neribotai, 7, 30 arba 90 dienų. Laukiančios ar taisyti grąžintos nuotraukos automatiškai netrinamos. |
 | **Saugoti atsiliepimų nuotraukas** | Išspręsto atsiliepimo ekrano nuotraukos saugojimas. Neišspręstų atsiliepimų nuotraukos automatiškai netrinamos. |
 
-## Vaikai ir prieiga
+Kasdienių skiltyje **Išsaugoti** mygtukas rodo užuominą **Išsaugo tik šeimos
+nustatymus.**
+
+## Žmonės ir įrenginiai
 
 ### Vaikų įrenginiai
 
@@ -102,83 +121,7 @@ vadovą](../start/pair-a-child-device.lt.md). Aktyviai naudojant susietą
 tyliai nustoti galioti. Atšaukus įrenginį prieiga iškart panaikinama ir jį
 reikia susieti iš naujo.
 
-### Tinklas ir saugumas
-
-Tinklo prieiga yra pasirenkamas papildomas saugumo sluoksnis. Tėvų slaptažodžiai,
-vaikų PIN ir įrenginių susiejimas veikia ir išjungus IP ribojimus.
-
-| Režimas | Ką leidžia |
-| --- | --- |
-| **Prieiga iš interneto** | Jokio IP ribojimo. |
-| **Riboti vaikų prieigą** | Vaikų puslapiai veikia tik iš įrašytų IP adresų ar tinklų; tėvų puslapiai IP neribojami. |
-| **Riboti visą prieigą** | Vaikų ir tėvų puslapiai veikia tik iš įrašytų IP adresų ar tinklų. |
-
-Į **Leidžiamus IP adresus ir tinklus** rašykite po vieną IPv4, IPv6 ar CIDR
-tinklą eilutėje, pvz., `192.0.2.25`, `192.0.2.0/24` arba `2001:db8::/64`.
-Prieš pasirinkdami **Riboti visą prieigą** įrašykite puslapyje rodomą dabartinį
-IP. Neteisinga taisyklė gali užrakinti visus ir reikės serverio administratoriaus.
-
-Veikiant režimui **Riboti vaikų prieigą**, tėvų prisijungimo ir slaptažodžio
-atkūrimo puslapiai lieka pasiekiami net tada, kai naršyklėje aktyvi vaiko sesija.
-Todėl tėvas gali prisijungti arba atkurti paskyrą iš to paties įrenginio.
-Autentifikavus tėvą, užklausa vertinama kaip tėvų prieiga; tik vaikams skirti ir
-susiejimo veiksmai lieka ribojami kaip vaikų maršrutai.
-
-## El. paštas ir pranešimai
-
-SMTP pasirenkamas. Jis naudojamas tėvų slaptažodžiui atkurti ir, nustačius
-gavėją, privačių atsiliepimų pranešimams. Atsiliepimas išlieka KinKudos, net jei
-el. paštas išjungtas. Naršyklės ar PWA pranešimai įjungiami prisijungusio ekrano
-pranešimų valdikliu; „iPhone“ ir „iPad“ pirmiausia reikia įdiegti KinKudos į
-pradžios ekraną.
-
-Įjungus el. paštą rodomas SMTP serveris, siuntėjo adresas ir atsiliepimų gavėjas,
-bet ne slaptažodis. **Keisti nustatymus** reikalauja administratoriaus tėvų
-slaptažodžio, o SMTP slaptažodį kiekvieną kartą reikia įvesti iš naujo.
-
-| Laukelis | Ką įrašyti |
-| --- | --- |
-| **Įjungti el. paštą** | Įjungti arba išjungti laiškų siuntimą. |
-| **SMTP serveris** | Tiekėjo siunčiamų laiškų serverio vardą, pvz., `smtp.example.com`. |
-| **SMTP prievadas** | Tiekėjo prievadą, dažnai 587 STARTTLS arba 465 SSL/TLS. |
-| **Šifravimas** | `STARTTLS`, `SSL/TLS` arba `None`; `None` tik patikimam privačiam relay. |
-| **SMTP naudotojo vardas** | Pašto paslaugos prisijungimo vardą. |
-| **SMTP slaptažodis** | Pašto ar programėlės slaptažodį; po išsaugojimo jis nerodomas. |
-| **Siuntėjo el. pašto adresas** | Adresą, kurį matys gavėjai. |
-| **Atsiliepimų gavėjo el. pašto adresas** | Adresą, kuriuo siunčiami papildomi pranešimai. |
-| **Jūsų paskyros slaptažodis** | Dabartinį administratoriaus slaptažodį jautriems pakeitimams apsaugoti. |
-
-## Atsarginės kopijos
-
-Kopijų paslauga kasdien sukuria šifruotas nuotolines šeimos duomenų bazės ir
-įkeltų nuotraukų kopijas. Atkūrimas nėra mygtukas internete – tai serverio
-administratoriaus veiksmas.
-
-Būsena gali būti **Įjungta**, **Kopijuojama**, **Neįjungta** arba **Reikia
-dėmesio**. Skydelyje taip pat rodomas tiekėjas, saugykla, **Paskutinė sėkminga
-kopija**, **Paskutinė vientisumo patikra**, klaidos ir naujausi kopijų veiksmai.
-
-Nepavykęs suplanuotas bandymas tos dienos sėkme neįrašomas. Kopijų paslauga gali
-vėliau tą pačią dieną bandyti dar kartą su ribotu laukimo didėjimu; sėkmingai
-įvykus suplanuotai kopijai, tą dieną ji nebekartojama.
-
-**Kurti kopiją dabar** paprašo papildomos kopijos; ji neatkuria duomenų ir
-nepaleidžiama, kol kita kopija vyksta. Prieš keisdami duomenis išsaugokite repo
-slaptažodį ne serveryje ir suplanuokite atkūrimo bandymą.
-
-| Laukelis | Ką įrašyti |
-| --- | --- |
-| **Saugyklos tiekėjas** | „Backblaze B2“ (rekomenduojama) arba kitą su S3 suderinamą tiekėją. |
-| **S3 endpoint** | Tiekėjo S3 API hostą be `https://` ir galinio `/`. |
-| **Bucket pavadinimas** | Atskirą KinKudos kopijoms skirtą bucket. |
-| **Regionas** | Tiekėjo regioną, jei jis reikalingas. |
-| **Application key ID / Application key** | Prisijungimo duomenis, geriausia apribotus šiam bucket. |
-| **Jūsų paskyros slaptažodis** | Dabartinį administratoriaus slaptažodį. |
-
-Ryšys patikrinamas prieš išsaugojimą. Tiekėjo duomenys laikomi atskiruose
-apsaugotuose serverio failuose. Žalia būsena nepakeičia bandomojo atkūrimo.
-
-## Paskyros
+### Paskyros
 
 Skiltyje **Paskyros** yra du blokai:
 
@@ -215,7 +158,7 @@ tėvų paskyrą panaikinamos ir jos „push“ prenumeratos.
 Pašalinus vaiką profilis išjungiamas, o jo Istorija lieka. Duomenys kitam vaikui
 neperduodami.
 
-## Šeimos atsiliepimai
+### Šeimos atsiliepimai
 
 Tėvai ir vaikai gali programoje pateikti privatų **pasiūlymą** arba **problemos**
 pranešimą. Jis lieka šiame serveryje; sukonfigūravus SMTP galima siųsti ir
@@ -230,6 +173,89 @@ KinKudos išsaugo pateikusiojo vaidmenį ir vardą, puslapio kelią, programos
 versiją, kalbą, temą ir naršyklės/įrenginio aprašą. Tai lieka šeimos diegime ir
 į GitHub nesiunčiama. Ekrano nuotraukoms taikoma aukščiau nurodyta saugojimo
 taisyklė.
+
+## Serveris
+
+### Tinklas ir saugumas
+
+Tinklo prieiga yra pasirenkamas papildomas saugumo sluoksnis skiltyje
+**Serveris**. Tėvų slaptažodžiai, vaikų PIN ir įrenginių susiejimas veikia ir
+išjungus IP ribojimus. Išskleidžiamos skilties santraukos antraštėje gali
+rodyti dabartinio režimo būsenos žymę.
+
+| Režimas | Ką leidžia |
+| --- | --- |
+| **Prieiga iš interneto** | Jokio IP ribojimo. |
+| **Riboti vaikų prieigą** | Vaikų puslapiai veikia tik iš įrašytų IP adresų ar tinklų; tėvų puslapiai IP neribojami. |
+| **Riboti visą prieigą** | Vaikų ir tėvų puslapiai veikia tik iš įrašytų IP adresų ar tinklų. |
+
+Į **Leidžiamus IP adresus ir tinklus** rašykite po vieną IPv4, IPv6 ar CIDR
+tinklą eilutėje, pvz., `192.0.2.25`, `192.0.2.0/24` arba `2001:db8::/64`.
+Prieš pasirinkdami **Riboti visą prieigą** įrašykite puslapyje rodomą dabartinį
+IP. Neteisinga taisyklė gali užrakinti visus ir reikės serverio administratoriaus.
+
+Veikiant režimui **Riboti vaikų prieigą**, tėvų prisijungimo ir slaptažodžio
+atkūrimo puslapiai lieka pasiekiami net tada, kai naršyklėje aktyvi vaiko sesija.
+Todėl tėvas gali prisijungti arba atkurti paskyrą iš to paties įrenginio.
+Autentifikavus tėvą, užklausa vertinama kaip tėvų prieiga; tik vaikams skirti ir
+susiejimo veiksmai lieka ribojami kaip vaikų maršrutai.
+
+### El. paštas ir pranešimai
+
+SMTP pasirenkamas. Jis naudojamas tėvų slaptažodžiui atkurti ir, nustačius
+gavėją, privačių atsiliepimų pranešimams. Atsiliepimas išlieka KinKudos, net jei
+el. paštas išjungtas. Naršyklės ar PWA pranešimai įjungiami prisijungusio ekrano
+pranešimų valdikliu; „iPhone“ ir „iPad“ pirmiausia reikia įdiegti KinKudos į
+pradžios ekraną.
+
+Išskleidžiamos skilties santraukos antraštėje gali rodyti būsenos žymę, pvz.,
+**Išjungta**. Įjungus el. paštą rodomas SMTP serveris, siuntėjo adresas ir
+atsiliepimų gavėjas, bet ne slaptažodis. **Keisti nustatymus** reikalauja
+administratoriaus tėvų slaptažodžio, o SMTP slaptažodį kiekvieną kartą reikia
+įvesti iš naujo.
+
+| Laukelis | Ką įrašyti |
+| --- | --- |
+| **Įjungti el. paštą** | Įjungti arba išjungti laiškų siuntimą. |
+| **SMTP serveris** | Tiekėjo siunčiamų laiškų serverio vardą, pvz., `smtp.example.com`. |
+| **SMTP prievadas** | Tiekėjo prievadą, dažnai 587 STARTTLS arba 465 SSL/TLS. |
+| **Šifravimas** | `STARTTLS`, `SSL/TLS` arba `None`; `None` tik patikimam privačiam relay. |
+| **SMTP naudotojo vardas** | Pašto paslaugos prisijungimo vardą. |
+| **SMTP slaptažodis** | Pašto ar programėlės slaptažodį; po išsaugojimo jis nerodomas. |
+| **Siuntėjo el. pašto adresas** | Adresą, kurį matys gavėjai. |
+| **Atsiliepimų gavėjo el. pašto adresas** | Adresą, kuriuo siunčiami papildomi pranešimai. |
+| **Jūsų paskyros slaptažodis** | Dabartinį administratoriaus slaptažodį jautriems pakeitimams apsaugoti. |
+
+### Kopijos
+
+Kopijų paslauga kasdien sukuria šifruotas nuotolines šeimos duomenų bazės ir
+įkeltų nuotraukų kopijas. Atkūrimas nėra mygtukas internete – tai serverio
+administratoriaus veiksmas. Išskleidžiamos skilties santraukos antraštėje gali
+rodyti būsenos žymę, pvz., **Reikia dėmesio**.
+
+Būsena gali būti **Įjungta**, **Kopijuojama**, **Neįjungta** arba **Reikia
+dėmesio**. Skydelyje taip pat rodomas tiekėjas, saugykla, **Paskutinė sėkminga
+kopija**, **Paskutinė vientisumo patikra**, klaidos ir naujausi kopijų veiksmai.
+
+Nepavykęs suplanuotas bandymas tos dienos sėkme neįrašomas. Kopijų paslauga gali
+vėliau tą pačią dieną bandyti dar kartą su ribotu laukimo didėjimu; sėkmingai
+įvykus suplanuotai kopijai, tą dieną ji nebekartojama.
+
+**Kurti kopiją dabar** paprašo papildomos kopijos; ji neatkuria duomenų ir
+nepaleidžiama, kol kita kopija vyksta. Prieš keisdami duomenis išsaugokite repo
+slaptažodį ne serveryje ir suplanuokite atkūrimo bandymą.
+
+| Laukelis | Ką įrašyti |
+| --- | --- |
+| **Saugyklos tiekėjas** | „Backblaze B2“ (rekomenduojama) arba kitą su S3 suderinamą tiekėją. |
+| **S3 endpoint** | Tiekėjo S3 API hostą be `https://` ir galinio `/`. |
+| **Bucket pavadinimas** | Atskirą KinKudos kopijoms skirtą bucket. |
+| **Regionas** | Tiekėjo regioną, jei jis reikalingas. |
+| **Application key ID / Application key** | Prisijungimo duomenis, geriausia apribotus šiam bucket. |
+| **Jūsų paskyros slaptažodis** | Dabartinį administratoriaus slaptažodį. |
+
+Ryšys patikrinamas prieš išsaugojimą. Tiekėjo duomenys laikomi atskiruose
+apsaugotuose serverio failuose. Žalia būsena nepakeičia bandomojo atkūrimo.
 
 ## Nuotraukų ribos ir laiko taisyklės
 
