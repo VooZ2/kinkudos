@@ -9,6 +9,40 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Nothing yet.
 
+## [26.6.8] - 2026-08-12
+
+### Changed
+
+- Parent and child History now paginate the full filtered result with
+  Previous/Next; Any time is no longer a silent short window.
+- Surprise-card boards stay opaque until reveal, and in-app copy uses Surprise
+  cards instead of lottery or win wording.
+- Child Gift and Feedback sit in one floating action stack so mobile task
+  buttons stay reachable.
+- Backup health on Settings loads after the page opens, so opening Settings
+  does not wait on the backup agent.
+- Official documentation now matches 26.6.8 History pagination, surprise-card
+  reveal, PIN alarm behaviour, backup status loading, background push, trusted
+  proxies, and the child floating-action stack.
+
+### Fixed
+
+- One-winner money paths claim SQLite rows immediately and with conditional
+  updates, so concurrent approvals cannot both win.
+- Same-day catalog credits, active-child money and unlock actions, and
+  sibling-scoped child lookups now match the existing ownership invariants.
+
+### Security
+
+- Web Push is delivered after commit on a background thread with a hard
+  per-endpoint timeout, so a slow push cannot block or fail the user action.
+- The household-wide child PIN counter is alarm-only; device, profile, and IP
+  limits still hard-block, and changing a PIN uses the same profile lockout as
+  sign-in.
+- Initial setup rate-limits failed claims and requires a long setup code; SMTP
+  and Web Push destinations must resolve to public addresses; trusted proxies
+  default to loopback only.
+
 ## [26.6.7] - 2026-08-12
 
 ### Changed
