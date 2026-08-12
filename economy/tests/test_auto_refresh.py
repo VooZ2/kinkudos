@@ -257,6 +257,38 @@ class ChildStateSignatureTests(TestCase):
         self.other_child.save(update_fields=["balance"])
         self.assertEqual(before, self.signature())
 
+    def test_child_state_query_count_stays_lightweight(self):
+        for index in range(8):
+            task = Task.objects.create(title=f"Task {index}", reward=10)
+            TaskClaim.objects.create(
+                child=self.child,
+                task=task,
+                task_title=task.title,
+                reward_snapshot=task.reward,
+            )
+            Reward.objects.create(title=f"Reward {index}", cost=5)
+
+        self.client.get(reverse("child_state"))  # warm session / auth queries
+
+        with CaptureQueriesContext(connection) as baseline:
+            first = self.client.get(reverse("child_state"))
+        self.assertEqual(first.status_code, 200)
+
+        for index in range(8, 40):
+            task = Task.objects.create(title=f"Task {index}", reward=10)
+            TaskClaim.objects.create(
+                child=self.child,
+                task=task,
+                task_title=task.title,
+                reward_snapshot=task.reward,
+            )
+
+        with CaptureQueriesContext(connection) as grown:
+            second = self.client.get(reverse("child_state"))
+        self.assertEqual(second.status_code, 200)
+        self.assertEqual(len(baseline), len(grown))
+        self.assertLessEqual(len(grown), 35)
+
 
 class RefreshFrontendContractTests(TestCase):
     def test_refresh_contract_uses_one_ten_second_visible_scheduler(self):

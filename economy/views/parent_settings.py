@@ -5,10 +5,12 @@ from django.contrib import messages
 from django.contrib.auth import (
     authenticate,
 )
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.translation import gettext as _
-from django.views.decorators.http import require_POST
+from django.views.decorators.cache import never_cache
+from django.views.decorators.http import require_GET, require_POST
 
 from economy.auth import parent_required
 from economy.backups import backup_status, configure_backup, request_manual_backup
@@ -27,6 +29,71 @@ from economy.models import (
 from economy.net import client_ip
 
 logger = logging.getLogger("economy.views")
+
+
+def _backup_status_payload(status):
+    if status.get("running"):
+        summary_label = _("Copying")
+        summary_class = "service-status-warning"
+    elif not status.get("available"):
+        summary_label = _("Attention needed")
+        summary_class = "service-status-bad"
+    elif not status.get("configured"):
+        summary_label = _("Not enabled")
+        summary_class = "service-status-bad"
+    elif status.get("is_fresh"):
+        summary_label = _("Enabled")
+        summary_class = "service-status-good"
+    else:
+        summary_label = _("Attention needed")
+        summary_class = "service-status-bad"
+
+    last_success = status.get("last_success")
+    last_check = status.get("last_check")
+    if last_success:
+        last_success_display = last_success.strftime("%Y-%m-%d %H:%M")
+    elif status.get("configured"):
+        last_success_display = str(_("Backups not completed"))
+    else:
+        last_success_display = "—"
+
+    return {
+        "available": bool(status.get("available")),
+        "configured": bool(status.get("configured")),
+        "running": bool(status.get("running")),
+        "is_fresh": bool(status.get("is_fresh")),
+        "provider": status.get("provider") or "",
+        "target": status.get("target") or "",
+        "error": status.get("error") or "",
+        "summary_label": str(summary_label),
+        "summary_class": summary_class,
+        "last_success_display": last_success_display,
+        "last_check_display": (
+            last_check.strftime("%Y-%m-%d %H:%M") if last_check else "—"
+        ),
+        "can_run": bool(
+            status.get("available") and status.get("configured")
+        ),
+        "unavailable_message": (
+            str(
+                _(
+                    "The backup service is unavailable. Ask the server "
+                    "administrator to check the backup container."
+                )
+            )
+            if not status.get("available")
+            else ""
+        ),
+    }
+
+
+@parent_required
+@require_GET
+@never_cache
+def parent_backup_status(request):
+    response = JsonResponse(_backup_status_payload(backup_status()))
+    response["Cache-Control"] = "private, no-store"
+    return response
 
 
 @parent_required

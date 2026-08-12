@@ -523,6 +523,9 @@ msgstr "Tikrinami pranešimai"
 msgid "Checking the private pairing link…"
 msgstr "Tikrinama privati susiejimo nuoroda…"
 
+msgid "Checking…"
+msgstr "Tikrinama…"
+
 msgid "Child"
 msgstr "Vaikas"
 

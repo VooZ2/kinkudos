@@ -1555,3 +1555,69 @@ if (parentStateUrl) {
   });
   scheduleParentStateCheck();
 }
+
+function escapeBackupText(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+async function loadBackupStatus() {
+  const section = document.querySelector("[data-backup-section]");
+  if (!section) return;
+  const statusUrl = section.dataset.backupStatusUrl;
+  if (!statusUrl) return;
+  try {
+    const response = await fetch(statusUrl, {
+      credentials: "same-origin",
+      cache: "no-store",
+      headers: { Accept: "application/json", "X-Requested-With": "XMLHttpRequest" },
+    });
+    if (!response.ok || !response.headers.get("content-type")?.includes("application/json")) {
+      return;
+    }
+    const status = await response.json();
+    const summary = section.querySelector("[data-backup-summary]");
+    const summaryLabel = section.querySelector("[data-backup-summary-label]");
+    const details = section.querySelector("[data-backup-details]");
+    const runForm = section.querySelector("[data-backup-run-form]");
+    const runButton = section.querySelector("[data-backup-run-button]");
+    if (summary) {
+      summary.className = `service-status settings-summary-status ${status.summary_class}`;
+    }
+    if (summaryLabel) summaryLabel.textContent = status.summary_label;
+    if (details) {
+      if (status.unavailable_message) {
+        details.innerHTML = `<p class="danger-warning backup-warning">${escapeBackupText(status.unavailable_message)}</p>`;
+      } else {
+        const provider = escapeBackupText(status.provider || "—");
+        const target = escapeBackupText(status.target || "—");
+        const lastSuccess = escapeBackupText(status.last_success_display);
+        const lastCheck = escapeBackupText(status.last_check_display);
+        const error = status.error
+          ? `<p class="danger-warning backup-warning">${escapeBackupText(status.error)}</p>`
+          : "";
+        details.innerHTML = `
+          <dl class="service-details">
+            <div><dt>${escapeBackupText(section.dataset.labelProvider)}</dt><dd>${provider}</dd></div>
+            <div><dt>${escapeBackupText(section.dataset.labelRepository)}</dt><dd>${target}</dd></div>
+            <div><dt>${escapeBackupText(section.dataset.labelLastSuccess)}</dt><dd>${lastSuccess}</dd></div>
+            <div><dt>${escapeBackupText(section.dataset.labelLastCheck)}</dt><dd>${lastCheck}</dd></div>
+          </dl>
+          ${error}
+        `;
+      }
+    }
+    if (runForm) {
+      runForm.hidden = !status.can_run;
+      if (runButton) runButton.disabled = Boolean(status.running);
+    }
+  } catch (_error) {
+    // Keep the checking placeholder if the backup agent is unreachable.
+  }
+}
+
+loadBackupStatus();

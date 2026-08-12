@@ -8,6 +8,7 @@ from datetime import timedelta
 from typing import ClassVar
 from urllib.parse import urlsplit
 
+from asgiref.local import Local
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
 from django.core.exceptions import ValidationError
@@ -19,6 +20,8 @@ from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
 from .device_detection import identify_device
+
+_family_settings_cache = Local()
 
 DEVICE_CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 PARENT_PUSH_SUBSCRIPTION_LIMIT = 10
@@ -164,11 +167,34 @@ class FamilySettings(models.Model):
     def save(self, *args, **kwargs):
         self.pk = 1
         super().save(*args, **kwargs)
+        if getattr(_family_settings_cache, "active", False):
+            _family_settings_cache.instance = self
 
     @classmethod
     def load(cls):
+        if getattr(_family_settings_cache, "active", False):
+            cached = getattr(_family_settings_cache, "instance", None)
+            if cached is not None:
+                return cached
         instance, _ = cls.objects.get_or_create(pk=1)
+        if getattr(_family_settings_cache, "active", False):
+            _family_settings_cache.instance = instance
         return instance
+
+    @classmethod
+    def clear_load_cache(cls):
+        if hasattr(_family_settings_cache, "instance"):
+            del _family_settings_cache.instance
+
+    @classmethod
+    def activate_load_cache(cls):
+        cls.clear_load_cache()
+        _family_settings_cache.active = True
+
+    @classmethod
+    def deactivate_load_cache(cls):
+        cls.clear_load_cache()
+        _family_settings_cache.active = False
 
     @property
     def display_name(self):

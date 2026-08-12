@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
-from django.db.models import Q, Sum, Value
+from django.db.models import Count, Max, Q, Sum, Value
 from django.db.models.functions import Coalesce
 from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -41,6 +41,7 @@ from economy.lottery import (
 )
 from economy.models import (
     AssignedTask,
+    AssignedTaskBatch,
     AssignedTaskStatus,
     BirthDateChangeRequest,
     ChildProfile,
@@ -620,141 +621,27 @@ def child_set_birth_date(request):
         messages.error(request, _("Check the birthday date."))
     return redirect("child_dashboard")
 
+def _status_counts(queryset, field="status"):
+    return list(
+        queryset.values(field)
+        .annotate(c=Count("pk"))
+        .order_by(field)
+        .values_list(field, "c")
+    )
+
+
+def _relation_watermark(queryset, *timestamp_fields):
+    aggregates = {
+        "count": Count("pk"),
+        "max_pk": Max("pk"),
+    }
+    for field in timestamp_fields:
+        aggregates[f"max_{field}"] = Max(field)
+    return queryset.aggregate(**aggregates)
+
+
 def _child_state_payload(child):
     family_settings = FamilySettings.load()
-    latest_ledger = child.ledger_entries.order_by("-pk").values_list(
-        "pk", "created_at"
-    ).first()
-    task_states = list(
-        child.task_claims.order_by("-submitted_at", "-pk").values_list(
-            "pk",
-            "task_id",
-            "task_title",
-            "reward_snapshot",
-            "photo_bonus_snapshot",
-            "status",
-            "rejection_reason",
-            "revision_note",
-            "evidence_image",
-            "evidence_thumbnail",
-            "submitted_at",
-            "decided_at",
-            "child_acknowledged_at",
-        )
-    )
-    reward_states = list(
-        child.reward_requests.order_by("-submitted_at", "-pk").values_list(
-            "pk",
-            "reward_id",
-            "reward_title",
-            "cost_snapshot",
-            "status",
-            "rejection_reason",
-            "submitted_at",
-            "decided_at",
-        )
-    )
-    assigned_task_states = list(
-        AssignedTask.objects.filter(batch__child=child)
-        .order_by("-batch__created_at", "-pk")
-        .values_list(
-            "pk",
-            "batch_id",
-            "batch__assigned_on",
-            "batch__blocks_rewards",
-            "batch__created_at",
-            "title_snapshot",
-            "icon_snapshot",
-            "reward_snapshot",
-            "status",
-            "completed_at",
-            "cancelled_at",
-        )
-    )
-    lottery_states = list(
-        child.lottery_tickets.order_by("-purchased_at", "-pk").values(
-            "pk",
-            "week_start",
-            "values",
-            "prize_amount",
-            "applied_delta",
-            "status",
-            "purchased_at",
-            "revealed_at",
-        )
-    )
-    goal_states = list(
-        child.goals.annotate(
-            _saved_amount=Coalesce(
-                Sum(
-                    "contributions__amount",
-                    filter=Q(contributions__state="active"),
-                ),
-                Value(0),
-            )
-        )
-        .order_by("-created_at", "-pk")
-        .values_list(
-            "pk",
-            "title",
-            "icon",
-            "mode",
-            "status",
-            "target_amount",
-            "_saved_amount",
-            "created_at",
-        )
-    )
-    goal_completion_states = list(
-        GoalCompletionRequest.objects.filter(goal__child=child)
-        .order_by("-requested_at", "-pk")
-        .values_list("pk", "goal_id", "status", "requested_at", "decided_at")
-    )
-    goal_event_states = list(
-        SavingsGoalEvent.objects.filter(goal__child=child)
-        .order_by("-created_at", "-pk")
-        .values_list("pk", "goal_id", "event_type", "description", "amount", "created_at")
-    )
-    proposal_states = list(
-        child.proposals.order_by("-created_at", "-pk").values_list(
-            "pk",
-            "proposal_type",
-            "title",
-            "icon",
-            "suggested_cost",
-            "goal_mode",
-            "final_cost",
-            "status",
-            "parent_note",
-            "created_at",
-            "decided_at",
-        )
-    )
-    birth_date_states = list(
-        child.birth_date_change_requests.order_by("-requested_at", "-pk").values_list(
-            "pk",
-            "previous_birth_date",
-            "requested_birth_date",
-            "status",
-            "requested_at",
-            "decided_at",
-        )
-    )
-    task_catalog = list(
-        Task.objects.filter(is_active=True, is_deleted=False)
-        .order_by("sort_order", "title", "pk")
-        .values_list("pk", "title", "icon", "reward")
-    )
-    reward_catalog = list(
-        Reward.objects.filter(is_active=True, is_deleted=False)
-        .order_by("sort_order", "title", "pk")
-        .values_list("pk", "title", "icon", "cost")
-    )
-    task_completion_states = list(
-        TaskCompletion.objects.filter(child=child)
-        .order_by("-completed_on", "-pk")
-        .values_list("pk", "task_id", "completed_on", "created_at")
-    )
     raw_state = json.dumps(
         {
             "local_date": timezone.localdate(),
@@ -778,19 +665,123 @@ def _child_state_payload(child):
                 family_settings.lottery_ticket_cost,
                 family_settings.lottery_weekly_limit,
             ],
-            "ledger": latest_ledger,
-            "tasks": task_states,
-            "rewards": reward_states,
-            "assigned_tasks": assigned_task_states,
-            "lottery": lottery_states,
-            "goals": goal_states,
-            "goal_completions": goal_completion_states,
-            "goal_events": goal_event_states,
-            "proposals": proposal_states,
-            "birth_dates": birth_date_states,
-            "task_catalog": task_catalog,
-            "reward_catalog": reward_catalog,
-            "task_completions": task_completion_states,
+            "ledger": _relation_watermark(
+                child.ledger_entries.all(),
+                "created_at",
+            ),
+            "tasks": {
+                **_relation_watermark(
+                    child.task_claims.all(),
+                    "submitted_at",
+                    "decided_at",
+                    "child_acknowledged_at",
+                    "evidence_uploaded_at",
+                    "evidence_purged_at",
+                ),
+                "statuses": _status_counts(child.task_claims.all()),
+            },
+            "rewards": {
+                **_relation_watermark(
+                    child.reward_requests.all(),
+                    "submitted_at",
+                    "decided_at",
+                ),
+                "statuses": _status_counts(child.reward_requests.all()),
+            },
+            "assigned_tasks": {
+                **_relation_watermark(
+                    AssignedTask.objects.filter(batch__child=child),
+                    "completed_at",
+                    "cancelled_at",
+                ),
+                "statuses": _status_counts(
+                    AssignedTask.objects.filter(batch__child=child)
+                ),
+                "batches": list(
+                    AssignedTaskBatch.objects.filter(child=child)
+                    .order_by("pk")
+                    .values_list(
+                        "pk",
+                        "blocks_rewards",
+                        "assigned_on",
+                        "created_at",
+                    )
+                ),
+            },
+            "lottery": {
+                **_relation_watermark(
+                    child.lottery_tickets.all(),
+                    "purchased_at",
+                    "revealed_at",
+                ),
+                "statuses": _status_counts(child.lottery_tickets.all()),
+            },
+            "goals": list(
+                child.goals.annotate(
+                    _saved_amount=Coalesce(
+                        Sum(
+                            "contributions__amount",
+                            filter=Q(contributions__state="active"),
+                        ),
+                        Value(0),
+                    )
+                )
+                .order_by("pk")
+                .values_list(
+                    "pk",
+                    "title",
+                    "icon",
+                    "mode",
+                    "status",
+                    "target_amount",
+                    "_saved_amount",
+                )
+            ),
+            "goal_completions": {
+                **_relation_watermark(
+                    GoalCompletionRequest.objects.filter(goal__child=child),
+                    "requested_at",
+                    "decided_at",
+                ),
+                "statuses": _status_counts(
+                    GoalCompletionRequest.objects.filter(goal__child=child)
+                ),
+            },
+            "goal_events": _relation_watermark(
+                SavingsGoalEvent.objects.filter(goal__child=child),
+                "created_at",
+            ),
+            "proposals": {
+                **_relation_watermark(
+                    child.proposals.all(),
+                    "created_at",
+                    "decided_at",
+                ),
+                "statuses": _status_counts(child.proposals.all()),
+            },
+            "birth_dates": {
+                **_relation_watermark(
+                    child.birth_date_change_requests.all(),
+                    "requested_at",
+                    "decided_at",
+                ),
+                "statuses": _status_counts(child.birth_date_change_requests.all()),
+            },
+            "task_catalog": list(
+                Task.objects.filter(is_active=True, is_deleted=False)
+                .order_by("sort_order", "title", "pk")
+                .values_list("pk", "title", "icon", "reward")
+            ),
+            "reward_catalog": list(
+                Reward.objects.filter(is_active=True, is_deleted=False)
+                .order_by("sort_order", "title", "pk")
+                .values_list("pk", "title", "icon", "cost")
+            ),
+            "task_completions": _relation_watermark(
+                TaskCompletion.objects.filter(child=child),
+                "completed_on",
+                "created_at",
+            ),
         },
         default=str,
         sort_keys=True,

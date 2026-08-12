@@ -17,7 +17,6 @@ from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET
 
 from economy.auth import current_device, parent_required
-from economy.backups import backup_status
 from economy.email_config import public_smtp_config
 from economy.forms import (
     BackupSettingsForm,
@@ -758,7 +757,6 @@ def parent_dashboard(request):
                 revoked_at__isnull=True
             ).select_related("created_by"),
             "current_device": current_device(request),
-            "backup_status": backup_status(),
             "backup_settings_form": BackupSettingsForm(),
             "smtp_status": public_smtp_config(),
             "smtp_settings_form": SmtpSettingsForm(

@@ -621,6 +621,7 @@
   "Last integrity check": "Paskutinė vientisumo patikra",
   "Backup in progress...": "Kuriama atsarginė kopija...",
   "Copying": "Kopijuojama",
+  "Checking…": "Tikrinama…",
   "Back up now": "Kurti kopiją dabar",
   "Edit settings": "Keisti nustatymus",
   "Backup setup": "Atsarginių kopijų nustatymai",

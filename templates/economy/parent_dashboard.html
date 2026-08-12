@@ -854,44 +854,24 @@
     {% endif %}
   </article>
   </details>
-    <details class="settings-section parent-accordion">
+    <details class="settings-section parent-accordion" data-backup-section data-backup-status-url="{% url 'parent_backup_status' %}" data-label-provider="{% translate 'Provider' %}" data-label-repository="{% translate 'Repository' %}" data-label-last-success="{% translate 'Last successful backup' %}" data-label-last-check="{% translate 'Last integrity check' %}">
       <summary><span class="settings-summary-label">{% translate "Backups" %}</span>
-        <span class="service-status settings-summary-status {% if backup_status.running %}service-status-warning{% elif backup_status.available and backup_status.configured and backup_status.is_fresh %}service-status-good{% else %}service-status-bad{% endif %}">
+        <span class="service-status settings-summary-status service-status-bad" data-backup-summary>
           <span aria-hidden="true"></span>
-          {% if backup_status.running %}
-            {% translate "Copying" %}
-          {% elif not backup_status.available %}
-            {% translate "Attention needed" %}
-          {% elif not backup_status.configured %}
-            {% translate "Not enabled" %}
-          {% elif backup_status.is_fresh %}
-            {% translate "Enabled" %}
-          {% else %}
-            {% translate "Attention needed" %}
-          {% endif %}
+          <span data-backup-summary-label>{% translate "Checking…" %}</span>
         </span></summary>
   <article class="panel backup-panel">
     <div class="backup-heading">
       <p class="settings-description">{% translate "Daily encrypted copies protect the family database and uploaded photos." %}</p>
     </div>
-    {% if not backup_status.available %}
-      <p class="danger-warning backup-warning">{% translate "The backup service is unavailable. Ask the server administrator to check the backup container." %}</p>
-    {% else %}
-      <dl class="service-details">
-        <div><dt>{% translate "Provider" %}</dt><dd>{{ backup_status.provider|default:"—" }}</dd></div>
-        <div><dt>{% translate "Repository" %}</dt><dd>{{ backup_status.target|default:"—" }}</dd></div>
-        <div><dt>{% translate "Last successful backup" %}</dt><dd>{% if backup_status.last_success %}{{ backup_status.last_success|date:"Y-m-d H:i" }}{% elif backup_status.configured %}{% translate "Backups not completed" %}{% else %}—{% endif %}</dd></div>
-        <div><dt>{% translate "Last integrity check" %}</dt><dd>{% if backup_status.last_check %}{{ backup_status.last_check|date:"Y-m-d H:i" }}{% else %}—{% endif %}</dd></div>
-      </dl>
-      {% if backup_status.error %}<p class="danger-warning backup-warning">{{ backup_status.error }}</p>{% endif %}
-    {% endif %}
+    <div data-backup-details>
+      <p class="help-text" data-backup-loading>{% translate "Checking…" %}</p>
+    </div>
     {% if user.is_staff %}
       <div class="backup-actions">
-        {% if backup_status.available and backup_status.configured %}
-          <form method="post" action="{% url 'parent_run_backup' %}">{% csrf_token %}
-            <button class="button button-primary" type="submit"{% if backup_status.running %} disabled{% endif %}>{% translate "Back up now" %}</button>
-          </form>
-        {% endif %}
+        <form method="post" action="{% url 'parent_run_backup' %}" data-backup-run-form hidden>{% csrf_token %}
+          <button class="button button-primary" type="submit" data-backup-run-button>{% translate "Back up now" %}</button>
+        </form>
         <button class="button button-primary" type="button" data-open-dialog="backup-settings-dialog">{% translate "Edit settings" %}</button>
       </div>
       <dialog id="backup-settings-dialog" class="action-dialog backup-dialog">

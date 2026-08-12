@@ -17,7 +17,7 @@ container-based TLS reverse proxy.
 
 There is no Node.js toolchain, SPA, or public API. Small internal JSON
 endpoints are used where necessary, such as child-state polling for
-automatic refresh.
+automatic refresh and deferred parent backup-status loading.
 
 ## Accounts
 **Parents** — multiple Django `User` accounts managed in the application.
@@ -36,6 +36,9 @@ edit or deactivate an administrator. The last active administrator cannot be
 deactivated. Deactivating any parent also removes that parent's push
 subscriptions. All parents may see backup health, but only the parent
 administrator may change backup credentials or request a manual backup.
+Backup health is loaded through a dedicated JSON endpoint after the parent
+dashboard HTML renders, so ordinary page loads do not block on the backup
+agent.
 
 **Children** — multiple `ChildProfile` records managed by parents. Before a
 device can see child names or submit a PIN, a parent pairs it with a
@@ -58,8 +61,9 @@ evidence/screenshot retention periods, optional application-level network
 access mode and allowed IPv4/IPv6 CIDRs, password-recovery code hash, initial
 setup completion state, default interface language, and family timezone. The
 timezone is activated for requests and lottery reminders so daily/weekly rules
-follow the household clock. Not a source of app versioning or general PWA
-configuration.
+follow the household clock. `FamilySettings.load()` is cached only for the
+duration of an HTTP request so repeated reads do not re-query the singleton.
+Not a source of app versioning or general PWA configuration.
 
 **DeviceToken** / **DevicePairingLink** — a paired child browser/PWA and its
 short-lived, single-use bootstrap link. Only SHA-256 token digests are stored.

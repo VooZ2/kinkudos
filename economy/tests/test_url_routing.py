@@ -75,6 +75,7 @@ CANONICAL_EXAMPLES = {
     "parent_rename_device": "/parents/devices/24/rename/",
     "parent_revoke_all_devices": "/parents/devices/revoke-all/",
     "parent_configure_backup": "/parents/settings/backup/",
+    "parent_backup_status": "/parents/settings/backup/status/",
     "parent_configure_smtp": "/parents/settings/email/",
     "parent_run_backup": "/parents/settings/backup/run/",
     "parent_update_feedback_status": "/parents/feedback/25/status/",
