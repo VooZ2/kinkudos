@@ -1408,6 +1408,9 @@ msgstr "KinKudos atsiliepimas #%(report_id)s: %(report_type)s"
 msgid "Language"
 msgstr "Kalba"
 
+msgid "Last"
+msgstr "Paskutinis"
+
 msgid "Last integrity check"
 msgstr "Paskutinė vientisumo patikra"
 

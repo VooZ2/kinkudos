@@ -50,6 +50,8 @@ def _send(payload, subscriptions):
                 vapid_private_key=settings.VAPID_PRIVATE_KEY,
                 vapid_claims={"sub": settings.VAPID_SUBJECT},
                 ttl=86400,
+                # Never block a request worker forever on a blackholed push endpoint.
+                timeout=10,
             )
         except WebPushException as exc:
             status_code = getattr(getattr(exc, "response", None), "status_code", None)

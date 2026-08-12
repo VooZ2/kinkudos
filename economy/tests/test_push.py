@@ -123,6 +123,22 @@ class ChildDecisionPushTests(TestCase):
             payload["url"],
             f"{reverse('child_dashboard')}#paskirti-darbai",
         )
+        self.assertEqual(webpush.call_args.kwargs["timeout"], 10)
+
+    @patch("economy.push.webpush")
+    def test_webpush_calls_use_an_explicit_timeout(self, webpush):
+        task = Task.objects.create(title="Paklota lova", reward=20)
+        claim = TaskClaim.objects.create(
+            child=self.child,
+            task=task,
+            task_title=task.title,
+            reward_snapshot=task.reward,
+        )
+
+        notify_task_decision(claim, approved=True)
+
+        webpush.assert_called_once()
+        self.assertEqual(webpush.call_args.kwargs["timeout"], 10)
 
     @patch("economy.push.webpush")
     def test_task_decision_targets_only_the_affected_child(self, webpush):

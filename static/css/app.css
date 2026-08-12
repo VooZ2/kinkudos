@@ -211,7 +211,7 @@ select.field-control, .stack-form select {
 .profile-grid, .item-grid, .stats-grid, .approval-grid, .catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 18px; }
 .profile-select-heading { margin-bottom: 28px; }
 .profile-card { padding: 28px; text-align: center; position: relative; overflow: hidden; }
-.profile-card.is-last::after { content: "Paskutinis"; position: absolute; top: 12px; right: 12px; padding: 5px 9px; border-radius: 99px; font-size: .7rem; background: var(--surface-solid); }
+.profile-card-last-badge { position: absolute; top: 12px; right: 12px; padding: 5px 9px; border-radius: 99px; font-size: .7rem; font-weight: 780; background: var(--surface-solid); }
 .profile-avatar, .profile-mini { display: grid; place-items: center; margin: 0 auto; color: white; background: linear-gradient(145deg, var(--primary), var(--accent)); font-weight: 900; }
 .profile-avatar { width: 86px; height: 86px; border-radius: 29px; font-size: 2rem; }
 .profile-mini { width: 42px; height: 42px; border-radius: 14px; margin: 0; }

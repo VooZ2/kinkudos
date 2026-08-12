@@ -4,7 +4,6 @@ from uuid import uuid4
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.db.models import Q, Sum, Value
@@ -838,13 +837,18 @@ def child_change_pin(request):
     if not form.is_valid():
         messages.error(request, _("Check the PIN fields."))
         return redirect("child_dashboard")
-    if not check_password(form.cleaned_data["current_pin"], request.child.pin_hash):
+    child = request.child
+    if child.is_locked:
+        messages.error(
+            request,
+            _("The profile is temporarily locked. Try again later."),
+        )
+        return redirect("child_dashboard")
+    if not child.verify_pin(form.cleaned_data["current_pin"]):
         messages.error(request, _("The current PIN is incorrect."))
         return redirect("child_dashboard")
-    request.child.set_pin(form.cleaned_data["new_pin"])
-    request.child.failed_pin_attempts = 0
-    request.child.locked_until = None
-    request.child.save(update_fields=["pin_hash", "failed_pin_attempts", "locked_until"])
+    child.set_pin(form.cleaned_data["new_pin"])
+    child.save(update_fields=["pin_hash"])
     messages.success(request, _("PIN changed."))
     return redirect("child_dashboard")
 

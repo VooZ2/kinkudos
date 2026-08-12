@@ -1778,7 +1778,52 @@ class AccessAndWorkflowTests(TestCase):
         )
         self.assertContains(response, "Dabartinis PIN neteisingas")
         self.child_one.refresh_from_db()
+        self.assertEqual(self.child_one.failed_pin_attempts, 1)
         self.assertTrue(self.child_one.verify_pin("1234"))
+
+    def test_child_change_pin_lockout_blocks_further_attempts(self):
+        self.login_child(self.child_one, "1234")
+        for _ in range(5):
+            response = self.client.post(
+                reverse("child_change_pin"),
+                {
+                    "current_pin": "9999",
+                    "new_pin": "2468",
+                    "confirm_pin": "2468",
+                },
+                follow=True,
+            )
+            self.assertContains(response, "Dabartinis PIN neteisingas")
+
+        self.child_one.refresh_from_db()
+        self.assertTrue(self.child_one.is_locked)
+
+        response = self.client.post(
+            reverse("child_change_pin"),
+            {
+                "current_pin": "1234",
+                "new_pin": "2468",
+                "confirm_pin": "2468",
+            },
+            follow=True,
+        )
+        self.assertContains(response, "Profilis trumpam užrakintas")
+        self.child_one.refresh_from_db()
+        self.assertTrue(self.child_one.is_locked)
+        self.assertTrue(check_password("1234", self.child_one.pin_hash))
+        self.assertFalse(check_password("2468", self.child_one.pin_hash))
+
+    def test_last_child_badge_follows_ui_language(self):
+        self.client.cookies["kinkudos_last_child"] = str(self.child_one.pk)
+        response = self.client.get(reverse("child_select"))
+        self.assertContains(response, "profile-card-last-badge")
+        self.assertContains(response, ">Paskutinis</span>", html=False)
+        self.assertNotContains(response, 'content: "Paskutinis"')
+
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+        response = self.client.get(reverse("child_select"))
+        self.assertContains(response, ">Last</span>", html=False)
+        self.assertNotContains(response, ">Paskutinis</span>", html=False)
 
     def test_child_avatar_is_cropped_and_served_as_webp(self):
         image_bytes = BytesIO()
