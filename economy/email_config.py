@@ -7,6 +7,8 @@ from tempfile import NamedTemporaryFile
 
 from django.conf import settings
 
+from economy.net import require_global_destination
+
 
 def smtp_config():
     path = Path(settings.SMTP_CONFIG_PATH)
@@ -46,6 +48,11 @@ def public_smtp_config():
 
 
 def verify_smtp(config):
+    require_global_destination(
+        config["host"],
+        config["port"],
+        allow_private=settings.SMTP_ALLOW_PRIVATE_DESTINATIONS,
+    )
     context = ssl.create_default_context()
     client_class = smtplib.SMTP_SSL if config["security"] == "ssl" else smtplib.SMTP
     with client_class(config["host"], config["port"], timeout=15) as client:

@@ -295,6 +295,12 @@ class PushSubscriptionValidationTests(TestCase):
             name="Push child",
             theme_selected=True,
         )
+        self.resolve_patcher = patch(
+            "economy.models.require_global_destination",
+            return_value=[],
+        )
+        self.resolve_patcher.start()
+        self.addCleanup(self.resolve_patcher.stop)
 
     @staticmethod
     def keys():

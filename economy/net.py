@@ -1,4 +1,5 @@
 import ipaddress
+import socket
 
 from django.conf import settings
 
@@ -81,3 +82,38 @@ def parse_allowed_networks(value):
         except ValueError:
             errors.append(item)
     return networks, errors
+
+
+def destination_ip_addresses(host, port):
+    try:
+        infos = socket.getaddrinfo(
+            host,
+            int(port),
+            type=socket.SOCK_STREAM,
+        )
+    except (OSError, ValueError, TypeError) as exc:
+        raise ValueError("Could not resolve destination host.") from exc
+    addresses = []
+    seen = set()
+    for info in infos:
+        parsed = _address(info[4][0])
+        if parsed is None:
+            continue
+        text = str(parsed)
+        if text in seen:
+            continue
+        seen.add(text)
+        addresses.append(parsed)
+    if not addresses:
+        raise ValueError("Could not resolve destination host.")
+    return addresses
+
+
+def require_global_destination(host, port, *, allow_private=False):
+    addresses = destination_ip_addresses(host, port)
+    if allow_private:
+        return addresses
+    for address in addresses:
+        if not address.is_global:
+            raise ValueError("Destination host is not a public address.")
+    return addresses

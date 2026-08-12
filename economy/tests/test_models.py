@@ -1,4 +1,5 @@
 import base64
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -11,6 +12,12 @@ class PushSubscriptionModelTests(TestCase):
     def setUp(self):
         self.parent = get_user_model().objects.create_user("parent")
         self.child = ChildProfile.objects.create(name="Child")
+        self.resolve_patcher = patch(
+            "economy.models.require_global_destination",
+            return_value=[],
+        )
+        self.resolve_patcher.start()
+        self.addCleanup(self.resolve_patcher.stop)
 
     @staticmethod
     def keys():
