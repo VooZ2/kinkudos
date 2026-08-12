@@ -903,8 +903,10 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, ">Žurnalas<", html=False)
 
         stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
-        self.assertIn(".catalog-grid > details > summary::after", stylesheet)
+        self.assertNotIn(".catalog-grid > details > summary::after", stylesheet)
         self.assertIn("#parent-settings details > summary::after", stylesheet)
+        self.assertIn(".manage-tabs a.is-active", stylesheet)
+        self.assertContains(response, "data-manage-section", html=False)
 
     def test_home_title_contains_family_nickname_and_project_name(self):
         response = self.client.get(reverse("home"))

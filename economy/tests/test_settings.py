@@ -221,7 +221,7 @@ class ParentSettingsTests(TestCase):
         self.client.post(reverse("parent_configure_smtp"), self.smtp_payload())
         verify.assert_not_called()
 
-    def test_catalog_edit_labels_have_colons(self):
+    def test_catalog_edit_labels_omit_trailing_colons(self):
         Task.objects.create(title="Tidy", reward=3)
         PenaltyTemplate.objects.create(title="Late", amount=-2)
         Reward.objects.create(title="Movie", cost=5)
@@ -229,10 +229,14 @@ class ParentSettingsTests(TestCase):
 
         response = self.client.get(reverse("parent_dashboard"))
 
-        self.assertContains(response, "Task:<input", count=1)
-        self.assertContains(response, "Penalty:<input", count=1)
-        self.assertContains(response, "Reward:<input", count=1)
-        self.assertContains(response, "Icon:<input", count=3)
+        self.assertContains(response, "<label>Task<input", count=1, html=False)
+        self.assertContains(response, "<label>Penalty<input", count=1, html=False)
+        self.assertContains(response, "<label>Reward<input", count=1, html=False)
+        self.assertContains(response, "<label>Icon<input", count=3, html=False)
+        self.assertNotContains(response, "Task:<input", html=False)
+        self.assertNotContains(response, "Penalty:<input", html=False)
+        self.assertNotContains(response, "Reward:<input", html=False)
+        self.assertNotContains(response, "Icon:<input", html=False)
 
     def test_email_status_uses_compact_details_and_short_edit_label(self):
         with TemporaryDirectory() as directory:
