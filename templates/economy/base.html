@@ -132,10 +132,13 @@
   {% endblock %}
 
   {% if feedback_available %}
-    <button class="feedback-launcher" type="button" data-open-dialog="feedback-dialog" aria-label="{% translate 'Send feedback' %}">
-      <svg class="action-icon" aria-hidden="true"><use href="#icon-bug"></use></svg>
-      <span>{% translate "Feedback" %}</span>
-    </button>
+    <div class="floating-actions" role="group" aria-label="{% translate 'Quick actions' %}">
+      {% block floating_actions_extra %}{% endblock %}
+      <button class="feedback-launcher" type="button" data-open-dialog="feedback-dialog" aria-label="{% translate 'Send feedback' %}">
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-bug"></use></svg>
+        <span>{% translate "Feedback" %}</span>
+      </button>
+    </div>
     <dialog id="feedback-dialog" class="action-dialog feedback-dialog">
       <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
         <svg class="action-icon"><use href="#icon-xmark"></use></svg>

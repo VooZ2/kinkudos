@@ -1981,6 +1981,9 @@ msgstr "Paskirtis"
 msgid "Quest complete"
 msgstr "Užduotis atlikta"
 
+msgid "Quick actions"
+msgstr "Greiti veiksmai"
+
 msgid "Reached goal"
 msgstr "Tikslas pasiektas"
 

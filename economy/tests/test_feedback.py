@@ -360,13 +360,25 @@ class FeedbackWorkflowTests(TestCase):
             self.client.get(reverse("child_dashboard")),
             "feedback-launcher",
         )
+        self.assertContains(
+            self.client.get(reverse("child_dashboard")),
+            'class="floating-actions"',
+            html=False,
+        )
 
     def test_mobile_feedback_button_avoids_parent_navigation(self):
         css = Path(settings.BASE_DIR, "static/css/app.css").read_text(
             encoding="utf-8"
         )
+        self.assertIn(".floating-actions {", css)
+        self.assertIn("--fab-size:", css)
+        self.assertIn("--fab-gap:", css)
         self.assertIn(
-            ".parent-area .feedback-launcher { bottom: calc(88px + env(safe-area-inset-bottom)); }",
+            ".parent-area .floating-actions {",
+            css,
+        )
+        self.assertIn(
+            "--fab-inset-block: calc(88px + env(safe-area-inset-bottom));",
             css,
         )
         self.assertIn("max-height: calc(100dvh - 24px)", css)

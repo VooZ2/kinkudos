@@ -345,10 +345,14 @@
 </article>
 <article class="panel"><h3>{% translate "Change PIN" %}</h3><form method="post" action="{% url 'child_change_pin' %}" class="stack-form">{% csrf_token %}{{ change_pin_form.as_p }}<button class="button button-primary" type="submit">{% translate "Save new PIN" %}</button></form></article>
 </div></section>
+{% block floating_actions_extra %}
 {% if gift_recipients_available %}
 <button class="gift-launcher" type="button" data-open-dialog="gift-dialog" aria-label="{% translate 'Give points' %}">
   <svg class="action-icon" aria-hidden="true"><use href="#icon-gift"></use></svg><span>{% translate "Gift" %}</span>
 </button>
+{% endif %}
+{% endblock %}
+{% if gift_recipients_available %}
 <dialog id="gift-dialog" class="action-dialog">
   <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
         <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
