@@ -9,7 +9,7 @@
 </section>
 <div class="profile-grid">
   {% for child in children %}
-  <article class="profile-card {% if last_child_id == child.pk|stringformat:'s' %}is-last{% endif %}">
+  <article class="profile-card">
     {% if last_child_id == child.pk|stringformat:'s' %}
       <span class="profile-card-last-badge">{% translate "Last" %}</span>
     {% endif %}
