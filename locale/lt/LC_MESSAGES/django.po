@@ -589,6 +589,9 @@ msgstr "Vaikai"
 msgid "Children and access"
 msgstr "Vaikai ir prieiga"
 
+msgid "Children can propose goals from their area. Approved goals appear here."
+msgstr "Vaikai gali pasiūlyti tikslus savo erdvėje. Patvirtinti tikslai atsiranda čia."
+
 msgid "Choose Save separately before adding points."
 msgstr "Prieš pridėdami taškus pasirinkite „Taupyti atskirai“."
 
@@ -1296,6 +1299,9 @@ msgstr "Padėk pandai atlikti visus darbus iki miego vidurnaktį."
 
 msgid "Hero Missions"
 msgstr "Herojaus misijos"
+
+msgid "Hidden"
+msgstr "Paslėpta"
 
 msgid "Hidden Emerald Grid"
 msgstr "Paslėptų smaragdų lentelė"
@@ -2743,11 +2749,17 @@ msgstr "Aktyvių darbų nėra."
 msgid "There are no goals yet."
 msgstr "Tikslų dar nėra."
 
+msgid "There are no penalties yet."
+msgstr "Kol kas nuobaudų nėra."
+
 msgid "There are no pending requests"
 msgstr "Nėra laukiančių prašymų"
 
 msgid "There are no requests."
 msgstr "Nėra prašymų."
+
+msgid "There are no rewards yet."
+msgstr "Kol kas prizų nėra."
 
 msgid "There are no tasks yet."
 msgstr "Kol kas darbų nėra."

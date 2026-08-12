@@ -234,27 +234,38 @@ if (parentShell) {
       else link.removeAttribute("aria-current");
     });
   };
+  const syncManageTabs = sectionId => {
+    parentShell.querySelectorAll(".manage-tabs a").forEach(link => {
+      const active = manageSectionForHash(link.hash.slice(1)) === sectionId;
+      link.classList.toggle("is-active", active);
+      if (active) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
+    });
+  };
   const openManageSection = id => {
-    const sectionId = manageSectionForHash(id);
+    const sectionId = manageSectionForHash(id) || (id === "parent-catalogs" ? "manage-tasks" : "");
     if (!sectionId) return false;
     const target = document.getElementById(sectionId);
     if (!target) return false;
-    parentShell.querySelectorAll(".catalog-grid > details").forEach(section => {
-      section.open = section === target;
+    parentShell.querySelectorAll("[data-manage-section]").forEach(section => {
+      section.hidden = section !== target;
     });
+    syncManageTabs(sectionId);
     window.requestAnimationFrame(() => target.scrollIntoView({ behavior: "auto", block: "start" }));
     return true;
   };
   const showRoute = id => {
     showPanel(id);
-    return openManageSection(id);
+    if (manageSectionForHash(id)) return openManageSection(id);
+    if (parentPanelForHash(id) === "parent-catalogs") return openManageSection("manage-tasks");
+    return false;
   };
   links.forEach(link => link.addEventListener("click", event => {
     event.preventDefault();
     const id = link.hash.slice(1);
     window.history.replaceState(window.history.state, "", `#${id}`);
-    showPanel(id);
-    scrollWorkspaceToTop();
+    showRoute(id);
+    if (!manageSectionForHash(id)) scrollWorkspaceToTop();
   }));
   const initialHash = window.location.hash.slice(1);
   const initialNestedRoute = showRoute(initialHash || panels[0]?.id);
@@ -268,7 +279,8 @@ if (parentShell) {
 document.querySelectorAll("[data-parent-goal-target]").forEach(link => {
   link.addEventListener("click", event => {
     event.preventDefault();
-    document.querySelector('[data-parent-nav="catalogs"]')?.click();
+    window.history.replaceState(window.history.state, "", "#manage-goals");
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
     window.setTimeout(() => {
       const target = document.getElementById(`goal-item-${link.dataset.parentGoalTarget}`);
       target?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -848,14 +860,32 @@ document.querySelectorAll("[data-message]").forEach(message => {
   window.setTimeout(() => dismissMessage(message), 5000);
 });
 
+const closeCatalogEdit = form => {
+  if (!form) return;
+  form.hidden = true;
+  form.closest(".catalog-row, .goal-manage-row")?.classList.remove("is-editing");
+  const key = form.id.replace(/^edit-/, "");
+  const toggle = document.querySelector(`[data-toggle-edit="${key}"]`);
+  toggle?.setAttribute("aria-expanded", "false");
+};
+
 document.querySelectorAll("[data-toggle-edit]").forEach(button => {
   button.addEventListener("click", () => {
     const form = document.getElementById(`edit-${button.dataset.toggleEdit}`);
     if (!form) return;
-    form.hidden = !form.hidden;
-    button.setAttribute("aria-expanded", String(!form.hidden));
-    if (!form.hidden) form.querySelector("input")?.focus();
+    const opening = form.hidden;
+    document.querySelectorAll(".catalog-edit-form").forEach(other => {
+      if (other !== form) closeCatalogEdit(other);
+    });
+    form.hidden = !opening;
+    button.setAttribute("aria-expanded", String(opening));
+    form.closest(".catalog-row, .goal-manage-row")?.classList.toggle("is-editing", opening);
+    if (opening) form.querySelector("input, select, textarea")?.focus();
   });
+});
+
+document.querySelectorAll("[data-cancel-edit]").forEach(button => {
+  button.addEventListener("click", () => closeCatalogEdit(button.closest(".catalog-edit-form")));
 });
 
 const accountCreateType = document.querySelector("[data-account-create-type]");

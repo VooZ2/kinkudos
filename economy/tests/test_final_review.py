@@ -13,6 +13,7 @@ from economy.models import (
     Proposal,
     ProposalType,
     SavingsGoal,
+    Task,
 )
 from economy.services import approve_proposal, post_ledger_entry
 
@@ -62,7 +63,7 @@ class FinalReviewTests(TestCase):
 
     def test_parent_accordions_and_settings_use_shared_compact_surface(self):
         response = self.parent_response()
-        self.assertContains(response, "parent-accordion", count=14)
+        self.assertContains(response, "parent-accordion", count=10)
         self.assertContains(response, 'class="settings-section parent-accordion"', count=10, html=False)
         self.assertNotContains(
             response,
@@ -78,6 +79,37 @@ class FinalReviewTests(TestCase):
         self.assertIn("min-height: 60px", css)
         self.assertIn(".settings-block-heading", css)
         self.assertNotIn("position: sticky; bottom: 0", css.split(".settings-save-actions")[1].split("}")[0])
+
+    def test_manage_uses_tabbed_sections_with_edit_and_hidden_states(self):
+        Task.objects.create(title="Review chore", reward=10, icon="🧹", is_active=False)
+        response = self.parent_response()
+        content = response.content.decode()
+        manage = content[content.index('id="parent-catalogs"') :]
+        manage = manage[: manage.index('id="parent-settings"')]
+        self.assertIn('class="manage-tabs"', manage)
+        self.assertIn("data-manage-section", manage)
+        self.assertNotIn("parent-accordion", manage)
+        self.assertIn("catalog-edit-actions", manage)
+        self.assertIn("data-cancel-edit", manage)
+        self.assertIn("catalog-delete-action", manage)
+        self.assertIn("catalog-row is-inactive", manage)
+        self.assertIn("Hidden", manage)
+        self.assertIn("manage-empty", manage)
+        self.assertIn(
+            "Children can propose goals from their area. Approved goals appear here.",
+            manage,
+        )
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn(".manage-tabs a.is-active", css)
+        self.assertIn(".catalog-row.is-inactive", css)
+        self.assertIn(".manage-empty", css)
+        self.assertIn("text-align: center", css.split(".manage-empty {")[1].split("}")[0])
+        self.assertIn("min-height: 44px", css.split(".manage-tabs a {")[1].split("}")[0])
+        self.assertIn(".catalog-edit-actions", css)
+        js = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
+        self.assertIn("[data-manage-section]", js)
+        self.assertIn("data-cancel-edit", js)
+        self.assertIn("closeCatalogEdit", js)
 
     def test_child_card_metadata_keeps_credit_and_ticket_controls_together(self):
         response = self.parent_response()

@@ -276,113 +276,150 @@
 <section id="parent-catalogs" class="parent-panel" data-parent-panel="catalogs" hidden>
 <section class="content-section">
   <div class="section-heading"><h2>{% translate "Manage" %}</h2></div>
-  <nav class="manage-tabs" aria-label="{% translate 'Manage sections' %}"><a href="#manage-tasks"><svg class="action-icon" aria-hidden="true"><use href="#icon-list-check"></use></svg>{% translate "Tasks" %}</a><a href="#manage-penalties"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-minus"></use></svg>{% translate "Penalties" %}</a><a href="#manage-rewards"><svg class="action-icon" aria-hidden="true"><use href="#icon-gift"></use></svg>{% translate "Rewards" %}</a><a href="#manage-goals"><svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Goals" %}</a></nav>
+  <nav class="manage-tabs" aria-label="{% translate 'Manage sections' %}">
+    <a href="#manage-tasks"><svg class="action-icon" aria-hidden="true"><use href="#icon-list-check"></use></svg>{% translate "Tasks" %}</a>
+    <a href="#manage-penalties"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-minus"></use></svg>{% translate "Penalties" %}</a>
+    <a href="#manage-rewards"><svg class="action-icon" aria-hidden="true"><use href="#icon-gift"></use></svg>{% translate "Rewards" %}</a>
+    <a href="#manage-goals"><svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Goals" %}</a>
+  </nav>
   <div class="catalog-grid">
-    <details id="manage-tasks" class="panel parent-accordion">
-      <summary>{% translate "Tasks" %}</summary>
+    <section id="manage-tasks" class="panel manage-section" data-manage-section hidden>
+      {% if tasks %}
       <div class="catalog-list">
         {% for item in tasks %}
-        <div class="catalog-row">
-          <div class="catalog-summary"><span class="catalog-emoji">{{ item.icon|icon_symbol }}</span><span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-positive">+{{ item.reward }} {{ item.reward|currency_unit:"neutral" }}</small></span></div>
+        <div class="catalog-row{% if not item.is_active %} is-inactive{% endif %}">
+          <div class="catalog-summary">
+            <span class="catalog-emoji">{{ item.icon|icon_symbol }}</span>
+            <span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-positive">+{{ item.reward }} {{ item.reward|currency_unit:"neutral" }}</small>{% if not item.is_active %} <span class="status-pill catalog-hidden-pill">{% translate "Hidden" %}</span>{% endif %}</span>
+          </div>
           <div class="catalog-actions">
-            <button class="icon-button" type="button" data-toggle-edit="task-{{ item.pk }}" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
+            <button class="icon-button" type="button" data-toggle-edit="task-{{ item.pk }}" aria-expanded="false" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
             <form method="post" action="{% url 'parent_toggle_catalog' 'task' item.pk %}">{% csrf_token %}<button class="icon-button" type="submit" aria-label="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %} {{ item.title }}" title="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %}"><svg class="action-icon"><use href="#icon-{% if item.is_active %}eye{% else %}eye-slash{% endif %}"></use></svg></button></form>
           </div>
           <form id="edit-task-{{ item.pk }}" method="post" action="{% url 'parent_edit_catalog' 'task' item.pk %}" class="catalog-edit-form stack-form" hidden>
             {% csrf_token %}
-            <label>{% translate "Task" %}:<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
-            <label>{% translate "Points" %}:<input class="field-control" name="reward" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ item.reward }}" required></label>
-            <label>{% translate "Icon" %}:<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
-            <div class="form-actions">
+            <label>{% translate "Task" %}<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
+            <label>{% translate "Points" %}<input class="field-control" name="reward" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ item.reward }}" required></label>
+            <label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
+            <div class="form-actions catalog-edit-actions">
               <button class="button button-primary" type="submit">{% translate "Save" %}</button>
-              <button class="button button-danger" type="submit" formaction="{% url 'parent_delete_catalog' 'task' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete task “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
+              <button class="button button-secondary" type="button" data-cancel-edit>{% translate "Cancel" %}</button>
             </div>
+            <button class="button button-danger catalog-delete-action" type="submit" formaction="{% url 'parent_delete_catalog' 'task' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete task “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
           </form>
         </div>
         {% endfor %}
       </div>
+      {% else %}
+      <div class="manage-empty">
+        <p class="empty-state">{% translate "There are no tasks yet." %}</p>
+      </div>
+      {% endif %}
       <div class="catalog-create">
         <div class="catalog-divider"><span>{% translate "Add new" %}</span></div>
         <form method="post" action="{% url 'parent_create_catalog' 'task' %}" class="stack-form">{% csrf_token %}{{ task_form.as_p }}<button class="button button-primary" type="submit">{% translate "Create task" %}</button></form>
       </div>
-    </details>
+    </section>
 
-    <details id="manage-penalties" class="panel parent-accordion">
-      <summary>{% translate "Penalties" %}</summary>
+    <section id="manage-penalties" class="panel manage-section" data-manage-section hidden>
+      {% if penalties %}
       <div class="catalog-list">
         {% for item in penalties %}
-        <div class="catalog-row">
-          <div class="catalog-summary"><span class="catalog-emoji">{{ item.icon|icon_symbol }}</span><span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-negative">{{ item.amount }} {{ item.amount|currency_unit:"neutral" }}</small></span></div>
+        <div class="catalog-row{% if not item.is_active %} is-inactive{% endif %}">
+          <div class="catalog-summary">
+            <span class="catalog-emoji">{{ item.icon|icon_symbol }}</span>
+            <span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-negative">{{ item.amount }} {{ item.amount|currency_unit:"neutral" }}</small>{% if not item.is_active %} <span class="status-pill catalog-hidden-pill">{% translate "Hidden" %}</span>{% endif %}</span>
+          </div>
           <div class="catalog-actions">
-            <button class="icon-button" type="button" data-toggle-edit="penalty-{{ item.pk }}" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
+            <button class="icon-button" type="button" data-toggle-edit="penalty-{{ item.pk }}" aria-expanded="false" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
             <form method="post" action="{% url 'parent_toggle_catalog' 'penalty' item.pk %}">{% csrf_token %}<button class="icon-button" type="submit" aria-label="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %} {{ item.title }}" title="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %}"><svg class="action-icon"><use href="#icon-{% if item.is_active %}eye{% else %}eye-slash{% endif %}"></use></svg></button></form>
           </div>
           <form id="edit-penalty-{{ item.pk }}" method="post" action="{% url 'parent_edit_catalog' 'penalty' item.pk %}" class="catalog-edit-form stack-form" hidden>
             {% csrf_token %}
-            <label>{% translate "Penalty" %}:<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
-            <label>{% translate "Points" %}:<input class="field-control" name="amount" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ item.amount|absolute }}" required></label>
-            <label>{% translate "Icon" %}:<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
-            <div class="form-actions">
+            <label>{% translate "Penalty" %}<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
+            <label>{% translate "Points" %}<input class="field-control" name="amount" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ item.amount|absolute }}" required></label>
+            <label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
+            <div class="form-actions catalog-edit-actions">
               <button class="button button-primary" type="submit">{% translate "Save" %}</button>
-              <button class="button button-danger" type="submit" formaction="{% url 'parent_delete_catalog' 'penalty' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete penalty “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
+              <button class="button button-secondary" type="button" data-cancel-edit>{% translate "Cancel" %}</button>
             </div>
+            <button class="button button-danger catalog-delete-action" type="submit" formaction="{% url 'parent_delete_catalog' 'penalty' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete penalty “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
           </form>
         </div>
         {% endfor %}
       </div>
+      {% else %}
+      <div class="manage-empty">
+        <p class="empty-state">{% translate "There are no penalties yet." %}</p>
+      </div>
+      {% endif %}
       <div class="catalog-create">
         <div class="catalog-divider"><span>{% translate "Add new" %}</span></div>
         <form method="post" action="{% url 'parent_create_catalog' 'penalty' %}" class="stack-form">{% csrf_token %}{{ penalty_form.as_p }}<button class="button button-primary" type="submit">{% translate "Create penalty" %}</button></form>
       </div>
-    </details>
+    </section>
 
-    <details id="manage-rewards" class="panel parent-accordion">
-      <summary>{% translate "Rewards" %}</summary>
+    <section id="manage-rewards" class="panel manage-section" data-manage-section hidden>
+      {% if rewards %}
       <div class="catalog-list">
         {% for item in rewards %}
-        <div class="catalog-row">
-          <div class="catalog-summary"><span class="catalog-emoji">{{ item.icon|icon_symbol }}</span><span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-negative">−{{ item.cost }} {{ item.cost|currency_unit:"neutral" }}</small></span></div>
+        <div class="catalog-row{% if not item.is_active %} is-inactive{% endif %}">
+          <div class="catalog-summary">
+            <span class="catalog-emoji">{{ item.icon|icon_symbol }}</span>
+            <span class="catalog-title">{{ item.title }} <small class="catalog-token catalog-token-negative">−{{ item.cost }} {{ item.cost|currency_unit:"neutral" }}</small>{% if not item.is_active %} <span class="status-pill catalog-hidden-pill">{% translate "Hidden" %}</span>{% endif %}</span>
+          </div>
           <div class="catalog-actions">
-            <button class="icon-button" type="button" data-toggle-edit="reward-{{ item.pk }}" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
+            <button class="icon-button" type="button" data-toggle-edit="reward-{{ item.pk }}" aria-expanded="false" aria-label="{% translate "Edit" %} {{ item.title }}" title="{% translate "Edit" %}"><svg class="action-icon"><use href="#icon-pen-to-square"></use></svg></button>
             <form method="post" action="{% url 'parent_toggle_catalog' 'reward' item.pk %}">{% csrf_token %}<button class="icon-button" type="submit" aria-label="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %} {{ item.title }}" title="{% if item.is_active %}{% translate "Hide" %}{% else %}{% translate "Show" %}{% endif %}"><svg class="action-icon"><use href="#icon-{% if item.is_active %}eye{% else %}eye-slash{% endif %}"></use></svg></button></form>
           </div>
           <form id="edit-reward-{{ item.pk }}" method="post" action="{% url 'parent_edit_catalog' 'reward' item.pk %}" class="catalog-edit-form stack-form" hidden>
             {% csrf_token %}
-            <label>{% translate "Reward" %}:<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
-            <label>{% translate "Points" %}:<input class="field-control" name="cost" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ item.cost }}" required></label>
-            <label>{% translate "Icon" %}:<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
-            <div class="form-actions">
+            <label>{% translate "Reward" %}<input class="field-control" name="title" value="{{ item.title }}" maxlength="120" required></label>
+            <label>{% translate "Points" %}<input class="field-control" name="cost" type="number" min="1" max="99999" maxlength="5" inputmode="numeric" value="{{ item.cost }}" required></label>
+            <label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ item.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label>
+            <div class="form-actions catalog-edit-actions">
               <button class="button button-primary" type="submit">{% translate "Save" %}</button>
-              <button class="button button-danger" type="submit" formaction="{% url 'parent_delete_catalog' 'reward' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete reward “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
+              <button class="button button-secondary" type="button" data-cancel-edit>{% translate "Cancel" %}</button>
             </div>
+            <button class="button button-danger catalog-delete-action" type="submit" formaction="{% url 'parent_delete_catalog' 'reward' item.pk %}" formnovalidate data-confirm="{% blocktranslate with title=item.title %}Delete reward “{{ title }}”? Earlier history entries will remain.{% endblocktranslate %}">{% translate "Delete" %}</button>
           </form>
         </div>
         {% endfor %}
       </div>
+      {% else %}
+      <div class="manage-empty">
+        <p class="empty-state">{% translate "There are no rewards yet." %}</p>
+      </div>
+      {% endif %}
       <div class="catalog-create">
         <div class="catalog-divider"><span>{% translate "Add new" %}</span></div>
         <form method="post" action="{% url 'parent_create_catalog' 'reward' %}" class="stack-form">{% csrf_token %}{{ reward_form.as_p }}<button class="button button-primary" type="submit">{% translate "Create reward" %}</button></form>
       </div>
-    </details>
+    </section>
 
-    <details id="manage-goals" class="panel parent-accordion">
-      <summary>{% translate "Goals" %}</summary>
+    <section id="manage-goals" class="panel manage-section" data-manage-section hidden>
+      {% if goals %}
       <div class="goal-filter" aria-label="{% translate 'Goal child filter' %}"><a class="is-active" href="#manage-goals">{% translate "All" %}</a>{% for goal_child in goal_children %}<a href="#manage-goals-child-{{ goal_child.pk }}">{{ goal_child.name }}</a>{% endfor %}</div>
       <div class="goal-manage-list">
         {% for goal in goals %}
         <article id="goal-item-{{ goal.pk }}" class="goal-manage-row" data-goal-child="{{ goal.child.pk }}" data-goal-status="{{ goal.status }}">
           <div class="goal-manage-heading"><span class="catalog-emoji">{{ goal.icon|icon_symbol }}</span><div><strong>{{ goal.title }}</strong><small>{{ goal.child.name }}</small></div></div>
           <div class="goal-manage-progress"><span>{{ goal.progress_amount }}/{{ goal.target_amount }} {% translate "Points" %}</span><div class="progress"><span style="width: {{ goal.progress_percent }}%"></span></div></div>
-          <div class="goal-manage-status">{% if goal.status == "completed" %}<span class="status-pill">{% translate "Completed" %}</span>{% elif goal.status == "cancelled" %}<span class="status-pill">{% translate "Cancelled" %}</span>{% elif goal.has_pending_completion %}<span class="status-pill">{% translate "Reached goal" %}</span>{% elif goal.mode == "available" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Uses available points" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% elif goal.mode == "saved" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-piggy-bank"></use></svg>{% translate "Saved separately" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% else %}<svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Choose mode" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg>{% endif %}</div>
-          <div class="goal-manage-actions"><button class="icon-button" type="button" data-toggle-edit="goal-{{ goal.pk }}" aria-label="{% translate 'Edit goal' %}" title="{% translate 'Edit goal' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-pen-to-square"></use></svg></button>{% if goal.mode == "saved" %}<button class="icon-button" type="button" data-open-dialog="goal-parent-add-{{ goal.pk }}" aria-label="{% translate 'Add points' %}" title="{% translate 'Add points' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-plus"></use></svg></button><dialog id="goal-parent-add-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Add points" %}</h2><p>{% translate "Move available points into this goal." %}</p><form method="post" action="{% url 'parent_add_goal_points' goal.pk %}" class="stack-form">{% csrf_token %}<label>{% translate "Points to add" %}<input class="field-control" name="amount" type="number" min="1" required></label><div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><button class="button button-primary" type="submit">{% translate "Add" %}</button></div></form></dialog>{% if goal.saved_amount %}<button class="icon-button" type="button" data-open-dialog="goal-return-{{ goal.pk }}" aria-label="{% translate 'Move saved points back' %}" title="{% translate 'Move saved points back' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-right-left"></use></svg></button><dialog id="goal-return-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Move saved points back" %}</h2><p>{% translate "These points will become available for rewards again." %}</p><form method="post" action="{% url 'parent_return_goal_points' goal.pk %}" class="stack-form">{% csrf_token %}<button class="button button-primary" type="submit">{% translate "Move points back" %}</button><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button></form></dialog>{% endif %}{% endif %}{% if not goal.saved_amount %}<form method="post" action="{% url 'parent_close_goal' goal.pk %}">{% csrf_token %}<button class="icon-button danger" type="submit" data-confirm="{% translate 'Close this goal?' %}" aria-label="{% translate 'Close goal' %}" title="{% translate 'Close goal' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-box-archive"></use></svg></button></form>{% else %}<button class="icon-button" type="button" disabled aria-label="{% translate 'Return saved points before closing' %}" title="{% translate 'Return saved points before closing' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-box-archive"></use></svg></button>{% endif %}</div>
-          <form id="edit-goal-{{ goal.pk }}" method="post" action="{% url 'parent_edit_goal' goal.pk %}" class="catalog-edit-form stack-form" hidden>{% csrf_token %}<label>{% translate "Goal title" %}:<input class="field-control" name="title" value="{{ goal.title }}" maxlength="120" required></label><label>{% translate "Target amount" %}:<input class="field-control" name="target_amount" type="number" min="1" value="{{ goal.target_amount }}" required></label><label>{% translate "Icon" %}:<input class="field-control emoji-input" name="icon" value="{{ goal.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label><div class="form-actions"><button class="button button-primary" type="submit">{% translate "Save" %}</button><button class="button button-danger" type="button" data-open-dialog="delete-goal-{{ goal.pk }}">{% translate "Delete" %}</button></div></form>
+          <div class="goal-manage-status">{% if goal.status == "completed" %}<span class="status-pill">{% translate "Completed" %}</span>{% elif goal.status == "cancelled" %}<span class="status-pill">{% translate "Cancelled" %}</span>{% elif goal.has_pending_completion %}<span class="status-pill">{% translate "Reached goal" %}</span>{% elif goal.mode == "available" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Uses available points" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% elif goal.mode == "saved" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-piggy-bank"></use></svg>{% translate "Saved separately" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% else %}<svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Choose mode" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% endif %}</div>
+          <div class="goal-manage-actions"><button class="icon-button" type="button" data-toggle-edit="goal-{{ goal.pk }}" aria-expanded="false" aria-label="{% translate 'Edit goal' %}" title="{% translate 'Edit goal' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-pen-to-square"></use></svg></button>{% if goal.mode == "saved" %}<button class="icon-button" type="button" data-open-dialog="goal-parent-add-{{ goal.pk }}" aria-label="{% translate 'Add points' %}" title="{% translate 'Add points' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-plus"></use></svg></button><dialog id="goal-parent-add-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Add points" %}</h2><p>{% translate "Move available points into this goal." %}</p><form method="post" action="{% url 'parent_add_goal_points' goal.pk %}" class="stack-form">{% csrf_token %}<label>{% translate "Points to add" %}<input class="field-control" name="amount" type="number" min="1" required></label><div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><button class="button button-primary" type="submit">{% translate "Add" %}</button></div></form></dialog>{% if goal.saved_amount %}<button class="icon-button" type="button" data-open-dialog="goal-return-{{ goal.pk }}" aria-label="{% translate 'Move saved points back' %}" title="{% translate 'Move saved points back' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-right-left"></use></svg></button><dialog id="goal-return-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Move saved points back" %}</h2><p>{% translate "These points will become available for rewards again." %}</p><form method="post" action="{% url 'parent_return_goal_points' goal.pk %}" class="stack-form">{% csrf_token %}<div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><button class="button button-primary" type="submit">{% translate "Move points back" %}</button></div></form></dialog>{% endif %}{% endif %}{% if not goal.saved_amount %}<form method="post" action="{% url 'parent_close_goal' goal.pk %}">{% csrf_token %}<button class="icon-button danger" type="submit" data-confirm="{% translate 'Close this goal?' %}" aria-label="{% translate 'Close goal' %}" title="{% translate 'Close goal' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-box-archive"></use></svg></button></form>{% else %}<button class="icon-button" type="button" disabled aria-label="{% translate 'Return saved points before closing' %}" title="{% translate 'Return saved points before closing' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-box-archive"></use></svg></button>{% endif %}</div>
+          <form id="edit-goal-{{ goal.pk }}" method="post" action="{% url 'parent_edit_goal' goal.pk %}" class="catalog-edit-form stack-form" hidden>{% csrf_token %}<label>{% translate "Goal title" %}<input class="field-control" name="title" value="{{ goal.title }}" maxlength="120" required></label><label>{% translate "Target amount" %}<input class="field-control" name="target_amount" type="number" min="1" value="{{ goal.target_amount }}" required></label><label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ goal.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label><div class="form-actions catalog-edit-actions"><button class="button button-primary" type="submit">{% translate "Save" %}</button><button class="button button-secondary" type="button" data-cancel-edit>{% translate "Cancel" %}</button></div><button class="button button-danger catalog-delete-action" type="button" data-open-dialog="delete-goal-{{ goal.pk }}">{% translate "Delete" %}</button></form>
           <dialog id="delete-goal-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>{% if goal.saved_amount %}<h2>{% translate "Delete goal and return saved points?" %}</h2><p>{% blocktranslate with amount=goal.saved_amount child_name=goal.child.name %}{{ amount }} saved points will be returned to {{ child_name }}’s available balance before this goal is removed.{% endblocktranslate %}</p>{% else %}<h2>{% translate "Delete goal?" %}</h2><p>{% translate "This goal will be removed. This action cannot be undone." %}</p>{% endif %}<form method="post" action="{% url 'parent_delete_goal' goal.pk %}">{% csrf_token %}<div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><button class="button button-danger" type="submit"><svg class="action-icon" aria-hidden="true"><use href="#icon-trash-can"></use></svg>{% if goal.saved_amount %}{% translate "Return points and delete" %}{% else %}{% translate "Delete goal" %}{% endif %}</button></div></form></dialog>
         </article>
         <dialog id="goal-parent-info-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{{ goal.title }}</h2><p>{% if goal.mode == "saved" %}{% translate "These points are reserved for this goal." %}{% elif goal.mode == "available" %}{% translate "Available points count as progress and can still be spent." %}{% else %}{% translate "Choose a savings mode for this goal." %}{% endif %}</p></dialog>
-        {% empty %}<p class="empty-state">{% translate "There are no goals yet." %}</p>
         {% endfor %}
       </div>
-    </details>
+      {% else %}
+      <div class="manage-empty">
+        <p class="empty-state">{% translate "There are no goals yet." %}</p>
+        <p class="empty-state-hint">{% translate "Children can propose goals from their area. Approved goals appear here." %}</p>
+      </div>
+      {% endif %}
+    </section>
   </div>
 </section>
 </section>
