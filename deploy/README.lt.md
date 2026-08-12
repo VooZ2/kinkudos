@@ -313,8 +313,9 @@ family.example.com {
 nurodytas `KINKUDOS_PROXY_NETWORK`.
 
 KinKudos pasitiki persiųsta kliento IP antrašte tik jei tiesioginis ryšys
-ateina iš `KINKUDOS_TRUSTED_PROXIES` nurodyto adreso ar potinklio. Nurodykite
-tikslų proxy adresą arba Docker potinklį, o ne visą internetą. Pasirenkamas tėvų
+ateina iš `KINKUDOS_TRUSTED_PROXIES` nurodyto adreso ar potinklio. Programos
+numatytoji reikšmė yra tik loopback; Traefik/NPM atvejais nurodykite tikslų
+proxy adresą arba Docker potinklį, o ne visą internetą. Pasirenkamas tėvų
 nustatymas „Nustatymai → Tinklo prieiga“ gali papildomai apriboti vaikų
 puslapius arba visą programą konkrečiais IP/CIDR tinklais. Pagal nutylėjimą jis
 išjungtas ir nepakeičia HTTPS, įrenginių susiejimo ar stiprių tėvų

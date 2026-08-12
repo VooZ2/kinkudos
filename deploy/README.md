@@ -334,8 +334,9 @@ WebSocket support, and use the same external network configured by
 `KINKUDOS_PROXY_NETWORK`.
 
 KinKudos trusts forwarded client-IP headers only when the direct peer belongs
-to `KINKUDOS_TRUSTED_PROXIES`. Set this to the exact proxy address or Docker
-subnet, not to the entire internet. The optional parent setting
+to `KINKUDOS_TRUSTED_PROXIES`. The application default is loopback only; set
+this to the exact proxy address or Docker subnet for Traefik/NPM, not to the
+entire internet. The optional parent setting
 Settings → Network access can then restrict child pages or the entire
 application to explicit IP/CIDR networks. It is disabled by default and is an
 additional layer, not a replacement for HTTPS, device pairing, or strong

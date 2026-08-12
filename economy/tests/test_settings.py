@@ -16,6 +16,22 @@ from economy.models import ChildProfile, FamilySettings, PenaltyTemplate, Reward
 ROOT = Path(__file__).resolve().parents[2]
 
 
+class FamilySettingsSingletonTests(TestCase):
+    def test_update_fields_save_recovers_when_singleton_row_is_missing(self):
+        FamilySettings.objects.filter(pk=1).delete()
+        ghost = FamilySettings(pk=1, family_name="Ghost", currency_name="Old")
+        ghost._state.adding = False
+        ghost._state.db = "default"
+        ghost.family_name = "Aurora"
+        ghost.currency_name = "Tokenai"
+
+        ghost.save(update_fields=["family_name", "currency_name"])
+
+        family = FamilySettings.objects.get(pk=1)
+        self.assertEqual(family.family_name, "Aurora")
+        self.assertEqual(family.currency_name, "Tokenai")
+
+
 class DefaultSettingsTests(SimpleTestCase):
     def test_debug_defaults_to_false_without_environment_override(self):
         environment = os.environ.copy()

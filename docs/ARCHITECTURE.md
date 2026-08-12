@@ -175,7 +175,9 @@ parent-approved; one pending request per child at a time.
 **PushSubscription** — Web Push subscription for either a parent user or a
 paired child device (exactly one owner, enforced by a DB constraint). Browser
 endpoints must be public HTTPS URLs with bounded, structurally valid Web Push
-keys; subscription counts are bounded per parent and child device. Parent
+keys; hostname endpoints are resolved and every address must be globally
+routable (literal private IPs and special local names are rejected).
+Subscription counts are bounded per parent and child device. Parent
 queries include only active users. Parents are notified of new/revised task
 submissions, reward requests, suggestions, and birthday-change requests;
 children are notified of task, reward, suggestion, and birthday-change
@@ -228,9 +230,14 @@ the shared parent palette.
 - TLS terminates at the operator's supported reverse proxy; Gunicorn is never
   published directly to the internet.
 - Forwarded client IP and scheme headers are honored only from configured
-  trusted proxy networks. Authentication limits use the resolved address.
-- Parent login, password recovery, device pairing, child PIN, and optional
-  Django admin endpoints have shared database-backed attempt limits.
+  trusted proxy networks. The default trusts loopback only
+  (`127.0.0.0/8`, `::1/128`); Traefik/NPM/Hostinger installs must set
+  `KINKUDOS_TRUSTED_PROXIES` to the reverse-proxy or Docker network CIDR.
+  Authentication limits use the resolved address.
+- Parent login, password recovery, device pairing, child PIN, initial setup
+  claim, and optional Django admin endpoints have shared database-backed
+  attempt limits. Operator-supplied setup tokens must meet a minimum length
+  floor (32 characters by default).
 - Child profiles are hidden until a parent pairs the device. Pairing links are
   single-use, expire after ten minutes, and pass their secret in the URL
   fragment so it is not written to normal HTTP access logs.
@@ -351,7 +358,11 @@ remain operator responsibilities.
 
 SMTP settings are editable only by the parent administrator after password
 confirmation. The SMTP password is stored in a separately permissioned local
-file under `secrets/`, never in the database, logs, or repository.
+file under `secrets/`, never in the database, logs, or repository. SMTP
+verification resolves the configured host and, by default, refuses
+non-global destinations (private, loopback, link-local). Self-hosted LAN
+SMTP requires an explicit `KINKUDOS_SMTP_ALLOW_PRIVATE_DESTINATIONS=true`
+escape hatch.
 
 ## Versioning
 MIT license, calendar-based `YY.FEATURE.FIX` versioning, and `main` must always

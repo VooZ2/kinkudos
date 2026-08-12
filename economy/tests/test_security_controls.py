@@ -2,6 +2,7 @@ import re
 from datetime import timedelta
 from unittest.mock import patch
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 from django.test import RequestFactory, TestCase, override_settings
@@ -45,6 +46,30 @@ class AttemptCounterTests(TestCase):
 class ClientIpTests(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
+
+    def test_default_trusted_proxies_are_loopback_only(self):
+        from pathlib import Path
+
+        settings_source = Path(settings.BASE_DIR, "kinkudos", "settings.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(
+            '"KINKUDOS_TRUSTED_PROXIES",\n    "127.0.0.0/8,::1/128",',
+            settings_source,
+        )
+        self.assertNotIn(
+            '"127.0.0.0/8,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"',
+            settings_source,
+        )
+
+    @override_settings(TRUSTED_PROXY_NETWORKS=["127.0.0.0/8", "::1/128"])
+    def test_private_lan_peer_does_not_receive_forwarded_client_ip(self):
+        request = self.factory.get(
+            "/",
+            REMOTE_ADDR="10.0.0.5",
+            HTTP_X_FORWARDED_FOR="198.51.100.9",
+        )
+        self.assertEqual(client_ip(request), "10.0.0.5")
 
     @override_settings(TRUSTED_PROXY_NETWORKS=["10.0.0.0/8"])
     def test_forwarded_chain_is_used_only_for_trusted_peer(self):

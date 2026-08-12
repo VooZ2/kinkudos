@@ -20,6 +20,7 @@ from django.utils.translation import get_language
 from django.utils.translation import gettext_lazy as _
 
 from .device_detection import identify_device
+from .net import require_global_destination
 
 _family_settings_cache = Local()
 
@@ -93,6 +94,12 @@ def validate_push_subscription_data(endpoint, p256dh, auth):
             (".localhost", ".local", ".internal", ".home.arpa")
         ):
             raise ValidationError({"endpoint": _("The Web Push endpoint is invalid.")})
+        try:
+            require_global_destination(ascii_hostname, port or 443)
+        except ValueError as exc:
+            raise ValidationError(
+                {"endpoint": _("The Web Push endpoint is invalid.")}
+            ) from exc
 
     public_key = _decode_web_push_key(
         p256dh,
@@ -166,6 +173,16 @@ class FamilySettings(models.Model):
 
     def save(self, *args, **kwargs):
         self.pk = 1
+        update_fields = kwargs.get("update_fields")
+        if update_fields is not None and not type(self).objects.filter(pk=1).exists():
+            # Avoid update_fields against a missing singleton (stale request-local
+            # instance after a rolled-back transaction, or first insert).
+            kwargs = {
+                key: value
+                for key, value in kwargs.items()
+                if key not in {"update_fields", "force_update"}
+            }
+            self._state.adding = True
         super().save(*args, **kwargs)
         if getattr(_family_settings_cache, "active", False):
             _family_settings_cache.instance = self
@@ -377,6 +394,7 @@ class AttemptCounter(models.Model):
         PASSWORD_RESET_ACCOUNT = "password_reset_account", _("Password reset by account")
         DEVICE_PAIRING = "device_pairing", _("Device pairing")
         ADMIN_LOGIN_IP = "admin_login_ip", _("Admin login by IP")
+        SETUP_CLAIM_IP = "setup_claim_ip", _("Initial setup by IP")
 
     scope = models.CharField(max_length=32, choices=Scope.choices)
     key_hash = models.CharField(max_length=64)
