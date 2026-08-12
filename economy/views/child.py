@@ -17,7 +17,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 
-from economy.auth import child_required, current_child, current_device
+from economy.auth import child_object_or_404, child_required, current_child, current_device
 from economy.forms import (
     AvatarForm,
     BirthDateForm,
@@ -368,10 +368,10 @@ def child_submit_task(request, task_id):
 @child_required
 @require_POST
 def child_resubmit_task(request, claim_id):
-    claim = get_object_or_404(
-        TaskClaim,
+    claim = child_object_or_404(
+        request,
+        TaskClaim.objects.all(),
         pk=claim_id,
-        child=request.child,
         status=RequestStatus.NEEDS_CHANGES,
     )
     form = TaskEvidenceForm(request.POST, request.FILES)
@@ -414,10 +414,10 @@ def child_resubmit_task(request, claim_id):
 @child_required
 @require_POST
 def child_acknowledge_task_response(request, claim_id):
-    claim = get_object_or_404(
-        TaskClaim,
+    claim = child_object_or_404(
+        request,
+        TaskClaim.objects.all(),
         pk=claim_id,
-        child=request.child,
         status=RequestStatus.REJECTED,
     )
     if claim.child_acknowledged_at is None:
@@ -460,11 +460,7 @@ def child_purchase_lottery_ticket(request):
 @child_required
 @require_POST
 def child_reveal_lottery_ticket(request, ticket_id):
-    ticket = get_object_or_404(
-        LotteryTicket,
-        pk=ticket_id,
-        child=request.child,
-    )
+    ticket = child_object_or_404(request, LotteryTicket.objects.all(), pk=ticket_id)
     revealed = reveal_lottery_ticket(ticket=ticket, child=request.child)
     revealed.refresh_from_db()
     return JsonResponse(
@@ -480,10 +476,10 @@ def child_reveal_lottery_ticket(request, ticket_id):
 @child_required
 @require_POST
 def child_cancel_reward(request, request_id):
-    reward_request = get_object_or_404(
-        RewardRequest,
+    reward_request = child_object_or_404(
+        request,
+        RewardRequest.objects.all(),
         pk=request_id,
-        child=request.child,
     )
     cancelled = cancel_reward_request(request=reward_request, child=request.child)
     if not cancelled:
@@ -508,10 +504,10 @@ def child_create_proposal(request):
 @child_required
 @require_POST
 def child_set_goal_mode(request, goal_id):
-    goal = get_object_or_404(
-        SavingsGoal,
+    goal = child_object_or_404(
+        request,
+        SavingsGoal.objects.all(),
         pk=goal_id,
-        child=request.child,
         status=GoalStatus.ACTIVE,
     )
     try:
@@ -528,10 +524,10 @@ def child_set_goal_mode(request, goal_id):
 @child_required
 @require_POST
 def child_add_goal_points(request, goal_id):
-    goal = get_object_or_404(
-        SavingsGoal,
+    goal = child_object_or_404(
+        request,
+        SavingsGoal.objects.all(),
         pk=goal_id,
-        child=request.child,
         status=GoalStatus.ACTIVE,
     )
     form = GoalAmountForm(request.POST)
@@ -551,10 +547,10 @@ def child_add_goal_points(request, goal_id):
 @child_required
 @require_POST
 def child_request_goal_completion(request, goal_id):
-    goal = get_object_or_404(
-        SavingsGoal,
+    goal = child_object_or_404(
+        request,
+        SavingsGoal.objects.all(),
         pk=goal_id,
-        child=request.child,
         status=GoalStatus.ACTIVE,
     )
     try:
