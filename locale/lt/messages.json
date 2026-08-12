@@ -1089,5 +1089,7 @@
   "There are no penalties yet.": "Kol kas nuobaudų nėra.",
   "There are no rewards yet.": "Kol kas prizų nėra.",
   "Children can propose goals from their area. Approved goals appear here.": "Vaikai gali pasiūlyti tikslus savo erdvėje. Patvirtinti tikslai atsiranda čia.",
-  "Last": "Paskutinis"
+  "Last": "Paskutinis",
+  "Too many setup attempts. Try again later.": "Per daug paruošimo bandymų. Bandykite vėliau.",
+  "The configured setup code is too short. Ask the server administrator to generate a longer code.": "Sukonfigūruotas paruošimo kodas per trumpas. Paprašykite serverio administratoriaus sugeneruoti ilgesnį kodą."
 }

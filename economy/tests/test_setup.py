@@ -5,14 +5,16 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
-from economy.models import FamilySettings
+from economy.models import AttemptCounter, FamilySettings
+
+SETUP_TOKEN = "setup-test-token-with-enough-entropy-32"
 
 
-@override_settings(SETUP_TOKEN="setup-test-token")
+@override_settings(SETUP_TOKEN=SETUP_TOKEN)
 class BrowserSetupTests(TestCase):
     def payload(self, **overrides):
         data = {
-            "setup_token": "setup-test-token",
+            "setup_token": SETUP_TOKEN,
             "username": "first-parent",
             "email": "parent@example.test",
             "password1": "Strong-first-parent-123!",
@@ -129,3 +131,28 @@ class BrowserSetupTests(TestCase):
         client = Client(enforce_csrf_checks=True)
         response = client.post(reverse("setup"), self.payload())
         self.assertEqual(response.status_code, 403)
+
+    def test_setup_claim_is_rate_limited_by_ip(self):
+        for _ in range(10):
+            response = self.client.post(
+                reverse("setup"),
+                self.payload(setup_token="wrong-token-value"),
+            )
+            self.assertContains(response, "The setup code is incorrect.")
+        response = self.client.post(reverse("setup"), self.payload())
+        self.assertContains(response, "Too many setup attempts. Try again later.")
+        self.assertFalse(get_user_model().objects.exists())
+        self.assertTrue(
+            AttemptCounter.objects.filter(
+                scope=AttemptCounter.Scope.SETUP_CLAIM_IP
+            ).exists()
+        )
+
+    @override_settings(SETUP_TOKEN="short-token")
+    def test_weak_configured_setup_token_is_rejected(self):
+        response = self.client.post(
+            reverse("setup"),
+            self.payload(setup_token="short-token"),
+        )
+        self.assertContains(response, "The configured setup code is too short.")
+        self.assertFalse(get_user_model().objects.exists())

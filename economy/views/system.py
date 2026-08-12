@@ -19,9 +19,18 @@ from economy.forms import (
     InitialSetupForm,
 )
 from economy.models import (
+    AttemptCounter,
     FamilySettings,
 )
-from economy.setup import SetupUnavailable, complete_setup, setup_is_available, token_is_valid
+from economy.net import client_ip
+from economy.rate_limit import register_attempt
+from economy.setup import (
+    SetupUnavailable,
+    complete_setup,
+    setup_is_available,
+    setup_token_meets_entropy_floor,
+    token_is_valid,
+)
 
 logger = logging.getLogger("economy.views")
 
@@ -56,8 +65,27 @@ def setup(request):
         return redirect("parent_dashboard" if request.user.is_authenticated else "parent_login")
     if request.method == "POST":
         form = InitialSetupForm(request.POST)
+        if not register_attempt(
+            AttemptCounter.Scope.SETUP_CLAIM_IP,
+            client_ip(request),
+            window_seconds=300,
+            limit=10,
+        ):
+            form.add_error(
+                None,
+                _("Too many setup attempts. Try again later."),
+            )
+            return render(request, "economy/setup.html", {"form": form})
         if form.is_valid():
-            if not token_is_valid(form.cleaned_data["setup_token"]):
+            if not setup_token_meets_entropy_floor(settings.SETUP_TOKEN):
+                form.add_error(
+                    "setup_token",
+                    _(
+                        "The configured setup code is too short. "
+                        "Ask the server administrator to generate a longer code."
+                    ),
+                )
+            elif not token_is_valid(form.cleaned_data["setup_token"]):
                 form.add_error("setup_token", _("The setup code is incorrect."))
             else:
                 smtp = None

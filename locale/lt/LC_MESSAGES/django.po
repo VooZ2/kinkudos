@@ -2590,6 +2590,9 @@ msgstr "Pakeitimų istorija dar tuščia."
 msgid "The child's name is required."
 msgstr "Vaiko vardas privalomas."
 
+msgid "The configured setup code is too short. Ask the server administrator to generate a longer code."
+msgstr "Sukonfigūruotas paruošimo kodas per trumpas. Paprašykite serverio administratoriaus sugeneruoti ilgesnį kodą."
+
 msgid "The corrected task was sent for approval again."
 msgstr "Pataisytas darbas vėl išsiųstas patvirtinti."
 
@@ -2961,6 +2964,9 @@ msgstr "Išsiųsta per daug atsiliepimų. Palaukite minutę ir bandykite dar kar
 
 msgid "Too many requests. Try again later."
 msgstr "Per daug užklausų. Bandykite vėliau."
+
+msgid "Too many setup attempts. Try again later."
+msgstr "Per daug paruošimo bandymų. Bandykite vėliau."
 
 msgid "Too many sign-in attempts. Try again later."
 msgstr "Per daug prisijungimo bandymų. Bandykite vėliau."
