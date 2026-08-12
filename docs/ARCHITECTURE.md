@@ -43,8 +43,10 @@ agent.
 **Children** — multiple `ChildProfile` records managed by parents. Before a
 device can see child names or submit a PIN, a parent pairs it with a
 high-entropy, revocable `DeviceToken`. Children then sign in with a four-digit
-PIN hashed with Argon2, never stored raw. Device, profile, IP, and site-wide
-attempt limits protect the PIN flow; five failed profile attempts also lock
+PIN hashed with Argon2, never stored raw. Device, profile, and IP attempt
+limits protect the PIN flow; a site-wide counter is retained for monitoring
+and logs a warning when the household threshold is crossed, but does not
+hard-lock every child. Five failed profile attempts also lock
 the profile for five minutes, and a parent can unlock it immediately. Child
 sessions are bound to the paired device and last 48 hours
 (`KINKUDOS_CHILD_SESSION_SECONDS`). A device may remember the last selected

@@ -114,6 +114,59 @@ class ClientIpTests(TestCase):
         self.assertEqual(response.content, b"|")
 
 
+@override_settings(DEVICE_PAIRING_REQUIRED=False, LANGUAGE_CODE="en")
+class ChildPinSiteRateLimitTests(TestCase):
+    def setUp(self):
+        self.child = ChildProfile(name="Pin child", theme_selected=True)
+        self.child.set_pin("1234")
+        self.child.save()
+        self.other = ChildProfile(name="Other pin child", theme_selected=True)
+        self.other.set_pin("1234")
+        self.other.save()
+
+    def post_pin(self, child=None, pin="0000"):
+        child = child or self.child
+        return self.client.post(
+            reverse("child_select"),
+            {"child_id": child.pk, "pin": pin},
+        )
+
+    def clear_profile_lock(self, child):
+        ChildProfile.objects.filter(pk=child.pk).update(
+            failed_pin_attempts=0,
+            locked_until=None,
+        )
+
+    @patch("economy.views.session.logger.warning")
+    def test_site_wide_pin_threshold_is_alarm_only(self, warning):
+        # Seed past the site threshold without burning device/profile/IP budgets.
+        for _ in range(61):
+            register_attempt(
+                AttemptCounter.Scope.CHILD_PIN_SITE,
+                "site",
+                window_seconds=300,
+                limit=60,
+            )
+        response = self.post_pin()
+        self.assertContains(response, "Incorrect PIN.")
+        self.assertNotContains(response, "Too many PIN attempts")
+        warning.assert_called()
+        self.clear_profile_lock(self.child)
+        response = self.post_pin(pin="1234")
+        self.assertRedirects(response, reverse("child_dashboard"))
+
+    def test_device_pin_limit_still_blocks_login(self):
+        # Profile AttemptCounter limit is 10; rotate so device (15) binds first.
+        for index in range(15):
+            child = self.child if index < 10 else self.other
+            response = self.post_pin(child=child)
+            self.assertContains(response, "Incorrect PIN.")
+            self.clear_profile_lock(child)
+        response = self.post_pin(pin="1234")
+        self.assertContains(response, "Too many PIN attempts. Try again later.")
+        self.assertNotIn("child_id", self.client.session)
+
+
 class ContentSecurityPolicyTests(TestCase):
     def setUp(self):
         self.parent = get_user_model().objects.create_user(
