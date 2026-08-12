@@ -880,7 +880,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, "Taškai ir darbai")
         self.assertContains(response, "Duomenys ir saugojimas")
         self.assertContains(response, "Tinklas ir saugumas")
-        self.assertContains(response, "Bilietų limitas per savaitę")
+        self.assertContains(response, "Kortelių limitas per savaitę")
         self.assertContains(
             response,
             "Limitas atnaujinamas kiekvieną pirmadienį, kiekvienam vaikui. "
@@ -1216,7 +1216,7 @@ class AccessAndWorkflowTests(TestCase):
         meta_row = html[html.index('<div class="child-metadata-row">') :]
         meta_row = meta_row[: meta_row.index("</div>")]
         self.assertIn("Kreditas -100", meta_row)
-        self.assertLess(meta_row.index("Kreditas"), meta_row.index("Bilietai"))
+        self.assertLess(meta_row.index("Kreditas"), meta_row.index("Kortelės"))
         self.assertNotIn("child-meta-sep", meta_row)
         nav_html = html[html.index('<nav class="parent-navigation"'):]
         nav_html = nav_html[:nav_html.index('</nav>')]
