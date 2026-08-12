@@ -12,9 +12,10 @@ vaikas mato tik tuo metu jam prieinamas užduotis.
 
 Katalogo eilutėje gali būti šie veiksmai:
 
-- **Redaguoti** – pakeisti būsimų naudojimų pavadinimą, taškus ar emoji;
-- **Paslėpti** – išsaugoti įrašą ir istoriją, bet pašalinti jį iš vaiko
-  pasirinkimo;
+- **Redaguoti** atveria vieną formą su **Išsaugoti** ir **Atšaukti**; **Trinti**
+  atskirtas žemiau;
+- **Paslėpti** išsaugo įrašą ir istoriją, bet pašalina jį iš vaiko pasirinkimo;
+  paslėptos eilutės atrodo prislopintos ir rodo būseną **Paslėpta**;
 - **Rodyti** – vėl padaryti paslėptą įrašą prieinamą;
 - **Trinti** – pašalinti įrašą iš aktyvaus naudojimo pagal programoje įdiegtą
   katalogo elgseną.
@@ -59,12 +60,14 @@ Vaiko kortelėje naudokite **Paskirti darbus šiandienai**, kad išsiųstumėte
 ## Nuobaudos ir korekcijos
 
 Skiltyje **Tėvai → Tvarkyti → Nuobaudos** sukurkite nuobaudų šablonus su aiškiu
-pavadinimu, neigiama taškų verte ir pasirenkamu emoji. Vaiko kortelėje
-**Skirti nuobaudą** pritaiko pasirinktus šablonus ir gali pridėti bendrą
-priežastį. Taip sukuriamas nuolatinis neigiamas Istorijos įrašas.
+pavadinimu, neigiama taškų verte ir pasirenkamu emoji. Vaiko kortelėje atidarykite
+**Daugiau** ir pasirinkite **Skirti nuobaudą**, kad pritaikytumėte šablonus su
+pasirenkama bendra priežastimi. Taip sukuriamas nuolatinis neigiamas Istorijos
+įrašas.
 
-**Koreguoti taškus** naudokite vienkartinei korekcijai ar veiksmui, kuris nėra
-darbas, prizas ar nuobauda. Įrašykite teigiamą arba neigiamą kiekį ir privalomą
-priežastį. Visą įrašų sąrašą rasite [Veiksmų istorija ir filtrai](history.lt.md).
+**Daugiau → Koreguoti taškus** naudokite vienkartinei korekcijai ar veiksmui,
+kuris nėra darbas, prizas ar nuobauda. Įrašykite teigiamą arba neigiamą kiekį ir
+privalomą priežastį. Visą įrašų sąrašą rasite [Veiksmų istorija ir
+filtrai](history.lt.md).
 
 [Tėvų skydelis ir vaikų kortelės →](dashboard-and-child-cards.lt.md) · [Kurti ir valdyti užduotis →](create-and-manage-tasks.lt.md) · [Veiksmų istorija →](history.lt.md) · [English](tasks-and-approvals.md)

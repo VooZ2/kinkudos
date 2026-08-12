@@ -24,9 +24,19 @@ vaikas tikslui pasirenka **Naudoti turimus taškus**, kai kitas tikslas jau yra
 neperkeliami ir balanso operacija nesukuriama.
 
 Pasiūlymas rodomas **Tėvai → Pradžia → Laukiantys prašymai**. Tėvai parenka
-galutinę sumą; ji neprivalo sutapti su pasiūlymu. Patvirtinus prizo pasiūlymą
-sukuriamas bendras prizas, o patvirtinus tikslo pasiūlymą – asmeninis vaiko
-tikslas. Atmetant pasiūlymą reikia priežasties, balansas nesikeičia.
+galutinę sumą; ji neprivalo sutapti su pasiūlymu. Kai tikslo pasiūlymui dar
+reikia taupymo būdo, patvirtinimo dialoge **Naudoti turimus taškus** ir
+**Taupyti atskirai** rodomi kaip įterptos pasirinkimo kortelės (radijas +
+etiketė). Patvirtinus prizo pasiūlymą sukuriamas bendras prizas, o patvirtinus
+tikslo pasiūlymą – asmeninis vaiko tikslas. Atmetant pasiūlymą reikia
+priežasties, balansas nesikeičia.
+
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti tikslo patvirtinimo taupymo būdo pasirinkimus</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
+<img class="screenshot-image" src="../../assets/parent-approve-goal-dialog-desktop-26-6-7.png" alt="Tikslo patvirtinimo dialogas su pasirinkimo kortelėmis Naudoti turimus taškus ir Taupyti atskirai" loading="lazy">
+</details>
+
+Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 
 ## Naudoti turimus taškus
 
@@ -74,21 +84,27 @@ temos taškų vieneto pavadinimą.
 
 ## Tėvų valdymas
 
-Eikite į **Tėvai → Tvarkyti → Tikslai**. Skiltyje pateikiama:
+Eikite į **Tėvai → Tvarkyti → Tikslai**. Navigacija skiltyje **Tvarkyti** yra
+tik skirtukais; skirtukas **Tikslai** rodo tik šią skiltį. Kai tikslų yra,
+skiltyje pateikiama:
 
-- vaiko filtras;
+- vaiko filtras (rodomas tik tada, kai yra bent vienas tikslas);
 - tikslo būdas **Dabartinis tikslas** arba **Taupoma atskirai**;
 - dabartinė pažanga, tikslas ir pažangos juosta;
-- **Redaguoti**;
+- **Redaguoti** su **Išsaugoti** ir **Atšaukti**, o **Trinti** atskirtas
+  žemiau;
 - **Pridėti taškų** prie atskiro tikslo;
 - **Grąžinti išsaugotus taškus**;
 - **Trinti**.
+
+Kai tikslų dar nėra, centre rodoma tuščia būsena: vaikai gali pasiūlyti tikslus
+savo aplinkoje, o patvirtinti tikslai atsiranda čia.
 
 Grąžinus išsaugotus taškus sukuriamas teigiamas **Istorijos** įrašas, taškai
 vėl tampa išleidžiami. Prieš keičiant būdą ar uždarant tikslą atskirai
 išsaugotus taškus reikia grąžinti.
 
-<img class="screenshot-image" src="../../assets/parent-manage-goals-desktop-26-6-4.png" alt="Tėvų skiltis „Tvarkyti → Tikslai“ darbalaukyje" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-manage-goals-desktop-26-6-7.png" alt="Tėvų skiltis „Tvarkyti → Tikslai“ tuščia būsena darbalaukyje" loading="lazy">
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 

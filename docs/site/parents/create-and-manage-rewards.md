@@ -1,7 +1,8 @@
 # Create and manage rewards
 
 Use **Parents → Manage → Rewards** to create things a child may ask for using
-spendable points.
+spendable points. Manage navigation is tabs only (**Tasks**, **Penalties**,
+**Rewards**, **Goals**); the Rewards tab shows that catalogue alone.
 
 > **For:** Parents<br>
 > **Result:** A clear reward catalogue with transparent parent decisions
@@ -20,11 +21,16 @@ already waiting for a parent keeps its original recorded cost.
 
 Use the row actions by name:
 
-- **Edit** changes the future title, cost, or emoji;
-- **Hide** keeps the reward and its history but removes it from child selection;
+- **Edit** opens one inline form at a time with **Save** and **Cancel**;
+  **Delete** is separated below those actions;
+- **Hide** keeps the reward and its history but removes it from child
+  selection; a hidden row looks muted and shows a **Hidden** state;
 - **Show** makes it available again;
 - **Delete** removes it from active use according to the implemented deletion
   behavior.
+
+If the catalogue is empty, a centered empty state explains that there are no
+rewards yet.
 
 Past History remains understandable after any catalogue action.
 

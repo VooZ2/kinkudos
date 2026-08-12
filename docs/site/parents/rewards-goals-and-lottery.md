@@ -45,8 +45,8 @@ limits how far a reward can reduce the balance; it is not extra points. New
 reward requests pause after half of the available credit is used. Existing
 pending requests remain available for a parent decision.
 
-Change the value with **Set credit** on the child card or in **Parents →
-Settings → Accounts**, under **Child profiles**.
+Change the value with **More → Set credit** on the child card or in
+**Parents → Settings → Accounts**, under **Child profiles**.
 
 ## Scratch tickets
 

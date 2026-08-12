@@ -25,10 +25,19 @@ child chooses **Use available points** for a goal while another goal is the
 move points or create a balance transaction.
 
 The proposal appears under **Parents → Home → Pending requests**. The parent
-chooses the final amount; it does not have to match the suggestion. Approving a
-reward proposal creates a shared reward, while approving a goal proposal
-creates that child’s personal goal. Rejecting a proposal requires a reason and
-does not change the balance.
+chooses the final amount; it does not have to match the suggestion. When a goal
+proposal still needs a save mode, the approve dialog offers **Use available
+points** and **Save separately** as inline option cards (radio + label).
+Approving a reward proposal creates a shared reward, while approving a goal
+proposal creates that child’s personal goal. Rejecting a proposal requires a
+reason and does not change the balance.
+
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View approve-goal save-mode options</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
+<img class="screenshot-image" src="../../assets/parent-approve-goal-dialog-desktop-26-6-7.png" alt="Approve goal dialog with Use available points and Save separately option cards" loading="lazy">
+</details>
+
+The screenshot uses fictional demonstration data.
 
 ## Use available points
 
@@ -77,20 +86,24 @@ UI uses the selected theme’s point-unit name.
 
 ## Parent management
 
-Go to **Parents → Manage → Goals**. The section provides:
+Go to **Parents → Manage → Goals**. Manage uses tabs only; the Goals tab shows
+this section alone. When goals exist, the section provides:
 
-- a child filter;
+- a child filter (shown only when at least one goal exists);
 - the goal’s **Current goal** or **Saved separately** method;
 - current progress and target with a progress bar;
-- **Edit**;
+- **Edit** with **Save** and **Cancel**, and **Delete** separated below;
 - **Add points** for a saved goal;
 - **Move saved points back**;
 - **Delete**.
 
+When there are no goals yet, a centered empty state explains that children can
+propose goals from their area and that approved goals appear here.
+
 Returning saved points creates a positive spendable History entry. A saved
 goal’s points can be returned before changing its method or closing it.
 
-<img class="screenshot-image" src="../../assets/parent-manage-goals-desktop-26-6-4.png" alt="Parent Manage Goals on desktop" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-manage-goals-desktop-26-6-7.png" alt="Parent Manage Goals empty state on desktop" loading="lazy">
 
 The screenshot uses fictional demonstration data.
 

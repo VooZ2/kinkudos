@@ -16,17 +16,17 @@ when you have personally checked the work.
 ## Apply a penalty
 
 Create agreed penalty templates in **Parents → Manage → Penalties** with a
-clear title, a negative point value, and an optional emoji. Then use **Assign
-penalty** on the child card, choose the template, and add a reason when it
-helps explain what happened.
+clear title, a negative point value, and an optional emoji. Then open **More**
+on the child card, choose **Assign penalty**, pick the template, and add a
+reason when it helps explain what happened.
 
 The result is a permanent negative History entry. A penalty is not the same as
 a reward request or a hidden balance edit.
 
 ## Correct a balance
 
-Use **Adjust points** on a child card for a one-off correction that is not a
-task, reward, or predefined penalty.
+Use **More → Adjust points** on a child card for a one-off correction that is
+not a task, reward, or predefined penalty.
 
 1. Enter a positive or negative amount.
 2. Write the required reason in plain family language.
@@ -40,8 +40,8 @@ grant extra earned points. When half of the available credit is already used,
 KinKudos pauses new reward requests until the balance improves. Existing
 pending requests can still receive a parent decision.
 
-Change the value with **Set credit** on the child card or in the child profile
-settings. See [the dashboard guide](dashboard-and-child-cards.md) for the
+Change the value with **More → Set credit** on the child card or in the child
+profile settings. See [the dashboard guide](dashboard-and-child-cards.md) for the
 compact card indicators and [Activity history and filters](history.md) for the
 complete record.
 

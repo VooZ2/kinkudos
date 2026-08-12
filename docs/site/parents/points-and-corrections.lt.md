@@ -17,16 +17,16 @@ pridedami iš karto; rinkitės tai, kai darbą asmeniškai jau patikrinote.
 
 Skiltyje **Tėvai → Tvarkyti → Nuobaudos** sukurkite sutartus nuobaudų šablonus
 su aiškiu pavadinimu, neigiama taškų verte ir, jei reikia, emoji. Tada vaiko
-kortelėje naudokite **Skirti nuobaudą**, pasirinkite šabloną ir pridėkite
-priežastį, kai ji padeda paaiškinti situaciją.
+kortelėje atidarykite **Daugiau**, pasirinkite **Skirti nuobaudą**, pasirinkite
+šabloną ir pridėkite priežastį, kai ji padeda paaiškinti situaciją.
 
 Rezultatas yra nuolatinis neigiamas **Istorijos** įrašas. Nuobauda nėra prizo
 prašymas ar paslėptas balanso pakeitimas.
 
 ## Koreguokite balansą
 
-Vaiko kortelėje naudokite **Koreguoti taškus**, jeigu vienkartinė korekcija nėra
-darbas, prizas ar apibrėžta nuobauda.
+Vaiko kortelėje naudokite **Daugiau → Koreguoti taškus**, jeigu vienkartinė
+korekcija nėra darbas, prizas ar apibrėžta nuobauda.
 
 1. Įrašykite teigiamą arba neigiamą kiekį.
 2. Paprasta šeimos kalba parašykite privalomą priežastį.
@@ -40,8 +40,8 @@ balansą; papildomų uždirbtų taškų jis nesuteikia. Išnaudojus pusę priein
 kredito, KinKudos sustabdo naujus prizų prašymus, kol balansas pagerėja. Jau
 laukiančius prašymus tėvai vis tiek gali spręsti.
 
-Reikšmę keiskite vaiko kortelėje naudodami **Nustatyti kreditą** arba vaiko
-profilio nustatymuose. Kompaktiškus kortelės rodiklius rasite [skydelio
+Reikšmę keiskite vaiko kortelėje naudodami **Daugiau → Nustatyti kreditą** arba
+vaiko profilio nustatymuose. Kompaktiškus kortelės rodiklius rasite [skydelio
 vadove](dashboard-and-child-cards.lt.md), o visą įrašų sąrašą – [Veiklos
 istorijoje ir filtruose](history.lt.md).
 
