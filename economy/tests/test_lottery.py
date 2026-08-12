@@ -371,8 +371,10 @@ class LotteryReminderTests(TestCase):
         self.assertEqual(sent, [])
         notify.assert_not_called()
 
+    @patch("economy.push._start_push_thread", side_effect=lambda target, args: target(*args))
+    @patch("economy.push.transaction.on_commit", side_effect=lambda func: func())
     @patch("economy.push.webpush")
-    def test_reminder_push_uses_theme_title_and_risk_copy(self, webpush):
+    def test_reminder_push_uses_theme_title_and_risk_copy(self, webpush, _on_commit, _thread):
         from economy.push import notify_lottery_reminder
 
         with override("lt"):

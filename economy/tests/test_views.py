@@ -318,7 +318,11 @@ class AccessAndWorkflowTests(TestCase):
 
     @override_settings(VAPID_PRIVATE_KEY="configured")
     @patch("economy.push.webpush", side_effect=ValueError("push error"))
-    def test_saved_task_is_not_reported_as_500_when_push_fails(self, webpush_mock):
+    @patch("economy.push.transaction.on_commit", side_effect=lambda func: func())
+    @patch("economy.push._start_push_thread", side_effect=lambda target, args: target(*args))
+    def test_saved_task_is_not_reported_as_500_when_push_fails(
+        self, _start_thread, _on_commit, webpush_mock
+    ):
         PushSubscription.objects.create(
             user=self.parent,
             endpoint="https://push.example.test/subscription",

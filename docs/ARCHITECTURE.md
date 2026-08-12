@@ -200,8 +200,10 @@ worker handles Web Push and may send `kinkudos-state-changed` messages to open
 clients as a fast refresh signal, but it does not intercept normal HTML
 document navigation. Lightweight Parent workspace and Child session state
 polling runs where configured and remains the reliable refresh fallback. Push
-subscriptions are available to both parent and child sessions. iOS requires
-the app to be added to the home screen for Web Push to work.
+delivery is best-effort after the database commit on a short-lived background
+thread, with a hard per-endpoint timeout; push failures must not fail the user
+action. Push subscriptions are available to both parent and child sessions.
+iOS requires the app to be added to the home screen for Web Push to work.
 
 Application URL paths are canonical, lowercase English paths using kebab-case
 where needed and do not change with the selected interface language. Named URL

@@ -43,6 +43,23 @@ from economy.push import (
 )
 
 
+class SyncPushDeliveryMixin:
+    def setUp(self):
+        super().setUp()
+        self._on_commit = patch(
+            "economy.push.transaction.on_commit",
+            side_effect=lambda func: func(),
+        )
+        self._thread = patch(
+            "economy.push._start_push_thread",
+            side_effect=lambda target, args: target(*args),
+        )
+        self._on_commit.start()
+        self._thread.start()
+        self.addCleanup(self._on_commit.stop)
+        self.addCleanup(self._thread.stop)
+
+
 class VapidFilePathTests(TestCase):
     def test_docker_secret_pem_path_is_accepted_by_vapid_library(self):
         key = ec.generate_private_key(ec.SECP256R1())
@@ -70,8 +87,9 @@ class VapidFilePathTests(TestCase):
     VAPID_PRIVATE_KEY="test-private-key",
     VAPID_SUBJECT="mailto:test@example.com",
 )
-class ChildDecisionPushTests(TestCase):
+class ChildDecisionPushTests(SyncPushDeliveryMixin, TestCase):
     def setUp(self):
+        super().setUp()
         self.parent = get_user_model().objects.create_user("parent")
         self.child = ChildProfile.objects.create(name="Child One", theme_selected=True)
         self.other_child = ChildProfile.objects.create(name="Child Two", theme_selected=True)
@@ -389,7 +407,7 @@ class PushSubscriptionValidationTests(TestCase):
         self.assertTrue(PushSubscription.objects.filter(child=self.child).exists())
 
 
-class InactiveParentPushTests(TestCase):
+class InactiveParentPushTests(SyncPushDeliveryMixin, TestCase):
     @patch("economy.push.webpush")
     def test_inactive_parent_subscriptions_are_not_notified(self, webpush):
         parent = get_user_model().objects.create_user("inactive-parent")
