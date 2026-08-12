@@ -192,12 +192,24 @@ def reveal_lottery_ticket(*, ticket, child):
         pk=child.pk,
         is_active=True,
     )
-    locked_ticket = LotteryTicket.objects.select_for_update().get(
+    locked_ticket = LotteryTicket.objects.get(
         pk=ticket.pk,
         child=locked_child,
     )
     if locked_ticket.status == LotteryTicketStatus.REVEALED:
         return locked_ticket
+
+    revealed_at = timezone.now()
+    claimed = LotteryTicket.objects.filter(
+        pk=locked_ticket.pk,
+        child=locked_child,
+        status=LotteryTicketStatus.OPEN,
+    ).update(
+        status=LotteryTicketStatus.REVEALED,
+        revealed_at=revealed_at,
+    )
+    if not claimed:
+        return LotteryTicket.objects.get(pk=locked_ticket.pk)
 
     applied_delta = locked_ticket.prize_amount
     if applied_delta < 0:
@@ -215,18 +227,11 @@ def reveal_lottery_ticket(*, ticket, child):
         description=_("Scratch ticket result"),
         source_id=locked_ticket.pk,
     )
-    locked_ticket.applied_delta = applied_delta
-    locked_ticket.result_ledger_entry = result_entry
-    locked_ticket.status = LotteryTicketStatus.REVEALED
-    locked_ticket.revealed_at = timezone.now()
-    locked_ticket.save(
-        update_fields=[
-            "applied_delta",
-            "result_ledger_entry",
-            "status",
-            "revealed_at",
-        ]
+    LotteryTicket.objects.filter(pk=locked_ticket.pk).update(
+        applied_delta=applied_delta,
+        result_ledger_entry=result_entry,
     )
+    locked_ticket.refresh_from_db()
     return locked_ticket
 
 

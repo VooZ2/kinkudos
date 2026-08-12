@@ -247,10 +247,12 @@ the shared parent palette.
   restricts scripts, forms, frames, workers, and plugins to the application
   origin; local image previews and existing inline styles remain supported.
 - Every parent/child request is authorized server-side.
-- Balance-changing operations use `transaction.atomic()` with row locking.
-  Proposal, reward-approval, reward-rejection, and reward-cancellation state
-  changes also claim `pending` rows with conditional updates, so SQLite does
-  not depend on `select_for_update()` alone for one-winner transitions.
+- Balance-changing operations use `transaction.atomic()`. SQLite is configured
+  with `transaction_mode=IMMEDIATE` and a matching `busy_timeout`. One-winner
+  state changes (task claims, assigned-task completion/cancel, reward and
+  proposal decisions, lottery reveal) claim rows with conditional
+  `UPDATE ... WHERE status=...` so SQLite does not depend on
+  `select_for_update()` alone.
 - Secrets are read only from Docker secret files or server environment
   variables — no default passwords/PINs/family data ship in the image.
 - Automatic Watchtower updates are disabled.

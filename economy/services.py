@@ -234,8 +234,19 @@ def submit_task(*, child, task, photo_bonus_snapshot=0):
 
 @transaction.atomic
 def approve_task_claim(*, claim, actor):
-    locked = TaskClaim.objects.select_for_update().select_related("child").get(pk=claim.pk)
+    locked = TaskClaim.objects.select_related("child").get(pk=claim.pk)
     if locked.status != RequestStatus.PENDING:
+        raise ValidationError(_("This request has already been resolved."))
+    decided_at = timezone.now()
+    claimed = TaskClaim.objects.filter(
+        pk=locked.pk,
+        status=RequestStatus.PENDING,
+    ).update(
+        status=RequestStatus.APPROVED,
+        decided_by=actor,
+        decided_at=decided_at,
+    )
+    if not claimed:
         raise ValidationError(_("This request has already been resolved."))
     entry = post_ledger_entry(
         child=locked.child,
@@ -245,69 +256,60 @@ def approve_task_claim(*, claim, actor):
         actor=actor,
         source_id=locked.pk,
     )
-    locked.status = RequestStatus.APPROVED
-    locked.decided_by = actor
-    locked.decided_at = timezone.now()
-    locked.save(update_fields=["status", "decided_by", "decided_at"])
     TaskCompletion.objects.create(child=locked.child, task=locked.task)
     return entry
 
 
 def reject_task_claim(*, claim, actor, reason):
     with transaction.atomic():
-        locked = TaskClaim.objects.select_for_update().get(pk=claim.pk)
-        if locked.status != RequestStatus.PENDING:
-            raise ValidationError(_("This request has already been resolved."))
-        locked.status = RequestStatus.REJECTED
-        locked.rejection_reason = reason.strip()
-        locked.decided_by = actor
-        locked.decided_at = timezone.now()
-        locked.save(
-            update_fields=["status", "rejection_reason", "decided_by", "decided_at"]
+        decided_at = timezone.now()
+        claimed = TaskClaim.objects.filter(
+            pk=claim.pk,
+            status=RequestStatus.PENDING,
+        ).update(
+            status=RequestStatus.REJECTED,
+            rejection_reason=reason.strip(),
+            decided_by=actor,
+            decided_at=decided_at,
         )
-    return locked
+        if not claimed:
+            raise ValidationError(_("This request has already been resolved."))
+        return TaskClaim.objects.get(pk=claim.pk)
 
 
 def request_task_revision(*, claim, actor, reason):
     with transaction.atomic():
-        locked = TaskClaim.objects.select_for_update().get(pk=claim.pk)
-        if locked.status != RequestStatus.PENDING:
-            raise ValidationError(_("This request has already been resolved."))
-        locked.status = RequestStatus.NEEDS_CHANGES
-        locked.revision_note = reason.strip()
-        locked.decided_by = actor
-        locked.decided_at = timezone.now()
-        locked.save(
-            update_fields=[
-                "status",
-                "revision_note",
-                "decided_by",
-                "decided_at",
-            ]
+        decided_at = timezone.now()
+        claimed = TaskClaim.objects.filter(
+            pk=claim.pk,
+            status=RequestStatus.PENDING,
+        ).update(
+            status=RequestStatus.NEEDS_CHANGES,
+            revision_note=reason.strip(),
+            decided_by=actor,
+            decided_at=decided_at,
         )
-    return locked
+        if not claimed:
+            raise ValidationError(_("This request has already been resolved."))
+        return TaskClaim.objects.get(pk=claim.pk)
 
 
 def resubmit_task_claim(*, claim):
     with transaction.atomic():
-        locked = TaskClaim.objects.select_for_update().get(pk=claim.pk)
-        if locked.status != RequestStatus.NEEDS_CHANGES:
-            raise ValidationError(_("This task is not awaiting corrections."))
-        locked.status = RequestStatus.PENDING
-        locked.revision_note = ""
-        locked.decided_by = None
-        locked.decided_at = None
-        locked.submitted_at = timezone.now()
-        locked.save(
-            update_fields=[
-                "status",
-                "revision_note",
-                "decided_by",
-                "decided_at",
-                "submitted_at",
-            ]
+        submitted_at = timezone.now()
+        claimed = TaskClaim.objects.filter(
+            pk=claim.pk,
+            status=RequestStatus.NEEDS_CHANGES,
+        ).update(
+            status=RequestStatus.PENDING,
+            revision_note="",
+            decided_by=None,
+            decided_at=None,
+            submitted_at=submitted_at,
         )
-    return locked
+        if not claimed:
+            raise ValidationError(_("This task is not awaiting corrections."))
+        return TaskClaim.objects.get(pk=claim.pk)
 
 
 def reward_requests_blocked(child):
@@ -393,15 +395,29 @@ def assign_tasks(
 
 @transaction.atomic
 def complete_assigned_task(*, assigned_task, child):
+    today = timezone.localdate()
+    completed_at = timezone.now()
+    claimed = AssignedTask.objects.filter(
+        pk=assigned_task.pk,
+        batch__child=child,
+        batch__assigned_on=today,
+        status=AssignedTaskStatus.PENDING,
+    ).update(
+        status=AssignedTaskStatus.COMPLETED,
+        completed_at=completed_at,
+    )
+    if not claimed:
+        locked = AssignedTask.objects.select_related("batch", "task").get(
+            pk=assigned_task.pk,
+            batch__child=child,
+        )
+        if locked.status != AssignedTaskStatus.PENDING:
+            raise ValidationError(_("This assigned task is no longer waiting."))
+        raise ValidationError(_("This assigned task has expired."))
     locked = (
-        AssignedTask.objects.select_for_update()
-        .select_related("batch", "task")
+        AssignedTask.objects.select_related("batch", "task")
         .get(pk=assigned_task.pk, batch__child=child)
     )
-    if locked.status != AssignedTaskStatus.PENDING:
-        raise ValidationError(_("This assigned task is no longer waiting."))
-    if locked.batch.assigned_on != timezone.localdate():
-        raise ValidationError(_("This assigned task has expired."))
     entry = post_ledger_entry(
         child=child,
         delta=locked.reward_snapshot,
@@ -409,10 +425,7 @@ def complete_assigned_task(*, assigned_task, child):
         description=locked.title_snapshot,
         source_id=locked.pk,
     )
-    locked.status = AssignedTaskStatus.COMPLETED
-    locked.completed_at = timezone.now()
-    locked.ledger_entry = entry
-    locked.save(update_fields=["status", "completed_at", "ledger_entry"])
+    AssignedTask.objects.filter(pk=locked.pk).update(ledger_entry=entry)
     if locked.task_id:
         TaskCompletion.objects.create(child=child, task=locked.task)
     return entry
@@ -420,20 +433,23 @@ def complete_assigned_task(*, assigned_task, child):
 
 @transaction.atomic
 def cancel_assigned_task(*, assigned_task, actor):
-    locked = (
-        AssignedTask.objects.select_for_update()
-        .select_related("batch")
-        .get(pk=assigned_task.pk)
+    today = timezone.localdate()
+    cancelled_at = timezone.now()
+    claimed = AssignedTask.objects.filter(
+        pk=assigned_task.pk,
+        batch__assigned_on=today,
+        status=AssignedTaskStatus.PENDING,
+    ).update(
+        status=AssignedTaskStatus.CANCELLED,
+        cancelled_at=cancelled_at,
+        cancelled_by=actor,
     )
-    if locked.status != AssignedTaskStatus.PENDING:
-        raise ValidationError(_("Only a waiting assigned task can be cancelled."))
-    if locked.batch.assigned_on != timezone.localdate():
+    if not claimed:
+        locked = AssignedTask.objects.select_related("batch").get(pk=assigned_task.pk)
+        if locked.status != AssignedTaskStatus.PENDING:
+            raise ValidationError(_("Only a waiting assigned task can be cancelled."))
         raise ValidationError(_("This assigned task has expired."))
-    locked.status = AssignedTaskStatus.CANCELLED
-    locked.cancelled_at = timezone.now()
-    locked.cancelled_by = actor
-    locked.save(update_fields=["status", "cancelled_at", "cancelled_by"])
-    return locked
+    return AssignedTask.objects.select_related("batch").get(pk=assigned_task.pk)
 
 
 @transaction.atomic

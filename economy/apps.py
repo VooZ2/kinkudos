@@ -7,7 +7,8 @@ def configure_sqlite(sender, connection, **kwargs):
         return
     with connection.cursor() as cursor:
         cursor.execute("PRAGMA foreign_keys = ON")
-        cursor.execute("PRAGMA busy_timeout = 5000")
+        # Keep busy_timeout aligned with DATABASES OPTIONS timeout (seconds → ms).
+        cursor.execute("PRAGMA busy_timeout = 20000")
         if connection.settings_dict["NAME"] != ":memory:":
             cursor.execute("PRAGMA journal_mode = WAL")
 

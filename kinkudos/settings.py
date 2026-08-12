@@ -87,7 +87,12 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": Path(os.environ.get("KINKUDOS_DATABASE_PATH", BASE_DIR / "data" / "kinkudos.sqlite3")),
-        "OPTIONS": {"timeout": 20},
+        "OPTIONS": {
+            "timeout": 20,
+            # Begin write transactions immediately so concurrent workers fail
+            # cleanly on SQLite instead of racing under deferred locks.
+            "transaction_mode": "IMMEDIATE",
+        },
     }
 }
 
