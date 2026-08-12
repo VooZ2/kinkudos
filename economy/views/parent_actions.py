@@ -507,7 +507,7 @@ def parent_delete_goal(request, goal_id):
 @parent_required
 @require_POST
 def parent_adjust_balance(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id)
+    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
     form = AdjustmentForm(request.POST)
     if form.is_valid():
         post_ledger_entry(
@@ -525,7 +525,7 @@ def parent_adjust_balance(request, child_id):
 @parent_required
 @require_POST
 def parent_apply_penalty(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id)
+    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
     form = ApplyPenaltyForm(request.POST)
     if form.is_valid():
         penalty = get_object_or_404(
@@ -566,7 +566,11 @@ def parent_award_task(request, child_id):
                 actor=request.user,
                 source_id=task.pk,
             )
-            TaskCompletion.objects.create(child=child, task=task)
+            TaskCompletion.objects.create(
+                child=child,
+                task=task,
+                completed_on=today,
+            )
     total = sum(task.reward for task in tasks)
     messages.success(
         request,
@@ -694,7 +698,7 @@ def parent_assign_penalty(request, penalty_id):
 @parent_required
 @require_POST
 def parent_set_min_balance(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id)
+    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
     form = MinBalanceForm(request.POST)
     if form.is_valid():
         child.min_balance = form.cleaned_data["min_balance"]

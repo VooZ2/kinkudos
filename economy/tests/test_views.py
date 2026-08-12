@@ -1463,6 +1463,39 @@ class AccessAndWorkflowTests(TestCase):
         self.assertFalse(self.child_one.is_active)
         self.assertTrue(self.child_one.ledger_entries.filter(description="Istorinis įrašas").exists())
 
+    def test_parent_mutations_reject_deactivated_children(self):
+        self.client.login(username="tevai", password=self.parent_password)
+        self.client.post(reverse("parent_remove_child_account", args=[self.child_one.pk]))
+        self.child_one.refresh_from_db()
+        self.assertFalse(self.child_one.is_active)
+        penalty = PenaltyTemplate.objects.create(
+            title="Inactive child penalty",
+            amount=-5,
+            icon="📵",
+        )
+        endpoints = (
+            (
+                reverse("parent_adjust_balance", args=[self.child_one.pk]),
+                {"amount": "1", "description": "Nope"},
+            ),
+            (
+                reverse("parent_apply_penalty", args=[self.child_one.pk]),
+                {"penalty_id": str(penalty.pk), "reason": "Nope"},
+            ),
+            (
+                reverse("parent_set_min_balance", args=[self.child_one.pk]),
+                {"min_balance": "-10"},
+            ),
+            (
+                reverse("parent_unlock_child", args=[self.child_one.pk]),
+                {},
+            ),
+        )
+        for url, payload in endpoints:
+            with self.subTest(url=url):
+                response = self.client.post(url, payload)
+                self.assertEqual(response.status_code, 404)
+
     def test_parent_can_disable_lottery_for_one_child(self):
         self.client.login(username="tevai", password=self.parent_password)
 
