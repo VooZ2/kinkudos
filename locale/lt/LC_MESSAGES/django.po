@@ -76,11 +76,11 @@ msgstr "Atmetimo priežastis privaloma."
 msgid "A reward is awaiting approval"
 msgstr "Prizo prašymas laukia patvirtinimo"
 
-msgid "A scratch ticket can be bought only with %(cost)s points you have earned."
-msgstr "Nutrinamą bilietą galima pirkti tik už %(cost)s uždirbtų taškų."
-
 msgid "A shared family space"
 msgstr "Bendra šeimos erdvė"
+
+msgid "A surprise card can be bought only with %(cost)s points you have earned."
+msgstr "Staigmenų kortelę galima pirkti tik už %(cost)s uždirbtų taškų."
 
 msgid "A task needs a little more work"
 msgstr "Darbą reikia šiek tiek pataisyti"
@@ -88,8 +88,8 @@ msgstr "Darbą reikia šiek tiek pataisyti"
 msgid "About credit"
 msgstr "Apie kreditą"
 
-msgid "About scratch tickets"
-msgstr "Apie nutrinamus bilietus"
+msgid "About surprise cards"
+msgstr "Apie staigmenų korteles"
 
 msgid "Access"
 msgstr "Prisijungimai"
@@ -415,11 +415,11 @@ msgstr "Kūrybos planas"
 msgid "Building plans"
 msgstr "Statybų planai"
 
+msgid "Buy card for %(cost)s %(unit)s"
+msgstr "Pirkti kortelę už %(cost)s %(unit)s"
+
 msgid "Buy for %(cost)s %(unit)s"
 msgstr "Pirkti už %(cost)s %(unit)s"
-
-msgid "Buy ticket for %(cost)s %(unit)s"
-msgstr "Pirkti bilietą už %(cost)s %(unit)s"
 
 msgid "Cancel"
 msgstr "Atšaukti"
@@ -429,6 +429,12 @@ msgstr "Atšaukti likusius"
 
 msgid "Cancelled"
 msgstr "Atšaukta"
+
+msgid "Cards"
+msgstr "Kortelės"
+
+msgid "Cards left this week: %(remaining)s of %(limit)s."
+msgstr "Šią savaitę liko kortelių: %(remaining)s iš %(limit)s."
 
 msgid "Catalog item created."
 msgstr "Katalogo įrašas sukurtas."
@@ -691,8 +697,8 @@ msgstr "Pasirink savo pasaulį"
 msgid "Claim prize"
 msgstr "Užsisakyti prizą"
 
-msgid "Classified Chance Card"
-msgstr "Įslaptinta sėkmės kortelė"
+msgid "Classified Surprise"
+msgstr "Įslaptinta staigmena"
 
 msgid "Clear all filters"
 msgstr "Išvalyti filtrus"
@@ -742,8 +748,8 @@ msgstr "Atlik darbus, rink taškus ir išsirink prizą."
 msgid "Complete tasks, earn tokens, and choose your reward."
 msgstr "Atlik darbus, rink tokenus ir išsirink prizą."
 
-msgid "Complete the assigned tasks before buying a scratch ticket."
-msgstr "Prieš pirkdamas nutrinamą bilietą atlik paskirtus darbus."
+msgid "Complete the assigned tasks before buying a surprise card."
+msgstr "Prieš pirkdamas staigmenų kortelę atlik paskirtus darbus."
 
 msgid "Complete the assigned tasks before requesting a new reward."
 msgstr "Prieš prašydamas naujo prizo atlik paskirtus darbus."
@@ -772,8 +778,8 @@ msgstr "Prisijunkite per leidžiamą namų arba VPN tinklą ir bandykite dar kar
 msgid "Connect to your home network or VPN and try again."
 msgstr "Prisijunkite prie namų tinklo arba VPN ir bandykite dar kartą."
 
-msgid "Continue scratching"
-msgstr "Tęsti trynimą"
+msgid "Continue uncovering"
+msgstr "Tęsti atidengimą"
 
 msgid "Copied"
 msgstr "Nukopijuota"
@@ -789,6 +795,9 @@ msgstr "Kaina"
 
 msgid "Could not change the notification setting."
 msgstr "Nepavyko pakeisti pranešimų nustatymo."
+
+msgid "Cover surface"
+msgstr "Dangos paviršius"
 
 msgid "Craft a recipe"
 msgstr "Sukurti receptą"
@@ -1015,17 +1024,17 @@ msgstr "El. pašto nustatymus gali keisti tik tėvų administratorius."
 msgid "Enable email"
 msgstr "Įjungti el. paštą"
 
-msgid "Enable scratch tickets"
-msgstr "Įjungti nutrinamus bilietus"
+msgid "Enable surprise cards"
+msgstr "Įjungti staigmenų korteles"
 
-msgid "Enable scratch tickets for this child"
-msgstr "Įjungti nutrinamus bilietus šiam vaikui"
+msgid "Enable surprise cards for this child"
+msgstr "Įjungti staigmenų korteles šiam vaikui"
 
 msgid "Enabled"
 msgstr "Įjungta"
 
-msgid "Enchanted Prophecy"
-msgstr "Užburta pranašystė"
+msgid "Enchanted Surprise"
+msgstr "Užburta staigmena"
 
 msgid "Encryption"
 msgstr "Šifravimas"
@@ -1092,6 +1101,9 @@ msgstr "Įvesk PIN"
 
 msgid "Everyday"
 msgstr "Kasdieniai"
+
+msgid "Everyday Surprise"
+msgstr "Kasdienė staigmena"
 
 msgid "Exchange galleons"
 msgstr "Išsikeisti galeonus"
@@ -1174,8 +1186,8 @@ msgstr "Užbaik visus projektus, kol studija užsidarys vidurnaktį."
 msgid "Finish setup"
 msgstr "Baigti paruošimą"
 
-msgid "Finish your open scratch ticket before buying another."
-msgstr "Prieš pirkdamas kitą užbaik pradėtą nutrinamą bilietą."
+msgid "Finish your open surprise card before buying another."
+msgstr "Prieš pirkdamas kitą užbaik pradėtą staigmenų kortelę."
 
 msgid "Fix and resubmit"
 msgstr "Pataisyti ir pateikti iš naujo"
@@ -1384,8 +1396,8 @@ msgstr "Prieiga iš interneto"
 msgid "Invalid IP address or network: %(value)s"
 msgstr "Netinkamas IP adresas arba tinklas: %(value)s"
 
-msgid "It costs %(cost)s earned %(unit)s. You may win up to 150 points, get nothing, or lose up to 50 points. The result cannot reduce your balance below your credit limit."
-msgstr "Jis kainuoja %(cost)s uždirbtų %(unit)s. Gali laimėti iki 150 taškų, nieko negauti arba prarasti iki 50 taškų. Rezultatas negali sumažinti balanso žemiau tavo kredito limito."
+msgid "It costs %(cost)s earned %(unit)s. Your points may go up by up to 150, stay the same, or go down by up to 50. The result cannot reduce your balance below your credit limit."
+msgstr "Ji kainuoja %(cost)s uždirbtų %(unit)s. Tavo taškai gali padidėti iki 150, likti tokie patys arba sumažėti iki 50. Rezultatas negali sumažinti balanso žemiau tavo kredito limito."
 
 msgid "JPEG, PNG, WebP, HEIC, or HEIF, up to 5 MB. The image will be cropped to a square."
 msgstr "JPEG, PNG, WebP, HEIC arba HEIF, iki 5 MB. Nuotrauka bus apkirpta kvadratu."
@@ -1443,12 +1455,6 @@ msgstr "Atsijungti"
 
 msgid "Login"
 msgstr "Prisijungti"
-
-msgid "Lottery"
-msgstr "Loterija"
-
-msgid "Lucky Ticket"
-msgstr "Laimės bilietas"
 
 msgid "Mac"
 msgstr "Mac"
@@ -1522,8 +1528,8 @@ msgstr "Grąžinti išsaugotus taškus"
 msgid "My Gallery"
 msgstr "Mano galerija"
 
-msgid "Mystery Prize Crate"
-msgstr "Paslaptinga prizų dėžė"
+msgid "Mystery Crate"
+msgstr "Paslapčių dėžė"
 
 msgid "Need %(amount)s %(unit)s more"
 msgstr "Trūksta %(amount)s %(unit)s"
@@ -1615,11 +1621,8 @@ msgstr "Naujų funkcijų nebuvo."
 msgid "No pending requests"
 msgstr "Nėra laukiančių prašymų"
 
-msgid "No points were lost."
-msgstr "Taškų nepraradai."
-
-msgid "No prize this time."
-msgstr "Šį kartą be prizo."
+msgid "No points were taken away."
+msgstr "Taškų neatėmė."
 
 msgid "No separate fixes in this release."
 msgstr "Atskirų pataisymų nebuvo."
@@ -2284,42 +2287,6 @@ msgstr "Pasirinktas taupymo režimas"
 msgid "Savings mode selected for %(title)s"
 msgstr "Pasirinktas tikslo „%(title)s“ taupymo režimas"
 
-msgid "Scratch all nine fields"
-msgstr "Nutrink visus devynis langelius"
-
-msgid "Scratch every field to reveal the result."
-msgstr "Nutrink kiekvieną langelį, kad pamatytum rezultatą."
-
-msgid "Scratch ticket"
-msgstr "Nutrinamas bilietas"
-
-msgid "Scratch ticket price"
-msgstr "Nutrinamo bilieto kaina"
-
-msgid "Scratch ticket result"
-msgstr "Nutrinamo bilieto rezultatas"
-
-msgid "Scratch tickets"
-msgstr "Nutrinami bilietai"
-
-msgid "Scratch tickets are disabled."
-msgstr "Nutrinami bilietai išjungti."
-
-msgid "Scratch tickets are paused until your point balance improves."
-msgstr "Nutrinami bilietai neprieinami, kol nepagerės tavo taškų balansas."
-
-msgid "Scratch tickets disabled"
-msgstr "Nutrinami bilietai išjungti"
-
-msgid "Scratch tickets this week: %(remaining)s of %(limit)s"
-msgstr "Nutrinamų bilietų šią savaitę: %(remaining)s iš %(limit)s"
-
-msgid "Scratch tickets used this week. The limit resets every Monday."
-msgstr "Šią savaitę panaudoti nutrinami bilietai. Limitas atnaujinamas kiekvieną pirmadienį."
-
-msgid "Scratch-off surface"
-msgstr "Nutrinamas paviršius"
-
 msgid "Screenshot"
 msgstr "Ekrano nuotrauka"
 
@@ -2488,6 +2455,33 @@ msgstr "Pasiūlymas atmestas."
 msgid "Superhero HQ"
 msgstr "Superherojų būstinė"
 
+msgid "Surprise card"
+msgstr "Staigmenų kortelė"
+
+msgid "Surprise card price"
+msgstr "Staigmenų kortelės kaina"
+
+msgid "Surprise card result"
+msgstr "Staigmenų kortelės rezultatas"
+
+msgid "Surprise cards"
+msgstr "Staigmenų kortelės"
+
+msgid "Surprise cards are disabled."
+msgstr "Staigmenų kortelės išjungtos."
+
+msgid "Surprise cards are paused until your point balance improves."
+msgstr "Staigmenų kortelės neprieinamos, kol nepagerės tavo taškų balansas."
+
+msgid "Surprise cards disabled"
+msgstr "Staigmenų kortelės išjungtos"
+
+msgid "Surprise cards this week: %(remaining)s of %(limit)s"
+msgstr "Staigmenų kortelių šią savaitę: %(remaining)s iš %(limit)s"
+
+msgid "Surprise cards used this week. The limit resets every Monday."
+msgstr "Šią savaitę panaudotos staigmenų kortelės. Limitas atnaujinamas kiekvieną pirmadienį."
+
 msgid "Switch profile"
 msgstr "Keisti profilį"
 
@@ -2617,8 +2611,8 @@ msgstr "Šeimos pavadinimas privalomas."
 msgid "The family name or nickname is required."
 msgstr "Šeimos pavadinimas arba slapyvardis yra privalomas."
 
-msgid "The family-wide scratch ticket switch must also be enabled."
-msgstr "Taip pat turi būti įjungtas bendras šeimos nutrinamų bilietų nustatymas."
+msgid "The family-wide surprise card switch must also be enabled."
+msgstr "Taip pat turi būti įjungtas bendras šeimos staigmenų kortelių nustatymas."
 
 msgid "The goal cannot be completed because the available balance changed."
 msgstr "Tikslo nepavyksta užbaigti, nes pasikeitė turimas balansas."
@@ -2656,8 +2650,8 @@ msgstr "Magijos krautuvė atsivers atlikus šiandienos užburtus darbus."
 msgid "The new PINs do not match."
 msgstr "Nauji PIN nesutampa."
 
-msgid "The new price is used for every future ticket purchase."
-msgstr "Nauja kaina taikoma kiekvienam būsimam bilieto pirkimui."
+msgid "The new price is used for every future card purchase."
+msgstr "Nauja kaina taikoma kiekvienam būsimam kortelės pirkimui."
 
 msgid "The number of child profiles must be a number."
 msgstr "Vaikų profilių skaičius turi būti skaičius."
@@ -2692,8 +2686,8 @@ msgstr "Profilis trumpam užrakintas. Pabandykite vėliau."
 msgid "The remaining assigned tasks were cancelled."
 msgstr "Likę paskirti darbai atšaukti."
 
-msgid "The result could not be saved. Reopen the ticket and try again."
-msgstr "Rezultato nepavyko išsaugoti. Atidaryk bilietą iš naujo ir bandyk dar kartą."
+msgid "The result could not be saved. Reopen the card and try again."
+msgstr "Rezultato nepavyko išsaugoti. Atidaryk kortelę iš naujo ir bandyk dar kartą."
 
 msgid "The reward chest unlocks after today's assigned missions are complete."
 msgstr "Prizų skrynia atsivers atlikus šiandien paskirtas misijas."
@@ -2845,6 +2839,9 @@ msgstr "Šio tikslo prašymas jau išspręstas."
 msgid "This goal will be removed. This action cannot be undone."
 msgstr "Šis tikslas bus pašalintas. Šio veiksmo atšaukti negalima."
 
+msgid "This is a surprise — the result is unknown until all fields are open."
+msgstr "Tai staigmena — rezultatas nežinomas, kol neatidengsi visų langelių."
+
 msgid "This message stays on your family server and is reviewed by parents."
 msgstr "Šis pranešimas lieka šeimos serveryje ir yra peržiūrimas tėvų."
 
@@ -2884,23 +2881,14 @@ msgstr "Šis darbas nebeaktyvus."
 msgid "This task is not awaiting corrections."
 msgstr "Šis darbas nelaukia pataisymų."
 
-msgid "This ticket is a game of chance."
-msgstr "Šis bilietas yra sėkmės žaidimas."
-
 msgid "This username is already in use."
 msgstr "Toks prisijungimo vardas jau naudojamas."
 
 msgid "This week"
 msgstr "Šią savaitę"
 
-msgid "Tickets"
-msgstr "Bilietai"
-
 msgid "Tickets %(used)s/%(limit)s"
 msgstr "Bilietai %(used)s/%(limit)s"
-
-msgid "Tickets left this week: %(remaining)s of %(limit)s."
-msgstr "Šią savaitę liko bilietų: %(remaining)s iš %(limit)s."
 
 msgid "Tickets {{ used }}/{{ limit }}"
 msgstr "Bilietai {{ used }}/{{ limit }}"
@@ -2977,14 +2965,14 @@ msgstr "Per daug prisijungimo bandymų. Bandykite vėliau."
 msgid "Treat Chest"
 msgstr "Skanėstų skrynėlė"
 
-msgid "Turn scratch tickets on or off for every child."
-msgstr "Įjunkite arba išjunkite nutrinamus bilietus visiems vaikams."
-
 msgid "Turn sounds off"
 msgstr "Išjungti garsus"
 
 msgid "Turn sounds on"
 msgstr "Įjungti garsus"
+
+msgid "Turn surprise cards on or off for every child."
+msgstr "Įjunkite arba išjunkite staigmenų korteles visiems vaikams."
 
 msgid "Type"
 msgstr "Tipas"
@@ -2994,6 +2982,12 @@ msgstr "Įvesk darbo pavadinimą"
 
 msgid "Unavailable today"
 msgstr "Šiandien nepasiekiamas"
+
+msgid "Uncover all nine fields"
+msgstr "Atidenk visus devynis langelius"
+
+msgid "Uncover every field to see the result."
+msgstr "Atidenk kiekvieną langelį, kad pamatytum rezultatą."
 
 msgid "Unknown device"
 msgstr "Nežinomas įrenginys"
@@ -3058,11 +3052,11 @@ msgstr "Laukia"
 msgid "We received a request to reset the password for the %(family_display_name)s parent account."
 msgstr "Gavome prašymą pakeisti „%(family_display_name)s“ tėvų paskyros slaptažodį."
 
+msgid "Weekly card limit"
+msgstr "Kortelių limitas per savaitę"
+
 msgid "Weekly limit reached"
 msgstr "Savaitės limitas pasiektas"
-
-msgid "Weekly ticket limit"
-msgstr "Bilietų limitas per savaitę"
 
 msgid "Welcome – %(family_display_name)s"
 msgstr "Sveiki – %(family_display_name)s"
@@ -3136,20 +3130,14 @@ msgstr "Negalima pašalinti paskutinio aktyvaus tėvų administratoriaus."
 msgid "You do not have enough points for this reward."
 msgstr "Šiam prizui nepakanka taškų."
 
-msgid "You have already used all %(limit)s scratch tickets this week."
-msgstr "Šią savaitę jau panaudojai visus %(limit)s nutrinamus bilietus."
+msgid "You have already used all %(limit)s surprise cards this week."
+msgstr "Šią savaitę jau panaudojai visas %(limit)s staigmenų korteles."
 
-msgid "You have not bought a scratch ticket this week. It costs %(cost)s and you may win, get nothing, or lose points."
-msgstr "Šią savaitę dar nepirkai nutrinamo bilieto. Jis kainuoja %(cost)s – gali laimėti, nieko negauti arba prarasti taškų."
-
-msgid "You lost {amount}."
-msgstr "Praradai {amount}."
+msgid "You have not bought a surprise card this week. It costs %(cost)s. Your points may go up, stay the same, or go down."
+msgstr "Šią savaitę dar nepirkai staigmenų kortelės. Ji kainuoja %(cost)s. Tavo taškai gali padidėti, likti tokie patys arba sumažėti."
 
 msgid "You may add a comment that the child will see."
 msgstr "Galite pridėti komentarą, kurį matys vaikas."
-
-msgid "You may win up to 150 points, get nothing, or lose up to 50 points."
-msgstr "Gali laimėti iki 150 taškų, nieko negauti arba prarasti iki 50 taškų."
 
 msgid "You need %(cost)s earned %(unit)s"
 msgstr "Reikia %(cost)s uždirbtų %(unit)s"
@@ -3159,9 +3147,6 @@ msgstr "Gavai %(amount)s gimtadienio proga"
 
 msgid "You received a gift!"
 msgstr "Gavai dovanų!"
-
-msgid "You won {amount}!"
-msgstr "Laimėjai {amount}!"
 
 msgid "Your account password"
 msgstr "Jūsų paskyros slaptažodis"
@@ -3178,11 +3163,23 @@ msgstr "Tavo gimimo datos pakeitimas patvirtintas"
 msgid "Your birthday change was rejected"
 msgstr "Tavo gimimo datos pakeitimas atmestas"
 
-msgid "Your credit limit protected part of the loss."
-msgstr "Kredito limitas apsaugojo nuo dalies praradimo."
+msgid "Your credit limit kept some points safe."
+msgstr "Kredito limitas apsaugojo dalį taškų."
 
 msgid "Your point gift was sent."
 msgstr "Tavo taškų dovana išsiųsta."
+
+msgid "Your points may go up by up to 150, stay the same, or go down by up to 50."
+msgstr "Tavo taškai gali padidėti iki 150, likti tokie patys arba sumažėti iki 50."
+
+msgid "Your points stayed the same."
+msgstr "Tavo taškai liko tokie patys."
+
+msgid "Your points went down by {amount}."
+msgstr "Tavo taškai sumažėjo {amount}."
+
+msgid "Your points went up by {amount}!"
+msgstr "Tavo taškai padidėjo {amount}!"
 
 msgid "Your profile"
 msgstr "Tavo profilis"
@@ -3193,14 +3190,14 @@ msgstr "Tavo prizo prašymas atmestas"
 msgid "Your reward was approved"
 msgstr "Tavo prizas patvirtintas"
 
-msgid "Your scratch ticket is ready."
-msgstr "Tavo nutrinamas bilietas paruoštas."
-
 msgid "Your suggestion was approved"
 msgstr "Tavo pasiūlymas patvirtintas"
 
 msgid "Your suggestion was rejected"
 msgstr "Tavo pasiūlymas atmestas"
+
+msgid "Your surprise card is ready."
+msgstr "Tavo staigmenų kortelė paruošta."
 
 msgid "Your task was approved"
 msgstr "Tavo darbas patvirtintas"
@@ -3247,8 +3244,8 @@ msgstr "iPad"
 msgid "iPhone"
 msgstr "iPhone"
 
-msgid "one ticket is unfinished"
-msgstr "vienas bilietas neužbaigtas"
+msgid "one card is unfinished"
+msgstr "viena kortelė neužbaigta"
 
 msgid "pending request"
 msgstr "laukiantis prašymas"
@@ -3271,8 +3268,8 @@ msgstr "įjungta"
 msgid "you"
 msgstr "jūs"
 
-msgid "{count} of 9 fields scratched."
-msgstr "Nutrinta {count} iš 9 langelių."
+msgid "{count} of 9 fields uncovered."
+msgstr "Atidengta {count} iš 9 langelių."
 
 msgid "“%(title)s” deleted."
 msgstr "„%(title)s“ ištrinta."

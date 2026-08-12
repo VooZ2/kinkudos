@@ -113,7 +113,7 @@ class LotteryServiceTests(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "A scratch ticket can be bought only with 15 points you have earned.",
+            "A surprise card can be bought only with 15 points you have earned.",
         ):
             purchase_lottery_ticket(child=self.child)
 
@@ -124,7 +124,7 @@ class LotteryServiceTests(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "Finish your open scratch ticket before buying another.",
+            "Finish your open surprise card before buying another.",
         ):
             purchase_lottery_ticket(child=self.child)
 
@@ -143,7 +143,7 @@ class LotteryServiceTests(TestCase):
 
         with self.assertRaisesMessage(
             ValidationError,
-            "Complete the assigned tasks before buying a scratch ticket.",
+            "Complete the assigned tasks before buying a surprise card.",
         ):
             purchase_lottery_ticket(child=self.child)
 
@@ -164,7 +164,7 @@ class LotteryServiceTests(TestCase):
         self.assertEqual(state["tickets_remaining"], 0)
         with self.assertRaisesMessage(
             ValidationError,
-            "You have already used all 3 scratch tickets this week.",
+            "You have already used all 3 surprise cards this week.",
         ):
             purchase_lottery_ticket(child=self.child)
 
@@ -187,7 +187,7 @@ class LotteryServiceTests(TestCase):
         self.assertEqual(state["tickets_remaining"], 0)
         with self.assertRaisesMessage(
             ValidationError,
-            "You have already used all 1 scratch tickets this week.",
+            "You have already used all 1 surprise cards this week.",
         ):
             purchase_lottery_ticket(child=self.child)
 
@@ -199,7 +199,7 @@ class LotteryServiceTests(TestCase):
 
         self.assertFalse(state["feature_enabled"])
         self.assertFalse(state["is_visible"])
-        with self.assertRaisesMessage(ValidationError, "Scratch tickets are disabled."):
+        with self.assertRaisesMessage(ValidationError, "Surprise cards are disabled."):
             purchase_lottery_ticket(child=self.child)
 
     def test_child_switch_disables_only_that_child(self):
@@ -248,7 +248,7 @@ class LotteryServiceTests(TestCase):
         self.assertEqual(self.child.balance, 160)
         self.assertEqual(
             self.child.ledger_entries.filter(
-                description="Scratch ticket result"
+                description="Surprise card result"
             ).count(),
             1,
         )
@@ -382,8 +382,8 @@ class LotteryReminderTests(TestCase):
 
         payload = json.loads(webpush.call_args.kwargs["data"])
         self.assertEqual(payload["title"], "Bambukų staigmena")
-        self.assertIn("gali laimėti", payload["body"])
-        self.assertIn("prarasti taškų", payload["body"])
+        self.assertIn("gali padidėti", payload["body"])
+        self.assertIn("sumažėti", payload["body"])
         self.assertEqual(payload["url"], f"{reverse('child_dashboard')}#prizai")
 
 
@@ -404,10 +404,10 @@ class LotteryViewTests(TestCase):
     def test_child_dashboard_shows_themed_lottery_tickets_and_risk(self):
         response = self.client.get(reverse("child_dashboard"))
 
-        self.assertContains(response, "Enchanted Prophecy")
-        self.assertContains(response, "Scratch tickets")
+        self.assertContains(response, "Enchanted Surprise")
+        self.assertContains(response, "Surprise cards")
         self.assertContains(response, "Buy for 15 galleons")
-        self.assertContains(response, "lose up to 50 points")
+        self.assertContains(response, "go down by up to 50")
 
     def test_dashboard_uses_configured_cost_and_limit(self):
         self.family.lottery_ticket_cost = 22
@@ -419,7 +419,7 @@ class LotteryViewTests(TestCase):
         response = self.client.get(reverse("child_dashboard"))
 
         self.assertContains(response, "Buy for 22 galleons")
-        self.assertContains(response, "Tickets left this week: 5 of 5.")
+        self.assertContains(response, "Cards left this week: 5 of 5.")
         self.assertContains(response, "It costs 22 earned galleons.")
 
     def test_disabled_lottery_is_hidden_without_an_open_ticket(self):
@@ -428,7 +428,7 @@ class LotteryViewTests(TestCase):
 
         response = self.client.get(reverse("child_dashboard"))
 
-        self.assertNotContains(response, "Enchanted Prophecy")
+        self.assertNotContains(response, "Enchanted Surprise")
         self.assertNotContains(response, 'data-lottery-card')
 
     def test_parent_sees_all_weekly_tickets_available_before_purchase(self):
@@ -441,7 +441,7 @@ class LotteryViewTests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
 
         self.assertContains(response, "Credit -100")
-        self.assertContains(response, '<span class="ticket-label">Tickets</span>', html=True)
+        self.assertContains(response, '<span class="ticket-label">Cards</span>', html=True)
         self.assertContains(response, "<span>0/3</span>", html=True)
 
     def test_all_seven_themes_have_distinct_lottery_titles(self):
@@ -466,7 +466,7 @@ class LotteryViewTests(TestCase):
             fetch_redirect_response=False,
         )
         dashboard = self.client.get(reverse("child_dashboard"))
-        self.assertContains(dashboard, "Continue scratching")
+        self.assertContains(dashboard, "Continue uncovering")
         self.assertContains(dashboard, 'data-lottery-cell', count=9)
         self.assertNotContains(dashboard, 'data-lottery-value="33"')
         self.assertNotContains(dashboard, '>+33</span>')
@@ -500,8 +500,8 @@ class LotteryViewTests(TestCase):
 
         response = self.client.get(reverse("parent_dashboard"))
 
-        self.assertContains(response, '<span class="ticket-label">Tickets</span>', html=True)
+        self.assertContains(response, '<span class="ticket-label">Cards</span>', html=True)
         self.assertContains(response, "<span>1/3</span>", html=True)
-        self.assertContains(response, "Scratch ticket")
-        self.assertContains(response, "Scratch ticket result")
+        self.assertContains(response, "Surprise card")
+        self.assertContains(response, "Surprise card result")
         self.assertNotContains(response, "data-lottery-value")

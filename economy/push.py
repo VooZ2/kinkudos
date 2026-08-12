@@ -284,8 +284,8 @@ def notify_lottery_reminder(child):
             "title": str(theme_text(child.theme, "lottery_title")),
             "body": str(
                 _(
-                    "You have not bought a scratch ticket this week. It costs %(cost)s "
-                    "and you may win, get nothing, or lose points."
+                    "You have not bought a surprise card this week. It costs %(cost)s. "
+                    "Your points may go up, stay the same, or go down."
                 )
                 % {"cost": _currency_amount(ticket_cost, child)}
             ),

@@ -685,7 +685,7 @@ def parent_dashboard(request):
         "rewards": _("Rewards"),
         "goals": _("Goals"),
         "gifts": _("Gifts"),
-        "scratch": _("Scratch tickets"),
+        "scratch": _("Surprise cards"),
         "adjustments": _("Point adjustments"),
     }.get(history_activity, "")
     pending_requests = _pending_request_items(goals_by_child)

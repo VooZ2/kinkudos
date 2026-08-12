@@ -947,7 +947,7 @@ class LedgerKind(models.TextChoices):
     ASSIGNED_TASK = "assigned_task", _("Assigned task")
     PENALTY = "penalty", _("Penalty")
     REWARD = "reward", _("Reward")
-    LOTTERY = "lottery", _("Lottery")
+    LOTTERY = "lottery", _("Surprise card")
     ADJUSTMENT = "adjustment", _("Adjustment")
     GIFT = "gift", _("Gift")
     BIRTHDAY = "birthday", _("Birthday")

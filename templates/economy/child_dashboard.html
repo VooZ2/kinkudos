@@ -114,17 +114,17 @@
   <article class="system-lottery-card" data-lottery-card>
     <div class="lottery-card-art" aria-hidden="true"><span>?</span><span>?</span><span>?</span></div>
     <div class="lottery-card-copy">
-      <p class="lottery-system-label">{% translate "Scratch tickets" %}</p>
+      <p class="lottery-system-label">{% translate "Surprise cards" %}</p>
       <h3>{{ child.theme|theme_text:"lottery_title" }}</h3>
       <p class="lottery-price">{{ lottery.ticket_cost }} {{ lottery.ticket_cost|currency_unit:child.theme }}</p>
-      <p>{% translate "You may win up to 150 points, get nothing, or lose up to 50 points." %}</p>
+      <p>{% translate "Your points may go up by up to 150, stay the same, or go down by up to 50." %}</p>
       <p class="lottery-weekly-status">
-        {% blocktranslate with remaining=lottery.tickets_remaining limit=lottery.weekly_limit %}Tickets left this week: {{ remaining }} of {{ limit }}.{% endblocktranslate %}
+        {% blocktranslate with remaining=lottery.tickets_remaining limit=lottery.weekly_limit %}Cards left this week: {{ remaining }} of {{ limit }}.{% endblocktranslate %}
       </p>
     </div>
     <div class="lottery-card-action">
       {% if lottery.open_ticket %}
-        <button class="button button-primary" type="button" data-open-dialog="lottery-ticket-dialog">{% translate "Continue scratching" %}</button>
+        <button class="button button-primary" type="button" data-open-dialog="lottery-ticket-dialog">{% translate "Continue uncovering" %}</button>
       {% elif lottery.can_purchase %}
         <button class="button button-primary" type="button" data-open-dialog="lottery-purchase-dialog">
           {% blocktranslate with cost=lottery.ticket_cost unit=lottery.ticket_cost|currency_unit:child.theme %}Buy for {{ cost }} {{ unit }}{% endblocktranslate %}
@@ -144,16 +144,16 @@
   </article>
   <dialog id="lottery-purchase-dialog" class="action-dialog lottery-purchase-dialog">
     <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
-    <p class="lottery-system-label">{% translate "Scratch tickets" %}</p>
+    <p class="lottery-system-label">{% translate "Surprise cards" %}</p>
     <h2>{{ child.theme|theme_text:"lottery_title" }}</h2>
     <div class="lottery-risk-warning">
-      <strong>{% translate "This ticket is a game of chance." %}</strong>
-      <p>{% blocktranslate with cost=lottery.ticket_cost unit=lottery.ticket_cost|currency_unit:child.theme %}It costs {{ cost }} earned {{ unit }}. You may win up to 150 points, get nothing, or lose up to 50 points. The result cannot reduce your balance below your credit limit.{% endblocktranslate %}</p>
+      <strong>{% translate "This is a surprise — the result is unknown until all fields are open." %}</strong>
+      <p>{% blocktranslate with cost=lottery.ticket_cost unit=lottery.ticket_cost|currency_unit:child.theme %}It costs {{ cost }} earned {{ unit }}. Your points may go up by up to 150, stay the same, or go down by up to 50. The result cannot reduce your balance below your credit limit.{% endblocktranslate %}</p>
     </div>
     <form method="post" action="{% url 'child_purchase_lottery_ticket' %}" class="stack-form">
       {% csrf_token %}
       <button class="button button-primary" type="submit">
-        {% blocktranslate with cost=lottery.ticket_cost unit=lottery.ticket_cost|currency_unit:child.theme %}Buy ticket for {{ cost }} {{ unit }}{% endblocktranslate %}
+        {% blocktranslate with cost=lottery.ticket_cost unit=lottery.ticket_cost|currency_unit:child.theme %}Buy card for {{ cost }} {{ unit }}{% endblocktranslate %}
       </button>
       <button class="button button-secondary" type="button" data-close-dialog>{% translate "Not now" %}</button>
     </form>
@@ -165,17 +165,17 @@
       data-lottery-dialog
       data-ticket-id="{{ lottery.open_ticket.pk }}"
       data-reveal-url="{% url 'child_reveal_lottery_ticket' lottery.open_ticket.pk %}"
-      data-result-win="{% translate 'You won {amount}!' %}"
-      data-result-loss="{% translate 'You lost {amount}.' %}"
-      data-result-none="{% translate 'No prize this time.' %}"
-      data-result-protected="{% translate 'No points were lost.' %}"
+      data-result-win="{% translate 'Your points went up by {amount}!' %}"
+      data-result-loss="{% translate 'Your points went down by {amount}.' %}"
+      data-result-none="{% translate 'Your points stayed the same.' %}"
+      data-result-protected="{% translate 'No points were taken away.' %}"
       data-result-balance="{% translate 'New balance: {balance}.' %}"
-      data-result-limited="{% translate 'Your credit limit protected part of the loss.' %}"
-      data-progress-text="{% translate '{count} of 9 fields scratched.' %}"
-      data-result-error="{% translate 'The result could not be saved. Reopen the ticket and try again.' %}"
+      data-result-limited="{% translate 'Your credit limit kept some points safe.' %}"
+      data-progress-text="{% translate '{count} of 9 fields uncovered.' %}"
+      data-result-error="{% translate 'The result could not be saved. Reopen the card and try again.' %}"
     >
       <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
-      <p class="lottery-system-label">{% translate "Scratch all nine fields" %}</p>
+      <p class="lottery-system-label">{% translate "Uncover all nine fields" %}</p>
       <h2>{{ child.theme|theme_text:"lottery_title" }}</h2>
       <p class="lottery-scratch-help">{% translate "Rub the silver surface with your finger. Three matching numbers reveal the result." %}</p>
       <div class="scratch-ticket" data-scratch-ticket>
@@ -184,10 +184,10 @@
             <span class="scratch-number scratch-hidden" data-lottery-cell aria-hidden="true"></span>
           {% endfor %}
         </div>
-        <canvas class="scratch-surface" data-scratch-surface aria-label="{% translate 'Scratch-off surface' %}"></canvas>
+        <canvas class="scratch-surface" data-scratch-surface aria-label="{% translate 'Cover surface' %}"></canvas>
         <div class="scratch-particles" data-scratch-particles aria-hidden="true"></div>
       </div>
-      <p class="scratch-progress" data-scratch-progress>{% translate "Scratch every field to reveal the result." %}</p>
+      <p class="scratch-progress" data-scratch-progress>{% translate "Uncover every field to see the result." %}</p>
       <div class="lottery-result" data-lottery-result hidden aria-live="polite">
         <strong data-lottery-result-title></strong>
         <p data-lottery-result-copy></p>
@@ -345,13 +345,6 @@
 </article>
 <article class="panel"><h3>{% translate "Change PIN" %}</h3><form method="post" action="{% url 'child_change_pin' %}" class="stack-form">{% csrf_token %}{{ change_pin_form.as_p }}<button class="button button-primary" type="submit">{% translate "Save new PIN" %}</button></form></article>
 </div></section>
-{% block floating_actions_extra %}
-{% if gift_recipients_available %}
-<button class="gift-launcher" type="button" data-open-dialog="gift-dialog" aria-label="{% translate 'Give points' %}">
-  <svg class="action-icon" aria-hidden="true"><use href="#icon-gift"></use></svg><span>{% translate "Gift" %}</span>
-</button>
-{% endif %}
-{% endblock %}
 {% if gift_recipients_available %}
 <dialog id="gift-dialog" class="action-dialog">
   <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
@@ -368,4 +361,11 @@
 <dialog id="evidence-lightbox" class="evidence-lightbox"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
         <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
       </button><img alt="{% translate 'Task photo' %}" data-lightbox-image></dialog>
+{% endblock %}
+{% block floating_actions_extra %}
+{% if gift_recipients_available %}
+<button class="gift-launcher" type="button" data-open-dialog="gift-dialog" aria-label="{% translate 'Give points' %}">
+  <svg class="action-icon" aria-hidden="true"><use href="#icon-gift"></use></svg><span>{% translate "Gift" %}</span>
+</button>
+{% endif %}
 {% endblock %}

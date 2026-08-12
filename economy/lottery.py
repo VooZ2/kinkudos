@@ -147,20 +147,20 @@ def purchase_lottery_ticket(*, child, rng=None, current_date=None):
     )
     state = lottery_state(locked_child, current_date)
     errors = {
-        "open": _("Finish your open scratch ticket before buying another."),
-        "disabled": _("Scratch tickets are disabled."),
+        "open": _("Finish your open surprise card before buying another."),
+        "disabled": _("Surprise cards are disabled."),
         "weekly_limit": _(
-            "You have already used all %(limit)s scratch tickets this week."
+            "You have already used all %(limit)s surprise cards this week."
         )
         % {"limit": state["weekly_limit"]},
         "assigned_tasks": _(
-            "Complete the assigned tasks before buying a scratch ticket."
+            "Complete the assigned tasks before buying a surprise card."
         ),
         "credit_paused": _(
-            "Scratch tickets are paused until your point balance improves."
+            "Surprise cards are paused until your point balance improves."
         ),
         "balance": _(
-            "A scratch ticket can be bought only with %(cost)s points you have earned."
+            "A surprise card can be bought only with %(cost)s points you have earned."
         )
         % {"cost": state["ticket_cost"]},
     }
@@ -178,7 +178,7 @@ def purchase_lottery_ticket(*, child, rng=None, current_date=None):
         child=locked_child,
         delta=-state["ticket_cost"],
         kind=LedgerKind.LOTTERY,
-        description=_("Scratch ticket"),
+        description=_("Surprise card"),
         source_id=ticket.pk,
     )
     ticket.purchase_ledger_entry = purchase_entry
@@ -224,7 +224,7 @@ def reveal_lottery_ticket(*, ticket, child):
         child=locked_child,
         delta=applied_delta,
         kind=LedgerKind.LOTTERY,
-        description=_("Scratch ticket result"),
+        description=_("Surprise card result"),
         source_id=locked_ticket.pk,
     )
     LotteryTicket.objects.filter(pk=locked_ticket.pk).update(

@@ -452,7 +452,7 @@ def child_request_reward(request, reward_id):
 def child_purchase_lottery_ticket(request):
     try:
         purchase_lottery_ticket(child=request.child)
-        messages.success(request, _("Your scratch ticket is ready."))
+        messages.success(request, _("Your surprise card is ready."))
     except ValidationError as exc:
         messages.error(request, exc.messages[0])
     return redirect(f"{reverse('child_dashboard')}#prizai")
