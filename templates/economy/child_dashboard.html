@@ -180,8 +180,8 @@
       <p class="lottery-scratch-help">{% translate "Rub the silver surface with your finger. Three matching numbers reveal the result." %}</p>
       <div class="scratch-ticket" data-scratch-ticket>
         <div class="scratch-grid" data-scratch-grid>
-          {% for value in lottery.open_ticket.values %}
-            <span class="scratch-number {% if value > 0 %}scratch-positive{% else %}scratch-negative{% endif %}" data-lottery-value="{{ value }}">{{ value|stringformat:"+d" }}</span>
+          {% for _ in lottery.open_ticket.values %}
+            <span class="scratch-number scratch-hidden" data-lottery-cell aria-hidden="true"></span>
           {% endfor %}
         </div>
         <canvas class="scratch-surface" data-scratch-surface aria-label="{% translate 'Scratch-off surface' %}"></canvas>

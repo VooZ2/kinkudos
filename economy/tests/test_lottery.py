@@ -465,7 +465,9 @@ class LotteryViewTests(TestCase):
         )
         dashboard = self.client.get(reverse("child_dashboard"))
         self.assertContains(dashboard, "Continue scratching")
-        self.assertContains(dashboard, 'data-lottery-value="33"', count=3)
+        self.assertContains(dashboard, 'data-lottery-cell', count=9)
+        self.assertNotContains(dashboard, 'data-lottery-value="33"')
+        self.assertNotContains(dashboard, '>+33</span>')
 
         reveal_response = self.client.post(
             reverse("child_reveal_lottery_ticket", args=[ticket.pk]),
@@ -473,7 +475,11 @@ class LotteryViewTests(TestCase):
         )
 
         self.assertEqual(reveal_response.status_code, 200)
-        self.assertEqual(reveal_response.json()["delta"], 33)
+        payload = reveal_response.json()
+        self.assertEqual(payload["delta"], 33)
+        self.assertEqual(payload["matching_value"], 33)
+        self.assertEqual(len(payload["values"]), 9)
+        self.assertEqual(payload["values"].count(33), 3)
         self.child.refresh_from_db()
         self.assertEqual(self.child.balance, 98)
 

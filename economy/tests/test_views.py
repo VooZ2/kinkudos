@@ -19,7 +19,6 @@ from economy.forms import PenaltyForm, RewardForm, TaskForm
 from economy.models import (
     ChildProfile,
     FamilySettings,
-    LedgerEntry,
     LedgerKind,
     PenaltyTemplate,
     Proposal,
@@ -1135,8 +1134,8 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.context["history_activity"], "adjustments")
         self.assertEqual(response.context["history_date"], "any")
 
-    def test_parent_history_is_limited_to_fifty_entries_from_the_last_seven_days(self):
-        entries = [
+    def test_parent_history_paginates_beyond_fifty_entries_for_any_time(self):
+        for index in range(52):
             post_ledger_entry(
                 child=self.child_one,
                 delta=index + 1,
@@ -1144,28 +1143,30 @@ class AccessAndWorkflowTests(TestCase):
                 description=f"Recent history {index}",
                 actor=self.parent,
             )
-            for index in range(52)
-        ]
-        old_entry = entries[0]
-        LedgerEntry.objects.filter(pk=old_entry.pk).update(
-            created_at=timezone.now() - timedelta(days=8)
-        )
         self.client.login(username="tevai", password=self.parent_password)
-
-        response = self.client.get(reverse("parent_dashboard"))
-
-        self.assertEqual(response.context["ledger_page"].paginator.count, 50)
-        self.assertNotContains(response, "Recent history 0")
-        self.assertNotContains(response, "Recent history 1")
 
         response = self.client.get(
             reverse("parent_dashboard"),
-            {"history_date": "any"},
+            {"history_child": self.child_one.pk, "history_date": "any"},
         )
 
-        self.assertEqual(response.context["ledger_page"].paginator.count, 50)
+        # 52 child-one entries, no silent 50-cap; pagination keeps pages of 10.
+        self.assertEqual(response.context["ledger_page"].paginator.count, 52)
+        self.assertEqual(response.context["ledger_page"].paginator.num_pages, 6)
+        self.assertContains(response, "Recent history 51")
         self.assertNotContains(response, "Recent history 0")
-        self.assertNotContains(response, "Recent history 1")
+
+        last_page = self.client.get(
+            reverse("parent_dashboard"),
+            {
+                "history_child": self.child_one.pk,
+                "history_date": "any",
+                "history_page": 6,
+            },
+        )
+        self.assertContains(last_page, "Recent history 0")
+        self.assertContains(last_page, "Recent history 1")
+        self.assertNotContains(last_page, "Sibling private entry")
 
     def test_parent_quick_actions_use_clear_icons_and_requested_order(self):
         self.client.login(username="tevai", password=self.parent_password)

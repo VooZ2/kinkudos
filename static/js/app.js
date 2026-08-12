@@ -573,7 +573,7 @@ if (lotteryDialog) {
   const result = lotteryDialog.querySelector("[data-lottery-result]");
   const resultTitle = lotteryDialog.querySelector("[data-lottery-result-title]");
   const resultCopy = lotteryDialog.querySelector("[data-lottery-result-copy]");
-  const values = [...lotteryDialog.querySelectorAll("[data-lottery-value]")];
+  const values = [...lotteryDialog.querySelectorAll("[data-lottery-cell]")];
   const storageKey = `kinkudos-lottery-${lotteryDialog.dataset.ticketId}`;
   const revealed = new Set();
   let drawing = false;
@@ -665,6 +665,18 @@ if (lotteryDialog) {
     };
   }
 
+  function applyBoardValues(board) {
+    values.forEach((cell, index) => {
+      const value = Number(board[index] ?? 0);
+      cell.dataset.lotteryValue = String(value);
+      cell.textContent = value > 0 ? `+${value}` : String(value);
+      cell.classList.toggle("scratch-positive", value > 0);
+      cell.classList.toggle("scratch-negative", value <= 0);
+      cell.classList.remove("scratch-hidden");
+      cell.removeAttribute("aria-hidden");
+    });
+  }
+
   function clearCell(index) {
     const context = canvas.getContext("2d");
     const bounds = cellBounds(index);
@@ -714,6 +726,10 @@ if (lotteryDialog) {
       });
       const payload = await response.json();
       if (!response.ok || !payload.ok) throw new Error("Lottery reveal failed");
+      if (!Array.isArray(payload.values) || payload.values.length !== values.length) {
+        throw new Error("Lottery board missing");
+      }
+      applyBoardValues(payload.values);
       values.forEach(value => {
         if (Number(value.dataset.lotteryValue) === payload.matching_value && payload.matching_value !== 0) {
           value.classList.add("scratch-match");

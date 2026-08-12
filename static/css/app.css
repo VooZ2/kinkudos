@@ -1074,6 +1074,7 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .scratch-ticket { position: relative; width: min(100%, 440px); aspect-ratio: 1; margin: 18px auto; overflow: hidden; border: 5px solid var(--lottery-frame, var(--primary)); border-radius: 20px; background: var(--surface-solid); box-shadow: 0 16px 34px rgba(17, 24, 39, .24); }
 .scratch-grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); }
 .scratch-number { display: grid; place-items: center; border: 1px dashed color-mix(in srgb, var(--muted) 36%, transparent); background: color-mix(in srgb, var(--surface-solid) 94%, var(--accent)); font-size: clamp(1.35rem, 7vw, 2.2rem); font-weight: 950; opacity: .72; transition: opacity .2s ease, transform .25s ease, box-shadow .25s ease; }
+.scratch-number.scratch-hidden { color: transparent; }
 .scratch-number.scratch-revealed { opacity: 1; }
 .scratch-number.scratch-positive { color: #087a4f; }
 .scratch-number.scratch-negative { color: #c72f3f; }

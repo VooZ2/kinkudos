@@ -472,6 +472,7 @@ def child_reveal_lottery_ticket(request, ticket_id):
             "delta": revealed.applied_delta,
             "balance": revealed.result_ledger_entry.balance_after,
             "matching_value": revealed.prize_amount,
+            "values": revealed.values,
         }
     )
 
