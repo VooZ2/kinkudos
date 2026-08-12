@@ -57,6 +57,10 @@ dialog. You can choose:
 - a date range: This week, Any time, This month, or Custom range;
 - From and To dates for a custom range.
 
+History for the chosen filters is paged with **Previous** / **Next**.
+**Any time** is not truncated to a short window; use pages (and filters) to
+reach older entries.
+
 The **Filters** control shows the active-filter count when filters are set.
 Active filters also appear as removable chips that are at least 44px tall. On a
 phone, an **Informational** chip may show as an icon-only control. Use

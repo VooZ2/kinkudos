@@ -23,11 +23,12 @@ Vaikas jungiasi tiksliai keturių skaitmenų PIN kodu, tačiau tik iš [susieto 
 PIN ekraną saugo keli lygiai:
 
 - įrenginys turi būti susietas, kad išvis galėtų rodyti vaikų profilius arba priimti PIN;
-- neteisingi bandymai ribojami pagal profilį, įrenginį, IP adresą ir visą svetainę;
+- neteisingi bandymai ribojami pagal profilį, įrenginį ir IP adresą;
+- visos svetainės skaitiklis įrašo įspėjimą, kai šeimos slenkstis viršijamas, bet neužrakina visų vaikų;
 - po penkių neteisingų bandymų vieno vaiko profilis užrakinamas penkioms minutėms; ir
 - tėvas gali paspausti **Atrakinti profilį** vaiko kortelėje, nelaukdamas.
 
-Pakeitus PIN, senasis iškart nustoja galioti. Atšaukus įrenginį, tame įrenginyje vaiko prieiga panaikinama; grįžti galima tik susiejus įrenginį iš naujo ir įvedus dabartinį PIN.
+Keičiant PIN taikomas tas pats profilio užraktas kaip ir jungiantis. Atšaukus įrenginį, tame įrenginyje vaiko prieiga panaikinama; grįžti galima tik susiejus įrenginį iš naujo ir įvedus dabartinį PIN.
 
 ## Paprasta šeimos taisyklė
 
