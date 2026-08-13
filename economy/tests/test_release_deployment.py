@@ -462,6 +462,124 @@ class ReleaseDeploymentTests(SimpleTestCase):
             )
             self.assertFalse((root / "secrets").exists())
 
+    def test_bootstrap_rerun_reuses_proxy_mode_from_env_file(self):
+        bootstrap = (ROOT / "deploy" / "bootstrap.sh").read_text(encoding="utf-8")
+        self.assertIn("existing_proxy_mode=$(read_env_value KINKUDOS_PROXY_MODE)", bootstrap)
+        self.assertIn(
+            "proxy_mode=${KINKUDOS_PROXY_MODE:-${existing_proxy_mode:-host}}",
+            bootstrap,
+        )
+
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            deploy = root / "deploy"
+            secrets = root / "secrets"
+            deploy.mkdir()
+            for name in (
+                "bootstrap.sh",
+                "compose.yml",
+                "compose.host-proxy.yml",
+                "compose.traefik.yml",
+                "compose.container-proxy.yml",
+            ):
+                source = ROOT / "deploy" / name
+                target = deploy / name
+                target.write_text(source.read_text(encoding="utf-8"), encoding="utf-8")
+                if name.endswith(".sh"):
+                    target.chmod(0o755)
+            (deploy / ".env").write_text(
+                "KINKUDOS_HOSTNAME=family.example.com\n"
+                "KINKUDOS_PROXY_MODE=traefik\n"
+                "KINKUDOS_PROXY_NETWORK=web\n"
+                "KINKUDOS_UID=1000\n"
+                "KINKUDOS_GID=1000\n"
+                "KINKUDOS_DEFAULT_LANGUAGE=en\n"
+                "KINKUDOS_TRUSTED_PROXIES=172.18.0.0/16\n",
+                encoding="utf-8",
+            )
+            (deploy / "compose.override.yml").write_text(
+                (ROOT / "deploy" / "compose.traefik.yml").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            ensure = deploy / "ensure-trusted-proxies.sh"
+            ensure.write_text(
+                (ROOT / "deploy" / "ensure-trusted-proxies.sh").read_text(
+                    encoding="utf-8"
+                ),
+                encoding="utf-8",
+            )
+            ensure.chmod(0o755)
+            ownership = deploy / "check-ownership.sh"
+            ownership.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+            ownership.chmod(0o755)
+
+            for path in (
+                secrets / "backup",
+                secrets / "smtp",
+                root / "data",
+                root / "backups",
+                root / "backup-state",
+            ):
+                path.mkdir(parents=True)
+            for secret_name in (
+                "django_secret_key",
+                "setup_token",
+                "restic_password",
+                "backup_agent_token",
+                "smtp_password",
+                "vapid_private.pem",
+                "vapid_public.txt",
+            ):
+                secret_path = secrets / secret_name
+                secret_path.write_text("x\n", encoding="utf-8")
+            (secrets / "backup" / "restic.env").write_text(
+                "RESTIC_REPOSITORY=test\n", encoding="utf-8"
+            )
+
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            for name, body in (
+                (
+                    "docker",
+                    "#!/bin/sh\n"
+                    'if [ "$1" = "info" ]; then exit 0; fi\n'
+                    'if [ "$1" = "compose" ]; then exit 0; fi\n'
+                    "exit 0\n",
+                ),
+                ("openssl", "#!/bin/sh\nexit 0\n"),
+                ("chown", "#!/bin/sh\nexit 0\n"),
+                ("find", "#!/bin/sh\nexit 0\n"),
+            ):
+                path = fake_bin / name
+                path.write_text(body, encoding="utf-8")
+                path.chmod(0o755)
+
+            environment = os.environ.copy()
+            environment["PATH"] = f"{fake_bin}:{environment['PATH']}"
+            for key in (
+                "KINKUDOS_PROXY_MODE",
+                "KINKUDOS_PROXY_NETWORK",
+                "KINKUDOS_HOSTNAME",
+                "KINKUDOS_DEFAULT_LANGUAGE",
+            ):
+                environment.pop(key, None)
+
+            result = subprocess.run(
+                ["sh", str(deploy / "bootstrap.sh")],
+                cwd=str(deploy),
+                env=environment,
+                stdin=subprocess.DEVNULL,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+            env_text = (deploy / ".env").read_text(encoding="utf-8")
+            self.assertIn("KINKUDOS_PROXY_MODE=traefik", env_text)
+            override = (deploy / "compose.override.yml").read_text(encoding="utf-8")
+            self.assertIn("traefik.enable", override)
+            self.assertNotIn("127.0.0.1:", override)
+
     def test_ensure_trusted_proxies_sets_host_and_docker_values(self):
         helper = ROOT / "deploy" / "ensure-trusted-proxies.sh"
         bootstrap = (ROOT / "deploy" / "bootstrap.sh").read_text(encoding="utf-8")

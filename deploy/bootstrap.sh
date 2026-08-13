@@ -4,8 +4,35 @@ set -eu
 deploy_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 project_root=$(CDPATH= cd -- "$deploy_dir/.." && pwd)
 secrets_dir="$project_root/secrets"
+env_file="$deploy_dir/.env"
 
-install_language=${KINKUDOS_DEFAULT_LANGUAGE:-en}
+read_env_value() {
+  if [ -f "$env_file" ]; then
+    sed -n "s/^${1}=//p" "$env_file" | tail -n 1
+  fi
+}
+
+upsert_env_value() {
+  key=$1
+  value=$2
+  temporary_env=$(mktemp "${env_file}.XXXXXX")
+  if [ -f "$env_file" ]; then
+    grep -v -E "^${key}=" "$env_file" > "$temporary_env" || true
+  else
+    : > "$temporary_env"
+  fi
+  printf '%s=%s\n' "$key" "$value" >> "$temporary_env"
+  chmod 0600 "$temporary_env"
+  mv "$temporary_env" "$env_file"
+}
+
+existing_language=$(read_env_value KINKUDOS_DEFAULT_LANGUAGE)
+existing_hostname=$(read_env_value KINKUDOS_HOSTNAME)
+existing_proxy_mode=$(read_env_value KINKUDOS_PROXY_MODE)
+existing_proxy_network=$(read_env_value KINKUDOS_PROXY_NETWORK)
+
+# Explicit environment wins; otherwise reuse the existing install; then defaults.
+install_language=${KINKUDOS_DEFAULT_LANGUAGE:-${existing_language:-en}}
 if [ -t 0 ]; then
   printf 'Installation language / Diegimo kalba [en/lt] (%s): ' "$install_language"
   read -r selected_language
@@ -16,9 +43,9 @@ case "$install_language" in
   *) echo "Language must be en or lt / Kalba turi būti en arba lt." >&2; exit 1 ;;
 esac
 
-install_hostname=${KINKUDOS_HOSTNAME:-kinkudos.example.com}
-proxy_mode=${KINKUDOS_PROXY_MODE:-host}
-proxy_network=${KINKUDOS_PROXY_NETWORK:-web}
+install_hostname=${KINKUDOS_HOSTNAME:-${existing_hostname:-kinkudos.example.com}}
+proxy_mode=${KINKUDOS_PROXY_MODE:-${existing_proxy_mode:-host}}
+proxy_network=${KINKUDOS_PROXY_NETWORK:-${existing_proxy_network:-web}}
 if [ -t 0 ]; then
   if [ "$install_language" = "lt" ]; then
     printf 'KinKudos domeno vardas [%s]: ' "$install_hostname"
@@ -63,7 +90,9 @@ if ! docker info >/dev/null 2>&1; then
 fi
 
 umask 077
-if [ ! -f "$deploy_dir/.env" ]; then
+# Keep hostname/proxy choices aligned with the overlay copied below. UID/GID are
+# preserved when already present so a re-run does not retarget ownership.
+if [ ! -f "$env_file" ]; then
   {
     echo "KINKUDOS_HOSTNAME=$install_hostname"
     echo "KINKUDOS_PROXY_MODE=$proxy_mode"
@@ -71,19 +100,20 @@ if [ ! -f "$deploy_dir/.env" ]; then
     echo "KINKUDOS_UID=$runtime_uid"
     echo "KINKUDOS_GID=$runtime_gid"
     echo "KINKUDOS_DEFAULT_LANGUAGE=$install_language"
-  } > "$deploy_dir/.env"
+  } > "$env_file"
 else
-  if ! grep -q '^KINKUDOS_DEFAULT_LANGUAGE=' "$deploy_dir/.env"; then
-    printf 'KINKUDOS_DEFAULT_LANGUAGE=%s\n' "$install_language" >> "$deploy_dir/.env"
+  upsert_env_value KINKUDOS_HOSTNAME "$install_hostname"
+  upsert_env_value KINKUDOS_PROXY_MODE "$proxy_mode"
+  upsert_env_value KINKUDOS_PROXY_NETWORK "$proxy_network"
+  upsert_env_value KINKUDOS_DEFAULT_LANGUAGE "$install_language"
+  if ! grep -q '^KINKUDOS_UID=' "$env_file"; then
+    upsert_env_value KINKUDOS_UID "$runtime_uid"
   fi
-  if ! grep -q '^KINKUDOS_PROXY_MODE=' "$deploy_dir/.env"; then
-    printf 'KINKUDOS_PROXY_MODE=%s\n' "$proxy_mode" >> "$deploy_dir/.env"
-  fi
-  if ! grep -q '^KINKUDOS_PROXY_NETWORK=' "$deploy_dir/.env"; then
-    printf 'KINKUDOS_PROXY_NETWORK=%s\n' "$proxy_network" >> "$deploy_dir/.env"
+  if ! grep -q '^KINKUDOS_GID=' "$env_file"; then
+    upsert_env_value KINKUDOS_GID "$runtime_gid"
   fi
 fi
-"$deploy_dir/ensure-trusted-proxies.sh" "$deploy_dir/.env" "$proxy_mode" "$proxy_network"
+"$deploy_dir/ensure-trusted-proxies.sh" "$env_file" "$proxy_mode" "$proxy_network"
 
 mkdir -p \
   "$secrets_dir/backup" \
@@ -156,7 +186,7 @@ if [ ! -f "$secrets_dir/backup/restic.env" ]; then
   } > "$secrets_dir/backup/restic.env"
 fi
 chmod 0600 \
-  "$deploy_dir/.env" \
+  "$env_file" \
   "$secrets_dir/django_secret_key" \
   "$secrets_dir/setup_token" \
   "$secrets_dir/restic_password" \
