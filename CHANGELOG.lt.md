@@ -11,6 +11,28 @@ schema.
 
 - Kol kas nieko.
 
+## [26.7.1] - 2026-08-13
+
+### Pakeista
+
+- Suplanuotų priminimų komanda dabar izoliuotais etapais paleidžia esamus
+  priminimus, paskirtų darbų priminimus ir suėjusius paskyrimų rinkinius,
+  todėl vieno etapo klaida nesustabdo kitų suplanuotų darbų.
+- Vedamas diegimas ir leidimo atnaujinimai dabar nustato patikimo proxy CIDR
+  pagal pasirinktą proxy režimą ir pakartotinai paleidus išsaugo esamą proxy
+  režimą, tinklą bei aiškiai nustatytą patikimo proxy reikšmę.
+
+### Pataisyta
+
+- Tėvai dabar gauna „Web Push“ pranešimą, kai vaikas užbaigia paskirtą darbą.
+- Esamų diegimų pakartotinis bootstrap nebeturėtų pakeisti Traefik ar
+  konteinerio proxy perdangos į host proxy perdangą.
+
+### Saugumas
+
+- Persiunčiamos proxy antraštės vedamo diegimo ir atnaujinimo metu priimamos
+  tik iš nustatyto loopback arba Docker proxy tinklo CIDR.
+
 ## [26.7.0] - 2026-08-13
 
 ### Pridėta
