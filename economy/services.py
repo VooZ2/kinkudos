@@ -710,6 +710,9 @@ def complete_assigned_task(*, assigned_task, child):
     AssignedTask.objects.filter(pk=locked.pk).update(ledger_entry=entry)
     if locked.task_id:
         TaskCompletion.objects.create(child=child, task=locked.task)
+    from .push import notify_assigned_task_completed
+
+    notify_assigned_task_completed(locked)
     return entry
 
 

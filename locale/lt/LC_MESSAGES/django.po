@@ -196,6 +196,9 @@ msgstr "Leisti šiame įrenginyje"
 msgid "Allowed IP addresses and networks"
 msgstr "Leidžiami IP adresai ir tinklai"
 
+msgid "An assigned task was completed"
+msgstr "Paskirtas darbas atliktas"
+
 msgid "Android phone"
 msgstr "Android telefonas"
 

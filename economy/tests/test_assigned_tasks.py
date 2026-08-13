@@ -166,7 +166,10 @@ class AssignedTaskServiceTests(TestCase):
 
     def test_completion_awards_immediately_and_only_once(self):
         item = self.create_batch().items.get(task=self.task)
-        entry = complete_assigned_task(assigned_task=item, child=self.child)
+        with patch("economy.push.notify_assigned_task_completed") as notify:
+            entry = complete_assigned_task(assigned_task=item, child=self.child)
+            notify.assert_called_once()
+            self.assertEqual(notify.call_args.args[0].pk, item.pk)
         self.child.refresh_from_db()
         item.refresh_from_db()
         self.assertEqual(self.child.balance, 20)
