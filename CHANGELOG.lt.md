@@ -13,6 +13,14 @@ schema.
 
 ## [26.7.1] - 2026-08-13
 
+### Pridėta
+
+- Vaikas gali pridėti pasirenkamą trumpą pastabą („Ką aš padariau“, iki 200
+  simbolių) pateikdamas ar iš naujo pateikdamas katalogo darbą. Tėvai ją
+  atidaro komentaro piktograma Laukiančiuose prašymuose ir Istorijoje.
+  Pastaba nepriklauso nuo nuotraukos, neskiria nuotraukos priedo ir
+  nenaudojama užbaigiant paskirtą darbą.
+
 ### Pakeista
 
 - Suplanuotų priminimų komanda dabar izoliuotais etapais paleidžia esamus
@@ -23,12 +31,26 @@ schema.
   režimą, tinklą bei aiškiai nustatytą patikimo proxy reikšmę.
 - Pakartotinai paleistas vedamas bootstrap po atnaujinimo gali atkurti dabartinio
   leidimo naujus diegimo pagalbininkus iš patikrintos leidimo kopijos.
+- Mygtukai ir kompaktiški piktogramų valdikliai naudoja tą patį užvedimo ir
+  fokusavimo pakėlimą. Pradžios laukiančių prašymų ženklelis darbalaukyje
+  lieka kompaktiškas ant navigacijos piktogramos ir nebeištempia Pradžios
+  eilutės.
+- Tėvų Pradžios laukiančių prašymų eilutėse vaiko vardas ir tipas lieka
+  vienoje eilutėje, komentaro piktograma stovi šalia nuotraukos, o
+  šiandienos paskirtų darbų atšaukimas lieka atskirame stulpelyje.
+  Tvarkyti → Tikslai informacijos valdiklį rodo prie tikslo pavadinimo.
+- Lietuviški sukauptų taškų užrašai vaiko kortelėse ir tiksluose dabar
+  vartoja „Sukaupta“ / „sukaupta“ vietoj „Išsaugota“ / „išsaugota“.
 
 ### Pataisyta
 
 - Tėvai dabar gauna „Web Push“ pranešimą, kai vaikas užbaigia paskirtą darbą.
 - Esamų diegimų pakartotinis bootstrap nebeturėtų pakeisti Traefik ar
   konteinerio proxy perdangos į host proxy perdangą.
+- To paties katalogo darbo patvirtinimas tą pačią dieną daugiau nei vieną
+  kartą nebebaigiasi HTTP 500. Kiekvienas patvirtintas pateikimas vis tiek
+  įrašo savo kreditą. „Paskirti darbus“ ir tėvų „Pridėti atliktą darbą“ tą
+  katalogo darbą vis tiek laiko panaudotu iki dienos pabaigos.
 
 ### Saugumas
 

@@ -11,6 +11,14 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 ## [26.7.1] - 2026-08-13
 
+### Added
+
+- Children can add an optional short note (What I did, up to 200 characters)
+  when submitting or resubmitting a catalogue task. Parents open it from a
+  comment icon in Pending and History. The note is independent of the photo,
+  does not grant a photo bonus, and is not used when completing an assigned
+  task.
+
 ### Changed
 
 - The scheduled reminder command now runs existing reminders, assigned-task
@@ -21,6 +29,15 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
   explicit trusted-proxy value when setup is run again.
 - Re-running the guided bootstrap after an upgrade can recover deployment
   helpers introduced by the current release from the validated release copy.
+- Buttons and compact icon controls share one hover and focus lift. The Home
+  pending-count badge stays compact on the desktop navigation icon instead of
+  stretching the Home row.
+- Parent Home pending rows keep the child name and request type on one line,
+  place the comment icon beside the photo, and keep today's assigned-task
+  cancel actions in a dedicated column. Manage → Goals shows the info control
+  beside the goal title.
+- Lithuanian saved-point labels on child cards and goals now use Sukaupta /
+  sukaupta instead of Išsaugota / išsaugota.
 
 ### Fixed
 
@@ -28,6 +45,10 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
   assigned task.
 - Existing installations no longer risk switching from a Traefik or container
   proxy overlay to the host-proxy overlay during a repeated bootstrap.
+- Approving the same catalogue task more than once in one day no longer fails
+  with an HTTP 500. Each approved claim still posts its own credit. Assign and
+  parent Award still treat that catalogue task as used for the rest of the
+  local day.
 
 ### Security
 
