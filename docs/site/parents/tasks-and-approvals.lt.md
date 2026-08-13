@@ -48,14 +48,19 @@ pridedami iškart, be vaiko pateikimo ir antro patvirtinimo.
 ## Paskirkite darbus šiandienai
 
 Vaiko kortelėje naudokite **Paskirti darbus šiandienai**, kad išsiųstumėte
-šiandienos katalogo darbus. Galite pridėti vieną savo užduotį su taškų verte.
+šiandienos katalogo darbus. Galite pridėti vieną individualų darbą, pasirenkamą
+pastabą ir išsaugotą rinkinį, kuris išeina pagal tvarkaraštį. Žr. [Paskirti
+užduotis šiandienai](assign-tasks-today.lt.md).
 
-- Paskirti darbai baigiasi vidurnaktį pagal serverio vietinį laiką.
+- Paskirti darbai baigiasi vidurnaktį pagal serverio vietinį laiką ir tada
+  dingsta iš šios dienos sąrašų.
 - Vaikas kiekvieną darbą užbaigia pats, o taškai pridedami iškart.
 - Užduotis neprieinama, jei ji jau laukia patvirtinimo, šiandien paskirta arba
   šiandien užskaityta.
 - Pasirinktinai galima blokuoti **naujus** prizų prašymus, kol darbai baigti.
 - Galima atšaukti vieną nebaigtą darbą arba visą likusį rinkinį.
+- Nebaigti paskirti punktai Veiksmų istorijoje nerodomi; žurnalo įrašą sukuria
+  tik užbaigtas paskirtas darbas.
 
 ## Nuobaudos ir korekcijos
 

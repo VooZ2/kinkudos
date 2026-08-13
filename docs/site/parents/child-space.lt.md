@@ -9,7 +9,7 @@ vaiko privačios informacijos, PIN, balanso ar prašymų.
 | Sritis | Ką vaikas gali daryti |
 | --- | --- |
 | **Darbai** | Pasirinkti galimą darbą, prireikus pridėti nuotrauką ir pateikti tėvų patvirtinimui. Jei darbas grąžintas taisyti, jį pataisyti ir pateikti iš naujo. |
-| **Šiandien paskirti darbai** | Užbaigti tėvų atsiųstus darbus. Kiekvienas užbaigtas darbas iškart prideda taškus ir dingsta iš dienos sąrašo. |
+| **Šiandien paskirti darbai** | Užbaigti tėvų atsiųstus darbus. Kiekvienas užbaigtas darbas iškart prideda taškus ir dingsta iš dienos sąrašo. Jei tėvai dialoge **Paskirti darbus šiandienai** įrašė pastabą, ji aiškiai rodoma po pavadinimu, vaiko temos spalvomis ir žodžiais. |
 | **Prizai** | Prašyti galimo prizo, jei tai leidžia išleidžiamas balansas ir kredito taisyklė. Kol prašymas laukia, vaikas gali jį atšaukti. |
 | **Tikslai ir pasiūlymai** | Pasirinkti **Pasiūlyk prizą ar tikslą** ir pasiūlyti prizą ar taupymo tikslą. Tėvams patvirtinus tikslo pasiūlymą, tikslo kortelėje pasirinkti **Naudoti turimus taškus** arba **Taupyti atskirai**. |
 | **Nutrinami bilietai** | Pirkti pasirenkamą bilietą tik jei jis įjungtas šeimai ir vaikui, pakanka išleidžiamų taškų bei leidžia savaitės limitas. Prieš kitą pirkimą reikia užbaigti atidarytą bilietą. |
@@ -19,6 +19,25 @@ vaiko privačios informacijos, PIN, balanso ar prašymų.
 Dovana ir Atsiliepimai vaiko pradžios lange sudėti į vieną plaukiojančių
 veiksmų stulpelį, kad nestumtų vienas kito ir neuždengtų darbų mygtukų;
 puslapio apačioje palikta vietos abiem valdikliams.
+
+Kai tėvų sprendimo vis dar reikia — pateiktam darbui, pataisymui, prizo
+prašymui, tikslo užbaigimui, pasiūlymui ar gimtadienio keitimui — po pasveikinimu
+atsiranda kompaktiška juosta. Joje iki trijų žetonų, kurie nuveda prie
+atitinkamos kortelės. Kai nieko nelaukia, juosta slepiama.
+
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti juostą, kai laukiama tėvų</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
+<img class="screenshot-image" src="../../assets/child-waiting-parents-mobile-26-7-0.png" alt="Vaiko skydelio pasveikinimas su laukimo juosta ir iki trijų žetonų" loading="lazy">
+</details>
+
+Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
+
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti paskirtą darbą su tėvų pastaba</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
+<img class="screenshot-image" src="../../assets/child-assigned-note-mobile-26-7-0.png" alt="Vaiko paskirto darbo eilutė su temine tėvų pastaba po pavadinimu" loading="lazy">
+</details>
+
+Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 
 ## Balansai ir tikslai
 

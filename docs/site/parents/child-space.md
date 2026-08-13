@@ -9,7 +9,7 @@ information, PIN, balance, or requests.
 | Area | What the child can do |
 | --- | --- |
 | **Tasks** | Choose an available task, optionally attach a photo, and submit it for parent approval. If work is returned for improvement, revise it and submit it again. |
-| **Today’s assigned tasks** | Complete tasks sent by a parent. Each completion awards its points immediately and the task disappears from today’s list. |
+| **Today’s assigned tasks** | Complete tasks sent by a parent. Each completion awards its points immediately and the task disappears from today’s list. If the parent added a note in **Assign tasks for today**, it appears clearly under the title in the child’s current theme. |
 | **Rewards** | Request an available reward when the spendable balance and credit rule allow it. A child may cancel their own request while it is pending. |
 | **Goals and suggestions** | Suggest a reward or savings goal. After a parent approves a goal suggestion, choose **Use available points** or **Save separately** from the goal card. |
 | **Scratch tickets** | Buy an optional ticket only when enabled for both the family and the child, the child has enough spendable points, and the weekly limit allows it. An open ticket must be finished before buying another. |
@@ -19,6 +19,25 @@ information, PIN, balance, or requests.
 Give points and Feedback sit in one floating action stack on the child
 dashboard so they stay spaced and do not cover task buttons; the page leaves
 room at the bottom for both controls.
+
+When anything still needs a parent decision — a submitted task, a revision to
+fix, a reward request, a goal completion, a suggestion, or a birthday change —
+a compact strip appears under the greeting. It shows up to three chips that
+scroll to the matching card. The strip is hidden when nothing is waiting.
+
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View the waiting-for-parents strip</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
+<img class="screenshot-image" src="../../assets/child-waiting-parents-mobile-26-7-0.png" alt="Child dashboard greeting with a waiting-for-parents strip and up to three chips" loading="lazy">
+</details>
+
+The screenshot uses fictional demonstration data.
+
+<details class="screenshot-disclosure" open>
+<summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View an assigned task with a parent note</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
+<img class="screenshot-image" src="../../assets/child-assigned-note-mobile-26-7-0.png" alt="Child assigned-task row with a themed parent note under the title" loading="lazy">
+</details>
+
+The screenshot uses fictional demonstration data.
 
 ## Balances and goals
 

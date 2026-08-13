@@ -82,7 +82,7 @@ Remkitės prieinamais veiksmų pavadinimais, o ne ikona:
 | Veiksmas | Kur | Kam skirtas |
 | --- | --- | --- |
 | **Pridėti atliktą darbą** | Pagrindinė eilutė (**Pridėti**) | Iškart skirti taškus už patikrintus katalogo darbus. |
-| **Paskirti darbus šiandienai** | Pagrindinė eilutė (**Paskirti**) | Iki vidurnakčio išsiųsti katalogo darbus ir, jei reikia, vieną savo užduotį. |
+| **Paskirti darbus šiandienai** | Pagrindinė eilutė (**Paskirti**) | Išsiųsti šios dienos katalogo darbus, vieną pasirenkamą individualų darbą ir pasirenkamas pastabas. Dialoge rodomi tik šiandienos rinkiniai. |
 | **Koreguoti taškus** | **Daugiau** | Pridėti arba atimti taškus su privaloma priežastimi. |
 | **Skirti nuobaudą** | **Daugiau** | Pritaikyti sutartus nuobaudų šablonus ir pasirenkamą bendrą priežastį. |
 | **Nustatyti kreditą** | **Daugiau** | Pakeisti šio vaiko žemiausią išlaidų ribą. |
@@ -94,10 +94,15 @@ dokumentacijoje nepasikliaujama ikonų forma.
 ## Šiandienai paskirti darbai
 
 Paskirtas darbas galioja tik tą dieną, kai išsiunčiamas. Vidurnaktį pagal
-serverio vietinį laiką nebaigti darbai pasibaigia ir lieka suprantami
-**Istorijoje**, tačiau vaiko nebevaržo.
+serverio vietinį laiką nebaigti punktai baigiasi: jie dingsta iš vaiko sąrašo
+ir nebeblokuoja naujų prizų prašymų. Nebaigti paskirti punktai nesukuria
+Veiksmų istorijos įrašų; žurnale atsiranda tik užbaigtas paskirtas darbas.
 
-Galima pasirinkti **Blokuoti prizų pirkimus, kol šie darbai nebaigti**. Tai
+Dialogas **Paskirti darbus šiandienai** rodo tik šiandienos rinkinius.
+Ankstesnės dienos nebaigtas darbas ten nebelieka. Pasirenkamos pastabos ir
+išsaugoti rinkiniai aprašyti [Paskirti užduotis šiandienai](assign-tasks-today.lt.md).
+
+Galima pasirinkti **Blokuoti prizų pirkimus, kol šie darbai bus atlikti**. Tai
 blokuoja tik naujus vaiko prizų prašymus, neatšaukia jau laukiančio prašymo ir
 netrukdo kitiems veiksmams. Atskirą nebaigtą darbą arba visą likusį rinkinį
 galima atšaukti toje pačioje kortelėje.

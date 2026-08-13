@@ -9,6 +9,7 @@ edited or deleted; a correction creates a new entry.
 Depending on what the family uses, History may include:
 
 - approved tasks;
+- completed assigned tasks;
 - manually added completed tasks;
 - penalties;
 - manual positive and negative point adjustments;
@@ -30,7 +31,8 @@ Depending on what the family uses, History may include:
 - existing automatic balance events.
 
 Rejected task and reward decisions can also appear as decision records, even
-when no points moved.
+when no points moved. Unfinished or expired assigned tasks do not appear here,
+because they do not create ledger entries.
 
 ## Child selector
 
@@ -41,7 +43,7 @@ remain in place.
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View Parent activity History on mobile</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
-<img class="screenshot-image" src="../../assets/parent-activity-history-mobile-26-6-7.png" alt="Parent activity History compact rows on mobile" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-activity-history-mobile-26-7-0.png" alt="Parent activity History compact rows on mobile" loading="lazy">
 </details>
 
 The screenshot uses fictional demonstration data.
@@ -68,7 +70,7 @@ phone, an **Informational** chip may show as an icon-only control. Use
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View History filters bottom sheet on mobile</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
-<img class="screenshot-image" src="../../assets/parent-history-filters-mobile-26-6-7.png" alt="Parent History filters bottom sheet on mobile" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-history-filters-mobile-26-7-0.png" alt="Parent History filters bottom sheet on mobile" loading="lazy">
 </details>
 
 The screenshot uses fictional demonstration data.
