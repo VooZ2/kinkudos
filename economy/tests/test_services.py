@@ -26,6 +26,8 @@ from economy.services import (
     reject_proposal,
     reject_reward_request,
     reject_task_claim,
+    request_task_revision,
+    resubmit_task_claim,
     submit_reward_request,
     submit_task,
 )
@@ -123,6 +125,29 @@ class EconomyServiceTests(TestCase):
         submit_task(child=self.child, task=self.task)
         with self.assertRaises(ValidationError):
             submit_task(child=self.child, task=self.task)
+
+    def test_submit_task_stores_optional_child_note(self):
+        claim = submit_task(
+            child=self.child,
+            task=self.task,
+            child_note="  Folded the towels.  ",
+        )
+        self.assertEqual(claim.child_note, "Folded the towels.")
+        self.assertEqual(claim.photo_bonus_snapshot, 0)
+
+    def test_resubmit_task_claim_can_replace_or_clear_child_note(self):
+        claim = submit_task(
+            child=self.child,
+            task=self.task,
+            child_note="First version",
+        )
+        request_task_revision(claim=claim, actor=self.parent, reason="Try again")
+        claim = resubmit_task_claim(claim=claim, child_note="  Helped my brother.  ")
+        self.assertEqual(claim.status, RequestStatus.PENDING)
+        self.assertEqual(claim.child_note, "Helped my brother.")
+        request_task_revision(claim=claim, actor=self.parent, reason="Once more")
+        claim = resubmit_task_claim(claim=claim, child_note="   ")
+        self.assertEqual(claim.child_note, "")
 
     def test_rejected_task_allows_optional_comment_and_does_not_change_balance(self):
         claim = submit_task(child=self.child, task=self.task)

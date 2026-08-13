@@ -319,6 +319,7 @@ class RefreshFrontendContractTests(TestCase):
             'document.querySelectorAll("[data-evidence-full]").forEach',
             script,
         )
+        self.assertIn('navItem.querySelector(".parent-nav-icon") || navItem', script)
 
 
 class ParentPollingTemplateScopeTests(TestCase):

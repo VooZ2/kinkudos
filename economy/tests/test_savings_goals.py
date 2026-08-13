@@ -1,3 +1,4 @@
+from pathlib import Path
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
@@ -446,6 +447,38 @@ class SavingsGoalServiceTests(TestCase):
         editor_html = html[form_start:form_end]
         self.assertIn(">Delete</button>", editor_html)
         self.assertNotIn("icon-trash-can", editor_html)
+
+    def test_parent_goal_info_button_sits_in_the_heading_not_the_status_row(self):
+        self.fund_child(200)
+        available = self.make_goal(target=250)
+        select_goal_mode(goal=available, child=self.child, mode=GoalMode.AVAILABLE)
+        saved = self.make_goal(target=200)
+        saved.title = "Art supplies"
+        saved.save(update_fields=["title"])
+        select_goal_mode(goal=saved, child=self.child, mode=GoalMode.SAVED)
+        add_saved_points(goal=saved, child=self.child, amount=185, actor=self.parent)
+        self.client.force_login(self.parent)
+
+        response = self.client.get(reverse("parent_dashboard"))
+        html = response.content.decode()
+
+        def section(start_marker, end_marker, blob):
+            start = blob.index(start_marker)
+            end = blob.index(end_marker, start)
+            return blob[start:end]
+
+        saved_row = section(f'id="goal-item-{saved.pk}"', f'id="goal-parent-info-{saved.pk}"', html)
+        heading = section('class="goal-manage-heading"', 'class="goal-manage-progress"', saved_row)
+        status = section('class="goal-manage-status"', 'class="goal-manage-actions"', saved_row)
+        self.assertIn("goal-parent-info-", heading)
+        self.assertIn("info-button", heading)
+        self.assertNotIn("info-button", status)
+        self.assertIn("icon-circle-plus", saved_row)
+        self.assertIn("icon-right-left", saved_row)
+        stylesheet = (Path(__file__).resolve().parents[2] / "static" / "css" / "app.css").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("minmax(194px, max-content)", stylesheet)
 
     def test_parent_saved_goal_delete_confirmation_includes_amount_and_child(self):
         self.fund_child(100)

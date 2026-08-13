@@ -215,7 +215,7 @@ class TaskEvidenceWorkflowTests(TestCase):
     def test_cleanup_removes_expired_files_but_keeps_history(self):
         self.client.post(
             reverse("child_submit_task", args=[self.task.pk]),
-            {"proof": self.photo()},
+            {"proof": self.photo(), "child_note": "Under the bed is clean."},
         )
         claim = TaskClaim.objects.get()
         approve_task_claim(claim=claim, actor=self.parent)
@@ -235,3 +235,122 @@ class TaskEvidenceWorkflowTests(TestCase):
         self.assertFalse(storage.exists(thumbnail_name))
         self.assertTrue(TaskClaim.objects.filter(pk=claim.pk).exists())
         self.assertTrue(LedgerEntry.objects.filter(source_id=claim.pk).exists())
+        self.assertEqual(claim.child_note, "Under the bed is clean.")
+
+
+class ChildClaimNoteTests(TestCase):
+    def setUp(self):
+        self.media_dir = tempfile.TemporaryDirectory()
+        self.media_override = override_settings(MEDIA_ROOT=self.media_dir.name)
+        self.media_override.enable()
+        self.parent = get_user_model().objects.create_user(
+            "parent",
+            password="Safe-visual-test-123!",
+            is_staff=True,
+        )
+        self.child = ChildProfile.objects.create(
+            name="Child Two",
+            theme="neutral",
+            theme_selected=True,
+        )
+        self.child.set_pin("1234")
+        self.child.save(update_fields=["pin_hash"])
+        self.task = Task.objects.create(title="Tidy room", reward=20, icon="🧹")
+        family = FamilySettings.load()
+        family.photo_bonus_points = 5
+        family.save(update_fields=["photo_bonus_points"])
+        session = self.client.session
+        session["child_id"] = self.child.pk
+        session.save()
+
+    def tearDown(self):
+        self.media_override.disable()
+        self.media_dir.cleanup()
+
+    def sign_in_parent(self):
+        self.client.logout()
+        self.client.login(username="parent", password="Safe-visual-test-123!")
+
+    def sign_in_child(self):
+        self.client.logout()
+        session = self.client.session
+        session["child_id"] = self.child.pk
+        session.save()
+
+    def test_child_submit_dialog_has_optional_note_field_without_autofocus(self):
+        response = self.client.get(reverse("child_dashboard"))
+        self.assertContains(response, "What I did")
+        self.assertContains(response, 'name="child_note"', html=False)
+        self.assertContains(response, 'maxlength="200"', html=False)
+        self.assertContains(response, "You can add a photo or a short note about what you did.")
+        self.assertNotContains(response, "autofocus")
+
+    def test_child_can_submit_optional_note_without_photo_bonus(self):
+        response = self.client.post(
+            reverse("child_submit_task", args=[self.task.pk]),
+            {"child_note": "  Put the dishes away.  "},
+        )
+        self.assertRedirects(response, reverse("child_dashboard"))
+        claim = TaskClaim.objects.get()
+        self.assertEqual(claim.child_note, "Put the dishes away.")
+        self.assertEqual(claim.photo_bonus_snapshot, 0)
+        self.assertFalse(claim.has_evidence)
+
+    def test_child_note_does_not_appear_without_text(self):
+        self.client.post(reverse("child_submit_task", args=[self.task.pk]))
+        self.sign_in_parent()
+        response = self.client.get(reverse("parent_dashboard"))
+        self.assertNotContains(response, "history-note-button")
+        self.assertNotContains(response, "pending-child-note-")
+
+    def test_parent_pending_and_history_show_note_icon(self):
+        self.client.post(
+            reverse("child_submit_task", args=[self.task.pk]),
+            {"child_note": "Helped my brother with homework."},
+        )
+        claim = TaskClaim.objects.get()
+        self.sign_in_parent()
+        pending = self.client.get(reverse("parent_dashboard"))
+        self.assertContains(pending, "history-note-button")
+        self.assertContains(pending, f'id="pending-child-note-{claim.pk}"', html=False)
+        self.assertContains(pending, "Helped my brother with homework.")
+        self.assertContains(pending, "pending-evidence-cluster")
+
+        self.client.post(reverse("parent_decide_task", args=[claim.pk, "approve"]))
+        history = self.client.get(reverse("parent_dashboard") + "?history_activity=tasks#parent-history")
+        self.assertContains(history, f'id="history-child-note-{claim.pk}"', html=False)
+        self.assertContains(history, "Helped my brother with homework.")
+
+    def test_child_can_change_note_when_resubmitting(self):
+        self.client.post(
+            reverse("child_submit_task", args=[self.task.pk]),
+            {"child_note": "First try"},
+        )
+        claim = TaskClaim.objects.get()
+        self.sign_in_parent()
+        self.client.post(
+            reverse("parent_decide_task", args=[claim.pk, "revise"]),
+            {"reason": "Please add the hallway."},
+        )
+        self.sign_in_child()
+        dashboard = self.client.get(reverse("child_dashboard"))
+        self.assertContains(dashboard, "First try")
+        self.assertContains(dashboard, "Please add the hallway.")
+        self.client.post(
+            reverse("child_resubmit_task", args=[claim.pk]),
+            {"child_note": "Hallway is tidy too."},
+        )
+        claim.refresh_from_db()
+        self.assertEqual(claim.status, RequestStatus.PENDING)
+        self.assertEqual(claim.child_note, "Hallway is tidy too.")
+
+    def test_photo_bonus_still_requires_a_photo(self):
+        self.client.post(
+            reverse("child_submit_task", args=[self.task.pk]),
+            {"child_note": "Done", "proof": TaskEvidenceWorkflowTests.photo()},
+        )
+        claim = TaskClaim.objects.get()
+        self.assertEqual(claim.child_note, "Done")
+        self.assertEqual(claim.photo_bonus_snapshot, 5)
+        self.assertTrue(claim.has_evidence)
+

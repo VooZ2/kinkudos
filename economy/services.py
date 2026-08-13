@@ -223,7 +223,7 @@ def randomize_daily_themes(*, current_date=None, chooser=None):
     return changed
 
 
-def submit_task(*, child, task, photo_bonus_snapshot=0):
+def submit_task(*, child, task, photo_bonus_snapshot=0, child_note=""):
     if not task.is_active:
         raise ValidationError(_("This task is no longer active."))
     try:
@@ -234,6 +234,7 @@ def submit_task(*, child, task, photo_bonus_snapshot=0):
                 task_title=task.title,
                 reward_snapshot=task.reward,
                 photo_bonus_snapshot=photo_bonus_snapshot,
+                child_note=child_note.strip()[:200],
             )
     except IntegrityError as exc:
         raise ValidationError(_("This task is already awaiting approval.")) from exc
@@ -301,19 +302,22 @@ def request_task_revision(*, claim, actor, reason):
         return TaskClaim.objects.get(pk=claim.pk)
 
 
-def resubmit_task_claim(*, claim):
+def resubmit_task_claim(*, claim, child_note=None):
     with transaction.atomic():
         submitted_at = timezone.now()
+        updates = {
+            "status": RequestStatus.PENDING,
+            "revision_note": "",
+            "decided_by": None,
+            "decided_at": None,
+            "submitted_at": submitted_at,
+        }
+        if child_note is not None:
+            updates["child_note"] = child_note.strip()[:200]
         claimed = TaskClaim.objects.filter(
             pk=claim.pk,
             status=RequestStatus.NEEDS_CHANGES,
-        ).update(
-            status=RequestStatus.PENDING,
-            revision_note="",
-            decided_by=None,
-            decided_at=None,
-            submitted_at=submitted_at,
-        )
+        ).update(**updates)
         if not claimed:
             raise ValidationError(_("This task is not awaiting corrections."))
         return TaskClaim.objects.get(pk=claim.pk)

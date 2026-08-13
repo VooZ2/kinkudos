@@ -91,7 +91,11 @@ Lifecycle:
 
 Approval and its ledger entry are created in one database transaction.
 Optional photo evidence is validated, resized, EXIF-stripped, and retained
-per its configured period (`economy/images.py`).
+per its configured period (`economy/images.py`). A child may also add an
+optional short note (`child_note`, max 200 characters) describing what they
+did. The note is independent of the photo: it does not grant the photo bonus,
+is not purged with evidence files, and is shown to parents as an icon in
+Pending and History rather than inline chat.
 
 **AssignedTaskBatch** / **AssignedTask** / **TaskCompletion** — a parent may
 send one child a list of catalog tasks plus one optional custom task for the

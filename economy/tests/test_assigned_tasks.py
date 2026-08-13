@@ -1,4 +1,5 @@
 from datetime import date, datetime, time, timedelta
+from pathlib import Path
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
@@ -539,6 +540,11 @@ class AssignedTaskViewTests(TestCase):
         self.client.login(username="parent", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, "Cancel remaining")
+        self.assertContains(response, 'class="assigned-task-cancel"', html=False)
+        stylesheet = Path(__file__).resolve().parents[2] / "static" / "css" / "app.css"
+        css = stylesheet.read_text(encoding="utf-8")
+        self.assertIn("grid-template-columns: minmax(0, 1fr) auto 44px;", css)
+        self.assertIn(".assigned-task-cancel {", css)
         complete_assigned_task(
             assigned_task=batch.items.get(),
             child=self.child,

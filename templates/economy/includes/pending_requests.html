@@ -41,7 +41,12 @@
             </div>
             <div class="pending-request-actions">
               {% if pending_item.kind == "task" %}
-                {% if pending_item.claim.has_evidence %}<button class="evidence-thumb-button" type="button" data-evidence-full="{% url 'task_evidence' pending_item.claim.pk 'full' %}" aria-label="{% translate "Open task photo" %}"><img src="{% url 'task_evidence' pending_item.claim.pk 'thumbnail' %}" alt="{% blocktranslate with task=pending_item.claim.task_title %}Photo for {{ task }}{% endblocktranslate %}"></button>{% endif %}
+                {% if pending_item.claim.child_note or pending_item.claim.has_evidence %}
+                <div class="pending-evidence-cluster">
+                  {% if pending_item.claim.child_note %}<button class="history-note-button" type="button" data-open-dialog="pending-child-note-{{ pending_item.claim.pk }}" aria-label="{% translate "Open child's note" %}" title="{% translate "Open child's note" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-comment"></use></svg></button>{% endif %}
+                  {% if pending_item.claim.has_evidence %}<button class="evidence-thumb-button" type="button" data-evidence-full="{% url 'task_evidence' pending_item.claim.pk 'full' %}" aria-label="{% translate "Open task photo" %}"><img src="{% url 'task_evidence' pending_item.claim.pk 'thumbnail' %}" alt="{% blocktranslate with task=pending_item.claim.task_title %}Photo for {{ task }}{% endblocktranslate %}"></button>{% endif %}
+                </div>
+                {% endif %}
                 <form method="post" action="{% url 'parent_decide_task' pending_item.claim.pk 'approve' %}">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>
                 <button class="decision-icon-button decision-revise" type="button" data-open-dialog="revise-task-{{ pending_item.claim.pk }}" aria-label="{% translate "Ask to improve" %}" title="{% translate "Ask to improve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-rotate-left"></use></svg></button>
                 <button class="decision-icon-button decision-reject" type="button" data-open-dialog="reject-task-{{ pending_item.claim.pk }}" aria-label="{% translate "Reject" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button>
@@ -61,6 +66,13 @@
             </div>
           </article>
           {% if pending_item.kind == "task" %}
+            {% if pending_item.claim.child_note %}
+            <dialog id="pending-child-note-{{ pending_item.claim.pk }}" class="action-dialog">
+              <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg></button>
+              <h2>{{ pending_item.claim.task_title }}</h2>
+              <p>{{ pending_item.claim.child_note }}</p>
+            </dialog>
+            {% endif %}
             <dialog id="revise-task-{{ pending_item.claim.pk }}" class="action-dialog task-decision-dialog">
               <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg></button>
               <h2>{% translate "Ask to improve" %}</h2><p>{% translate "You may add a comment that the child will see." %}</p>

@@ -1224,6 +1224,16 @@ class AccessAndWorkflowTests(TestCase):
             re.findall(r'<use href="#(icon-[^"]+)"', nav_html),
             ["icon-house", "icon-table-list", "icon-clock-rotate-left", "icon-gear"],
         )
+        home_item = nav_html[nav_html.index('data-parent-nav="home"'):]
+        home_item = home_item[: home_item.index("</a>")]
+        icon_wrap = home_item[home_item.index('class="parent-nav-icon"'):]
+        self.assertIn("nav-count", icon_wrap)
+        self.assertIn("parent-nav-label", home_item)
+        self.assertLess(home_item.index("parent-nav-icon"), home_item.index("parent-nav-label"))
+        stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn(".parent-nav-icon { display: contents; }", stylesheet)
+        self.assertIn(".pending-request-meta { display: flex; flex-wrap: wrap; align-items: baseline;", stylesheet)
+        self.assertNotIn("left: calc(50% + 7px)", stylesheet)
         manage_html = html[html.index('<nav class="manage-tabs"'):]
         manage_html = manage_html[:manage_html.index('</nav>')]
         self.assertEqual(
@@ -1660,6 +1670,21 @@ class AccessAndWorkflowTests(TestCase):
         stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".child-balance-row { display: flex; align-items: baseline; justify-content: flex-start;", stylesheet)
         self.assertIn(".child-metadata-row {", stylesheet)
+
+    def test_parent_goal_summary_has_no_decorative_info_icon(self):
+        template = Path(settings.BASE_DIR, "templates/economy/parent_dashboard.html").read_text(
+            encoding="utf-8"
+        )
+        start = template.index('class="parent-goal-summary"')
+        end = template.index("</a>", start)
+        summary = template[start:end]
+        self.assertIn("goal-summary-status", summary)
+        self.assertNotIn("icon-circle-info", summary)
+        self.assertNotIn("info-button", summary)
+
+        catalog = Path(settings.BASE_DIR, "locale/lt/messages.json").read_text(encoding="utf-8")
+        self.assertIn('"Saved": "Sukaupta"', catalog)
+        self.assertIn('"saved": "sukaupta"', catalog)
 
     def test_pending_requests_are_one_shared_chronological_list(self):
         older = self.child_one.task_claims.create(
