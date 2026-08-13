@@ -48,15 +48,19 @@ immediately, without a child submission or second approval.
 ## Assign tasks for today
 
 Use **Assign tasks for today** on a child card to send selected catalogue tasks
-for the current day. You can also add one custom task and its point value.
+for the current day. You can also add one custom task, an optional note, and a
+saved set that can go out on a schedule. See [Assign tasks for today](assign-tasks-today.md).
 
-- Assigned tasks expire at midnight in the server’s local time.
+- Assigned tasks expire at midnight in the server’s local time and then leave
+  today’s lists.
 - The child completes each assigned task; points are added immediately.
 - A task is unavailable when it is already waiting for approval, assigned
   today, or credited today.
 - You can optionally block **new** reward purchases until the assigned tasks
   are finished.
 - You can cancel one unfinished task or all remaining tasks in a batch.
+- Incomplete assigned items do not appear in Activity History; only a
+  completed assigned task creates a ledger entry.
 
 ## Penalties and adjustments
 

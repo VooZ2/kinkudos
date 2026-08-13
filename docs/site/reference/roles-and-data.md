@@ -26,7 +26,9 @@ The public documentation has separate cookie-free analytics only.
 | Child PIN | Four digits; a child profile needs a paired device first. |
 | Task/feedback image upload | JPEG, PNG, WebP, HEIC, or HEIF up to 12 MB. |
 | Avatar upload | The same formats up to 5 MB; cropped to a square. |
-| Assigned task deadline | Midnight in the server’s local time. |
+| Assigned task deadline | Midnight in the server’s local time. Pending items then leave today’s lists; incomplete items do not create ledger entries. |
+| Saved assignment sets | Up to five named sets per child. |
+| Assigned-task reminder | Soft child notification about three hours after a batch, if any item is still waiting. |
 | Scratch-ticket week | Monday through Sunday. |
 | Completed task-photo retention | Family choice: indefinitely, 7, 30, or 90 days. |
 | Resolved-feedback image retention | Family choice: indefinitely, 7, 30, or 90 days. |

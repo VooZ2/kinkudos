@@ -26,7 +26,9 @@ Slapukų nenaudojanti analitika naudojama tik viešoje dokumentacijoje.
 | Vaiko PIN | Keturi skaitmenys; profiliui pirmiausia reikia susieto įrenginio. |
 | Darbo / atsiliepimo vaizdo įkėlimas | JPEG, PNG, WebP, HEIC arba HEIF iki 12 MB. |
 | Avataro įkėlimas | Tie patys formatai iki 5 MB; apkerpama į kvadratą. |
-| Paskirto darbo terminas | Vidurnaktis pagal serverio vietinį laiką. |
+| Paskirto darbo terminas | Vidurnaktis pagal serverio vietinį laiką. Tada laukiantys punktai dingsta iš šios dienos sąrašų; nebaigti punktai žurnalo įrašų nesukuria. |
+| Išsaugoti paskyrimo rinkiniai | Iki penkių pavadintų rinkinių vienam vaikui. |
+| Paskirto darbo priminimas | Švelnus pranešimas vaikui apie tris valandas po rinkinio, jei bent vienas punktas vis dar laukia. |
 | Nutrinamų bilietų savaitė | Nuo pirmadienio iki sekmadienio. |
 | Užbaigtų darbų nuotraukų saugojimas | Šeimos pasirinkimas: neribotai, 7, 30 arba 90 dienų. |
 | Išspręsto atsiliepimo nuotraukų saugojimas | Šeimos pasirinkimas: neribotai, 7, 30 arba 90 dienų. |

@@ -9,6 +9,7 @@ ar ištrinti; korekcija sukuria naują įrašą.
 Priklausomai nuo šeimos naudojamų funkcijų, Istorijoje gali būti:
 
 - patvirtinti darbai;
+- užbaigti paskirti darbai;
 - rankiniu būdu pridėti atlikti darbai;
 - nuobaudos;
 - rankinės teigiamos ir neigiamos taškų korekcijos;
@@ -30,7 +31,8 @@ Priklausomai nuo šeimos naudojamų funkcijų, Istorijoje gali būti:
 - esami automatiniai balanso įvykiai.
 
 Atmesti darbo ir prizo sprendimai taip pat gali būti rodomi kaip sprendimo
-įrašai, net jei taškai nepajudėjo.
+įrašai, net jei taškai nepajudėjo. Nebaigti ar pasibaigę paskirti darbai čia
+nerodomi, nes jie nesukuria žurnalo įrašų.
 
 ## Vaiko pasirinkimas
 
@@ -40,7 +42,7 @@ Istorija filtruojama iškart; vien norint pakeisti vaiką nereikia atidaryti
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti tėvų veiksmų istoriją telefone</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
-<img class="screenshot-image" src="../../assets/parent-activity-history-mobile-26-6-7.png" alt="Tėvų veiksmų istorijos kompaktiškos eilutės telefone" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-activity-history-mobile-26-7-0.png" alt="Tėvų veiksmų istorijos kompaktiškos eilutės telefone" loading="lazy">
 </details>
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
@@ -67,7 +69,7 @@ išplėstinius pasirinkimus, o **Taikyti** juos pritaiko.
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti Istorijos filtrų apatinį lapą telefone</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
-<img class="screenshot-image" src="../../assets/parent-history-filters-mobile-26-6-7.png" alt="Tėvų Istorijos filtrų apatinis lapas telefone" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-history-filters-mobile-26-7-0.png" alt="Tėvų Istorijos filtrų apatinis lapas telefone" loading="lazy">
 </details>
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.

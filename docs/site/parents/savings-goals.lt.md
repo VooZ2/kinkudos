@@ -33,7 +33,7 @@ priežasties, balansas nesikeičia.
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti tikslo patvirtinimo taupymo būdo pasirinkimus</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
-<img class="screenshot-image" src="../../assets/parent-approve-goal-dialog-desktop-26-6-7.png" alt="Tikslo patvirtinimo dialogas su pasirinkimo kortelėmis Naudoti turimus taškus ir Taupyti atskirai" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-approve-goal-dialog-desktop-26-7-0.png" alt="Tikslo patvirtinimo dialogas su pasirinkimo kortelėmis Naudoti turimus taškus ir Taupyti atskirai" loading="lazy">
 </details>
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
@@ -104,7 +104,7 @@ Grąžinus išsaugotus taškus sukuriamas teigiamas **Istorijos** įrašas, taš
 vėl tampa išleidžiami. Prieš keičiant būdą ar uždarant tikslą atskirai
 išsaugotus taškus reikia grąžinti.
 
-<img class="screenshot-image" src="../../assets/parent-manage-goals-desktop-26-6-7.png" alt="Tėvų skiltis „Tvarkyti → Tikslai“ tuščia būsena darbalaukyje" loading="lazy">
+<img class="screenshot-image" src="../../assets/parent-manage-goals-desktop-26-7-0.png" alt="Tėvų skiltis „Tvarkyti → Tikslai“ tuščia būsena darbalaukyje" loading="lazy">
 
 Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 

@@ -12,7 +12,7 @@ KinKudos galima įdiegti kaip PWA programą ir ji gali siųsti naršyklės prane
 
 ## Įjunkite pranešimus
 
-Prisijunkite tame įrenginyje, viršutinėje juostoje spauskite varpelį ir patvirtinkite naršyklės leidimą. Pakartokite kiekviename įrenginyje, kuriame norite gauti pranešimus. Aktyvus tėvas gauna pranešimus apie vaikų pateiktus darbus, prizų prašymus, pasiūlymus ir gimtadienio keitimo prašymus; vaikai – apie tėvų sprendimus, paskirtus darbus, dovanas, gimtadienio taškus ir pasirinktiną nutrinamų bilietų priminimą. Išjungus tėvų paskyrą panaikinamos jos „push“ prenumeratos, todėl ji nebegaus tėvams skirtų pranešimų.
+Prisijunkite tame įrenginyje, viršutinėje juostoje spauskite varpelį ir patvirtinkite naršyklės leidimą. Pakartokite kiekviename įrenginyje, kuriame norite gauti pranešimus. Aktyvus tėvas gauna pranešimus apie vaikų pateiktus darbus, prizų prašymus, pasiūlymus ir gimtadienio keitimo prašymus; vaikai – apie tėvų sprendimus, paskirtus darbus, dovanas, gimtadienio taškus, pasirinktiną nutrinamų bilietų priminimą ir švelnų priminimą praėjus apie trims valandoms po paskyrimo, jei tame rinkinyje vis dar yra laukiantis punktas. Už nebaigtą paskirtą darbą automatinės nuobaudos nėra. Išjungus tėvų paskyrą panaikinamos jos „push“ prenumeratos, todėl ji nebegaus tėvams skirtų pranešimų.
 
 Pranešimai siunčiami geriausiu bandymu po duomenų bazės commit fone, su griežtu endpoint timeout; lėtas ar nepavykęs push veiksmo nesužlugdo. Būseną visada tikrinkite pačioje programoje.
 
