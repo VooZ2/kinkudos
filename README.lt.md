@@ -51,7 +51,7 @@
 <p align="center"><sub>Patogiai naudokite KinKudos telefone, planšetėje ar kompiuteryje.</sub></p>
 
 <p align="center">
-  <img src="docs/screenshots/child-magic-academy-2026.webp" width="90%" alt="KinKudos Magic Academy vaiko tema">
+  <img src="docs/screenshots/child-superhero-hq-2026.webp" width="90%" alt="KinKudos Superhero HQ vaiko tema">
 </p>
 <p align="center"><sub><strong>Savas pasaulis</strong><br>Vaikai gali pasirinkti vaizdinę temą su savais tekstais ir taškų vienetais.</sub></p>
 
