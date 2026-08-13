@@ -436,6 +436,9 @@ priminimų komandą – kas 30 minučių:
 */30 * * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py send_lottery_reminders
 ```
 
+`send_lottery_reminders` taip pat siunčia švelnius priminimus apie
+nebaigtus paskirtus darbus, praėjus trims valandoms po paskyrimo.
+
 Rankinis paleidimas:
 
 ```bash

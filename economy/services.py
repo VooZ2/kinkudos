@@ -1,4 +1,5 @@
 import random
+from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -11,6 +12,10 @@ from .models import (
     AssignedTask,
     AssignedTaskBatch,
     AssignedTaskStatus,
+    AssignmentPreset,
+    AssignmentPresetCadence,
+    AssignmentPresetItem,
+    AssignmentPresetWeekendMode,
     BirthdayAward,
     ChildProfile,
     FamilySettings,
@@ -35,6 +40,8 @@ from .models import (
     TaskCompletion,
     Theme,
 )
+
+ASSIGNMENT_PRESET_LIMIT = 5
 
 
 def deactivate_parent_account(account):
@@ -355,6 +362,8 @@ def assign_tasks(
     custom_title="",
     custom_points=None,
     blocks_rewards=False,
+    task_notes=None,
+    custom_note="",
 ):
     child = ChildProfile.objects.select_for_update().get(
         pk=child.pk,
@@ -366,10 +375,14 @@ def assign_tasks(
         raise ValidationError(
             _("One or more selected tasks are no longer available today.")
         )
+    notes = task_notes or {}
+    custom_note = (custom_note or "").strip()
+    now = timezone.now()
     batch = AssignedTaskBatch.objects.create(
         child=child,
         assigned_by=actor,
         blocks_rewards=blocks_rewards,
+        nudge_at=now + timedelta(hours=3),
     )
     AssignedTask.objects.bulk_create(
         [
@@ -379,6 +392,7 @@ def assign_tasks(
                 title_snapshot=task.title,
                 icon_snapshot=task.icon,
                 reward_snapshot=task.reward,
+                note_snapshot=(notes.get(task.pk) or "").strip(),
             )
             for task in tasks
         ]
@@ -389,8 +403,237 @@ def assign_tasks(
             title_snapshot=custom_title,
             icon_snapshot="🧹",
             reward_snapshot=custom_points,
+            note_snapshot=custom_note,
         )
     return batch
+
+
+def assignment_preset_matches_date(preset, day):
+    weekday = day.weekday()
+    if preset.cadence == AssignmentPresetCadence.DAILY:
+        return True
+    if preset.cadence == AssignmentPresetCadence.WEEKDAYS:
+        return bool(preset.weekday_mask & (1 << weekday))
+    if preset.cadence == AssignmentPresetCadence.WEEKEND:
+        if preset.weekend_mode == AssignmentPresetWeekendMode.SATURDAY:
+            return weekday == 5
+        if preset.weekend_mode == AssignmentPresetWeekendMode.SUNDAY:
+            return weekday == 6
+        return weekday in {5, 6}
+    if preset.cadence == AssignmentPresetCadence.WEEKLY:
+        return preset.weekly_weekday == weekday
+    return False
+
+
+@transaction.atomic
+def save_assignment_preset(
+    *,
+    child,
+    actor,
+    name,
+    tasks,
+    task_notes=None,
+    custom_title="",
+    custom_points=None,
+    custom_note="",
+    blocks_rewards=False,
+    cadence=AssignmentPresetCadence.DAILY,
+    weekday_mask=0,
+    weekend_mode=AssignmentPresetWeekendMode.BOTH,
+    weekly_weekday=None,
+    run_at=None,
+):
+    from datetime import time as dt_time
+
+    child = ChildProfile.objects.select_for_update().get(pk=child.pk, is_active=True)
+    name = (name or "").strip()
+    if not name:
+        raise ValidationError(_("Enter a name for this saved set."))
+    if AssignmentPreset.objects.filter(child=child).count() >= ASSIGNMENT_PRESET_LIMIT:
+        raise ValidationError(_("You can save up to %(limit)s sets per child.") % {
+            "limit": ASSIGNMENT_PRESET_LIMIT,
+        })
+    custom_title = (custom_title or "").strip()
+    if bool(custom_title) != bool(custom_points):
+        raise ValidationError(
+            _("Enter both the custom task name and its point amount.")
+        )
+    if not tasks and not custom_title:
+        raise ValidationError(_("Choose at least one task or add a custom task."))
+    if cadence == AssignmentPresetCadence.WEEKDAYS and not weekday_mask:
+        raise ValidationError(_("Choose at least one weekday."))
+    if cadence == AssignmentPresetCadence.WEEKLY and weekly_weekday is None:
+        raise ValidationError(_("Choose a weekday for the weekly set."))
+    if run_at is None:
+        run_at = dt_time(7, 0)
+    notes = task_notes or {}
+    preset = AssignmentPreset.objects.create(
+        child=child,
+        name=name[:80],
+        blocks_rewards=blocks_rewards,
+        cadence=cadence,
+        weekday_mask=weekday_mask if cadence == AssignmentPresetCadence.WEEKDAYS else 0,
+        weekend_mode=(
+            weekend_mode
+            if cadence == AssignmentPresetCadence.WEEKEND
+            else AssignmentPresetWeekendMode.BOTH
+        ),
+        weekly_weekday=(
+            weekly_weekday if cadence == AssignmentPresetCadence.WEEKLY else None
+        ),
+        run_at=run_at,
+        created_by=actor,
+    )
+    items = []
+    for index, task in enumerate(tasks):
+        items.append(
+            AssignmentPresetItem(
+                preset=preset,
+                task=task,
+                note=(notes.get(task.pk) or "").strip()[:200],
+                sort_order=index,
+            )
+        )
+    if custom_title:
+        items.append(
+            AssignmentPresetItem(
+                preset=preset,
+                custom_title=custom_title[:120],
+                custom_points=custom_points,
+                note=(custom_note or "").strip()[:200],
+                sort_order=len(items),
+            )
+        )
+    AssignmentPresetItem.objects.bulk_create(items)
+    return preset
+
+
+@transaction.atomic
+def apply_assignment_preset(*, preset, actor=None):
+    preset = (
+        AssignmentPreset.objects.select_for_update()
+        .select_related("child", "created_by")
+        .prefetch_related("items__task")
+        .get(pk=preset.pk)
+    )
+    child = ChildProfile.objects.select_for_update().get(
+        pk=preset.child_id,
+        is_active=True,
+    )
+    unavailable = unavailable_assignment_task_ids(child)
+    catalog_tasks = []
+    task_notes = {}
+    custom_title = ""
+    custom_points = None
+    custom_note = ""
+    for item in preset.items.all():
+        if item.task_id:
+            if item.task_id in unavailable:
+                continue
+            if not item.task.is_active or item.task.is_deleted:
+                continue
+            catalog_tasks.append(item.task)
+            if item.note:
+                task_notes[item.task_id] = item.note
+        elif item.custom_title and not custom_title:
+            custom_title = item.custom_title
+            custom_points = item.custom_points
+            custom_note = item.note
+    if not catalog_tasks and not custom_title:
+        return None
+    batch = assign_tasks(
+        child=child,
+        actor=actor or preset.created_by,
+        tasks=catalog_tasks,
+        custom_title=custom_title,
+        custom_points=custom_points,
+        blocks_rewards=preset.blocks_rewards,
+        task_notes=task_notes,
+        custom_note=custom_note,
+    )
+    return batch
+
+
+def run_due_assignment_presets(*, current_time=None):
+    from .push import notify_assigned_tasks
+
+    current_time = current_time or timezone.now()
+    today = timezone.localdate()
+    local_time = timezone.localtime(current_time).time()
+    preset_ids = list(
+        AssignmentPreset.objects.filter(is_paused=False, child__is_active=True)
+        .exclude(last_auto_assigned_on=today)
+        .values_list("pk", flat=True)
+    )
+    created = []
+    for preset_id in preset_ids:
+        batch = None
+        with transaction.atomic():
+            preset = (
+                AssignmentPreset.objects.select_for_update()
+                .select_related("child", "created_by")
+                .get(pk=preset_id)
+            )
+            if preset.is_paused or not preset.child.is_active:
+                continue
+            if preset.last_auto_assigned_on == today:
+                continue
+            if not assignment_preset_matches_date(preset, today):
+                continue
+            if local_time < preset.run_at:
+                continue
+            batch = apply_assignment_preset(preset=preset, actor=preset.created_by)
+            AssignmentPreset.objects.filter(pk=preset.pk).update(
+                last_auto_assigned_on=today,
+                updated_at=timezone.now(),
+            )
+        if batch is not None:
+            notify_assigned_tasks(batch)
+            created.append(batch)
+    return created
+
+
+def send_due_assigned_task_nudges(*, current_time=None):
+    from .push import notify_assigned_tasks_nudge
+
+    current_time = current_time or timezone.now()
+    today = timezone.localdate()
+    due_ids = list(
+        AssignedTaskBatch.objects.filter(
+            nudge_at__isnull=False,
+            nudge_at__lte=current_time,
+            nudge_sent_at__isnull=True,
+            assigned_on=today,
+        ).values_list("pk", flat=True)
+    )
+    sent = []
+    for batch_id in due_ids:
+        should_notify = False
+        with transaction.atomic():
+            locked = (
+                AssignedTaskBatch.objects.select_for_update()
+                .select_related("child")
+                .get(pk=batch_id)
+            )
+            if locked.nudge_sent_at is not None:
+                continue
+            if locked.assigned_on != timezone.localdate():
+                locked.nudge_sent_at = current_time
+                locked.save(update_fields=["nudge_sent_at"])
+                continue
+            has_pending = locked.items.filter(
+                status=AssignedTaskStatus.PENDING
+            ).exists()
+            locked.nudge_sent_at = current_time
+            locked.save(update_fields=["nudge_sent_at"])
+            if has_pending and PushSubscription.objects.filter(
+                child=locked.child
+            ).exists():
+                should_notify = True
+                sent.append(locked)
+        if should_notify:
+            notify_assigned_tasks_nudge(locked)
+    return sent
 
 
 @transaction.atomic

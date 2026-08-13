@@ -30,6 +30,7 @@ from economy.forms import (
     PenaltyForm,
     RejectForm,
     RewardForm,
+    SaveAssignmentPresetForm,
     SavingsGoalForm,
     TaskDecisionCommentForm,
     TaskForm,
@@ -37,6 +38,7 @@ from economy.forms import (
 from economy.models import (
     AssignedTask,
     AssignedTaskBatch,
+    AssignmentPreset,
     BirthDateChangeRequest,
     ChildProfile,
     GoalCompletionRequest,
@@ -62,6 +64,7 @@ from economy.push import (
 )
 from economy.services import (
     add_saved_points,
+    apply_assignment_preset,
     approve_goal_completion,
     approve_proposal,
     approve_reward_request,
@@ -79,6 +82,7 @@ from economy.services import (
     reject_task_claim,
     request_task_revision,
     return_saved_points,
+    save_assignment_preset,
     update_savings_goal,
 )
 
@@ -611,6 +615,8 @@ def parent_assign_tasks(request, child_id):
             custom_title=form.cleaned_data["custom_title"],
             custom_points=form.cleaned_data["custom_points"],
             blocks_rewards=form.cleaned_data["blocks_rewards"],
+            task_notes=form.cleaned_data["task_notes"],
+            custom_note=form.cleaned_data["custom_note"],
         )
         notify_assigned_tasks(batch)
         messages.success(
@@ -620,6 +626,94 @@ def parent_assign_tasks(request, child_id):
         )
     except ValidationError as exc:
         messages.error(request, exc.messages[0])
+    return redirect("parent_dashboard")
+
+@parent_required
+@require_POST
+def parent_save_assignment_preset(request, child_id):
+    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    form = SaveAssignmentPresetForm(request.POST)
+    if not form.is_valid():
+        error = next(iter(form.errors.values()))[0]
+        messages.error(request, str(error))
+        return redirect("parent_dashboard")
+    try:
+        save_assignment_preset(
+            child=child,
+            actor=request.user,
+            name=form.cleaned_data["preset_name"],
+            tasks=list(form.cleaned_data["task_ids"]),
+            task_notes=form.cleaned_data["task_notes"],
+            custom_title=form.cleaned_data["custom_title"],
+            custom_points=form.cleaned_data["custom_points"],
+            custom_note=form.cleaned_data["custom_note"],
+            blocks_rewards=form.cleaned_data["blocks_rewards"],
+            cadence=form.cleaned_data["cadence"],
+            weekday_mask=form.cleaned_data["weekday_mask"],
+            weekend_mode=form.cleaned_data["weekend_mode"],
+            weekly_weekday=form.cleaned_data["weekly_weekday"],
+            run_at=form.cleaned_data["run_at"],
+        )
+        messages.success(request, _('Saved set "%(name)s".') % {
+            "name": form.cleaned_data["preset_name"],
+        })
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect("parent_dashboard")
+
+@parent_required
+@require_POST
+def parent_apply_assignment_preset(request, preset_id):
+    preset = get_object_or_404(
+        AssignmentPreset.objects.select_related("child"),
+        pk=preset_id,
+        child__is_active=True,
+    )
+    try:
+        batch = apply_assignment_preset(preset=preset, actor=request.user)
+        if batch is None:
+            messages.info(
+                request,
+                _("Nothing from this set is available to assign today."),
+            )
+        else:
+            notify_assigned_tasks(batch)
+            messages.success(
+                request,
+                _("Tasks were assigned to %(name)s for today.")
+                % {"name": preset.child.name},
+            )
+    except ValidationError as exc:
+        messages.error(request, exc.messages[0])
+    return redirect("parent_dashboard")
+
+@parent_required
+@require_POST
+def parent_toggle_assignment_preset(request, preset_id):
+    preset = get_object_or_404(
+        AssignmentPreset,
+        pk=preset_id,
+        child__is_active=True,
+    )
+    preset.is_paused = not preset.is_paused
+    preset.save(update_fields=["is_paused", "updated_at"])
+    if preset.is_paused:
+        messages.success(request, _('Paused "%(name)s".') % {"name": preset.name})
+    else:
+        messages.success(request, _('Resumed "%(name)s".') % {"name": preset.name})
+    return redirect("parent_dashboard")
+
+@parent_required
+@require_POST
+def parent_delete_assignment_preset(request, preset_id):
+    preset = get_object_or_404(
+        AssignmentPreset,
+        pk=preset_id,
+        child__is_active=True,
+    )
+    name = preset.name
+    preset.delete()
+    messages.success(request, _('Deleted "%(name)s".') % {"name": name})
     return redirect("parent_dashboard")
 
 @parent_required

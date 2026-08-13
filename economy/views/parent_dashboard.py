@@ -428,6 +428,11 @@ def parent_dashboard(request):
         child.lottery_feature_enabled = child_lottery["feature_enabled"]
         child.lottery_weekly_limit = child_lottery["weekly_limit"]
         child.assignment_unavailable_task_ids = unavailable_assignment_task_ids(child)
+        child.saved_assignment_presets = list(
+            child.assignment_presets.select_related("created_by")
+            .prefetch_related("items")
+            .all()
+        )
         child.assignment_batches = list(
             child.assigned_task_batches.filter(assigned_on__lte=today)
             .select_related("assigned_by")

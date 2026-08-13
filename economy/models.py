@@ -4,6 +4,7 @@ import hashlib
 import ipaddress
 import re
 import secrets
+from datetime import time as dt_time
 from datetime import timedelta
 from typing import ClassVar
 from urllib.parse import urlsplit
@@ -617,6 +618,8 @@ class AssignedTaskBatch(models.Model):
     blocks_rewards = models.BooleanField(default=False)
     assigned_on = models.DateField(default=timezone.localdate)
     created_at = models.DateTimeField(auto_now_add=True)
+    nudge_at = models.DateTimeField(null=True, blank=True)
+    nudge_sent_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering: ClassVar = ["-created_at", "-pk"]
@@ -644,6 +647,7 @@ class AssignedTask(models.Model):
     title_snapshot = models.CharField(max_length=120)
     icon_snapshot = models.CharField(max_length=32, default="🧹")
     reward_snapshot = models.PositiveIntegerField()
+    note_snapshot = models.CharField(max_length=200, blank=True, default="")
     status = models.CharField(
         max_length=16,
         choices=AssignedTaskStatus.choices,
@@ -675,6 +679,84 @@ class AssignedTask(models.Model):
             self.status == AssignedTaskStatus.PENDING
             and self.batch.assigned_on < timezone.localdate()
         )
+
+
+class AssignmentPresetCadence(models.TextChoices):
+    DAILY = "daily", _("Every day")
+    WEEKDAYS = "weekdays", _("Chosen weekdays")
+    WEEKEND = "weekend", _("Weekend")
+    WEEKLY = "weekly", _("Once a week")
+
+
+class AssignmentPresetWeekendMode(models.TextChoices):
+    SATURDAY = "sat", _("Saturday")
+    SUNDAY = "sun", _("Sunday")
+    BOTH = "both", _("Saturday and Sunday")
+
+
+def _default_preset_run_at():
+    return dt_time(7, 0)
+
+
+class AssignmentPreset(models.Model):
+    child = models.ForeignKey(
+        ChildProfile,
+        on_delete=models.CASCADE,
+        related_name="assignment_presets",
+    )
+    name = models.CharField(max_length=80)
+    blocks_rewards = models.BooleanField(default=False)
+    is_paused = models.BooleanField(default=False)
+    cadence = models.CharField(
+        max_length=16,
+        choices=AssignmentPresetCadence.choices,
+        default=AssignmentPresetCadence.DAILY,
+    )
+    weekday_mask = models.PositiveSmallIntegerField(default=0)
+    weekend_mode = models.CharField(
+        max_length=8,
+        choices=AssignmentPresetWeekendMode.choices,
+        default=AssignmentPresetWeekendMode.BOTH,
+        blank=True,
+    )
+    weekly_weekday = models.PositiveSmallIntegerField(null=True, blank=True)
+    run_at = models.TimeField(default=_default_preset_run_at)
+    last_auto_assigned_on = models.DateField(null=True, blank=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="assignment_presets",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering: ClassVar = ["name", "pk"]
+
+    def __str__(self):
+        return f"{self.child}: {self.name}"
+
+
+class AssignmentPresetItem(models.Model):
+    preset = models.ForeignKey(
+        AssignmentPreset,
+        on_delete=models.CASCADE,
+        related_name="items",
+    )
+    task = models.ForeignKey(
+        Task,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="assignment_preset_items",
+    )
+    custom_title = models.CharField(max_length=120, blank=True, default="")
+    custom_points = models.PositiveIntegerField(null=True, blank=True)
+    note = models.CharField(max_length=200, blank=True, default="")
+    sort_order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering: ClassVar = ["sort_order", "pk"]
 
 
 class TaskCompletion(models.Model):

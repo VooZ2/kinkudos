@@ -460,6 +460,9 @@ once per night and the reminder command every 30 minutes:
 */30 * * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py send_lottery_reminders
 ```
 
+`send_lottery_reminders` also sends soft assigned-task nudges when a batch is
+still pending three hours after assignment.
+
 It can also be run manually on any Docker Compose host:
 
 ```bash

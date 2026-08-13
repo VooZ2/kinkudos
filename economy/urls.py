@@ -43,6 +43,7 @@ from .views import (
     pair_device_via_link,
     parent_add_goal_points,
     parent_adjust_balance,
+    parent_apply_assignment_preset,
     parent_apply_penalty,
     parent_assign_child_penalty,
     parent_assign_penalty,
@@ -63,6 +64,7 @@ from .views import (
     parent_decide_proposal,
     parent_decide_reward,
     parent_decide_task,
+    parent_delete_assignment_preset,
     parent_delete_catalog,
     parent_delete_goal,
     parent_edit_catalog,
@@ -79,7 +81,9 @@ from .views import (
     parent_revoke_all_devices,
     parent_revoke_device,
     parent_run_backup,
+    parent_save_assignment_preset,
     parent_set_min_balance,
+    parent_toggle_assignment_preset,
     parent_toggle_catalog,
     parent_unlock_child,
     parent_update_family_preferences,
@@ -384,6 +388,26 @@ urlpatterns = [
         name="parent_assign_tasks",
     ),
     path(
+        "parents/children/<int:child_id>/assignment-presets/save/",
+        parent_save_assignment_preset,
+        name="parent_save_assignment_preset",
+    ),
+    path(
+        "parents/assignment-presets/<int:preset_id>/apply/",
+        parent_apply_assignment_preset,
+        name="parent_apply_assignment_preset",
+    ),
+    path(
+        "parents/assignment-presets/<int:preset_id>/toggle/",
+        parent_toggle_assignment_preset,
+        name="parent_toggle_assignment_preset",
+    ),
+    path(
+        "parents/assignment-presets/<int:preset_id>/delete/",
+        parent_delete_assignment_preset,
+        name="parent_delete_assignment_preset",
+    ),
+    path(
         "parents/assigned-tasks/<int:assigned_task_id>/cancel/",
         parent_cancel_assigned_task,
         name="parent_cancel_assigned_task",
@@ -669,6 +693,22 @@ urlpatterns += [
     path(
         "tevai/vaikas/<int:child_id>/paskirti-darbus/",
         _legacy_route(parent_assign_tasks, "parent_assign_tasks"),
+    ),
+    path(
+        "tevai/vaikas/<int:child_id>/issaugoti-darbu-rinkini/",
+        _legacy_route(parent_save_assignment_preset, "parent_save_assignment_preset"),
+    ),
+    path(
+        "tevai/darbu-rinkinys/<int:preset_id>/pritaikyti/",
+        _legacy_route(parent_apply_assignment_preset, "parent_apply_assignment_preset"),
+    ),
+    path(
+        "tevai/darbu-rinkinys/<int:preset_id>/pauze/",
+        _legacy_route(parent_toggle_assignment_preset, "parent_toggle_assignment_preset"),
+    ),
+    path(
+        "tevai/darbu-rinkinys/<int:preset_id>/istrinti/",
+        _legacy_route(parent_delete_assignment_preset, "parent_delete_assignment_preset"),
     ),
     path(
         "tevai/paskirtas-darbas/<int:assigned_task_id>/atsaukti/",

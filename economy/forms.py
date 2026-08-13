@@ -10,6 +10,8 @@ from django.utils.translation import gettext_lazy as _
 from pillow_heif import register_heif_opener
 
 from .models import (
+    AssignmentPresetCadence,
+    AssignmentPresetWeekendMode,
     BirthDateChangeRequest,
     ChildProfile,
     FamilySettings,
@@ -285,6 +287,9 @@ class AwardTasksForm(forms.Form):
         )
 
 
+ASSIGNED_TASK_NOTE_MAX_LENGTH = 200
+
+
 class AssignTasksForm(forms.Form):
     task_ids = forms.ModelMultipleChoiceField(
         label=_("Tasks"),
@@ -301,6 +306,11 @@ class AssignTasksForm(forms.Form):
         label=_("Points"),
         min_value=1,
         max_value=MAX_POINT_AMOUNT,
+        required=False,
+    )
+    custom_note = forms.CharField(
+        label=_("Note"),
+        max_length=ASSIGNED_TASK_NOTE_MAX_LENGTH,
         required=False,
     )
     blocks_rewards = forms.BooleanField(
@@ -328,6 +338,90 @@ class AssignTasksForm(forms.Form):
                 _("Choose at least one task or add a custom task.")
             )
         cleaned["custom_title"] = title
+        task_notes = {}
+        for task in cleaned.get("task_ids") or []:
+            raw = self.data.get(f"task_note_{task.pk}", "")
+            note = str(raw).strip()[:ASSIGNED_TASK_NOTE_MAX_LENGTH]
+            if note:
+                task_notes[task.pk] = note
+        cleaned["task_notes"] = task_notes
+        cleaned["custom_note"] = (cleaned.get("custom_note") or "").strip()[
+            :ASSIGNED_TASK_NOTE_MAX_LENGTH
+        ]
+        if not title:
+            cleaned["custom_note"] = ""
+        return cleaned
+
+
+WEEKDAY_CHOICES = (
+    ("0", _("Mon")),
+    ("1", _("Tue")),
+    ("2", _("Wed")),
+    ("3", _("Thu")),
+    ("4", _("Fri")),
+    ("5", _("Sat")),
+    ("6", _("Sun")),
+)
+
+
+class SaveAssignmentPresetForm(AssignTasksForm):
+    preset_name = forms.CharField(label=_("Set name"), max_length=80)
+    cadence = forms.ChoiceField(
+        label=_("Repeat"),
+        choices=AssignmentPresetCadence.choices,
+        initial=AssignmentPresetCadence.DAILY,
+    )
+    weekdays = forms.MultipleChoiceField(
+        label=_("Weekdays"),
+        choices=WEEKDAY_CHOICES,
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+    )
+    weekend_mode = forms.ChoiceField(
+        label=_("Weekend days"),
+        choices=AssignmentPresetWeekendMode.choices,
+        initial=AssignmentPresetWeekendMode.BOTH,
+        required=False,
+    )
+    weekly_weekday = forms.TypedChoiceField(
+        label=_("Weekday"),
+        choices=WEEKDAY_CHOICES,
+        coerce=int,
+        required=False,
+        empty_value=None,
+    )
+    run_at = forms.TimeField(
+        label=_("Send at"),
+        required=False,
+        input_formats=["%H:%M", "%H:%M:%S"],
+    )
+
+    def clean(self):
+        cleaned = super().clean()
+        cadence = cleaned.get("cadence") or AssignmentPresetCadence.DAILY
+        weekdays = cleaned.get("weekdays") or []
+        weekday_mask = 0
+        for value in weekdays:
+            weekday_mask |= 1 << int(value)
+        cleaned["weekday_mask"] = weekday_mask
+        if cadence == AssignmentPresetCadence.WEEKDAYS and not weekday_mask:
+            raise forms.ValidationError(_("Choose at least one weekday."))
+        if cadence == AssignmentPresetCadence.WEEKLY:
+            if cleaned.get("weekly_weekday") is None:
+                raise forms.ValidationError(_("Choose a weekday for the weekly set."))
+        else:
+            cleaned["weekly_weekday"] = None
+        if cadence != AssignmentPresetCadence.WEEKEND:
+            cleaned["weekend_mode"] = AssignmentPresetWeekendMode.BOTH
+        elif not cleaned.get("weekend_mode"):
+            cleaned["weekend_mode"] = AssignmentPresetWeekendMode.BOTH
+        if cleaned.get("run_at") is None:
+            from datetime import time as dt_time
+
+            cleaned["run_at"] = dt_time(7, 0)
+        cleaned["preset_name"] = (cleaned.get("preset_name") or "").strip()
+        if not cleaned["preset_name"]:
+            raise forms.ValidationError(_("Enter a name for this saved set."))
         return cleaned
 
 
