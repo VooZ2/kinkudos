@@ -81,7 +81,7 @@ accessible action names rather than relying on an icon:
 | Action | Where | Use it for |
 | --- | --- | --- |
 | **Add completed task** | Primary row (**Add**) | Award selected catalogue tasks immediately after checking the work. |
-| **Assign tasks for today** | Primary row (**Assign**) | Send catalogue tasks, plus one optional custom task, until midnight. |
+| **Assign tasks for today** | Primary row (**Assign**) | Send today’s catalogue tasks, one optional custom task, and optional notes. The dialog lists only today’s batches. |
 | **Adjust points** | **More** | Add or remove points with a required reason. |
 | **Assign penalty** | **More** | Apply agreed penalty templates and an optional shared reason. |
 | **Set credit** | **More** | Change this child’s lower spending limit. |
@@ -93,8 +93,14 @@ documentation does not depend on icon shapes.
 ## Assigned tasks for today
 
 An assigned task is available only on the day it is sent. At midnight in the
-server’s local time, unfinished tasks expire and remain understandable in
-History, but they no longer block the child.
+server’s local time, unfinished items expire: they leave the child’s list and
+stop blocking new reward requests. Incomplete assigned items do not create
+Activity History entries; only a completed assigned task appears in the
+ledger.
+
+The **Assign tasks for today** dialog lists only today’s batches. Unfinished
+work from a previous day is not kept there. Optional notes and saved
+assignment sets are documented in [Assign tasks for today](assign-tasks-today.md).
 
 You can choose **Block reward purchases until these tasks are finished**. This
 blocks only new reward requests from that child; it does not cancel a request

@@ -97,8 +97,10 @@ per its configured period (`economy/images.py`).
 send one child a list of catalog tasks plus one optional custom task for the
 current calendar day. The batch stores the assigning parent, assignment date,
 and whether new reward requests are blocked while any item is waiting. Each
-item snapshots its title, icon, and point value so later catalog edits do not
-change work that was already sent.
+item snapshots its title, icon, point value, and optional parent note so later
+catalog edits do not change work that was already sent. Notes are entered only
+in the Assign dialog (not in Manage → Tasks) and are shown clearly on the
+child’s assigned-task row in the active theme.
 
 Assigned items have `pending`, `completed`, or `cancelled` status. A child
 completes each item separately and receives its points immediately in the
@@ -113,10 +115,41 @@ available on the next day.
 
 Pending items are active only when `AssignedTaskBatch.assigned_on` equals the
 server-local calendar date. At midnight they disappear from the child's
-priority list, stop blocking new reward requests, and remain visible as
-expired in parent history. Blocking applies only to new reward purchases:
+priority list and stop blocking new reward requests. The Assign dialog lists
+only the current day's batches so a parent can cancel remaining items;
+completed assigned tasks remain in the activity ledger. Blocking applies only
+to new reward purchases:
 existing pending reward requests can still be approved or rejected, and all
 other child actions remain available.
+
+The child dashboard also shows a compact “waiting for parents” strip under the
+greeting when anything still needs a parent decision (task claim, revision to
+fix, reward request, goal completion, proposal, or birthday change). It lists
+up to three chips that scroll to the existing card and is hidden when empty.
+Pending task or reward chips are omitted when the linked catalogue entry is
+inactive or soft-deleted, so chips never point at missing cards.
+
+Each batch schedules a soft child nudge about three hours after creation
+(`nudge_at`). If that would fall after local midnight — when the batch would
+already expire — the nudge is clamped to the same local evening (23:45) so a
+late assignment can still remind before the day ends. The existing 30-minute
+lottery-reminder command also sends due assigned-task nudges at most once per
+batch when the local assignment date is still today and at least one item
+remains pending. There is no automatic penalty if the work is unfinished.
+
+**AssignmentPreset** / **AssignmentPresetItem** — a parent may save the current
+Assign-dialog selection (catalog tasks, optional custom task, optional notes,
+and reward-block flag) as a named set for one child. Cadence options are every
+day, chosen weekdays, weekend (Saturday, Sunday, or both), or once a week, with
+a local send time (default 07:00). Paused sets stay available for manual Apply
+but are skipped by auto-assign. Applying a set (manually or automatically)
+reuses `assign_tasks`, skips unavailable catalog tasks, and skips a custom
+title that is already pending or completed for that child today so repeat Apply
+cannot duplicate custom-task credits. A successful Apply also stamps
+`last_auto_assigned_on` for the local day so the timer will not send the same
+set again that day. An empty Apply (nothing left to assign) leaves that stamp
+unchanged so a later timer tick can retry if work becomes available. Soft
+limit: five saved sets per child.
 
 **PenaltyTemplate** — penalty catalog entry storing a negative amount
 directly (enforced at the field level). Applying it to a child requires a
@@ -219,7 +252,8 @@ a small allowlist; `next` is retained only as a validated internal relative URL,
 and unknown or unsafe values are discarded.
 
 The systemd deployment installs a daily maintenance timer and a separate
-30-minute lottery-reminder timer. Generic deployments must schedule the
+30-minute lottery-reminder timer. That reminder command also delivers soft
+assigned-task nudges when due. Generic deployments must schedule the
 corresponding Django commands themselves.
 
 ## Parent interface palette
@@ -380,7 +414,8 @@ Current released version: the latest versioned entry in `CHANGELOG.md`
 created at install time, never shipped in the repo.
 
 ## Deliberately out of scope (for now)
-Recurring tasks · achievements/badges · levels/streaks/leaderboards ·
+Achievements/badges · levels/streaks/leaderboards ·
 Telegram integration · CSV/Excel export · multi-family hosting in one
-instance. This is a scope note, not a version plan — update it when any
+instance · holiday/school calendar modes for assignment presets.
+This is a scope note, not a version plan — update it when any
 item ships.

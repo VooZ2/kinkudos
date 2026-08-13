@@ -225,6 +225,7 @@ def child_dashboard(request):
             "reward_id", flat=True
         )
     )
+    waiting_for_parents = _waiting_for_parents_items(child)
     return render(
         request,
         "economy/child_dashboard.html",
@@ -235,6 +236,7 @@ def child_dashboard(request):
             "rewards": rewards,
             "pending_task_ids": pending_task_ids,
             "pending_reward_ids": pending_reward_ids,
+            "waiting_for_parents": waiting_for_parents,
             "pending_requests": child.reward_requests.filter(status=RequestStatus.PENDING),
             "revision_claims": child.task_claims.filter(
                 status=RequestStatus.NEEDS_CHANGES
@@ -275,6 +277,84 @@ def child_dashboard(request):
             ).exclude(pk=child.pk).exists(),
         },
     )
+
+
+def _waiting_for_parents_items(child, *, limit=3):
+    """Compact chips for items still waiting on a parent decision."""
+    items = []
+    for claim in child.task_claims.filter(
+        status=RequestStatus.NEEDS_CHANGES
+    ).select_related("task").order_by("submitted_at", "pk"):
+        items.append(
+            {
+                "kind": "revision",
+                "kind_label": _("Needs a fix"),
+                "title": claim.task_title,
+                "href": f"#revision-claim-{claim.pk}",
+            }
+        )
+    for claim in child.task_claims.filter(
+        status=RequestStatus.PENDING
+    ).select_related("task").order_by("submitted_at", "pk"):
+        task = claim.task
+        if task is None or not task.is_active or task.is_deleted:
+            continue
+        items.append(
+            {
+                "kind": "task",
+                "kind_label": _("Task"),
+                "title": claim.task_title,
+                "href": f"#task-card-{task.pk}",
+            }
+        )
+    for reward_request in child.reward_requests.filter(
+        status=RequestStatus.PENDING
+    ).select_related("reward").order_by("submitted_at", "pk"):
+        reward = reward_request.reward
+        if reward is None or not reward.is_active or reward.is_deleted:
+            continue
+        items.append(
+            {
+                "kind": "reward",
+                "kind_label": _("Reward"),
+                "title": reward_request.reward_title,
+                "href": f"#reward-card-{reward.pk}",
+            }
+        )
+    for completion in GoalCompletionRequest.objects.filter(
+        goal__child=child,
+        status=RequestStatus.PENDING,
+        goal__status=GoalStatus.ACTIVE,
+    ).select_related("goal").order_by("requested_at", "pk"):
+        items.append(
+            {
+                "kind": "goal",
+                "kind_label": _("Goal"),
+                "title": completion.goal.title,
+                "href": f"#goal-card-{completion.goal_id}",
+            }
+        )
+    for proposal in child.proposals.filter(
+        status=RequestStatus.PENDING
+    ).order_by("created_at", "pk"):
+        items.append(
+            {
+                "kind": "proposal",
+                "kind_label": _("Idea"),
+                "title": proposal.title,
+                "href": "#pasiulymai",
+            }
+        )
+    if child.birth_date_change_requests.filter(status=RequestStatus.PENDING).exists():
+        items.append(
+            {
+                "kind": "birthday",
+                "kind_label": _("Birthday"),
+                "title": _("Birthday change"),
+                "href": "#gimtadienis",
+            }
+        )
+    return items[:limit]
 
 @never_cache
 @child_required

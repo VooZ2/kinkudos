@@ -11,6 +11,49 @@ schema.
 
 - Kol kas nieko.
 
+## [26.7.0] - 2026-08-13
+
+### Pridėta
+
+- „Paskirti darbus šiandien“ gali turėti pasirenkamą pastabą prie kiekvieno
+  katalogo ar nestandartinio darbo; pastaba išsaugoma paskyrime ir aiškiai
+  rodoma vaiko paskirto darbo eilutėje.
+- Tėvai gali išsaugoti dabartinį paskyrimo pasirinkimą kaip pavadintą rinkinį
+  (iki penkių vienam vaikui) su kasdienio, pasirinktų savaitės dienų,
+  savaitgalio arba kartą per savaitę ritmu ir vietiniu siuntimo laiku, o
+  vėliau jį pritaikyti, pristabdyti, atnaujinti ar ištrinti.
+- Suėję išsaugoti rinkiniai automatiškai paskiriami per esamą 30 minučių
+  priminimų laikmatį šeimos laiko juostoje, praleidžiant nepasiekiamus
+  katalogo darbus ir tos pačios dienos nestandartinius pavadinimus, kurie
+  dubliuotų kreditus.
+- Maždaug po trijų valandų siunčiamas švelnus vaiko „Web Push“ priminimas,
+  kol toje pačioje dienoje dar yra nebaigtų paskirtų darbų; vėlai vakare
+  paskyrimai prispaudžiami prie tos pačios vietinės vakaro, kad priminimas
+  dar spėtų išeiti prieš vidurnaktį.
+- Vaiko pradžios lange po sveikinimo rodoma kompaktiška juosta „laukia
+  tėvų“ su iki trijų lustų dar laukiantiems tėvų sprendimo dalykams.
+
+### Pakeista
+
+- Paskyrimo dialoge rodomi tik šiandienos paskyrimų rinkiniai, todėl
+  istorija lieka apie tai, ką dar galima atšaukti šiandien.
+- Esamas 30 minučių priminimų `systemd` laikmatis ir komanda taip pat siunčia
+  suėjusius paskirtų darbų priminimus ir paleidžia suėjusius darbų rinkinius;
+  diegimo dokumentacija aprašo tą bendrą darbą.
+- Oficiali dokumentacija ir ekrano nuotraukos apima paskyrimo pastabas,
+  išsaugotus rinkinius, švelnų priminimą ir „laukia tėvų“ juostą.
+
+### Pataisyta
+
+- Tuščias išsaugoto rinkinio pritaikymas nebesudegina dienos žymos, todėl
+  vėlesnis laikmačio ciklas gali bandyti iš naujo, kai atsiranda ką
+  paskirti.
+- Enter „Išsaugoti kaip rinkinį“ laukuose nebesiunčia „Siųsti darbus“ iš
+  bendros paskyrimo formos.
+- „Laukia tėvų“ lustai praleidžia laukiančius darbų ar prizų prašymus, kurių
+  katalogo įrašas neaktyvus ar ištrintas, todėl lustai niekada nenurodo į
+  neegzistuojančias korteles.
+
 ## [26.6.8] - 2026-08-12
 
 ### Pakeista

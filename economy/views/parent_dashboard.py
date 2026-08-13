@@ -428,13 +428,14 @@ def parent_dashboard(request):
         child.lottery_feature_enabled = child_lottery["feature_enabled"]
         child.lottery_weekly_limit = child_lottery["weekly_limit"]
         child.assignment_unavailable_task_ids = unavailable_assignment_task_ids(child)
+        child.saved_assignment_presets = list(child.assignment_presets.all())
         child.assignment_batches = list(
-            child.assigned_task_batches.filter(assigned_on__lte=today)
+            child.assigned_task_batches.filter(assigned_on=today)
             .select_related("assigned_by")
-            .prefetch_related("items__task", "items__cancelled_by")[:10]
+            .prefetch_related("items__task", "items__cancelled_by")
         )
         for batch in child.assignment_batches:
-            batch.has_pending_items = batch.assigned_on == today and any(
+            batch.has_pending_items = any(
                 item.status == AssignedTaskStatus.PENDING
                 for item in batch.items.all()
             )

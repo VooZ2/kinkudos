@@ -162,3 +162,76 @@ class ChildExperienceTests(TestCase):
         self.assertEqual(changed, [])
         self.assertEqual(self.child.theme, original_theme)
         self.assertIsNone(self.child.theme_randomized_on)
+
+    def test_waiting_for_parents_strip_hidden_when_empty(self):
+        self.claim.child_acknowledged_at = timezone.now()
+        self.claim.save(update_fields=["child_acknowledged_at"])
+        self.sign_in_child()
+        response = self.client.get(reverse("child_dashboard"))
+        self.assertNotContains(response, "waiting-parents-strip", html=False)
+
+    def test_waiting_for_parents_strip_shows_chips_with_targets(self):
+        self.claim.child_acknowledged_at = timezone.now()
+        self.claim.save(update_fields=["child_acknowledged_at"])
+        pending_task = Task.objects.create(title="Wash dishes", reward=8, icon="🍽️")
+        TaskClaim.objects.create(
+            child=self.child,
+            task=pending_task,
+            task_title=pending_task.title,
+            reward_snapshot=pending_task.reward,
+            status=RequestStatus.PENDING,
+        )
+        reward = Reward.objects.create(title="Ice cream", cost=15, icon="🍦")
+        RewardRequest.objects.create(
+            child=self.child,
+            reward=reward,
+            reward_title=reward.title,
+            cost_snapshot=reward.cost,
+            status=RequestStatus.PENDING,
+        )
+        self.sign_in_child()
+        response = self.client.get(reverse("child_dashboard"))
+        self.assertContains(response, "waiting-parents-strip", html=False)
+        self.assertContains(response, "Waiting for parents")
+        self.assertContains(response, f'href="#task-card-{pending_task.pk}"', html=False)
+        self.assertContains(response, f'href="#reward-card-{reward.pk}"', html=False)
+        self.assertContains(response, "Wash dishes")
+        self.assertContains(response, "Ice cream")
+
+    def test_waiting_for_parents_strip_skips_inactive_catalog_targets(self):
+        self.claim.child_acknowledged_at = timezone.now()
+        self.claim.save(update_fields=["child_acknowledged_at"])
+        pending_task = Task.objects.create(title="Wash dishes", reward=8, icon="🍽️")
+        TaskClaim.objects.create(
+            child=self.child,
+            task=pending_task,
+            task_title=pending_task.title,
+            reward_snapshot=pending_task.reward,
+            status=RequestStatus.PENDING,
+        )
+        reward = Reward.objects.create(title="Ice cream", cost=15, icon="🍦")
+        RewardRequest.objects.create(
+            child=self.child,
+            reward=reward,
+            reward_title=reward.title,
+            cost_snapshot=reward.cost,
+            status=RequestStatus.PENDING,
+        )
+        pending_task.is_active = False
+        pending_task.save(update_fields=["is_active"])
+        reward.is_deleted = True
+        reward.save(update_fields=["is_deleted"])
+
+        self.sign_in_child()
+        response = self.client.get(reverse("child_dashboard"))
+        self.assertNotContains(response, "waiting-parents-strip", html=False)
+        self.assertNotContains(
+            response,
+            f'href="#task-card-{pending_task.pk}"',
+            html=False,
+        )
+        self.assertNotContains(
+            response,
+            f'href="#reward-card-{reward.pk}"',
+            html=False,
+        )

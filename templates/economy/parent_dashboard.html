@@ -151,17 +151,41 @@
     <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
     <h2>{% translate "Assign tasks for today" %}</h2><p class="dialog-context">{{ child.name }}</p>
     <p>{% translate "The tasks expire at midnight. Completed tasks award points immediately." %}</p>
+    {% if child.saved_assignment_presets %}
+      <div class="assignment-presets">
+        <h3>{% translate "Saved sets" %}</h3>
+        {% for preset in child.saved_assignment_presets %}
+          <div class="assignment-preset-row{% if preset.is_paused %} is-paused{% endif %}">
+            <div class="assignment-preset-copy">
+              <strong>{{ preset.name }}</strong>
+              <small>
+                {{ preset.get_cadence_display }} · {{ preset.run_at|time:"H:i" }}
+                {% if preset.is_paused %} · {% translate "Paused" %}{% endif %}
+              </small>
+            </div>
+            <div class="assignment-preset-actions">
+              <form method="post" action="{% url 'parent_apply_assignment_preset' preset.pk %}">{% csrf_token %}<button class="button button-secondary compact-action-button" type="submit">{% translate "Apply" %}</button></form>
+              <form method="post" action="{% url 'parent_toggle_assignment_preset' preset.pk %}">{% csrf_token %}<button class="button button-secondary compact-action-button" type="submit">{% if preset.is_paused %}{% translate "Resume" %}{% else %}{% translate "Pause" %}{% endif %}</button></form>
+              <form method="post" action="{% url 'parent_delete_assignment_preset' preset.pk %}">{% csrf_token %}<button class="button button-danger compact-action-button" type="submit" data-confirm="{% translate "Delete this saved set?" %}">{% translate "Delete" %}</button></form>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
     <form method="post" action="{% url 'parent_assign_tasks' child.pk %}" class="stack-form">
       {% csrf_token %}
       <fieldset class="choice-fieldset">
         <legend>{% translate "Choose tasks" %}:</legend>
         <div class="choice-list">
           {% for task in active_tasks %}
-            <label class="choice-option{% if task.pk in child.assignment_unavailable_task_ids %} choice-option-disabled{% endif %}">
+            <label class="choice-option choice-option-assign{% if task.pk in child.assignment_unavailable_task_ids %} choice-option-disabled{% endif %}">
               <input type="checkbox" name="task_ids" value="{{ task.pk }}"{% if task.pk in child.assignment_unavailable_task_ids %} disabled{% endif %}>
               <span class="choice-icon">{{ task.icon|icon_symbol }}</span>
               <span class="choice-title">{{ task.title }}{% if task.pk in child.assignment_unavailable_task_ids %}<small>{% translate "Unavailable today" %}</small>{% endif %}</span>
               <strong class="choice-value">+{{ task.reward }} {{ task.reward|currency_unit:"neutral" }}</strong>
+              {% if task.pk not in child.assignment_unavailable_task_ids %}
+              <input class="field-control assigned-task-note-input" name="task_note_{{ task.pk }}" type="text" maxlength="200" placeholder="{% translate 'Note (optional)' %}" aria-label="{% translate 'Note (optional)' %}">
+              {% endif %}
             </label>
           {% empty %}
             <p class="empty-state">{% translate "There are no active tasks." %}</p>
@@ -172,16 +196,73 @@
         <h3>{% translate "Custom task (optional)" %}</h3>
         <label>{% translate "Task name" %}:<input class="field-control" name="custom_title" maxlength="120"></label>
         <label>{% translate "Points" %}:<input class="field-control" name="custom_points" type="number" min="1" max="99999" maxlength="5" inputmode="numeric"></label>
+        <label>{% translate "Note (optional)" %}:<input class="field-control" name="custom_note" maxlength="200"></label>
       </div>
       <label class="checkbox-field">
         <input name="blocks_rewards" type="checkbox">
         <span>{% translate "Block reward purchases until these tasks are finished" %}</span>
       </label>
       <button class="button button-primary" type="submit">{% translate "Send tasks" %}</button>
+      <div class="assignment-preset-save" data-assignment-preset-save>
+        <h3>{% translate "Save as a set" %}</h3>
+        <p>{% translate "Keep the tasks above. Choose when to send them automatically." %}</p>
+        <label>{% translate "Set name" %}:<input class="field-control" name="preset_name" maxlength="80"></label>
+        <fieldset class="preset-cadence-options">
+          <legend>{% translate "How often?" %}</legend>
+          <p class="help-text">{% translate "Only the options for the chosen schedule are used." %}</p>
+          <label class="checkbox-field preset-cadence-choice">
+            <input type="radio" name="cadence" value="daily" checked data-preset-cadence>
+            <span>{% translate "Every day" %}</span>
+          </label>
+          <label class="checkbox-field preset-cadence-choice">
+            <input type="radio" name="cadence" value="weekdays" data-preset-cadence>
+            <span>{% translate "Chosen weekdays" %}</span>
+          </label>
+          <div class="preset-cadence-panel" data-preset-cadence-panel="weekdays" hidden>
+            <div class="preset-weekday-list" role="group" aria-label="{% translate 'Weekdays' %}">
+              <label class="checkbox-field"><input type="checkbox" name="weekdays" value="0"><span>{% translate "Mon" %}</span></label>
+              <label class="checkbox-field"><input type="checkbox" name="weekdays" value="1"><span>{% translate "Tue" %}</span></label>
+              <label class="checkbox-field"><input type="checkbox" name="weekdays" value="2"><span>{% translate "Wed" %}</span></label>
+              <label class="checkbox-field"><input type="checkbox" name="weekdays" value="3"><span>{% translate "Thu" %}</span></label>
+              <label class="checkbox-field"><input type="checkbox" name="weekdays" value="4"><span>{% translate "Fri" %}</span></label>
+              <label class="checkbox-field"><input type="checkbox" name="weekdays" value="5"><span>{% translate "Sat" %}</span></label>
+              <label class="checkbox-field"><input type="checkbox" name="weekdays" value="6"><span>{% translate "Sun" %}</span></label>
+            </div>
+          </div>
+          <label class="checkbox-field preset-cadence-choice">
+            <input type="radio" name="cadence" value="weekend" data-preset-cadence>
+            <span>{% translate "Weekend" %}</span>
+          </label>
+          <div class="preset-cadence-panel" data-preset-cadence-panel="weekend" hidden>
+            <label class="checkbox-field"><input type="radio" name="weekend_mode" value="both" checked><span>{% translate "Saturday and Sunday" %}</span></label>
+            <label class="checkbox-field"><input type="radio" name="weekend_mode" value="sat"><span>{% translate "Saturday" %}</span></label>
+            <label class="checkbox-field"><input type="radio" name="weekend_mode" value="sun"><span>{% translate "Sunday" %}</span></label>
+          </div>
+          <label class="checkbox-field preset-cadence-choice">
+            <input type="radio" name="cadence" value="weekly" data-preset-cadence>
+            <span>{% translate "Once a week" %}</span>
+          </label>
+          <div class="preset-cadence-panel" data-preset-cadence-panel="weekly" hidden>
+            <label>{% translate "Weekday" %}:
+              <select class="field-control" name="weekly_weekday">
+                <option value="0">{% translate "Mon" %}</option>
+                <option value="1">{% translate "Tue" %}</option>
+                <option value="2">{% translate "Wed" %}</option>
+                <option value="3">{% translate "Thu" %}</option>
+                <option value="4">{% translate "Fri" %}</option>
+                <option value="5">{% translate "Sat" %}</option>
+                <option value="6">{% translate "Sun" %}</option>
+              </select>
+            </label>
+          </div>
+        </fieldset>
+        <label>{% translate "Send at" %}:<input class="field-control" name="run_at" type="time" value="07:00"></label>
+        <button class="button button-secondary" type="submit" formaction="{% url 'parent_save_assignment_preset' child.pk %}" data-save-assignment-preset>{% translate "Save set" %}</button>
+      </div>
     </form>
     {% if child.assignment_batches %}
       <div class="assigned-task-history">
-        <h3>{% translate "Recent assigned tasks" %}</h3>
+        <h3>{% translate "Today's assigned tasks" %}</h3>
         {% for batch in child.assignment_batches %}
           <section class="assigned-task-batch">
             <div class="list-row">
@@ -192,11 +273,13 @@
             </div>
             {% for item in batch.items.all %}
               <div class="assigned-task-history-row">
-                <span>{{ item.icon_snapshot|icon_symbol }} {{ item.title_snapshot }}</span>
+                <span>
+                  {{ item.icon_snapshot|icon_symbol }} {{ item.title_snapshot }}
+                  {% if item.note_snapshot %}<small class="assigned-task-history-note">{{ item.note_snapshot }}</small>{% endif %}
+                </span>
                 <span>
                   {% if item.status == "completed" %}{% translate "Completed" %}
                   {% elif item.status == "cancelled" %}{% translate "Cancelled" %}
-                  {% elif item.is_expired %}{% translate "Expired" %}
                   {% else %}
                     {% translate "Waiting" %}
                     <form method="post" action="{% url 'parent_cancel_assigned_task' item.pk %}">{% csrf_token %}<button class="decision-icon-button decision-reject compact-decision-button" type="submit" aria-label="{% translate "Cancel" %}" title="{% translate "Cancel" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form>

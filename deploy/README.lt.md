@@ -250,7 +250,7 @@ env` leidimo atnaujintojui ir dar kartą kiekvienai vėlesnei Compose komandai,
 kuri iš naujo parenka ar iš naujo sukuria atvaizdą, pavyzdžiui:
 
 ```bash
-candidate_tag=26.6.8-rc.<short-sha>
+candidate_tag=26.7.0-rc.<short-sha>
 sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
   KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
 sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
@@ -258,9 +258,9 @@ sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
 ```
 
 Šie perrašymai tyčia neišsaugomi produkciniame `.env`. Tai nėra įprastas
-stabilaus leidimo naudotojo atnaujinimo kelias. Atnaujindami stabilų `26.6.8`,
+stabilaus leidimo naudotojo atnaujinimo kelias. Atnaujindami stabilų `26.7.0`,
 naudokite aukščiau pateiktą procedūrą be abiejų perrašymų: Compose numatytosios
-reikšmės yra gamybinis `vooz2/kinkudos` paketas ir `26.6.8`.
+reikšmės yra gamybinis `vooz2/kinkudos` paketas ir `26.7.0`.
 
 Atnaujintojas patikrina kontrolinę sumą ir leidimo duomenis, parsiunčia bei
 išbando paskelbtą atvaizdą, patikrina serverio katalogų nuosavybę, sukuria
@@ -416,12 +416,24 @@ ekrano nuotraukų ar kitų šeimos duomenų. Pasirinktinės vidinės ekrano
 nuotraukos saugomos privačiai WebP formatu; pasibaigus nustatytam terminui
 automatiškai šalinamos tik išspręstų atsiliepimų nuotraukos.
 
-## Periodinė priežiūra ir loterijos priminimai
+## Periodinė priežiūra, loterijos priminimai ir darbų rinkiniai
 
 KinKudos darbų nuotraukas ir išspręstų atsiliepimų ekrano nuotraukas saugo
-tėvų nustatymuose pasirinktą laiką. Sistema taip pat kas 30 minučių patikrina,
-ar jau reikia siųsti savaitinį loterijos priminimą. `systemd` naudojančiame
-Docker serveryje po diegimo arba atnaujinimo įjunkite abu laikmačius:
+tėvų nustatymuose pasirinktą laiką. Kas 30 minučių ta pati priminimų komanda
+taip pat:
+
+- tikrina, ar jau reikia siųsti savaitinį loterijos priminimą;
+- siunčia švelnius priminimus apie nebaigtus paskirtus darbus maždaug po
+  trijų valandų (vis dar tą pačią vietinę kalendorinę dieną);
+- paleidžia suėjusius išsaugotus darbų rinkinius (šeimos laiko juosta, nuo
+  kiekvieno rinkinio siuntimo laiko, kartą per atitinkančią dieną, kai yra ką
+  paskirti).
+
+Neišjunkite šio laikmačio kaip „tik loterijos“ darbo — juo naudojasi ir
+paskirtų darbų priminimai, ir automatinių rinkinių siuntimas.
+
+`systemd` naudojančiame Docker serveryje po diegimo arba atnaujinimo įjunkite
+abu laikmačius:
 
 ```bash
 cd /kelias/iki/kinkudos/deploy

@@ -148,6 +148,18 @@ def notify_assigned_tasks(batch):
     )
 
 
+def notify_assigned_tasks_nudge(batch):
+    _send(
+        {
+            "title": str(theme_text(batch.child.theme, "assigned_nudge_title")),
+            "body": str(theme_text(batch.child.theme, "assigned_nudge_help")),
+            "url": _child_dashboard_url("paskirti-darbai"),
+            "tag": f"assigned-tasks-nudge-{batch.pk}",
+        },
+        _child_subscriptions(batch.child),
+    )
+
+
 def notify_task_revision(claim):
     body = claim.task_title
     if claim.revision_note:

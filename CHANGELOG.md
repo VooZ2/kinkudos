@@ -9,6 +9,44 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Nothing yet.
 
+## [26.7.0] - 2026-08-13
+
+### Added
+
+- Assign tasks for today can include an optional note per selected catalog
+  task or custom task; the note is snapshotted on the assigned item and shown
+  clearly on the child's assigned-task row.
+- Parents can save the current Assign selection as a named set (up to five per
+  child) with Every day, Chosen weekdays, Weekend, or Once a week cadence and
+  a local send time, then Apply, Pause, Resume, or Delete it.
+- Due saved sets auto-assign through the existing 30-minute reminder timer in
+  the family timezone, skipping unavailable catalog tasks and same-day custom
+  titles that would duplicate credits.
+- Soft child Web Push nudges about three hours after an assignment batch while
+  work is still pending that day; late assignments clamp to the same local
+  evening so the nudge can still send before midnight.
+- The child dashboard shows a compact “waiting for parents” strip under the
+  greeting with up to three chips for items still awaiting a parent decision.
+
+### Changed
+
+- The Assign dialog lists only today's assigned batches so the in-dialog
+  history stays focused on what can still be cancelled today.
+- The existing 30-minute reminder systemd timer and command also deliver due
+  assigned-task nudges and run due assignment presets; deployment docs
+  describe that shared job.
+- Official documentation and screenshots cover assignment notes, saved sets,
+  the soft nudge, and the waiting-for-parents strip.
+
+### Fixed
+
+- An empty Apply of a saved set no longer burns the day stamp, so a later
+  timer tick can retry when work becomes available.
+- Enter in the Save-as-a-set fields no longer submits Send tasks from the
+  shared Assign form.
+- Waiting-for-parents chips omit pending task or reward items whose catalogue
+  entry is inactive or soft-deleted, so chips never point at missing cards.
+
 ## [26.6.8] - 2026-08-12
 
 ### Changed

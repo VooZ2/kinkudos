@@ -1621,3 +1621,37 @@ async function loadBackupStatus() {
 }
 
 loadBackupStatus();
+
+function syncAssignmentPresetCadence(root) {
+  const selected = root.querySelector("[data-preset-cadence]:checked");
+  if (!selected) return;
+  const cadence = selected.value;
+  root.querySelectorAll("[data-preset-cadence-panel]").forEach((panel) => {
+    const active = panel.dataset.presetCadencePanel === cadence;
+    panel.hidden = !active;
+    panel.querySelectorAll("input, select, textarea, button").forEach((field) => {
+      field.disabled = !active;
+    });
+  });
+}
+
+document.querySelectorAll("[data-assignment-preset-save]").forEach((root) => {
+  const radios = root.querySelectorAll("[data-preset-cadence]");
+  if (radios.length) {
+    syncAssignmentPresetCadence(root);
+    radios.forEach((radio) => {
+      radio.addEventListener("change", () => syncAssignmentPresetCadence(root));
+    });
+  }
+  const saveButton = root.querySelector("[data-save-assignment-preset]");
+  root.querySelectorAll("input, select").forEach((field) => {
+    field.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") return;
+      // Keep Enter inside Save-as-a-set from submitting Send tasks (first
+      // type=submit in the shared Assign form).
+      event.preventDefault();
+      if (field instanceof HTMLInputElement && field.type === "radio") return;
+      saveButton?.click();
+    });
+  });
+});
