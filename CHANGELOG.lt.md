@@ -11,6 +11,19 @@ schema.
 
 - Kol kas nieko.
 
+## [26.7.2] - 2026-08-13
+
+### Pakeista
+
+- Vaiko pradžios lange darbų ir prizų taškai lieka toje pačioje eilutėje
+  kaip pavadinimas. Paskirto darbo tėvų pastaba ir toliau rodoma po
+  pavadinimu.
+
+### Pataisyta
+
+- Vaiko skyrių meniu po pasisveikinimo nuvažiavimo limpa prie ekrano
+  viršaus, o ne kabo ant turinio žemiau.
+
 ## [26.7.1] - 2026-08-13
 
 ### Pridėta

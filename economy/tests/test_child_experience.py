@@ -1,4 +1,5 @@
 from datetime import date
+from pathlib import Path
 
 from django.conf import settings
 from django.test import TestCase, override_settings
@@ -234,4 +235,36 @@ class ChildExperienceTests(TestCase):
             response,
             f'href="#reward-card-{reward.pk}"',
             html=False,
+        )
+
+    def test_dashboard_tabbar_sticks_to_viewport_top(self):
+        stylesheet = Path(__file__).resolve().parents[2] / "static" / "css" / "app.css"
+        css = stylesheet.read_text(encoding="utf-8")
+        self.assertIn(
+            ".tabbar { display: flex; gap: 6px; overflow-x: auto; position: sticky; top: calc(10px + env(safe-area-inset-top, 0px));",
+            css,
+        )
+        self.assertNotIn("position: sticky; top: 82px;", css)
+        self.assertIn(".assigned-task-row .amount { grid-column: 2; grid-row: 1; white-space: nowrap; }", css)
+        self.assertIn(".item-card .amount { flex: 0 0 auto; white-space: nowrap; }", css)
+
+    def test_dashboard_item_card_keeps_readable_title_beside_points(self):
+        stylesheet = Path(__file__).resolve().parents[2] / "static" / "css" / "app.css"
+        css = stylesheet.read_text(encoding="utf-8")
+        self.assertIn(
+            ".item-grid { grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }",
+            css,
+        )
+        self.assertIn(
+            ".item-card h3 { margin: 0; flex: 1 1 8ch; min-width: 8ch; overflow-wrap: break-word; }",
+            css,
+        )
+        self.assertNotIn(".item-card h3 { margin: 0; overflow-wrap: anywhere; }", css)
+        self.assertIn(
+            ".item-card > div { display: flex; flex-wrap: wrap; align-items: baseline;",
+            css,
+        )
+        self.assertIn(
+            ".item-card > button,\n.item-card > form.workflow-card-action { grid-column: 1 / -1; justify-self: end; }",
+            css,
         )

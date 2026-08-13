@@ -9,6 +9,18 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Nothing yet.
 
+## [26.7.2] - 2026-08-13
+
+### Changed
+
+- Child dashboard task and reward points stay on the same row as the title.
+  Assigned-task parent notes remain underneath.
+
+### Fixed
+
+- The child dashboard section menu sticks near the top of the screen after
+  the greeting scrolls away, instead of hovering over the content below.
+
 ## [26.7.1] - 2026-08-13
 
 ### Added
