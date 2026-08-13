@@ -223,6 +223,7 @@ select.field-control, .stack-form select {
 .message-success { border-left: 5px solid var(--success); }
 .message-error { border-left: 5px solid var(--danger); }
 .profile-grid, .item-grid, .stats-grid, .approval-grid, .catalog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 18px; }
+.item-grid { grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
 .profile-select-heading { margin-bottom: 28px; }
 .profile-card { padding: 28px; text-align: center; position: relative; overflow: hidden; }
 .profile-card-last-badge { position: absolute; top: 12px; right: 12px; padding: 5px 9px; border-radius: 99px; font-size: .7rem; font-weight: 780; background: var(--surface-solid); }
@@ -343,14 +344,18 @@ select.field-control, .stack-form select {
 .tabbar a:hover { background: color-mix(in srgb, var(--primary) 12%, transparent); }
 .content-section { scroll-margin-top: calc(90px + env(safe-area-inset-top, 0px)); padding: 30px 0; }
 .section-heading h2, .parent-section-heading h1 { margin: 0 0 18px; font-size: clamp(1.7rem, 4vw, 2.5rem); line-height: 1.1; letter-spacing: -.04em; }
-.item-card { padding: 20px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; }
+.item-card { padding: 20px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; container-type: inline-size; }
 .item-card > button,
-.item-card > form.workflow-card-action { grid-column: 3; grid-row: 1; justify-self: end; }
+.item-card > form.workflow-card-action { grid-column: 1 / -1; justify-self: end; }
+@container (min-width: 380px) {
+  .item-card > button,
+  .item-card > form.workflow-card-action { grid-column: 3; grid-row: 1; }
+}
 .item-card .status-pill { grid-column: 1 / -1; }
 .reward-card > form { margin: 0; }
 .item-icon { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 17px; color: var(--primary); background: color-mix(in srgb, var(--primary) 12%, var(--surface-solid)); font-size: 1.6rem; }
 .approval-card h3 { margin: 0 0 5px; }
-.item-card h3 { margin: 0; overflow-wrap: anywhere; }
+.item-card h3 { margin: 0; flex: 1 1 8ch; min-width: 8ch; overflow-wrap: break-word; }
 .item-card p { margin: 0; }
 .amount { font-variant-numeric: tabular-nums; font-weight: 850; color: var(--danger); }
 .amount.positive { color: var(--success); }
@@ -976,8 +981,8 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
 .photo-bonus { color: var(--success) !important; font-weight: 800; }
 .empty-state { max-width: 100%; margin: 0; overflow-wrap: anywhere; }
 .item-card { min-width: 0; overflow: hidden; }
-.item-card > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 10px; min-width: 0; }
-.item-card .amount { white-space: nowrap; }
+.item-card > div { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 10px; row-gap: 2px; min-width: 0; }
+.item-card .amount { flex: 0 0 auto; white-space: nowrap; }
 .amount.negative { color: var(--danger); }
 .parent-panel .subsection-heading { margin-top: clamp(38px, 6vw, 64px); }
 .sound-toggle { display: inline-grid; flex: 0 0 auto; place-items: center; width: 44px; height: 44px; min-width: 44px; min-height: 44px; padding: 0; border: 1px solid var(--border); border-radius: 99px; color: var(--muted); background: var(--surface-solid); cursor: pointer; transition: transform .14s, background .14s, box-shadow .14s, color .14s; }
