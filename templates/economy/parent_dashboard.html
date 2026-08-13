@@ -23,21 +23,23 @@
 <div class="parent-shell" data-parent-shell>
   <nav class="parent-navigation" aria-label="{% translate "Parent area sections" %}">
     <a class="parent-nav-item is-active" href="#parent-home" data-parent-nav="home">
-      <svg class="action-icon" aria-hidden="true"><use href="#icon-house"></use></svg>
-      <span>{% translate "Home" %}</span>
-      <strong id="parent-home-count-badge" class="nav-count" data-parent-home-badge {% if not pending_count %}hidden{% endif %} aria-label="{{ pending_count }} {% if pending_count == 1 %}{% translate 'pending request' %}{% else %}{% translate 'pending requests' %}{% endif %}">{{ pending_count }}</strong>
+      <span class="parent-nav-icon">
+        <svg class="action-icon" aria-hidden="true"><use href="#icon-house"></use></svg>
+        <strong id="parent-home-count-badge" class="nav-count" data-parent-home-badge {% if not pending_count %}hidden{% endif %} aria-label="{{ pending_count }} {% if pending_count == 1 %}{% translate 'pending request' %}{% else %}{% translate 'pending requests' %}{% endif %}">{{ pending_count }}</strong>
+      </span>
+      <span class="parent-nav-label">{% translate "Home" %}</span>
     </a>
     <a class="parent-nav-item" href="#parent-catalogs" data-parent-nav="catalogs">
-      <svg class="action-icon" aria-hidden="true"><use href="#icon-table-list"></use></svg>
-      <span>{% translate "Manage" %}</span>
+      <span class="parent-nav-icon"><svg class="action-icon" aria-hidden="true"><use href="#icon-table-list"></use></svg></span>
+      <span class="parent-nav-label">{% translate "Manage" %}</span>
     </a>
     <a class="parent-nav-item" href="#parent-history" data-parent-nav="history">
-      <svg class="action-icon" aria-hidden="true"><use href="#icon-clock-rotate-left"></use></svg>
-      <span>{% translate "History" %}</span>
+      <span class="parent-nav-icon"><svg class="action-icon" aria-hidden="true"><use href="#icon-clock-rotate-left"></use></svg></span>
+      <span class="parent-nav-label">{% translate "History" %}</span>
     </a>
     <a class="parent-nav-item" href="#parent-settings" data-parent-nav="settings">
-      <svg class="action-icon" aria-hidden="true"><use href="#icon-gear"></use></svg>
-      <span>{% translate "Settings" %}</span>
+      <span class="parent-nav-icon"><svg class="action-icon" aria-hidden="true"><use href="#icon-gear"></use></svg></span>
+      <span class="parent-nav-label">{% translate "Settings" %}</span>
     </a>
   </nav>
   <div id="parent-refresh-status" class="parent-refresh-status" data-parent-refresh-status aria-live="polite" aria-atomic="true">
@@ -84,7 +86,7 @@
         </p>
       {% endif %}
     </div>
-    {% if child.goal_summary %}<a class="parent-goal-summary" href="#parent-catalogs" data-parent-goal-target="{{ child.goal_summary.pk }}"><span class="goal-summary-title"><span>{{ child.goal_summary.icon|icon_symbol }}</span> {{ child.goal_summary.title }}</span><span class="goal-summary-progress">{{ child.goal_summary.progress_amount }}/{{ child.goal_summary.target_amount }} {% translate "Points" %}</span><span class="progress"><span style="width: {{ child.goal_summary.progress_percent }}%"></span></span><small class="goal-summary-status">{% if child.goal_summary.has_pending_completion %}{% translate "Reached goal" %}{% elif child.goal_summary.mode == "available" %}{% translate "Current goal" %}{% else %}{% translate "Saved" %}{% endif %} <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></small>{% if child.additional_goal_count %}<small>+{{ child.additional_goal_count }}</small>{% endif %}</a>{% endif %}
+    {% if child.goal_summary %}<a class="parent-goal-summary" href="#parent-catalogs" data-parent-goal-target="{{ child.goal_summary.pk }}"><span class="goal-summary-title"><span>{{ child.goal_summary.icon|icon_symbol }}</span> {{ child.goal_summary.title }}</span><span class="goal-summary-progress">{{ child.goal_summary.progress_amount }}/{{ child.goal_summary.target_amount }} {% translate "Points" %}</span><span class="progress"><span style="width: {{ child.goal_summary.progress_percent }}%"></span></span><small class="goal-summary-status">{% if child.goal_summary.has_pending_completion %}{% translate "Reached goal" %}{% elif child.goal_summary.mode == "available" %}{% translate "Current goal" %}{% else %}{% translate "Saved" %}{% endif %}</small>{% if child.additional_goal_count %}<small>+{{ child.additional_goal_count }}</small>{% endif %}</a>{% endif %}
     <div class="child-quick-actions" aria-label="{{ child.name }} {% translate "actions" %}">
       <button class="quick-action" type="button" data-open-dialog="task-{{ child.pk }}" aria-label="{% translate "Add completed task" %}" title="{% translate "Add completed task" %}">
         <svg class="action-icon" aria-hidden="true"><use href="#icon-clipboard-check"></use></svg>
@@ -265,26 +267,30 @@
         <h3>{% translate "Today's assigned tasks" %}</h3>
         {% for batch in child.assignment_batches %}
           <section class="assigned-task-batch">
-            <div class="list-row">
-              <span><strong>{{ batch.assigned_on|date:"Y-m-d" }}</strong> · {{ batch.assigned_by|user_display_name }}{% if batch.blocks_rewards %} · {% translate "Purchases blocked" %}{% endif %}</span>
+            <div class="list-row assigned-task-batch-header">
+              <span class="assigned-task-batch-copy"><strong>{{ batch.assigned_on|date:"Y-m-d" }}</strong> · {{ batch.assigned_by|user_display_name }}{% if batch.blocks_rewards %} · {% translate "Purchases blocked" %}{% endif %}</span>
               {% if batch.has_pending_items %}
-                <form method="post" action="{% url 'parent_cancel_assigned_task_batch' batch.pk %}">{% csrf_token %}<button class="decision-icon-button decision-reject compact-decision-button" type="submit" aria-label="{% translate "Cancel remaining" %}" title="{% translate "Cancel remaining" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form>
+                <form class="assigned-task-cancel" method="post" action="{% url 'parent_cancel_assigned_task_batch' batch.pk %}">{% csrf_token %}<button class="decision-icon-button decision-reject compact-decision-button" type="submit" aria-label="{% translate "Cancel remaining" %}" title="{% translate "Cancel remaining" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form>
+              {% else %}
+                <span class="assigned-task-cancel" aria-hidden="true"></span>
               {% endif %}
             </div>
             {% for item in batch.items.all %}
               <div class="assigned-task-history-row">
-                <span>
+                <span class="assigned-task-history-copy">
                   {{ item.icon_snapshot|icon_symbol }} {{ item.title_snapshot }}
                   {% if item.note_snapshot %}<small class="assigned-task-history-note">{{ item.note_snapshot }}</small>{% endif %}
                 </span>
-                <span>
+                <span class="assigned-task-history-status">
                   {% if item.status == "completed" %}{% translate "Completed" %}
                   {% elif item.status == "cancelled" %}{% translate "Cancelled" %}
-                  {% else %}
-                    {% translate "Waiting" %}
-                    <form method="post" action="{% url 'parent_cancel_assigned_task' item.pk %}">{% csrf_token %}<button class="decision-icon-button decision-reject compact-decision-button" type="submit" aria-label="{% translate "Cancel" %}" title="{% translate "Cancel" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form>
-                  {% endif %}
+                  {% else %}{% translate "Waiting" %}{% endif %}
                 </span>
+                {% if item.status != "completed" and item.status != "cancelled" %}
+                  <form class="assigned-task-cancel" method="post" action="{% url 'parent_cancel_assigned_task' item.pk %}">{% csrf_token %}<button class="decision-icon-button decision-reject compact-decision-button" type="submit" aria-label="{% translate "Cancel" %}" title="{% translate "Cancel" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form>
+                {% else %}
+                  <span class="assigned-task-cancel" aria-hidden="true"></span>
+                {% endif %}
               </div>
             {% endfor %}
           </section>
@@ -486,9 +492,9 @@
       <div class="goal-manage-list">
         {% for goal in goals %}
         <article id="goal-item-{{ goal.pk }}" class="goal-manage-row" data-goal-child="{{ goal.child.pk }}" data-goal-status="{{ goal.status }}">
-          <div class="goal-manage-heading"><span class="catalog-emoji">{{ goal.icon|icon_symbol }}</span><div><strong>{{ goal.title }}</strong><small>{{ goal.child.name }}</small></div></div>
+          <div class="goal-manage-heading"><span class="catalog-emoji">{{ goal.icon|icon_symbol }}</span><div><strong>{{ goal.title }}</strong><small>{{ goal.child.name }}</small></div>{% if goal.status != "completed" and goal.status != "cancelled" and not goal.has_pending_completion %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% endif %}</div>
           <div class="goal-manage-progress"><span>{{ goal.progress_amount }}/{{ goal.target_amount }} {% translate "Points" %}</span><div class="progress"><span style="width: {{ goal.progress_percent }}%"></span></div></div>
-          <div class="goal-manage-status">{% if goal.status == "completed" %}<span class="status-pill">{% translate "Completed" %}</span>{% elif goal.status == "cancelled" %}<span class="status-pill">{% translate "Cancelled" %}</span>{% elif goal.has_pending_completion %}<span class="status-pill">{% translate "Reached goal" %}</span>{% elif goal.mode == "available" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Uses available points" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% elif goal.mode == "saved" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-piggy-bank"></use></svg>{% translate "Saved separately" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% else %}<svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Choose mode" %}<button class="info-button" type="button" data-open-dialog="goal-parent-info-{{ goal.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button>{% endif %}</div>
+          <div class="goal-manage-status">{% if goal.status == "completed" %}<span class="status-pill">{% translate "Completed" %}</span>{% elif goal.status == "cancelled" %}<span class="status-pill">{% translate "Cancelled" %}</span>{% elif goal.has_pending_completion %}<span class="status-pill">{% translate "Reached goal" %}</span>{% elif goal.mode == "available" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Uses available points" %}{% elif goal.mode == "saved" %}<svg class="action-icon" aria-hidden="true"><use href="#icon-piggy-bank"></use></svg>{% translate "Saved separately" %}{% else %}<svg class="action-icon" aria-hidden="true"><use href="#icon-bullseye"></use></svg>{% translate "Choose mode" %}{% endif %}</div>
           <div class="goal-manage-actions"><button class="icon-button" type="button" data-toggle-edit="goal-{{ goal.pk }}" aria-expanded="false" aria-label="{% translate 'Edit goal' %}" title="{% translate 'Edit goal' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-pen-to-square"></use></svg></button>{% if goal.mode == "saved" %}<button class="icon-button" type="button" data-open-dialog="goal-parent-add-{{ goal.pk }}" aria-label="{% translate 'Add points' %}" title="{% translate 'Add points' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-plus"></use></svg></button><dialog id="goal-parent-add-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Add points" %}</h2><p>{% translate "Move available points into this goal." %}</p><form method="post" action="{% url 'parent_add_goal_points' goal.pk %}" class="stack-form">{% csrf_token %}<label>{% translate "Points to add" %}<input class="field-control" name="amount" type="number" min="1" required></label><div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><button class="button button-primary" type="submit">{% translate "Add" %}</button></div></form></dialog>{% if goal.saved_amount %}<button class="icon-button" type="button" data-open-dialog="goal-return-{{ goal.pk }}" aria-label="{% translate 'Move saved points back' %}" title="{% translate 'Move saved points back' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-right-left"></use></svg></button><dialog id="goal-return-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button><h2>{% translate "Move saved points back" %}</h2><p>{% translate "These points will become available for rewards again." %}</p><form method="post" action="{% url 'parent_return_goal_points' goal.pk %}" class="stack-form">{% csrf_token %}<div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><button class="button button-primary" type="submit">{% translate "Move points back" %}</button></div></form></dialog>{% endif %}{% endif %}{% if not goal.saved_amount %}<form method="post" action="{% url 'parent_close_goal' goal.pk %}">{% csrf_token %}<button class="icon-button danger" type="submit" data-confirm="{% translate 'Close this goal?' %}" aria-label="{% translate 'Close goal' %}" title="{% translate 'Close goal' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-box-archive"></use></svg></button></form>{% else %}<button class="icon-button" type="button" disabled aria-label="{% translate 'Return saved points before closing' %}" title="{% translate 'Return saved points before closing' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-box-archive"></use></svg></button>{% endif %}</div>
           <form id="edit-goal-{{ goal.pk }}" method="post" action="{% url 'parent_edit_goal' goal.pk %}" class="catalog-edit-form stack-form" hidden>{% csrf_token %}<label>{% translate "Goal title" %}<input class="field-control" name="title" value="{{ goal.title }}" maxlength="120" required></label><label>{% translate "Target amount" %}<input class="field-control" name="target_amount" type="number" min="1" value="{{ goal.target_amount }}" required></label><label>{% translate "Icon" %}<input class="field-control emoji-input" name="icon" value="{{ goal.icon|icon_symbol }}" list="emoji-options" maxlength="8" required></label><div class="form-actions catalog-edit-actions"><button class="button button-primary" type="submit">{% translate "Save" %}</button><button class="button button-secondary" type="button" data-cancel-edit>{% translate "Cancel" %}</button></div><button class="button button-danger catalog-delete-action" type="button" data-open-dialog="delete-goal-{{ goal.pk }}">{% translate "Delete" %}</button></form>
           <dialog id="delete-goal-{{ goal.pk }}" class="action-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>{% if goal.saved_amount %}<h2>{% translate "Delete goal and return saved points?" %}</h2><p>{% blocktranslate with amount=goal.saved_amount child_name=goal.child.name %}{{ amount }} saved points will be returned to {{ child_name }}’s available balance before this goal is removed.{% endblocktranslate %}</p>{% else %}<h2>{% translate "Delete goal?" %}</h2><p>{% translate "This goal will be removed. This action cannot be undone." %}</p>{% endif %}<form method="post" action="{% url 'parent_delete_goal' goal.pk %}">{% csrf_token %}<div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>{% translate "Cancel" %}</button><button class="button button-danger" type="submit"><svg class="action-icon" aria-hidden="true"><use href="#icon-trash-can"></use></svg>{% if goal.saved_amount %}{% translate "Return points and delete" %}{% else %}{% translate "Delete goal" %}{% endif %}</button></div></form></dialog>
@@ -1012,6 +1018,9 @@
             {% if entry.rejection_reason %}<small class="history-rejection-reason">{% translate "Reason" %}: {{ entry.rejection_reason }}</small>{% endif %}
           </div>
           <span class="history-row-actions">
+            {% if entry.child_note %}
+              <button class="history-note-button" type="button" data-open-dialog="history-child-note-{{ entry.pk }}" aria-label="{% translate "Open child's note" %}" title="{% translate "Open child's note" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-comment"></use></svg></button>
+            {% endif %}
             {% if entry.has_evidence %}
               <button class="history-photo-button" type="button" data-evidence-full="{% url 'task_evidence' entry.pk 'full' %}" aria-label="{% translate "Open task photo" %}" title="{% translate "Open task photo" %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></button>
             {% elif entry.evidence_purged_at %}
@@ -1023,6 +1032,13 @@
             </span>
             {% include "economy/includes/history_kind_icon.html" %}
           </span>
+          {% if entry.child_note %}
+            <dialog id="history-child-note-{{ entry.pk }}" class="action-dialog">
+              <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg></button>
+              <h2>{{ entry.task_title }}</h2>
+              <p>{{ entry.child_note }}</p>
+            </dialog>
+          {% endif %}
         {% elif entry.history_type == "reward_decision" %}
           <div>
             <strong>{{ entry.child.name }} · {{ entry.reward_title }}</strong>
@@ -1050,6 +1066,9 @@
             {% if entry.history_actor and entry.history_actor_label %}<small class="history-actor">{{ entry.history_actor_label }}: {{ entry.history_actor|user_display_name }}</small>{% endif %}
           </div>
           <span class="history-row-actions">
+            {% if entry.task_claim and entry.task_claim.child_note %}
+              <button class="history-note-button" type="button" data-open-dialog="history-child-note-{{ entry.task_claim.pk }}" aria-label="{% translate "Open child's note" %}" title="{% translate "Open child's note" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-comment"></use></svg></button>
+            {% endif %}
             {% if entry.task_claim and entry.task_claim.has_evidence %}
               <button class="history-photo-button" type="button" data-evidence-full="{% url 'task_evidence' entry.task_claim.pk 'full' %}" aria-label="{% translate "Open task photo" %}" title="{% translate "Open task photo" %}"><svg class="action-icon"><use href="#icon-camera"></use></svg></button>
             {% elif entry.task_claim and entry.task_claim.evidence_purged_at %}
@@ -1064,6 +1083,13 @@
             <span class="amount {% if entry.delta > 0 %}positive{% endif %}">{{ entry.delta|stringformat:"+d" }} {{ entry.delta|currency_unit:"neutral" }}</span>
             {% include "economy/includes/history_kind_icon.html" %}
           </span>
+          {% if entry.task_claim and entry.task_claim.child_note %}
+            <dialog id="history-child-note-{{ entry.task_claim.pk }}" class="action-dialog">
+              <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg></button>
+              <h2>{{ entry.task_claim.task_title }}</h2>
+              <p>{{ entry.task_claim.child_note }}</p>
+            </dialog>
+          {% endif %}
         {% endif %}
       </div>
       {% empty %}<div class="history-empty-state"><p class="empty-state">{% if history_filters_active %}{% translate "No activity matches these filters." %}{% else %}{% translate "The activity history is empty." %}{% endif %}</p></div>{% endfor %}

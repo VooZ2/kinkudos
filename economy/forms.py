@@ -288,6 +288,7 @@ class AwardTasksForm(forms.Form):
 
 
 ASSIGNED_TASK_NOTE_MAX_LENGTH = 200
+CHILD_CLAIM_NOTE_MAX_LENGTH = 200
 
 
 class AssignTasksForm(forms.Form):
@@ -563,6 +564,21 @@ class TaskEvidenceForm(StyledFormMixin, forms.Form):
         ),
     )
     remove_evidence = forms.BooleanField(required=False, widget=forms.HiddenInput)
+    child_note = forms.CharField(
+        label=_("What I did"),
+        max_length=CHILD_CLAIM_NOTE_MAX_LENGTH,
+        required=False,
+        widget=forms.Textarea(
+            attrs={
+                "class": "field-control child-claim-note",
+                "rows": 2,
+                "maxlength": str(CHILD_CLAIM_NOTE_MAX_LENGTH),
+                "enterkeyhint": "done",
+                "autocomplete": "off",
+                "placeholder": _("Optional — a short note for your parents"),
+            }
+        ),
+    )
 
     def clean_proof(self):
         proof = self.cleaned_data.get("proof")
@@ -574,6 +590,9 @@ class TaskEvidenceForm(StyledFormMixin, forms.Form):
         if image_format not in {"JPEG", "PNG", "WEBP", "HEIF", "HEIC"}:
             raise forms.ValidationError(_("Use a JPEG, PNG, WebP, HEIC, or HEIF image."))
         return proof
+
+    def clean_child_note(self):
+        return (self.cleaned_data.get("child_note") or "").strip()[:CHILD_CLAIM_NOTE_MAX_LENGTH]
 
 
 class FeedbackReportForm(StyledFormMixin, forms.ModelForm):

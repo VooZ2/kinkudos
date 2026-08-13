@@ -838,7 +838,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.7.0")
+        self.assertContains(response, "v26.7.1")
         self.assertContains(response, f'href="{reverse("changelog")}"', html=False)
         self.assertContains(response, "taškai")
         self.assertContains(response, "Kreditas -100")
@@ -923,7 +923,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
         self.assertContains(response, 'class="footer-product">KinKudos · ', html=False)
-        self.assertContains(response, "v26.7.0")
+        self.assertContains(response, "v26.7.1")
         self.assertContains(response, "Dokumentacija")
         self.assertContains(response, "https://docs.kinkudos.app/index.lt/")
         self.assertContains(response, "https://github.com/VooZ2/kinkudos")
@@ -1224,6 +1224,19 @@ class AccessAndWorkflowTests(TestCase):
             re.findall(r'<use href="#(icon-[^"]+)"', nav_html),
             ["icon-house", "icon-table-list", "icon-clock-rotate-left", "icon-gear"],
         )
+        home_item = nav_html[nav_html.index('data-parent-nav="home"'):]
+        home_item = home_item[: home_item.index("</a>")]
+        icon_wrap = home_item[home_item.index('class="parent-nav-icon"'):]
+        self.assertIn("nav-count", icon_wrap)
+        self.assertIn("parent-nav-label", home_item)
+        self.assertLess(home_item.index("parent-nav-icon"), home_item.index("parent-nav-label"))
+        stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn(".parent-nav-icon { display: contents; }", stylesheet)
+        self.assertIn(".parent-nav-item .action-icon { justify-self: center; width: 22px; height: 22px; order: 1; }", stylesheet)
+        self.assertIn(".parent-nav-item .nav-count { order: 3; justify-self: end; width: max-content; }", stylesheet)
+        self.assertIn("parent-nav-label { min-width: 0; justify-self: start; line-height: 1.2; text-align: left; order: 2; }", stylesheet)
+        self.assertIn(".pending-request-meta { display: flex; flex-wrap: wrap; align-items: baseline;", stylesheet)
+        self.assertNotIn("left: calc(50% + 7px)", stylesheet)
         manage_html = html[html.index('<nav class="manage-tabs"'):]
         manage_html = manage_html[:manage_html.index('</nav>')]
         self.assertEqual(
@@ -1323,10 +1336,10 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.7.0")
+        self.assertContains(response, "v26.7.1")
         self.assertContains(response, "Dabartinė versija")
         current_release = response.context["releases"][0]
-        self.assertEqual(current_release["version"], "26.7.0")
+        self.assertEqual(current_release["version"], "26.7.1")
         self.assertEqual(len(response.context["releases"]), 5)
         self.assertEqual(response.context["release_page"].paginator.per_page, 5)
         current_copy = " ".join(current_release["new"] + current_release["fixed"]).lower()
@@ -1334,7 +1347,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotIn("demo", current_copy)
         next_page = self.client.get(reverse("changelog"), {"page": 2})
         self.assertEqual(next_page.status_code, 200)
-        self.assertNotContains(next_page, "<h2>v26.7.0</h2>", html=False)
+        self.assertNotContains(next_page, "<h2>v26.7.1</h2>", html=False)
         self.assertContains(next_page, "Pakeitimų istorijos puslapiai")
 
     def test_parent_can_create_another_parent_account(self):
@@ -1661,6 +1674,43 @@ class AccessAndWorkflowTests(TestCase):
         self.assertIn(".child-balance-row { display: flex; align-items: baseline; justify-content: flex-start;", stylesheet)
         self.assertIn(".child-metadata-row {", stylesheet)
 
+    def test_parent_goal_summary_has_no_decorative_info_icon(self):
+        template = Path(settings.BASE_DIR, "templates/economy/parent_dashboard.html").read_text(
+            encoding="utf-8"
+        )
+        start = template.index('class="parent-goal-summary"')
+        end = template.index("</a>", start)
+        summary = template[start:end]
+        self.assertIn("goal-summary-status", summary)
+        self.assertNotIn("icon-circle-info", summary)
+        self.assertNotIn("info-button", summary)
+
+        catalog = Path(settings.BASE_DIR, "locale/lt/messages.json").read_text(encoding="utf-8")
+        self.assertIn('"Saved": "Sukaupta"', catalog)
+        self.assertIn('"saved": "sukaupta"', catalog)
+
+    def test_control_hover_uses_icon_lift_fill_and_text_lift(self):
+        css = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn("--control-hover-lift: translateY(-1px);", css)
+        self.assertIn(".button:hover, .button:focus-visible { transform: var(--control-hover-lift); }", css)
+        self.assertIn(".text-button:hover, .text-button:focus-visible { transform: var(--control-hover-lift); }", css)
+        self.assertNotIn("filter: brightness(1.04);", css)
+        icon_hover = css[
+            css.index(".icon-button:hover, .icon-button:focus-visible {") :
+            css.index("}", css.index(".icon-button:hover, .icon-button:focus-visible {"))
+        ]
+        self.assertIn("var(--control-hover-lift)", icon_hover)
+        self.assertIn("var(--icon-hover-fill)", icon_hover)
+        self.assertIn("var(--icon-hover-shadow)", icon_hover)
+        self.assertNotIn("border-color", icon_hover)
+        self.assertNotIn("0 0 0 3px", icon_hover)
+        pending_hover = css[
+            css.index(".decision-icon-button:hover, .decision-icon-button:focus-visible {") :
+            css.index("}", css.index(".decision-icon-button:hover, .decision-icon-button:focus-visible {"))
+        ]
+        self.assertIn("var(--control-hover-lift)", pending_hover)
+        self.assertIn("var(--icon-hover-fill)", pending_hover)
+
     def test_pending_requests_are_one_shared_chronological_list(self):
         older = self.child_one.task_claims.create(
             task=self.task,
@@ -1955,10 +2005,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.7.0',
+            '/static/icons/favicon-32.png?v=26.7.1',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.7.0")
-        self.assertContains(home, "/static/js/app.js?v=26.7.0")
+        self.assertContains(home, "/static/css/app.css?v=26.7.1")
+        self.assertContains(home, "/static/js/app.js?v=26.7.1")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -1966,11 +2016,11 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.7.0",
+            "/static/icons/icon-192.png?v=26.7.1",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.7.0")
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.7.1")
         self.assertContains(worker, 'self.addEventListener("push"', html=False)
         self.assertContains(worker, 'self.addEventListener("notificationclick"', html=False)
         self.assertNotContains(worker, 'self.addEventListener("fetch"', html=False)

@@ -1,4 +1,5 @@
 from datetime import date, datetime, time, timedelta
+from pathlib import Path
 from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
@@ -37,6 +38,7 @@ from economy.services import (
     save_assignment_preset,
     send_due_assigned_task_nudges,
     submit_reward_request,
+    submit_task,
     unavailable_assignment_task_ids,
 )
 
@@ -166,7 +168,10 @@ class AssignedTaskServiceTests(TestCase):
 
     def test_completion_awards_immediately_and_only_once(self):
         item = self.create_batch().items.get(task=self.task)
-        entry = complete_assigned_task(assigned_task=item, child=self.child)
+        with patch("economy.push.notify_assigned_task_completed") as notify:
+            entry = complete_assigned_task(assigned_task=item, child=self.child)
+            notify.assert_called_once()
+            self.assertEqual(notify.call_args.args[0].pk, item.pk)
         self.child.refresh_from_db()
         item.refresh_from_db()
         self.assertEqual(self.child.balance, 20)
@@ -248,6 +253,28 @@ class AssignedTaskServiceTests(TestCase):
             reward_snapshot=self.task.reward,
         )
         approve_task_claim(claim=claim, actor=self.parent)
+        self.assertIn(self.task.pk, unavailable_assignment_task_ids(self.child))
+
+    def test_approve_after_assigned_completion_still_credits(self):
+        batch = self.create_batch(blocks_rewards=False)
+        complete_assigned_task(
+            assigned_task=batch.items.get(task=self.task),
+            child=self.child,
+        )
+        self.child.refresh_from_db()
+        balance_after_assigned = self.child.balance
+        claim = submit_task(child=self.child, task=self.task)
+        approve_task_claim(claim=claim, actor=self.parent)
+        self.child.refresh_from_db()
+        self.assertEqual(self.child.balance, balance_after_assigned + self.task.reward)
+        self.assertEqual(
+            TaskCompletion.objects.filter(
+                child=self.child,
+                task=self.task,
+                completed_on=timezone.localdate(),
+            ).count(),
+            1,
+        )
         self.assertIn(self.task.pk, unavailable_assignment_task_ids(self.child))
 
     def test_cancelled_catalog_task_can_be_assigned_again_same_day(self):
@@ -513,6 +540,11 @@ class AssignedTaskViewTests(TestCase):
         self.client.login(username="parent", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, "Cancel remaining")
+        self.assertContains(response, 'class="assigned-task-cancel"', html=False)
+        stylesheet = Path(__file__).resolve().parents[2] / "static" / "css" / "app.css"
+        css = stylesheet.read_text(encoding="utf-8")
+        self.assertIn("grid-template-columns: minmax(0, 1fr) auto 44px;", css)
+        self.assertIn(".assigned-task-cancel {", css)
         complete_assigned_task(
             assigned_task=batch.items.get(),
             child=self.child,

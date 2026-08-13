@@ -196,6 +196,9 @@ msgstr "Leisti šiame įrenginyje"
 msgid "Allowed IP addresses and networks"
 msgstr "Leidžiami IP adresai ir tinklai"
 
+msgid "An assigned task was completed"
+msgstr "Paskirtas darbas atliktas"
+
 msgid "Android phone"
 msgstr "Android telefonas"
 
@@ -1810,6 +1813,9 @@ msgstr "Naudojami tik pasirinkto grafiko laukai."
 msgid "Open"
 msgstr "Neužbaigtas"
 
+msgid "Open child's note"
+msgstr "Atidaryti vaiko pastabą"
+
 msgid "Open feedback"
 msgstr "Neišspręsti atsiliepimai"
 
@@ -1836,6 +1842,9 @@ msgstr "Pasirenkami IP ribojimai suteikia papildomą apsaugos sluoksnį virš į
 
 msgid "Optional for providers that do not require a region."
 msgstr "Nebūtina tiekėjams, kuriems regionas nereikalingas."
+
+msgid "Optional — a short note for your parents"
+msgstr "Nebūtina — trumpa pastaba tėvams"
 
 msgid "Order"
 msgstr "Užsisakyti"
@@ -2384,7 +2393,7 @@ msgid "Save this recovery code in your password manager. It will not be shown ag
 msgstr "Išsaugokite šį atkūrimo kodą slaptažodžių tvarkyklėje. Jis daugiau nebus rodomas."
 
 msgid "Saved"
-msgstr "Išsaugota"
+msgstr "Sukaupta"
 
 msgid "Saved %(amount)s points for %(title)s"
 msgstr "Tikslui „%(title)s“ išsaugota taškų: %(amount)s"
@@ -3268,6 +3277,9 @@ msgstr "Sveiki, %(family_name)s"
 msgid "Welcome, %(name)s!"
 msgstr "Labas, %(name)s!"
 
+msgid "What I did"
+msgstr "Ką aš padariau"
+
 msgid "What happened"
 msgstr "Kas nutiko"
 
@@ -3300,6 +3312,9 @@ msgstr "Užrašyti į burtų knygą"
 
 msgid "You can add a photo of the finished task."
 msgstr "Gali pridėti atlikto darbo nuotrauką."
+
+msgid "You can add a photo or a short note about what you did."
+msgstr "Gali pridėti nuotrauką arba trumpą pastabą, ką padarei."
 
 msgid "You can add at most %(amount)s points to reach this goal."
 msgstr "Šiam tikslui pasiekti galite pridėti ne daugiau kaip %(amount)s taškų."
@@ -3473,7 +3488,7 @@ msgid "photo bonus"
 msgstr "priedas už nuotrauką"
 
 msgid "saved"
-msgstr "išsaugota"
+msgstr "sukaupta"
 
 msgid "this device"
 msgstr "šis įrenginys"

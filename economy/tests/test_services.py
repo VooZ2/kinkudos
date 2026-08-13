@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.utils import timezone
 
 from economy.models import (
     ChildProfile,
@@ -14,6 +15,7 @@ from economy.models import (
     Reward,
     SavingsGoal,
     Task,
+    TaskCompletion,
 )
 from economy.services import (
     approve_proposal,
@@ -24,6 +26,8 @@ from economy.services import (
     reject_proposal,
     reject_reward_request,
     reject_task_claim,
+    request_task_revision,
+    resubmit_task_claim,
     submit_reward_request,
     submit_task,
 )
@@ -82,6 +86,29 @@ class EconomyServiceTests(TestCase):
         )
         self.assertEqual(first.balance_after, 50)
 
+    def test_same_catalog_task_can_be_approved_multiple_times_per_day(self):
+        first = submit_task(child=self.child, task=self.task)
+        approve_task_claim(claim=first, actor=self.parent)
+        second = submit_task(child=self.child, task=self.task)
+        approve_task_claim(claim=second, actor=self.parent)
+        self.child.refresh_from_db()
+        self.assertEqual(self.child.balance, 100)
+        self.assertEqual(
+            LedgerEntry.objects.filter(
+                child=self.child,
+                kind=LedgerKind.TASK,
+            ).count(),
+            2,
+        )
+        self.assertEqual(
+            TaskCompletion.objects.filter(
+                child=self.child,
+                task=self.task,
+                completed_on=timezone.localdate(),
+            ).count(),
+            1,
+        )
+
     def test_double_task_rejection_is_one_winner(self):
         claim = submit_task(child=self.child, task=self.task)
         reject_task_claim(claim=claim, actor=self.parent, reason="No")
@@ -98,6 +125,29 @@ class EconomyServiceTests(TestCase):
         submit_task(child=self.child, task=self.task)
         with self.assertRaises(ValidationError):
             submit_task(child=self.child, task=self.task)
+
+    def test_submit_task_stores_optional_child_note(self):
+        claim = submit_task(
+            child=self.child,
+            task=self.task,
+            child_note="  Folded the towels.  ",
+        )
+        self.assertEqual(claim.child_note, "Folded the towels.")
+        self.assertEqual(claim.photo_bonus_snapshot, 0)
+
+    def test_resubmit_task_claim_can_replace_or_clear_child_note(self):
+        claim = submit_task(
+            child=self.child,
+            task=self.task,
+            child_note="First version",
+        )
+        request_task_revision(claim=claim, actor=self.parent, reason="Try again")
+        claim = resubmit_task_claim(claim=claim, child_note="  Helped my brother.  ")
+        self.assertEqual(claim.status, RequestStatus.PENDING)
+        self.assertEqual(claim.child_note, "Helped my brother.")
+        request_task_revision(claim=claim, actor=self.parent, reason="Once more")
+        claim = resubmit_task_claim(claim=claim, child_note="   ")
+        self.assertEqual(claim.child_note, "")
 
     def test_rejected_task_allows_optional_comment_and_does_not_change_balance(self):
         claim = submit_task(child=self.child, task=self.task)

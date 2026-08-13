@@ -223,7 +223,7 @@ def randomize_daily_themes(*, current_date=None, chooser=None):
     return changed
 
 
-def submit_task(*, child, task, photo_bonus_snapshot=0):
+def submit_task(*, child, task, photo_bonus_snapshot=0, child_note=""):
     if not task.is_active:
         raise ValidationError(_("This task is no longer active."))
     try:
@@ -234,6 +234,7 @@ def submit_task(*, child, task, photo_bonus_snapshot=0):
                 task_title=task.title,
                 reward_snapshot=task.reward,
                 photo_bonus_snapshot=photo_bonus_snapshot,
+                child_note=child_note.strip()[:200],
             )
     except IntegrityError as exc:
         raise ValidationError(_("This task is already awaiting approval.")) from exc
@@ -263,7 +264,7 @@ def approve_task_claim(*, claim, actor):
         actor=actor,
         source_id=locked.pk,
     )
-    TaskCompletion.objects.create(child=locked.child, task=locked.task)
+    ensure_task_completion(child=locked.child, task=locked.task)
     return entry
 
 
@@ -301,19 +302,22 @@ def request_task_revision(*, claim, actor, reason):
         return TaskClaim.objects.get(pk=claim.pk)
 
 
-def resubmit_task_claim(*, claim):
+def resubmit_task_claim(*, claim, child_note=None):
     with transaction.atomic():
         submitted_at = timezone.now()
+        updates = {
+            "status": RequestStatus.PENDING,
+            "revision_note": "",
+            "decided_by": None,
+            "decided_at": None,
+            "submitted_at": submitted_at,
+        }
+        if child_note is not None:
+            updates["child_note"] = child_note.strip()[:200]
         claimed = TaskClaim.objects.filter(
             pk=claim.pk,
             status=RequestStatus.NEEDS_CHANGES,
-        ).update(
-            status=RequestStatus.PENDING,
-            revision_note="",
-            decided_by=None,
-            decided_at=None,
-            submitted_at=submitted_at,
-        )
+        ).update(**updates)
         if not claimed:
             raise ValidationError(_("This task is not awaiting corrections."))
         return TaskClaim.objects.get(pk=claim.pk)
@@ -352,6 +356,24 @@ def assigned_task_nudge_at(*, now=None):
     if candidate < now:
         candidate = now
     return candidate
+
+
+def ensure_task_completion(*, child, task, completed_on=None):
+    """Mark a catalog task as credited today for Assign/Award day gating.
+
+    Children may submit and have the same catalog task approved multiple times
+    in one day. The unique (child, task, completed_on) row is only a day marker
+    for parent Assign/Award — never a reason to fail a second credit.
+    """
+    if task is None:
+        return None
+    completed_on = completed_on or timezone.localdate()
+    completion, _created = TaskCompletion.objects.get_or_create(
+        child=child,
+        task=task,
+        completed_on=completed_on,
+    )
+    return completion
 
 
 def unavailable_assignment_task_ids(child):
@@ -709,7 +731,10 @@ def complete_assigned_task(*, assigned_task, child):
     )
     AssignedTask.objects.filter(pk=locked.pk).update(ledger_entry=entry)
     if locked.task_id:
-        TaskCompletion.objects.create(child=child, task=locked.task)
+        ensure_task_completion(child=child, task=locked.task)
+    from .push import notify_assigned_task_completed
+
+    notify_assigned_task_completed(locked)
     return entry
 
 

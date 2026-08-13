@@ -11,6 +11,6 @@ Use this page when you already operate Docker and an HTTPS proxy. KinKudos does 
 - Traefik: use the provided Traefik overlay and the exact external network.
 - Nginx Proxy Manager or another container proxy: use the `container` overlay, service `app`, port `8000`, and the configured external network.
 
-Forward `Host`, `X-Forwarded-Proto`, and client IP headers. By default KinKudos trusts only loopback (`127.0.0.0/8`, `::1/128`). Behind Traefik, Nginx Proxy Manager, or Hostinger Docker, set `KINKUDOS_TRUSTED_PROXIES` to the real proxy address or Docker subnet; never trust the internet. Validate `docker compose config` before starting and keep `data`, backups, and secrets outside release source.
+Forward `Host`, `X-Forwarded-Proto`, and client IP headers. By default KinKudos trusts only loopback (`127.0.0.0/8`, `::1/128`). Guided setup and upgrades write `KINKUDOS_TRUSTED_PROXIES` from the selected proxy mode (loopback for host Nginx/Caddy; the Docker proxy network CIDR for Traefik or another container proxy) and keep an existing non-empty value. Re-running bootstrap keeps the current overlay. Hostinger Compose keeps its own private Docker-network fallback. You may still set an explicit CIDR; never trust the internet. Validate `docker compose config` before starting and keep `data`, backups, and secrets outside release source.
 
 The complete commands and proxy examples are maintained in the [technical deployment reference](https://github.com/VooZ2/kinkudos/blob/main/deploy/README.md#reverse-proxy-and-client-ips).

@@ -31,6 +31,7 @@ from economy.models import (
 )
 from economy.push import (
     _currency_amount,
+    notify_assigned_task_completed,
     notify_assigned_tasks,
     notify_birth_date_change,
     notify_birth_date_decision,
@@ -142,6 +143,35 @@ class ChildDecisionPushTests(SyncPushDeliveryMixin, TestCase):
             f"{reverse('child_dashboard')}#paskirti-darbai",
         )
         self.assertEqual(webpush.call_args.kwargs["timeout"], 10)
+
+    @patch("economy.push.webpush")
+    def test_assigned_task_completion_notifies_parents(self, webpush):
+        batch = AssignedTaskBatch.objects.create(
+            child=self.child,
+            assigned_by=self.parent,
+        )
+        item = AssignedTask.objects.create(
+            batch=batch,
+            title_snapshot="Pakloti lovą",
+            reward_snapshot=10,
+        )
+
+        with override("lt"):
+            notify_assigned_task_completed(item)
+
+        webpush.assert_called_once()
+        self.assertEqual(
+            webpush.call_args.kwargs["subscription_info"]["endpoint"],
+            "https://push.example/parent",
+        )
+        payload = json.loads(webpush.call_args.kwargs["data"])
+        self.assertEqual(payload["title"], "Paskirtas darbas atliktas")
+        self.assertEqual(payload["body"], "Child One: Pakloti lovą (+10 taškų)")
+        self.assertEqual(
+            payload["url"],
+            f"{reverse('parent_dashboard')}#parent-history",
+        )
+        self.assertEqual(payload["tag"], f"assigned-task-completed-{item.pk}")
 
     @patch("economy.push.webpush")
     def test_webpush_calls_use_an_explicit_timeout(self, webpush):

@@ -25,8 +25,13 @@ išlaiko pakankamai pradinės užduoties informacijos, kad liktų suprantami.
 
 ## Vaiko pateikta užduotis
 
-1. Vaikas pasirenka prieinamą užduotį ir prireikus prideda nuotrauką.
-2. Užduotis atsiranda **Tėvai → Pradžia → Laukiantys prašymai**.
+1. Vaikas pasirenka prieinamą katalogo užduotį ir prireikus prideda nuotrauką
+   bei pasirenkamą trumpą pastabą (**Ką aš padariau**, iki 200 simbolių).
+   Paskirto darbo užbaigimas šios pastabos nenaudoja.
+2. Užduotis atsiranda **Tėvai → Pradžia → Laukiantys prašymai**. Jei vaikas
+   įrašė pastabą, komentaro ikona atidaro tik skaitymui skirtą dialogą;
+   tuščiai pastabai ikonos nėra. Pastaba nėra pokalbis ir neskiria priedo už
+   nuotrauką.
 3. Pasirinkite sprendimą:
 
 | Sprendimas | Rezultatas |
@@ -35,9 +40,14 @@ išlaiko pakankamai pradinės užduoties informacijos, kad liktų suprantami.
 | **Prašyti pataisyti** | Užduotis grąžinama vaikui su pasirenkamu paaiškinimu; taškai dar nejuda. |
 | **Atmesti** | Užduotis uždaroma be taškų. Pasirenkamas paaiškinimas gali nurodyti priežastį. |
 
-Tai pačiai užduočiai vaikas gali turėti tik vieną aktyvų pateikimą. Nuotrauka
-privačiai saugoma šeimai: sumažinama, išvaloma nuo kameros metaduomenų ir
-saugoma pagal šeimos taisyklę.
+Tai pačiai užduočiai vaikas gali turėti tik vieną aktyvų pateikimą. Tą pačią
+katalogo užduotį tą pačią vietinę dieną galima pateikti ir patvirtinti ne
+vieną kartą; kiekvienas patvirtintas pateikimas vis tiek skiria taškus.
+**Paskirti darbus šiandienai** ir **Pridėti atliktą darbą** tą katalogo
+užduotį vis dar užskaito ne daugiau kaip kartą per vietinę dieną.
+
+Nuotrauka privačiai saugoma šeimai: sumažinama, išvaloma nuo kameros
+metaduomenų ir saugoma pagal šeimos taisyklę.
 
 ## Tiesiogiai pridėkite atliktą darbą
 
@@ -54,7 +64,9 @@ užduotis šiandienai](assign-tasks-today.lt.md).
 
 - Paskirti darbai baigiasi vidurnaktį pagal serverio vietinį laiką ir tada
   dingsta iš šios dienos sąrašų.
-- Vaikas kiekvieną darbą užbaigia pats, o taškai pridedami iškart.
+- Vaikas kiekvieną darbą užbaigia pats, o taškai pridedami iškart. Prie to
+  užbaigimo vaiko pastabos nėra. Tėvams, įjungusiems pranešimus, taip pat
+  nusiunčiamas „Web Push“ pranešimas.
 - Užduotis neprieinama, jei ji jau laukia patvirtinimo, šiandien paskirta arba
   šiandien užskaityta.
 - Pasirinktinai galima blokuoti **naujus** prizų prašymus, kol darbai baigti.

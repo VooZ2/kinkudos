@@ -79,6 +79,12 @@ link eilutės galo. Prie kiekvienos datos kalendoriaus ikona nerodoma. Veiklos
 ikonos ir jų vieta prisitaikančiame išdėstyme yra tik vizualinė pagalba;
 reikšmę apibrėžia suprantamas veiksmo pavadinimas ir eilutės tekstas.
 
+Kai katalogo pateikime buvo vaiko pastaba, toje Istorijos eilutėje rodoma
+komentaro ikona. Ją atidarius matoma ta pati tik skaitymui skirta pastaba;
+tuščiai pastabai ikonos nėra. Tai ne pokalbis, ir pastaba neskiria priedo už
+nuotrauką. Atskira kameros piktograma atidaro darbo nuotrauką, jei ji dar
+saugoma.
+
 ## Būsenos ir vertės reikšmė
 
 - **Patvirtinta** būsena rodoma sėkmę žyminčiu stiliumi.

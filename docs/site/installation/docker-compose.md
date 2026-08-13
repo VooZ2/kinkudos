@@ -84,6 +84,14 @@ Select `traefik` only when Traefik is attached to that network. Select
 `container` only when the other proxy is attached to it and is configured to
 route to the KinKudos `app` service on port `8000`.
 
+Guided setup writes `KINKUDOS_TRUSTED_PROXIES` from the selected proxy mode:
+loopback for `host`, and the Docker proxy network CIDR for `traefik` or
+`container`. An existing non-empty value is left unchanged. Re-running
+`bootstrap.sh` keeps the existing proxy mode, network, overlay, and explicit
+trusted-proxy value; it does not switch a Traefik or container overlay to
+`host`. Hostinger Compose keeps its own private Docker-network fallback and
+does not use this helper. Never trust the public internet.
+
 ## Manual Docker Compose setup
 
 Download a specific GitHub release archive and SHA256 file, verify it, and use

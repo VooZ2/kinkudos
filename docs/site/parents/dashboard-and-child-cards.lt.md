@@ -13,6 +13,10 @@ yra prašymų, šalia antraštės rodomas skaičiaus ženklelis. Kai prašymų n
 kompaktiška tuščia būsena rodo **Nėra laukiančių prašymų**. Vaikų kortelės
 lieka tiesiai po skydeliu.
 
+Tėvų navigacijos punkte **Pradžia** tas pats laukiančių skaičius rodomas ir
+ten. Telefone ženklelis yra namo ikonos kampe; plateiniame ekrane kompaktiškas
+skaičius lieka Pradžios eilutės dešinėje.
+
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti tėvų Pradžią su laukiančiais prašymais telefone</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-home-pending-requests-mobile-26-6-7.png" alt="Tėvų Pradžios laukiančių prašymų skydelis su antrašte ir skaičiaus ženkleliu telefone" loading="lazy">
@@ -42,14 +46,16 @@ Kompaktiški rodikliai gali atrodyti taip:
 | `463 Taškai` | Dabar išleidžiami taškai. |
 | `Kreditas -100` | Žemiausias balansas, iki kurio vaikas gali išleisti taškus; tai nėra 100 papildomų taškų. |
 | `Bilietai 0/3` | Panaudoti nutrinami bilietai ir savaitinis limitas. |
-| `50 išsaugota` | Atskirai tikslams išsaugoti taškai. |
+| `50 sukaupta` | Atskirai tikslams išsaugoti taškai. |
 
 Taškai yra išleidžiamas balansas. Tikslui atskirai išsaugoti taškai į jį
 neįtraukiami ir negali būti naudojami prizams. Naudojamus taškus naudojantis
 tikslas, kai balansas nulis arba neigiamas, turi nulinę pažangą. **Bilietų**
-eilutė slepiama, kai nutrinami bilietai išjungti. `Išsaugota` rodoma tik tada,
-kai vaikas turi išsaugotų taškų; `0 išsaugota` nerodoma. Vaikas be tikslų neturi
-tuščio tikslo bloko ar vietos žymeklio.
+eilutė slepiama, kai nutrinami bilietai išjungti. `sukaupta` rodoma tik tada,
+kai vaikas turi išsaugotų taškų; `0 sukaupta` nerodoma. Šalia tos sumos
+informacijos valdiklis paaiškina rezervuotus taškus; tikslo juosta po ja
+atskiros informacijos mygtuko neturi. Vaikas be tikslų neturi tuščio tikslo
+bloko ar vietos žymeklio.
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti tėvų Pradžią su vaikų kortelėmis telefone</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
@@ -68,11 +74,12 @@ Vaiko kortelėje gali būti rodomas vienas aktualus tikslas. Pirmenybė teikiama
 
 Suvestinėje gali būti tikslo pavadinimas, dabartinė pažanga ir tikslas,
 pažangos juosta bei būsena **Dabartinis tikslas**, **Naudoja turimus taškus**,
-**Išsaugota** arba **Tikslas pasiektas**. Atskirai taupomas tikslas gali būti
+**Sukaupta** arba **Tikslas pasiektas**. Atskirai taupomas tikslas gali būti
 pažymėtas **Taupoma atskirai**, o papildomų tikslų skaičius parodo, kad jų yra
 daugiau.
 
-Pasirinkus suvestinę atidaroma **Tvarkyti → Tikslai**.
+Tikslo juosta neturi atskiros informacijos mygtuko. Pasirinkus visą juostą
+atidaroma **Tvarkyti → Tikslai**.
 
 ## Vaiko kortelės veiksmai
 
@@ -110,6 +117,7 @@ galima atšaukti toje pačioje kortelėje.
 ## Laukiantys prašymai
 
 Prašymai rodomi laukiančių prašymų skydelyje ir lengvai peržiūrimi pagal vaiką.
+Vaiko vardas ir tipas (**Darbas** arba **Prizas**) rodomi vienoje eilutėje.
 Telefone sprendimų mygtukai lygiuojami kairėn po prašymo tekstu. Galimi
 sprendimai:
 
@@ -124,8 +132,10 @@ Kai tvirtinamas taupymo tikslo pasiūlymas, kuriam dar reikia taupymo būdo,
 dialoge **Naudoti turimus taškus** ir **Taupyti atskirai** rodomi kaip
 įterptos pasirinkimo kortelės (radijas + etiketė).
 
-Jei darbas turi nuotrauką, pasirinkite miniatiūrą ir peržiūrėkite ją viso
-dydžio. Nuotraukos yra privatūs šeimos duomenys ir saugomos pagal [Tėvų
+Jei darbas turi vaiko pastabą, komentaro ikona atidaro tik skaitymui skirtą
+dialogą. Tuščiai pastabai ikonos nėra. Jei darbas turi nuotrauką, pasirinkite
+miniatiūrą ir peržiūrėkite ją viso dydžio. Pastaba neskiria priedo už
+nuotrauką. Nuotraukos yra privatūs šeimos duomenys ir saugomos pagal [Tėvų
 nustatymų](settings.lt.md) taisyklę.
 
 ## Istorija

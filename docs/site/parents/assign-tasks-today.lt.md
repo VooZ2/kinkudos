@@ -21,7 +21,9 @@ Vaiko kortelėje, esančioje **Tėvai → Pradžia**, naudokite **Paskirti darbu
    bei patikrinti, ar sąrašas matomas.
 
 Vaikas kiekvieną paskirtą užduotį užbaigia pats ir iš karto gauna jos taškus.
-Tokiam užbaigimui atskiro tėvų patvirtinimo nėra.
+Tokiam užbaigimui atskiro tėvų patvirtinimo nėra, ir prie to užbaigimo vaiko
+pateikimo pastabos nėra. Tėvams, įjungusiems pranešimus, taip pat nusiunčiamas
+„Web Push“ pranešimas. Jei dar nesiunčiate, dialogą uždarykite **X**.
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">Peržiūrėti paskyrimą su pasirenkama pastaba</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
@@ -32,9 +34,11 @@ Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 
 ## Pasirenkamos pastabos
 
-Pastaba įrašoma į paskirtą punktą išsiuntimo metu. Vėlesni katalogo pakeitimai
-jau išsiųstos pastabos nekeičia. Vaikas ją aiškiai mato po užduoties
-pavadinimu, esamos temos spalvomis ir žodžiais.
+Tėvų pastaba įrašoma į paskirtą punktą išsiuntimo metu. Vėlesni katalogo
+pakeitimai jau išsiųstos pastabos nekeičia. Vaikas ją aiškiai mato po
+užduoties pavadinimu, esamos temos spalvomis ir žodžiais. Tai nėra pasirenkama
+**Ką aš padariau** pastaba, kurią vaikas gali pridėti pateikdamas katalogo
+užduotį tvirtinti.
 
 ## Išsaugoti rinkiniai
 
@@ -89,7 +93,9 @@ darbais.
 
 - Katalogo užduoties negalima paskirti, jeigu ji jau laukia peržiūros, jau
   paskirta šiandien arba šiandien jau užskaityta. Tokios eilutės rodo
-  **Šiandien nepasiekiamas**.
+  **Šiandien nepasiekiamas**. Vaiko pateiktą katalogo užduotį tą pačią vietinę
+  dieną vis tiek galima patvirtinti ne vieną kartą; paskyrimas ir tiesioginis
+  užskaitymas lieka kartą per vietinę dieną.
 - Nebaigti paskyrimai baigiasi vidurnaktį pagal serverio vietinį laiką. Jie
   dingsta iš vaiko sąrašo ir nebeblokuoja naujų prizų prašymų. Taškų jie
   nesuteikia.

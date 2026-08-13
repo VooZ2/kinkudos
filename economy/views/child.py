@@ -413,6 +413,7 @@ def child_submit_task(request, task_id):
             child=request.child,
             task=task,
             photo_bonus_snapshot=bonus,
+            child_note=form.cleaned_data.get("child_note") or "",
         )
         if processed:
             _replace_task_evidence(claim, processed)
@@ -472,7 +473,10 @@ def child_resubmit_task(request, claim_id):
             _replace_task_evidence(claim, processed)
             claim.photo_bonus_snapshot = FamilySettings.load().photo_bonus_points
             claim.save(update_fields=["photo_bonus_snapshot"])
-        resubmit_task_claim(claim=claim)
+        resubmit_task_claim(
+            claim=claim,
+            child_note=form.cleaned_data.get("child_note") or "",
+        )
         claim.refresh_from_db()
         notify_task_claim(claim)
         messages.success(

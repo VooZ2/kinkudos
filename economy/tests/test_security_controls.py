@@ -157,12 +157,14 @@ class ChildPinSiteRateLimitTests(TestCase):
 
     def test_device_pin_limit_still_blocks_login(self):
         # Profile AttemptCounter limit is 10; rotate so device (15) binds first.
-        for index in range(15):
-            child = self.child if index < 10 else self.other
-            response = self.post_pin(child=child)
-            self.assertContains(response, "Incorrect PIN.")
-            self.clear_profile_lock(child)
-        response = self.post_pin(pin="1234")
+        window_start = timezone.now().replace(second=0, microsecond=0)
+        with patch("django.utils.timezone.now", return_value=window_start):
+            for index in range(15):
+                child = self.child if index < 10 else self.other
+                response = self.post_pin(child=child)
+                self.assertContains(response, "Incorrect PIN.")
+                self.clear_profile_lock(child)
+            response = self.post_pin(pin="1234")
         self.assertContains(response, "Too many PIN attempts. Try again later.")
         self.assertNotIn("child_id", self.client.session)
 

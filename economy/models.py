@@ -555,6 +555,7 @@ class TaskClaim(models.Model):
     status = models.CharField(max_length=20, choices=RequestStatus.choices, default=RequestStatus.PENDING)
     rejection_reason = models.TextField(blank=True)
     revision_note = models.TextField(blank=True)
+    child_note = models.CharField(max_length=200, blank=True, default="")
     evidence_image = models.ImageField(upload_to="task-evidence/full/%Y/%m/", blank=True)
     evidence_thumbnail = models.ImageField(
         upload_to="task-evidence/thumbnails/%Y/%m/",

@@ -250,7 +250,7 @@ env` leidimo atnaujintojui ir dar kartą kiekvienai vėlesnei Compose komandai,
 kuri iš naujo parenka ar iš naujo sukuria atvaizdą, pavyzdžiui:
 
 ```bash
-candidate_tag=26.7.0-rc.<short-sha>
+candidate_tag=26.7.1-rc.<short-sha>
 sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
   KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
 sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
@@ -258,9 +258,9 @@ sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
 ```
 
 Šie perrašymai tyčia neišsaugomi produkciniame `.env`. Tai nėra įprastas
-stabilaus leidimo naudotojo atnaujinimo kelias. Atnaujindami stabilų `26.7.0`,
+stabilaus leidimo naudotojo atnaujinimo kelias. Atnaujindami stabilų `26.7.1`,
 naudokite aukščiau pateiktą procedūrą be abiejų perrašymų: Compose numatytosios
-reikšmės yra gamybinis `vooz2/kinkudos` paketas ir `26.7.0`.
+reikšmės yra gamybinis `vooz2/kinkudos` paketas ir `26.7.1`.
 
 Atnaujintojas patikrina kontrolinę sumą ir leidimo duomenis, parsiunčia bei
 išbando paskelbtą atvaizdą, patikrina serverio katalogų nuosavybę, sukuria
@@ -314,9 +314,18 @@ nurodytas `KINKUDOS_PROXY_NETWORK`.
 
 KinKudos pasitiki persiųsta kliento IP antrašte tik jei tiesioginis ryšys
 ateina iš `KINKUDOS_TRUSTED_PROXIES` nurodyto adreso ar potinklio. Programos
-numatytoji reikšmė yra tik loopback; Traefik/NPM atvejais nurodykite tikslų
-proxy adresą arba Docker potinklį, o ne visą internetą. Pasirenkamas tėvų
-nustatymas „Nustatymai → Tinklo prieiga“ gali papildomai apriboti vaikų
+numatytoji reikšmė yra tik loopback. `bootstrap.sh` ir `install-release.sh`
+šią reikšmę įrašo automatiškai:
+
+- host Nginx/Caddy → `127.0.0.0/8,::1/128`;
+- Traefik ar kitas konteinerinis proxy → pasirinkto Docker tinklo potinklis iš
+  `docker network inspect` (arba vienas interaktyvus CIDR klausimas, jei tinklas
+  nerastas).
+
+Jei `.env` jau turi nenulinę reikšmę, ji neperrašoma. Hostinger Docker Manager
+diegimai naudoja Compose atsarginę reikšmę `10.0.0.0/8,172.16.0.0/12` ir šio
+pagalbininko nenaudoja. Niekada nenustatykite viso interneto. Pasirenkamas
+tėvų nustatymas „Nustatymai → Tinklo prieiga“ gali papildomai apriboti vaikų
 puslapius arba visą programą konkrečiais IP/CIDR tinklais. Pagal nutylėjimą jis
 išjungtas ir nepakeičia HTTPS, įrenginių susiejimo ar stiprių tėvų
 slaptažodžių. Jei taisyklė užrakino visus tėvus, paleiskite:
@@ -420,7 +429,7 @@ automatiškai šalinamos tik išspręstų atsiliepimų nuotraukos.
 
 KinKudos darbų nuotraukas ir išspręstų atsiliepimų ekrano nuotraukas saugo
 tėvų nustatymuose pasirinktą laiką. Kas 30 minučių ta pati priminimų komanda
-taip pat:
+(`run_scheduled_reminders`, senasis alias `send_lottery_reminders`) taip pat:
 
 - tikrina, ar jau reikia siųsti savaitinį loterijos priminimą;
 - siunčia švelnius priminimus apie nebaigtus paskirtus darbus maždaug po
@@ -445,16 +454,17 @@ priminimų komandą – kas 30 minučių:
 
 ```cron
 15 2 * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py run_maintenance
-*/30 * * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py send_lottery_reminders
+*/30 * * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py run_scheduled_reminders
 ```
 
 Rankinis paleidimas:
 
 ```bash
 docker compose exec -T app python manage.py run_maintenance
-docker compose exec -T app python manage.py send_lottery_reminders
+docker compose exec -T app python manage.py run_scheduled_reminders
 ```
 
+Senas alias `send_lottery_reminders` ir toliau veikia esamiems `cron` įrašams.
 ## Ribota diagnostikos prieiga
 
 Diagnostikos naudotojui nesuteikite narystės Docker grupėje. Administratorius

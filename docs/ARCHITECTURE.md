@@ -91,7 +91,11 @@ Lifecycle:
 
 Approval and its ledger entry are created in one database transaction.
 Optional photo evidence is validated, resized, EXIF-stripped, and retained
-per its configured period (`economy/images.py`).
+per its configured period (`economy/images.py`). A child may also add an
+optional short note (`child_note`, max 200 characters) describing what they
+did. The note is independent of the photo: it does not grant the photo bonus,
+is not purged with evidence files, and is shown to parents as an icon in
+Pending and History rather than inline chat.
 
 **AssignedTaskBatch** / **AssignedTask** / **TaskCompletion** — a parent may
 send one child a list of catalog tasks plus one optional custom task for the
@@ -105,13 +109,20 @@ child’s assigned-task row in the active theme.
 Assigned items have `pending`, `completed`, or `cancelled` status. A child
 completes each item separately and receives its points immediately in the
 same database transaction that closes the item and creates its
-`assigned_task` ledger entry. Catalog-backed completion also creates a
-`TaskCompletion` record for that child and calendar day. This prevents a
-catalog task from being assigned while it awaits approval, is already
-assigned, or has already been credited that day. The database enforces that
-invariant with a unique constraint on `(child, task, completed_on)`.
-Cancelled items can be assigned again; completed catalog tasks become
-available on the next day.
+`assigned_task` ledger entry. Catalog-backed completion also records a
+`TaskCompletion` for that child and calendar day. Parents with active
+Web Push subscriptions receive a completion alert (history deep-link); there is
+no approval step because points are already credited. The same day-marker
+blocks Assign (and parent Award) for that catalog task for the rest of the
+local day; the database enforces at most one `TaskCompletion` row per
+`(child, task, completed_on)`. Cancelled items can be assigned again;
+completed catalog tasks become available for Assign again on the next day.
+
+Voluntary catalog claims are different: a child may submit and have the same
+catalog task approved multiple times in one day (for example unloading the
+dishwasher twice). Each approval posts its own ledger credit. Approval uses
+`get_or_create` for `TaskCompletion` so a second same-day credit never raises
+an integrity error, while the day-marker still prevents a second Assign.
 
 Pending items are active only when `AssignedTaskBatch.assigned_on` equals the
 server-local calendar date. At midnight they disappear from the child's
@@ -252,8 +263,10 @@ a small allowlist; `next` is retained only as a validated internal relative URL,
 and unknown or unsafe values are discarded.
 
 The systemd deployment installs a daily maintenance timer and a separate
-30-minute lottery-reminder timer. That reminder command also delivers soft
-assigned-task nudges when due. Generic deployments must schedule the
+30-minute scheduled-reminders timer (`run_scheduled_reminders`, legacy alias
+`send_lottery_reminders`). That command delivers lottery reminders, soft
+assigned-task nudges, and due assignment presets; each step is isolated so one
+failure does not skip the others. Generic deployments must schedule the
 corresponding Django commands themselves.
 
 ## Parent interface palette
@@ -271,8 +284,12 @@ the shared parent palette.
   published directly to the internet.
 - Forwarded client IP and scheme headers are honored only from configured
   trusted proxy networks. The default trusts loopback only
-  (`127.0.0.0/8`, `::1/128`); Traefik/NPM/Hostinger installs must set
-  `KINKUDOS_TRUSTED_PROXIES` to the reverse-proxy or Docker network CIDR.
+  (`127.0.0.0/8`, `::1/128`). Guided `bootstrap.sh` / `install-release.sh`
+  installs persist `KINKUDOS_TRUSTED_PROXIES` for the selected proxy mode
+  (loopback for host Nginx/Caddy; the Docker proxy network CIDR for
+  Traefik/NPM/container proxies). Hostinger Compose keeps its own private
+  Docker-network fallback. Operators may still set an explicit CIDR; the
+  application never trusts the public internet by default.
   Authentication limits use the resolved address.
 - Parent login, password recovery, device pairing, child PIN, initial setup
   claim, and optional Django admin endpoints have shared database-backed

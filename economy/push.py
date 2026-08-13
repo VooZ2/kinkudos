@@ -160,6 +160,22 @@ def notify_assigned_tasks_nudge(batch):
     )
 
 
+def notify_assigned_task_completed(assigned_task):
+    child = assigned_task.batch.child
+    _send(
+        {
+            "title": _("An assigned task was completed"),
+            "body": (
+                f"{child.name}: {assigned_task.title_snapshot} "
+                f"(+{_currency_amount(assigned_task.reward_snapshot, child)})"
+            ),
+            "url": f"{_parent_dashboard_url()}#parent-history",
+            "tag": f"assigned-task-completed-{assigned_task.pk}",
+        },
+        _parent_subscriptions(),
+    )
+
+
 def notify_task_revision(claim):
     body = claim.task_title
     if claim.revision_note:

@@ -46,7 +46,7 @@ Choose:
 Enter the hostname only, without `https://` or a trailing slash. The proxy mode
 must match the infrastructure you prepared before starting the installer.
 
-The installer generates server secrets, writes the local `.env`, selects the proxy overlay, checks directory ownership, pulls the image pinned to the selected KinKudos release, and starts `app` and `backup-agent`.
+The installer generates server secrets, writes the local `.env`, selects the proxy overlay, writes `KINKUDOS_TRUSTED_PROXIES` for that proxy mode, checks directory ownership, pulls the image pinned to the selected KinKudos release, and starts `app` and `backup-agent`.
 
 When the installer finishes, run `docker compose ps` from `/opt/kinkudos/deploy`
 and wait for `app` to become `healthy` before opening the HTTPS hostname.

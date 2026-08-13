@@ -268,7 +268,7 @@ release updater and pass them again to every later Compose command that resolves
 or recreates images, for example:
 
 ```bash
-candidate_tag=26.7.0-rc.<short-sha>
+candidate_tag=26.7.1-rc.<short-sha>
 sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
   KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
 sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
@@ -276,9 +276,9 @@ sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
 ```
 
 The overrides are intentionally not persisted in the production `.env`. This is
-not the normal stable-user update workflow. For a stable `26.7.0` update, use
+not the normal stable-user update workflow. For a stable `26.7.1` update, use
 the procedure above without either override; the Compose defaults are the
-production `vooz2/kinkudos` package and `26.7.0`.
+production `vooz2/kinkudos` package and `26.7.1`.
 
 The updater validates the checksum and release metadata, pulls and smoke-tests
 the published image, checks host-directory ownership, backs up the live
@@ -334,9 +334,18 @@ WebSocket support, and use the same external network configured by
 `KINKUDOS_PROXY_NETWORK`.
 
 KinKudos trusts forwarded client-IP headers only when the direct peer belongs
-to `KINKUDOS_TRUSTED_PROXIES`. The application default is loopback only; set
-this to the exact proxy address or Docker subnet for Traefik/NPM, not to the
-entire internet. The optional parent setting
+to `KINKUDOS_TRUSTED_PROXIES`. The application default is loopback only.
+`bootstrap.sh` and `install-release.sh` write this value automatically:
+
+- host Nginx/Caddy → `127.0.0.0/8,::1/128`;
+- Traefik or another container proxy → the selected Docker network subnet from
+  `docker network inspect` (or one interactive CIDR prompt if the network is
+  missing).
+
+An existing non-empty `.env` value is never overwritten. Hostinger Docker
+Manager installs keep the Compose fallback
+`10.0.0.0/8,172.16.0.0/12` and do not use this helper. Never set the value to
+the entire internet. The optional parent setting
 Settings → Network access can then restrict child pages or the entire
 application to explicit IP/CIDR networks. It is disabled by default and is an
 additional layer, not a replacement for HTTPS, device pairing, or strong
@@ -437,8 +446,8 @@ selected in Settings.
 ## Scheduled maintenance, lottery reminders, and assignment presets
 
 KinKudos keeps task photos and resolved-feedback screenshots for the periods
-selected in the parent settings. Every 30 minutes the same reminder command
-also:
+selected in the parent settings. Every 30 minutes the same reminder command (`run_scheduled_reminders`, with
+legacy alias `send_lottery_reminders`) also:
 
 - checks whether a due weekly lottery reminder should be sent;
 - sends soft assigned-task nudges when a batch is still pending about three
@@ -468,16 +477,17 @@ once per night and the reminder command every 30 minutes:
 
 ```cron
 15 2 * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py run_maintenance
-*/30 * * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py send_lottery_reminders
+*/30 * * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py run_scheduled_reminders
 ```
 
 It can also be run manually on any Docker Compose host:
 
 ```bash
 docker compose exec -T app python manage.py run_maintenance
-docker compose exec -T app python manage.py send_lottery_reminders
+docker compose exec -T app python manage.py run_scheduled_reminders
 ```
 
+The legacy alias `send_lottery_reminders` still works for existing cron entries.
 ## Limited diagnostics access
 
 Do not add a diagnostics-only account to the Docker group. An administrator

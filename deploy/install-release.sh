@@ -175,6 +175,13 @@ if [ ! -f "$deploy_dir/compose.override.yml" ]; then
   echo "Created compose.override.yml for the existing Traefik deployment."
 fi
 "$staging_dir/deploy/check-ownership.sh" "$project_root"
+# Migrate trusted-proxy configuration before recreating containers so Docker
+# reverse-proxy installs do not fall back to loopback-only after an upgrade.
+if [ ! -f "$deploy_dir/.env" ]; then
+  echo "Missing deploy/.env; cannot configure trusted proxies for the upgrade." >&2
+  exit 1
+fi
+"$staging_dir/deploy/ensure-trusted-proxies.sh" "$deploy_dir/.env"
 docker compose config --quiet
 if ! docker compose config --images | grep -Fx "$image" >/dev/null; then
   echo "Compose does not reference the release image $image." >&2
@@ -230,6 +237,7 @@ for helper in \
   check-ownership.sh \
   configure-email.sh \
   configure-feedback.sh \
+  ensure-trusted-proxies.sh \
   install-diagnostics.sh \
   install-maintenance.sh \
   install.sh \

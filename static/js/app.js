@@ -1348,7 +1348,7 @@ function updatePendingNavigationCount(count) {
     const badge = document.createElement("strong");
     badge.className = "nav-count";
     badge.dataset.parentHomeBadge = "";
-    navItem.append(badge);
+    (navItem.querySelector(".parent-nav-icon") || navItem).append(badge);
     badges.push(badge);
   }
   badges.forEach(badge => {

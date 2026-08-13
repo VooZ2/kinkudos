@@ -388,6 +388,14 @@ class ParentSettingsTests(TestCase):
             )
         self.assertEqual(settings.count("settings-summary-status"), 3)
         self.assertNotContains(response, ">Rewards and goals<", html=False)
+        stylesheet = (ROOT / "static" / "css" / "app.css").read_text(encoding="utf-8")
+        self.assertIn(".service-status > span:first-child {", stylesheet)
+        self.assertIn(".service-status-bad > span:first-child {", stylesheet)
+        self.assertIn(".service-status > [data-backup-summary-label]", stylesheet)
+        self.assertNotIn(
+            ".service-status > span { width: 10px; height: 10px; border-radius: 50%; }",
+            stylesheet,
+        )
 
     def smtp_payload(self, **overrides):
         payload = {

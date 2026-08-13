@@ -8,8 +8,8 @@ vaiko privačios informacijos, PIN, balanso ar prašymų.
 
 | Sritis | Ką vaikas gali daryti |
 | --- | --- |
-| **Darbai** | Pasirinkti galimą darbą, prireikus pridėti nuotrauką ir pateikti tėvų patvirtinimui. Jei darbas grąžintas taisyti, jį pataisyti ir pateikti iš naujo. |
-| **Šiandien paskirti darbai** | Užbaigti tėvų atsiųstus darbus. Kiekvienas užbaigtas darbas iškart prideda taškus ir dingsta iš dienos sąrašo. Jei tėvai dialoge **Paskirti darbus šiandienai** įrašė pastabą, ji aiškiai rodoma po pavadinimu, vaiko temos spalvomis ir žodžiais. |
+| **Darbai** | Pasirinkti galimą katalogo darbą, prireikus pridėti nuotrauką ir pasirenkamą trumpą pastabą, tada pateikti tėvų patvirtinimui. Jei darbas grąžintas taisyti, jį pataisyti ir pateikti iš naujo. |
+| **Šiandien paskirti darbai** | Užbaigti tėvų atsiųstus darbus. Kiekvienas užbaigtas darbas iškart prideda taškus ir dingsta iš dienos sąrašo. Prie to užbaigimo vaiko pastabos nėra. Jei tėvai dialoge **Paskirti darbus šiandienai** įrašė pastabą, ji aiškiai rodoma po pavadinimu, vaiko temos spalvomis ir žodžiais. |
 | **Prizai** | Prašyti galimo prizo, jei tai leidžia išleidžiamas balansas ir kredito taisyklė. Kol prašymas laukia, vaikas gali jį atšaukti. |
 | **Tikslai ir pasiūlymai** | Pasirinkti **Pasiūlyk prizą ar tikslą** ir pasiūlyti prizą ar taupymo tikslą. Tėvams patvirtinus tikslo pasiūlymą, tikslo kortelėje pasirinkti **Naudoti turimus taškus** arba **Taupyti atskirai**. |
 | **Nutrinami bilietai** | Pirkti pasirenkamą bilietą tik jei jis įjungtas šeimai ir vaikui, pakanka išleidžiamų taškų bei leidžia savaitės limitas. Prieš kitą pirkimą reikia užbaigti atidarytą bilietą. |
@@ -19,6 +19,12 @@ vaiko privačios informacijos, PIN, balanso ar prašymų.
 Dovana ir Atsiliepimai vaiko pradžios lange sudėti į vieną plaukiojančių
 veiksmų stulpelį, kad nestumtų vienas kito ir neuždengtų darbų mygtukų;
 puslapio apačioje palikta vietos abiem valdikliams.
+
+Katalogo pateikime ar pakartotiniame pateikime eilė tokia: nuotrauka, tada
+**Ką aš padariau**, tada varnelė. Pastaba pasirenkama, iki 200 simbolių, ir
+automatiškai neaktyvinama. Tai vienkartinė pastaba tėvams, ne pokalbis.
+Paskirto darbo užbaigimas šios pastabos nenaudoja; tėvų instrukcija lieka tik
+paskirtame punkte.
 
 Kai tėvų sprendimo vis dar reikia — pateiktam darbui, pataisymui, prizo
 prašymui, tikslo užbaigimui, pasiūlymui ar gimtadienio keitimui — po pasveikinimu

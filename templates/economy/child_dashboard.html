@@ -78,6 +78,9 @@
         <input type="hidden" name="remove_evidence" value="" data-remove-evidence>
         {% if claim.evidence_thumbnail %}<img class="evidence-preview" src="{% url 'task_evidence' claim.pk 'thumbnail' %}" alt="{% translate 'Task photo' %}" data-evidence-preview>{% else %}<img class="evidence-preview" alt="" data-evidence-preview hidden>{% endif %}
         <div class="evidence-actions"><button type="button" class="button button-secondary" data-evidence-camera><svg class="action-icon"><use href="#icon-camera"></use></svg>{% translate "Take photo" %}</button><button type="button" class="button button-secondary" data-evidence-gallery>{% translate "Choose from gallery" %}</button><button type="button" class="text-button danger" data-evidence-remove>{% translate "Remove photo" %}</button></div>
+        <label for="resubmit-child-note-{{ claim.pk }}">{% translate "What I did" %}
+          <textarea class="field-control child-claim-note" id="resubmit-child-note-{{ claim.pk }}" name="child_note" maxlength="200" rows="2" enterkeyhint="done" autocomplete="off" placeholder="{% translate "Optional — a short note for your parents" %}">{{ claim.child_note }}</textarea>
+        </label>
         <button class="decision-icon-button decision-approve dialog-decision-action" type="submit" aria-label="{% translate "Send again" %}" title="{% translate "Send again" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>
       </form>
     </dialog>
@@ -117,12 +120,15 @@
     {% if task.pk in pending_task_ids %}<span class="status-pill">{% if child.theme == "blockville" %}{{ child.theme|theme_text:"pending" }}{% else %}{% translate "Awaiting approval" %}{% endif %}</span>{% else %}<button class="decision-icon-button decision-approve workflow-card-button" type="button" data-open-dialog="submit-task-{{ task.pk }}" aria-label="{{ child.theme|theme_text:'task_button' }}" title="{{ child.theme|theme_text:'task_button' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>{% endif %}</article>
     <dialog id="submit-task-{{ task.pk }}" class="action-dialog evidence-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
         <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
-      </button><h2>{{ child.theme|theme_text:"task_modal_title" }}</h2><h3>{{ task.title }}</h3><p>{% translate "You can add a photo of the finished task." %}</p>
+      </button><h2>{{ child.theme|theme_text:"task_modal_title" }}</h2><h3>{{ task.title }}</h3><p>{% translate "You can add a photo or a short note about what you did." %}</p>
       {% if family_settings.photo_bonus_points %}<p class="photo-bonus">+{{ family_settings.photo_bonus_points }} {{ family_settings.photo_bonus_points|currency_unit:child.theme }} {% translate "for a photo" %}</p>{% endif %}
       <form method="post" action="{% url 'child_submit_task' task.pk %}" enctype="multipart/form-data" class="stack-form evidence-form" data-success-effect="task">{% csrf_token %}
         <input type="file" name="proof" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" data-evidence-input hidden>
         <img class="evidence-preview" alt="" data-evidence-preview hidden>
         <div class="evidence-actions"><button type="button" class="button button-secondary" data-evidence-camera><svg class="action-icon"><use href="#icon-camera"></use></svg>{% if child.theme == "blockville" %}{{ child.theme|theme_text:"task_photo" }}{% else %}{% translate "Take photo" %}{% endif %}</button><button type="button" class="button button-secondary" data-evidence-gallery>{% translate "Choose from gallery" %}</button><button type="button" class="text-button danger" data-evidence-remove hidden>{% translate "Remove photo" %}</button></div>
+        <label for="submit-child-note-{{ task.pk }}">{% translate "What I did" %}
+          <textarea class="field-control child-claim-note" id="submit-child-note-{{ task.pk }}" name="child_note" maxlength="200" rows="2" enterkeyhint="done" autocomplete="off" placeholder="{% translate "Optional — a short note for your parents" %}"></textarea>
+        </label>
         <button class="decision-icon-button decision-approve dialog-decision-action" type="submit" aria-label="{{ child.theme|theme_text:'task_modal_submit' }}" title="{{ child.theme|theme_text:'task_modal_submit' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>
       </form>
     </dialog>
