@@ -501,14 +501,17 @@ class ReleaseDeploymentTests(SimpleTestCase):
                 (ROOT / "deploy" / "compose.traefik.yml").read_text(encoding="utf-8"),
                 encoding="utf-8",
             )
-            ensure = deploy / "ensure-trusted-proxies.sh"
-            ensure.write_text(
+            current_deploy = root / "current" / "deploy"
+            current_deploy.mkdir(parents=True)
+            ensure_source = current_deploy / "ensure-trusted-proxies.sh"
+            ensure_source.write_text(
                 (ROOT / "deploy" / "ensure-trusted-proxies.sh").read_text(
                     encoding="utf-8"
                 ),
                 encoding="utf-8",
             )
-            ensure.chmod(0o755)
+            ensure_source.chmod(0o755)
+            ensure = deploy / "ensure-trusted-proxies.sh"
             ownership = deploy / "check-ownership.sh"
             ownership.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
             ownership.chmod(0o755)
@@ -574,6 +577,8 @@ class ReleaseDeploymentTests(SimpleTestCase):
                 check=False,
             )
             self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+            self.assertTrue(ensure.is_file())
+            self.assertEqual(ensure.read_text(encoding="utf-8"), ensure_source.read_text(encoding="utf-8"))
             env_text = (deploy / ".env").read_text(encoding="utf-8")
             self.assertIn("KINKUDOS_PROXY_MODE=traefik", env_text)
             override = (deploy / "compose.override.yml").read_text(encoding="utf-8")

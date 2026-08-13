@@ -113,7 +113,16 @@ else
     upsert_env_value KINKUDOS_GID "$runtime_gid"
   fi
 fi
-"$deploy_dir/ensure-trusted-proxies.sh" "$env_file" "$proxy_mode" "$proxy_network"
+
+# Older release updaters may not know about a helper introduced by this
+# release. Recover it from the validated current release before continuing.
+trusted_proxies_script="$deploy_dir/ensure-trusted-proxies.sh"
+if [ ! -x "$trusted_proxies_script" ] \
+  && [ -x "$project_root/current/deploy/ensure-trusted-proxies.sh" ]; then
+  cp "$project_root/current/deploy/ensure-trusted-proxies.sh" "$trusted_proxies_script"
+  chmod 0755 "$trusted_proxies_script"
+fi
+"$trusted_proxies_script" "$env_file" "$proxy_mode" "$proxy_network"
 
 mkdir -p \
   "$secrets_dir/backup" \

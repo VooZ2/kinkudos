@@ -21,6 +21,8 @@ schema.
 - Vedamas diegimas ir leidimo atnaujinimai dabar nustato patikimo proxy CIDR
   pagal pasirinktą proxy režimą ir pakartotinai paleidus išsaugo esamą proxy
   režimą, tinklą bei aiškiai nustatytą patikimo proxy reikšmę.
+- Pakartotinai paleistas vedamas bootstrap po atnaujinimo gali atkurti dabartinio
+  leidimo naujus diegimo pagalbininkus iš patikrintos leidimo kopijos.
 
 ### Pataisyta
 

@@ -19,6 +19,8 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 - Guided setup and release upgrades now detect the trusted proxy CIDR from the
   selected proxy mode and preserve the existing proxy mode, network, and
   explicit trusted-proxy value when setup is run again.
+- Re-running the guided bootstrap after an upgrade can recover deployment
+  helpers introduced by the current release from the validated release copy.
 
 ### Fixed
 
