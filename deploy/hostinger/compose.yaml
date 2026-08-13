@@ -1,6 +1,6 @@
 services:
   app:
-    image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.7.1}
+    image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.7.2}
     restart: unless-stopped
     read_only: true
     tmpfs:
