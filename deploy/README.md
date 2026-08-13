@@ -446,8 +446,8 @@ selected in Settings.
 ## Scheduled maintenance, lottery reminders, and assignment presets
 
 KinKudos keeps task photos and resolved-feedback screenshots for the periods
-selected in the parent settings. Every 30 minutes the same reminder command
-also:
+selected in the parent settings. Every 30 minutes the same reminder command (`run_scheduled_reminders`, with
+legacy alias `send_lottery_reminders`) also:
 
 - checks whether a due weekly lottery reminder should be sent;
 - sends soft assigned-task nudges when a batch is still pending about three
@@ -477,16 +477,17 @@ once per night and the reminder command every 30 minutes:
 
 ```cron
 15 2 * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py run_maintenance
-*/30 * * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py send_lottery_reminders
+*/30 * * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py run_scheduled_reminders
 ```
 
 It can also be run manually on any Docker Compose host:
 
 ```bash
 docker compose exec -T app python manage.py run_maintenance
-docker compose exec -T app python manage.py send_lottery_reminders
+docker compose exec -T app python manage.py run_scheduled_reminders
 ```
 
+The legacy alias `send_lottery_reminders` still works for existing cron entries.
 ## Limited diagnostics access
 
 Do not add a diagnostics-only account to the Docker group. An administrator

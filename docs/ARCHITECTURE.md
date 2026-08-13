@@ -106,7 +106,9 @@ Assigned items have `pending`, `completed`, or `cancelled` status. A child
 completes each item separately and receives its points immediately in the
 same database transaction that closes the item and creates its
 `assigned_task` ledger entry. Catalog-backed completion also creates a
-`TaskCompletion` record for that child and calendar day. This prevents a
+`TaskCompletion` record for that child and calendar day. Parents with active
+Web Push subscriptions receive a completion alert (history deep-link); there is
+no approval step because points are already credited. This prevents a
 catalog task from being assigned while it awaits approval, is already
 assigned, or has already been credited that day. The database enforces that
 invariant with a unique constraint on `(child, task, completed_on)`.
@@ -252,8 +254,10 @@ a small allowlist; `next` is retained only as a validated internal relative URL,
 and unknown or unsafe values are discarded.
 
 The systemd deployment installs a daily maintenance timer and a separate
-30-minute lottery-reminder timer. That reminder command also delivers soft
-assigned-task nudges when due. Generic deployments must schedule the
+30-minute scheduled-reminders timer (`run_scheduled_reminders`, legacy alias
+`send_lottery_reminders`). That command delivers lottery reminders, soft
+assigned-task nudges, and due assignment presets; each step is isolated so one
+failure does not skip the others. Generic deployments must schedule the
 corresponding Django commands themselves.
 
 ## Parent interface palette

@@ -429,7 +429,7 @@ automatiškai šalinamos tik išspręstų atsiliepimų nuotraukos.
 
 KinKudos darbų nuotraukas ir išspręstų atsiliepimų ekrano nuotraukas saugo
 tėvų nustatymuose pasirinktą laiką. Kas 30 minučių ta pati priminimų komanda
-taip pat:
+(`run_scheduled_reminders`, senasis alias `send_lottery_reminders`) taip pat:
 
 - tikrina, ar jau reikia siųsti savaitinį loterijos priminimą;
 - siunčia švelnius priminimus apie nebaigtus paskirtus darbus maždaug po
@@ -454,16 +454,17 @@ priminimų komandą – kas 30 minučių:
 
 ```cron
 15 2 * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py run_maintenance
-*/30 * * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py send_lottery_reminders
+*/30 * * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py run_scheduled_reminders
 ```
 
 Rankinis paleidimas:
 
 ```bash
 docker compose exec -T app python manage.py run_maintenance
-docker compose exec -T app python manage.py send_lottery_reminders
+docker compose exec -T app python manage.py run_scheduled_reminders
 ```
 
+Senas alias `send_lottery_reminders` ir toliau veikia esamiems `cron` įrašams.
 ## Ribota diagnostikos prieiga
 
 Diagnostikos naudotojui nesuteikite narystės Docker grupėje. Administratorius
