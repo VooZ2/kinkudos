@@ -257,7 +257,7 @@
           </div>
         </fieldset>
         <label>{% translate "Send at" %}:<input class="field-control" name="run_at" type="time" value="07:00"></label>
-        <button class="button button-secondary" type="submit" formaction="{% url 'parent_save_assignment_preset' child.pk %}">{% translate "Save set" %}</button>
+        <button class="button button-secondary" type="submit" formaction="{% url 'parent_save_assignment_preset' child.pk %}" data-save-assignment-preset>{% translate "Save set" %}</button>
       </div>
     </form>
     {% if child.assignment_batches %}

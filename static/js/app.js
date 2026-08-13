@@ -1637,9 +1637,21 @@ function syncAssignmentPresetCadence(root) {
 
 document.querySelectorAll("[data-assignment-preset-save]").forEach((root) => {
   const radios = root.querySelectorAll("[data-preset-cadence]");
-  if (!radios.length) return;
-  syncAssignmentPresetCadence(root);
-  radios.forEach((radio) => {
-    radio.addEventListener("change", () => syncAssignmentPresetCadence(root));
+  if (radios.length) {
+    syncAssignmentPresetCadence(root);
+    radios.forEach((radio) => {
+      radio.addEventListener("change", () => syncAssignmentPresetCadence(root));
+    });
+  }
+  const saveButton = root.querySelector("[data-save-assignment-preset]");
+  root.querySelectorAll("input, select").forEach((field) => {
+    field.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter") return;
+      // Keep Enter inside Save-as-a-set from submitting Send tasks (first
+      // type=submit in the shared Assign form).
+      event.preventDefault();
+      if (field instanceof HTMLInputElement && field.type === "radio") return;
+      saveButton?.click();
+    });
   });
 });

@@ -336,6 +336,24 @@ def assigned_tasks_block_rewards(child):
     ).exists()
 
 
+def assigned_task_nudge_at(*, now=None):
+    """Schedule the soft nudge ~3h later, but still on the assignment day.
+
+    Assigned work expires at local midnight. A nudge_at that falls after that
+    would never send (send_due requires assigned_on == today), so late-evening
+    batches clamp to the same local evening instead.
+    """
+    now = now or timezone.now()
+    local_now = timezone.localtime(now)
+    day_end = local_now.replace(hour=23, minute=45, second=0, microsecond=0)
+    candidate = now + timedelta(hours=3)
+    if timezone.localtime(candidate) > day_end:
+        candidate = day_end
+    if candidate < now:
+        candidate = now
+    return candidate
+
+
 def unavailable_assignment_task_ids(child):
     today = timezone.localdate()
     pending_claim_ids = child.task_claims.filter(
@@ -397,7 +415,7 @@ def assign_tasks(
         child=child,
         assigned_by=actor,
         blocks_rewards=blocks_rewards,
-        nudge_at=now + timedelta(hours=3),
+        nudge_at=assigned_task_nudge_at(now=now),
     )
     AssignedTask.objects.bulk_create(
         [
@@ -606,14 +624,8 @@ def run_due_assignment_presets(*, current_time=None):
             if local_time < preset.run_at:
                 continue
             batch = apply_assignment_preset(preset=preset, actor=preset.created_by)
-            # apply_assignment_preset already stamps last_auto_assigned_on on success;
-            # if nothing was available, still mark the day so the timer does not retry
-            # empty matching presets every 30 minutes.
-            if batch is None:
-                AssignmentPreset.objects.filter(pk=preset.pk).update(
-                    last_auto_assigned_on=today,
-                    updated_at=timezone.now(),
-                )
+            # Successful Apply stamps last_auto_assigned_on. An empty run must
+            # not burn the day — retry on later ticks if work becomes available.
         if batch is not None:
             notify_assigned_tasks(batch)
             created.append(batch)

@@ -104,13 +104,25 @@ class AssignedTaskServiceTests(TestCase):
         self.assertEqual(custom_item.note_snapshot, "Use the blue bowl.")
 
     def test_assignment_schedules_three_hour_nudge(self):
-        before = timezone.now()
-        batch = self.create_batch()
-        after = timezone.now()
-        self.assertIsNotNone(batch.nudge_at)
+        morning = timezone.make_aware(
+            datetime.combine(timezone.localdate(), time(10, 0))
+        )
+        with patch("django.utils.timezone.now", return_value=morning):
+            batch = self.create_batch()
+        self.assertEqual(batch.nudge_at, morning + timedelta(hours=3))
         self.assertIsNone(batch.nudge_sent_at)
-        self.assertGreaterEqual(batch.nudge_at, before + timedelta(hours=3))
-        self.assertLessEqual(batch.nudge_at, after + timedelta(hours=3))
+
+    def test_late_evening_assignment_clamps_nudge_to_same_day(self):
+        evening = timezone.make_aware(
+            datetime.combine(timezone.localdate(), time(21, 0))
+        )
+        with patch("django.utils.timezone.now", return_value=evening):
+            batch = self.create_batch(blocks_rewards=False)
+        local_nudge = timezone.localtime(batch.nudge_at)
+        self.assertEqual(local_nudge.date(), timezone.localdate())
+        self.assertEqual(local_nudge.hour, 23)
+        self.assertEqual(local_nudge.minute, 45)
+        self.assertGreater(batch.nudge_at, evening)
 
     @patch("economy.push.notify_assigned_tasks_nudge")
     def test_due_nudge_sends_once_while_pending(self, notify):
@@ -698,6 +710,29 @@ class AssignmentPresetTests(TestCase):
         second = run_due_assignment_presets(current_time=now)
         self.assertEqual(second, [])
         self.assertEqual(self.child.assigned_task_batches.count(), 1)
+
+    @patch("economy.push.notify_assigned_tasks")
+    def test_empty_auto_run_does_not_burn_the_day(self, notify_push):
+        preset = self._save_daily(name="Empty first", run_at=time(7, 0))
+        self.task.is_active = False
+        self.task.save(update_fields=["is_active"])
+        now = timezone.make_aware(
+            datetime.combine(timezone.localdate(), time(8, 0))
+        )
+        created = run_due_assignment_presets(current_time=now)
+        preset.refresh_from_db()
+        self.assertEqual(created, [])
+        self.assertIsNone(preset.last_auto_assigned_on)
+        notify_push.assert_not_called()
+
+        self.task.is_active = True
+        self.task.save(update_fields=["is_active"])
+        created = run_due_assignment_presets(current_time=now)
+        preset.refresh_from_db()
+        self.assertEqual(len(created), 1)
+        self.assertEqual(preset.last_auto_assigned_on, timezone.localdate())
+        self.assertEqual(self.child.assigned_task_batches.count(), 1)
+        notify_push.assert_called_once()
 
     def test_preset_limit_per_child(self):
         for index in range(5):

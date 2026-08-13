@@ -129,11 +129,13 @@ up to three chips that scroll to the existing card and is hidden when empty.
 Pending task or reward chips are omitted when the linked catalogue entry is
 inactive or soft-deleted, so chips never point at missing cards.
 
-Each batch schedules a soft child nudge three hours after creation
-(`nudge_at`). The existing 30-minute lottery-reminder command also sends due
-assigned-task nudges at most once per batch when the local assignment date is
-still today and at least one item remains pending. There is no automatic
-penalty if the work is unfinished.
+Each batch schedules a soft child nudge about three hours after creation
+(`nudge_at`). If that would fall after local midnight — when the batch would
+already expire — the nudge is clamped to the same local evening (23:45) so a
+late assignment can still remind before the day ends. The existing 30-minute
+lottery-reminder command also sends due assigned-task nudges at most once per
+batch when the local assignment date is still today and at least one item
+remains pending. There is no automatic penalty if the work is unfinished.
 
 **AssignmentPreset** / **AssignmentPresetItem** — a parent may save the current
 Assign-dialog selection (catalog tasks, optional custom task, optional notes,
@@ -145,7 +147,9 @@ reuses `assign_tasks`, skips unavailable catalog tasks, and skips a custom
 title that is already pending or completed for that child today so repeat Apply
 cannot duplicate custom-task credits. A successful Apply also stamps
 `last_auto_assigned_on` for the local day so the timer will not send the same
-set again that day. Soft limit: five saved sets per child.
+set again that day. An empty Apply (nothing left to assign) leaves that stamp
+unchanged so a later timer tick can retry if work becomes available. Soft
+limit: five saved sets per child.
 
 **PenaltyTemplate** — penalty catalog entry storing a negative amount
 directly (enforced at the field level). Applying it to a child requires a

@@ -416,12 +416,24 @@ ekrano nuotraukų ar kitų šeimos duomenų. Pasirinktinės vidinės ekrano
 nuotraukos saugomos privačiai WebP formatu; pasibaigus nustatytam terminui
 automatiškai šalinamos tik išspręstų atsiliepimų nuotraukos.
 
-## Periodinė priežiūra ir loterijos priminimai
+## Periodinė priežiūra, loterijos priminimai ir darbų rinkiniai
 
 KinKudos darbų nuotraukas ir išspręstų atsiliepimų ekrano nuotraukas saugo
-tėvų nustatymuose pasirinktą laiką. Sistema taip pat kas 30 minučių patikrina,
-ar jau reikia siųsti savaitinį loterijos priminimą. `systemd` naudojančiame
-Docker serveryje po diegimo arba atnaujinimo įjunkite abu laikmačius:
+tėvų nustatymuose pasirinktą laiką. Kas 30 minučių ta pati priminimų komanda
+taip pat:
+
+- tikrina, ar jau reikia siųsti savaitinį loterijos priminimą;
+- siunčia švelnius priminimus apie nebaigtus paskirtus darbus maždaug po
+  trijų valandų (vis dar tą pačią vietinę kalendorinę dieną);
+- paleidžia suėjusius išsaugotus darbų rinkinius (šeimos laiko juosta, nuo
+  kiekvieno rinkinio siuntimo laiko, kartą per atitinkančią dieną, kai yra ką
+  paskirti).
+
+Neišjunkite šio laikmačio kaip „tik loterijos“ darbo — juo naudojasi ir
+paskirtų darbų priminimai, ir automatinių rinkinių siuntimas.
+
+`systemd` naudojančiame Docker serveryje po diegimo arba atnaujinimo įjunkite
+abu laikmačius:
 
 ```bash
 cd /kelias/iki/kinkudos/deploy
@@ -435,9 +447,6 @@ priminimų komandą – kas 30 minučių:
 15 2 * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py run_maintenance
 */30 * * * * cd /kelias/iki/kinkudos/deploy && docker compose exec -T app python manage.py send_lottery_reminders
 ```
-
-`send_lottery_reminders` taip pat siunčia švelnius priminimus apie
-nebaigtus paskirtus darbus, praėjus trims valandoms po paskyrimo.
 
 Rankinis paleidimas:
 

@@ -434,12 +434,23 @@ or other family data. Optional in-app screenshots are private WebP files; only
 screenshots from resolved reports are removed after the retention period
 selected in Settings.
 
-## Scheduled maintenance and lottery reminders
+## Scheduled maintenance, lottery reminders, and assignment presets
 
 KinKudos keeps task photos and resolved-feedback screenshots for the periods
-selected in the parent settings. It also checks every 30 minutes whether a due
-weekly lottery reminder should be sent. On a systemd-based Docker host, enable
-both timers after installation or an upgrade:
+selected in the parent settings. Every 30 minutes the same reminder command
+also:
+
+- checks whether a due weekly lottery reminder should be sent;
+- sends soft assigned-task nudges when a batch is still pending about three
+  hours after assignment (still on that local calendar day);
+- runs due saved assignment presets (family timezone, at/after each set’s
+  send time, once per matching day when work is available).
+
+Do not disable this timer as a “lottery-only” job — assignment nudges and
+saved-set auto-assign use it too.
+
+On a systemd-based Docker host, enable both timers after installation or an
+upgrade:
 
 ```bash
 cd /path/to/kinkudos/deploy
@@ -459,9 +470,6 @@ once per night and the reminder command every 30 minutes:
 15 2 * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py run_maintenance
 */30 * * * * cd /path/to/kinkudos/deploy && docker compose exec -T app python manage.py send_lottery_reminders
 ```
-
-`send_lottery_reminders` also sends soft assigned-task nudges when a batch is
-still pending three hours after assignment.
 
 It can also be run manually on any Docker Compose host:
 

@@ -1,5 +1,5 @@
 [Unit]
-Description=Send due KinKudos lottery reminders
+Description=Send KinKudos lottery reminders, assigned-task nudges, and due assignment presets
 Requires=docker.service
 After=docker.service
 

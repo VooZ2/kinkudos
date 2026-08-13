@@ -1,5 +1,5 @@
 [Unit]
-Description=Check KinKudos lottery reminders every 30 minutes
+Description=Check KinKudos lottery reminders, assigned-task nudges, and assignment presets every 30 minutes
 
 [Timer]
 OnCalendar=*:0/30
