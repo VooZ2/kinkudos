@@ -147,7 +147,7 @@
       <button class="button button-primary" type="submit"{% if not active_tasks %} disabled{% endif %}>{% translate "Award selected tasks" %}</button>
     </form>
   </dialog>
-    <dialog id="assign-tasks-{{ child.pk }}" class="action-dialog assigned-tasks-dialog">
+  <dialog id="assign-tasks-{{ child.pk }}" class="action-dialog assigned-tasks-dialog">
     <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
     <h2>{% translate "Assign tasks for today" %}</h2><p class="dialog-context">{{ child.name }}</p>
     <p>{% translate "The tasks expire at midnight. Completed tasks award points immediately." %}</p>
@@ -280,7 +280,6 @@
                 <span>
                   {% if item.status == "completed" %}{% translate "Completed" %}
                   {% elif item.status == "cancelled" %}{% translate "Cancelled" %}
-                  {% elif item.is_expired %}{% translate "Expired" %}
                   {% else %}
                     {% translate "Waiting" %}
                     <form method="post" action="{% url 'parent_cancel_assigned_task' item.pk %}">{% csrf_token %}<button class="decision-icon-button decision-reject compact-decision-button" type="submit" aria-label="{% translate "Cancel" %}" title="{% translate "Cancel" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form>
