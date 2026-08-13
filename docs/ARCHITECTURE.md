@@ -105,15 +105,20 @@ child’s assigned-task row in the active theme.
 Assigned items have `pending`, `completed`, or `cancelled` status. A child
 completes each item separately and receives its points immediately in the
 same database transaction that closes the item and creates its
-`assigned_task` ledger entry. Catalog-backed completion also creates a
-`TaskCompletion` record for that child and calendar day. Parents with active
+`assigned_task` ledger entry. Catalog-backed completion also records a
+`TaskCompletion` for that child and calendar day. Parents with active
 Web Push subscriptions receive a completion alert (history deep-link); there is
-no approval step because points are already credited. This prevents a
-catalog task from being assigned while it awaits approval, is already
-assigned, or has already been credited that day. The database enforces that
-invariant with a unique constraint on `(child, task, completed_on)`.
-Cancelled items can be assigned again; completed catalog tasks become
-available on the next day.
+no approval step because points are already credited. The same day-marker
+blocks Assign (and parent Award) for that catalog task for the rest of the
+local day; the database enforces at most one `TaskCompletion` row per
+`(child, task, completed_on)`. Cancelled items can be assigned again;
+completed catalog tasks become available for Assign again on the next day.
+
+Voluntary catalog claims are different: a child may submit and have the same
+catalog task approved multiple times in one day (for example unloading the
+dishwasher twice). Each approval posts its own ledger credit. Approval uses
+`get_or_create` for `TaskCompletion` so a second same-day credit never raises
+an integrity error, while the day-marker still prevents a second Assign.
 
 Pending items are active only when `AssignedTaskBatch.assigned_on` equals the
 server-local calendar date. At midnight they disappear from the child's

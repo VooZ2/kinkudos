@@ -37,6 +37,7 @@ from economy.services import (
     save_assignment_preset,
     send_due_assigned_task_nudges,
     submit_reward_request,
+    submit_task,
     unavailable_assignment_task_ids,
 )
 
@@ -251,6 +252,28 @@ class AssignedTaskServiceTests(TestCase):
             reward_snapshot=self.task.reward,
         )
         approve_task_claim(claim=claim, actor=self.parent)
+        self.assertIn(self.task.pk, unavailable_assignment_task_ids(self.child))
+
+    def test_approve_after_assigned_completion_still_credits(self):
+        batch = self.create_batch(blocks_rewards=False)
+        complete_assigned_task(
+            assigned_task=batch.items.get(task=self.task),
+            child=self.child,
+        )
+        self.child.refresh_from_db()
+        balance_after_assigned = self.child.balance
+        claim = submit_task(child=self.child, task=self.task)
+        approve_task_claim(claim=claim, actor=self.parent)
+        self.child.refresh_from_db()
+        self.assertEqual(self.child.balance, balance_after_assigned + self.task.reward)
+        self.assertEqual(
+            TaskCompletion.objects.filter(
+                child=self.child,
+                task=self.task,
+                completed_on=timezone.localdate(),
+            ).count(),
+            1,
+        )
         self.assertIn(self.task.pk, unavailable_assignment_task_ids(self.child))
 
     def test_cancelled_catalog_task_can_be_assigned_again_same_day(self):

@@ -263,7 +263,7 @@ def approve_task_claim(*, claim, actor):
         actor=actor,
         source_id=locked.pk,
     )
-    TaskCompletion.objects.create(child=locked.child, task=locked.task)
+    ensure_task_completion(child=locked.child, task=locked.task)
     return entry
 
 
@@ -352,6 +352,24 @@ def assigned_task_nudge_at(*, now=None):
     if candidate < now:
         candidate = now
     return candidate
+
+
+def ensure_task_completion(*, child, task, completed_on=None):
+    """Mark a catalog task as credited today for Assign/Award day gating.
+
+    Children may submit and have the same catalog task approved multiple times
+    in one day. The unique (child, task, completed_on) row is only a day marker
+    for parent Assign/Award — never a reason to fail a second credit.
+    """
+    if task is None:
+        return None
+    completed_on = completed_on or timezone.localdate()
+    completion, _created = TaskCompletion.objects.get_or_create(
+        child=child,
+        task=task,
+        completed_on=completed_on,
+    )
+    return completion
 
 
 def unavailable_assignment_task_ids(child):
@@ -709,7 +727,7 @@ def complete_assigned_task(*, assigned_task, child):
     )
     AssignedTask.objects.filter(pk=locked.pk).update(ledger_entry=entry)
     if locked.task_id:
-        TaskCompletion.objects.create(child=child, task=locked.task)
+        ensure_task_completion(child=child, task=locked.task)
     from .push import notify_assigned_task_completed
 
     notify_assigned_task_completed(locked)

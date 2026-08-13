@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.utils import timezone
 
 from economy.models import (
     ChildProfile,
@@ -14,6 +15,7 @@ from economy.models import (
     Reward,
     SavingsGoal,
     Task,
+    TaskCompletion,
 )
 from economy.services import (
     approve_proposal,
@@ -81,6 +83,29 @@ class EconomyServiceTests(TestCase):
             1,
         )
         self.assertEqual(first.balance_after, 50)
+
+    def test_same_catalog_task_can_be_approved_multiple_times_per_day(self):
+        first = submit_task(child=self.child, task=self.task)
+        approve_task_claim(claim=first, actor=self.parent)
+        second = submit_task(child=self.child, task=self.task)
+        approve_task_claim(claim=second, actor=self.parent)
+        self.child.refresh_from_db()
+        self.assertEqual(self.child.balance, 100)
+        self.assertEqual(
+            LedgerEntry.objects.filter(
+                child=self.child,
+                kind=LedgerKind.TASK,
+            ).count(),
+            2,
+        )
+        self.assertEqual(
+            TaskCompletion.objects.filter(
+                child=self.child,
+                task=self.task,
+                completed_on=timezone.localdate(),
+            ).count(),
+            1,
+        )
 
     def test_double_task_rejection_is_one_winner(self):
         claim = submit_task(child=self.child, task=self.task)

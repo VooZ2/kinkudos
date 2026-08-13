@@ -75,6 +75,7 @@ from economy.services import (
     close_savings_goal,
     deactivate_parent_account,
     delete_savings_goal,
+    ensure_task_completion,
     keep_goal_active,
     post_ledger_entry,
     reject_proposal,
@@ -585,7 +586,7 @@ def parent_award_task(request, child_id):
                 actor=request.user,
                 source_id=task.pk,
             )
-            TaskCompletion.objects.create(
+            ensure_task_completion(
                 child=child,
                 task=task,
                 completed_on=today,
