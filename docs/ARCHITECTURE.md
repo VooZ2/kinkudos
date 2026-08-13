@@ -115,8 +115,10 @@ available on the next day.
 
 Pending items are active only when `AssignedTaskBatch.assigned_on` equals the
 server-local calendar date. At midnight they disappear from the child's
-priority list, stop blocking new reward requests, and remain visible as
-expired in parent history. Blocking applies only to new reward purchases:
+priority list and stop blocking new reward requests. The Assign dialog lists
+only the current day's batches so a parent can cancel remaining items;
+completed assigned tasks remain in the activity ledger. Blocking applies only
+to new reward purchases:
 existing pending reward requests can still be approved or rejected, and all
 other child actions remain available.
 

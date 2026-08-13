@@ -2107,9 +2107,6 @@ msgstr "Šiandienos darbai laukia!"
 msgid "Reason"
 msgstr "Paaiškinimas"
 
-msgid "Recent assigned tasks"
-msgstr "Naujausi paskirti darbai"
-
 msgid "Recent backup actions"
 msgstr "Naujausi atsarginių kopijų veiksmai"
 
@@ -3072,6 +3069,9 @@ msgstr "Šiandien paskirtos misijos"
 
 msgid "Today's assigned quests"
 msgstr "Šiandien paskirtos užduotys"
+
+msgid "Today's assigned tasks"
+msgstr "Šiandien paskirti darbai"
 
 msgid "Today's bamboo tasks"
 msgstr "Šiandienos bambuko darbai"

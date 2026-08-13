@@ -434,12 +434,12 @@ def parent_dashboard(request):
             .all()
         )
         child.assignment_batches = list(
-            child.assigned_task_batches.filter(assigned_on__lte=today)
+            child.assigned_task_batches.filter(assigned_on=today)
             .select_related("assigned_by")
-            .prefetch_related("items__task", "items__cancelled_by")[:10]
+            .prefetch_related("items__task", "items__cancelled_by")
         )
         for batch in child.assignment_batches:
-            batch.has_pending_items = batch.assigned_on == today and any(
+            batch.has_pending_items = any(
                 item.status == AssignedTaskStatus.PENDING
                 for item in batch.items.all()
             )

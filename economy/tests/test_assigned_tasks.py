@@ -464,6 +464,34 @@ class AssignedTaskViewTests(TestCase):
         )
         self.assertFalse(assigned_tasks_block_rewards(self.child))
 
+    def test_assign_dialog_lists_only_todays_batches(self):
+        yesterday_task = Task.objects.create(title="Yesterday only", reward=5)
+        today_task = Task.objects.create(title="Today only", reward=6)
+        yesterday = assign_tasks(
+            child=self.child,
+            actor=self.parent,
+            tasks=[yesterday_task],
+        )
+        yesterday.assigned_on = timezone.localdate() - timedelta(days=1)
+        yesterday.save(update_fields=["assigned_on"])
+        assign_tasks(
+            child=self.child,
+            actor=self.parent,
+            tasks=[today_task],
+        )
+        self.client.login(username="parent", password=self.parent_password)
+        response = self.client.get(reverse("parent_dashboard"))
+        child = next(
+            item for item in response.context["children"] if item.pk == self.child.pk
+        )
+        titles = [
+            assigned.title_snapshot
+            for batch in child.assignment_batches
+            for assigned in batch.items.all()
+        ]
+        self.assertContains(response, "Today's assigned tasks")
+        self.assertEqual(titles, ["Today only"])
+
     def test_cancel_remaining_button_only_appears_for_waiting_batch(self):
         batch = assign_tasks(
             child=self.child,
