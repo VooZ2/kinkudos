@@ -25,8 +25,12 @@ original task information to remain understandable.
 
 ## Child-submitted tasks
 
-1. A child selects an available task and may attach a photo.
-2. The task appears in **Parents → Home → Pending requests**.
+1. A child selects an available catalogue task and may attach a photo and an
+   optional short note (**What I did**, at most 200 characters). Completing an
+   assigned task does not use this note.
+2. The task appears in **Parents → Home → Pending requests**. If the child
+   wrote a note, a comment icon opens a read-only dialog; there is no icon when
+   the note is empty. The note is not a chat and does not award a photo bonus.
 3. Choose one decision:
 
 | Decision | Result |
@@ -35,9 +39,14 @@ original task information to remain understandable.
 | **Ask to improve** | Returns the task to the child with an optional explanation; no points move yet. |
 | **Reject** | Closes the task without points. An optional explanation can tell the child why. |
 
-A child can have one active submission for the same task at a time. A task
-photo is private to the family: it is resized, stripped of camera metadata,
-and kept according to the family retention rule.
+A child can have one active submission for the same task at a time. The same
+catalogue task can be submitted and approved more than once in one local day;
+each approved claim still awards its points. **Assign tasks for today** and
+**Add completed task** still credit that catalogue task at most once per local
+day.
+
+A task photo is private to the family: it is resized, stripped of camera
+metadata, and kept according to the family retention rule.
 
 ## Add a completed task directly
 
@@ -53,7 +62,9 @@ saved set that can go out on a schedule. See [Assign tasks for today](assign-tas
 
 - Assigned tasks expire at midnight in the server’s local time and then leave
   today’s lists.
-- The child completes each assigned task; points are added immediately.
+- The child completes each assigned task; points are added immediately. That
+  completion has no child note. Parents with notifications enabled also
+  receive a Web Push alert.
 - A task is unavailable when it is already waiting for approval, assigned
   today, or credited today.
 - You can optionally block **new** reward purchases until the assigned tasks

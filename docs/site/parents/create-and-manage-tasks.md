@@ -51,7 +51,7 @@ understandable with the title, icon, and point value recorded at the time.
 
 | Method | What happens | Use it when |
 | --- | --- | --- |
-| **Child submission** | The child submits the task; a parent approves, asks for improvement, or rejects it. | The child should report the work or attach evidence. |
+| **Child submission** | The child submits the task, optionally with a photo and a short note; a parent approves, asks for improvement, or rejects it. | The child should report the work or attach evidence. |
 | **Add completed task** | A parent selects catalogue tasks from a child card and awards them immediately. | An adult observed the work or the child is too young to submit it. |
 
 ## Related guides

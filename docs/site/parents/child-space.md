@@ -8,8 +8,8 @@ information, PIN, balance, or requests.
 
 | Area | What the child can do |
 | --- | --- |
-| **Tasks** | Choose an available task, optionally attach a photo, and submit it for parent approval. If work is returned for improvement, revise it and submit it again. |
-| **Today’s assigned tasks** | Complete tasks sent by a parent. Each completion awards its points immediately and the task disappears from today’s list. If the parent added a note in **Assign tasks for today**, it appears clearly under the title in the child’s current theme. |
+| **Tasks** | Choose an available catalogue task, optionally attach a photo and a short note, and submit it for parent approval. If work is returned for improvement, revise it and submit it again. |
+| **Today’s assigned tasks** | Complete tasks sent by a parent. Each completion awards its points immediately and the task disappears from today’s list. There is no child note on that check. If the parent added a note in **Assign tasks for today**, it appears clearly under the title in the child’s current theme. |
 | **Rewards** | Request an available reward when the spendable balance and credit rule allow it. A child may cancel their own request while it is pending. |
 | **Goals and suggestions** | Suggest a reward or savings goal. After a parent approves a goal suggestion, choose **Use available points** or **Save separately** from the goal card. |
 | **Scratch tickets** | Buy an optional ticket only when enabled for both the family and the child, the child has enough spendable points, and the weekly limit allows it. An open ticket must be finished before buying another. |
@@ -19,6 +19,12 @@ information, PIN, balance, or requests.
 Give points and Feedback sit in one floating action stack on the child
 dashboard so they stay spaced and do not cover task buttons; the page leaves
 room at the bottom for both controls.
+
+On a catalogue claim or resubmit, the sheet order is photo, then **What I did**,
+then the check. The note is optional, at most 200 characters, and is not
+focused automatically. It is a one-way note for parents, not a chat. Completing
+an assigned task does not use this note; that parent instruction lives only on
+the assigned item.
 
 When anything still needs a parent decision — a submitted task, a revision to
 fix, a reward request, a goal completion, a suggestion, or a birthday change —

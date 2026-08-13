@@ -95,7 +95,9 @@ openssl rand -hex 32
 Paruošimo kodą saugokite paslaptyje — jo reikės tik pirmai šeimai ir tėvų
 administratoriaus paskyrai sukurti. Nei vienos reikšmės nerodykite ekrano
 nuotraukose. Papildomų kintamųjų nepridėkite, nebent turite konkretų palaikomą
-konfigūracijos poreikį.
+konfigūracijos poreikį. `KINKUDOS_TRUSTED_PROXIES` nustatyti nereikia;
+Hostinger Compose failas jau pasitiki privačiais Docker tinklais, naudojamais
+su valdomu Traefik. Tos reikšmės neplėskite į visą internetą.
 
 ![Hostinger Compose programa su KinKudos atvaizdu ir paslėptomis privalomomis reikšmėmis](../assets/hostinger-compose-environment.png)
 

@@ -85,6 +85,15 @@ KINKUDOS_PROXY_NETWORK=traefik-public ./bootstrap.sh
 rinksitės tik tada, kai kitas proxy prijungtas prie jo ir nukreiptas į KinKudos
 `app` servisą per `8000` prievadą.
 
+Vedamasis paruošimas `KINKUDOS_TRUSTED_PROXIES` įrašo pagal pasirinktą proxy
+režimą: `host` – loopback, o `traefik` ar `container` – Docker proxy tinklo
+CIDR. Esama netuščia reikšmė paliekama. Pakartotinai paleidus `bootstrap.sh`
+išlieka esamas proxy režimas, tinklas, papildinys ir aiškiai nustatyta
+patikimų proxy reikšmė; Traefik ar konteinerinio proxy papildinys
+neperjungiamas į `host`. Hostinger Compose palieka savą privatų Docker tinklo
+atsarginį variantą ir šio pagalbinio scenarijaus nenaudoja. Niekada
+nepasitikėkite visu internetu.
+
 ## Rankinis Docker Compose diegimas
 
 Parsisiųskite konkretaus GitHub leidimo archyvą ir SHA256 failą, juos

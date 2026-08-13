@@ -12,7 +12,7 @@ Installing gives KinKudos its own home-screen or app icon and is required for no
 
 ## Enable notifications
 
-Sign in on the device, then select the bell icon in the top bar and accept the browser permission prompt. Repeat this for each device that should receive notifications. An active parent receives alerts for child submissions, reward requests, suggestions, and birthday-change requests; a child receives relevant parent decisions, assigned work, gifts, birthday awards, an optional lottery reminder, and a gentle reminder about three hours after assigned work is sent if any item in that batch is still waiting. Unfinished assigned work is not penalised automatically. Deactivating a parent removes that account's push subscriptions, so it no longer receives parent notifications.
+Sign in on the device, then select the bell icon in the top bar and accept the browser permission prompt. Repeat this for each device that should receive notifications. An active parent receives alerts for child submissions, assigned-task completions, reward requests, suggestions, and birthday-change requests; a child receives relevant parent decisions, assigned work, gifts, birthday awards, an optional lottery reminder, and a gentle reminder about three hours after assigned work is sent if any item in that batch is still waiting. Unfinished assigned work is not penalised automatically. Deactivating a parent removes that account's push subscriptions, so it no longer receives parent notifications.
 
 Delivery is best-effort after the database commit on a short background thread with a hard per-endpoint timeout; a slow or failed push must not fail the user action. Always confirm state in the app itself.
 

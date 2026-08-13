@@ -58,7 +58,7 @@ todėl pažanga gali mažėti.
 
 ## Taupyti atskirai
 
-Vaikui rodomos būsenos gali būti **Išsaugota** ir **Taupoma atskirai**.
+Vaikui rodomos būsenos gali būti **Sukaupta** ir **Taupoma atskirai**.
 
 - Vaikas iš teigiamo turimo balanso į tikslą perkelia pasirinktą sumą.
 - Išleidžiamas balansas sumažėja.
@@ -91,6 +91,8 @@ skiltyje pateikiama:
 - vaiko filtras (rodomas tik tada, kai yra bent vienas tikslas);
 - tikslo būdas **Dabartinis tikslas** arba **Taupoma atskirai**;
 - dabartinė pažanga, tikslas ir pažangos juosta;
+- informacijos valdiklis prie tikslo pavadinimo, kad liktų matomas, kai
+  atskirai taupomas tikslas turi keturis veiksmus;
 - **Redaguoti** su **Išsaugoti** ir **Atšaukti**, o **Trinti** atskirtas
   žemiau;
 - **Pridėti taškų** prie atskiro tikslo;

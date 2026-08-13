@@ -13,6 +13,10 @@ requests exist, a count badge appears beside that heading. When there are none,
 the compact empty state says **No pending requests**. The child cards remain
 directly below the panel.
 
+The parent **Home** navigation item also shows that pending count. On a phone
+the badge sits on the house-icon corner; on a wider screen it stays a compact
+count on the right of the Home row.
+
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View Parent Home pending requests on mobile</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
 <img class="screenshot-image" src="../../assets/parent-home-pending-requests-mobile-26-6-7.png" alt="Parent Home pending requests panel with heading and count badge on mobile" loading="lazy">
@@ -48,8 +52,10 @@ Points is the spendable balance. Points saved separately for a goal are
 excluded from it and cannot be used for rewards. A zero or negative balance
 gives a use-available goal zero progress. The **Tickets** line is hidden when
 scratch tickets are disabled. The `saved` line is shown only when the child
-has saved points; `0 saved` is not shown. A child without goals has no empty
-goal block or placeholder.
+has saved points; `0 saved` is not shown. An information control next to that
+total explains the reserved points; the goal strip below it has no separate
+information button. A child without goals has no empty goal block or
+placeholder.
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View Parent Home child cards on mobile</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
@@ -71,7 +77,8 @@ bar, and a status such as **Current goal**, **Uses available points**, **Saved**
 or **Reached goal**. A saved goal may also be identified as **Saved
 separately**, and an additional-goal count can show that more goals exist.
 
-Selecting the summary opens **Manage → Goals**.
+The goal strip has no separate information button. Selecting the whole strip
+opens **Manage → Goals**.
 
 ## Child card actions
 
@@ -109,7 +116,8 @@ unfinished tasks or the remaining set can be cancelled from the same card.
 
 ## Pending requests
 
-Requests appear in the pending panel and are easy to scan by child. On a phone,
+Requests appear in the pending panel and are easy to scan by child. The child’s
+name and the type (**Task** or **Reward**) sit on one line. On a phone,
 decision actions sit left-aligned under the request copy. The available
 decisions are:
 
@@ -123,7 +131,9 @@ When approving a savings-goal proposal that still needs a save mode, the dialog
 offers **Use available points** and **Save separately** as inline option cards
 (radio + label).
 
-For a task with a photo, select the thumbnail to view it at full size. Photos
+For a task with a child note, a comment icon opens a read-only dialog. There is
+no icon when the note is empty. For a task with a photo, select the thumbnail
+to view it at full size. The note does not award a photo bonus. Photos
 are private family data and follow the retention rule in [Parent
 settings](settings.md).
 

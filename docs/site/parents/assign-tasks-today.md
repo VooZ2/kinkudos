@@ -20,7 +20,10 @@ Assigning work gives one child a small, explicit list for the current day. Use
    confirm the list is visible.
 
 The child completes each assigned task themselves and receives its points
-immediately. There is no separate parent-approval step for that completion.
+immediately. There is no separate parent-approval step for that completion, and
+there is no child claim note on that check. Parents with notifications enabled
+also receive a Web Push alert. Close the dialog with **X** if you are not
+sending yet.
 
 <details class="screenshot-disclosure" open>
 <summary><span class="screenshot-disclosure__icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1 2-2m0 2v12h14V6zm2 10 2.8-3.5 2 2.4 2.7-3.4L18 16zM16.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/></svg></span><span class="screenshot-disclosure__label">View Assign tasks for today with an optional note</span><span class="screenshot-disclosure__arrow" aria-hidden="true"></span></summary>
@@ -31,9 +34,11 @@ The screenshot uses fictional demonstration data.
 
 ## Optional notes
 
-A note is stored on the assigned item when you send it. Later catalogue edits
-do not change a note that was already sent. The child sees it clearly under
-the task title, using the colours and wording of their current world.
+A parent note is stored on the assigned item when you send it. Later catalogue
+edits do not change a note that was already sent. The child sees it clearly
+under the task title, using the colours and wording of their current world.
+This is not the optional **What I did** note a child can add when submitting a
+catalogue task for approval.
 
 ## Saved assignment sets
 
@@ -84,7 +89,9 @@ for the child and stop appearing as today’s work.
 
 - A catalogue task cannot be assigned when it is already pending review,
   already assigned today, or already credited today. Those rows show
-  **Unavailable today**.
+  **Unavailable today**. A child-submitted catalogue claim can still be
+  approved more than once in the same local day; Assign and Award stay once
+  per local day.
 - Unfinished assignments expire at midnight in the server’s local time. They
   disappear from the child’s list and stop blocking new reward requests. They
   do not award points.

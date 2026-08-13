@@ -45,7 +45,7 @@ Pasirinkite:
 Domeno paraginime įrašykite tik domeną, be `https://` ir be pasvirojo brūkšnio
 pabaigoje. Proxy režimas turi atitikti prieš diegiklį paruoštą infrastruktūrą.
 
-Diegiklis sugeneruoja serverio paslaptis, įrašo vietinį `.env`, parenka proxy papildinį, patikrina katalogų savininkus, parsiunčia pasirinktam KinKudos leidimui priskirtą programos atvaizdą ir paleidžia `app` bei `backup-agent`.
+Diegiklis sugeneruoja serverio paslaptis, įrašo vietinį `.env`, parenka proxy papildinį, tam režimui įrašo `KINKUDOS_TRUSTED_PROXIES`, patikrina katalogų savininkus, parsiunčia pasirinktam KinKudos leidimui priskirtą programos atvaizdą ir paleidžia `app` bei `backup-agent`.
 
 Diegikliui baigus darbą kataloge `/opt/kinkudos/deploy` vykdykite
 `docker compose ps` ir prieš atverdami HTTPS domeną palaukite, kol `app` būsena

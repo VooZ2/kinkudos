@@ -52,7 +52,7 @@ galiojęs pavadinimas, ikona ir taškų vertė.
 
 | Būdas | Kas vyksta | Kada rinktis |
 | --- | --- | --- |
-| **Vaiko pateikimas** | Vaikas pateikia užduotį; tėvai ją patvirtina, prašo pataisyti arba atmeta. | Vaikas turi pats pranešti apie darbą ar pridėti įrodymą. |
+| **Vaiko pateikimas** | Vaikas pateikia užduotį, prireikus su nuotrauka ir trumpa pastaba; tėvai ją patvirtina, prašo pataisyti arba atmeta. | Vaikas turi pats pranešti apie darbą ar pridėti įrodymą. |
 | **Pridėti atliktą darbą** | Tėvai vaiko kortelėje pasirenka katalogo darbus ir iškart skiria taškus. | Suaugęs matė rezultatą arba vaikas per mažas pateikti užduotį. |
 
 ## Susiję vadovai

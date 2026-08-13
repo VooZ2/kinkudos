@@ -95,7 +95,10 @@ openssl rand -hex 32
 
 Keep the setup code private; it is needed only to create the first family and
 parent account. Do not reveal either value in screenshots. Do not add other
-variables unless you have a specific supported configuration need.
+variables unless you have a specific supported configuration need. You do not
+need to set `KINKUDOS_TRUSTED_PROXIES`; the Hostinger Compose file already
+trusts the private Docker networks used with managed Traefik. Do not widen
+that value to the public internet.
 
 ![Hostinger Compose application with the KinKudos image and masked required variables](../assets/hostinger-compose-environment.png)
 
