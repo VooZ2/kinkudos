@@ -92,6 +92,8 @@ this section alone. When goals exist, the section provides:
 - a child filter (shown only when at least one goal exists);
 - the goal’s **Current goal** or **Saved separately** method;
 - current progress and target with a progress bar;
+- an information control next to the goal title, so it stays visible when a
+  saved goal has four actions;
 - **Edit** with **Save** and **Cancel**, and **Delete** separated below;
 - **Add points** for a saved goal;
 - **Move saved points back**;

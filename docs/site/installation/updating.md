@@ -19,7 +19,7 @@ Only the latest published release is supported. Read its [release notes](https:/
 
 Use the release archive, SHA256 file, and `install-release.sh` procedure from the [technical deployment reference](https://github.com/VooZ2/kinkudos/blob/main/deploy/README.md#updating-an-existing-installation). Run it from the deployment root, not from an arbitrary Compose copy.
 
-The updater verifies release metadata and checksum, pulls and smoke-tests the pinned image, checks directory ownership, creates a consistent database backup, starts the new app and backup agent, waits for health, verifies migrations and version, and refreshes versioned management helpers. It preserves `.env`, `data`, uploads, backups, and secrets.
+The updater verifies release metadata and checksum, pulls and smoke-tests the pinned image, checks directory ownership, creates a consistent database backup, starts the new app and backup agent, waits for health, verifies migrations and version, and refreshes versioned management helpers. It preserves `.env`, `data`, uploads, backups, and secrets. It also keeps the existing proxy overlay, network, and a non-empty `KINKUDOS_TRUSTED_PROXIES` value, and writes the trusted-proxy CIDR from the selected proxy mode when that value is still empty.
 
 On Hostinger, use Docker Manager's supported Update action and verify the
 managed Traefik route and HTTPS result afterward. Create a VPS snapshot first.

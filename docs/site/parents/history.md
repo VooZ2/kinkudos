@@ -80,6 +80,11 @@ the trailing edge of the row. Rows do not use a calendar icon beside every
 date. Activity icons and their responsive positions are visual aids; the
 readable action name and row text are the source of meaning.
 
+When a catalogue claim included a child note, a comment icon appears on that
+History row. Opening it shows the same read-only note; there is no icon when
+the note is empty. It is not a chat, and the note does not award a photo bonus.
+A separate camera control opens the task photo when one is still stored.
+
 ## Status and value meaning
 
 - **Approved** uses the success treatment.

@@ -9,10 +9,14 @@ Peržiūra leidžia tėvams išlaikyti aiškų susitarimą prieš pasikeičiant 
 
 ## Peržiūrėkite pateikimą
 
-1. Atidarykite **Laukiančius prašymus** ir pasirinkite vaiko užduotį.
-2. Jei rodoma miniatiūra, atidarykite ją tik tada, kai nuotraukos reikia užduočiai
+1. Atidarykite **Laukiančius prašymus** ir pasirinkite vaiko užduotį. Vaiko
+   vardas ir tipas (**Darbas** arba **Prizas**) rodomi vienoje eilutėje.
+2. Jei matoma komentaro ikona, atidarykite ją ir perskaitykite vaiko
+   pasirenkamą pastabą. Dialogas tik skaitymui; tai ne pokalbis. Tuščiai
+   pastabai ikonos nėra. Pastaba neskiria priedo už nuotrauką.
+3. Jei rodoma miniatiūra, atidarykite ją tik tada, kai nuotraukos reikia užduočiai
    įvertinti. Tai tik šeimai matomas atlikimo įrodymas.
-3. Priimkite vieną sprendimą:
+4. Priimkite vieną sprendimą:
 
 | Sprendimas | Rezultatas |
 | --- | --- |
@@ -20,9 +24,14 @@ Peržiūra leidžia tėvams išlaikyti aiškų susitarimą prieš pasikeičiant 
 | **Prašyti pataisyti** | Grąžina užduotį vaikui su pasirenkama pastaba. Vaikas gali pataisyti ir pateikti iš naujo; taškai dar neskiriami. |
 | **Atmesti** | Užduotis uždaroma be taškų. Pasirenkama pastaba gali paaiškinti sprendimą. |
 
-Vaikas gali turėti tik vieną aktyvų tos pačios užduoties pateikimą. Užduoties nuotrauka
-prieš saugojimą sumažinama ir išvaloma nuo kameros metaduomenų; saugojimo laiką
-nustato šeima.
+Vaikas gali turėti tik vieną aktyvų tos pačios užduoties pateikimą. Tą pačią
+katalogo užduotį tą pačią vietinę dieną galima pateikti ir patvirtinti ne
+vieną kartą; kiekvienas patvirtintas pateikimas vis tiek skiria taškus.
+**Paskirti darbus šiandienai** ir **Pridėti atliktą darbą** katalogo užduotį
+vis dar užskaito ne daugiau kaip kartą per vietinę dieną.
+
+Užduoties nuotrauka prieš saugojimą sumažinama ir išvaloma nuo kameros
+metaduomenų; saugojimo laiką nustato šeima.
 
 ## Patikrinkite rezultatą
 

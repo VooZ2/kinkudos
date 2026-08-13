@@ -19,7 +19,7 @@ Palaikomas tik naujausias paskelbtas leidimas. Perskaitykite jo [leidimo pastaba
 
 Naudokite leidimo archyvo, SHA256 failo ir `install-release.sh` eigą iš [techninio diegimo aprašo](https://github.com/VooZ2/kinkudos/blob/main/deploy/README.lt.md#esamos-instaliacijos-atnaujinimas). Komandas vykdykite diegimo šakniniame kataloge, ne atsitiktinėje Compose kopijoje.
 
-Atnaujintojas patikrina leidimo duomenis ir kontrolinę sumą, parsiunčia ir bandomai paleidžia konkrečios versijos atvaizdą, tikrina katalogų teises, sukuria nuoseklią DB kopiją, paleidžia naują programą ir kopijų agentą, laukia sveikatos patikros, tikrina migracijas bei versiją ir atnaujina valdymo scenarijus. `.env`, `data`, įkelti failai, kopijos ir paslaptys išlieka.
+Atnaujintojas patikrina leidimo duomenis ir kontrolinę sumą, parsiunčia ir bandomai paleidžia konkrečios versijos atvaizdą, tikrina katalogų teises, sukuria nuoseklią DB kopiją, paleidžia naują programą ir kopijų agentą, laukia sveikatos patikros, tikrina migracijas bei versiją ir atnaujina valdymo scenarijus. `.env`, `data`, įkelti failai, kopijos ir paslaptys išlieka. Taip pat išlieka esamas proxy papildinys, tinklas ir netuščia `KINKUDOS_TRUSTED_PROXIES` reikšmė; jei ji dar tuščia, patikimų proxy CIDR įrašomas pagal pasirinktą proxy režimą.
 
 Hostinger aplinkoje naudokite Docker Manager palaikomą Update veiksmą ir po jo
 patikrinkite valdomą Traefik maršrutą bei HTTPS rezultatą. Prieš atnaujinimą
