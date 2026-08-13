@@ -296,28 +296,35 @@ def _waiting_for_parents_items(child, *, limit=3):
     for claim in child.task_claims.filter(
         status=RequestStatus.PENDING
     ).select_related("task").order_by("submitted_at", "pk"):
+        task = claim.task
+        if task is None or not task.is_active or task.is_deleted:
+            continue
         items.append(
             {
                 "kind": "task",
                 "kind_label": _("Task"),
                 "title": claim.task_title,
-                "href": f"#task-card-{claim.task_id}",
+                "href": f"#task-card-{task.pk}",
             }
         )
     for reward_request in child.reward_requests.filter(
         status=RequestStatus.PENDING
     ).select_related("reward").order_by("submitted_at", "pk"):
+        reward = reward_request.reward
+        if reward is None or not reward.is_active or reward.is_deleted:
+            continue
         items.append(
             {
                 "kind": "reward",
                 "kind_label": _("Reward"),
                 "title": reward_request.reward_title,
-                "href": f"#reward-card-{reward_request.reward_id}",
+                "href": f"#reward-card-{reward.pk}",
             }
         )
     for completion in GoalCompletionRequest.objects.filter(
         goal__child=child,
         status=RequestStatus.PENDING,
+        goal__status=GoalStatus.ACTIVE,
     ).select_related("goal").order_by("requested_at", "pk"):
         items.append(
             {

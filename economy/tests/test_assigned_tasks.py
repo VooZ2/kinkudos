@@ -704,3 +704,73 @@ class AssignmentPresetTests(TestCase):
             self._save_daily(name=f"Set {index}")
         with self.assertRaises(ValidationError):
             self._save_daily(name="Too many")
+
+    def test_repeated_apply_skips_custom_task_already_counting_today(self):
+        preset = save_assignment_preset(
+            child=self.child,
+            actor=self.parent,
+            name="Custom only",
+            tasks=[],
+            custom_title="Feed the cat",
+            custom_points=5,
+        )
+        first = apply_assignment_preset(preset=preset, actor=self.parent)
+        self.assertIsNotNone(first)
+        self.assertEqual(first.items.count(), 1)
+        preset.refresh_from_db()
+        self.assertEqual(preset.last_auto_assigned_on, timezone.localdate())
+
+        second = apply_assignment_preset(preset=preset, actor=self.parent)
+        self.assertIsNone(second)
+        self.assertEqual(self.child.assigned_task_batches.count(), 1)
+
+        custom_item = first.items.get(task__isnull=True)
+        complete_assigned_task(assigned_task=custom_item, child=self.child)
+        self.child.refresh_from_db()
+        self.assertEqual(self.child.balance, 5)
+
+        third = apply_assignment_preset(preset=preset, actor=self.parent)
+        self.assertIsNone(third)
+        self.assertEqual(self.child.assigned_task_batches.count(), 1)
+        self.child.refresh_from_db()
+        self.assertEqual(self.child.balance, 5)
+
+    def test_manual_apply_blocks_same_day_auto_run(self):
+        preset = self._save_daily(
+            name="Manual first",
+            tasks=[],
+            custom_title="Water plants",
+            custom_points=3,
+            run_at=time(7, 0),
+        )
+        batch = apply_assignment_preset(preset=preset, actor=self.parent)
+        self.assertIsNotNone(batch)
+        preset.refresh_from_db()
+        self.assertEqual(preset.last_auto_assigned_on, timezone.localdate())
+
+        now = timezone.make_aware(
+            datetime.combine(timezone.localdate(), time(8, 0))
+        )
+        with patch("economy.push.notify_assigned_tasks") as notify_push:
+            created = run_due_assignment_presets(current_time=now)
+        self.assertEqual(created, [])
+        notify_push.assert_not_called()
+        self.assertEqual(self.child.assigned_task_batches.count(), 1)
+
+    def test_cancelled_custom_task_can_be_reapplied_same_day(self):
+        preset = save_assignment_preset(
+            child=self.child,
+            actor=self.parent,
+            name="Custom cancel",
+            tasks=[],
+            custom_title="Feed the cat",
+            custom_points=5,
+        )
+        first = apply_assignment_preset(preset=preset, actor=self.parent)
+        cancel_assigned_task(
+            assigned_task=first.items.get(),
+            actor=self.parent,
+        )
+        second = apply_assignment_preset(preset=preset, actor=self.parent)
+        self.assertIsNotNone(second)
+        self.assertEqual(self.child.assigned_task_batches.count(), 2)

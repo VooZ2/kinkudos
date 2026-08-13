@@ -353,6 +353,21 @@ def unavailable_assignment_task_ids(child):
     return set(pending_claim_ids) | set(active_assignment_ids) | set(completed_ids)
 
 
+def custom_assignment_title_taken_today(child, title):
+    """True when a same-title custom assigned task is still counting for today."""
+    title = (title or "").strip()
+    if not title:
+        return False
+    today = timezone.localdate()
+    return AssignedTask.objects.filter(
+        batch__child=child,
+        batch__assigned_on=today,
+        task__isnull=True,
+        title_snapshot=title,
+        status__in=[AssignedTaskStatus.PENDING, AssignedTaskStatus.COMPLETED],
+    ).exists()
+
+
 @transaction.atomic
 def assign_tasks(
     *,
@@ -539,6 +554,10 @@ def apply_assignment_preset(*, preset, actor=None):
             custom_title = item.custom_title
             custom_points = item.custom_points
             custom_note = item.note
+    if custom_title and custom_assignment_title_taken_today(child, custom_title):
+        custom_title = ""
+        custom_points = None
+        custom_note = ""
     if not catalog_tasks and not custom_title:
         return None
     batch = assign_tasks(
@@ -550,6 +569,10 @@ def apply_assignment_preset(*, preset, actor=None):
         blocks_rewards=preset.blocks_rewards,
         task_notes=task_notes,
         custom_note=custom_note,
+    )
+    AssignmentPreset.objects.filter(pk=preset.pk).update(
+        last_auto_assigned_on=timezone.localdate(),
+        updated_at=timezone.now(),
     )
     return batch
 
@@ -583,10 +606,14 @@ def run_due_assignment_presets(*, current_time=None):
             if local_time < preset.run_at:
                 continue
             batch = apply_assignment_preset(preset=preset, actor=preset.created_by)
-            AssignmentPreset.objects.filter(pk=preset.pk).update(
-                last_auto_assigned_on=today,
-                updated_at=timezone.now(),
-            )
+            # apply_assignment_preset already stamps last_auto_assigned_on on success;
+            # if nothing was available, still mark the day so the timer does not retry
+            # empty matching presets every 30 minutes.
+            if batch is None:
+                AssignmentPreset.objects.filter(pk=preset.pk).update(
+                    last_auto_assigned_on=today,
+                    updated_at=timezone.now(),
+                )
         if batch is not None:
             notify_assigned_tasks(batch)
             created.append(batch)

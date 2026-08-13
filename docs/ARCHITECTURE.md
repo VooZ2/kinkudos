@@ -126,6 +126,8 @@ The child dashboard also shows a compact “waiting for parents” strip under t
 greeting when anything still needs a parent decision (task claim, revision to
 fix, reward request, goal completion, proposal, or birthday change). It lists
 up to three chips that scroll to the existing card and is hidden when empty.
+Pending task or reward chips are omitted when the linked catalogue entry is
+inactive or soft-deleted, so chips never point at missing cards.
 
 Each batch schedules a soft child nudge three hours after creation
 (`nudge_at`). The existing 30-minute lottery-reminder command also sends due
@@ -138,10 +140,12 @@ Assign-dialog selection (catalog tasks, optional custom task, optional notes,
 and reward-block flag) as a named set for one child. Cadence options are every
 day, chosen weekdays, weekend (Saturday, Sunday, or both), or once a week, with
 a local send time (default 07:00). Paused sets stay available for manual Apply
-but are skipped by auto-assign. The same lottery-reminder command runs due
-presets once per matching local day when the clock is at or after `run_at`,
-reusing `assign_tasks` so unavailable catalog tasks are skipped the same way as
-a manual assign. Soft limit: five saved sets per child.
+but are skipped by auto-assign. Applying a set (manually or automatically)
+reuses `assign_tasks`, skips unavailable catalog tasks, and skips a custom
+title that is already pending or completed for that child today so repeat Apply
+cannot duplicate custom-task credits. A successful Apply also stamps
+`last_auto_assigned_on` for the local day so the timer will not send the same
+set again that day. Soft limit: five saved sets per child.
 
 **PenaltyTemplate** — penalty catalog entry storing a negative amount
 directly (enforced at the field level). Applying it to a child requires a
