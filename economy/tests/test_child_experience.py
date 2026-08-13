@@ -1,4 +1,5 @@
 from datetime import date
+from pathlib import Path
 
 from django.conf import settings
 from django.test import TestCase, override_settings
@@ -235,3 +236,14 @@ class ChildExperienceTests(TestCase):
             f'href="#reward-card-{reward.pk}"',
             html=False,
         )
+
+    def test_dashboard_tabbar_sticks_to_viewport_top(self):
+        stylesheet = Path(__file__).resolve().parents[2] / "static" / "css" / "app.css"
+        css = stylesheet.read_text(encoding="utf-8")
+        self.assertIn(
+            ".tabbar { display: flex; gap: 6px; overflow-x: auto; position: sticky; top: calc(10px + env(safe-area-inset-top, 0px));",
+            css,
+        )
+        self.assertNotIn("position: sticky; top: 82px;", css)
+        self.assertIn(".assigned-task-row .amount { grid-column: 2; grid-row: 1; white-space: nowrap; }", css)
+        self.assertIn(".item-card .amount { white-space: nowrap; }", css)

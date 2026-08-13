@@ -338,17 +338,19 @@ select.field-control, .stack-form select {
 .balance-orb { flex: 0 0 auto; min-width: 152px; min-height: 152px; display: grid; place-content: center; text-align: center; border-radius: 50%; color: #fff; background: radial-gradient(circle at 30% 20%, var(--accent), var(--primary)); box-shadow: 0 20px 55px color-mix(in srgb, var(--primary) 36%, transparent); }
 .balance-orb strong { font-size: 2.6rem; line-height: 1; }
 .balance-orb span { font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; }
-.tabbar { display: flex; gap: 6px; overflow-x: auto; position: sticky; top: 82px; z-index: 8; padding: 8px; margin: 0 0 34px; border: 1px solid var(--line); border-radius: 17px; background: var(--surface); backdrop-filter: blur(20px); }
+.tabbar { display: flex; gap: 6px; overflow-x: auto; position: sticky; top: calc(10px + env(safe-area-inset-top, 0px)); z-index: 8; padding: 8px; margin: 0 0 34px; border: 1px solid var(--line); border-radius: 17px; background: var(--surface-solid); backdrop-filter: blur(20px); }
 .tabbar a { flex: 1; min-width: max-content; padding: 10px 14px; text-align: center; text-decoration: none; font-weight: 750; border-radius: 12px; }
 .tabbar a:hover { background: color-mix(in srgb, var(--primary) 12%, transparent); }
-.content-section { scroll-margin-top: 150px; padding: 30px 0; }
+.content-section { scroll-margin-top: calc(90px + env(safe-area-inset-top, 0px)); padding: 30px 0; }
 .section-heading h2, .parent-section-heading h1 { margin: 0 0 18px; font-size: clamp(1.7rem, 4vw, 2.5rem); line-height: 1.1; letter-spacing: -.04em; }
-.item-card { padding: 20px; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 14px; }
-.item-card form, .item-card .status-pill, .item-card > button { grid-column: 1 / -1; }
-.reward-card > form, .reward-card > form .button, .reward-card > button { width: 100%; }
+.item-card { padding: 20px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; }
+.item-card > button,
+.item-card > form.workflow-card-action { grid-column: 3; grid-row: 1; justify-self: end; }
+.item-card .status-pill { grid-column: 1 / -1; }
 .reward-card > form { margin: 0; }
 .item-icon { width: 52px; height: 52px; display: grid; place-items: center; border-radius: 17px; color: var(--primary); background: color-mix(in srgb, var(--primary) 12%, var(--surface-solid)); font-size: 1.6rem; }
-.item-card h3, .approval-card h3 { margin: 0 0 5px; }
+.approval-card h3 { margin: 0 0 5px; }
+.item-card h3 { margin: 0; overflow-wrap: anywhere; }
 .item-card p { margin: 0; }
 .amount { font-variant-numeric: tabular-nums; font-weight: 850; color: var(--danger); }
 .amount.positive { color: var(--success); }
@@ -562,8 +564,11 @@ select.field-control, .stack-form select {
 .assigned-tasks-priority > p { color: var(--muted); }
 .assigned-task-list { display: grid; gap: 10px; }
 .assigned-task-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 14px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface-solid); }
+.assigned-task-row > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 10px; row-gap: 6px; min-width: 0; }
+.assigned-task-row h3 { grid-column: 1; grid-row: 1; min-width: 0; overflow-wrap: anywhere; }
+.assigned-task-row .amount { grid-column: 2; grid-row: 1; white-space: nowrap; }
 .assigned-task-row h3, .assigned-task-row p { margin: 0; }
-.assigned-task-note { margin-top: 8px !important; display: grid; gap: 2px; color: var(--text); }
+.assigned-task-note { grid-column: 1 / -1; margin-top: 2px !important; display: grid; gap: 2px; color: var(--text); }
 .assigned-task-note-label { font-size: .78em; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: var(--accent); }
 .assigned-task-note-body { font-size: 1em; font-weight: 600; line-height: 1.35; color: var(--text); }
 .assigned-task-history-note { display: block; margin-top: 4px; color: var(--muted); }
@@ -716,7 +721,7 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .compact-decision-button .action-icon { width: 22px; height: 22px; }
 .dialog-decision-action { justify-self: end; scroll-margin-bottom: 12px; }
 .workflow-card-button { justify-self: end; }
-.item-card > form.workflow-card-action { display: flex; width: 100%; margin: 0; justify-content: flex-end; }
+.item-card > form.workflow-card-action { display: flex; width: auto; margin: 0; }
 .task-decision-dialog .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 .task-decision-dialog .button .action-icon { width: 21px; height: 21px; }
 .inline-reject { display: flex; flex: 1; min-width: min(320px, 100%); gap: 8px; }
@@ -971,8 +976,8 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
 .photo-bonus { color: var(--success) !important; font-weight: 800; }
 .empty-state { max-width: 100%; margin: 0; overflow-wrap: anywhere; }
 .item-card { min-width: 0; overflow: hidden; }
-.item-card > div { min-width: 0; }
-.item-card h3 { overflow-wrap: anywhere; }
+.item-card > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 10px; min-width: 0; }
+.item-card .amount { white-space: nowrap; }
 .amount.negative { color: var(--danger); }
 .parent-panel .subsection-heading { margin-top: clamp(38px, 6vw, 64px); }
 .sound-toggle { display: inline-grid; flex: 0 0 auto; place-items: center; width: 44px; height: 44px; min-width: 44px; min-height: 44px; padding: 0; border: 1px solid var(--border); border-radius: 99px; color: var(--muted); background: var(--surface-solid); cursor: pointer; transition: transform .14s, background .14s, box-shadow .14s, color .14s; }
