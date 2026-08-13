@@ -72,9 +72,18 @@ if [ ! -f "$deploy_dir/.env" ]; then
     echo "KINKUDOS_GID=$runtime_gid"
     echo "KINKUDOS_DEFAULT_LANGUAGE=$install_language"
   } > "$deploy_dir/.env"
-elif ! grep -q '^KINKUDOS_DEFAULT_LANGUAGE=' "$deploy_dir/.env"; then
-  printf 'KINKUDOS_DEFAULT_LANGUAGE=%s\n' "$install_language" >> "$deploy_dir/.env"
+else
+  if ! grep -q '^KINKUDOS_DEFAULT_LANGUAGE=' "$deploy_dir/.env"; then
+    printf 'KINKUDOS_DEFAULT_LANGUAGE=%s\n' "$install_language" >> "$deploy_dir/.env"
+  fi
+  if ! grep -q '^KINKUDOS_PROXY_MODE=' "$deploy_dir/.env"; then
+    printf 'KINKUDOS_PROXY_MODE=%s\n' "$proxy_mode" >> "$deploy_dir/.env"
+  fi
+  if ! grep -q '^KINKUDOS_PROXY_NETWORK=' "$deploy_dir/.env"; then
+    printf 'KINKUDOS_PROXY_NETWORK=%s\n' "$proxy_network" >> "$deploy_dir/.env"
+  fi
 fi
+"$deploy_dir/ensure-trusted-proxies.sh" "$deploy_dir/.env" "$proxy_mode" "$proxy_network"
 
 mkdir -p \
   "$secrets_dir/backup" \

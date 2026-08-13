@@ -334,9 +334,18 @@ WebSocket support, and use the same external network configured by
 `KINKUDOS_PROXY_NETWORK`.
 
 KinKudos trusts forwarded client-IP headers only when the direct peer belongs
-to `KINKUDOS_TRUSTED_PROXIES`. The application default is loopback only; set
-this to the exact proxy address or Docker subnet for Traefik/NPM, not to the
-entire internet. The optional parent setting
+to `KINKUDOS_TRUSTED_PROXIES`. The application default is loopback only.
+`bootstrap.sh` and `install-release.sh` write this value automatically:
+
+- host Nginx/Caddy → `127.0.0.0/8,::1/128`;
+- Traefik or another container proxy → the selected Docker network subnet from
+  `docker network inspect` (or one interactive CIDR prompt if the network is
+  missing).
+
+An existing non-empty `.env` value is never overwritten. Hostinger Docker
+Manager installs keep the Compose fallback
+`10.0.0.0/8,172.16.0.0/12` and do not use this helper. Never set the value to
+the entire internet. The optional parent setting
 Settings → Network access can then restrict child pages or the entire
 application to explicit IP/CIDR networks. It is disabled by default and is an
 additional layer, not a replacement for HTTPS, device pairing, or strong

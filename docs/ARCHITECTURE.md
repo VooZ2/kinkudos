@@ -271,8 +271,12 @@ the shared parent palette.
   published directly to the internet.
 - Forwarded client IP and scheme headers are honored only from configured
   trusted proxy networks. The default trusts loopback only
-  (`127.0.0.0/8`, `::1/128`); Traefik/NPM/Hostinger installs must set
-  `KINKUDOS_TRUSTED_PROXIES` to the reverse-proxy or Docker network CIDR.
+  (`127.0.0.0/8`, `::1/128`). Guided `bootstrap.sh` / `install-release.sh`
+  installs persist `KINKUDOS_TRUSTED_PROXIES` for the selected proxy mode
+  (loopback for host Nginx/Caddy; the Docker proxy network CIDR for
+  Traefik/NPM/container proxies). Hostinger Compose keeps its own private
+  Docker-network fallback. Operators may still set an explicit CIDR; the
+  application never trusts the public internet by default.
   Authentication limits use the resolved address.
 - Parent login, password recovery, device pairing, child PIN, initial setup
   claim, and optional Django admin endpoints have shared database-backed

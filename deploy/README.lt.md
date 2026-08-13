@@ -314,9 +314,18 @@ nurodytas `KINKUDOS_PROXY_NETWORK`.
 
 KinKudos pasitiki persiųsta kliento IP antrašte tik jei tiesioginis ryšys
 ateina iš `KINKUDOS_TRUSTED_PROXIES` nurodyto adreso ar potinklio. Programos
-numatytoji reikšmė yra tik loopback; Traefik/NPM atvejais nurodykite tikslų
-proxy adresą arba Docker potinklį, o ne visą internetą. Pasirenkamas tėvų
-nustatymas „Nustatymai → Tinklo prieiga“ gali papildomai apriboti vaikų
+numatytoji reikšmė yra tik loopback. `bootstrap.sh` ir `install-release.sh`
+šią reikšmę įrašo automatiškai:
+
+- host Nginx/Caddy → `127.0.0.0/8,::1/128`;
+- Traefik ar kitas konteinerinis proxy → pasirinkto Docker tinklo potinklis iš
+  `docker network inspect` (arba vienas interaktyvus CIDR klausimas, jei tinklas
+  nerastas).
+
+Jei `.env` jau turi nenulinę reikšmę, ji neperrašoma. Hostinger Docker Manager
+diegimai naudoja Compose atsarginę reikšmę `10.0.0.0/8,172.16.0.0/12` ir šio
+pagalbininko nenaudoja. Niekada nenustatykite viso interneto. Pasirenkamas
+tėvų nustatymas „Nustatymai → Tinklo prieiga“ gali papildomai apriboti vaikų
 puslapius arba visą programą konkrečiais IP/CIDR tinklais. Pagal nutylėjimą jis
 išjungtas ir nepakeičia HTTPS, įrenginių susiejimo ar stiprių tėvų
 slaptažodžių. Jei taisyklė užrakino visus tėvus, paleiskite:
