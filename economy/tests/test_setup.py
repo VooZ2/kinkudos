@@ -1,9 +1,11 @@
 from pathlib import Path
+from unittest import mock
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
 
 from economy.models import AttemptCounter, FamilySettings
 
@@ -132,14 +134,17 @@ class BrowserSetupTests(TestCase):
         response = client.post(reverse("setup"), self.payload())
         self.assertEqual(response.status_code, 403)
 
+    @override_settings(USE_TZ=True)
     def test_setup_claim_is_rate_limited_by_ip(self):
-        for _ in range(10):
-            response = self.client.post(
-                reverse("setup"),
-                self.payload(setup_token="wrong-token-value"),
-            )
-            self.assertContains(response, "The setup code is incorrect.")
-        response = self.client.post(reverse("setup"), self.payload())
+        window_start = timezone.now().replace(second=0, microsecond=0)
+        with mock.patch("django.utils.timezone.now", return_value=window_start):
+            for _ in range(10):
+                response = self.client.post(
+                    reverse("setup"),
+                    self.payload(setup_token="wrong-token-value"),
+                )
+                self.assertContains(response, "The setup code is incorrect.")
+            response = self.client.post(reverse("setup"), self.payload())
         self.assertContains(response, "Too many setup attempts. Try again later.")
         self.assertFalse(get_user_model().objects.exists())
         self.assertTrue(
