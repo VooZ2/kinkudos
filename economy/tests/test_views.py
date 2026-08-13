@@ -1232,6 +1232,9 @@ class AccessAndWorkflowTests(TestCase):
         self.assertLess(home_item.index("parent-nav-icon"), home_item.index("parent-nav-label"))
         stylesheet = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".parent-nav-icon { display: contents; }", stylesheet)
+        self.assertIn(".parent-nav-item .action-icon { justify-self: center; width: 22px; height: 22px; order: 1; }", stylesheet)
+        self.assertIn(".parent-nav-item .nav-count { order: 3; justify-self: end; width: max-content; }", stylesheet)
+        self.assertIn("parent-nav-label { min-width: 0; justify-self: start; line-height: 1.2; text-align: left; order: 2; }", stylesheet)
         self.assertIn(".pending-request-meta { display: flex; flex-wrap: wrap; align-items: baseline;", stylesheet)
         self.assertNotIn("left: calc(50% + 7px)", stylesheet)
         manage_html = html[html.index('<nav class="manage-tabs"'):]
@@ -1685,6 +1688,28 @@ class AccessAndWorkflowTests(TestCase):
         catalog = Path(settings.BASE_DIR, "locale/lt/messages.json").read_text(encoding="utf-8")
         self.assertIn('"Saved": "Sukaupta"', catalog)
         self.assertIn('"saved": "sukaupta"', catalog)
+
+    def test_control_hover_uses_icon_lift_fill_and_text_lift(self):
+        css = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn("--control-hover-lift: translateY(-1px);", css)
+        self.assertIn(".button:hover, .button:focus-visible { transform: var(--control-hover-lift); }", css)
+        self.assertIn(".text-button:hover, .text-button:focus-visible { transform: var(--control-hover-lift); }", css)
+        self.assertNotIn("filter: brightness(1.04);", css)
+        icon_hover = css[
+            css.index(".icon-button:hover, .icon-button:focus-visible {") :
+            css.index("}", css.index(".icon-button:hover, .icon-button:focus-visible {"))
+        ]
+        self.assertIn("var(--control-hover-lift)", icon_hover)
+        self.assertIn("var(--icon-hover-fill)", icon_hover)
+        self.assertIn("var(--icon-hover-shadow)", icon_hover)
+        self.assertNotIn("border-color", icon_hover)
+        self.assertNotIn("0 0 0 3px", icon_hover)
+        pending_hover = css[
+            css.index(".decision-icon-button:hover, .decision-icon-button:focus-visible {") :
+            css.index("}", css.index(".decision-icon-button:hover, .decision-icon-button:focus-visible {"))
+        ]
+        self.assertIn("var(--control-hover-lift)", pending_hover)
+        self.assertIn("var(--icon-hover-fill)", pending_hover)
 
     def test_pending_requests_are_one_shared_chronological_list(self):
         older = self.child_one.task_claims.create(
