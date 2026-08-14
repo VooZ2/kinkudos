@@ -399,9 +399,15 @@ class AssignedTaskViewTests(TestCase):
         )
         self.login_child()
         response = self.client.get(reverse("child_dashboard"))
-        self.assertContains(response, "Tidy room")
+        html = response.content.decode()
+        row_html = html[html.find('class="assigned-task-row"') : html.find("</article>", html.find('class="assigned-task-row"'))]
+        title_at = row_html.find("<h3>Tidy room</h3>")
+        amount_at = row_html.find('class="amount positive"')
+        note_at = row_html.find("assigned-task-note")
+        self.assertGreater(title_at, -1)
+        self.assertGreater(amount_at, title_at)
+        self.assertGreater(note_at, amount_at)
         self.assertContains(response, "Clothes next to the dryer, not inside.")
-        self.assertContains(response, "assigned-task-note", html=False)
 
     def test_child_sees_priority_list_and_completes_own_task(self):
         batch = assign_tasks(
