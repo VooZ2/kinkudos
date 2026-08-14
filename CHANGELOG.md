@@ -9,6 +9,13 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Nothing yet.
 
+## [26.7.3] - 2026-08-14
+
+### Fixed
+
+- Assigned-task titles on the child dashboard wrap between words on a phone,
+  instead of being squeezed beside the points.
+
 ## [26.7.2] - 2026-08-13
 
 ### Changed
