@@ -11,6 +11,13 @@ schema.
 
 - Kol kas nieko.
 
+## [26.7.3] - 2026-08-14
+
+### Pataisyta
+
+- Paskirtų darbų pavadinimai vaiko lange telefone lūžta tarp žodžių, o ne
+  spaudžiasi šalia taškų.
+
 ## [26.7.2] - 2026-08-13
 
 ### Pakeista
