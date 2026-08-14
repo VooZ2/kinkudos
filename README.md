@@ -54,7 +54,7 @@
 <p align="center"><sub>Use KinKudos comfortably from a phone, tablet, or computer.</sub></p>
 
 <p align="center">
-  <img src="docs/screenshots/child-magic-academy-2026.webp" width="90%" alt="KinKudos Magic Academy child theme">
+  <img src="docs/screenshots/child-superhero-hq-2026.webp" width="90%" alt="KinKudos Superhero HQ child theme">
 </p>
 <p align="center"><sub><strong>A world of their own</strong><br>Children can choose visual themes with their own wording and point units.</sub></p>
 
