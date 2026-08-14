@@ -51,13 +51,13 @@
         <span class="item-icon">{{ assigned_task.icon_snapshot|icon_symbol }}</span>
         <div>
           <h3>{{ assigned_task.title_snapshot }}</h3>
+          <p class="amount positive">+{{ assigned_task.reward_snapshot }} {{ assigned_task.reward_snapshot|currency_unit:child.theme }}</p>
           {% if assigned_task.note_snapshot %}
           <p class="assigned-task-note">
             <span class="assigned-task-note-label">{{ child.theme|theme_text:"assigned_note_label" }}</span>
             <span class="assigned-task-note-body">{{ assigned_task.note_snapshot }}</span>
           </p>
           {% endif %}
-          <p class="amount positive">+{{ assigned_task.reward_snapshot }} {{ assigned_task.reward_snapshot|currency_unit:child.theme }}</p>
         </div>
         <form method="post" action="{% url 'child_complete_assigned_task' assigned_task.pk %}" data-success-effect="task">{% csrf_token %}
           <button class="decision-icon-button decision-approve" type="submit" aria-label="{{ child.theme|theme_text:'assigned_complete' }}" title="{{ child.theme|theme_text:'assigned_complete' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>

@@ -245,8 +245,23 @@ class ChildExperienceTests(TestCase):
             css,
         )
         self.assertNotIn("position: sticky; top: 82px;", css)
-        self.assertIn(".assigned-task-row .amount { grid-column: 2; grid-row: 1; white-space: nowrap; }", css)
         self.assertIn(".item-card .amount { flex: 0 0 auto; white-space: nowrap; }", css)
+
+    def test_dashboard_assigned_task_stacks_title_above_points(self):
+        stylesheet = Path(__file__).resolve().parents[2] / "static" / "css" / "app.css"
+        css = stylesheet.read_text(encoding="utf-8")
+        self.assertIn(
+            ".assigned-task-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start;",
+            css,
+        )
+        self.assertIn(".assigned-task-row > div { display: grid; gap: 2px; min-width: 0; }", css)
+        self.assertIn(".assigned-task-row h3 { min-width: 0; overflow-wrap: break-word; }", css)
+        self.assertIn(".assigned-task-row .amount { white-space: nowrap; }", css)
+        self.assertNotIn(
+            ".assigned-task-row .amount { grid-column: 2; grid-row: 1; white-space: nowrap; }",
+            css,
+        )
+        self.assertNotIn(".assigned-task-row h3 { grid-column: 1; grid-row: 1; min-width: 0; overflow-wrap: anywhere; }", css)
 
     def test_dashboard_item_card_keeps_readable_title_beside_points(self):
         stylesheet = Path(__file__).resolve().parents[2] / "static" / "css" / "app.css"

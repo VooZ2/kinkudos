@@ -568,14 +568,14 @@ select.field-control, .stack-form select {
 .assigned-tasks-priority { margin-bottom: 32px; padding: 22px; border: 2px solid color-mix(in srgb, var(--accent) 58%, var(--line)); border-radius: var(--radius); background: color-mix(in srgb, var(--accent) 9%, var(--surface-solid)); box-shadow: var(--shadow); }
 .assigned-tasks-priority > p { color: var(--muted); }
 .assigned-task-list { display: grid; gap: 10px; }
-.assigned-task-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 14px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface-solid); }
-.assigned-task-row > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; column-gap: 10px; row-gap: 8px; min-width: 0; }
-.assigned-task-row h3 { grid-column: 1; grid-row: 1; min-width: 0; overflow-wrap: anywhere; }
-.assigned-task-row .amount { grid-column: 2; grid-row: 1; white-space: nowrap; }
+.assigned-task-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; gap: 14px; padding: 14px; border: 1px solid var(--line); border-radius: 15px; background: var(--surface-solid); }
+.assigned-task-row > div { display: grid; gap: 2px; min-width: 0; }
+.assigned-task-row h3 { min-width: 0; overflow-wrap: break-word; }
+.assigned-task-row .amount { white-space: nowrap; }
 .assigned-task-row h3, .assigned-task-row p { margin: 0; }
-.assigned-task-note { grid-column: 1 / -1; display: grid; gap: 2px; color: var(--text); }
+.assigned-task-note { margin-top: 6px; display: grid; gap: 2px; color: var(--text); }
 .assigned-task-note-label { font-size: .78em; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: var(--accent); }
-.assigned-task-note-body { font-size: 1em; font-weight: 600; line-height: 1.35; color: var(--text); }
+.assigned-task-note-body { font-size: 1em; font-weight: 600; line-height: 1.35; color: var(--text); overflow-wrap: break-word; }
 .assigned-task-history-note { display: block; margin-top: 4px; color: var(--muted); }
 .assignment-presets,
 .assignment-preset-save { display: grid; gap: 12px; margin: 18px 0 8px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: color-mix(in srgb, var(--primary) 5%, var(--surface-solid)); }
