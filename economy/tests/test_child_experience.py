@@ -1,3 +1,4 @@
+import re
 from datetime import date
 from pathlib import Path
 
@@ -121,6 +122,10 @@ class ChildExperienceTests(TestCase):
         self.assertNotContains(response, "⌫")
         self.assertContains(response, reverse("child_set_theme"))
         self.assertContains(response, reverse("child_set_avatar"))
+        self.assertEqual(content.count('class="child-settings-acc"'), 4)
+        self.assertIsNone(
+            re.search(r'<details class="child-settings-acc"[^>]*\sopen(?:\s|>)', content)
+        )
 
     def test_settings_theme_grid_stays_two_columns_on_mobile(self):
         stylesheet = Path(__file__).resolve().parents[2] / "static" / "css" / "app.css"
