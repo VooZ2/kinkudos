@@ -38,7 +38,7 @@ nebegaliojanti svečio prieiga iš nustatymų sąrašų dingsta automatiškai.
 
 ## Susieti įrenginiai
 
-Susiejimas yra pirmas vaikų saugumo vartas. Kol naršyklė ar PWA nesusieta, ji negali nei rodyti vaikų vardų, nei priimti PIN. Kiekvienas įrenginys rodomas su bendra telefono, planšetės, kompiuterio arba nežinomo įrenginio kategorija, naršyklės aprašu, stabiliu šešių simbolių ID ir paskutinio naudojimo laiku. Tai patogumo klasifikavimas, nenustatantis tikslaus modelio. Nenaudojus 30 dienų rodoma **Ilgai nenaudotas**. Įrenginius aiškiai pavadinkite, peržiūrėkite paskutinio naudojimo laiką ir iškart atšaukite prarastą ar nebe šeimos valdomą įrenginį.
+Susiejimas yra pirmas vaikų saugumo vartas. Kol naršyklė ar PWA nesusieta, ji negali nei rodyti vaikų vardų, nei priimti PIN. Kiekvienas įrenginys rodomas su bendra telefono, planšetės, kompiuterio arba nežinomo įrenginio kategorija, naršyklės aprašu, stabiliu šešių simbolių ID ir paskutinio naudojimo laiku. Tai patogumo klasifikavimas, nenustatantis tikslaus modelio. 30 dienų nenaudoti įrenginiai iš nustatymų sąrašo paslepiami (susiejimas neatšaukiamas) ir vėl pasirodo panaudojus. Įrenginius aiškiai pavadinkite, peržiūrėkite paskutinio naudojimo laiką ir iškart atšaukite prarastą ar nebe šeimos valdomą įrenginį.
 
 Aktyviai naudojamo susieto įrenginio prieigos slapukas pratęsiamas, todėl aktyvus
 susiejimas neturėtų tyliai nustoti galioti. Atšaukus įrenginį jo vaiko prieiga ir

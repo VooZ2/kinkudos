@@ -69,14 +69,12 @@ def parent_generate_pairing_link(request):
         return redirect(f"{reverse('parent_dashboard')}#parent-settings")
     link, raw_token = DevicePairingLink.issue(created_by=request.user)
     pairing_url = request.build_absolute_uri(reverse("pair_device_via_link"))
-    return render(
-        request,
-        "economy/pairing_link_created.html",
-        {
-            "pairing_url": f"{pairing_url}#{raw_token}",
-            "pairing_expires_at": link.expires_at,
-        },
-    )
+    request.session["device_pairing_share"] = {
+        "pairing_url": f"{pairing_url}#{raw_token}",
+        "expires_at": link.expires_at.isoformat(),
+    }
+    messages.success(request, _("The pairing link is ready to share."))
+    return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
 @never_cache
 def pair_device_via_link(request):

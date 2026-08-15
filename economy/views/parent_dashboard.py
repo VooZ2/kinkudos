@@ -786,9 +786,11 @@ def parent_dashboard(request):
                 auto_id="id_network_access_%s",
             ),
             "current_client_ip": client_ip(request),
-            "paired_devices": DeviceToken.objects.filter(
+            "paired_devices": list(DeviceToken.recently_active()),
+            "has_paired_devices": DeviceToken.objects.filter(
                 revoked_at__isnull=True
-            ).select_related("created_by"),
+            ).exists(),
+            "device_pairing_share": request.session.pop("device_pairing_share", None),
             "current_device": current_device(request),
             "backup_settings_form": BackupSettingsForm(),
             "smtp_status": public_smtp_config(),

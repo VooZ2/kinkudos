@@ -353,6 +353,19 @@ class DeviceToken(models.Model):
     def is_inactive(self):
         return self.last_seen_at < timezone.now() - timedelta(days=30)
 
+    @classmethod
+    def recently_active(cls, *, within_days=30):
+        """Paired devices seen within the inactivity window (for settings lists)."""
+        from django.db.models.functions import Coalesce
+
+        cutoff = timezone.now() - timedelta(days=within_days)
+        return (
+            cls.objects.filter(revoked_at__isnull=True)
+            .annotate(seen_at=Coalesce("last_used_at", "created_at"))
+            .filter(seen_at__gte=cutoff)
+            .select_related("created_by")
+        )
+
     @property
     def is_revoked(self):
         return self.revoked_at is not None

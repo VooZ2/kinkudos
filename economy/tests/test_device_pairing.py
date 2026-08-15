@@ -150,6 +150,39 @@ class DevicePairingTests(TestCase):
         self.assertContains(response, "device-revoke-button", html=False)
         self.assertContains(response, 'class="device-revoke-icon"', html=False)
 
+    def test_generate_pairing_link_opens_share_dialog_on_settings(self):
+        self.client.force_login(self.parent)
+
+        response = self.client.post(reverse("parent_generate_pairing_link"))
+
+        self.assertRedirects(
+            response,
+            f"{reverse('parent_dashboard')}#parent-settings",
+        )
+        follow = self.client.get(reverse("parent_dashboard"))
+        self.assertContains(follow, 'id="device-pairing-share-dialog"', html=False)
+        self.assertContains(follow, "Private pairing link")
+        self.assertContains(follow, reverse("pair_device_via_link"), html=False)
+        self.assertTrue(DevicePairingLink.objects.exists())
+
+    def test_inactive_devices_are_hidden_from_settings_list(self):
+        active, _ = DeviceToken.issue(created_by=self.parent, label="Active tablet")
+        inactive, _ = DeviceToken.issue(created_by=self.parent, label="Stale phone")
+        DeviceToken.objects.filter(pk=inactive.pk).update(
+            created_at=timezone.now() - timedelta(days=45),
+            last_used_at=timezone.now() - timedelta(days=45),
+        )
+        self.client.force_login(self.parent)
+
+        response = self.client.get(reverse("parent_dashboard"))
+
+        self.assertContains(response, "Active tablet")
+        self.assertNotContains(response, "Stale phone")
+        self.assertContains(response, "Revoke all child devices")
+        inactive.refresh_from_db()
+        self.assertTrue(inactive.is_inactive)
+        self.assertFalse(active.is_inactive)
+
     def test_pairing_link_is_single_use_and_expires(self):
         link, raw_token = DevicePairingLink.issue(created_by=self.parent)
 

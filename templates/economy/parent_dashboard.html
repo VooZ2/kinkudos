@@ -635,7 +635,7 @@
             <span class="device-copy">
               <strong>{{ device.display_name }}{% if current_device.pk == device.pk %} <small>({% translate "this device" %})</small>{% endif %}</strong>
               <small>{{ device.device_summary }} · {% translate "ID" %} {{ device.device_code }}</small>
-              <small>{% translate "Last used" %}: {{ device.last_seen_at|date:"Y-m-d H:i" }}{% if device.is_inactive %} · <span class="device-status device-status-inactive">{% translate "Not used recently" %}</span>{% endif %}</small>
+              <small>{% translate "Last used" %}: {{ device.last_seen_at|date:"Y-m-d H:i" }}</small>
             </span>
           </div>
           <div class="catalog-actions">
@@ -657,7 +657,7 @@
         <p class="empty-state">{% translate "No child devices are paired yet." %}</p>
       {% endfor %}
     </div>
-    {% if user.is_staff and paired_devices %}
+    {% if user.is_staff and has_paired_devices %}
       <details>
         <summary>{% translate "Revoke all child devices" %}</summary>
         <form method="post" action="{% url 'parent_revoke_all_devices' %}" class="stack-form">
@@ -670,6 +670,46 @@
       </details>
     {% endif %}
   </article>
+  {% if device_pairing_share %}
+  <dialog id="device-pairing-share-dialog" class="action-dialog" open>
+    <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
+    <h2>{% translate "Private pairing link" %}</h2>
+    <p>{% translate "Open this link on the child's device. It can be used once and expires in 10 minutes." %}</p>
+    <label>{% translate "Pairing link" %}
+      <textarea class="field-control" rows="4" readonly data-device-pairing-link>{{ device_pairing_share.pairing_url }}</textarea>
+    </label>
+    <p class="danger-warning">{% translate "Anyone with this link can pair one device until it expires. Send it privately." %}</p>
+    <div class="dialog-actions hero-actions">
+      <button class="button button-primary" type="button" data-copy-device-pairing>{% translate "Copy link" %}</button>
+      <button class="button button-secondary" type="button" data-share-device-pairing hidden>{% translate "Share…" %}</button>
+      <button class="button button-secondary" type="button" data-close-dialog>{% translate "Done" %}</button>
+    </div>
+  </dialog>
+  <script nonce="{{ request.csp_nonce }}">
+  (() => {
+    const linkEl = document.querySelector("[data-device-pairing-link]");
+    const copyButton = document.querySelector("[data-copy-device-pairing]");
+    const shareButton = document.querySelector("[data-share-device-pairing]");
+    const pairingUrl = linkEl.value;
+    const shareTitle = "{% translate 'KinKudos child device pairing' %}";
+    const shareText = "{% translate 'Private child-device pairing link — use it once on the child device.' %}";
+    copyButton.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(pairingUrl);
+      copyButton.textContent = "{% translate 'Copied' %}";
+    });
+    if (navigator.share) {
+      shareButton.hidden = false;
+      shareButton.addEventListener("click", async () => {
+        try {
+          await navigator.share({ title: shareTitle, text: shareText, url: pairingUrl });
+        } catch (_err) {
+          /* user cancelled share sheet */
+        }
+      });
+    }
+  })();
+  </script>
+  {% endif %}
   </details>
     <details class="settings-section parent-accordion">
       <summary><span class="settings-summary-label">{% translate "Accounts" %}</span></summary>

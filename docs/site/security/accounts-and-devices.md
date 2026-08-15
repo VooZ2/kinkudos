@@ -38,7 +38,7 @@ guest access disappear from the settings lists automatically.
 
 ## Paired devices
 
-Pairing is the first security gate for children. Until a browser/PWA is paired, it cannot list child names or present the PIN screen. Each device is shown with a broad phone, tablet, computer, or unknown-device classification, a browser summary, a stable six-character ID, and a last-used time. The classification is a convenience label and does not identify an exact model. After 30 days without use, the device is marked **Not used recently**. Name devices clearly, review the last-used time, and revoke a device as soon as it is lost or no longer family-controlled.
+Pairing is the first security gate for children. Until a browser/PWA is paired, it cannot list child names or present the PIN screen. Each device is shown with a broad phone, tablet, computer, or unknown-device classification, a browser summary, a stable six-character ID, and a last-used time. The classification is a convenience label and does not identify an exact model. Devices unused for 30 days are hidden from the settings list (pairing is not revoked) and reappear when used again. Name devices clearly, review the last-used time, and revoke a device as soon as it is lost or no longer family-controlled.
 
 An actively used paired device has its access cookie renewed, so an active
 pairing should not quietly expire. Revocation removes the device’s child access

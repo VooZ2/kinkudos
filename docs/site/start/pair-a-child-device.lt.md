@@ -13,8 +13,8 @@ Vaiko profilis ir vaiko įrenginys yra skirtingi dalykai. Profilis saugo vardą,
 ## Susiekite kitą įrenginį privačia nuoroda
 
 1. Bet kuriame tėvų įrenginyje atidarykite **Tėvai → Nustatymai → Vaikų įrenginiai**.
-2. Spauskite **Siųsti nuorodą**.
-3. Saugiai perduokite nuorodą numatytam įrenginiui ir atidarykite ją ten. Neskelbkite grupės pokalbyje ir nepalikite bendrame užraše.
+2. Spauskite **Siųsti nuorodą**. KinKudos atidaro dalijimosi dialogą su privačia nuoroda.
+3. Spauskite **Kopijuoti** arba **Dalintis…** ir atidarykite nuorodą numatytame įrenginyje. Neskelbkite grupės pokalbyje ir nepalikite bendrame užraše.
 4. Nuoroda susieja vieną kartą ir nustoja galioti po **10 minučių**.
 
 Susiejus KinKudos parodo patvirtinimą, pvz., **Šis įrenginys susietas kaip Mac ·
@@ -29,7 +29,10 @@ Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 pvz., **iPhone · Safari** arba **Android planšetė · Chrome**, stabilų šešių
 simbolių ID ir paskutinio naudojimo laiką. Klasifikavimas apima telefono,
 planšetės, kompiuterio ir nežinomo įrenginio kategorijas; tikslus modelis
-nenustatomas. Nenaudojus 30 dienų papildomai rodoma **Ilgai nenaudotas**.
+nenustatomas. 30 dienų nenaudoti įrenginiai iš šio sąrašo automatiškai
+paslepiami (susiejimas neatšaukiamas). Jie vėl pasirodo, kai įrenginys
+panaudojamas. **Atšaukti visus vaikų įrenginius** vis tiek apima visus
+neatšauktus susiejimus, įskaitant paslėptuosius.
 
 Įrenginio pavadinimą galima pakeisti, kad jį būtų lengva atpažinti. Telefone
 **Atšaukti** rodoma kompaktiška šiukšliadėžės ikona. Pamestą, parduotą, ilgam

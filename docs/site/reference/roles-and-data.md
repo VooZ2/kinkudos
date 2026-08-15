@@ -21,7 +21,7 @@ The public documentation has separate cookie-free analytics only.
 | Rule | Value or behavior |
 | --- | --- |
 | Child-device pairing link | Single use; expires after 10 minutes. |
-| Paired-device profile | Broad phone, tablet, computer, or unknown-device classification; short stable six-character ID; browser summary; and last-used time. The list marks a device **Not used recently** after 30 days. |
+| Paired-device profile | Broad phone, tablet, computer, or unknown-device classification; short stable six-character ID; browser summary; and last-used time. Devices unused for 30 days are hidden from the settings list until used again. |
 | Active paired-device access | The access cookie is renewed while the device is actively used. Revoking the device invalidates child access and notifications immediately. |
 | Child PIN | Four digits; a child profile needs a paired device first. |
 | Task/feedback image upload | JPEG, PNG, WebP, HEIC, or HEIF up to 12 MB. |
