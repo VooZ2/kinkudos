@@ -3,6 +3,15 @@
 Public callables are re-exported for ``economy.urls`` compatibility.
 """
 
+from economy.views.caregiver import (
+    caregiver_create_pin,
+    caregiver_invite_redeem,
+    caregiver_login,
+    parent_cancel_caregiver_invite,
+    parent_create_caregiver_invite,
+    parent_remove_caregiver,
+    parent_unlock_caregiver,
+)
 from economy.views.child import (
     child_acknowledge_task_response,
     child_add_goal_points,
@@ -118,6 +127,9 @@ __all__ = [
     "ParentPasswordResetConfirmView",
     "ParentPasswordResetDoneView",
     "ParentPasswordResetView",
+    "caregiver_create_pin",
+    "caregiver_invite_redeem",
+    "caregiver_login",
     "changelog",
     "child_acknowledge_task_response",
     "child_add_goal_points",
@@ -159,9 +171,11 @@ __all__ = [
     "parent_backup_status",
     "parent_cancel_assigned_task",
     "parent_cancel_assigned_task_batch",
+    "parent_cancel_caregiver_invite",
     "parent_close_goal",
     "parent_configure_backup",
     "parent_configure_smtp",
+    "parent_create_caregiver_invite",
     "parent_create_catalog",
     "parent_create_child_account",
     "parent_create_parent_account",
@@ -181,6 +195,7 @@ __all__ = [
     "parent_generate_pairing_link",
     "parent_pair_device",
     "parent_pending_state",
+    "parent_remove_caregiver",
     "parent_remove_child_account",
     "parent_remove_parent_account",
     "parent_rename_device",
@@ -192,6 +207,7 @@ __all__ = [
     "parent_save_assignment_preset",
     "parent_toggle_assignment_preset",
     "parent_toggle_catalog",
+    "parent_unlock_caregiver",
     "parent_unlock_child",
     "parent_update_family_preferences",
     "parent_update_feedback_status",

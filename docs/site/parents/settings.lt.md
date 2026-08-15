@@ -107,10 +107,10 @@ ar piršto atspaudo nustatymas.
 | --- | --- |
 | **Įrenginio pavadinimas** | Pasirenkama žyma, pvz., „Virtuvės planšetė“. Jei paliksite tuščią, po susiejimo KinKudos naudos aptiktą įrenginio aprašą. |
 | **Leisti šiame įrenginyje** | Iškart susieja dabartinę naršyklę/PWA. Tada galima pasirinkti vaiką ir įvesti PIN. |
-| **Siųsti nuorodą** | Sukuria vienkartinę privačią nuorodą, galiojančią **10 minučių**. Atidarykite tik numatytame įrenginyje. |
+| **Siųsti nuorodą** | Atidaro dalijimosi dialogą su vienkartine privačia nuoroda, galiojančia **10 minučių**. Atidarykite tik numatytame įrenginyje. |
 | **Įrenginio aprašas** | Rodo bendrą ikoną ir aprašą, pvz., **iPhone · Safari**, **Android telefonas · Chrome**, **iPad · Safari**, **Android planšetė · Chrome**, **Mac**, **Windows kompiuteris** arba **Linux kompiuteris**. Nežinomi įrenginiai taip ir pažymimi. |
 | **ID** | Trumpas stabilus šešių simbolių identifikatorius, padedantis atskirti įrašus. Tai nėra susiejimo prisijungimo duomuo. |
-| **Naudotas paskutinį kartą** | Rodo, kada įrenginys paskutinį kartą buvo aktyvus. Nenaudojus 30 dienų papildomai rodoma **Ilgai nenaudotas**. |
+| **Naudotas paskutinį kartą** | Rodo, kada įrenginys paskutinį kartą buvo aktyvus. 30 dienų nenaudoti įrenginiai iš šio sąrašo paslepiami iki kito panaudojimo. |
 | **Pervadinti** | Atveria įrenginio pavadinimo keitimo formą; prieiga nenutraukiama. |
 | **Atšaukti** | Pašalina vaiko prieigą ir pranešimus iš vieno prarasto ar nebenaudojamo įrenginio. Telefone tai rodoma kompaktiška šiukšliadėžės ikona. Norint prisijungti reikės susieti iš naujo. |
 | **Atšaukti visus vaikų įrenginius** | Tik administratoriui. Reikia jo slaptažodžio ir visus įrenginius teks susieti iš naujo. |

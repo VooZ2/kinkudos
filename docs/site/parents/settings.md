@@ -107,10 +107,10 @@ This is a convenience label, not an exact model or fingerprint.
 | --- | --- |
 | **Device name** | Optional label for the device, for example “Kitchen tablet”. If left blank, KinKudos uses the detected device summary after pairing. |
 | **Allow on this device** | Pairs the current browser/PWA immediately. It can then select a child and accept a PIN. |
-| **Send a link** | Creates a single-use private link that expires after **10 minutes**. Open it only on the intended device. |
+| **Send a link** | Opens a share dialog with a single-use private link that expires after **10 minutes**. Open it only on the intended device. |
 | **Device summary** | Shows a broad icon and description such as **iPhone · Safari**, **Android phone · Chrome**, **iPad · Safari**, **Android tablet · Chrome**, **Mac**, **Windows PC**, or **Linux PC**. Unknown devices remain labelled as unknown. |
 | **ID** | Shows a short, stable six-character identifier so a parent can distinguish entries. It is not a pairing credential. |
-| **Last used** | Shows when the device was last active. After 30 days without use, the list also shows **Not used recently**. |
+| **Last used** | Shows when the device was last active. Devices unused for 30 days are hidden from this list until used again. |
 | **Rename** | Opens an inline form for changing the device label without interrupting access. |
 | **Revoke** | Removes child access and notifications from one lost or retired device. On mobile, this is shown as a compact trash-can icon. The device must be paired again before sign-in. |
 | **Revoke all child devices** | Administrator-only. Requires the administrator’s password and forces every child browser/PWA to pair again. |

@@ -16,7 +16,12 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET
 
-from economy.auth import current_device, parent_required
+from economy.auth import (
+    accessible_children_qs,
+    current_caregiver,
+    current_device,
+    parent_required,
+)
 from economy.email_config import public_smtp_config
 from economy.forms import (
     BackupSettingsForm,
@@ -66,14 +71,17 @@ from economy.net import client_ip
 from economy.services import (
     unavailable_assignment_task_ids,
 )
+from economy.views.caregiver import caregiver_settings_context
 
 
-def _pending_request_items(goals_by_child):
+def _pending_request_items(goals_by_child, *, child_ids=None):
     pending_requests = []
+    child_filter = {"child_id__in": child_ids} if child_ids is not None else {}
     pending_claims = list(
         TaskClaim.objects.filter(
             status=RequestStatus.PENDING,
             child__is_active=True,
+            **child_filter,
         )
         .select_related("child", "task")
         .order_by("submitted_at", "pk")
@@ -82,6 +90,7 @@ def _pending_request_items(goals_by_child):
         RewardRequest.objects.filter(
             status=RequestStatus.PENDING,
             child__is_active=True,
+            **child_filter,
         )
         .select_related("child", "reward")
         .order_by("submitted_at", "pk")
@@ -90,6 +99,7 @@ def _pending_request_items(goals_by_child):
         Proposal.objects.filter(
             status=RequestStatus.PENDING,
             child__is_active=True,
+            **child_filter,
         )
         .select_related("child")
         .order_by("created_at", "pk")
@@ -107,6 +117,7 @@ def _pending_request_items(goals_by_child):
         GoalCompletionRequest.objects.filter(
             status=RequestStatus.PENDING,
             goal__child__is_active=True,
+            **({"goal__child_id__in": child_ids} if child_ids is not None else {}),
         )
         .select_related("goal", "goal__child")
         .order_by("requested_at", "pk")
@@ -123,6 +134,7 @@ def _pending_request_items(goals_by_child):
         BirthDateChangeRequest.objects.filter(
             status=RequestStatus.PENDING,
             child__is_active=True,
+            **({"child_id__in": child_ids} if child_ids is not None else {}),
         )
         .select_related("child")
         .order_by("requested_at", "pk")
@@ -263,10 +275,11 @@ def _pending_request_revision(pending_requests):
     )
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
-def _parent_pending_state_data():
-    children = list(ChildProfile.objects.filter(is_active=True))
+def _parent_pending_state_data(request=None):
+    children = list(accessible_children_qs(request) if request is not None else ChildProfile.objects.filter(is_active=True))
+    child_ids = [child.pk for child in children]
     goals = list(
-        SavingsGoal.objects.filter(child__is_active=True)
+        SavingsGoal.objects.filter(child__is_active=True, child_id__in=child_ids)
         .select_related("child")
         .annotate(
             _saved_amount=Coalesce(
@@ -281,7 +294,7 @@ def _parent_pending_state_data():
     goals_by_child = {child.pk: [] for child in children}
     for goal in goals:
         goals_by_child.setdefault(goal.child_id, []).append(goal)
-    pending_requests = _pending_request_items(goals_by_child)
+    pending_requests = _pending_request_items(goals_by_child, child_ids=child_ids)
     return pending_requests, _pending_request_revision(pending_requests)
 
 def _pending_requests_fragment(request, pending_requests, pending_revision):
@@ -298,7 +311,7 @@ def _pending_requests_fragment(request, pending_requests, pending_revision):
 @parent_required
 @require_GET
 def parent_pending_state(request):
-    pending_requests, pending_revision = _parent_pending_state_data()
+    pending_requests, pending_revision = _parent_pending_state_data(request)
     etag = f'"{pending_revision}"'
     response_headers = {
         "Cache-Control": "private, no-store",
@@ -329,7 +342,10 @@ def parent_pending_state(request):
 
 @parent_required
 def parent_dashboard(request):
-    children = list(ChildProfile.objects.filter(is_active=True))
+    caregiver = current_caregiver(request)
+    is_caregiver = caregiver is not None
+    children = list(accessible_children_qs(request))
+    child_ids = [child.pk for child in children]
     today = timezone.localdate()
     history_date = request.GET.get("history_date", "any").strip()
     history_custom_start = request.GET.get("history_start", "").strip()
@@ -360,7 +376,7 @@ def parent_dashboard(request):
         history_custom_start = ""
         history_custom_end = ""
     all_goals = list(
-        SavingsGoal.objects.filter(child__is_active=True)
+        SavingsGoal.objects.filter(child__is_active=True, child_id__in=child_ids or [-1])
         .select_related("child")
         .annotate(
             _saved_amount=Coalesce(
@@ -376,6 +392,7 @@ def parent_dashboard(request):
         GoalCompletionRequest.objects.filter(
             status=RequestStatus.PENDING,
             goal__child__is_active=True,
+            goal__child_id__in=child_ids or [-1],
         ).select_related("goal", "goal__child")
     )
     pending_goal_ids = {item.goal_id for item in pending_goal_completions}
@@ -439,7 +456,13 @@ def parent_dashboard(request):
                 item.status == AssignedTaskStatus.PENDING
                 for item in batch.items.all()
             )
-    history_children = list(ChildProfile.objects.order_by("name"))
+    history_children = list(accessible_children_qs(request).order_by("name"))
+    if child_ids:
+        ledger_child_filter = {"child_id__in": child_ids}
+        goal_child_filter = {"goal__child_id__in": child_ids}
+    else:
+        ledger_child_filter = {"child_id__in": [-1]}
+        goal_child_filter = {"goal__child_id__in": [-1]}
     feedback_status = request.GET.get("feedback_status", "active").strip()
     feedback_type = request.GET.get("feedback_type", "").strip()
     feedback_query = FeedbackReport.objects.select_related("parent", "child")
@@ -458,7 +481,9 @@ def parent_dashboard(request):
     )
     history_child_id = request.GET.get("history_child", "").strip()
     history_activity = request.GET.get("history_activity", "").strip()
-    ledger_query = LedgerEntry.objects.all().select_related("child", "actor")
+    ledger_query = LedgerEntry.objects.filter(**ledger_child_filter).select_related(
+        "child", "actor"
+    )
     if history_cutoff is not None:
         ledger_query = ledger_query.filter(created_at__gte=history_cutoff)
     if history_end_at is not None:
@@ -466,6 +491,7 @@ def parent_dashboard(request):
     reward_decisions = RewardRequest.objects.filter(
         status__in=[RequestStatus.APPROVED, RequestStatus.REJECTED],
         decided_at__isnull=False,
+        **ledger_child_filter,
     ).select_related("child", "decided_by")
     if history_cutoff is not None:
         reward_decisions = reward_decisions.filter(decided_at__gte=history_cutoff)
@@ -474,6 +500,7 @@ def parent_dashboard(request):
     task_decisions = TaskClaim.objects.filter(
         status=RequestStatus.REJECTED,
         decided_at__isnull=False,
+        **ledger_child_filter,
     ).select_related("child", "decided_by", "task")
     if history_cutoff is not None:
         task_decisions = task_decisions.filter(decided_at__gte=history_cutoff)
@@ -482,6 +509,7 @@ def parent_dashboard(request):
     proposal_decisions = Proposal.objects.filter(
         status__in=[RequestStatus.APPROVED, RequestStatus.REJECTED],
         decided_at__isnull=False,
+        **ledger_child_filter,
     ).select_related("child", "decided_by")
     if history_cutoff is not None:
         proposal_decisions = proposal_decisions.filter(decided_at__gte=history_cutoff)
@@ -489,6 +517,7 @@ def parent_dashboard(request):
         proposal_decisions = proposal_decisions.filter(decided_at__lte=history_end_at)
     goal_events_query = SavingsGoalEvent.objects.filter(
         goal__child__is_active=True,
+        **goal_child_filter,
     ).select_related("goal", "goal__child", "actor")
     if history_cutoff is not None:
         goal_events_query = goal_events_query.filter(created_at__gte=history_cutoff)
@@ -689,15 +718,18 @@ def parent_dashboard(request):
         "scratch": _("Surprise cards"),
         "adjustments": _("Point adjustments"),
     }.get(history_activity, "")
-    pending_requests = _pending_request_items(goals_by_child)
+    pending_requests = _pending_request_items(goals_by_child, child_ids=child_ids)
     pending_revision = _pending_request_revision(pending_requests)
-    parent_accounts = list(get_user_model().objects.filter(is_active=True).order_by("username"))
+    parent_accounts = list(
+        get_user_model()
+        .objects.filter(is_active=True, caregiver_profile__isnull=True)
+        .order_by("username")
+    )
 
-    return render(
-        request,
-        "economy/parent_dashboard.html",
-        {
+    context = {
             "children": children,
+            "is_caregiver": is_caregiver,
+            "caregiver_profile": caregiver,
             "today": today,
             "pending_requests": pending_requests,
             "pending_count": len(pending_requests),
@@ -754,9 +786,11 @@ def parent_dashboard(request):
                 auto_id="id_network_access_%s",
             ),
             "current_client_ip": client_ip(request),
-            "paired_devices": DeviceToken.objects.filter(
+            "paired_devices": list(DeviceToken.recently_active()),
+            "has_paired_devices": DeviceToken.objects.filter(
                 revoked_at__isnull=True
-            ).select_related("created_by"),
+            ).exists(),
+            "device_pairing_share": request.session.pop("device_pairing_share", None),
             "current_device": current_device(request),
             "backup_settings_form": BackupSettingsForm(),
             "smtp_status": public_smtp_config(),
@@ -791,5 +825,11 @@ def parent_dashboard(request):
                 }
                 for child in children
             ],
-        },
+        }
+    if not is_caregiver:
+        context.update(caregiver_settings_context(request))
+    return render(
+        request,
+        "economy/parent_dashboard.html",
+        context,
     )

@@ -1198,3 +1198,99 @@ class ChildEditForm(StyledFormMixin, forms.Form):
                 decided_at=timezone.now(),
             )
         return self.child
+
+
+class CaregiverInviteForm(StyledFormMixin, forms.Form):
+    label = forms.CharField(label=_("Guest name"), max_length=80)
+    children = forms.ModelMultipleChoiceField(
+        label=_("Children"),
+        queryset=ChildProfile.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+    )
+    access_until = forms.DateField(
+        label=_("Access valid until"),
+        widget=forms.DateInput(attrs={"type": "date"}),
+    )
+    email = forms.EmailField(
+        label=_("Email"),
+        required=False,
+        help_text=_("Optional. Used only when email sending is enabled."),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["children"].queryset = ChildProfile.objects.filter(is_active=True)
+
+    def clean_access_until(self):
+        access_until = self.cleaned_data["access_until"]
+        if access_until < timezone.localdate():
+            raise forms.ValidationError(_("Choose today or a future date."))
+        return access_until
+
+    def clean_children(self):
+        children = self.cleaned_data["children"]
+        if not children:
+            raise forms.ValidationError(_("Select at least one child."))
+        return children
+
+
+class CaregiverCreatePinForm(StyledFormMixin, forms.Form):
+    pin = forms.CharField(
+        label=_("Create PIN"),
+        min_length=4,
+        max_length=4,
+        widget=forms.PasswordInput(
+            attrs={
+                "inputmode": "numeric",
+                "pattern": "[0-9]*",
+                "autocomplete": "new-password",
+            }
+        ),
+    )
+    confirm_pin = forms.CharField(
+        label=_("Repeat PIN"),
+        min_length=4,
+        max_length=4,
+        widget=forms.PasswordInput(
+            attrs={
+                "inputmode": "numeric",
+                "pattern": "[0-9]*",
+                "autocomplete": "new-password",
+            }
+        ),
+    )
+
+    def clean_pin(self):
+        pin = self.cleaned_data["pin"]
+        if not pin.isdigit():
+            raise forms.ValidationError(_("The PIN must contain digits only."))
+        return pin
+
+    def clean(self):
+        cleaned = super().clean()
+        pin = cleaned.get("pin")
+        confirm = cleaned.get("confirm_pin")
+        if pin and confirm and pin != confirm:
+            self.add_error("confirm_pin", _("The PINs do not match."))
+        return cleaned
+
+
+class CaregiverPinForm(StyledFormMixin, forms.Form):
+    pin = forms.CharField(
+        label="PIN",
+        min_length=4,
+        max_length=4,
+        widget=forms.PasswordInput(
+            attrs={
+                "inputmode": "numeric",
+                "pattern": "[0-9]*",
+                "autocomplete": "one-time-code",
+            }
+        ),
+    )
+
+    def clean_pin(self):
+        pin = self.cleaned_data["pin"]
+        if not pin.isdigit():
+            raise forms.ValidationError(_("The PIN must contain digits only."))
+        return pin
