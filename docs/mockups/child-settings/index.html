@@ -204,14 +204,73 @@
       display: block; margin-top: 4px; font-weight: 650; font-size: .72rem;
       color: var(--muted); text-transform: uppercase; letter-spacing: .06em;
     }
-    .daily-toggle {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 14px; border-radius: 999px;
-      border: 2px solid color-mix(in srgb, var(--primary) 35%, var(--border));
-      background: color-mix(in srgb, var(--primary) 8%, var(--surface-solid));
-      font-weight: 750; cursor: pointer; user-select: none;
+    /* 8th grid tile = daily surprise (fills 2×4 with 7 themes) */
+    .theme-pick.theme-daily .theme-pick-card {
+      border-style: dashed;
+      background:
+        repeating-linear-gradient(-45deg, transparent, transparent 8px, color-mix(in srgb, var(--primary) 8%, transparent) 8px, color-mix(in srgb, var(--primary) 8%, transparent) 16px),
+        var(--surface-solid);
     }
-    .daily-toggle input { width: 22px; height: 22px; accent-color: var(--primary); }
+    .theme-pick.theme-daily input:checked + .theme-pick-card {
+      border-style: solid;
+      background: color-mix(in srgb, var(--accent) 22%, var(--surface-solid));
+    }
+    .theme-pick.theme-daily .theme-pick-card .daily-emoji {
+      display: block; font-size: 1.5rem; line-height: 1; margin-bottom: 4px;
+    }
+
+    /* Accordion: settings sections collapsed by default */
+    .settings-accordion { display: grid; gap: 12px; }
+    .settings-acc {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .settings-acc > summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px;
+      font-weight: 850;
+      font-size: 1.1rem;
+      user-select: none;
+    }
+    .settings-acc > summary::-webkit-details-marker { display: none; }
+    .settings-acc > summary .acc-icon {
+      flex: 0 0 auto;
+      width: 40px; height: 40px;
+      display: grid; place-items: center;
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--primary) 12%, var(--surface-solid));
+      font-size: 1.25rem;
+    }
+    .settings-acc > summary .acc-copy { flex: 1 1 auto; min-width: 0; }
+    .settings-acc > summary .acc-copy small {
+      display: block; margin-top: 2px; font-weight: 650; font-size: .82rem;
+      color: var(--muted);
+    }
+    .settings-acc > summary .acc-chevron {
+      flex: 0 0 auto;
+      width: 28px; height: 28px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      color: var(--muted);
+      font-size: 1rem;
+      transition: transform .16s;
+    }
+    .settings-acc[open] > summary .acc-chevron { transform: rotate(180deg); color: var(--primary); border-color: var(--primary); }
+    .settings-acc .acc-body {
+      padding: 0 18px 18px;
+      border-top: 1px solid var(--border);
+      padding-top: 16px;
+    }
+    .settings-acc .acc-body > .hint { margin-top: 0; }
+
     .avatar-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
     .avatar-preview {
       width: 88px; height: 88px; border-radius: 28px;
@@ -336,16 +395,22 @@
     .theme-pick.theme-blockville .theme-pick-card small { color: #8d9399; }
 
     body.theme-magic_academy .profile-block,
-    .phone-screen.theme-magic_academy .profile-block { border: 2px solid #c5a059; border-radius: 12px; }
-    .phone-screen.theme-block_world .profile-block { border-radius: 0; box-shadow: 4px 4px 0 #1e3b1f; }
-    .phone-screen.theme-hero_hq .profile-block { border: 2px solid #1f2937; border-radius: 5px; box-shadow: 5px 5px 0 #1f2937; }
-    .phone-screen.theme-art_studio .profile-block { border: 2px solid #f2cc8f; border-radius: 30px 18px 28px 20px; }
-    .phone-screen.theme-panda_pet .profile-block {
+    .phone-screen.theme-magic_academy .profile-block,
+    .phone-screen.theme-magic_academy .settings-acc { border: 2px solid #c5a059; border-radius: 12px; }
+    .phone-screen.theme-block_world .profile-block,
+    .phone-screen.theme-block_world .settings-acc { border-radius: 0; box-shadow: 4px 4px 0 #1e3b1f; }
+    .phone-screen.theme-hero_hq .profile-block,
+    .phone-screen.theme-hero_hq .settings-acc { border: 2px solid #1f2937; border-radius: 5px; box-shadow: 5px 5px 0 #1f2937; }
+    .phone-screen.theme-art_studio .profile-block,
+    .phone-screen.theme-art_studio .settings-acc { border: 2px solid #f2cc8f; border-radius: 30px 18px 28px 20px; }
+    .phone-screen.theme-panda_pet .profile-block,
+    .phone-screen.theme-panda_pet .settings-acc {
       border-radius: 34px;
       border: 2px solid color-mix(in srgb, #2d6a4f 32%, transparent);
       box-shadow: 0 10px 0 color-mix(in srgb, #ffb5a7 45%, transparent);
     }
-    .phone-screen.theme-blockville .profile-block {
+    .phone-screen.theme-blockville .profile-block,
+    .phone-screen.theme-blockville .settings-acc {
       border: 1px solid #393b3d; border-radius: 8px; background: #232527;
     }
     .phone-screen.theme-block_world .daily-toggle,
@@ -442,6 +507,8 @@
         eyebrow: "Your spellbook", title: "Settings",
         worldTitle: "Choose a world", worldHint: "Tap a world. It changes colours, words, and sounds.",
         daily: "Surprise me with a new world each day",
+        dailyTitle: "Surprise world",
+        dailySub: "New every day",
         avatarTitle: "My portrait", avatarHint: "Show your wizard face.",
         cam: "Take photo", gal: "From gallery",
         bdayTitle: "Birthday feast", bdayHint: "Parents confirm before it changes.",
@@ -464,6 +531,8 @@
         eyebrow: "Your base", title: "Settings",
         worldTitle: "Pick a biome", worldHint: "Square buttons. Big taps.",
         daily: "Random biome every day",
+        dailyTitle: "Surprise biome",
+        dailySub: "New every day",
         avatarTitle: "My skin", avatarHint: "Add a face to your character.",
         cam: "Camera", gal: "Gallery",
         bdayTitle: "Spawn day", bdayHint: "Parents approve the change.",
@@ -485,6 +554,8 @@
         eyebrow: "Hero profile", title: "Settings",
         worldTitle: "SELECT HQ THEME", worldHint: "Big comic cards. One tap.",
         daily: "Random HQ skin daily",
+        dailyTitle: "SURPRISE HQ",
+        dailySub: "NEW EACH DAY",
         avatarTitle: "HERO PORTRAIT", avatarHint: "Suit up with your photo.",
         cam: "Snap", gal: "Files",
         bdayTitle: "ORIGIN DAY", bdayHint: "Needs adult clearance.",
@@ -506,6 +577,8 @@
         eyebrow: "My studio", title: "Settings",
         worldTitle: "Pick a mood", worldHint: "Organic cards — like paint swatches.",
         daily: "New mood every morning",
+        dailyTitle: "Surprise mood",
+        dailySub: "New each morning",
         avatarTitle: "Self-portrait", avatarHint: "Your art star photo.",
         cam: "Camera", gal: "Photos",
         bdayTitle: "Celebration day", bdayHint: "Parents OK it first.",
@@ -527,6 +600,8 @@
         eyebrow: "Panda den", title: "Settings",
         worldTitle: "Visit a world", worldHint: "Round cards — easy for little fingers.",
         daily: "Wake up in a surprise world",
+        dailyTitle: "Surprise world",
+        dailySub: "Wake up new",
         avatarTitle: "My panda face", avatarHint: "A smiling photo.",
         cam: "Say cheese", gal: "Pick photo",
         bdayTitle: "Cake day", bdayHint: "Grown-ups check it.",
@@ -548,6 +623,8 @@
         eyebrow: "Player pad", title: "Settings",
         worldTitle: "Select skin pack", worldHint: "Dark UI + glow — like a game menu.",
         daily: "Daily random skin",
+        dailyTitle: "Random skin",
+        dailySub: "Daily roll",
         avatarTitle: "Player icon", avatarHint: "Upload your face tile.",
         cam: "Capture", gal: "Inventory",
         bdayTitle: "Player birthday", bdayHint: "Parent unlock required.",
@@ -569,6 +646,8 @@
         eyebrow: "Your profile", title: "Settings",
         worldTitle: "Choose a world", worldHint: "You can switch whenever you want.",
         daily: "Change my world every day",
+        dailyTitle: "Surprise world",
+        dailySub: "New every day",
         avatarTitle: "My photo", avatarHint: "A clear face photo.",
         cam: "Take photo", gal: "Choose photo",
         bdayTitle: "Birthday", bdayHint: "Parents approve changes.",
@@ -594,75 +673,108 @@
       { id: "neutral", name: "Neutral", sub: "Points" }
     ];
 
-    function themeCardsHtml(activeId) {
-      return WORLD_CARDS.map((w) => `
+    function themeCardsHtml(activeId, t) {
+      const themes = WORLD_CARDS.map((w) => `
         <label class="theme-pick theme-${w.id}">
           <input type="radio" name="theme" value="${w.id}" ${w.id === activeId ? "checked" : ""}>
           <span class="theme-pick-card"><span>${w.name}</span><small>${w.sub}</small></span>
         </label>
       `).join("");
+      const daily = `
+        <label class="theme-pick theme-daily">
+          <input type="checkbox" name="randomize_theme_daily" value="1">
+          <span class="theme-pick-card">
+            <span class="daily-emoji" aria-hidden="true">🎲</span>
+            <span>${t.dailyTitle || t.daily}</span>
+            <small>${t.dailySub || "Every day"}</small>
+          </span>
+        </label>
+      `;
+      return themes + daily;
     }
 
     function settingsBlockHtml(themeId, t) {
+      const worldName = WORLD_CARDS.find((w) => w.id === themeId)?.name || themeId;
       return `
         <section id="nustatymai" class="content-section">
           <div class="section-heading">
             <p class="eyebrow">${t.eyebrow}</p>
             <h2>${t.title}</h2>
           </div>
-          <div class="profile-stack">
-            <article class="profile-block">
-              <h3>${t.worldTitle}</h3>
-              <p class="hint">${t.worldHint}</p>
-              <div class="theme-pick-grid">${themeCardsHtml(themeId)}</div>
-              <label class="daily-toggle">
-                <input type="checkbox">
-                <span>${t.daily}</span>
-              </label>
-              <p style="margin:14px 0 0">
-                <button class="button button-primary" type="button">${t.ctaTheme}</button>
-              </p>
-            </article>
-            <article class="profile-block">
-              <h3>${t.avatarTitle}</h3>
-              <p class="hint">${t.avatarHint}</p>
-              <div class="avatar-row">
-                <div class="avatar-preview" aria-hidden="true">${t.emoji}</div>
-                <div class="avatar-actions">
-                  <button class="button button-primary" type="button">${t.cam}</button>
-                  <button class="button button-secondary" type="button">${t.gal}</button>
+          <p class="hint" style="margin-top:-6px">Tap a row to open. Only one open at a time.</p>
+          <div class="settings-accordion" data-settings-accordion>
+            <details class="settings-acc" open>
+              <summary>
+                <span class="acc-icon" aria-hidden="true">🌍</span>
+                <span class="acc-copy">${t.worldTitle}<small>${worldName}</small></span>
+                <span class="acc-chevron" aria-hidden="true">▾</span>
+              </summary>
+              <div class="acc-body">
+                <p class="hint">${t.worldHint}</p>
+                <div class="theme-pick-grid">${themeCardsHtml(themeId, t)}</div>
+                <p style="margin:14px 0 0">
+                  <button class="button button-primary" type="button">${t.ctaTheme}</button>
+                </p>
+              </div>
+            </details>
+
+            <details class="settings-acc">
+              <summary>
+                <span class="acc-icon" aria-hidden="true">${t.emoji}</span>
+                <span class="acc-copy">${t.avatarTitle}<small>${t.avatarHint}</small></span>
+                <span class="acc-chevron" aria-hidden="true">▾</span>
+              </summary>
+              <div class="acc-body">
+                <div class="avatar-row">
+                  <div class="avatar-preview" aria-hidden="true">${t.emoji}</div>
+                  <div class="avatar-actions">
+                    <button class="button button-primary" type="button">${t.cam}</button>
+                    <button class="button button-secondary" type="button">${t.gal}</button>
+                  </div>
                 </div>
               </div>
-            </article>
-            <article class="profile-block" id="gimtadienis">
-              <h3>${t.bdayTitle}</h3>
-              <p class="hint">${t.bdayHint}</p>
-              <div class="birthday-big">
-                <input type="date" value="2015-06-12" aria-label="Birthday">
-                <button class="button button-secondary" type="button">Save</button>
+            </details>
+
+            <details class="settings-acc" id="gimtadienis">
+              <summary>
+                <span class="acc-icon" aria-hidden="true">🎂</span>
+                <span class="acc-copy">${t.bdayTitle}<small>${t.bdayHint}</small></span>
+                <span class="acc-chevron" aria-hidden="true">▾</span>
+              </summary>
+              <div class="acc-body">
+                <div class="birthday-big">
+                  <input type="date" value="2015-06-12" aria-label="Birthday">
+                  <button class="button button-secondary" type="button">Save</button>
+                </div>
               </div>
-            </article>
-            <article class="profile-block" data-pin-change>
-              <h3>${t.pinTitle}</h3>
-              <p class="hint">${t.pinHint}</p>
-              <ol class="pin-guide" aria-label="PIN change steps">
-                <li class="is-active" data-pin-step="0"><span class="step-num">1</span><span>${t.pinSteps[0]}</span></li>
-                <li data-pin-step="1"><span class="step-num">2</span><span>${t.pinSteps[1]}</span></li>
-                <li data-pin-step="2"><span class="step-num">3</span><span>${t.pinSteps[2]}</span></li>
-              </ol>
-              <p class="pin-step-label" data-pin-step-label>${t.pinSteps[0]}</p>
-              <div class="pin-dots" aria-hidden="true" data-pin-dots>
-                <span></span><span></span><span></span><span></span>
+            </details>
+
+            <details class="settings-acc" data-pin-change>
+              <summary>
+                <span class="acc-icon" aria-hidden="true">🔒</span>
+                <span class="acc-copy">${t.pinTitle}<small>${t.pinHint}</small></span>
+                <span class="acc-chevron" aria-hidden="true">▾</span>
+              </summary>
+              <div class="acc-body">
+                <ol class="pin-guide" aria-label="PIN change steps">
+                  <li class="is-active" data-pin-step="0"><span class="step-num">1</span><span>${t.pinSteps[0]}</span></li>
+                  <li data-pin-step="1"><span class="step-num">2</span><span>${t.pinSteps[1]}</span></li>
+                  <li data-pin-step="2"><span class="step-num">3</span><span>${t.pinSteps[2]}</span></li>
+                </ol>
+                <p class="pin-step-label" data-pin-step-label>${t.pinSteps[0]}</p>
+                <div class="pin-dots" aria-hidden="true" data-pin-dots>
+                  <span></span><span></span><span></span><span></span>
+                </div>
+                <div class="pin-pad" aria-label="PIN pad" data-pin-pad>
+                  ${[1,2,3,4,5,6,7,8,9,"",0,"⌫"].map((k) =>
+                    k === "" ? "<span></span>" : `<button type="button" data-key="${k}">${k}</button>`
+                  ).join("")}
+                </div>
+                <div class="pin-save-row" data-pin-save hidden>
+                  <button class="button button-primary" type="button">${t.pinSave}</button>
+                </div>
               </div>
-              <div class="pin-pad" aria-label="PIN pad" data-pin-pad>
-                ${[1,2,3,4,5,6,7,8,9,"",0,"⌫"].map((k) =>
-                  k === "" ? "<span></span>" : `<button type="button" data-key="${k}">${k}</button>`
-                ).join("")}
-              </div>
-              <div class="pin-save-row" data-pin-save hidden>
-                <button class="button button-primary" type="button">${t.pinSave}</button>
-              </div>
-            </article>
+            </details>
           </div>
         </section>
       `;
@@ -761,6 +873,19 @@
       `;
     }
 
+    function wireAccordion(root) {
+      const wrap = root.querySelector("[data-settings-accordion]");
+      if (!wrap) return;
+      wrap.querySelectorAll("details.settings-acc").forEach((detail) => {
+        detail.addEventListener("toggle", () => {
+          if (!detail.open) return;
+          wrap.querySelectorAll("details.settings-acc").forEach((other) => {
+            if (other !== detail) other.open = false;
+          });
+        });
+      });
+    }
+
     function wirePinPad(root, t) {
       const box = root.querySelector("[data-pin-change]");
       if (!box) return;
@@ -794,7 +919,6 @@
         buffer = "";
         step += 1;
         if (step === 3 && values[1] !== values[2]) {
-          // mismatch — send back to step 2 (new) with a nudge
           step = 1;
           values[1] = "";
           values[2] = "";
@@ -827,6 +951,7 @@
       const focus = new URLSearchParams(location.search).get("focus");
       root.className = `phone-screen theme-${themeId} child-area${focus === "settings" ? " shot-focus-settings" : ""}`;
       root.innerHTML = dashboardHtml(themeId, t);
+      wireAccordion(root);
       wirePinPad(root, t);
       if (focus === "settings") {
         const el = root.querySelector("#nustatymai") || root.querySelector("[data-pin-change]");
