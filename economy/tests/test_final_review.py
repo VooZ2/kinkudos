@@ -249,6 +249,49 @@ class FinalReviewTests(TestCase):
         self.assertIsInstance(goal, SavingsGoal)
         self.assertEqual(goal.mode, GoalMode.SAVED)
 
+    def test_safari_mobile_first_tap_reaches_settings_and_dialogs(self):
+        response = self.parent_response()
+        self.assertContains(
+            response,
+            'name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"',
+            html=False,
+        )
+        self.assertContains(response, "r=safari-tap", html=False)
+
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn("--browser-bottom-gap: env(safe-area-inset-bottom, 0px);", css)
+        self.assertIn(
+            "@media (display-mode: browser) and (hover: none) and (pointer: coarse)",
+            css,
+        )
+        self.assertIn(
+            "--browser-bottom-gap: calc(env(safe-area-inset-bottom, 0px) + 44px);",
+            css,
+        )
+        self.assertIn("@media (hover: none), (pointer: coarse)", css)
+        self.assertIn("touch-action: manipulation", css)
+        self.assertIn(
+            "padding: 7px 0 calc(8px + var(--browser-bottom-gap))",
+            css,
+        )
+        self.assertIn(
+            "padding: 22px 18px calc(16px + var(--browser-bottom-gap))",
+            css,
+        )
+        self.assertIn(
+            "--fab-inset-block: calc(88px + var(--browser-bottom-gap));",
+            css,
+        )
+
+        js = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
+        self.assertIn("function bindPrimaryTap(", js)
+        self.assertIn('if (event.pointerType === "mouse") return;', js)
+        self.assertIn(
+            'bindPrimaryTap(document, "[data-close-dialog], [data-open-dialog]"',
+            js,
+        )
+        self.assertIn('bindPrimaryTap(parentShell, "[data-parent-nav]"', js)
+
     def test_frontend_source_covers_date_goal_language_and_balance_behaviour(self):
         response = self.parent_response()
         self.assertContains(response, 'name="language" value="en" type="submit"', html=False)

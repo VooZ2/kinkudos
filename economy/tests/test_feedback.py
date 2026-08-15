@@ -378,7 +378,7 @@ class FeedbackWorkflowTests(TestCase):
             css,
         )
         self.assertIn(
-            "--fab-inset-block: calc(88px + env(safe-area-inset-bottom));",
+            "--fab-inset-block: calc(88px + var(--browser-bottom-gap));",
             css,
         )
         self.assertIn("max-height: calc(100dvh - 24px)", css)
