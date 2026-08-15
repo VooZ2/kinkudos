@@ -13,7 +13,11 @@ python -m http.server 8765 --bind 0.0.0.0
 
 On a real phone (narrow viewport) the nested phone chrome drops away; theme chips stay sticky.
 
-Uses live [`static/css/app.css`](../../../static/css/app.css).
+## Languages
+
+Use the **LT / EN** toggle (or `?lang=lt` / `?lang=en`). Settings strings are theme-flavoured in both languages; nav labels follow existing product translations from `locale/lt/LC_MESSAGES/django.po` where available.
+
+Copy source: [`copy.js`](copy.js).
 
 ## What stays the same
 

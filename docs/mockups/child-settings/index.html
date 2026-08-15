@@ -462,6 +462,10 @@
     „Surprise world“ (kasdien random), kad 2×4 užsipildytų.
   </p>
 
+  <div class="mock-toolbar" role="toolbar" aria-label="Language" style="margin-bottom:10px">
+    <button type="button" data-lang="lt" aria-pressed="true">LT</button>
+    <button type="button" data-lang="en" aria-pressed="false">EN</button>
+  </div>
   <div class="mock-toolbar" role="toolbar" aria-label="Temos">
     <button type="button" data-theme="magic_academy" aria-pressed="true">Magic Academy</button>
     <button type="button" data-theme="block_world" aria-pressed="false">Block World</button>
@@ -484,7 +488,7 @@
   </div>
 
   <section class="compare-strip">
-    <h2 style="margin:0 0 14px;font-size:1.2rem;">Tik Settings blokas — dabar vs pasiūlymas</h2>
+    <h2 id="compare-strip-title" style="margin:0 0 14px;font-size:1.2rem;">Tik Settings blokas — dabar vs pasiūlymas</h2>
     <div class="compare-grid">
       <article class="compare-card">
         <header>Dabar — formų panelės</header>
@@ -497,184 +501,19 @@
     </div>
   </section>
 
+  <script src="./copy.js"></script>
   <script>
-    const THEMES = {
-      magic_academy: {
-        label: "Magic Academy", emoji: "🦉", currency: "galleons",
-        nav: ["Assignments", "Magic Shop", "Dream Enchantments", "Magic Chronicle"],
-        taskEyebrow: "Message from the owl post", taskTitle: "Today's enchanted duties",
-        taskName: "Tidy the common room", taskPts: "+8",
-        eyebrow: "Your spellbook", title: "Settings",
-        worldTitle: "Choose a world", worldHint: "Tap a world. It changes colours, words, and sounds.",
-        daily: "Surprise me with a new world each day",
-        dailyTitle: "Surprise world",
-        dailySub: "New every day",
-        avatarTitle: "My portrait", avatarHint: "Show your wizard face.",
-        cam: "Take photo", gal: "From gallery",
-        bdayTitle: "Birthday feast", bdayHint: "Parents confirm before it changes.",
-        pinTitle: "Secret code", pinHint: "Three small steps. Same keypad each time.",
-        pinSteps: ["Old code", "New code", "Repeat new code"],
-        pinSave: "Save secret code",
-        ctaTheme: "Enter this world",
-        notes: [
-          "Hero + orb + 4 tabai — kaip produkcijoje (nekeista).",
-          "Keičiasi tik Settings segmentas apačioje.",
-          "Theme = kortelės, ne <code>&lt;select&gt;</code>.",
-          "PIN: senas → naujas → pakartoti + checklist."
-        ]
-      },
-      block_world: {
-        label: "Block World", emoji: "🟩", currency: "emeralds",
-        nav: ["Missions", "Reward Chest", "Building Plan", "Activity Log"],
-        taskEyebrow: "Priority", taskTitle: "Today's block jobs",
-        taskName: "Sort the crafting chest", taskPts: "+8",
-        eyebrow: "Your base", title: "Settings",
-        worldTitle: "Pick a biome", worldHint: "Square buttons. Big taps.",
-        daily: "Random biome every day",
-        dailyTitle: "Surprise biome",
-        dailySub: "New every day",
-        avatarTitle: "My skin", avatarHint: "Add a face to your character.",
-        cam: "Camera", gal: "Gallery",
-        bdayTitle: "Spawn day", bdayHint: "Parents approve the change.",
-        pinTitle: "Passcode", pinHint: "Old → new → repeat. Checklist keeps you on track.",
-        pinSteps: ["Old passcode", "New passcode", "Repeat new"],
-        pinSave: "Save passcode",
-        ctaTheme: "Build this world",
-        notes: [
-          "Struktūra ta pati — tik Settings blokas.",
-          "Pixel / square kampai Settings kortelėse.",
-          "PIN checklist: senas, naujas, pakartoti."
-        ]
-      },
-      hero_hq: {
-        label: "Superhero HQ", emoji: "🦸", currency: "badges",
-        nav: ["Hero Missions", "HQ Arsenal", "Secret Plan", "Mission Log"],
-        taskEyebrow: "Priority", taskTitle: "Today's hero missions",
-        taskName: "Clear the laundry lair", taskPts: "+8",
-        eyebrow: "Hero profile", title: "Settings",
-        worldTitle: "SELECT HQ THEME", worldHint: "Big comic cards. One tap.",
-        daily: "Random HQ skin daily",
-        dailyTitle: "SURPRISE HQ",
-        dailySub: "NEW EACH DAY",
-        avatarTitle: "HERO PORTRAIT", avatarHint: "Suit up with your photo.",
-        cam: "Snap", gal: "Files",
-        bdayTitle: "ORIGIN DAY", bdayHint: "Needs adult clearance.",
-        pinTitle: "ACCESS CODE", pinHint: "Prove the old code, then set a new one twice.",
-        pinSteps: ["CURRENT CODE", "NEW CODE", "REPEAT NEW"],
-        pinSave: "SAVE CODE",
-        ctaTheme: "ACTIVATE",
-        notes: [
-          "Tabai ir hero nepakitę.",
-          "Settings copy UPPERCASE / comic stiliumi.",
-          "PIN guide: CURRENT → NEW → REPEAT."
-        ]
-      },
-      art_studio: {
-        label: "Art Studio", emoji: "🎨", currency: "pearls",
-        nav: ["Creative Projects", "Inspiration Shop", "My Gallery", "Creative Journal"],
-        taskEyebrow: "Priority", taskTitle: "Today's studio jobs",
-        taskName: "Wash the paint cups", taskPts: "+8",
-        eyebrow: "My studio", title: "Settings",
-        worldTitle: "Pick a mood", worldHint: "Organic cards — like paint swatches.",
-        daily: "New mood every morning",
-        dailyTitle: "Surprise mood",
-        dailySub: "New each morning",
-        avatarTitle: "Self-portrait", avatarHint: "Your art star photo.",
-        cam: "Camera", gal: "Photos",
-        bdayTitle: "Celebration day", bdayHint: "Parents OK it first.",
-        pinTitle: "Private sketch code", pinHint: "Old code first, then new code twice.",
-        pinSteps: ["Old code", "New code", "Repeat new"],
-        pinSave: "Save sketch code",
-        ctaTheme: "Paint this world",
-        notes: [
-          "Dashboard layout nepakitęs.",
-          "Settings — organinės formos + šilta kalba.",
-          "PIN checklist trimis žingsniais."
-        ]
-      },
-      panda_pet: {
-        label: "Panda World", emoji: "🐼", currency: "bamboo",
-        nav: ["Panda Tasks", "Treat Chest", "Panda's Dream", "Panda Tracks"],
-        taskEyebrow: "Priority", taskTitle: "Today's panda tasks",
-        taskName: "Fluff the bamboo bed", taskPts: "+8",
-        eyebrow: "Panda den", title: "Settings",
-        worldTitle: "Visit a world", worldHint: "Round cards — easy for little fingers.",
-        daily: "Wake up in a surprise world",
-        dailyTitle: "Surprise world",
-        dailySub: "Wake up new",
-        avatarTitle: "My panda face", avatarHint: "A smiling photo.",
-        cam: "Say cheese", gal: "Pick photo",
-        bdayTitle: "Cake day", bdayHint: "Grown-ups check it.",
-        pinTitle: "Secret bamboo code", pinHint: "First the old one. Then the new one. Then again!",
-        pinSteps: ["Old code", "New code", "Say it again"],
-        pinSave: "Save bamboo code",
-        ctaTheme: "Go to this world",
-        notes: [
-          "Hero + 4 tabai kaip dabar.",
-          "Settings — soft pills, paprasta kalba (5–8 m.).",
-          "PIN: senas → naujas → dar kartą + checklist."
-        ]
-      },
-      blockville: {
-        label: "Blockville", emoji: "🧱", currency: "cubes",
-        nav: ["Block quests", "Prize shop", "Building plans", "Mission Log"],
-        taskEyebrow: "Priority", taskTitle: "Today's block quests",
-        taskName: "Sort inventory chest", taskPts: "+8",
-        eyebrow: "Player pad", title: "Settings",
-        worldTitle: "Select skin pack", worldHint: "Dark UI + glow — like a game menu.",
-        daily: "Daily random skin",
-        dailyTitle: "Random skin",
-        dailySub: "Daily roll",
-        avatarTitle: "Player icon", avatarHint: "Upload your face tile.",
-        cam: "Capture", gal: "Inventory",
-        bdayTitle: "Player birthday", bdayHint: "Parent unlock required.",
-        pinTitle: "Lock code", pinHint: "Unlock with old code, then set new code twice.",
-        pinSteps: ["Old lock", "New lock", "Confirm lock"],
-        pinSave: "Save lock code",
-        ctaTheme: "Equip world",
-        notes: [
-          "Struktūra kaip produkcijoje.",
-          "Settings — neon / gaming leksika (9–14 m.).",
-          "PIN checklist: old → new → confirm."
-        ]
-      },
-      neutral: {
-        label: "Neutral", emoji: "⭐", currency: "points",
-        nav: ["Tasks", "Rewards", "Goals", "History"],
-        taskEyebrow: "Priority", taskTitle: "Tasks from your parents",
-        taskName: "Make the bed", taskPts: "+8",
-        eyebrow: "Your profile", title: "Settings",
-        worldTitle: "Choose a world", worldHint: "You can switch whenever you want.",
-        daily: "Change my world every day",
-        dailyTitle: "Surprise world",
-        dailySub: "New every day",
-        avatarTitle: "My photo", avatarHint: "A clear face photo.",
-        cam: "Take photo", gal: "Choose photo",
-        bdayTitle: "Birthday", bdayHint: "Parents approve changes.",
-        pinTitle: "My PIN", pinHint: "Enter the old PIN, then the new PIN twice.",
-        pinSteps: ["Old PIN", "New PIN", "Repeat new PIN"],
-        pinSave: "Save new PIN",
-        ctaTheme: "Use this world",
-        notes: [
-          "Bazinė struktūra 1:1 su dabartiniu dashboard.",
-          "Settings vis tiek vizualios kortelės.",
-          "PIN: 3 žingsniai su checklistu."
-        ]
-      }
-    };
+    const params = new URLSearchParams(location.search);
+    let lang = params.get("lang") === "en" ? "en" : "lt";
+    let currentTheme = params.get("theme") || "magic_academy";
+    const focus = params.get("focus");
 
-    const WORLD_CARDS = [
-      { id: "magic_academy", name: "Magic Academy", sub: "Owls & galleons" },
-      { id: "block_world", name: "Block World", sub: "Emeralds" },
-      { id: "hero_hq", name: "Superhero HQ", sub: "Badges" },
-      { id: "art_studio", name: "Art Studio", sub: "Pearls" },
-      { id: "panda_pet", name: "Panda World", sub: "Bamboo" },
-      { id: "blockville", name: "Blockville", sub: "Cubes" },
-      { id: "neutral", name: "Neutral", sub: "Points" }
-    ];
+    function tOf(themeId = currentTheme) {
+      return window.KK_SETTINGS_COPY.get(lang, themeId);
+    }
 
     function themeCardsHtml(activeId, t) {
-      const themes = WORLD_CARDS.map((w) => `
+      const themes = t.worlds.map((w) => `
         <label class="theme-pick theme-${w.id}">
           <input type="radio" name="theme" value="${w.id}" ${w.id === activeId ? "checked" : ""}>
           <span class="theme-pick-card"><span>${w.name}</span><small>${w.sub}</small></span>
@@ -685,8 +524,8 @@
           <input type="checkbox" name="randomize_theme_daily" value="1">
           <span class="theme-pick-card">
             <span class="daily-emoji" aria-hidden="true">🎲</span>
-            <span>${t.dailyTitle || t.daily}</span>
-            <small>${t.dailySub || "Every day"}</small>
+            <span>${t.dailyTitle}</span>
+            <small>${t.dailySub}</small>
           </span>
         </label>
       `;
@@ -694,14 +533,14 @@
     }
 
     function settingsBlockHtml(themeId, t) {
-      const worldName = WORLD_CARDS.find((w) => w.id === themeId)?.name || themeId;
+      const worldName = t.worlds.find((w) => w.id === themeId)?.name || themeId;
       return `
         <section id="nustatymai" class="content-section">
           <div class="section-heading">
             <p class="eyebrow">${t.eyebrow}</p>
             <h2>${t.title}</h2>
           </div>
-          <p class="hint" style="margin-top:-6px">Tap a row to open. Only one open at a time.</p>
+          <p class="hint" style="margin-top:-6px">${t.ui.accordionHint}</p>
           <div class="settings-accordion" data-settings-accordion>
             <details class="settings-acc" open>
               <summary>
@@ -743,8 +582,8 @@
               </summary>
               <div class="acc-body">
                 <div class="birthday-big">
-                  <input type="date" value="2015-06-12" aria-label="Birthday">
-                  <button class="button button-secondary" type="button">Save</button>
+                  <input type="date" value="2015-06-12" aria-label="${t.bdayTitle}">
+                  <button class="button button-secondary" type="button">${t.ui.save}</button>
                 </div>
               </div>
             </details>
@@ -756,7 +595,7 @@
                 <span class="acc-chevron" aria-hidden="true">▾</span>
               </summary>
               <div class="acc-body">
-                <ol class="pin-guide" aria-label="PIN change steps">
+                <ol class="pin-guide" aria-label="PIN">
                   <li class="is-active" data-pin-step="0"><span class="step-num">1</span><span>${t.pinSteps[0]}</span></li>
                   <li data-pin-step="1"><span class="step-num">2</span><span>${t.pinSteps[1]}</span></li>
                   <li data-pin-step="2"><span class="step-num">3</span><span>${t.pinSteps[2]}</span></li>
@@ -765,7 +604,7 @@
                 <div class="pin-dots" aria-hidden="true" data-pin-dots>
                   <span></span><span></span><span></span><span></span>
                 </div>
-                <div class="pin-pad" aria-label="PIN pad" data-pin-pad>
+                <div class="pin-pad" aria-label="PIN" data-pin-pad>
                   ${[1,2,3,4,5,6,7,8,9,"",0,"⌫"].map((k) =>
                     k === "" ? "<span></span>" : `<button type="button" data-key="${k}">${k}</button>`
                   ).join("")}
@@ -781,26 +620,22 @@
     }
 
     function dashboardHtml(themeId, t, { settingsOnly = false } = {}) {
-      if (settingsOnly) {
-        return `<div class="page">${settingsBlockHtml(themeId, t)}</div>`;
-      }
+      if (settingsOnly) return `<div class="page">${settingsBlockHtml(themeId, t)}</div>`;
       return `
         <div class="page">
           <section class="child-hero">
             <div class="child-identity">
               <div class="hero-avatar-mock" aria-hidden="true">${t.emoji}</div>
               <div class="child-greeting">
-                <h1>Hello, Alex!</h1>
-                <p class="child-greeting-supporting">Ready for today's tasks?</p>
+                <h1>${t.ui.hello}</h1>
+                <p class="child-greeting-supporting">${t.ui.ready}</p>
               </div>
             </div>
             <div class="balance-orb"><strong>42</strong><span>${t.currency}</span></div>
           </section>
-
           <nav class="tabbar" aria-label="Sections">
             ${t.nav.map((label, i) => `<a href="#${["darbai","prizai","tikslai","istorija"][i]}">${label}</a>`).join("")}
           </nav>
-
           <section id="darbai" class="content-section mock-stub">
             <div class="section-heading">
               <p class="eyebrow">${t.taskEyebrow}</p>
@@ -810,67 +645,55 @@
               <div class="item-icon" aria-hidden="true">🛏️</div>
               <div>
                 <h3 style="margin:0">${t.taskName}</h3>
-                <p style="margin:4px 0 0;color:var(--muted)">Stub — same layout as today</p>
+                <p style="margin:4px 0 0;color:var(--muted)">${t.ui.stubNote}</p>
               </div>
-              <strong class="positive">${t.taskPts}</strong>
+              <strong class="positive">+8</strong>
             </article>
           </section>
-
           ${settingsBlockHtml(themeId, t)}
         </div>
       `;
     }
 
-    function nowSettingsHtml() {
+    function nowSettingsHtml(t) {
+      if (lang === "lt") {
+        return `
+          <div class="page" style="padding-top:12px">
+            <div class="section-heading"><p class="eyebrow">Tavo profilis</p><h2>Nustatymai</h2></div>
+            <div class="settings-grid">
+              <article class="panel"><h3>Išvaizda</h3>
+                <form class="stack-form" onsubmit="return false">
+                  <p><label>Tema</label><select><option>Magijos akademija</option></select></p>
+                  <button class="button button-secondary" type="button">Pakeisti temą</button>
+                </form>
+              </article>
+              <article class="panel"><h3>Gimimo data</h3>
+                <button class="button button-secondary" type="button">Išsaugoti</button>
+              </article>
+              <article class="panel"><h3>Pakeisti PIN</h3>
+                <button class="button button-primary" type="button">Išsaugoti naują PIN</button>
+              </article>
+            </div>
+          </div>`;
+      }
       return `
         <div class="page" style="padding-top:12px">
-          <div class="section-heading">
-            <p class="eyebrow">Your profile</p>
-            <h2>Settings</h2>
-          </div>
+          <div class="section-heading"><p class="eyebrow">Your profile</p><h2>Settings</h2></div>
           <div class="settings-grid">
-            <article class="panel profile-appearance-panel">
-              <section class="profile-setting-part">
-                <h3>Appearance</h3>
-                <form class="stack-form" onsubmit="return false">
-                  <p><label>Theme</label>
-                    <select><option>Magic Academy</option><option>Block World</option></select>
-                  </p>
-                  <p class="checkbox-field">
-                    <input type="checkbox" id="r1"><label for="r1">Change my theme randomly every day</label>
-                    <small class="helptext">A different theme is chosen once per day.</small>
-                  </p>
-                  <button class="button button-secondary" type="button">Change theme</button>
-                </form>
-              </section>
-              <section class="profile-setting-part">
-                <h3>Avatar</h3>
-                <form class="stack-form" onsubmit="return false">
-                  <p><input type="file"></p>
-                  <small class="help-text">JPEG, PNG, WebP, HEIC, or HEIF, up to 5 MB.</small>
-                  <button class="button button-secondary" type="button">Upload avatar</button>
-                </form>
-              </section>
-            </article>
-            <article class="panel">
-              <h3>Birthday</h3>
+            <article class="panel"><h3>Appearance</h3>
               <form class="stack-form" onsubmit="return false">
-                <p><input type="date"></p>
-                <button class="button button-secondary" type="button">Save birthday</button>
+                <p><label>Theme</label><select><option>Magic Academy</option></select></p>
+                <button class="button button-secondary" type="button">Change theme</button>
               </form>
             </article>
-            <article class="panel">
-              <h3>Change PIN</h3>
-              <form class="stack-form" onsubmit="return false">
-                <p><input type="password" placeholder="Current PIN" maxlength="4"></p>
-                <p><input type="password" placeholder="New PIN" maxlength="4"></p>
-                <p><input type="password" placeholder="Repeat PIN" maxlength="4"></p>
-                <button class="button button-primary" type="button">Save new PIN</button>
-              </form>
+            <article class="panel"><h3>Birthday</h3>
+              <button class="button button-secondary" type="button">Save birthday</button>
+            </article>
+            <article class="panel"><h3>Change PIN</h3>
+              <button class="button button-primary" type="button">Save new PIN</button>
             </article>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
     function wireAccordion(root) {
@@ -900,16 +723,11 @@
       function paint() {
         steps.forEach((el, i) => {
           el.classList.toggle("is-active", i === step && step < 3);
-          el.classList.toggle("is-done", i < step || (step === 3 && i < 3));
-          if (i < step || (step === 3 && values[i].length === 4)) {
-            el.querySelector(".step-num").textContent = "✓";
-          } else {
-            el.querySelector(".step-num").textContent = String(i + 1);
-          }
+          el.classList.toggle("is-done", i < step || step === 3);
+          el.querySelector(".step-num").textContent =
+            (i < step || step === 3) ? "✓" : String(i + 1);
         });
-        if (label) {
-          label.textContent = step < 3 ? t.pinSteps[step] : "Ready to save";
-        }
+        if (label) label.textContent = step < 3 ? t.pinSteps[step] : t.ui.pinReady;
         dots.forEach((d, i) => d.classList.toggle("filled", i < buffer.length));
         if (saveRow) saveRow.hidden = !(step === 3 && values[1] && values[1] === values[2]);
       }
@@ -922,7 +740,7 @@
           step = 1;
           values[1] = "";
           values[2] = "";
-          if (label) label.textContent = "New codes didn’t match — try again";
+          if (label) label.textContent = t.ui.pinMismatch;
         }
         paint();
       }
@@ -931,53 +749,55 @@
         const btn = e.target.closest("button[data-key]");
         if (!btn || step >= 3) return;
         const key = btn.dataset.key;
-        if (key === "⌫") {
-          buffer = buffer.slice(0, -1);
-        } else if (buffer.length < 4) {
-          buffer += key;
-        }
+        if (key === "⌫") buffer = buffer.slice(0, -1);
+        else if (buffer.length < 4) buffer += key;
         paint();
-        if (buffer.length === 4) {
-          window.setTimeout(advance, 180);
-        }
+        if (buffer.length === 4) window.setTimeout(advance, 180);
       });
-
       paint();
     }
 
-    function applyTheme(themeId) {
-      const t = THEMES[themeId];
+    function render() {
+      const t = tOf(currentTheme);
       const root = document.getElementById("phone-root");
-      const focus = new URLSearchParams(location.search).get("focus");
-      root.className = `phone-screen theme-${themeId} child-area${focus === "settings" ? " shot-focus-settings" : ""}`;
-      root.innerHTML = dashboardHtml(themeId, t);
+      root.className = `phone-screen theme-${currentTheme} child-area${focus === "settings" ? " shot-focus-settings" : ""}`;
+      root.innerHTML = dashboardHtml(currentTheme, t);
       wireAccordion(root);
       wirePinPad(root, t);
       if (focus === "settings") {
-        const el = root.querySelector("#nustatymai") || root.querySelector("[data-pin-change]");
-        if (el) el.scrollIntoView({ block: "start" });
+        root.querySelector("#nustatymai")?.scrollIntoView({ block: "start" });
       }
-      document.getElementById("notes-title").textContent = t.label;
+      document.getElementById("notes-title").textContent = `${t.label} · ${lang.toUpperCase()}`;
       document.getElementById("notes-list").innerHTML = t.notes.map((n) => `<li>${n}</li>`).join("");
-      document.querySelectorAll(".mock-toolbar button").forEach((btn) => {
-        btn.setAttribute("aria-pressed", btn.dataset.theme === themeId ? "true" : "false");
+      document.querySelectorAll('[data-theme]').forEach((btn) => {
+        btn.setAttribute("aria-pressed", btn.dataset.theme === currentTheme ? "true" : "false");
       });
+      document.querySelectorAll('[data-lang]').forEach((btn) => {
+        btn.setAttribute("aria-pressed", btn.dataset.lang === lang ? "true" : "false");
+      });
+      document.getElementById("compare-now").innerHTML = nowSettingsHtml(t);
+      document.getElementById("compare-next").innerHTML = dashboardHtml(currentTheme, t, { settingsOnly: true });
+      document.querySelector("#compare-strip-title") &&
+        (document.querySelector("#compare-strip-title").textContent =
+          lang === "lt" ? "Tik Settings blokas — dabar vs pasiūlymas" : "Settings block only — now vs proposal");
       root.querySelectorAll('input[name="theme"]').forEach((input) => {
         input.addEventListener("change", () => {
-          if (input.checked) applyTheme(input.value);
+          if (input.checked) {
+            currentTheme = input.value;
+            render();
+          }
         });
       });
     }
 
-    document.querySelectorAll(".mock-toolbar button").forEach((btn) => {
-      btn.addEventListener("click", () => applyTheme(btn.dataset.theme));
+    document.querySelectorAll("[data-theme]").forEach((btn) => {
+      btn.addEventListener("click", () => { currentTheme = btn.dataset.theme; render(); });
+    });
+    document.querySelectorAll("[data-lang]").forEach((btn) => {
+      btn.addEventListener("click", () => { lang = btn.dataset.lang; render(); });
     });
 
-    document.getElementById("compare-now").innerHTML = nowSettingsHtml();
-    document.getElementById("compare-next").innerHTML = dashboardHtml("magic_academy", THEMES.magic_academy, { settingsOnly: true });
-
-    const startTheme = new URLSearchParams(location.search).get("theme");
-    applyTheme(THEMES[startTheme] ? startTheme : "magic_academy");
+    render();
   </script>
 </body>
 </html>
