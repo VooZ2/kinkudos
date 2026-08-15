@@ -993,9 +993,9 @@ details .stack-form, details .inline-form { margin-top: 14px; }
   font-weight: 800;
   font-size: 1.05rem;
 }
-.pin-dots { display: flex; justify-content: center; gap: 16px; margin: 10px 0 6px; }
+.pin-dots { display: flex; justify-content: center; gap: 18px; margin: 12px 0 8px; }
 .pin-dots span {
-  width: 22px; height: 22px; border-radius: 50%;
+  width: 26px; height: 26px; border-radius: 50%;
   border: 3px solid var(--primary); background: transparent;
 }
 .pin-dots span.filled { background: var(--primary); }
@@ -1003,13 +1003,14 @@ details .stack-form, details .inline-form { margin-top: 14px; }
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
+  width: 100%;
   max-width: 360px;
   margin: 14px auto 0;
 }
 .pin-pad button {
   display: grid;
   place-items: center;
-  min-height: 72px;
+  min-height: 76px;
   border-radius: 18px;
   border: 2px solid var(--border);
   background: var(--surface-solid);
