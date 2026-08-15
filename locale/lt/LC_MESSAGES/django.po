@@ -3531,3 +3531,12 @@ msgstr "Svečio zona"
 
 msgid "Copy sign-in link"
 msgstr "Nukopijuoti prisijungimo nuorodą"
+
+msgid "The pairing link is ready to share."
+msgstr "Susiejimo nuoroda paruošta dalintis."
+
+msgid "KinKudos child device pairing"
+msgstr "KinKudos vaiko įrenginio susiejimas"
+
+msgid "Private child-device pairing link — use it once on the child device."
+msgstr "Privati vaiko įrenginio susiejimo nuoroda — panaudokite vieną kartą vaiko įrenginyje."
