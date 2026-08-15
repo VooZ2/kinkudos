@@ -50,10 +50,22 @@ class CaregiverGuestAccessTests(TestCase):
 
     def test_invite_date_field_stays_inside_dialog(self):
         css = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
-        date_rule = css.split(".stack-form input[type=\"date\"]")[1].split("}")[0]
-        self.assertIn("max-width: 100%", date_rule)
-        self.assertIn("min-width: 0", date_rule)
+        self.assertIn(".date-input-shell {", css)
+        self.assertIn("min-width: 0 !important", css)
+        self.assertIn("-webkit-appearance: none", css)
         self.assertIn(".stack-form p, .stack-form label { margin: 0; display: grid; gap: 7px; min-width: 0;", css)
+        self.assertIn("max-width: 100%;", css.split(".action-dialog {")[-1].split("}")[0])
+        self.client.force_login(self.parent)
+        response = self.client.get(reverse("parent_dashboard"))
+        html = response.content.decode()
+        start = html.index('id="caregiver-invite-dialog"')
+        dialog_html = html[start : html.index("</dialog>", start)]
+        self.assertIn('class="date-input-shell"', dialog_html)
+        self.assertIn('id="id_caregiver_invite_access_until"', dialog_html)
+        self.assertLess(
+            dialog_html.index('class="date-input-shell"'),
+            dialog_html.index('id="id_caregiver_invite_access_until"'),
+        )
 
     def test_create_invite_opens_share_dialog_via_session(self):
         self.client.force_login(self.parent)

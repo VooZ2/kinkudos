@@ -39,11 +39,20 @@ PASSWORD_HELP = (
 )
 
 
+CONSTRAINED_DATE_INPUT_TYPES = {"date", "datetime-local", "time"}
+
+
 class StyledFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.setdefault("class", "field-control")
+            widget_type = str(
+                field.widget.attrs.get("type")
+                or getattr(field.widget, "input_type", "")
+            )
+            if widget_type in CONSTRAINED_DATE_INPUT_TYPES:
+                field.widget.template_name = "economy/widgets/constrained_date.html"
             if isinstance(field, forms.IntegerField) and not isinstance(
                 field.widget, forms.HiddenInput
             ):

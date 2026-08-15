@@ -10,7 +10,7 @@
   <title>{% block title %}{{ project_name }}{% endblock %}</title>
   <link rel="manifest" href="{% url 'manifest' %}">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'icons/favicon-32.png' %}?v={{ app_version }}">
-  <link rel="stylesheet" href="{% static 'css/app.css' %}?v={{ app_version }}">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}?v={{ app_version }}&amp;r=date-shell">
   <link rel="apple-touch-icon" href="{% static 'icons/icon-192.png' %}?v={{ app_version }}">
 </head>
 <body class="{% block body_class %}system-page theme-neutral{% endblock %}">

@@ -178,6 +178,25 @@ a { color: inherit; }
 .stack-form { display: grid; gap: 16px; }
 .stack-form p, .stack-form label { margin: 0; display: grid; gap: 7px; min-width: 0; color: var(--text); font-weight: 750; }
 .field-control, .stack-form input, .stack-form select, .stack-form textarea, .pin-input { width: 100%; min-height: 48px; color: var(--text); background-color: var(--surface-solid); border: 1px solid var(--border); border-radius: 13px; padding: 12px 13px; outline: none; font-weight: 650; line-height: 1.35; }
+.date-input-shell {
+  display: grid;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+.stack-form p:has(> input[type="date"]),
+.stack-form p:has(> input[type="datetime-local"]),
+.stack-form p:has(> input[type="time"]),
+.stack-form p:has(> .date-input-shell),
+.stack-form label:has(> input[type="date"]),
+.stack-form label:has(> input[type="datetime-local"]),
+.stack-form label:has(> input[type="time"]),
+.stack-form label:has(> .date-input-shell) {
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+}
 .stack-form input[type="date"],
 .stack-form input[type="datetime-local"],
 .stack-form input[type="time"],
@@ -188,13 +207,24 @@ a { color: inherit; }
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
-  min-width: 0;
+  min-width: 0 !important;
+  overflow: hidden;
+  -webkit-appearance: none;
+  appearance: none;
 }
 .stack-form input[type="date"]::-webkit-datetime-edit,
-.field-control[type="date"]::-webkit-datetime-edit {
+.stack-form input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+.field-control[type="date"]::-webkit-datetime-edit,
+.field-control[type="date"]::-webkit-datetime-edit-fields-wrapper {
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
+}
+.stack-form input[type="date"]::-webkit-calendar-picker-indicator,
+.field-control[type="date"]::-webkit-calendar-picker-indicator {
+  margin: 0;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 .stack-form input[type="checkbox"],
 .stack-form input[type="radio"] { width: 22px; height: 22px; min-height: 22px; padding: 0; margin: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; accent-color: var(--primary); }
@@ -1811,7 +1841,8 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
     position: fixed;
     inset: auto 0 0;
     width: 100%;
-    max-width: none;
+    max-width: 100%;
+    min-width: 0;
     max-height: min(90svh, calc(100dvh - 12px));
     margin: 0;
     border-width: 1px 1px 0;
@@ -1822,9 +1853,13 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
   }
+  .action-dialog.account-edit-dialog {
+    width: 100%;
+    max-width: 100%;
+  }
   .history-filter-dialog {
     width: 100%;
-    max-width: none;
+    max-width: 100%;
   }
   .history-filter-dialog h2 {
     margin: 0 0 14px;
