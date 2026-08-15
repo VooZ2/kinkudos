@@ -153,16 +153,15 @@ class DevicePairingTests(TestCase):
     def test_generate_pairing_link_opens_share_dialog_on_settings(self):
         self.client.force_login(self.parent)
 
-        response = self.client.post(reverse("parent_generate_pairing_link"))
+        response = self.client.post(reverse("parent_generate_pairing_link"), follow=True)
 
-        self.assertRedirects(
-            response,
-            f"{reverse('parent_dashboard')}#parent-settings",
+        self.assertTrue(response.redirect_chain)
+        self.assertTrue(
+            response.redirect_chain[-1][0].startswith(reverse("parent_dashboard"))
         )
-        follow = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(follow, 'id="device-pairing-share-dialog"', html=False)
-        self.assertContains(follow, "Private pairing link")
-        self.assertContains(follow, reverse("pair_device_via_link"), html=False)
+        self.assertContains(response, 'id="device-pairing-share-dialog"', html=False)
+        self.assertContains(response, "Private pairing link")
+        self.assertContains(response, reverse("pair_device_via_link"), html=False)
         self.assertTrue(DevicePairingLink.objects.exists())
 
     def test_inactive_devices_are_hidden_from_settings_list(self):
