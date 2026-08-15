@@ -23,4 +23,6 @@ Uses live [`static/css/app.css`](../../../static/css/app.css).
 
 ## What changes
 
-- Settings segment only: visual world cards, camera/gallery avatar, birthday, PIN pad, themed copy
+- Settings segment only, as an **accordion** (one row open at a time)
+- Visual world cards in a **2×4 grid**: 7 themes + 8th “Surprise world” (daily random)
+- Camera/gallery avatar, birthday, PIN pad with 3-step checklist
