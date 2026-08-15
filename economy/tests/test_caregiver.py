@@ -1,5 +1,7 @@
 from datetime import timedelta
+from pathlib import Path
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
@@ -43,6 +45,15 @@ class CaregiverGuestAccessTests(TestCase):
             response,
             "Temporary access for grandparents, relatives, or babysitters",
         )
+        self.assertContains(response, 'id="caregiver-invite-dialog"', html=False)
+        self.assertContains(response, 'type="date"', html=False)
+
+    def test_invite_date_field_stays_inside_dialog(self):
+        css = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
+        date_rule = css.split(".stack-form input[type=\"date\"]")[1].split("}")[0]
+        self.assertIn("max-width: 100%", date_rule)
+        self.assertIn("min-width: 0", date_rule)
+        self.assertIn(".stack-form p, .stack-form label { margin: 0; display: grid; gap: 7px; min-width: 0;", css)
 
     def test_create_invite_opens_share_dialog_via_session(self):
         self.client.force_login(self.parent)

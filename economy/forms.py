@@ -1210,7 +1210,7 @@ class CaregiverInviteForm(StyledFormMixin, forms.Form):
     )
     access_until = forms.DateField(
         label=_("Access valid until"),
-        widget=forms.DateInput(attrs={"type": "date"}),
+        widget=forms.DateInput(format="%Y-%m-%d", attrs={"type": "date"}),
     )
     email = forms.EmailField(
         label=_("Email"),
