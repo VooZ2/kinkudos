@@ -237,12 +237,23 @@ select.field-control, .stack-form select {
 .child-greeting h1 { overflow-wrap: anywhere; text-wrap: balance; }
 .child-greeting-supporting { max-width: 36rem; margin: 10px 0 0; color: var(--muted); font-size: clamp(1.05rem, 2.2vw, 1.9rem); font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
 .pin-dialog, .action-dialog { width: min(440px, calc(100% - 28px)); max-height: calc(100dvh - 28px); overflow-y: auto; border: 1px solid var(--line); border-radius: 24px; color: var(--text); background: var(--surface-solid); padding: 32px; box-shadow: var(--shadow); font-family: inherit; }
+.share-dialog[open] {
+  display: grid;
+  align-content: start;
+  row-gap: 14px;
+}
+.share-dialog > h2,
+.share-dialog > p,
+.share-dialog > label,
+.share-dialog .dialog-context {
+  margin: 0;
+}
 .share-dialog .share-dialog-toolbar {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
   gap: 10px;
-  margin-top: 8px;
+  margin: 0;
 }
 .share-dialog .share-dialog-toolbar .icon-button {
   flex: 0 0 auto;
@@ -253,8 +264,8 @@ select.field-control, .stack-form select {
   flex-wrap: nowrap;
   align-items: stretch;
   justify-content: stretch;
-  margin-top: 14px;
-  padding-top: 0;
+  margin: 0;
+  padding: 0;
   padding-bottom: env(safe-area-inset-bottom);
   background: transparent;
 }
@@ -264,7 +275,7 @@ select.field-control, .stack-form select {
   min-width: 0;
 }
 .share-dialog .danger-warning {
-  margin: 12px 0 0;
+  margin: 0;
   padding: 9px 11px;
   font-size: .82rem;
   line-height: 1.4;
