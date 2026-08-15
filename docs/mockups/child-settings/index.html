@@ -503,72 +503,96 @@
 
   <script src="./copy.js"></script>
   <script>
+    const ALLOWED_THEMES = Object.freeze(Object.keys(window.KK_SETTINGS_COPY.meta));
+    const ALLOWED_THEME_SET = new Set(ALLOWED_THEMES);
+
+    function esc(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function normalizeTheme(id) {
+      const value = String(id || "");
+      return ALLOWED_THEME_SET.has(value) ? value : "magic_academy";
+    }
+
+    function normalizeLang(id) {
+      return id === "en" ? "en" : "lt";
+    }
+
     const params = new URLSearchParams(location.search);
-    let lang = params.get("lang") === "en" ? "en" : "lt";
-    let currentTheme = params.get("theme") || "magic_academy";
-    const focus = params.get("focus");
+    let lang = normalizeLang(params.get("lang"));
+    let currentTheme = normalizeTheme(params.get("theme"));
+    const focus = params.get("focus") === "settings" ? "settings" : "";
 
     function tOf(themeId = currentTheme) {
-      return window.KK_SETTINGS_COPY.get(lang, themeId);
+      return window.KK_SETTINGS_COPY.get(lang, normalizeTheme(themeId));
     }
 
     function themeCardsHtml(activeId, t) {
-      const themes = t.worlds.map((w) => `
-        <label class="theme-pick theme-${w.id}">
-          <input type="radio" name="theme" value="${w.id}" ${w.id === activeId ? "checked" : ""}>
-          <span class="theme-pick-card"><span>${w.name}</span><small>${w.sub}</small></span>
-        </label>
-      `).join("");
+      const safeActive = normalizeTheme(activeId);
+      const themes = t.worlds.map((w) => {
+        const id = normalizeTheme(w.id);
+        return `
+        <label class="theme-pick theme-${esc(id)}">
+          <input type="radio" name="theme" value="${esc(id)}" ${id === safeActive ? "checked" : ""}>
+          <span class="theme-pick-card"><span>${esc(w.name)}</span><small>${esc(w.sub)}</small></span>
+        </label>`;
+      }).join("");
       const daily = `
         <label class="theme-pick theme-daily">
           <input type="checkbox" name="randomize_theme_daily" value="1">
           <span class="theme-pick-card">
             <span class="daily-emoji" aria-hidden="true">🎲</span>
-            <span>${t.dailyTitle}</span>
-            <small>${t.dailySub}</small>
+            <span>${esc(t.dailyTitle)}</span>
+            <small>${esc(t.dailySub)}</small>
           </span>
-        </label>
-      `;
+        </label>`;
       return themes + daily;
     }
 
     function settingsBlockHtml(themeId, t) {
-      const worldName = t.worlds.find((w) => w.id === themeId)?.name || themeId;
+      const safeTheme = normalizeTheme(themeId);
+      const worldName = t.worlds.find((w) => w.id === safeTheme)?.name || safeTheme;
       return `
         <section id="nustatymai" class="content-section">
           <div class="section-heading">
-            <p class="eyebrow">${t.eyebrow}</p>
-            <h2>${t.title}</h2>
+            <p class="eyebrow">${esc(t.eyebrow)}</p>
+            <h2>${esc(t.title)}</h2>
           </div>
-          <p class="hint" style="margin-top:-6px">${t.ui.accordionHint}</p>
+          <p class="hint" style="margin-top:-6px">${esc(t.ui.accordionHint)}</p>
           <div class="settings-accordion" data-settings-accordion>
             <details class="settings-acc" open>
               <summary>
                 <span class="acc-icon" aria-hidden="true">🌍</span>
-                <span class="acc-copy">${t.worldTitle}<small>${worldName}</small></span>
+                <span class="acc-copy">${esc(t.worldTitle)}<small>${esc(worldName)}</small></span>
                 <span class="acc-chevron" aria-hidden="true">▾</span>
               </summary>
               <div class="acc-body">
-                <p class="hint">${t.worldHint}</p>
-                <div class="theme-pick-grid">${themeCardsHtml(themeId, t)}</div>
+                <p class="hint">${esc(t.worldHint)}</p>
+                <div class="theme-pick-grid">${themeCardsHtml(safeTheme, t)}</div>
                 <p style="margin:14px 0 0">
-                  <button class="button button-primary" type="button">${t.ctaTheme}</button>
+                  <button class="button button-primary" type="button">${esc(t.ctaTheme)}</button>
                 </p>
               </div>
             </details>
 
             <details class="settings-acc">
               <summary>
-                <span class="acc-icon" aria-hidden="true">${t.emoji}</span>
-                <span class="acc-copy">${t.avatarTitle}<small>${t.avatarHint}</small></span>
+                <span class="acc-icon" aria-hidden="true">${esc(t.emoji)}</span>
+                <span class="acc-copy">${esc(t.avatarTitle)}<small>${esc(t.avatarHint)}</small></span>
                 <span class="acc-chevron" aria-hidden="true">▾</span>
               </summary>
               <div class="acc-body">
                 <div class="avatar-row">
-                  <div class="avatar-preview" aria-hidden="true">${t.emoji}</div>
+                  <div class="avatar-preview" aria-hidden="true">${esc(t.emoji)}</div>
                   <div class="avatar-actions">
-                    <button class="button button-primary" type="button">${t.cam}</button>
-                    <button class="button button-secondary" type="button">${t.gal}</button>
+                    <button class="button button-primary" type="button">${esc(t.cam)}</button>
+                    <button class="button button-secondary" type="button">${esc(t.gal)}</button>
                   </div>
                 </div>
               </div>
@@ -577,13 +601,13 @@
             <details class="settings-acc" id="gimtadienis">
               <summary>
                 <span class="acc-icon" aria-hidden="true">🎂</span>
-                <span class="acc-copy">${t.bdayTitle}<small>${t.bdayHint}</small></span>
+                <span class="acc-copy">${esc(t.bdayTitle)}<small>${esc(t.bdayHint)}</small></span>
                 <span class="acc-chevron" aria-hidden="true">▾</span>
               </summary>
               <div class="acc-body">
                 <div class="birthday-big">
-                  <input type="date" value="2015-06-12" aria-label="${t.bdayTitle}">
-                  <button class="button button-secondary" type="button">${t.ui.save}</button>
+                  <input type="date" value="2015-06-12" aria-label="${esc(t.bdayTitle)}">
+                  <button class="button button-secondary" type="button">${esc(t.ui.save)}</button>
                 </div>
               </div>
             </details>
@@ -591,26 +615,26 @@
             <details class="settings-acc" data-pin-change>
               <summary>
                 <span class="acc-icon" aria-hidden="true">🔒</span>
-                <span class="acc-copy">${t.pinTitle}<small>${t.pinHint}</small></span>
+                <span class="acc-copy">${esc(t.pinTitle)}<small>${esc(t.pinHint)}</small></span>
                 <span class="acc-chevron" aria-hidden="true">▾</span>
               </summary>
               <div class="acc-body">
                 <ol class="pin-guide" aria-label="PIN">
-                  <li class="is-active" data-pin-step="0"><span class="step-num">1</span><span>${t.pinSteps[0]}</span></li>
-                  <li data-pin-step="1"><span class="step-num">2</span><span>${t.pinSteps[1]}</span></li>
-                  <li data-pin-step="2"><span class="step-num">3</span><span>${t.pinSteps[2]}</span></li>
+                  <li class="is-active" data-pin-step="0"><span class="step-num">1</span><span>${esc(t.pinSteps[0])}</span></li>
+                  <li data-pin-step="1"><span class="step-num">2</span><span>${esc(t.pinSteps[1])}</span></li>
+                  <li data-pin-step="2"><span class="step-num">3</span><span>${esc(t.pinSteps[2])}</span></li>
                 </ol>
-                <p class="pin-step-label" data-pin-step-label>${t.pinSteps[0]}</p>
+                <p class="pin-step-label" data-pin-step-label>${esc(t.pinSteps[0])}</p>
                 <div class="pin-dots" aria-hidden="true" data-pin-dots>
                   <span></span><span></span><span></span><span></span>
                 </div>
                 <div class="pin-pad" aria-label="PIN" data-pin-pad>
                   ${[1,2,3,4,5,6,7,8,9,"",0,"⌫"].map((k) =>
-                    k === "" ? "<span></span>" : `<button type="button" data-key="${k}">${k}</button>`
+                    k === "" ? "<span></span>" : `<button type="button" data-key="${esc(k)}">${esc(k)}</button>`
                   ).join("")}
                 </div>
                 <div class="pin-save-row" data-pin-save hidden>
-                  <button class="button button-primary" type="button">${t.pinSave}</button>
+                  <button class="button button-primary" type="button">${esc(t.pinSave)}</button>
                 </div>
               </div>
             </details>
@@ -620,42 +644,43 @@
     }
 
     function dashboardHtml(themeId, t, { settingsOnly = false } = {}) {
-      if (settingsOnly) return `<div class="page">${settingsBlockHtml(themeId, t)}</div>`;
+      const safeTheme = normalizeTheme(themeId);
+      if (settingsOnly) return `<div class="page">${settingsBlockHtml(safeTheme, t)}</div>`;
       return `
         <div class="page">
           <section class="child-hero">
             <div class="child-identity">
-              <div class="hero-avatar-mock" aria-hidden="true">${t.emoji}</div>
+              <div class="hero-avatar-mock" aria-hidden="true">${esc(t.emoji)}</div>
               <div class="child-greeting">
-                <h1>${t.ui.hello}</h1>
-                <p class="child-greeting-supporting">${t.ui.ready}</p>
+                <h1>${esc(t.ui.hello)}</h1>
+                <p class="child-greeting-supporting">${esc(t.ui.ready)}</p>
               </div>
             </div>
-            <div class="balance-orb"><strong>42</strong><span>${t.currency}</span></div>
+            <div class="balance-orb"><strong>42</strong><span>${esc(t.currency)}</span></div>
           </section>
           <nav class="tabbar" aria-label="Sections">
-            ${t.nav.map((label, i) => `<a href="#${["darbai","prizai","tikslai","istorija"][i]}">${label}</a>`).join("")}
+            ${t.nav.map((label, i) => `<a href="#${["darbai","prizai","tikslai","istorija"][i]}">${esc(label)}</a>`).join("")}
           </nav>
           <section id="darbai" class="content-section mock-stub">
             <div class="section-heading">
-              <p class="eyebrow">${t.taskEyebrow}</p>
-              <h2>${t.taskTitle}</h2>
+              <p class="eyebrow">${esc(t.taskEyebrow)}</p>
+              <h2>${esc(t.taskTitle)}</h2>
             </div>
             <article class="item-card panel">
               <div class="item-icon" aria-hidden="true">🛏️</div>
               <div>
-                <h3 style="margin:0">${t.taskName}</h3>
-                <p style="margin:4px 0 0;color:var(--muted)">${t.ui.stubNote}</p>
+                <h3 style="margin:0">${esc(t.taskName)}</h3>
+                <p style="margin:4px 0 0;color:var(--muted)">${esc(t.ui.stubNote)}</p>
               </div>
               <strong class="positive">+8</strong>
             </article>
           </section>
-          ${settingsBlockHtml(themeId, t)}
+          ${settingsBlockHtml(safeTheme, t)}
         </div>
       `;
     }
 
-    function nowSettingsHtml(t) {
+    function nowSettingsHtml() {
       if (lang === "lt") {
         return `
           <div class="page" style="padding-top:12px">
@@ -758,32 +783,44 @@
     }
 
     function render() {
+      currentTheme = normalizeTheme(currentTheme);
+      lang = normalizeLang(lang);
       const t = tOf(currentTheme);
       const root = document.getElementById("phone-root");
-      root.className = `phone-screen theme-${currentTheme} child-area${focus === "settings" ? " shot-focus-settings" : ""}`;
+      const focusClass = focus === "settings" ? " shot-focus-settings" : "";
+      root.className = "phone-screen theme-" + currentTheme + " child-area" + focusClass;
       root.innerHTML = dashboardHtml(currentTheme, t);
       wireAccordion(root);
       wirePinPad(root, t);
       if (focus === "settings") {
         root.querySelector("#nustatymai")?.scrollIntoView({ block: "start" });
       }
-      document.getElementById("notes-title").textContent = `${t.label} · ${lang.toUpperCase()}`;
-      document.getElementById("notes-list").innerHTML = t.notes.map((n) => `<li>${n}</li>`).join("");
-      document.querySelectorAll('[data-theme]').forEach((btn) => {
+      document.getElementById("notes-title").textContent = t.label + " · " + lang.toUpperCase();
+      const notes = document.getElementById("notes-list");
+      notes.replaceChildren();
+      t.notes.forEach((n) => {
+        const li = document.createElement("li");
+        li.textContent = n;
+        notes.appendChild(li);
+      });
+      document.querySelectorAll("[data-theme]").forEach((btn) => {
         btn.setAttribute("aria-pressed", btn.dataset.theme === currentTheme ? "true" : "false");
       });
-      document.querySelectorAll('[data-lang]').forEach((btn) => {
+      document.querySelectorAll("[data-lang]").forEach((btn) => {
         btn.setAttribute("aria-pressed", btn.dataset.lang === lang ? "true" : "false");
       });
-      document.getElementById("compare-now").innerHTML = nowSettingsHtml(t);
+      document.getElementById("compare-now").innerHTML = nowSettingsHtml();
       document.getElementById("compare-next").innerHTML = dashboardHtml(currentTheme, t, { settingsOnly: true });
-      document.querySelector("#compare-strip-title") &&
-        (document.querySelector("#compare-strip-title").textContent =
-          lang === "lt" ? "Tik Settings blokas — dabar vs pasiūlymas" : "Settings block only — now vs proposal");
+      const title = document.querySelector("#compare-strip-title");
+      if (title) {
+        title.textContent = lang === "lt"
+          ? "Tik Settings blokas — dabar vs pasiūlymas"
+          : "Settings block only — now vs proposal";
+      }
       root.querySelectorAll('input[name="theme"]').forEach((input) => {
         input.addEventListener("change", () => {
           if (input.checked) {
-            currentTheme = input.value;
+            currentTheme = normalizeTheme(input.value);
             render();
           }
         });
@@ -791,10 +828,16 @@
     }
 
     document.querySelectorAll("[data-theme]").forEach((btn) => {
-      btn.addEventListener("click", () => { currentTheme = btn.dataset.theme; render(); });
+      btn.addEventListener("click", () => {
+        currentTheme = normalizeTheme(btn.dataset.theme);
+        render();
+      });
     });
     document.querySelectorAll("[data-lang]").forEach((btn) => {
-      btn.addEventListener("click", () => { lang = btn.dataset.lang; render(); });
+      btn.addEventListener("click", () => {
+        lang = normalizeLang(btn.dataset.lang);
+        render();
+      });
     });
 
     render();
