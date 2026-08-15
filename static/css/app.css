@@ -240,7 +240,7 @@ select.field-control, .stack-form select {
 .share-dialog[open] {
   display: grid;
   align-content: start;
-  row-gap: 14px;
+  row-gap: 20px;
 }
 .share-dialog > h2,
 .share-dialog > p,
