@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>KinKudos – Child Settings mockup (5–14)</title>
+  <title>KinKudos – Child Settings mockup (last block only)</title>
   <link rel="stylesheet" href="../../../static/css/app.css">
   <style>
-    /* Mockup chrome only — product styles come from app.css */
+    /* Mockup chrome only — product layout comes from app.css */
     .mock-shell {
       min-height: 100vh;
       padding: 28px 20px 64px;
@@ -14,13 +14,13 @@
       color: #f5f2ff;
       font-family: Inter, ui-sans-serif, system-ui, sans-serif;
     }
-    .mock-shell h1 {
+    .mock-shell > h1 {
       margin: 0 0 8px;
       font-size: clamp(1.6rem, 3vw, 2.2rem);
       letter-spacing: -.04em;
     }
-    .mock-shell .lede {
-      max-width: 62ch;
+    .mock-shell > .lede {
+      max-width: 68ch;
       margin: 0 0 22px;
       color: #c4bdd8;
       line-height: 1.5;
@@ -48,44 +48,30 @@
     }
     .mock-layout {
       display: grid;
-      grid-template-columns: minmax(280px, 390px) minmax(260px, 1fr);
+      grid-template-columns: minmax(320px, 430px) minmax(260px, 1fr);
       gap: 28px;
       align-items: start;
     }
-    @media (max-width: 860px) {
+    @media (max-width: 900px) {
       .mock-layout { grid-template-columns: 1fr; justify-items: stretch; }
     }
-    /* Real phone: show the child UI full-bleed (no nested phone chrome) */
     @media (max-width: 700px) {
-      .mock-shell {
-        padding: 0;
-        background: transparent;
-        color: inherit;
-      }
+      .mock-shell { padding: 0; background: transparent; color: inherit; }
       .mock-shell > h1,
       .mock-shell > .lede,
       .mock-shell > .notes,
       .mock-shell > .compare-strip { display: none !important; }
       .mock-toolbar {
-        position: sticky;
-        top: 0;
-        z-index: 40;
-        margin: 0;
-        padding: 10px 10px calc(10px + env(safe-area-inset-top, 0px));
-        background: #1a1625;
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        -webkit-overflow-scrolling: touch;
+        position: sticky; top: 0; z-index: 40; margin: 0;
+        padding: 10px; background: #1a1625;
+        overflow-x: auto; flex-wrap: nowrap;
       }
       .mock-toolbar button { flex: 0 0 auto; font-size: .85rem; padding: 8px 12px; }
-      .mock-layout { display: block; gap: 0; }
+      .mock-layout { display: block; }
       .phone {
-        width: 100% !important;
-        max-width: none !important;
-        border: 0 !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
-        background: transparent !important;
+        width: 100% !important; max-width: none !important;
+        border: 0 !important; border-radius: 0 !important;
+        box-shadow: none !important; background: transparent !important;
       }
       .phone-notch { display: none !important; }
       .phone-screen {
@@ -93,13 +79,10 @@
         min-height: calc(100dvh - 56px);
         overflow: visible !important;
       }
-      .phone-screen .page {
-        width: calc(100% - 24px) !important;
-        max-width: none;
-      }
+      .phone-screen .page { width: calc(100% - 24px) !important; }
     }
     .phone {
-      width: min(390px, 100%);
+      width: min(430px, 100%);
       border-radius: 36px;
       border: 3px solid #3d3652;
       background: #0b0912;
@@ -107,22 +90,16 @@
       overflow: hidden;
     }
     .phone-notch {
-      height: 28px;
-      background: #0b0912;
-      display: grid;
-      place-items: center;
+      height: 28px; background: #0b0912;
+      display: grid; place-items: center;
     }
     .phone-notch span {
-      width: 110px;
-      height: 10px;
-      border-radius: 999px;
-      background: #1c1828;
+      width: 110px; height: 10px; border-radius: 999px; background: #1c1828;
     }
     .phone-screen {
-      height: min(820px, 88vh);
+      height: min(860px, 88vh);
       overflow: auto;
       -webkit-overflow-scrolling: touch;
-      /* Keep child worlds in their authored light look even if the OS is dark */
       color-scheme: light;
       background-color: var(--bg);
       background-image: radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--primary) 16%, transparent), transparent 32rem);
@@ -139,11 +116,7 @@
       background-image: radial-gradient(circle, rgba(45,106,79,.07) 2px, transparent 2px);
       background-size: 30px 30px;
     }
-    .phone-screen.theme-blockville {
-      color-scheme: dark;
-      background-image: none;
-    }
-    /* Defeat app.css prefers-color-scheme: dark overrides inside the phone frame */
+    .phone-screen.theme-blockville { color-scheme: dark; background-image: none; }
     .phone-screen.theme-magic_academy {
       --bg: #efe7d7 !important; --text: #1f2937 !important; --muted: #6b7280 !important;
       --surface: rgba(255,255,255,.86) !important; --surface-solid: #fff !important;
@@ -169,42 +142,33 @@
       --bg: #f9fafb !important; --text: #1f2937 !important; --muted: #6b7280 !important;
       --surface: rgba(255,255,255,.86) !important; --surface-solid: #fff !important;
     }
-    .compare-card .mini {
-      background-color: var(--bg);
-      color: var(--text);
-      color-scheme: light;
+    /* Keep hero structure like production: greeting + orb on one row in the frame */
+    .phone-screen .child-hero {
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: space-between;
     }
-    .compare-card .mini.theme-magic_academy {
-      --bg: #efe7d7 !important; --text: #1f2937 !important; --muted: #6b7280 !important;
-      --surface: rgba(255,255,255,.86) !important; --surface-solid: #fff !important;
+    .phone-screen .child-identity { min-width: 0; flex: 1 1 auto; }
+    .phone-screen .child-greeting h1 {
+      font-size: clamp(1.55rem, 5.2vw, 2.35rem) !important;
+      line-height: 1.05;
     }
-    /* Compact hero in mock so profile content fits the first phone viewport */
-    .phone-screen .child-hero { padding: 10px 0 14px; gap: 12px; }
-    .phone-screen .balance-orb { min-width: 96px; min-height: 96px; }
-    .phone-screen .balance-orb strong { font-size: 1.7rem; }
-    .phone-screen .child-hero h1 { font-size: clamp(1.6rem, 6vw, 2.2rem) !important; }
-    .phone-screen .tabbar { margin-bottom: 18px; }
-    .phone-screen .theme-pick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .phone-screen .theme-pick-card { min-height: 78px; font-size: .92rem; }
-    .phone-screen .page {
-      width: min(1160px, calc(100% - 28px));
-      margin: 0 auto;
-      padding-bottom: 28px;
+    .phone-screen .balance-orb {
+      flex: 0 0 auto;
+      min-width: 112px;
+      min-height: 112px;
     }
+    .phone-screen .balance-orb strong { font-size: 2rem; }
+    .phone-screen .page { width: min(1160px, calc(100% - 28px)); margin: 0 auto; padding-bottom: 28px; }
     .notes {
-      background: #241f33;
-      border: 1px solid #3d3652;
-      border-radius: 18px;
-      padding: 18px 20px;
-      color: #d9d2ef;
-      line-height: 1.55;
+      background: #241f33; border: 1px solid #3d3652; border-radius: 18px;
+      padding: 18px 20px; color: #d9d2ef; line-height: 1.55;
     }
     .notes h2 { margin: 0 0 10px; font-size: 1.15rem; }
     .notes ul { margin: 0; padding-left: 1.15em; }
     .notes li + li { margin-top: 8px; }
-    .notes code { font-size: .9em; color: #c4b5fd; }
 
-    /* Proposed profile settings (not in product yet) */
+    /* Proposed settings block only */
     .profile-stack { display: grid; gap: 16px; }
     .profile-block {
       padding: 18px;
@@ -213,177 +177,151 @@
       border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
-    .profile-block h3 {
-      margin: 0 0 6px;
-      font-size: 1.2rem;
-    }
-    .profile-block .hint {
-      margin: 0 0 14px;
-      color: var(--muted);
-      font-size: .95rem;
-      line-height: 1.4;
-    }
+    .profile-block h3 { margin: 0 0 6px; font-size: 1.2rem; }
+    .profile-block .hint { margin: 0 0 14px; color: var(--muted); font-size: .95rem; line-height: 1.4; }
     .theme-pick-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
       margin-bottom: 14px;
     }
-    .theme-pick {
-      position: relative;
-      display: block;
-      cursor: pointer;
-      min-width: 0;
-    }
-    .theme-pick input {
-      position: absolute;
-      opacity: 0;
-      width: 1px;
-      height: 1px;
-    }
+    .theme-pick { position: relative; display: block; cursor: pointer; min-width: 0; }
+    .theme-pick input { position: absolute; opacity: 0; width: 1px; height: 1px; }
     .theme-pick-card {
-      min-height: 92px;
-      display: grid;
-      place-content: center;
-      text-align: center;
+      min-height: 88px;
+      display: grid; place-content: center; text-align: center;
       padding: 14px 10px;
       border: 2px solid var(--border);
       border-radius: 16px;
       background: var(--surface-solid);
-      font-weight: 800;
-      line-height: 1.15;
-      transition: transform .14s, box-shadow .14s, border-color .14s;
+      font-weight: 800; line-height: 1.15;
     }
-    .theme-pick:hover .theme-pick-card { transform: translateY(-2px); }
     .theme-pick input:checked + .theme-pick-card {
       border-color: var(--primary);
       box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent);
     }
     .theme-pick-card small {
-      display: block;
-      margin-top: 4px;
-      font-weight: 650;
-      font-size: .72rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: .06em;
+      display: block; margin-top: 4px; font-weight: 650; font-size: .72rem;
+      color: var(--muted); text-transform: uppercase; letter-spacing: .06em;
     }
     .daily-toggle {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 14px;
-      border-radius: 999px;
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 999px;
       border: 2px solid color-mix(in srgb, var(--primary) 35%, var(--border));
       background: color-mix(in srgb, var(--primary) 8%, var(--surface-solid));
-      font-weight: 750;
-      cursor: pointer;
-      user-select: none;
+      font-weight: 750; cursor: pointer; user-select: none;
     }
     .daily-toggle input { width: 22px; height: 22px; accent-color: var(--primary); }
-    .avatar-row {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
+    .avatar-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
     .avatar-preview {
-      width: 88px;
-      height: 88px;
-      border-radius: 28px;
-      display: grid;
-      place-items: center;
-      font-size: 2.4rem;
+      width: 88px; height: 88px; border-radius: 28px;
+      display: grid; place-items: center; font-size: 2.4rem;
       background: color-mix(in srgb, var(--primary) 14%, var(--surface-solid));
       border: 3px solid color-mix(in srgb, var(--primary) 40%, var(--border));
-      overflow: hidden;
     }
     .avatar-actions { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 160px; }
     .avatar-actions .button { width: 100%; justify-content: center; }
-    .birthday-big {
+    .birthday-big { display: grid; gap: 10px; }
+    .birthday-big input[type="date"] { font-size: 1.15rem; min-height: 56px; text-align: center; }
+    .pin-guide {
       display: grid;
+      gap: 8px;
+      margin: 0 0 14px;
+      padding: 0;
+      list-style: none;
+    }
+    .pin-guide li {
+      display: flex;
+      align-items: center;
       gap: 10px;
-    }
-    .birthday-big input[type="date"] {
-      font-size: 1.15rem;
-      min-height: 56px;
-      text-align: center;
-    }
-    .pin-pad {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      max-width: 280px;
-      margin: 12px auto 0;
-    }
-    .pin-pad button {
-      min-height: 56px;
-      border-radius: 16px;
+      padding: 10px 12px;
+      border-radius: 14px;
       border: 2px solid var(--border);
       background: var(--surface-solid);
-      color: var(--text);
-      font-size: 1.35rem;
-      font-weight: 850;
-      cursor: pointer;
+      font-weight: 750;
+      color: var(--muted);
     }
-    .pin-dots {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin: 8px 0 4px;
-    }
-    .pin-dots span {
-      width: 14px;
-      height: 14px;
+    .pin-guide .step-num {
+      flex: 0 0 auto;
+      width: 28px; height: 28px;
+      display: grid; place-items: center;
       border-radius: 50%;
-      border: 2px solid var(--primary);
-      background: transparent;
+      border: 2px solid color-mix(in srgb, var(--primary) 35%, var(--border));
+      font-size: .9rem;
+      font-weight: 850;
+    }
+    .pin-guide li.is-done {
+      color: var(--text);
+      border-color: color-mix(in srgb, var(--success) 45%, var(--border));
+      background: color-mix(in srgb, var(--success) 10%, var(--surface-solid));
+    }
+    .pin-guide li.is-done .step-num {
+      border-color: var(--success);
+      background: var(--success);
+      color: #fff;
+    }
+    .pin-guide li.is-active {
+      color: var(--text);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 18%, transparent);
+      background: color-mix(in srgb, var(--primary) 8%, var(--surface-solid));
+    }
+    .pin-guide li.is-active .step-num {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+    }
+    .pin-step-label {
+      margin: 0 0 6px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+    .pin-pad {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+      max-width: 280px; margin: 12px auto 0;
+    }
+    .pin-pad button {
+      min-height: 56px; border-radius: 16px; border: 2px solid var(--border);
+      background: var(--surface-solid); color: var(--text);
+      font-size: 1.35rem; font-weight: 850; cursor: pointer;
+    }
+    .pin-dots { display: flex; justify-content: center; gap: 12px; margin: 8px 0 4px; }
+    .pin-dots span {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid var(--primary); background: transparent;
     }
     .pin-dots span.filled { background: var(--primary); }
-    .tabbar a.is-active {
-      background: color-mix(in srgb, var(--primary) 16%, transparent);
-      color: var(--primary);
-    }
+    .pin-save-row { margin-top: 14px; text-align: center; }
+    .pin-save-row[hidden] { display: none; }
     .hero-avatar-mock {
-      width: 64px;
-      height: 64px;
-      border-radius: 20px;
-      display: grid;
-      place-items: center;
-      font-size: 1.8rem;
+      width: 64px; height: 64px; border-radius: 20px;
+      display: grid; place-items: center; font-size: 1.8rem;
       background: color-mix(in srgb, var(--primary) 16%, var(--surface-solid));
       border: 2px solid color-mix(in srgb, var(--primary) 35%, var(--border));
     }
     .child-identity { display: flex; align-items: center; gap: 14px; }
     .child-greeting h1 { margin: 0; }
     .child-greeting-supporting { margin: 6px 0 0; color: var(--muted); }
+    .mock-stub { opacity: .92; }
+    .mock-stub .item-card { margin-bottom: 12px; }
 
-    /* Per-theme card skins for the picker previews */
     .theme-pick.theme-neutral .theme-pick-card { background: linear-gradient(145deg, #f3e8ff, #fff); }
     .theme-pick.theme-magic_academy .theme-pick-card {
       background: radial-gradient(circle at 15% 20%, rgba(214,169,74,.35), transparent 40%), #efe7d7;
-      font-family: Palatino, Georgia, serif;
-      border-color: #c5a059;
+      font-family: Palatino, Georgia, serif; border-color: #c5a059;
     }
     .theme-pick.theme-block_world .theme-pick-card {
-      border-radius: 0;
-      font-family: ui-monospace, Menlo, monospace;
+      border-radius: 0; font-family: ui-monospace, Menlo, monospace;
       background-image: linear-gradient(rgba(30,59,31,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(30,59,31,.06) 1px, transparent 1px);
-      background-size: 14px 14px;
-      background-color: #dfead5;
-      box-shadow: 3px 3px 0 #1e3b1f;
+      background-size: 14px 14px; background-color: #dfead5; box-shadow: 3px 3px 0 #1e3b1f;
     }
     .theme-pick.theme-hero_hq .theme-pick-card {
-      border-radius: 5px;
-      border-color: #1f2937;
-      box-shadow: 3px 3px 0 #1f2937;
-      text-transform: uppercase;
-      background: #eef2ff;
+      border-radius: 5px; border-color: #1f2937; box-shadow: 3px 3px 0 #1f2937;
+      text-transform: uppercase; background: #eef2ff;
     }
     .theme-pick.theme-art_studio .theme-pick-card {
-      border-radius: 22px 12px 20px 14px;
-      border-color: #f2cc8f;
-      background: #f4f1de;
+      border-radius: 22px 12px 20px 14px; border-color: #f2cc8f; background: #f4f1de;
     }
     .theme-pick.theme-panda_pet .theme-pick-card {
       border-radius: 28px;
@@ -392,72 +330,71 @@
       background: #f8f9fa;
     }
     .theme-pick.theme-blockville .theme-pick-card {
-      border-radius: 8px;
-      border-color: #393b3d;
-      background: #232527;
-      color: #fff;
+      border-radius: 8px; border-color: #393b3d; background: #232527; color: #fff;
       box-shadow: 0 0 16px rgba(0,162,255,.22), inset 0 0 0 2px rgba(0,230,118,.16);
     }
     .theme-pick.theme-blockville .theme-pick-card small { color: #8d9399; }
 
-    body.theme-magic_academy .profile-block { border: 2px solid #c5a059; border-radius: 12px; }
-    body.theme-block_world .profile-block { border-radius: 0; box-shadow: 4px 4px 0 #1e3b1f; }
-    body.theme-hero_hq .profile-block { border: 2px solid #1f2937; border-radius: 5px; box-shadow: 5px 5px 0 #1f2937; }
-    body.theme-art_studio .profile-block { border: 2px solid #f2cc8f; border-radius: 30px 18px 28px 20px; }
-    body.theme-panda_pet .profile-block { border-radius: 34px; border: 2px solid color-mix(in srgb, #2d6a4f 32%, transparent); box-shadow: 0 10px 0 color-mix(in srgb, #ffb5a7 45%, transparent); }
-    body.theme-blockville .profile-block { border: 1px solid #393b3d; border-radius: 8px; background: #232527; }
-
-    body.theme-magic_academy .daily-toggle,
-    body.theme-panda_pet .daily-toggle { border-radius: 999px; }
-    body.theme-block_world .daily-toggle,
-    body.theme-block_world .pin-pad button,
-    body.theme-block_world .avatar-preview { border-radius: 0; }
-    body.theme-hero_hq .daily-toggle,
-    body.theme-hero_hq .pin-pad button { border-radius: 5px; border-width: 2px; border-color: #1f2937; }
-    body.theme-art_studio .daily-toggle { border-radius: 20px 12px 18px 14px; }
-    body.theme-blockville .daily-toggle,
-    body.theme-blockville .pin-pad button { border-radius: 8px; border-color: #393b3d; background: #2a2c2e; color: #fff; }
+    body.theme-magic_academy .profile-block,
+    .phone-screen.theme-magic_academy .profile-block { border: 2px solid #c5a059; border-radius: 12px; }
+    .phone-screen.theme-block_world .profile-block { border-radius: 0; box-shadow: 4px 4px 0 #1e3b1f; }
+    .phone-screen.theme-hero_hq .profile-block { border: 2px solid #1f2937; border-radius: 5px; box-shadow: 5px 5px 0 #1f2937; }
+    .phone-screen.theme-art_studio .profile-block { border: 2px solid #f2cc8f; border-radius: 30px 18px 28px 20px; }
+    .phone-screen.theme-panda_pet .profile-block {
+      border-radius: 34px;
+      border: 2px solid color-mix(in srgb, #2d6a4f 32%, transparent);
+      box-shadow: 0 10px 0 color-mix(in srgb, #ffb5a7 45%, transparent);
+    }
+    .phone-screen.theme-blockville .profile-block {
+      border: 1px solid #393b3d; border-radius: 8px; background: #232527;
+    }
+    .phone-screen.theme-block_world .daily-toggle,
+    .phone-screen.theme-block_world .pin-pad button,
+    .phone-screen.theme-block_world .avatar-preview { border-radius: 0; }
+    .phone-screen.theme-hero_hq .daily-toggle,
+    .phone-screen.theme-hero_hq .pin-pad button { border-radius: 5px; border-color: #1f2937; }
+    .phone-screen.theme-blockville .daily-toggle,
+    .phone-screen.theme-blockville .pin-pad button {
+      border-radius: 8px; border-color: #393b3d; background: #2a2c2e; color: #fff;
+    }
 
     .compare-strip {
-      margin-top: 36px;
-      padding-top: 28px;
-      border-top: 1px solid #3d3652;
+      margin-top: 36px; padding-top: 28px; border-top: 1px solid #3d3652;
     }
     .compare-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 18px;
     }
     .compare-card {
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid #3d3652;
-      background: #120f1c;
+      border-radius: 18px; overflow: hidden;
+      border: 1px solid #3d3652; background: #120f1c;
     }
     .compare-card header {
-      padding: 12px 14px;
-      font-weight: 750;
-      font-size: .85rem;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      color: #c4bdd8;
+      padding: 12px 14px; font-weight: 750; font-size: .85rem;
+      letter-spacing: .04em; text-transform: uppercase; color: #c4bdd8;
       border-bottom: 1px solid #3d3652;
     }
     .compare-card .mini {
-      height: 220px;
-      overflow: hidden;
-      pointer-events: none;
-      transform-origin: top center;
+      max-height: 520px; overflow: auto; pointer-events: none;
+      background-color: var(--bg); color: var(--text); color-scheme: light;
     }
-    .compare-card .mini .page { width: calc(100% - 20px); padding-bottom: 12px; }
-    .compare-card.now .mini { filter: grayscale(.15); opacity: .92; }
+    .compare-card .mini.theme-magic_academy {
+      --bg: #efe7d7 !important; --text: #1f2937 !important; --muted: #6b7280 !important;
+      --surface: rgba(255,255,255,.86) !important; --surface-solid: #fff !important;
+    }
+    .compare-card .mini .page { width: calc(100% - 24px); }
+    .shot-focus-settings .mock-stub,
+    .shot-focus-settings .child-hero,
+    .shot-focus-settings .tabbar { display: none !important; }
   </style>
 </head>
 <body class="mock-shell">
-  <h1>Child Settings mockup · 5–14 m.</h1>
+  <h1>Child Settings mockup · tik paskutinis blokas</h1>
   <p class="lede">
-    Diskusijai: „Mano pasaulis“ kaip 5-as tabas. Kiekviena tema turi savo korteles, copy ir kontrolę —
-    ne bendrą admin Settings. Perjunk temas žemiau.
+    Dashboard struktūra ta pati: hero (vardas + taškų orb’as vienoje eilėje), 4 tabai,
+    Tasks stub. Keičiasi <strong>tik</strong> apatinis Settings segmentas — vaikiškesnis,
+    su temos kortelėmis. Perjunk temas žemiau.
   </p>
 
   <div class="mock-toolbar" role="toolbar" aria-label="Temos">
@@ -475,29 +412,22 @@
       <div class="phone-notch"><span></span></div>
       <div class="phone-screen" id="phone-root"></div>
     </div>
-
     <aside class="notes">
       <h2 id="notes-title">Magic Academy</h2>
-      <ul id="notes-list">
-        <li>Tabas: <strong>Spellbook</strong> — ne „Settings“.</li>
-        <li>Theme picker = didelės kortelės (kaip onboarding), ne <code>&lt;select&gt;</code>.</li>
-        <li>Avatar: kamera / galerija, kaip task photo.</li>
-        <li>PIN: taškai + didelis pad (5–8 m. pirštais).</li>
-        <li>Sekcijos stacked — vietos plėtrai (garsas, kalba…).</li>
-      </ul>
+      <ul id="notes-list"></ul>
     </aside>
   </div>
 
   <section class="compare-strip">
-    <h2 style="margin:0 0 14px;font-size:1.2rem;">Dabar vs pasiūlymas (Magic Academy)</h2>
+    <h2 style="margin:0 0 14px;font-size:1.2rem;">Tik Settings blokas — dabar vs pasiūlymas</h2>
     <div class="compare-grid">
-      <article class="compare-card now">
+      <article class="compare-card">
         <header>Dabar — formų panelės</header>
         <div class="mini theme-magic_academy child-area" id="compare-now"></div>
       </article>
       <article class="compare-card">
-        <header>Pasiūlymas — Mano pasaulis</header>
-        <div class="mini theme-magic_academy child-area" id="compare-next"></div>
+        <header>Pasiūlymas — tas pats segmentas</header>
+        <div class="mini theme-magic_academy child-area shot-focus-settings" id="compare-next"></div>
       </article>
     </div>
   </section>
@@ -505,192 +435,151 @@
   <script>
     const THEMES = {
       magic_academy: {
-        label: "Magic Academy",
-        emoji: "🦉",
-        currency: "galleons",
-        nav: ["Assignments", "Magic Shop", "Dreams", "Chronicle", "Spellbook"],
-        eyebrow: "Your spellbook",
-        title: "My world",
-        support: "Change your magic look anytime.",
-        worldTitle: "Choose a world",
-        worldHint: "Tap a world. It changes colours, words, and sounds.",
+        label: "Magic Academy", emoji: "🦉", currency: "galleons",
+        nav: ["Assignments", "Magic Shop", "Dream Enchantments", "Magic Chronicle"],
+        taskEyebrow: "Message from the owl post", taskTitle: "Today's enchanted duties",
+        taskName: "Tidy the common room", taskPts: "+8",
+        eyebrow: "Your spellbook", title: "Settings",
+        worldTitle: "Choose a world", worldHint: "Tap a world. It changes colours, words, and sounds.",
         daily: "Surprise me with a new world each day",
-        avatarTitle: "My portrait",
-        avatarHint: "Show your wizard face.",
-        cam: "Take photo",
-        gal: "From gallery",
-        bdayTitle: "Birthday feast",
-        bdayHint: "Parents confirm before it changes.",
-        pinTitle: "Secret code",
-        pinHint: "4 magic digits. Keep them to yourself.",
+        avatarTitle: "My portrait", avatarHint: "Show your wizard face.",
+        cam: "Take photo", gal: "From gallery",
+        bdayTitle: "Birthday feast", bdayHint: "Parents confirm before it changes.",
+        pinTitle: "Secret code", pinHint: "Three small steps. Same keypad each time.",
+        pinSteps: ["Old code", "New code", "Repeat new code"],
+        pinSave: "Save secret code",
         ctaTheme: "Enter this world",
         notes: [
-          "Tabas: <strong>Spellbook</strong> — ne „Settings“.",
-          "Serif + auksinės kortelės, kaip academy pasaulyje.",
-          "CTA: „Enter this world“ vietoj „Change theme“.",
-          "PIN = „Secret code“, ne admin „Change PIN“."
+          "Hero + orb + 4 tabai — kaip produkcijoje (nekeista).",
+          "Keičiasi tik Settings segmentas apačioje.",
+          "Theme = kortelės, ne <code>&lt;select&gt;</code>.",
+          "PIN: senas → naujas → pakartoti + checklist."
         ]
       },
       block_world: {
-        label: "Block World",
-        emoji: "🟩",
-        currency: "emeralds",
-        nav: ["Missions", "Chest", "Plan", "Log", "Base"],
-        eyebrow: "Your base",
-        title: "Build my look",
-        support: "Pick blocks. Change anytime.",
-        worldTitle: "Pick a biome",
-        worldHint: "Square buttons. Big taps.",
+        label: "Block World", emoji: "🟩", currency: "emeralds",
+        nav: ["Missions", "Reward Chest", "Building Plan", "Activity Log"],
+        taskEyebrow: "Priority", taskTitle: "Today's block jobs",
+        taskName: "Sort the crafting chest", taskPts: "+8",
+        eyebrow: "Your base", title: "Settings",
+        worldTitle: "Pick a biome", worldHint: "Square buttons. Big taps.",
         daily: "Random biome every day",
-        avatarTitle: "My skin",
-        avatarHint: "Add a face to your character.",
-        cam: "Camera",
-        gal: "Gallery",
-        bdayTitle: "Spawn day",
-        bdayHint: "Parents approve the change.",
-        pinTitle: "Passcode",
-        pinHint: "4 digits. Only you.",
+        avatarTitle: "My skin", avatarHint: "Add a face to your character.",
+        cam: "Camera", gal: "Gallery",
+        bdayTitle: "Spawn day", bdayHint: "Parents approve the change.",
+        pinTitle: "Passcode", pinHint: "Old → new → repeat. Checklist keeps you on track.",
+        pinSteps: ["Old passcode", "New passcode", "Repeat new"],
+        pinSave: "Save passcode",
         ctaTheme: "Build this world",
         notes: [
-          "Tabas: <strong>Base</strong>.",
-          "Pixel / square kampai, monospace — kaip Block World UI.",
-          "„Spawn day“ vietoj „Birthday“.",
-          "Dideli kvadratiniai tap target’ai 5–9 m."
+          "Struktūra ta pati — tik Settings blokas.",
+          "Pixel / square kampai Settings kortelėse.",
+          "PIN checklist: senas, naujas, pakartoti."
         ]
       },
       hero_hq: {
-        label: "Superhero HQ",
-        emoji: "🦸",
-        currency: "badges",
-        nav: ["Missions", "Arsenal", "Plan", "Log", "HQ"],
-        eyebrow: "Hero profile",
-        title: "HQ SETUP",
-        support: "Gear up your identity.",
-        worldTitle: "SELECT HQ THEME",
-        worldHint: "Big comic cards. One tap.",
+        label: "Superhero HQ", emoji: "🦸", currency: "badges",
+        nav: ["Hero Missions", "HQ Arsenal", "Secret Plan", "Mission Log"],
+        taskEyebrow: "Priority", taskTitle: "Today's hero missions",
+        taskName: "Clear the laundry lair", taskPts: "+8",
+        eyebrow: "Hero profile", title: "Settings",
+        worldTitle: "SELECT HQ THEME", worldHint: "Big comic cards. One tap.",
         daily: "Random HQ skin daily",
-        avatarTitle: "HERO PORTRAIT",
-        avatarHint: "Suit up with your photo.",
-        cam: "Snap",
-        gal: "Files",
-        bdayTitle: "ORIGIN DAY",
-        bdayHint: "Needs adult clearance.",
-        pinTitle: "ACCESS CODE",
-        pinHint: "4 digits. Top secret.",
+        avatarTitle: "HERO PORTRAIT", avatarHint: "Suit up with your photo.",
+        cam: "Snap", gal: "Files",
+        bdayTitle: "ORIGIN DAY", bdayHint: "Needs adult clearance.",
+        pinTitle: "ACCESS CODE", pinHint: "Prove the old code, then set a new one twice.",
+        pinSteps: ["CURRENT CODE", "NEW CODE", "REPEAT NEW"],
+        pinSave: "SAVE CODE",
         ctaTheme: "ACTIVATE",
         notes: [
-          "Tabas: <strong>HQ</strong>.",
-          "Uppercase + comic shadow kortelės.",
-          "Kalba kaip misijos: ACTIVATE, ACCESS CODE.",
-          "Tinka 8–14 m. „serious play“ tonui."
+          "Tabai ir hero nepakitę.",
+          "Settings copy UPPERCASE / comic stiliumi.",
+          "PIN guide: CURRENT → NEW → REPEAT."
         ]
       },
       art_studio: {
-        label: "Art Studio",
-        emoji: "🎨",
-        currency: "pearls",
-        nav: ["Projects", "Shop", "Gallery", "Journal", "Studio"],
-        eyebrow: "My studio",
-        title: "Make it mine",
-        support: "Colours, photo, and soft shapes.",
-        worldTitle: "Pick a mood",
-        worldHint: "Organic cards — like paint swatches.",
+        label: "Art Studio", emoji: "🎨", currency: "pearls",
+        nav: ["Creative Projects", "Inspiration Shop", "My Gallery", "Creative Journal"],
+        taskEyebrow: "Priority", taskTitle: "Today's studio jobs",
+        taskName: "Wash the paint cups", taskPts: "+8",
+        eyebrow: "My studio", title: "Settings",
+        worldTitle: "Pick a mood", worldHint: "Organic cards — like paint swatches.",
         daily: "New mood every morning",
-        avatarTitle: "Self-portrait",
-        avatarHint: "Your art star photo.",
-        cam: "Camera",
-        gal: "Photos",
-        bdayTitle: "Celebration day",
-        bdayHint: "Parents OK it first.",
-        pinTitle: "Private sketch code",
-        pinHint: "4 numbers just for you.",
+        avatarTitle: "Self-portrait", avatarHint: "Your art star photo.",
+        cam: "Camera", gal: "Photos",
+        bdayTitle: "Celebration day", bdayHint: "Parents OK it first.",
+        pinTitle: "Private sketch code", pinHint: "Old code first, then new code twice.",
+        pinSteps: ["Old code", "New code", "Repeat new"],
+        pinSave: "Save sketch code",
         ctaTheme: "Paint this world",
         notes: [
-          "Tabas: <strong>Studio</strong>.",
-          "Organinės radius formos + šilta paletė.",
-          "Švelnesnis tonas 5–10 m. kūrybiškiems vaikams.",
-          "„Self-portrait“ vietoj „Upload avatar“."
+          "Dashboard layout nepakitęs.",
+          "Settings — organinės formos + šilta kalba.",
+          "PIN checklist trimis žingsniais."
         ]
       },
       panda_pet: {
-        label: "Panda World",
-        emoji: "🐼",
-        currency: "bamboo",
-        nav: ["Tasks", "Treats", "Dream", "Tracks", "Den"],
-        eyebrow: "Panda den",
-        title: "My cozy den",
-        support: "Soft buttons. Friendly words.",
-        worldTitle: "Visit a world",
-        worldHint: "Round cards — easy for little fingers.",
+        label: "Panda World", emoji: "🐼", currency: "bamboo",
+        nav: ["Panda Tasks", "Treat Chest", "Panda's Dream", "Panda Tracks"],
+        taskEyebrow: "Priority", taskTitle: "Today's panda tasks",
+        taskName: "Fluff the bamboo bed", taskPts: "+8",
+        eyebrow: "Panda den", title: "Settings",
+        worldTitle: "Visit a world", worldHint: "Round cards — easy for little fingers.",
         daily: "Wake up in a surprise world",
-        avatarTitle: "My panda face",
-        avatarHint: "A smiling photo.",
-        cam: "Say cheese",
-        gal: "Pick photo",
-        bdayTitle: "Cake day",
-        bdayHint: "Grown-ups check it.",
-        pinTitle: "Secret bamboo code",
-        pinHint: "4 numbers. Shhh!",
+        avatarTitle: "My panda face", avatarHint: "A smiling photo.",
+        cam: "Say cheese", gal: "Pick photo",
+        bdayTitle: "Cake day", bdayHint: "Grown-ups check it.",
+        pinTitle: "Secret bamboo code", pinHint: "First the old one. Then the new one. Then again!",
+        pinSteps: ["Old code", "New code", "Say it again"],
+        pinSave: "Save bamboo code",
         ctaTheme: "Go to this world",
         notes: [
-          "Tabas: <strong>Den</strong> — ypač 5–8 m.",
-          "Pilkos/žalios pill formos, rausvas accent shadow.",
-          "„Cake day“, „Say cheese“ — paprasta kalba.",
-          "Didžiausi tap target’ai iš visų temų."
+          "Hero + 4 tabai kaip dabar.",
+          "Settings — soft pills, paprasta kalba (5–8 m.).",
+          "PIN: senas → naujas → dar kartą + checklist."
         ]
       },
       blockville: {
-        label: "Blockville",
-        emoji: "🧱",
-        currency: "cubes",
-        nav: ["Quests", "Shop", "Plans", "Log", "Pad"],
-        eyebrow: "Player pad",
-        title: "Customize",
-        support: "Neon controls. Fast taps.",
-        worldTitle: "Select skin pack",
-        worldHint: "Dark UI + glow — like a game menu.",
+        label: "Blockville", emoji: "🧱", currency: "cubes",
+        nav: ["Block quests", "Prize shop", "Building plans", "Mission Log"],
+        taskEyebrow: "Priority", taskTitle: "Today's block quests",
+        taskName: "Sort inventory chest", taskPts: "+8",
+        eyebrow: "Player pad", title: "Settings",
+        worldTitle: "Select skin pack", worldHint: "Dark UI + glow — like a game menu.",
         daily: "Daily random skin",
-        avatarTitle: "Player icon",
-        avatarHint: "Upload your face tile.",
-        cam: "Capture",
-        gal: "Inventory",
-        bdayTitle: "Player birthday",
-        bdayHint: "Parent unlock required.",
-        pinTitle: "Lock code",
-        pinHint: "4 digits. Don’t share.",
+        avatarTitle: "Player icon", avatarHint: "Upload your face tile.",
+        cam: "Capture", gal: "Inventory",
+        bdayTitle: "Player birthday", bdayHint: "Parent unlock required.",
+        pinTitle: "Lock code", pinHint: "Unlock with old code, then set new code twice.",
+        pinSteps: ["Old lock", "New lock", "Confirm lock"],
+        pinSave: "Save lock code",
         ctaTheme: "Equip world",
         notes: [
-          "Tabas: <strong>Pad</strong>.",
-          "Dark neon — kaip žaidimo settings meniu (9–14 m.).",
-          "„Equip world“ / „Lock code“ gaming leksika.",
-          "Išlieka kids-safe: dideli mygtukai, be smulkių formų."
+          "Struktūra kaip produkcijoje.",
+          "Settings — neon / gaming leksika (9–14 m.).",
+          "PIN checklist: old → new → confirm."
         ]
       },
       neutral: {
-        label: "Neutral",
-        emoji: "⭐",
-        currency: "points",
-        nav: ["Tasks", "Rewards", "Goals", "History", "Me"],
-        eyebrow: "Your profile",
-        title: "My space",
-        support: "Simple words. Big buttons.",
-        worldTitle: "Choose a world",
-        worldHint: "You can switch whenever you want.",
+        label: "Neutral", emoji: "⭐", currency: "points",
+        nav: ["Tasks", "Rewards", "Goals", "History"],
+        taskEyebrow: "Priority", taskTitle: "Tasks from your parents",
+        taskName: "Make the bed", taskPts: "+8",
+        eyebrow: "Your profile", title: "Settings",
+        worldTitle: "Choose a world", worldHint: "You can switch whenever you want.",
         daily: "Change my world every day",
-        avatarTitle: "My photo",
-        avatarHint: "A clear face photo.",
-        cam: "Take photo",
-        gal: "Choose photo",
-        bdayTitle: "Birthday",
-        bdayHint: "Parents approve changes.",
-        pinTitle: "My PIN",
-        pinHint: "4 numbers only you know.",
+        avatarTitle: "My photo", avatarHint: "A clear face photo.",
+        cam: "Take photo", gal: "Choose photo",
+        bdayTitle: "Birthday", bdayHint: "Parents approve changes.",
+        pinTitle: "My PIN", pinHint: "Enter the old PIN, then the new PIN twice.",
+        pinSteps: ["Old PIN", "New PIN", "Repeat new PIN"],
+        pinSave: "Save new PIN",
         ctaTheme: "Use this world",
         notes: [
-          "Tabas: <strong>Me</strong> — aišku 5–14 m.",
-          "Bazinė KinKudos kalba be fantasy.",
-          "Vis tiek vizualios kortelės, ne dropdown.",
-          "Geriausias fallback šeimoms be temos pasirinkimo."
+          "Bazinė struktūra 1:1 su dabartiniu dashboard.",
+          "Settings vis tiek vizualios kortelės.",
+          "PIN: 3 žingsniai su checklistu."
         ]
       }
     };
@@ -714,7 +603,75 @@
       `).join("");
     }
 
-    function profileHtml(themeId, t) {
+    function settingsBlockHtml(themeId, t) {
+      return `
+        <section id="nustatymai" class="content-section">
+          <div class="section-heading">
+            <p class="eyebrow">${t.eyebrow}</p>
+            <h2>${t.title}</h2>
+          </div>
+          <div class="profile-stack">
+            <article class="profile-block">
+              <h3>${t.worldTitle}</h3>
+              <p class="hint">${t.worldHint}</p>
+              <div class="theme-pick-grid">${themeCardsHtml(themeId)}</div>
+              <label class="daily-toggle">
+                <input type="checkbox">
+                <span>${t.daily}</span>
+              </label>
+              <p style="margin:14px 0 0">
+                <button class="button button-primary" type="button">${t.ctaTheme}</button>
+              </p>
+            </article>
+            <article class="profile-block">
+              <h3>${t.avatarTitle}</h3>
+              <p class="hint">${t.avatarHint}</p>
+              <div class="avatar-row">
+                <div class="avatar-preview" aria-hidden="true">${t.emoji}</div>
+                <div class="avatar-actions">
+                  <button class="button button-primary" type="button">${t.cam}</button>
+                  <button class="button button-secondary" type="button">${t.gal}</button>
+                </div>
+              </div>
+            </article>
+            <article class="profile-block" id="gimtadienis">
+              <h3>${t.bdayTitle}</h3>
+              <p class="hint">${t.bdayHint}</p>
+              <div class="birthday-big">
+                <input type="date" value="2015-06-12" aria-label="Birthday">
+                <button class="button button-secondary" type="button">Save</button>
+              </div>
+            </article>
+            <article class="profile-block" data-pin-change>
+              <h3>${t.pinTitle}</h3>
+              <p class="hint">${t.pinHint}</p>
+              <ol class="pin-guide" aria-label="PIN change steps">
+                <li class="is-active" data-pin-step="0"><span class="step-num">1</span><span>${t.pinSteps[0]}</span></li>
+                <li data-pin-step="1"><span class="step-num">2</span><span>${t.pinSteps[1]}</span></li>
+                <li data-pin-step="2"><span class="step-num">3</span><span>${t.pinSteps[2]}</span></li>
+              </ol>
+              <p class="pin-step-label" data-pin-step-label>${t.pinSteps[0]}</p>
+              <div class="pin-dots" aria-hidden="true" data-pin-dots>
+                <span></span><span></span><span></span><span></span>
+              </div>
+              <div class="pin-pad" aria-label="PIN pad" data-pin-pad>
+                ${[1,2,3,4,5,6,7,8,9,"",0,"⌫"].map((k) =>
+                  k === "" ? "<span></span>" : `<button type="button" data-key="${k}">${k}</button>`
+                ).join("")}
+              </div>
+              <div class="pin-save-row" data-pin-save hidden>
+                <button class="button button-primary" type="button">${t.pinSave}</button>
+              </div>
+            </article>
+          </div>
+        </section>
+      `;
+    }
+
+    function dashboardHtml(themeId, t, { settingsOnly = false } = {}) {
+      if (settingsOnly) {
+        return `<div class="page">${settingsBlockHtml(themeId, t)}</div>`;
+      }
       return `
         <div class="page">
           <section class="child-hero">
@@ -722,66 +679,32 @@
               <div class="hero-avatar-mock" aria-hidden="true">${t.emoji}</div>
               <div class="child-greeting">
                 <h1>Hello, Alex!</h1>
-                <p class="child-greeting-supporting">Ready for today's adventure?</p>
+                <p class="child-greeting-supporting">Ready for today's tasks?</p>
               </div>
             </div>
             <div class="balance-orb"><strong>42</strong><span>${t.currency}</span></div>
           </section>
+
           <nav class="tabbar" aria-label="Sections">
-            ${t.nav.map((label, i) => `<a href="#" class="${i === 4 ? "is-active" : ""}">${label}</a>`).join("")}
+            ${t.nav.map((label, i) => `<a href="#${["darbai","prizai","tikslai","istorija"][i]}">${label}</a>`).join("")}
           </nav>
-          <section id="profilis" class="content-section">
+
+          <section id="darbai" class="content-section mock-stub">
             <div class="section-heading">
-              <p class="eyebrow">${t.eyebrow}</p>
-              <h2>${t.title}</h2>
+              <p class="eyebrow">${t.taskEyebrow}</p>
+              <h2>${t.taskTitle}</h2>
             </div>
-            <p style="margin-top:-8px;color:var(--muted)">${t.support}</p>
-            <div class="profile-stack">
-              <article class="profile-block">
-                <h3>${t.worldTitle}</h3>
-                <p class="hint">${t.worldHint}</p>
-                <div class="theme-pick-grid">${themeCardsHtml(themeId)}</div>
-                <label class="daily-toggle">
-                  <input type="checkbox">
-                  <span>${t.daily}</span>
-                </label>
-                <p style="margin:14px 0 0">
-                  <button class="button button-primary" type="button">${t.ctaTheme}</button>
-                </p>
-              </article>
-              <article class="profile-block">
-                <h3>${t.avatarTitle}</h3>
-                <p class="hint">${t.avatarHint}</p>
-                <div class="avatar-row">
-                  <div class="avatar-preview" aria-hidden="true">${t.emoji}</div>
-                  <div class="avatar-actions">
-                    <button class="button button-primary" type="button">${t.cam}</button>
-                    <button class="button button-secondary" type="button">${t.gal}</button>
-                  </div>
-                </div>
-              </article>
-              <article class="profile-block">
-                <h3>${t.bdayTitle}</h3>
-                <p class="hint">${t.bdayHint}</p>
-                <div class="birthday-big">
-                  <input type="date" value="2015-06-12" aria-label="Birthday">
-                  <button class="button button-secondary" type="button">Save</button>
-                </div>
-              </article>
-              <article class="profile-block">
-                <h3>${t.pinTitle}</h3>
-                <p class="hint">${t.pinHint}</p>
-                <div class="pin-dots" aria-hidden="true">
-                  <span class="filled"></span><span class="filled"></span><span></span><span></span>
-                </div>
-                <div class="pin-pad" aria-label="PIN pad">
-                  ${[1,2,3,4,5,6,7,8,9,"",0,"⌫"].map((k) =>
-                    k === "" ? "<span></span>" : `<button type="button">${k}</button>`
-                  ).join("")}
-                </div>
-              </article>
-            </div>
+            <article class="item-card panel">
+              <div class="item-icon" aria-hidden="true">🛏️</div>
+              <div>
+                <h3 style="margin:0">${t.taskName}</h3>
+                <p style="margin:4px 0 0;color:var(--muted)">Stub — same layout as today</p>
+              </div>
+              <strong class="positive">${t.taskPts}</strong>
+            </article>
           </section>
+
+          ${settingsBlockHtml(themeId, t)}
         </div>
       `;
     }
@@ -838,17 +761,82 @@
       `;
     }
 
+    function wirePinPad(root, t) {
+      const box = root.querySelector("[data-pin-change]");
+      if (!box) return;
+      const steps = [...box.querySelectorAll("[data-pin-step]")];
+      const label = box.querySelector("[data-pin-step-label]");
+      const dots = [...box.querySelectorAll("[data-pin-dots] span")];
+      const saveRow = box.querySelector("[data-pin-save]");
+      let step = 0;
+      let buffer = "";
+      const values = ["", "", ""];
+
+      function paint() {
+        steps.forEach((el, i) => {
+          el.classList.toggle("is-active", i === step && step < 3);
+          el.classList.toggle("is-done", i < step || (step === 3 && i < 3));
+          if (i < step || (step === 3 && values[i].length === 4)) {
+            el.querySelector(".step-num").textContent = "✓";
+          } else {
+            el.querySelector(".step-num").textContent = String(i + 1);
+          }
+        });
+        if (label) {
+          label.textContent = step < 3 ? t.pinSteps[step] : "Ready to save";
+        }
+        dots.forEach((d, i) => d.classList.toggle("filled", i < buffer.length));
+        if (saveRow) saveRow.hidden = !(step === 3 && values[1] && values[1] === values[2]);
+      }
+
+      function advance() {
+        values[step] = buffer;
+        buffer = "";
+        step += 1;
+        if (step === 3 && values[1] !== values[2]) {
+          // mismatch — send back to step 2 (new) with a nudge
+          step = 1;
+          values[1] = "";
+          values[2] = "";
+          if (label) label.textContent = "New codes didn’t match — try again";
+        }
+        paint();
+      }
+
+      box.querySelector("[data-pin-pad]")?.addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-key]");
+        if (!btn || step >= 3) return;
+        const key = btn.dataset.key;
+        if (key === "⌫") {
+          buffer = buffer.slice(0, -1);
+        } else if (buffer.length < 4) {
+          buffer += key;
+        }
+        paint();
+        if (buffer.length === 4) {
+          window.setTimeout(advance, 180);
+        }
+      });
+
+      paint();
+    }
+
     function applyTheme(themeId) {
       const t = THEMES[themeId];
       const root = document.getElementById("phone-root");
-      root.className = `phone-screen theme-${themeId} child-area`;
-      root.innerHTML = profileHtml(themeId, t);
+      const focus = new URLSearchParams(location.search).get("focus");
+      root.className = `phone-screen theme-${themeId} child-area${focus === "settings" ? " shot-focus-settings" : ""}`;
+      root.innerHTML = dashboardHtml(themeId, t);
+      wirePinPad(root, t);
+      if (focus === "settings") {
+        const el = root.querySelector("#nustatymai") || root.querySelector("[data-pin-change]");
+        if (el) el.scrollIntoView({ block: "start" });
+      }
       document.getElementById("notes-title").textContent = t.label;
       document.getElementById("notes-list").innerHTML = t.notes.map((n) => `<li>${n}</li>`).join("");
       document.querySelectorAll(".mock-toolbar button").forEach((btn) => {
         btn.setAttribute("aria-pressed", btn.dataset.theme === themeId ? "true" : "false");
       });
-      // Keep theme radio in phone in sync with toolbar
       root.querySelectorAll('input[name="theme"]').forEach((input) => {
         input.addEventListener("change", () => {
           if (input.checked) applyTheme(input.value);
@@ -861,7 +849,7 @@
     });
 
     document.getElementById("compare-now").innerHTML = nowSettingsHtml();
-    document.getElementById("compare-next").innerHTML = profileHtml("magic_academy", THEMES.magic_academy);
+    document.getElementById("compare-next").innerHTML = dashboardHtml("magic_academy", THEMES.magic_academy, { settingsOnly: true });
 
     const startTheme = new URLSearchParams(location.search).get("theme");
     applyTheme(THEMES[startTheme] ? startTheme : "magic_academy");

@@ -1,28 +1,26 @@
 # Child Settings mockup (discussion)
 
-Static visual mockup for redesigning the child **Settings** area for ages **5–14**.
+Static visual mockup: **same child dashboard structure**, only the **last Settings segment** is redesigned for ages **5–14**, with per-theme cards/copy.
 
-## Open locally
-
-From the repo root:
+## Open
 
 ```bash
 python -m http.server 8765 --bind 0.0.0.0
 ```
 
-Then open [http://127.0.0.1:8765/docs/mockups/child-settings/](http://127.0.0.1:8765/docs/mockups/child-settings/).
+- Full page: `/docs/mockups/child-settings/?theme=magic_academy`
+- Settings block only (screenshots): `?theme=panda_pet&focus=settings`
 
-**Phone:** on a narrow viewport the page goes full-bleed (no nested phone frame). Theme chips stay sticky at the top. Open the same URL on the phone (same Wi‑Fi / public tunnel) — `127.0.0.1` only works on the machine running the server.
+On a real phone (narrow viewport) the nested phone chrome drops away; theme chips stay sticky.
 
-Uses live [`static/css/app.css`](../../../static/css/app.css) theme tokens so each world keeps its real look.
+Uses live [`static/css/app.css`](../../../static/css/app.css).
 
-## What it shows
+## What stays the same
 
-- **5th tab** (“Spellbook” / “Den” / “HQ” / …) instead of buried Settings
-- **Per-theme copy** and control chrome (rounded panda vs square blocks vs neon Blockville)
-- **Visual world cards** instead of a `<select>`
-- **Camera / gallery** avatar actions
-- **PIN pad** for small fingers
-- Side-by-side **Now vs proposed** strip (Magic Academy)
+- Hero: greeting + balance orb on one row
+- 4-tab tabbar (Tasks / Rewards / Goals / History — themed labels)
+- Content above Settings (stub task card in the mock)
 
-Not wired to Django — discussion only.
+## What changes
+
+- Settings segment only: visual world cards, camera/gallery avatar, birthday, PIN pad, themed copy
