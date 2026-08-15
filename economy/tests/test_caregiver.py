@@ -60,9 +60,20 @@ class CaregiverGuestAccessTests(TestCase):
         self.assertContains(response, "caregiver-invite-share-dialog")
         self.assertContains(response, "Share…")
         self.assertContains(response, "Copy link")
+        self.assertContains(response, 'href="#icon-share-nodes"', html=False)
         self.assertNotContains(response, "is ready to share")
         self.assertNotContains(response, 'data-share-caregiver-invite hidden')
         self.assertContains(response, "dialog.showModal")
+        html = response.content.decode()
+        dialog_html = html[
+            html.index('id="caregiver-invite-share-dialog"') : html.index(
+                'id="push-help-dialog"'
+            )
+        ]
+        self.assertLess(
+            dialog_html.index("danger-warning"),
+            dialog_html.index("dialog-actions"),
+        )
         invite = CaregiverInvite.objects.get()
         self.assertTrue(invite.is_pending)
         self.assertEqual(invite.children.count(), 1)

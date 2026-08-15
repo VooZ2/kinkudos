@@ -164,9 +164,21 @@ class DevicePairingTests(TestCase):
         self.assertContains(response, reverse("pair_device_via_link"), html=False)
         self.assertContains(response, "Share…")
         self.assertContains(response, "Copy link")
+        self.assertContains(response, 'href="#icon-share-nodes"', html=False)
+        self.assertContains(response, 'href="#icon-clipboard-check"', html=False)
         self.assertNotContains(response, "is ready to share")
         self.assertNotContains(response, 'data-share-device-pairing hidden')
         self.assertContains(response, "dialog.showModal")
+        html = response.content.decode()
+        dialog_html = html[
+            html.index('id="device-pairing-share-dialog"') : html.index(
+                "id=\"push-help-dialog\""
+            )
+        ]
+        self.assertLess(
+            dialog_html.index("danger-warning"),
+            dialog_html.index("dialog-actions"),
+        )
         self.assertTrue(DevicePairingLink.objects.exists())
 
     def test_inactive_devices_are_hidden_from_settings_list(self):
