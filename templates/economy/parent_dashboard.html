@@ -25,7 +25,7 @@
   </label>
   <div class="share-dialog-toolbar">
     <button class="icon-button" type="button" data-share-caregiver-invite aria-label="{% translate "Share…" %}" title="{% translate "Share…" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-share-nodes"></use></svg></button>
-    <button class="icon-button" type="button" data-copy-caregiver-invite aria-label="{% translate "Copy link" %}" title="{% translate "Copy link" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-clipboard-check"></use></svg></button>
+    <button class="share-copy-button" type="button" data-copy-caregiver-invite>{% translate "Copy" %}</button>
   </div>
   <p class="danger-warning">{% translate "Anyone with this link can activate guest access until it expires. Send it privately." %}</p>
   {% if caregiver_invite_share.email_sent %}
@@ -48,11 +48,7 @@
   const inviteUrl = linkEl.value;
   copyButton.addEventListener("click", async () => {
     await navigator.clipboard.writeText(inviteUrl);
-    const copied = "{% translate 'Copied' %}";
-    copyButton.title = copied;
-    copyButton.setAttribute("aria-label", copied);
-    const icon = copyButton.querySelector("use");
-    if (icon) icon.setAttribute("href", "#icon-circle-check");
+    copyButton.textContent = "{% translate 'Copied' %}";
   });
   shareButton.addEventListener("click", async () => {
     if (navigator.share) {
@@ -82,7 +78,7 @@
   </label>
   <div class="share-dialog-toolbar">
     <button class="icon-button" type="button" data-share-device-pairing aria-label="{% translate "Share…" %}" title="{% translate "Share…" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-share-nodes"></use></svg></button>
-    <button class="icon-button" type="button" data-copy-device-pairing aria-label="{% translate "Copy link" %}" title="{% translate "Copy link" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-clipboard-check"></use></svg></button>
+    <button class="share-copy-button" type="button" data-copy-device-pairing>{% translate "Copy" %}</button>
   </div>
   <p class="danger-warning">{% translate "Anyone with this link can pair one device until it expires. Send it privately." %}</p>
   <div class="dialog-actions">
@@ -100,11 +96,7 @@
   const pairingUrl = linkEl.value;
   copyButton.addEventListener("click", async () => {
     await navigator.clipboard.writeText(pairingUrl);
-    const copied = "{% translate 'Copied' %}";
-    copyButton.title = copied;
-    copyButton.setAttribute("aria-label", copied);
-    const icon = copyButton.querySelector("use");
-    if (icon) icon.setAttribute("href", "#icon-circle-check");
+    copyButton.textContent = "{% translate 'Copied' %}";
   });
   shareButton.addEventListener("click", async () => {
     if (navigator.share) {
@@ -901,13 +893,11 @@
           </div>
           <div class="catalog-actions">
             <button
-              class="icon-button"
+              class="share-copy-button"
               type="button"
               data-copy-caregiver-login
               data-login-url="{{ request.scheme }}://{{ request.get_host }}{% url 'caregiver_login' guest.login_code %}"
-              aria-label="{% translate 'Copy sign-in link' %}"
-              title="{% translate 'Copy sign-in link' %}"
-            ><svg class="action-icon"><use href="#icon-clipboard-check"></use></svg></button>
+            >{% translate "Copy" %}</button>
             {% if guest.is_locked %}
             <form method="post" action="{% url 'parent_unlock_caregiver' guest.pk %}">
               {% csrf_token %}
@@ -962,7 +952,7 @@
   document.querySelectorAll("[data-copy-caregiver-login]").forEach((button) => {
     button.addEventListener("click", async () => {
       await navigator.clipboard.writeText(button.dataset.loginUrl);
-      button.title = "{% translate 'Copied' %}";
+      button.textContent = "{% translate 'Copied' %}";
     });
   });
   </script>

@@ -303,8 +303,32 @@ select.field-control, .stack-form select {
   gap: 10px;
   margin: 0;
 }
-.share-dialog .share-dialog-toolbar .icon-button {
+.share-dialog .share-dialog-toolbar .icon-button,
+.share-dialog .share-dialog-toolbar .share-copy-button {
   flex: 0 0 auto;
+}
+.share-copy-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--line));
+  border-radius: 11px;
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface-solid));
+  font: inherit;
+  font-weight: 750;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: transform .14s, background .14s, box-shadow .14s;
+}
+.share-copy-button:hover, .share-copy-button:focus-visible {
+  transform: var(--control-hover-lift);
+  background: var(--icon-hover-fill);
+  box-shadow: var(--icon-hover-shadow);
 }
 .share-dialog .dialog-actions {
   position: static;
@@ -1686,6 +1710,15 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
     color: #ffb4ad;
     border-color: color-mix(in srgb, var(--danger) 44%, var(--line));
     background: color-mix(in srgb, var(--danger) 18%, var(--surface-solid));
+  }
+  .share-copy-button {
+    color: #d8c9ff;
+    border-color: color-mix(in srgb, #b8a0ed 42%, var(--line));
+    background: color-mix(in srgb, #6b46c1 22%, var(--surface-solid));
+  }
+  .share-copy-button:hover, .share-copy-button:focus-visible {
+    color: #f1eaff;
+    background: color-mix(in srgb, #8b5cf6 34%, var(--surface-solid));
   }
   .theme-magic_academy { --bg: #150d10; }
   .theme-block_world { --bg: #101910; }

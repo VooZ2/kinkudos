@@ -803,6 +803,7 @@
   "Open this link on the child's device. It can be used once and expires in 10 minutes.": "Atidarykite šią nuorodą vaiko įrenginyje. Ją galima panaudoti vieną kartą ir ji galioja 10 minučių.",
   "Pairing link": "Susiejimo nuoroda",
   "Anyone with this link can pair one device until it expires. Send it privately.": "Iki nuorodai nustojant galioti ją turintis asmuo gali susieti vieną įrenginį. Siųskite ją privačiai.",
+  "Copy": "Kopijuoti",
   "Copy link": "Kopijuoti nuorodą",
   "Back to settings": "Grįžti į nustatymus",
   "Copied": "Nukopijuota",

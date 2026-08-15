@@ -802,6 +802,9 @@ msgstr "Tęsti atidengimą"
 msgid "Copied"
 msgstr "Nukopijuota"
 
+msgid "Copy"
+msgstr "Kopijuoti"
+
 msgid "Copy link"
 msgstr "Kopijuoti nuorodą"
 
