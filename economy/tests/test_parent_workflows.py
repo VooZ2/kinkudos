@@ -42,7 +42,11 @@ class ParentWorkflowTests(TestCase):
             reverse("child_set_birth_date"),
             {"birth_date": "2018-07-29"},
         )
-        self.assertRedirects(response, reverse("child_dashboard"))
+        self.assertRedirects(
+            response,
+            f"{reverse('child_dashboard')}#gimtadienis",
+            fetch_redirect_response=False,
+        )
         self.child.refresh_from_db()
         self.assertEqual(self.child.birth_date, date(2018, 7, 29))
         self.assertTrue(self.child.birth_date_initialized)

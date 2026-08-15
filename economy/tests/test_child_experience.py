@@ -104,13 +104,18 @@ class ChildExperienceTests(TestCase):
         self.assertRegex(content, r'class="ledger-icon">\s*🎬\s*</span>')
         self.assertNotRegex(content, r'class="ledger-icon">\s*[TR]\s*</span>')
 
-    def test_theme_and_avatar_forms_share_one_appearance_panel(self):
+    def test_theme_and_avatar_forms_share_settings_accordion(self):
         self.sign_in_child()
         response = self.client.get(reverse("child_dashboard"))
         content = response.content.decode()
 
-        self.assertEqual(content.count("data-profile-appearance-panel"), 1)
-        self.assertEqual(content.count('class="profile-setting-part"'), 2)
+        self.assertEqual(content.count("data-child-settings-accordion"), 1)
+        self.assertEqual(content.count("data-settings-panel="), 4)
+        self.assertContains(response, 'id="nustatymai"')
+        self.assertContains(response, 'id="gimtadienis"')
+        self.assertContains(response, 'id="pinas"')
+        self.assertContains(response, "theme-daily")
+        self.assertContains(response, 'data-pin-pad')
         self.assertContains(response, reverse("child_set_theme"))
         self.assertContains(response, reverse("child_set_avatar"))
 
@@ -124,7 +129,11 @@ class ChildExperienceTests(TestCase):
             },
         )
 
-        self.assertRedirects(response, reverse("child_dashboard"))
+        self.assertRedirects(
+            response,
+            f"{reverse('child_dashboard')}#nustatymai",
+            fetch_redirect_response=False,
+        )
         self.child.refresh_from_db()
         self.assertEqual(self.child.theme, Theme.MAGIC_ACADEMY)
         self.assertTrue(self.child.randomize_theme_daily)

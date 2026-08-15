@@ -1655,3 +1655,116 @@ document.querySelectorAll("[data-assignment-preset-save]").forEach((root) => {
     });
   });
 });
+
+document.querySelectorAll("[data-child-settings-accordion]").forEach((root) => {
+  root.querySelectorAll("details.child-settings-acc").forEach((detail) => {
+    detail.addEventListener("toggle", () => {
+      if (!detail.open) return;
+      root.querySelectorAll("details.child-settings-acc").forEach((other) => {
+        if (other !== detail) other.open = false;
+      });
+    });
+  });
+});
+
+const openChildSettingsFromHash = () => {
+  const hash = window.location.hash.replace(/^#/, "");
+  if (!hash) return;
+  const target = document.getElementById(hash);
+  if (target?.matches?.("details.child-settings-acc")) {
+    const root = target.closest("[data-child-settings-accordion]");
+    root?.querySelectorAll("details.child-settings-acc").forEach((detail) => {
+      detail.open = detail === target;
+    });
+    window.requestAnimationFrame(() => {
+      target.scrollIntoView({ block: "start" });
+    });
+    return;
+  }
+  if (hash === "nustatymai") {
+    document.getElementById("nustatymai")?.scrollIntoView({ block: "start" });
+  }
+};
+openChildSettingsFromHash();
+window.addEventListener("hashchange", openChildSettingsFromHash);
+
+document.querySelectorAll("[data-pin-change]").forEach((box) => {
+  const form = box.querySelector("[data-pin-form]");
+  if (!form) return;
+  const steps = [...box.querySelectorAll("[data-pin-step]")];
+  const stepTexts = steps.map(
+    (el) => el.querySelector("[data-pin-step-text]")?.textContent?.trim() || ""
+  );
+  const label = box.querySelector("[data-pin-step-label]");
+  const dots = [...box.querySelectorAll("[data-pin-dots] span")];
+  const saveRow = box.querySelector("[data-pin-save]");
+  const fields = {
+    current_pin: form.querySelector('[data-pin-field="current_pin"]'),
+    new_pin: form.querySelector('[data-pin-field="new_pin"]'),
+    confirm_pin: form.querySelector('[data-pin-field="confirm_pin"]'),
+  };
+  const mismatchText = form.dataset.pinMismatch || "";
+  const readyText = form.dataset.pinReady || "";
+  let step = 0;
+  let buffer = "";
+  const values = ["", "", ""];
+
+  const syncFields = () => {
+    if (fields.current_pin) fields.current_pin.value = values[0];
+    if (fields.new_pin) fields.new_pin.value = values[1];
+    if (fields.confirm_pin) fields.confirm_pin.value = values[2];
+  };
+
+  const paint = () => {
+    steps.forEach((el, i) => {
+      el.classList.toggle("is-active", i === step && step < 3);
+      el.classList.toggle("is-done", i < step || step >= 3);
+      const num = el.querySelector(".step-num");
+      if (num) num.textContent = i < step || step >= 3 ? "✓" : String(i + 1);
+    });
+    if (label) {
+      if (step >= 3) label.textContent = readyText || stepTexts[2] || "";
+      else label.textContent = stepTexts[step] || "";
+    }
+    dots.forEach((dot, i) => dot.classList.toggle("filled", i < buffer.length));
+    const ready = step >= 3 && values[1] && values[1] === values[2];
+    if (saveRow) saveRow.hidden = !ready;
+    syncFields();
+  };
+
+  const advance = () => {
+    values[step] = buffer;
+    buffer = "";
+    step += 1;
+    if (step === 3 && values[1] !== values[2]) {
+      step = 1;
+      values[1] = "";
+      values[2] = "";
+      form.classList.add("is-pin-mismatch");
+      window.setTimeout(() => form.classList.remove("is-pin-mismatch"), 420);
+      if (label) label.textContent = mismatchText || stepTexts[1] || "";
+      paint();
+      return;
+    }
+    paint();
+  };
+
+  box.querySelector("[data-pin-pad]")?.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-pin-key]");
+    if (!button || step >= 3) return;
+    const key = button.dataset.pinKey;
+    if (key === "back") buffer = buffer.slice(0, -1);
+    else if (/^\d$/.test(key) && buffer.length < 4) buffer += key;
+    paint();
+    if (buffer.length === 4) window.setTimeout(advance, 160);
+  });
+
+  form.addEventListener("submit", (event) => {
+    syncFields();
+    if (!(values[0] && values[1] && values[1] === values[2])) {
+      event.preventDefault();
+    }
+  });
+
+  paint();
+});

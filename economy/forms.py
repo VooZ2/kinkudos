@@ -480,6 +480,7 @@ class ThemeForm(StyledFormMixin, forms.Form):
     theme = forms.ChoiceField(
         label=_("Theme"),
         choices=Theme.choices,
+        widget=forms.RadioSelect,
     )
     randomize_theme_daily = forms.BooleanField(
         label=_("Change my theme randomly every day"),

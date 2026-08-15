@@ -3510,3 +3510,309 @@ msgstr "„%(title)s“ dabar %(state)s."
 
 msgid "“%(title)s” updated."
 msgstr "„%(title)s“ atnaujinta."
+
+msgid "Your spellbook"
+msgstr "Tavo užkeikimų knyga"
+
+msgid "My magic"
+msgstr "Mano magija"
+
+msgid "Choose a world"
+msgstr "Pasirink pasaulį"
+
+msgid "Tap a world. It changes colours, words, and sounds."
+msgstr "Paliesk pasaulį. Keisis spalvos, žodžiai ir garsai."
+
+msgid "Owls & galleons"
+msgstr "Pelėdos ir galeonai"
+
+msgid "Surprise world"
+msgstr "Staigmenos pasaulis"
+
+msgid "New every day"
+msgstr "Naujas kasdien"
+
+msgid "My portrait"
+msgstr "Mano portretas"
+
+msgid "From gallery"
+msgstr "Iš galerijos"
+
+msgid "Birthday feast"
+msgstr "Gimtadienio šventė"
+
+msgid "Secret code"
+msgstr "Slaptas kodas"
+
+msgid "Old code"
+msgstr "Senas kodas"
+
+msgid "New code"
+msgstr "Naujas kodas"
+
+msgid "Repeat new code"
+msgstr "Pakartok naują"
+
+msgid "Save secret code"
+msgstr "Išsaugoti slaptą kodą"
+
+msgid "Enter this world"
+msgstr "Įeiti į šį pasaulį"
+
+msgid "Your base"
+msgstr "Tavo bazė"
+
+msgid "Build my look"
+msgstr "Kuriu savo išvaizdą"
+
+msgid "Pick a biome"
+msgstr "Pasirink biomą"
+
+msgid "Square buttons. Big taps."
+msgstr "Kvadratiniai mygtukai. Dideli bakstelėjimai."
+
+msgid "Emeralds"
+msgstr "Smaragdai"
+
+msgid "Surprise biome"
+msgstr "Staigmenos biomas"
+
+msgid "My skin"
+msgstr "Mano skin’as"
+
+msgid "Camera"
+msgstr "Kamera"
+
+msgid "Gallery"
+msgstr "Galerija"
+
+msgid "Spawn day"
+msgstr "Spawn diena"
+
+msgid "Passcode"
+msgstr "Praėjimo kodas"
+
+msgid "Old passcode"
+msgstr "Senas kodas"
+
+msgid "New passcode"
+msgstr "Naujas kodas"
+
+msgid "Repeat new"
+msgstr "Pakartok naują"
+
+msgid "Save passcode"
+msgstr "Išsaugoti praėjimo kodą"
+
+msgid "Build this world"
+msgstr "Pastatyti šį pasaulį"
+
+msgid "My space"
+msgstr "Mano erdvė"
+
+msgid "You can switch whenever you want."
+msgstr "Gali keisti kada nori."
+
+msgid "My photo"
+msgstr "Mano nuotrauka"
+
+msgid "Choose photo"
+msgstr "Pasirinkti nuotrauką"
+
+msgid "My PIN"
+msgstr "Mano PIN"
+
+msgid "Old PIN"
+msgstr "Senas PIN"
+
+msgid "Use this world"
+msgstr "Naudoti šį pasaulį"
+
+msgid "Hero profile"
+msgstr "Herojaus profilis"
+
+msgid "HQ setup"
+msgstr "Herojaus pultas"
+
+msgid "Select HQ theme"
+msgstr "Pasirink būstinės temą"
+
+msgid "Big comic cards. One tap."
+msgstr "Didelės komiksų kortelės. Vienas bakstelėjimas."
+
+msgid "Badges"
+msgstr "Ženkleliai"
+
+msgid "Surprise HQ"
+msgstr "Staigmenos būstinė"
+
+msgid "New each day"
+msgstr "Nauja kasdien"
+
+msgid "Hero portrait"
+msgstr "Herojaus portretas"
+
+msgid "Snap"
+msgstr "Snap"
+
+msgid "Files"
+msgstr "Failai"
+
+msgid "Origin day"
+msgstr "Kilmės diena"
+
+msgid "Access code"
+msgstr "Prieigos kodas"
+
+msgid "Current code"
+msgstr "Dabartinis kodas"
+
+msgid "Save code"
+msgstr "Išsaugoti kodą"
+
+msgid "Activate"
+msgstr "Aktyvuoti"
+
+msgid "My studio"
+msgstr "Mano studija"
+
+msgid "Make it mine"
+msgstr "Padaryk sava"
+
+msgid "Pick a mood"
+msgstr "Pasirink nuotaiką"
+
+msgid "Organic cards — like paint swatches."
+msgstr "Organinės kortelės — kaip dažų mėginiai."
+
+msgid "Pearls"
+msgstr "Perlai"
+
+msgid "Surprise mood"
+msgstr "Staigmenos nuotaika"
+
+msgid "New each morning"
+msgstr "Nauja kiekvieną rytą"
+
+msgid "Self-portrait"
+msgstr "Autoportretas"
+
+msgid "Photos"
+msgstr "Nuotraukos"
+
+msgid "Celebration day"
+msgstr "Šventės diena"
+
+msgid "Private sketch code"
+msgstr "Privatus eskizo kodas"
+
+msgid "Save sketch code"
+msgstr "Išsaugoti eskizo kodą"
+
+msgid "Paint this world"
+msgstr "Nutapyti šį pasaulį"
+
+msgid "Panda den"
+msgstr "Pandos urvas"
+
+msgid "My cozy den"
+msgstr "Mano jaukus urvas"
+
+msgid "Visit a world"
+msgstr "Aplankyk pasaulį"
+
+msgid "Round cards — easy for little fingers."
+msgstr "Apvalios kortelės — patogu mažiems pirštukams."
+
+msgid "Bamboo"
+msgstr "Bambukas"
+
+msgid "Wake up new"
+msgstr "Pabusk naujai"
+
+msgid "My panda face"
+msgstr "Mano pandos veidas"
+
+msgid "Say cheese"
+msgstr "Sakyk sūris"
+
+msgid "Pick photo"
+msgstr "Pasirink nuotrauką"
+
+msgid "Cake day"
+msgstr "Tortuko diena"
+
+msgid "Secret bamboo code"
+msgstr "Slaptas bambuko kodas"
+
+msgid "Say it again"
+msgstr "Sakyk dar kartą"
+
+msgid "Save bamboo code"
+msgstr "Išsaugoti bambuko kodą"
+
+msgid "Go to this world"
+msgstr "Eiti į šį pasaulį"
+
+msgid "Player pad"
+msgstr "Žaidėjo pultas"
+
+msgid "Customize"
+msgstr "Priderinti"
+
+msgid "Select skin pack"
+msgstr "Pasirink skin paketą"
+
+msgid "Dark UI + glow — like a game menu."
+msgstr "Tamsus UI + švytėjimas — kaip žaidimo meniu."
+
+msgid "Cubes"
+msgstr "Kubeliai"
+
+msgid "Random skin"
+msgstr "Atsitiktinis skin’as"
+
+msgid "Daily roll"
+msgstr "Kasdienis roll’as"
+
+msgid "Player icon"
+msgstr "Žaidėjo ikona"
+
+msgid "Capture"
+msgstr "Užfiksuoti"
+
+msgid "Inventory"
+msgstr "Inventorius"
+
+msgid "Player birthday"
+msgstr "Žaidėjo gimtadienis"
+
+msgid "Lock code"
+msgstr "Užrakto kodas"
+
+msgid "Old lock"
+msgstr "Senas užraktas"
+
+msgid "New lock"
+msgstr "Naujas užraktas"
+
+msgid "Confirm lock"
+msgstr "Patvirtink"
+
+msgid "Save lock code"
+msgstr "Išsaugoti užrakto kodą"
+
+msgid "Equip world"
+msgstr "Uždėti pasaulį"
+
+msgid "PIN change steps"
+msgstr "PIN keitimo žingsniai"
+
+msgid "PIN keypad"
+msgstr "PIN klaviatūra"
+
+msgid "New codes didn’t match — try again"
+msgstr "Nauji kodai nesutapo — bandyk dar kartą"
+
+msgid "Ready to save"
+msgstr "Galima išsaugoti"
