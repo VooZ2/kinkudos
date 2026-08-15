@@ -176,6 +176,10 @@ class DevicePairingTests(TestCase):
             )
         ]
         self.assertLess(
+            dialog_html.index("share-dialog-toolbar"),
+            dialog_html.index("danger-warning"),
+        )
+        self.assertLess(
             dialog_html.index("danger-warning"),
             dialog_html.index("dialog-actions"),
         )

@@ -23,13 +23,15 @@
   <label>{% translate "Invite link" %}
     <textarea class="field-control" rows="3" readonly data-caregiver-invite-link>{{ caregiver_invite_share.invite_url }}</textarea>
   </label>
+  <div class="share-dialog-toolbar">
+    <button class="icon-button" type="button" data-share-caregiver-invite aria-label="{% translate "Share…" %}" title="{% translate "Share…" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-share-nodes"></use></svg></button>
+    <button class="icon-button" type="button" data-copy-caregiver-invite aria-label="{% translate "Copy link" %}" title="{% translate "Copy link" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-clipboard-check"></use></svg></button>
+  </div>
   <p class="danger-warning">{% translate "Anyone with this link can activate guest access until it expires. Send it privately." %}</p>
   {% if caregiver_invite_share.email_sent %}
     <p>{% blocktranslate with email=caregiver_invite_share.email_address %}Sent to {{ email }}.{% endblocktranslate %}</p>
   {% endif %}
-  <div class="dialog-actions hero-actions">
-    <button class="icon-button" type="button" data-share-caregiver-invite aria-label="{% translate "Share…" %}" title="{% translate "Share…" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-share-nodes"></use></svg></button>
-    <button class="icon-button" type="button" data-copy-caregiver-invite aria-label="{% translate "Copy link" %}" title="{% translate "Copy link" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-clipboard-check"></use></svg></button>
+  <div class="dialog-actions">
     <button class="button button-secondary" type="button" data-close-dialog>{% translate "Done" %}</button>
   </div>
   {{ caregiver_invite_share.share_title|json_script:"caregiver-share-title" }}
@@ -78,10 +80,12 @@
   <label>{% translate "Pairing link" %}
     <textarea class="field-control" rows="3" readonly data-device-pairing-link>{{ device_pairing_share.pairing_url }}</textarea>
   </label>
-  <p class="danger-warning">{% translate "Anyone with this link can pair one device until it expires. Send it privately." %}</p>
-  <div class="dialog-actions hero-actions">
+  <div class="share-dialog-toolbar">
     <button class="icon-button" type="button" data-share-device-pairing aria-label="{% translate "Share…" %}" title="{% translate "Share…" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-share-nodes"></use></svg></button>
     <button class="icon-button" type="button" data-copy-device-pairing aria-label="{% translate "Copy link" %}" title="{% translate "Copy link" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-clipboard-check"></use></svg></button>
+  </div>
+  <p class="danger-warning">{% translate "Anyone with this link can pair one device until it expires. Send it privately." %}</p>
+  <div class="dialog-actions">
     <button class="button button-secondary" type="button" data-close-dialog>{% translate "Done" %}</button>
   </div>
 </dialog>

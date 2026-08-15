@@ -237,32 +237,34 @@ select.field-control, .stack-form select {
 .child-greeting h1 { overflow-wrap: anywhere; text-wrap: balance; }
 .child-greeting-supporting { max-width: 36rem; margin: 10px 0 0; color: var(--muted); font-size: clamp(1.05rem, 2.2vw, 1.9rem); font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
 .pin-dialog, .action-dialog { width: min(440px, calc(100% - 28px)); max-height: calc(100dvh - 28px); overflow-y: auto; border: 1px solid var(--line); border-radius: 24px; color: var(--text); background: var(--surface-solid); padding: 32px; box-shadow: var(--shadow); font-family: inherit; }
-.share-dialog {
+.share-dialog .share-dialog-toolbar {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.share-dialog .dialog-actions {
-  position: relative;
-  z-index: auto;
-  flex-shrink: 0;
   flex-wrap: nowrap;
   align-items: center;
-  justify-content: flex-end;
-  margin-top: 0;
+  gap: 10px;
+  margin-top: 8px;
+}
+.share-dialog .share-dialog-toolbar .icon-button {
+  flex: 0 0 auto;
+}
+.share-dialog .dialog-actions {
+  position: static;
+  z-index: auto;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: stretch;
+  margin-top: 14px;
   padding-top: 0;
   padding-bottom: env(safe-area-inset-bottom);
   background: transparent;
 }
-.share-dialog .dialog-actions .icon-button {
-  flex: 0 0 auto;
-}
 .share-dialog .dialog-actions .button {
   flex: 1 1 auto;
+  width: 100%;
   min-width: 0;
 }
 .share-dialog .danger-warning {
-  margin: 0;
+  margin: 12px 0 0;
   padding: 9px 11px;
   font-size: .82rem;
   line-height: 1.4;
@@ -1816,8 +1818,7 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
   .dialog-actions { align-items: stretch; }
   .dialog-actions .button, .dialog-actions form { flex: 1 1 auto; }
   .dialog-actions form .button { width: 100%; }
-  .share-dialog .dialog-actions { align-items: center; flex-wrap: nowrap; }
-  .share-dialog .dialog-actions .icon-button { flex: 0 0 auto; }
+  .share-dialog .dialog-actions { align-items: stretch; flex-wrap: nowrap; }
   .approval-card .evidence-thumb { width: 62px; height: 62px; }
   .evidence-actions { display: grid; grid-template-columns: 1fr; }
   .evidence-actions .button { justify-content: center; }
