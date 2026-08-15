@@ -1486,7 +1486,7 @@ class CaregiverProfile(models.Model):
         from django.contrib.auth import get_user_model
 
         User = get_user_model()
-        for _ in range(20):
+        for _attempt in range(20):
             login_code = _generate_caregiver_login_code()
             if not cls.objects.filter(login_code=login_code).exists():
                 break
