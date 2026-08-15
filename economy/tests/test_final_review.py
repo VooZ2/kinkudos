@@ -286,6 +286,7 @@ class FinalReviewTests(TestCase):
         js = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
         self.assertIn("function bindPrimaryTap(", js)
         self.assertIn('if (event.pointerType === "mouse") return;', js)
+        self.assertIn("const dragged = armed && Math.hypot(", js)
         self.assertIn(
             'bindPrimaryTap(document, "[data-close-dialog], [data-open-dialog]"',
             js,

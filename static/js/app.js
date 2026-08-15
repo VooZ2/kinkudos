@@ -4,6 +4,7 @@ function bindPrimaryTap(target, selector, handler) {
   let startX = 0;
   let startY = 0;
   let last = 0;
+  let armed = false;
   const match = event => event.target.closest?.(selector);
   const run = (event, node) => {
     const now = Date.now();
@@ -16,6 +17,7 @@ function bindPrimaryTap(target, selector, handler) {
   };
   target.addEventListener("pointerdown", event => {
     if (!match(event)) return;
+    armed = true;
     startX = event.clientX;
     startY = event.clientY;
   }, { passive: true });
@@ -23,9 +25,12 @@ function bindPrimaryTap(target, selector, handler) {
     if (event.pointerType === "mouse") return;
     const node = match(event);
     if (!node) return;
-    if (Math.hypot(event.clientX - startX, event.clientY - startY) > 14) return;
+    const dragged = armed && Math.hypot(event.clientX - startX, event.clientY - startY) > 14;
+    armed = false;
+    if (dragged) return;
     run(event, node);
   });
+  target.addEventListener("pointercancel", () => { armed = false; });
   target.addEventListener("click", event => {
     const node = match(event);
     if (!node) return;
