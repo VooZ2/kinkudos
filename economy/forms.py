@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm, UserCreationForm
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.utils.html import format_html
 from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 from pillow_heif import register_heif_opener
@@ -42,17 +43,39 @@ PASSWORD_HELP = (
 CONSTRAINED_DATE_INPUT_TYPES = {"date", "datetime-local", "time"}
 
 
+class ConstrainedDateInput(forms.DateInput):
+    """Keep native date controls inside stacked forms on narrow screens."""
+
+    def render(self, name, value, attrs=None, renderer=None):
+        return format_html(
+            '<span class="date-input-shell">{}</span>',
+            super().render(name, value, attrs, renderer),
+        )
+
+
+def _constrain_date_widget(widget):
+    widget_type = str(widget.attrs.get("type") or getattr(widget, "input_type", ""))
+    if widget_type not in CONSTRAINED_DATE_INPUT_TYPES:
+        return
+    if isinstance(widget, ConstrainedDateInput):
+        return
+    original_render = widget.render
+
+    def render(name, value, attrs=None, renderer=None):
+        return format_html(
+            '<span class="date-input-shell">{}</span>',
+            original_render(name, value, attrs, renderer),
+        )
+
+    widget.render = render
+
+
 class StyledFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.setdefault("class", "field-control")
-            widget_type = str(
-                field.widget.attrs.get("type")
-                or getattr(field.widget, "input_type", "")
-            )
-            if widget_type in CONSTRAINED_DATE_INPUT_TYPES:
-                field.widget.template_name = "economy/widgets/constrained_date.html"
+            _constrain_date_widget(field.widget)
             if isinstance(field, forms.IntegerField) and not isinstance(
                 field.widget, forms.HiddenInput
             ):
@@ -848,7 +871,7 @@ class BirthDateForm(StyledFormMixin, forms.ModelForm):
         fields = ["birth_date"]
         labels = {"birth_date": _("Birthday")}
         widgets = {
-            "birth_date": forms.DateInput(
+            "birth_date": ConstrainedDateInput(
                 format="%Y-%m-%d", attrs={"type": "date"}
             )
         }
@@ -1126,7 +1149,7 @@ class ChildEditForm(StyledFormMixin, forms.Form):
     birth_date = forms.DateField(
         label=_("Birthday"),
         required=False,
-        widget=forms.DateInput(format="%Y-%m-%d", attrs={"type": "date"}),
+        widget=ConstrainedDateInput(format="%Y-%m-%d", attrs={"type": "date"}),
         help_text=_("Parents may change this date without an additional approval."),
     )
     new_pin = forms.CharField(
@@ -1219,7 +1242,7 @@ class CaregiverInviteForm(StyledFormMixin, forms.Form):
     )
     access_until = forms.DateField(
         label=_("Access valid until"),
-        widget=forms.DateInput(format="%Y-%m-%d", attrs={"type": "date"}),
+        widget=ConstrainedDateInput(format="%Y-%m-%d", attrs={"type": "date"}),
     )
     email = forms.EmailField(
         label=_("Email"),
