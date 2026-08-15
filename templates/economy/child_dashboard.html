@@ -473,7 +473,9 @@
             <button type="button" data-pin-key="9">9</button>
             <span></span>
             <button type="button" data-pin-key="0">0</button>
-            <button type="button" data-pin-key="back" aria-label="{% translate 'Delete' %}">⌫</button>
+            <button type="button" class="pin-pad-back" data-pin-key="back" aria-label="{% translate 'Delete' %}">
+              <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg>
+            </button>
           </div>
           <div class="pin-save-row" data-pin-save hidden>
             <button class="button button-primary" type="submit">{{ child.theme|theme_text:"settings_pin_save" }}</button>

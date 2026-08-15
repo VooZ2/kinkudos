@@ -993,28 +993,36 @@ details .stack-form, details .inline-form { margin-top: 14px; }
   font-weight: 800;
   font-size: 1.05rem;
 }
-.pin-dots { display: flex; justify-content: center; gap: 12px; margin: 8px 0 4px; }
+.pin-dots { display: flex; justify-content: center; gap: 16px; margin: 10px 0 6px; }
 .pin-dots span {
-  width: 14px; height: 14px; border-radius: 50%;
-  border: 2px solid var(--primary); background: transparent;
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 3px solid var(--primary); background: transparent;
 }
 .pin-dots span.filled { background: var(--primary); }
 .pin-pad {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  max-width: 280px;
-  margin: 12px auto 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 360px;
+  margin: 14px auto 0;
 }
 .pin-pad button {
-  min-height: 56px;
-  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  min-height: 72px;
+  border-radius: 18px;
   border: 2px solid var(--border);
   background: var(--surface-solid);
   color: var(--text);
-  font-size: 1.35rem;
+  font-size: 1.85rem;
   font-weight: 850;
   cursor: pointer;
+  touch-action: manipulation;
+}
+.pin-pad-back .action-icon {
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
 }
 .pin-save-row { margin-top: 14px; text-align: center; }
 .pin-save-row[hidden] { display: none; }

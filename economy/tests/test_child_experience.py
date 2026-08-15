@@ -116,6 +116,9 @@ class ChildExperienceTests(TestCase):
         self.assertContains(response, 'id="pinas"')
         self.assertContains(response, "theme-daily")
         self.assertContains(response, 'data-pin-pad')
+        self.assertContains(response, 'class="pin-pad-back"', html=False)
+        self.assertRegex(content, r'data-pin-key="back"[^>]*>\s*<svg class="action-icon"[^>]*>\s*<use href="#icon-circle-xmark">')
+        self.assertNotContains(response, "⌫")
         self.assertContains(response, reverse("child_set_theme"))
         self.assertContains(response, reverse("child_set_avatar"))
 
