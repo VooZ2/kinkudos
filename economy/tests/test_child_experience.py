@@ -122,6 +122,21 @@ class ChildExperienceTests(TestCase):
         self.assertContains(response, reverse("child_set_theme"))
         self.assertContains(response, reverse("child_set_avatar"))
 
+    def test_settings_theme_grid_stays_two_columns_on_mobile(self):
+        stylesheet = Path(__file__).resolve().parents[2] / "static" / "css" / "app.css"
+        css = stylesheet.read_text(encoding="utf-8")
+        mobile = css.split("@media (max-width: 720px)")[1]
+        self.assertIn(".theme-choice-grid { grid-template-columns: 1fr; }", mobile)
+        self.assertIn(
+            ".child-settings-theme-grid { grid-template-columns: repeat(2, minmax(0, 1fr));",
+            mobile,
+        )
+        self.assertIn(".child-area .page { padding-bottom: 28px; }", mobile)
+        self.assertNotIn(
+            "var(--fab-size) * 2",
+            mobile.split(".child-area .page")[1].split("}")[0],
+        )
+
     def test_child_can_enable_daily_random_theme(self):
         self.sign_in_child()
         response = self.client.post(

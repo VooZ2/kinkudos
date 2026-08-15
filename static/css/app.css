@@ -126,9 +126,7 @@ a { color: inherit; }
 .brand-logo { object-fit: cover; }
 .page { width: min(1160px, calc(100% - 32px)); margin: 0 auto; padding: 42px 0 max(80px, env(safe-area-inset-bottom)); }
 .child-area .page {
-  padding-bottom: calc(
-    var(--fab-inset-block) + (var(--fab-size) * 2) + var(--fab-gap) + 40px
-  );
+  padding-bottom: 36px;
 }
 .hero { min-height: calc(100vh - 180px); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; max-width: 780px; }
 .landing-page .page { min-height: calc(100vh - 164px); display: grid; align-items: center; padding-block: clamp(38px, 8vh, 96px); }
@@ -1749,13 +1747,12 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
   .lottery-card-action { grid-column: 1 / -1; min-width: 0; text-align: stretch; }
   .lottery-card-action .button { width: 100%; }
   .page { width: min(100% - 24px, 1160px); padding-top: 26px; padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
-  .child-area .page {
-    padding-bottom: calc(
-      var(--fab-inset-block) + (var(--fab-size) * 2) + var(--fab-gap) + 32px
-    );
-  }
+  .child-area .page { padding-bottom: 28px; }
   .parent-area .page { padding-bottom: 28px; }
-  .parent-version-footer, .site-footer { flex-wrap: wrap; padding-bottom: calc(90px + var(--browser-bottom-gap)); }
+  .parent-version-footer, .site-footer { flex-wrap: wrap; }
+  .parent-version-footer { padding-bottom: calc(90px + var(--browser-bottom-gap)); }
+  .site-footer { padding-bottom: calc(18px + var(--browser-bottom-gap)); }
+  .child-area .site-footer { margin-top: 10px; }
   .parent-version-footer .footer-release, .site-footer .footer-release { order: 2; flex-basis: 100%; justify-content: center; padding-top: 2px; font-size: .66rem; font-weight: 650; }
   .parent-version-footer .footer-release + span, .site-footer .footer-release + span { display: none; }
   .footer-product, .footer-docs-long { display: none; }
@@ -1821,6 +1818,15 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
   .device-revoke-icon { display: inline-grid; place-items: center; }
   .device-revoke-button { width: 44px; min-width: 44px; height: 44px; padding: 0; display: grid; place-items: center; }
   .theme-choice-grid { grid-template-columns: 1fr; }
+  .child-settings-theme-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .child-settings-theme-grid .theme-choice-preview {
+    min-height: 84px;
+    padding: 10px 34px 10px 12px;
+  }
+  .child-settings-theme-grid .theme-choice-preview strong { font-size: .92rem; }
+  .child-settings-theme-grid .theme-choice-sub { font-size: .6rem; }
+  .child-settings-theme-grid .theme-choice-check { top: 8px; right: 8px; width: 24px; height: 24px; }
+  .child-settings-theme-grid .theme-daily-emoji { font-size: 1.15rem; }
   .release-columns { grid-template-columns: 1fr; }
   .topbar { gap: 7px; padding-inline: max(10px, env(safe-area-inset-left)); }
   .topbar > * { gap: 7px; }
