@@ -72,10 +72,6 @@ def parent_generate_pairing_link(request):
     request.session["device_pairing_share"] = {
         "pairing_url": f"{pairing_url}#{raw_token}",
         "expires_at": link.expires_at.isoformat(),
-        "share_title": str(_("KinKudos child device pairing")),
-        "share_text": str(
-            _("Private child-device pairing link — use it once on the child device.")
-        ),
     }
     return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 

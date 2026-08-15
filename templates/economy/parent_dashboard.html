@@ -80,8 +80,6 @@
     <button class="button button-secondary" type="button" data-close-dialog>{% translate "Done" %}</button>
   </div>
   <p class="danger-warning">{% translate "Anyone with this link can pair one device until it expires. Send it privately." %}</p>
-  {{ device_pairing_share.share_title|json_script:"device-pairing-share-title" }}
-  {{ device_pairing_share.share_text|json_script:"device-pairing-share-text" }}
 </dialog>
 <script nonce="{{ request.csp_nonce }}">
 (() => {
@@ -89,8 +87,8 @@
   const linkEl = document.querySelector("[data-device-pairing-link]");
   const copyButton = document.querySelector("[data-copy-device-pairing]");
   const shareButton = document.querySelector("[data-share-device-pairing]");
-  const shareTitle = JSON.parse(document.getElementById("device-pairing-share-title").textContent);
-  const shareText = JSON.parse(document.getElementById("device-pairing-share-text").textContent);
+  const shareTitle = "{% translate 'KinKudos child device pairing' %}";
+  const shareText = "{% translate 'Private child-device pairing link — use it once on the child device.' %}";
   const pairingUrl = linkEl.value;
   copyButton.addEventListener("click", async () => {
     await navigator.clipboard.writeText(pairingUrl);
