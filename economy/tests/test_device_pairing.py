@@ -168,12 +168,14 @@ class DevicePairingTests(TestCase):
         self.assertNotContains(response, "is ready to share")
         self.assertNotContains(response, 'data-share-device-pairing hidden')
         self.assertContains(response, "dialog.showModal")
+        self.assertContains(response, "Pairing link:")
         html = response.content.decode()
         dialog_html = html[
             html.index('id="device-pairing-share-dialog"') : html.index(
                 "id=\"push-help-dialog\""
             )
         ]
+        self.assertIn("<span>Pairing link:</span>", dialog_html)
         self.assertIn(">Copy<", dialog_html)
         self.assertNotIn("#icon-clipboard-check", dialog_html)
         self.assertNotIn("Copy link", dialog_html)

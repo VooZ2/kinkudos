@@ -108,12 +108,14 @@ class CaregiverGuestAccessTests(TestCase):
         self.assertNotContains(response, "is ready to share")
         self.assertNotContains(response, 'data-share-caregiver-invite hidden')
         self.assertContains(response, "dialog.showModal")
+        self.assertContains(response, "Invite link:")
         html = response.content.decode()
         dialog_html = html[
             html.index('id="caregiver-invite-share-dialog"') : html.index(
                 'id="push-help-dialog"'
             )
         ]
+        self.assertIn("<span>Invite link:</span>", dialog_html)
         self.assertIn(">Copy<", dialog_html)
         self.assertNotIn("#icon-clipboard-check", dialog_html)
         self.assertNotIn("Copy link", dialog_html)
@@ -125,6 +127,14 @@ class CaregiverGuestAccessTests(TestCase):
             dialog_html.index("danger-warning"),
             dialog_html.index("dialog-actions"),
         )
+        css = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
+        label_rule = css[
+            css.index(".share-dialog > label {") : css.index(
+                "}", css.index(".share-dialog > label {")
+            )
+        ]
+        self.assertIn("display: grid", label_rule)
+        self.assertIn("gap: 10px", label_rule)
         invite = CaregiverInvite.objects.get()
         self.assertTrue(invite.is_pending)
         self.assertEqual(invite.children.count(), 1)

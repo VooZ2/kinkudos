@@ -1465,6 +1465,9 @@ msgstr "Prieiga iš interneto"
 msgid "Invalid IP address or network: %(value)s"
 msgstr "Netinkamas IP adresas arba tinklas: %(value)s"
 
+msgid "Invite link:"
+msgstr "Kvietimo nuoroda:"
+
 msgid "It costs %(cost)s earned %(unit)s. Your points may go up by up to 150, stay the same, or go down by up to 50. The result cannot reduce your balance below your credit limit."
 msgstr "Ji kainuoja %(cost)s uždirbtų %(unit)s. Tavo taškai gali padidėti iki 150, likti tokie patys arba sumažėti iki 50. Rezultatas negali sumažinti balanso žemiau tavo kredito limito."
 
@@ -1875,6 +1878,9 @@ msgstr "Susieti įrenginiai"
 
 msgid "Pairing link"
 msgstr "Susiejimo nuoroda"
+
+msgid "Pairing link:"
+msgstr "Susiejimo nuoroda:"
 
 msgid "Panda Tasks"
 msgstr "Pandos užduotys"

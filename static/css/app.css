@@ -29,11 +29,6 @@
   --browser-bottom-gap: env(safe-area-inset-bottom, 0px);
   font-family: Inter, ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
 }
-@media (display-mode: browser) and (hover: none) and (pointer: coarse) {
-  @supports (-webkit-touch-callout: none) {
-    :root { --browser-bottom-gap: calc(env(safe-area-inset-bottom, 0px) + 44px); }
-  }
-}
 @media (prefers-color-scheme: dark) {
   :root {
     --brand: #b8a0ed;
@@ -296,24 +291,43 @@ select.field-control, .stack-form select {
 .share-dialog[open] {
   display: grid;
   align-content: start;
-  row-gap: 20px;
+  justify-items: stretch;
+  row-gap: 16px;
 }
 .share-dialog > h2,
 .share-dialog > p,
 .share-dialog > label,
-.share-dialog .dialog-context {
+.share-dialog .dialog-context,
+.share-dialog .share-dialog-toolbar,
+.share-dialog .danger-warning,
+.share-dialog .dialog-actions {
   margin: 0;
+  width: 100%;
+  max-width: 100%;
+  text-align: start;
+}
+.share-dialog.action-dialog .dialog-context {
+  margin: 0;
+}
+.share-dialog > label {
+  display: grid;
+  gap: 10px;
+  color: var(--text);
+  font-weight: 750;
 }
 .share-dialog .share-dialog-toolbar {
   display: flex;
   flex-wrap: nowrap;
-  align-items: center;
+  align-items: stretch;
   gap: 10px;
-  margin: 0;
 }
-.share-dialog .share-dialog-toolbar .icon-button,
-.share-dialog .share-dialog-toolbar .share-copy-button {
+.share-dialog .share-dialog-toolbar .icon-button {
   flex: 0 0 auto;
+}
+.share-dialog .share-dialog-toolbar .share-copy-button {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
 }
 .share-copy-button {
   display: inline-flex;
@@ -341,12 +355,12 @@ select.field-control, .stack-form select {
 .share-dialog .dialog-actions {
   position: static;
   z-index: auto;
+  display: flex;
   flex-wrap: nowrap;
   align-items: stretch;
-  justify-content: stretch;
+  justify-content: flex-start;
   margin: 0;
   padding: 0;
-  padding-bottom: var(--browser-bottom-gap);
   background: transparent;
 }
 .share-dialog .dialog-actions .button {

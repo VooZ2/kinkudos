@@ -20,7 +20,8 @@
   <h2>{% translate "Private sign-in link" %}</h2>
   <p class="dialog-context">{{ caregiver_invite_share.label }}</p>
   <p>{% translate "The link is valid for 6 hours or until a PIN is created." %}</p>
-  <label>{% translate "Invite link" %}
+  <label>
+    <span>{% translate "Invite link:" %}</span>
     <textarea class="field-control" rows="3" readonly data-caregiver-invite-link>{{ caregiver_invite_share.invite_url }}</textarea>
   </label>
   <div class="share-dialog-toolbar">
@@ -73,7 +74,8 @@
   <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
   <h2>{% translate "Private pairing link" %}</h2>
   <p>{% translate "Open this link on the child's device. It can be used once and expires in 10 minutes." %}</p>
-  <label>{% translate "Pairing link" %}
+  <label>
+    <span>{% translate "Pairing link:" %}</span>
     <textarea class="field-control" rows="3" readonly data-device-pairing-link>{{ device_pairing_share.pairing_url }}</textarea>
   </label>
   <div class="share-dialog-toolbar">

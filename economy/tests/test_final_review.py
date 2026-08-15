@@ -256,15 +256,15 @@ class FinalReviewTests(TestCase):
             'name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"',
             html=False,
         )
-        self.assertContains(response, "r=theme-grid", html=False)
+        self.assertContains(response, "r=nav-gap", html=False)
 
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn("--browser-bottom-gap: env(safe-area-inset-bottom, 0px);", css)
-        self.assertIn(
+        self.assertNotIn(
             "@media (display-mode: browser) and (hover: none) and (pointer: coarse)",
             css,
         )
-        self.assertIn(
+        self.assertNotIn(
             "--browser-bottom-gap: calc(env(safe-area-inset-bottom, 0px) + 44px);",
             css,
         )
