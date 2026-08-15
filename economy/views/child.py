@@ -658,7 +658,7 @@ def child_set_theme(request):
             update_fields=["theme", "theme_selected", "randomize_theme_daily"]
         )
         messages.success(request, _("Theme changed."))
-    return redirect("child_dashboard")
+    return redirect(f"{reverse('child_dashboard')}#nustatymai")
 
 @child_required
 @require_POST
@@ -699,7 +699,7 @@ def child_set_birth_date(request):
             )
     else:
         messages.error(request, _("Check the birthday date."))
-    return redirect("child_dashboard")
+    return redirect(f"{reverse('child_dashboard')}#gimtadienis")
 
 def _status_counts(queryset, field="status"):
     return list(
@@ -908,21 +908,21 @@ def child_change_pin(request):
     form = ChangePinForm(request.POST)
     if not form.is_valid():
         messages.error(request, _("Check the PIN fields."))
-        return redirect("child_dashboard")
+        return redirect(f"{reverse('child_dashboard')}#pinas")
     child = request.child
     if child.is_locked:
         messages.error(
             request,
             _("The profile is temporarily locked. Try again later."),
         )
-        return redirect("child_dashboard")
+        return redirect(f"{reverse('child_dashboard')}#pinas")
     if not child.verify_pin(form.cleaned_data["current_pin"]):
         messages.error(request, _("The current PIN is incorrect."))
-        return redirect("child_dashboard")
+        return redirect(f"{reverse('child_dashboard')}#pinas")
     child.set_pin(form.cleaned_data["new_pin"])
     child.save(update_fields=["pin_hash"])
     messages.success(request, _("PIN changed."))
-    return redirect("child_dashboard")
+    return redirect(f"{reverse('child_dashboard')}#pinas")
 
 @child_required
 @require_POST
@@ -931,14 +931,14 @@ def child_set_avatar(request):
     if not form.is_valid():
         error = next(iter(form.errors.values()))[0]
         messages.error(request, str(error))
-        return redirect("child_dashboard")
+        return redirect(f"{reverse('child_dashboard')}#nustatymai")
 
     upload = form.cleaned_data["avatar"]
     try:
         avatar_bytes = process_avatar(upload)
     except ImageProcessingError:
         messages.error(request, _("The image could not be processed. Choose another file."))
-        return redirect("child_dashboard")
+        return redirect(f"{reverse('child_dashboard')}#nustatymai")
 
     child = request.child
     old_name = child.avatar.name
@@ -948,7 +948,7 @@ def child_set_avatar(request):
     if old_name:
         child.avatar.storage.delete(old_name)
     messages.success(request, _("Avatar changed."))
-    return redirect("child_dashboard")
+    return redirect(f"{reverse('child_dashboard')}#nustatymai")
 
 def _delete_task_evidence(claim, *, mark_purged=False):
     names = [
