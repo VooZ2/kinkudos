@@ -14,6 +14,58 @@
 {% endblock %}
 {% block content %}
 {% if not is_caregiver %}
+{% if caregiver_invite_share %}
+<dialog id="caregiver-invite-share-dialog" class="action-dialog share-dialog">
+  <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
+  <h2>{% translate "Private sign-in link" %}</h2>
+  <p class="dialog-context">{{ caregiver_invite_share.label }}</p>
+  <p>{% translate "The link is valid for 6 hours or until a PIN is created." %}</p>
+  <label>{% translate "Invite link" %}
+    <textarea class="field-control" rows="3" readonly data-caregiver-invite-link>{{ caregiver_invite_share.invite_url }}</textarea>
+  </label>
+  <div class="dialog-actions hero-actions">
+    <button class="button button-primary" type="button" data-share-caregiver-invite>{% translate "Share…" %}</button>
+    <button class="button button-secondary" type="button" data-copy-caregiver-invite>{% translate "Copy link" %}</button>
+    <button class="button button-secondary" type="button" data-close-dialog>{% translate "Done" %}</button>
+  </div>
+  <p class="danger-warning">{% translate "Anyone with this link can activate guest access until it expires. Send it privately." %}</p>
+  {% if caregiver_invite_share.email_sent %}
+    <p>{% blocktranslate with email=caregiver_invite_share.email_address %}Sent to {{ email }}.{% endblocktranslate %}</p>
+  {% endif %}
+  {{ caregiver_invite_share.share_title|json_script:"caregiver-share-title" }}
+  {{ caregiver_invite_share.share_text|json_script:"caregiver-share-text" }}
+</dialog>
+<script nonce="{{ request.csp_nonce }}">
+(() => {
+  const dialog = document.getElementById("caregiver-invite-share-dialog");
+  const linkEl = document.querySelector("[data-caregiver-invite-link]");
+  const copyButton = document.querySelector("[data-copy-caregiver-invite]");
+  const shareButton = document.querySelector("[data-share-caregiver-invite]");
+  const shareTitle = JSON.parse(document.getElementById("caregiver-share-title").textContent);
+  const shareText = JSON.parse(document.getElementById("caregiver-share-text").textContent);
+  const inviteUrl = linkEl.value;
+  copyButton.addEventListener("click", async () => {
+    await navigator.clipboard.writeText(inviteUrl);
+    copyButton.textContent = "{% translate 'Copied' %}";
+  });
+  shareButton.addEventListener("click", async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: shareTitle, text: shareText, url: inviteUrl });
+        return;
+      } catch (err) {
+        if (err && err.name === "AbortError") return;
+      }
+    }
+    const body = `${shareText}\n${inviteUrl}`;
+    window.location.href = `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(body)}`;
+  });
+  if (dialog && typeof dialog.showModal === "function" && !dialog.open) {
+    dialog.showModal();
+  }
+})();
+</script>
+{% endif %}
 <dialog id="push-help-dialog" class="action-dialog">
   <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
   <h2>{% translate "How do I enable notifications?" %}</h2>
@@ -896,52 +948,6 @@
     });
   });
   </script>
-  {% if caregiver_invite_share %}
-  <dialog id="caregiver-invite-share-dialog" class="action-dialog" open>
-    <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
-    <h2>{% translate "Private sign-in link" %}</h2>
-    <p class="dialog-context">{{ caregiver_invite_share.label }}</p>
-    <p>{% translate "The link is valid for 6 hours or until a PIN is created." %}</p>
-    <label>{% translate "Invite link" %}
-      <textarea class="field-control" rows="4" readonly data-caregiver-invite-link>{{ caregiver_invite_share.invite_url }}</textarea>
-    </label>
-    <p class="danger-warning">{% translate "Anyone with this link can activate guest access until it expires. Send it privately." %}</p>
-    {% if caregiver_invite_share.email_sent %}
-      <p>{% blocktranslate with email=caregiver_invite_share.email_address %}Sent to {{ email }}.{% endblocktranslate %}</p>
-    {% endif %}
-    {{ caregiver_invite_share.share_title|json_script:"caregiver-share-title" }}
-    {{ caregiver_invite_share.share_text|json_script:"caregiver-share-text" }}
-    <div class="dialog-actions hero-actions">
-      <button class="button button-primary" type="button" data-copy-caregiver-invite>{% translate "Copy link" %}</button>
-      <button class="button button-secondary" type="button" data-share-caregiver-invite hidden>{% translate "Share…" %}</button>
-      <button class="button button-secondary" type="button" data-close-dialog>{% translate "Done" %}</button>
-    </div>
-  </dialog>
-  <script nonce="{{ request.csp_nonce }}">
-  (() => {
-    const linkEl = document.querySelector("[data-caregiver-invite-link]");
-    const copyButton = document.querySelector("[data-copy-caregiver-invite]");
-    const shareButton = document.querySelector("[data-share-caregiver-invite]");
-    const shareTitle = JSON.parse(document.getElementById("caregiver-share-title").textContent);
-    const shareText = JSON.parse(document.getElementById("caregiver-share-text").textContent);
-    const inviteUrl = linkEl.value;
-    copyButton.addEventListener("click", async () => {
-      await navigator.clipboard.writeText(inviteUrl);
-      copyButton.textContent = "{% translate 'Copied' %}";
-    });
-    if (navigator.share) {
-      shareButton.hidden = false;
-      shareButton.addEventListener("click", async () => {
-        try {
-          await navigator.share({ title: shareTitle, text: shareText, url: inviteUrl });
-        } catch (_err) {
-          /* user cancelled share sheet */
-        }
-      });
-    }
-  })();
-  </script>
-  {% endif %}
   </details>
     <details class="settings-section parent-accordion">
       <summary><span class="settings-summary-label">{% translate "Family feedback" %}</span></summary>

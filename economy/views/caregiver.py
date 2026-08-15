@@ -121,10 +121,6 @@ def parent_create_caregiver_invite(request):
         "email_sent": email_sent,
         "email_address": email_address,
     }
-    messages.success(
-        request,
-        _("Guest invite for “%(name)s” is ready to share.") % {"name": invite.label},
-    )
     return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
 

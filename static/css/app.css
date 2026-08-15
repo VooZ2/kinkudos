@@ -237,6 +237,14 @@ select.field-control, .stack-form select {
 .child-greeting h1 { overflow-wrap: anywhere; text-wrap: balance; }
 .child-greeting-supporting { max-width: 36rem; margin: 10px 0 0; color: var(--muted); font-size: clamp(1.05rem, 2.2vw, 1.9rem); font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
 .pin-dialog, .action-dialog { width: min(440px, calc(100% - 28px)); max-height: calc(100dvh - 28px); overflow-y: auto; border: 1px solid var(--line); border-radius: 24px; color: var(--text); background: var(--surface-solid); padding: 32px; box-shadow: var(--shadow); font-family: inherit; }
+.share-dialog .dialog-actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  margin-top: 12px;
+  padding-top: 14px;
+  background: var(--surface-solid);
+}
 .pin-dialog::backdrop, .action-dialog::backdrop { background: rgba(8, 6, 18, .66); backdrop-filter: blur(8px); }
 .action-dialog h2 { margin-top: 0; padding-right: 24px; }
 .action-dialog > p { color: var(--muted); font-size: .94rem; font-weight: 720; line-height: 1.5; letter-spacing: .01em; }
