@@ -1,0 +1,21 @@
+{% extends "economy/base.html" %}
+{% load i18n %}
+{% block body_class %}system-page session-sensitive-page theme-neutral{% endblock %}
+{% block title %}{% translate "Guest sign-in" %} – {{ project_name }}{% endblock %}
+{% block content %}
+<section class="narrow-card">
+  <p class="eyebrow">{% translate "Guest access" %}</p>
+  {% if unavailable %}
+    <h1>{% translate "Guest access unavailable" %}</h1>
+    <p>{% translate "This guest access is no longer available." %}</p>
+  {% else %}
+    <h1>{% translate "Guest sign-in" %}</h1>
+    <p class="dialog-context">{{ caregiver.label }}</p>
+    <form method="post" class="stack-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="button button-primary button-large" type="submit">{% translate "Sign in" %}</button>
+    </form>
+  {% endif %}
+</section>
+{% endblock %}

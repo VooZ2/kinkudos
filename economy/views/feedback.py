@@ -14,7 +14,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
-from economy.auth import current_child, parent_required
+from economy.auth import current_child, parent_account_required
 from economy.email_config import smtp_config
 from economy.forms import (
     FeedbackReportForm,
@@ -185,7 +185,7 @@ def feedback_screenshot(request, report_id):
     response["Content-Disposition"] = "inline"
     return response
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_update_feedback_status(request, report_id):
     report = get_object_or_404(FeedbackReport, pk=report_id)

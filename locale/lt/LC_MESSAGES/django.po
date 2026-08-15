@@ -3510,3 +3510,24 @@ msgstr "„%(title)s“ dabar %(state)s."
 
 msgid "“%(title)s” updated."
 msgstr "„%(title)s“ atnaujinta."
+
+msgid "%(family)s – guest access"
+msgstr "%(family)s – svečio prieiga"
+
+msgid "Guest access"
+msgstr "Svečių prieiga"
+
+msgid "Create invite"
+msgstr "Sukurti kvietimą"
+
+msgid "Private sign-in link"
+msgstr "Privati prisijungimo nuoroda"
+
+msgid "Share…"
+msgstr "Dalintis…"
+
+msgid "Guest area"
+msgstr "Svečio zona"
+
+msgid "Copy sign-in link"
+msgstr "Nukopijuoti prisijungimo nuorodą"

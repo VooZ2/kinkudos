@@ -12,7 +12,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET, require_POST
 
-from economy.auth import parent_required
+from economy.auth import parent_account_required
 from economy.backups import backup_status, configure_backup, request_manual_backup
 from economy.email_config import save_smtp_config, verify_smtp
 from economy.forms import (
@@ -87,7 +87,7 @@ def _backup_status_payload(status):
     }
 
 
-@parent_required
+@parent_account_required
 @require_GET
 @never_cache
 def parent_backup_status(request):
@@ -96,7 +96,7 @@ def parent_backup_status(request):
     return response
 
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_update_family_preferences(request):
     family = FamilySettings.load()
@@ -108,7 +108,7 @@ def parent_update_family_preferences(request):
         messages.error(request, _("Check the family settings."))
     return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_update_network_access(request):
     if not request.user.is_staff:
@@ -143,7 +143,7 @@ def parent_update_network_access(request):
     messages.success(request, _("Network access settings saved."))
     return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_configure_smtp(request):
     if not request.user.is_staff:
@@ -187,7 +187,7 @@ def parent_configure_smtp(request):
         messages.success(request, _("Email settings were verified and saved."))
     return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_configure_backup(request):
     if not request.user.is_staff:
@@ -219,7 +219,7 @@ def parent_configure_backup(request):
         messages.success(request, _("Backup storage was verified and saved."))
     return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_run_backup(request):
     if not request.user.is_staff:

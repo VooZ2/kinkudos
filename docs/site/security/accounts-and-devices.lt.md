@@ -22,6 +22,20 @@ ir dialogai telefone pritaikyti mažam ekranui.
 
 Panaikinus vaiką profilis išjungiamas, o istorija lieka. Ji neištrinama ir neperduodama kitam vaikui.
 
+## Svečių prieiga
+
+Laikina svečių prieiga skirta seneliams, giminaičiams ar auklėms. **Tėvai →
+Nustatymai → Svečių prieiga** sukurkite kvietimą, pasirinkite vaikus ir prieigos
+pabaigos datą. Privatią nuorodą dalinkitės dialoge (nukopijuoti, įrenginio
+dalinimosi meniu arba el. paštu, jei SMTP įjungtas). Kvietimo nuoroda galioja
+**6 valandas** ir sudega, kai svečias sukuria PIN.
+
+Svečiai jungiasi tuo PIN per stabilią svečio nuorodą. Jie gali tvirtinti
+kasdienius prašymus ir skirti dienos darbus pasirinktiems vaikams, bet nemato
+„Tvarkyti“ ir „Nustatymai“ skiltčių ir negauna pranešimų. Tėvai bet kada gali
+atrakinti užblokuotą svečio PIN arba pašalinti prieigą. Pasibaigę kvietimai ir
+nebegaliojanti svečio prieiga iš nustatymų sąrašų dingsta automatiškai.
+
 ## Susieti įrenginiai
 
 Susiejimas yra pirmas vaikų saugumo vartas. Kol naršyklė ar PWA nesusieta, ji negali nei rodyti vaikų vardų, nei priimti PIN. Kiekvienas įrenginys rodomas su bendra telefono, planšetės, kompiuterio arba nežinomo įrenginio kategorija, naršyklės aprašu, stabiliu šešių simbolių ID ir paskutinio naudojimo laiku. Tai patogumo klasifikavimas, nenustatantis tikslaus modelio. Nenaudojus 30 dienų rodoma **Ilgai nenaudotas**. Įrenginius aiškiai pavadinkite, peržiūrėkite paskutinio naudojimo laiką ir iškart atšaukite prarastą ar nebe šeimos valdomą įrenginį.

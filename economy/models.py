@@ -396,6 +396,10 @@ class AttemptCounter(models.Model):
         DEVICE_PAIRING = "device_pairing", _("Device pairing")
         ADMIN_LOGIN_IP = "admin_login_ip", _("Admin login by IP")
         SETUP_CLAIM_IP = "setup_claim_ip", _("Initial setup by IP")
+        CAREGIVER_INVITE_IP = "caregiver_invite_ip", _("Caregiver invite by IP")
+        CAREGIVER_INVITE_PARENT = "caregiver_invite_parent", _("Caregiver invite by parent")
+        CAREGIVER_PIN_PROFILE = "caregiver_pin_profile", _("Caregiver PIN by profile")
+        CAREGIVER_PIN_IP = "caregiver_pin_ip", _("Caregiver PIN by IP")
 
     scope = models.CharField(max_length=32, choices=Scope.choices)
     key_hash = models.CharField(max_length=64)
@@ -1340,3 +1344,166 @@ class FeedbackReport(models.Model):
             models.Index(fields=["status", "-created_at"]),
             models.Index(fields=["report_type", "-created_at"]),
         ]
+
+
+CAREGIVER_INVITE_LIFETIME = timedelta(hours=6)
+CAREGIVER_LOGIN_CODE_LENGTH = 8
+
+
+def _generate_caregiver_login_code():
+    return "".join(
+        secrets.choice(DEVICE_CODE_ALPHABET) for _ in range(CAREGIVER_LOGIN_CODE_LENGTH)
+    )
+
+
+class CaregiverInvite(models.Model):
+    token_hash = models.CharField(max_length=64, unique=True)
+    label = models.CharField(max_length=80)
+    email = models.EmailField(blank=True)
+    access_until = models.DateField()
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="caregiver_invites",
+    )
+    children = models.ManyToManyField(
+        "ChildProfile",
+        related_name="caregiver_invites",
+        blank=False,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    used_at = models.DateTimeField(null=True, blank=True)
+    caregiver = models.ForeignKey(
+        "CaregiverProfile",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="invites",
+    )
+
+    class Meta:
+        ordering = ["-created_at", "-pk"]
+
+    @property
+    def is_pending(self):
+        return (
+            self.used_at is None
+            and self.expires_at > timezone.now()
+        )
+
+    @classmethod
+    def issue(cls, *, created_by, label, access_until, children, email=""):
+        raw_token = secrets.token_urlsafe(32)
+        instance = cls.objects.create(
+            token_hash=DeviceToken.digest(raw_token),
+            label=label.strip(),
+            email=(email or "").strip(),
+            access_until=access_until,
+            created_by=created_by,
+            expires_at=timezone.now() + CAREGIVER_INVITE_LIFETIME,
+        )
+        instance.children.set(children)
+        return instance, raw_token
+
+
+class CaregiverProfile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="caregiver_profile",
+    )
+    label = models.CharField(max_length=80)
+    login_code = models.CharField(max_length=16, unique=True)
+    pin_hash = models.CharField(max_length=255)
+    access_until = models.DateField()
+    children = models.ManyToManyField(
+        "ChildProfile",
+        related_name="caregivers",
+        blank=False,
+    )
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="created_caregivers",
+    )
+    failed_pin_attempts = models.PositiveSmallIntegerField(default=0)
+    locked_until = models.DateTimeField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["label", "pk"]
+
+    def __str__(self):
+        return self.label
+
+    @property
+    def is_locked(self):
+        return bool(self.locked_until and self.locked_until > timezone.now())
+
+    @property
+    def has_access(self):
+        if not self.is_active:
+            return False
+        if not self.user_id or not self.user.is_active:
+            return False
+        return self.access_until >= timezone.localdate()
+
+    def set_pin(self, raw_pin):
+        if not (raw_pin.isdigit() and len(raw_pin) == 4):
+            raise ValidationError(_("The PIN must contain exactly 4 digits."))
+        self.pin_hash = make_password(raw_pin)
+
+    def verify_pin(self, raw_pin):
+        if self.is_locked:
+            return False
+        if check_password(raw_pin, self.pin_hash):
+            self.failed_pin_attempts = 0
+            self.locked_until = None
+            self.save(update_fields=["failed_pin_attempts", "locked_until"])
+            return True
+        self.failed_pin_attempts += 1
+        if self.failed_pin_attempts >= 5:
+            self.locked_until = timezone.now() + timedelta(minutes=5)
+            self.failed_pin_attempts = 0
+        self.save(update_fields=["failed_pin_attempts", "locked_until"])
+        return False
+
+    def deactivate(self):
+        self.is_active = False
+        self.save(update_fields=["is_active"])
+        user = self.user
+        if user.is_active:
+            user.is_active = False
+            user.save(update_fields=["is_active"])
+        PushSubscription.objects.filter(user=user).delete()
+
+    @classmethod
+    def create_from_invite(cls, *, invite, raw_pin):
+        from django.contrib.auth import get_user_model
+
+        User = get_user_model()
+        for _ in range(20):
+            login_code = _generate_caregiver_login_code()
+            if not cls.objects.filter(login_code=login_code).exists():
+                break
+        else:
+            raise ValidationError(_("Could not create a guest sign-in link."))
+        username = f"guest_{login_code.lower()}"
+        user = User.objects.create_user(username=username)
+        user.set_unusable_password()
+        user.save(update_fields=["password"])
+        profile = cls(
+            user=user,
+            label=invite.label,
+            login_code=login_code,
+            access_until=invite.access_until,
+            created_by=invite.created_by,
+        )
+        profile.set_pin(raw_pin)
+        profile.save()
+        profile.children.set(invite.children.all())
+        return profile

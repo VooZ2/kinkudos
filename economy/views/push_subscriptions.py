@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
-from economy.auth import child_required, current_device, parent_required
+from economy.auth import child_required, current_caregiver, current_device, parent_required
 from economy.models import (
     CHILD_PUSH_SUBSCRIPTION_LIMIT,
     PARENT_PUSH_SUBSCRIPTION_LIMIT,
@@ -37,6 +37,8 @@ def _push_payload(request):
 @parent_required
 @require_POST
 def push_subscribe(request):
+    if current_caregiver(request) is not None:
+        return JsonResponse({"ok": False}, status=403)
     payload = _push_payload(request)
     if payload is None:
         return JsonResponse({"ok": False}, status=400)
