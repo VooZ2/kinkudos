@@ -53,7 +53,50 @@
       align-items: start;
     }
     @media (max-width: 860px) {
-      .mock-layout { grid-template-columns: 1fr; justify-items: center; }
+      .mock-layout { grid-template-columns: 1fr; justify-items: stretch; }
+    }
+    /* Real phone: show the child UI full-bleed (no nested phone chrome) */
+    @media (max-width: 700px) {
+      .mock-shell {
+        padding: 0;
+        background: transparent;
+        color: inherit;
+      }
+      .mock-shell > h1,
+      .mock-shell > .lede,
+      .mock-shell > .notes,
+      .mock-shell > .compare-strip { display: none !important; }
+      .mock-toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        margin: 0;
+        padding: 10px 10px calc(10px + env(safe-area-inset-top, 0px));
+        background: #1a1625;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+      .mock-toolbar button { flex: 0 0 auto; font-size: .85rem; padding: 8px 12px; }
+      .mock-layout { display: block; gap: 0; }
+      .phone {
+        width: 100% !important;
+        max-width: none !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        background: transparent !important;
+      }
+      .phone-notch { display: none !important; }
+      .phone-screen {
+        height: auto !important;
+        min-height: calc(100dvh - 56px);
+        overflow: visible !important;
+      }
+      .phone-screen .page {
+        width: calc(100% - 24px) !important;
+        max-width: none;
+      }
     }
     .phone {
       width: min(390px, 100%);
