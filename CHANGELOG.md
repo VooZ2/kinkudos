@@ -9,6 +9,13 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Nothing yet.
 
+## [26.8.1] - 2026-08-16
+
+### Fixed
+
+- Required field labels in stack forms no longer show a second colon after the
+  required marker.
+
 ## [26.8.0] - 2026-08-16
 
 ### Added
