@@ -94,7 +94,7 @@
   const copyButton = document.querySelector("[data-copy-device-pairing]");
   const shareButton = document.querySelector("[data-share-device-pairing]");
   const shareTitle = "{% translate 'KinKudos child device pairing' %}";
-  const shareText = "{% translate 'Private child-device pairing link — use it once on the child device.' %}";
+  const shareText = "{% translate "A secret one-time key. Open it on the child's device — then it vanishes." %}";
   const pairingUrl = linkEl.value;
   copyButton.addEventListener("click", async () => {
     await navigator.clipboard.writeText(pairingUrl);

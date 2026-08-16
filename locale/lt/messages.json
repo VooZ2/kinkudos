@@ -801,6 +801,7 @@
   "Paired devices": "Susieti įrenginiai",
   "Private pairing link": "Privati susiejimo nuoroda",
   "Open this link on the child's device. It can be used once and expires in 10 minutes.": "Atidarykite šią nuorodą vaiko įrenginyje. Ją galima panaudoti vieną kartą ir ji galioja 10 minučių.",
+  "A secret one-time key. Open it on the child's device — then it vanishes.": "Slaptas vienkartinis raktas. Atidarykite jį vaiko įrenginyje — tada jis išnyks.",
   "Pairing link": "Susiejimo nuoroda",
   "Pairing link:": "Susiejimo nuoroda:",
   "Invite link:": "Kvietimo nuoroda:",

@@ -48,6 +48,24 @@ class CaregiverGuestAccessTests(TestCase):
         self.assertContains(response, 'id="caregiver-invite-dialog"', html=False)
         self.assertContains(response, 'type="date"', html=False)
 
+    def test_guest_invite_button_and_callout_spacing(self):
+        css = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn(
+            ".device-pairing-actions:not(:has(form)) { grid-template-columns: minmax(0, 1fr); }",
+            css,
+        )
+        self.assertIn(
+            ".settings-section .device-pairing-actions + .account-list { margin-top: 12px; }",
+            css,
+        )
+        callout = css[
+            css.index(".feedback-email-warning,") : css.index(
+                ".backup-panel .backup-warning"
+            )
+        ]
+        self.assertIn("display: flex", callout)
+        self.assertIn("align-items: center", callout)
+
     def test_invite_date_field_stays_inside_dialog(self):
         css = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".date-input-shell {", css)

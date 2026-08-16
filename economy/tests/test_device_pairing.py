@@ -169,6 +169,9 @@ class DevicePairingTests(TestCase):
         self.assertNotContains(response, 'data-share-device-pairing hidden')
         self.assertContains(response, "dialog.showModal")
         self.assertContains(response, "Pairing link:")
+        self.assertContains(response, "A secret one-time key.", html=False)
+        self.assertContains(response, "then it vanishes.", html=False)
+        self.assertNotContains(response, "Private child-device pairing link", html=False)
         html = response.content.decode()
         dialog_html = html[
             html.index('id="device-pairing-share-dialog"') : html.index(

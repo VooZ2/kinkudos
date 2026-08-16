@@ -76,6 +76,9 @@ msgstr "Atmetimo priežastis privaloma."
 msgid "A reward is awaiting approval"
 msgstr "Prizo prašymas laukia patvirtinimo"
 
+msgid "A secret one-time key. Open it on the child's device — then it vanishes."
+msgstr "Slaptas vienkartinis raktas. Atidarykite jį vaiko įrenginyje — tada jis išnyks."
+
 msgid "A shared family space"
 msgstr "Bendra šeimos erdvė"
 
@@ -3547,8 +3550,6 @@ msgstr "Susiejimo nuoroda paruošta dalintis."
 msgid "KinKudos child device pairing"
 msgstr "KinKudos vaiko įrenginio susiejimas"
 
-msgid "Private child-device pairing link — use it once on the child device."
-msgstr "Privati vaiko įrenginio susiejimo nuoroda — panaudokite vieną kartą vaiko įrenginyje."
 msgid "Your spellbook"
 msgstr "Tavo užkeikimų knyga"
 

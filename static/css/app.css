@@ -1417,11 +1417,18 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
 .feedback-actions { align-items: end; }
 .feedback-actions form { display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 0; }
 .feedback-screenshot-button { flex: 0 0 44px; width: 44px; height: 44px; color: var(--primary); }
-.feedback-email-warning { margin: 0 0 18px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--accent) 10%, var(--surface-solid)); line-height: 1.45; }
-.feedback-admin .feedback-description { margin-bottom: 20px; }
+.feedback-email-warning { margin: 0 0 16px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--accent) 10%, var(--surface-solid)); line-height: 1.35; }
+.feedback-admin .feedback-description { margin-bottom: 12px; }
 .danger-warning { margin: 0 0 18px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--danger) 42%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--danger) 9%, var(--surface-solid)); line-height: 1.45; }
 .feedback-admin .danger-warning { margin-bottom: 14px; padding: 9px 11px; border-radius: 11px; background: color-mix(in srgb, var(--danger) 7%, var(--surface-solid)); font-size: .82rem; line-height: 1.4; overflow-wrap: anywhere; }
-.backup-panel > .backup-warning { margin: 18px 0 0; padding: 12px 14px; background: color-mix(in srgb, var(--danger) 7%, var(--surface-solid)); overflow-wrap: anywhere; }
+.feedback-email-warning,
+.backup-warning {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  line-height: 1.35;
+}
+.backup-panel .backup-warning { margin: 12px 0 0; padding: 12px 14px; background: color-mix(in srgb, var(--danger) 7%, var(--surface-solid)); overflow-wrap: anywhere; }
 .backup-panel { margin-top: 18px; }
 .network-access-panel .service-details dd { white-space: normal; }
 .network-access-panel > .button, .email-panel > .button { display: flex; margin-top: 18px; margin-left: auto; }
@@ -1550,10 +1557,12 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
 .service-details dd { min-width: 0; margin: 0; color: var(--text); font-family: inherit; font-size: .9rem; font-weight: 650; line-height: 1.45; overflow-wrap: anywhere; }
 .backup-actions { justify-content: flex-end; margin-top: 18px; }
 .backup-actions form { margin: 0; }
-.device-pairing-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; align-items: end; }
+.device-pairing-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; align-items: end; }
 .device-pairing-actions form { display: contents; }
 .device-pairing-actions label { display: grid; grid-column: 1 / -1; gap: 7px; font-weight: 750; }
 .device-pairing-actions .button { width: 100%; height: 100%; min-height: 48px; display: grid; place-items: center; line-height: 1.2; }
+.device-pairing-actions:not(:has(form)) { grid-template-columns: minmax(0, 1fr); }
+.settings-section .device-pairing-actions + .account-list { margin-top: 12px; }
 .backup-audit { margin-top: 18px; }
 .backup-audit ul { padding-left: 20px; color: var(--muted); font-family: inherit; font-size: .86rem; line-height: 1.5; }
 .backup-dialog { width: min(620px, calc(100% - 24px)); max-height: calc(100dvh - 24px); overflow-y: auto; }
