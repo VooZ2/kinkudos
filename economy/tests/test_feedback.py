@@ -378,9 +378,11 @@ class FeedbackWorkflowTests(TestCase):
             css,
         )
         self.assertIn(
-            "--fab-inset-block: calc(88px + var(--safe-area-bottom) + var(--viewport-bottom-offset));",
+            "--fab-inset-block: calc(88px + var(--safe-area-bottom));",
             css,
         )
+        self.assertNotIn("--viewport-bottom-offset", css)
+        self.assertIn("--fab-inset-block: calc(12px + var(--safe-area-bottom));", css)
         self.assertIn("max-height: calc(100dvh - 24px)", css)
         self.assertIn(".feedback-admin { padding: 22px; }", css)
         self.assertIn(".notice-block.notice-warning", css)

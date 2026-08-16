@@ -146,6 +146,7 @@ class FinalReviewTests(TestCase):
         content = response.content.decode()
         template = (ROOT / "templates/economy/parent_dashboard.html").read_text(encoding="utf-8")
         child_template = (ROOT / "templates/economy/child_dashboard.html").read_text(encoding="utf-8")
+        setup_template = (ROOT / "templates/economy/setup_complete.html").read_text(encoding="utf-8")
         self.assertIn("notice-block notice-danger", template)
         self.assertIn("notice-block notice-warning", template)
         self.assertIn("notice-block notice-warning", child_template)
@@ -162,10 +163,18 @@ class FinalReviewTests(TestCase):
         self.assertIn(".settings-summary-description", css)
         self.assertIn(".settings-add-divider", css)
         self.assertIn(".tabbar.is-scrollable:not(.is-at-start)", css)
+        self.assertIn(".recovery-code-row", css)
+        self.assertIn(".account-create-form { grid-template-columns: repeat(2, minmax(0, 1fr));", css)
+        self.assertIn(".child-hero.has-avatar .balance-orb", css)
+        self.assertNotIn("--viewport-bottom-offset", css)
+        self.assertIn('data-copy-from="recovery-code-value"', setup_template)
+        self.assertIn("setup-open-parent", setup_template)
         js = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
         self.assertIn("syncHorizontalTabbar", js)
         self.assertIn("revealActiveTab", js)
         self.assertIn("scrollIntoView", js)
+        self.assertIn("decorateRequiredLabels", js)
+        self.assertIn("data-copy-from", setup_template)
 
     def test_child_card_metadata_keeps_credit_and_ticket_controls_together(self):
         response = self.parent_response()
@@ -214,7 +223,7 @@ class FinalReviewTests(TestCase):
             css,
         )
         self.assertIn("border-radius: 24px 24px 0 0;", css)
-        self.assertIn("inset: auto 0 var(--viewport-bottom-offset);", css)
+        self.assertIn("inset: auto 0 0;", css)
         self.assertIn(".history-filter-dialog .dialog-actions", css)
         self.assertIn("position: sticky;", css)
         self.assertIn(".history-photo-button", css)
@@ -316,10 +325,7 @@ class FinalReviewTests(TestCase):
 
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn("--safe-area-bottom: env(safe-area-inset-bottom, 0px);", css)
-        self.assertIn(
-            "--viewport-bottom-offset: max(0px, calc(100lvh - 100dvh));",
-            css,
-        )
+        self.assertNotIn("--viewport-bottom-offset", css)
         self.assertNotIn(
             "@media (display-mode: browser) and (hover: none) and (pointer: coarse)",
             css,
@@ -330,10 +336,7 @@ class FinalReviewTests(TestCase):
         )
         self.assertIn("@media (hover: none)", css)
         self.assertIn("touch-action: manipulation", css)
-        self.assertIn(
-            "inset: auto 0 var(--viewport-bottom-offset)",
-            css,
-        )
+        self.assertIn("inset: auto 0 0;", css)
         self.assertIn(
             "padding: 7px 0 calc(7px + var(--safe-area-bottom))",
             css,
@@ -343,7 +346,7 @@ class FinalReviewTests(TestCase):
             css,
         )
         self.assertIn(
-            "--fab-inset-block: calc(88px + var(--safe-area-bottom) + var(--viewport-bottom-offset));",
+            "--fab-inset-block: calc(88px + var(--safe-area-bottom));",
             css,
         )
 

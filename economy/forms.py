@@ -73,6 +73,7 @@ def _constrain_date_widget(widget):
 class StyledFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.label_suffix = ""
         self.required_css_class = "field-required"
         for field in self.fields.values():
             field.widget.attrs.setdefault("class", "field-control")

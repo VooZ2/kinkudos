@@ -1,5 +1,38 @@
 const t = key => window.KINKUDOS?.i18n?.[key] || key;
 
+function decorateRequiredLabels() {
+  document.querySelectorAll("label").forEach(label => {
+    if (label.dataset.requiredDecorated === "true") return;
+    const control = label.htmlFor
+      ? document.getElementById(label.htmlFor)
+      : label.querySelector("input[required], select[required], textarea[required]");
+    const required = Boolean(control?.required || label.closest(".field-required"));
+    if (!required || label.closest(".field-required")) return;
+    const textNode = [...label.childNodes].find(
+      node => node.nodeType === Node.TEXT_NODE && node.textContent.trim(),
+    );
+    if (!textNode) return;
+    const text = textNode.textContent;
+    const trimmed = text.trimEnd();
+    const stackParagraphLabel = label.parentElement?.matches(".stack-form > p");
+    const marker = stackParagraphLabel ? " *" : " *:";
+    textNode.textContent = trimmed.endsWith(":")
+      ? `${trimmed.slice(0, -1)}${marker}${text.slice(trimmed.length)}`
+      : `${text}${marker}`;
+    label.dataset.requiredDecorated = "true";
+  });
+}
+
+document.querySelectorAll("[data-copy-from]").forEach(button => {
+  button.addEventListener("click", async () => {
+    const source = document.getElementById(button.dataset.copyFrom);
+    if (!source || !navigator.clipboard) return;
+    await navigator.clipboard.writeText(source.textContent.trim());
+    const label = button.querySelector("[data-copy-label]");
+    if (label) label.textContent = button.dataset.copiedLabel || label.textContent;
+  });
+});
+
 document.querySelectorAll('input[type="number"]').forEach(input => {
   const min = Number(input.getAttribute("min"));
   const max = Number(input.getAttribute("max"));
@@ -63,8 +96,12 @@ function syncSetupEmailFields() {
   });
 }
 
-setupEmailToggle?.addEventListener("change", syncSetupEmailFields);
+setupEmailToggle?.addEventListener("change", () => {
+  syncSetupEmailFields();
+  decorateRequiredLabels();
+});
 syncSetupEmailFields();
+decorateRequiredLabels();
 
 const taskSearch = document.querySelector("[data-task-search]");
 const taskSearchResults = document.querySelector("[data-task-search-results]");
