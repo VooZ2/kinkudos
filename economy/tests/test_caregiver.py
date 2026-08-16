@@ -63,10 +63,14 @@ class CaregiverGuestAccessTests(TestCase):
                 ".backup-panel .backup-warning"
             )
         ]
-        self.assertIn("display: flex", callout)
-        self.assertIn("align-items: center", callout)
-        self.assertIn("justify-content: center", callout)
-        self.assertIn("text-align: center", callout)
+        self.assertIn("display: block", callout)
+        self.assertIn("width: 100%", callout)
+        self.assertIn("max-width: 100%", callout)
+        self.assertIn("margin-inline: 0", callout)
+        self.assertIn("text-align: start", callout)
+        self.assertNotIn("justify-content: center", callout)
+        self.assertNotIn("text-align: center", callout)
+        self.assertIn(".backup-panel [data-backup-details] { width: 100%; min-width: 0; }", css)
 
     def test_invite_date_field_stays_inside_dialog(self):
         css = Path(settings.BASE_DIR, "static/css/app.css").read_text(encoding="utf-8")

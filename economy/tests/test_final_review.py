@@ -256,7 +256,7 @@ class FinalReviewTests(TestCase):
             'name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"',
             html=False,
         )
-        self.assertContains(response, "r=callout-center", html=False)
+        self.assertContains(response, "r=callout-align", html=False)
 
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn("--browser-bottom-gap: env(safe-area-inset-bottom, 0px);", css)

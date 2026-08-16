@@ -1417,21 +1417,23 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
 .feedback-actions { align-items: end; }
 .feedback-actions form { display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-width: 0; }
 .feedback-screenshot-button { flex: 0 0 44px; width: 44px; height: 44px; color: var(--primary); }
-.feedback-email-warning { margin: 0 0 16px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--accent) 10%, var(--surface-solid)); line-height: 1.35; }
+.feedback-email-warning { margin: 0 0 16px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--accent) 10%, var(--surface-solid)); line-height: 1.45; }
 .feedback-admin .feedback-description { margin-bottom: 12px; }
 .danger-warning { margin: 0 0 18px; padding: 12px 14px; border: 1px solid color-mix(in srgb, var(--danger) 42%, var(--line)); border-radius: 12px; background: color-mix(in srgb, var(--danger) 9%, var(--surface-solid)); line-height: 1.45; }
 .feedback-admin .danger-warning { margin-bottom: 14px; padding: 9px 11px; border-radius: 11px; background: color-mix(in srgb, var(--danger) 7%, var(--surface-solid)); font-size: .82rem; line-height: 1.4; overflow-wrap: anywhere; }
 .feedback-email-warning,
 .backup-warning {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
   box-sizing: border-box;
-  text-align: center;
-  line-height: 1.35;
+  text-align: start;
+  line-height: 1.45;
 }
 .backup-panel .backup-warning { margin: 12px 0 0; padding: 12px 14px; background: color-mix(in srgb, var(--danger) 7%, var(--surface-solid)); overflow-wrap: anywhere; }
 .backup-panel { margin-top: 18px; }
+.backup-panel [data-backup-details] { width: 100%; min-width: 0; }
 .network-access-panel .service-details dd { white-space: normal; }
 .network-access-panel > .button, .email-panel > .button { display: flex; margin-top: 18px; margin-left: auto; }
 .network-access-panel .action-dialog .settings-description { margin-bottom: 18px; }
