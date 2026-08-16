@@ -1,5 +1,60 @@
 const t = key => window.KINKUDOS?.i18n?.[key] || key;
 
+function decorateRequiredLabels() {
+  document.querySelectorAll("label").forEach(label => {
+    const control = label.htmlFor
+      ? document.getElementById(label.htmlFor)
+      : label.querySelector("input[required], select[required], textarea[required]");
+    const required = Boolean(control?.required || label.closest(".field-required"));
+    const marker = label.querySelector(":scope > .field-label-text");
+    if (!required) {
+      if (label.dataset.requiredDecorated !== "true" || !marker) return;
+      marker.replaceWith(document.createTextNode(label.dataset.requiredOriginalText || ""));
+      label.classList.remove("required-label-decorated");
+      delete label.dataset.requiredDecorated;
+      delete label.dataset.requiredOriginalText;
+      return;
+    }
+    if (label.dataset.requiredDecorated === "true") return;
+    const textNode = [...label.childNodes].find(
+      node => node.nodeType === Node.TEXT_NODE && node.textContent.trim(),
+    );
+    if (!textNode) return;
+    const originalText = textNode.textContent;
+    const labelText = originalText.trim().replace(/:\s*$/, "");
+    if (!labelText) return;
+    const labelTextWrapper = document.createElement("span");
+    labelTextWrapper.className = "field-label-text";
+    labelTextWrapper.append(document.createTextNode(labelText));
+    const star = document.createElement("span");
+    star.className = "required-marker-star";
+    star.setAttribute("aria-hidden", "true");
+    star.textContent = " *";
+    const colon = document.createElement("span");
+    colon.className = "required-marker-colon";
+    colon.setAttribute("aria-hidden", "true");
+    colon.textContent = ":";
+    labelTextWrapper.append(star, colon);
+    textNode.replaceWith(labelTextWrapper);
+    label.classList.add("required-label-decorated");
+    label.dataset.requiredOriginalText = originalText;
+    label.dataset.requiredDecorated = "true";
+  });
+}
+
+document.querySelectorAll("[data-copy-from]").forEach(button => {
+  button.addEventListener("click", async () => {
+    const source = document.getElementById(button.dataset.copyFrom);
+    if (!source || !navigator.clipboard) return;
+    await navigator.clipboard.writeText(source.textContent.trim());
+    const copiedLabel = button.dataset.copiedLabel;
+    if (copiedLabel) {
+      button.setAttribute("aria-label", copiedLabel);
+      button.setAttribute("title", copiedLabel);
+    }
+  });
+});
+
 document.querySelectorAll('input[type="number"]').forEach(input => {
   const min = Number(input.getAttribute("min"));
   const max = Number(input.getAttribute("max"));
@@ -51,15 +106,24 @@ const setupEmailFields = [...document.querySelectorAll('[id^="id_smtp_"]')];
 
 function syncSetupEmailFields() {
   if (!setupEmailToggle) return;
-  const disabled = !setupEmailToggle.checked;
+  const enabled = setupEmailToggle.checked;
+  const disabled = !enabled;
   setupEmailFields.forEach(field => {
     field.disabled = disabled;
-    field.closest("p")?.classList.toggle("is-disabled", disabled);
+    field.required = enabled;
+    const fieldWrapper = field.closest("p");
+    fieldWrapper?.classList.toggle("field-required", enabled);
+    fieldWrapper?.querySelector("label")?.classList.toggle("field-required", enabled);
+    fieldWrapper?.classList.toggle("is-disabled", disabled);
   });
 }
 
-setupEmailToggle?.addEventListener("change", syncSetupEmailFields);
+setupEmailToggle?.addEventListener("change", () => {
+  syncSetupEmailFields();
+  decorateRequiredLabels();
+});
 syncSetupEmailFields();
+decorateRequiredLabels();
 
 const taskSearch = document.querySelector("[data-task-search]");
 const taskSearchResults = document.querySelector("[data-task-search-results]");
@@ -201,6 +265,32 @@ document.addEventListener("click", event => {
   lightbox.showModal();
 });
 
+const horizontalTabbars = [...document.querySelectorAll(".tabbar, .manage-tabs")];
+const syncHorizontalTabbar = tabbar => {
+  const scrollable = tabbar.scrollWidth > tabbar.clientWidth + 1;
+  const atStart = !scrollable || tabbar.scrollLeft <= 1;
+  const atEnd = !scrollable || tabbar.scrollLeft + tabbar.clientWidth >= tabbar.scrollWidth - 1;
+  tabbar.classList.toggle("is-scrollable", scrollable);
+  tabbar.classList.toggle("is-at-start", atStart);
+  tabbar.classList.toggle("is-at-end", atEnd);
+};
+const revealActiveTab = tabbar => {
+  const activeLink = tabbar?.querySelector("a.is-active");
+  if (!activeLink) return;
+  activeLink.scrollIntoView({
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    block: "nearest",
+    inline: "nearest",
+  });
+  window.requestAnimationFrame(() => syncHorizontalTabbar(tabbar));
+};
+horizontalTabbars.forEach(tabbar => {
+  syncHorizontalTabbar(tabbar);
+  tabbar.addEventListener("scroll", () => syncHorizontalTabbar(tabbar), { passive: true });
+  if (window.ResizeObserver) new ResizeObserver(() => syncHorizontalTabbar(tabbar)).observe(tabbar);
+});
+window.addEventListener("resize", () => horizontalTabbars.forEach(syncHorizontalTabbar));
+
 const parentShell = document.querySelector("[data-parent-shell]");
 if (parentShell) {
   const panels = [...parentShell.querySelectorAll("[data-parent-panel]")];
@@ -235,12 +325,14 @@ if (parentShell) {
     });
   };
   const syncManageTabs = sectionId => {
-    parentShell.querySelectorAll(".manage-tabs a").forEach(link => {
+    const manageTabs = parentShell.querySelector(".manage-tabs");
+    manageTabs?.querySelectorAll("a").forEach(link => {
       const active = manageSectionForHash(link.hash.slice(1)) === sectionId;
       link.classList.toggle("is-active", active);
       if (active) link.setAttribute("aria-current", "true");
       else link.removeAttribute("aria-current");
     });
+    revealActiveTab(manageTabs);
   };
   const openManageSection = id => {
     const sectionId = manageSectionForHash(id) || (id === "parent-catalogs" ? "manage-tasks" : "");
@@ -1591,14 +1683,14 @@ async function loadBackupStatus() {
     if (summaryLabel) summaryLabel.textContent = status.summary_label;
     if (details) {
       if (status.unavailable_message) {
-        details.innerHTML = `<p class="danger-warning backup-warning">${escapeBackupText(status.unavailable_message)}</p>`;
+        details.innerHTML = `<p class="danger-warning notice-block notice-danger backup-warning">${escapeBackupText(status.unavailable_message)}</p>`;
       } else {
         const provider = escapeBackupText(status.provider || "—");
         const target = escapeBackupText(status.target || "—");
         const lastSuccess = escapeBackupText(status.last_success_display);
         const lastCheck = escapeBackupText(status.last_check_display);
         const error = status.error
-          ? `<p class="danger-warning backup-warning">${escapeBackupText(status.error)}</p>`
+          ? `<p class="danger-warning notice-block notice-danger backup-warning">${escapeBackupText(status.error)}</p>`
           : "";
         details.innerHTML = `
           <dl class="service-details">
@@ -1654,4 +1746,117 @@ document.querySelectorAll("[data-assignment-preset-save]").forEach((root) => {
       saveButton?.click();
     });
   });
+});
+
+document.querySelectorAll("[data-child-settings-accordion]").forEach((root) => {
+  root.querySelectorAll("details.child-settings-acc").forEach((detail) => {
+    detail.addEventListener("toggle", () => {
+      if (!detail.open) return;
+      root.querySelectorAll("details.child-settings-acc").forEach((other) => {
+        if (other !== detail) other.open = false;
+      });
+    });
+  });
+});
+
+const openChildSettingsFromHash = () => {
+  const hash = window.location.hash.replace(/^#/, "");
+  if (!hash) return;
+  const target = document.getElementById(hash);
+  if (target?.matches?.("details.child-settings-acc")) {
+    const root = target.closest("[data-child-settings-accordion]");
+    root?.querySelectorAll("details.child-settings-acc").forEach((detail) => {
+      detail.open = detail === target;
+    });
+    window.requestAnimationFrame(() => {
+      target.scrollIntoView({ block: "start" });
+    });
+    return;
+  }
+  if (hash === "nustatymai") {
+    document.getElementById("nustatymai")?.scrollIntoView({ block: "start" });
+  }
+};
+openChildSettingsFromHash();
+window.addEventListener("hashchange", openChildSettingsFromHash);
+
+document.querySelectorAll("[data-pin-change]").forEach((box) => {
+  const form = box.querySelector("[data-pin-form]");
+  if (!form) return;
+  const steps = [...box.querySelectorAll("[data-pin-step]")];
+  const stepTexts = steps.map(
+    (el) => el.querySelector("[data-pin-step-text]")?.textContent?.trim() || ""
+  );
+  const label = box.querySelector("[data-pin-step-label]");
+  const dots = [...box.querySelectorAll("[data-pin-dots] span")];
+  const saveRow = box.querySelector("[data-pin-save]");
+  const fields = {
+    current_pin: form.querySelector('[data-pin-field="current_pin"]'),
+    new_pin: form.querySelector('[data-pin-field="new_pin"]'),
+    confirm_pin: form.querySelector('[data-pin-field="confirm_pin"]'),
+  };
+  const mismatchText = form.dataset.pinMismatch || "";
+  const readyText = form.dataset.pinReady || "";
+  let step = 0;
+  let buffer = "";
+  const values = ["", "", ""];
+
+  const syncFields = () => {
+    if (fields.current_pin) fields.current_pin.value = values[0];
+    if (fields.new_pin) fields.new_pin.value = values[1];
+    if (fields.confirm_pin) fields.confirm_pin.value = values[2];
+  };
+
+  const paint = () => {
+    steps.forEach((el, i) => {
+      el.classList.toggle("is-active", i === step && step < 3);
+      el.classList.toggle("is-done", i < step || step >= 3);
+      const num = el.querySelector(".step-num");
+      if (num) num.textContent = i < step || step >= 3 ? "✓" : String(i + 1);
+    });
+    if (label) {
+      if (step >= 3) label.textContent = readyText || stepTexts[2] || "";
+      else label.textContent = stepTexts[step] || "";
+    }
+    dots.forEach((dot, i) => dot.classList.toggle("filled", i < buffer.length));
+    const ready = step >= 3 && values[1] && values[1] === values[2];
+    if (saveRow) saveRow.hidden = !ready;
+    syncFields();
+  };
+
+  const advance = () => {
+    values[step] = buffer;
+    buffer = "";
+    step += 1;
+    if (step === 3 && values[1] !== values[2]) {
+      step = 1;
+      values[1] = "";
+      values[2] = "";
+      form.classList.add("is-pin-mismatch");
+      window.setTimeout(() => form.classList.remove("is-pin-mismatch"), 420);
+      if (label) label.textContent = mismatchText || stepTexts[1] || "";
+      paint();
+      return;
+    }
+    paint();
+  };
+
+  box.querySelector("[data-pin-pad]")?.addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-pin-key]");
+    if (!button || step >= 3) return;
+    const key = button.dataset.pinKey;
+    if (key === "back") buffer = buffer.slice(0, -1);
+    else if (/^\d$/.test(key) && buffer.length < 4) buffer += key;
+    paint();
+    if (buffer.length === 4) window.setTimeout(advance, 160);
+  });
+
+  form.addEventListener("submit", (event) => {
+    syncFields();
+    if (!(values[0] && values[1] && values[1] === values[2])) {
+      event.preventDefault();
+    }
+  });
+
+  paint();
 });

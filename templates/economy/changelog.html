@@ -32,7 +32,7 @@
                 {% for item in release.new %}<li>{{ item }}</li>{% endfor %}
               </ul>
             {% else %}
-              <p class="empty-release-section">{% translate "No new features in this release." %}</p>
+              <p class="empty-state">{% translate "No new features in this release." %}</p>
             {% endif %}
           </section>
 
@@ -43,7 +43,7 @@
                 {% for item in release.fixed %}<li>{{ item }}</li>{% endfor %}
               </ul>
             {% else %}
-              <p class="empty-release-section">{% translate "No separate fixes in this release." %}</p>
+              <p class="empty-state">{% translate "No separate fixes in this release." %}</p>
             {% endif %}
           </section>
         </div>

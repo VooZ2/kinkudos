@@ -3,9 +3,10 @@
 Path: **Parents → Settings**. The page uses three top-level groups that match
 the application:
 
-1. **Everyday** — Family, Points and tasks, Scratch tickets, and Data and
+1. **Everyday** — Family, Points and tasks, Surprise cards, and Data and
    retention.
-2. **People and devices** — Child devices, Accounts, and Family feedback.
+2. **People and devices** — Child devices, Accounts, Guest access, and Family
+   feedback.
 3. **Server** — Network and security, Email and notifications, and Backups.
 
 Inside those groups, topics are compact expandable sections: selecting one
@@ -13,8 +14,9 @@ reveals its fields, and empty sections are not shown. The Everyday **Save**
 control saves family preferences only; it does not change devices, accounts,
 network, email, or backup settings. The **Accounts** section has one
 account-creation panel and one list of existing accounts; its edit forms open
-in dialogs that also fit small screens. Network, Email, and Backups summaries
-can show a status chip on the accordion header.
+in dialogs that also fit small screens. **Guest access** is a separate section
+for temporary caregiver invites. Network, Email, and Backups summaries can show
+a status chip on the accordion header.
 
 > **Who can change what?** Every parent can use ordinary family settings and
 > manage ordinary parent accounts and child profiles. A normal parent cannot
@@ -67,18 +69,18 @@ existing History entries.
 | **Points for a task photo** | Extra points awarded when a child submits a task with a photo. Use `0` to turn the bonus off. The value is captured when the task is submitted. |
 | **Birthday points** | A yearly gift awarded once for each child’s saved birthday. Use `0` to disable it. The same child is not awarded twice in one calendar year. |
 
-### Scratch tickets
+### Surprise cards
 
 These family-wide controls work together with the individual switch in
 **Parents → Settings → Accounts**, under **Child profiles**:
 
 | Field | What it means |
 | --- | --- |
-| **Enable scratch tickets** | Master switch. Turning it off prevents new purchases and reminders, but an already-open ticket can still be finished. |
-| **Scratch ticket price** | The point cost for future tickets. A ticket already bought keeps its recorded cost. |
-| **Weekly ticket limit** | How many tickets one child may buy from Monday through Sunday. The count resets every Monday. |
+| **Enable surprise cards** | Master switch. Turning it off prevents new purchases and reminders, but an already-open card can still be finished. |
+| **Surprise card price** | The point cost for future cards. A card already bought keeps its recorded cost. |
+| **Weekly card limit** | How many cards one child may buy from Monday through Sunday. The count resets every Monday. |
 
-Scratch tickets are optional; they are not required for ordinary tasks or
+Surprise cards are optional; they are not required for ordinary tasks or
 rewards.
 
 ### Data and retention
@@ -107,18 +109,20 @@ This is a convenience label, not an exact model or fingerprint.
 | --- | --- |
 | **Device name** | Optional label for the device, for example “Kitchen tablet”. If left blank, KinKudos uses the detected device summary after pairing. |
 | **Allow on this device** | Pairs the current browser/PWA immediately. It can then select a child and accept a PIN. |
-| **Send a link** | Creates a single-use private link that expires after **10 minutes**. Open it only on the intended device. |
+| **Send a link** | Opens a share dialog with a single-use private link that expires after **10 minutes**. Open it only on the intended device. |
 | **Device summary** | Shows a broad icon and description such as **iPhone · Safari**, **Android phone · Chrome**, **iPad · Safari**, **Android tablet · Chrome**, **Mac**, **Windows PC**, or **Linux PC**. Unknown devices remain labelled as unknown. |
 | **ID** | Shows a short, stable six-character identifier so a parent can distinguish entries. It is not a pairing credential. |
-| **Last used** | Shows when the device was last active. After 30 days without use, the list also shows **Not used recently**. |
+| **Last used** | Shows when the device was last active. An unused device remains listed until it is revoked, including after 30 days without use. |
 | **Rename** | Opens an inline form for changing the device label without interrupting access. |
 | **Revoke** | Removes child access and notifications from one lost or retired device. On mobile, this is shown as a compact trash-can icon. The device must be paired again before sign-in. |
 | **Revoke all child devices** | Administrator-only. Requires the administrator’s password and forces every child browser/PWA to pair again. |
 
 Read [Pair a child device](../start/pair-a-child-device.md) before using a
-private link. When a paired device is actively used, its access cookie is
-renewed so an active pairing should not quietly expire. Revoking the device
-still invalidates it immediately; it must be paired again.
+private link. Inactive devices remain visible so a parent can review and revoke
+any pairing that still grants child access. When a paired device is actively
+used, its access cookie is renewed so an active pairing should not quietly
+expire. Revoking the device still invalidates it immediately; it must be paired
+again.
 
 ### Accounts
 
@@ -133,7 +137,7 @@ The **Accounts** section has two panels:
 
 Create a separate parent account for each adult with a username, email address,
 and strong password. Create a child profile with the child’s name, optional
-Lithuanian greeting form, starting PIN, credit, individual scratch-ticket
+Lithuanian greeting form, starting PIN, credit, individual surprise-card
 switch, and birthday. The child chooses a theme on first sign-in.
 
 Select the edit icon beside an existing account to open its edit dialog. Close
@@ -153,12 +157,36 @@ subscriptions.
 | **Child’s name** | The displayed name; names must be unique. |
 | **Vocative name** | An optional Lithuanian greeting form. |
 | **Credit** | The child’s lowest permitted balance, such as `-100`; it is the same rule shown on the child card. |
-| **Enable scratch tickets for this child** | Individual permission; the family-wide switch must also be on. |
+| **Enable surprise cards for this child** | Individual permission; the family-wide switch must also be on. |
 | **Birthday** | The yearly birthday-points rule. Parents can edit it directly; a child’s requested change needs approval. |
 | **New PIN / Repeat new PIN** | Resets the child’s four-digit PIN. Leave both blank to keep it unchanged. |
 
 Removing a child deactivates the profile and preserves its History. It does not
 transfer that child’s data to another child.
+
+### Guest access
+
+Guest access is for a grandparent, relative, babysitter, or another temporary
+caregiver. Open **Parents → Settings → Guest access**, select **Create invite**,
+choose the children the guest may access, and set the date through which the
+access remains valid. You can optionally enter an email address when SMTP is
+enabled.
+
+After you create the invite, KinKudos opens a private sign-in-link dialog. Use
+**Copy** or **Share…**, or let the configured email notification send the link.
+The invite link expires after **6 hours** and is used when the guest creates a
+four-digit PIN. Send it only to the intended person.
+
+The guest signs in through the stable guest URL with that PIN. Guest access is
+limited to the selected children and the family actions available on Home,
+including reviewing and deciding ordinary requests and assigning day-to-day
+tasks. Guests cannot open **Manage** or **Settings**, and they do not receive
+notifications.
+
+The **Active guests** list shows each guest’s selected children and access end
+date. Parents can copy the guest sign-in URL, unlock a locked guest PIN, or
+remove the guest access. Pending invite links can be cancelled. Expired or
+removed guest access no longer works.
 
 ### Family feedback
 
@@ -269,6 +297,6 @@ Task photos and feedback screenshots accept JPEG, PNG, WebP, HEIC, or HEIF up to
 square.
 
 Daily assigned tasks expire at midnight in the **server’s local time**.
-Scratch-ticket limits reset every Monday in that same calendar context.
+Surprise-card limits reset every Monday in that same calendar context.
 
 [Network access →](../security/network-access.md) · [Backups →](../backups.md) · [Family administration →](../family-administration.md) · [Lietuviškai](settings.lt.md)

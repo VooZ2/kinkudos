@@ -1,0 +1,32 @@
+{% extends "economy/base.html" %}
+{% load i18n %}
+{% block body_class %}system-page session-sensitive-page theme-neutral{% endblock %}
+{% block title %}{% translate "Guest access" %} – {{ project_name }}{% endblock %}
+{% block content %}
+<section class="narrow-card">
+  <p class="eyebrow">{% translate "Guest access" %}</p>
+  <h1>{% translate "Open guest invite" %}</h1>
+  <p data-caregiver-invite-status data-invalid-message="{% translate 'This sign-in link is invalid or has expired.' %}" data-ready-message="{% translate 'A parent shared temporary guest access with you. Continue to create your PIN.' %}">{% translate "Checking the private invite link…" %}</p>
+  <form method="post" class="stack-form" data-caregiver-invite-form hidden>
+    {% csrf_token %}
+    <input type="hidden" name="token" data-caregiver-invite-token>
+    <button class="button button-primary button-large" type="submit">{% translate "Continue" %}</button>
+  </form>
+  <noscript><p class="form-error">{% translate "JavaScript is required to use the private invite link." %}</p></noscript>
+</section>
+<script nonce="{{ request.csp_nonce }}">
+(() => {
+  const token = window.location.hash.slice(1);
+  const form = document.querySelector("[data-caregiver-invite-form]");
+  const status = document.querySelector("[data-caregiver-invite-status]");
+  window.history.replaceState(null, "", window.location.pathname);
+  if (!token) {
+    status.textContent = status.dataset.invalidMessage;
+    return;
+  }
+  form.querySelector("[data-caregiver-invite-token]").value = token;
+  form.hidden = false;
+  status.textContent = status.dataset.readyMessage;
+})();
+</script>
+{% endblock %}

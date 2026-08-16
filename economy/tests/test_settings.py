@@ -352,6 +352,14 @@ class ParentSettingsTests(TestCase):
         self.assertNotContains(response, 'data-toggle-edit="parent-account-', html=False)
         self.assertIn('document.querySelector("[data-account-create-type]")', script)
         self.assertIn('dialog[data-reset-on-close]', script)
+        stylesheet = (Path(__file__).resolve().parents[2] / "static" / "css" / "app.css").read_text(
+            encoding="utf-8",
+        )
+        self.assertIn(
+            ".account-create-form { grid-template-columns: repeat(2, minmax(0, 1fr));",
+            stylesheet,
+        )
+        self.assertIn(".account-create-form { grid-template-columns: 1fr; }", stylesheet)
 
     def test_settings_are_grouped_without_a_redundant_category_heading(self):
         self.client.force_login(self.admin)
@@ -386,6 +394,13 @@ class ParentSettingsTests(TestCase):
                 f'class="settings-summary-label">{heading}</span>',
                 settings,
             )
+        for description in (
+            "Control which devices can access child profiles.",
+            "Manage parent, child, and guest accounts.",
+            "Create and manage temporary guest access.",
+            "Review feedback submitted by family members.",
+        ):
+            self.assertIn(description, settings)
         self.assertEqual(settings.count("settings-summary-status"), 3)
         self.assertNotContains(response, ">Rewards and goals<", html=False)
         stylesheet = (ROOT / "static" / "css" / "app.css").read_text(encoding="utf-8")

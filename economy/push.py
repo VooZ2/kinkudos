@@ -30,6 +30,7 @@ def _parent_subscriptions():
     return PushSubscription.objects.filter(
         user__isnull=False,
         user__is_active=True,
+        user__caregiver_profile__isnull=True,
     )
 
 

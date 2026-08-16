@@ -12,7 +12,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 
-from economy.auth import parent_required
+from economy.auth import parent_account_required
 from economy.models import (
     AttemptCounter,
     DevicePairingLink,
@@ -24,7 +24,7 @@ from economy.net import client_ip
 from economy.rate_limit import register_attempt
 
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_pair_device(request):
     label = request.POST.get("label", "").strip()
@@ -56,7 +56,7 @@ def parent_pair_device(request):
     )
     return response
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_generate_pairing_link(request):
     if not register_attempt(
@@ -69,14 +69,11 @@ def parent_generate_pairing_link(request):
         return redirect(f"{reverse('parent_dashboard')}#parent-settings")
     link, raw_token = DevicePairingLink.issue(created_by=request.user)
     pairing_url = request.build_absolute_uri(reverse("pair_device_via_link"))
-    return render(
-        request,
-        "economy/pairing_link_created.html",
-        {
-            "pairing_url": f"{pairing_url}#{raw_token}",
-            "pairing_expires_at": link.expires_at,
-        },
-    )
+    request.session["device_pairing_share"] = {
+        "pairing_url": f"{pairing_url}#{raw_token}",
+        "expires_at": link.expires_at.isoformat(),
+    }
+    return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
 @never_cache
 def pair_device_via_link(request):
@@ -131,7 +128,7 @@ def pair_device_via_link(request):
     )
     return response
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_revoke_device(request, device_id):
     device = get_object_or_404(DeviceToken, pk=device_id, revoked_at__isnull=True)
@@ -147,7 +144,7 @@ def parent_revoke_device(request, device_id):
     messages.success(request, _("Device access revoked."))
     return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_rename_device(request, device_id):
     device = get_object_or_404(DeviceToken, pk=device_id, revoked_at__isnull=True)
@@ -160,7 +157,7 @@ def parent_rename_device(request, device_id):
         messages.success(request, _("Device name saved."))
     return redirect(f"{reverse('parent_dashboard')}#parent-settings")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_revoke_all_devices(request):
     if not request.user.is_staff:

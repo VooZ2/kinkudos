@@ -14,7 +14,7 @@
       </button><h2>{% translate "Notifications" %}</h2><p data-push-help-text>{% translate "Notifications could not be enabled on this device." %}</p></dialog>
 {% endblock %}
 {% block content %}
-<section class="child-hero">
+<section class="child-hero{% if child.avatar %} has-avatar{% endif %}">
   <div class="child-identity">{% if child.avatar %}<img class="hero-avatar" src="{% url 'child_avatar' child.pk %}" alt="">{% endif %}<div class="child-greeting">{% if greeting_name %}<h1>{% blocktranslate with name=greeting_name %}Hello, {{ name }}!{% endblocktranslate %}</h1>{% else %}<h1>{% translate "Hello!" %}</h1>{% endif %}<p class="child-greeting-supporting">{% translate "Ready for today's tasks?" %}</p></div></div>
   <div class="balance-orb"><strong>{{ child.balance }}</strong><span>{{ child.balance|currency_unit:child.theme }}</span></div>
 </section>
@@ -69,7 +69,7 @@
   {% endif %}
   <div class="section-heading"><p class="eyebrow">{% translate "Choose a task" %}</p><h2>{{ child.theme|theme_text:"nav_tasks" }}</h2></div>
   {% if revision_claims %}<div class="revision-list"><h3>{% if child.theme == "blockville" %}{{ child.theme|theme_text:"revision" }}{% else %}{% translate "Needs improvement" %}{% endif %}</h3>{% for claim in revision_claims %}
-    <article id="revision-claim-{{ claim.pk }}" class="revision-card"><div><strong>{{ claim.task_title }}</strong>{% if claim.revision_note %}<p>{{ claim.revision_note }}</p>{% endif %}</div><button class="decision-icon-button decision-revise" type="button" data-open-dialog="resubmit-task-{{ claim.pk }}" aria-label="{% translate "Fix and resubmit" %}" title="{% translate "Fix and resubmit" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-rotate-left"></use></svg></button></article>
+    <article id="revision-claim-{{ claim.pk }}" class="revision-card notice-block notice-warning"><div><strong>{{ claim.task_title }}</strong>{% if claim.revision_note %}<p>{{ claim.revision_note }}</p>{% endif %}</div><button class="decision-icon-button decision-revise" type="button" data-open-dialog="resubmit-task-{{ claim.pk }}" aria-label="{% translate "Fix and resubmit" %}" title="{% translate "Fix and resubmit" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-rotate-left"></use></svg></button></article>
     <dialog id="resubmit-task-{{ claim.pk }}" class="action-dialog evidence-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
         <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
       </button><h2>{{ claim.task_title }}</h2><p class="revision-note">{{ claim.revision_note }}</p>
@@ -132,13 +132,13 @@
         <button class="decision-icon-button decision-approve dialog-decision-action" type="submit" aria-label="{{ child.theme|theme_text:'task_modal_submit' }}" title="{{ child.theme|theme_text:'task_modal_submit' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>
       </form>
     </dialog>
-  {% empty %}<p>{% translate "There are no tasks yet." %}</p>{% endfor %}</div>
+  {% empty %}<p class="empty-state">{% translate "There are no tasks yet." %}</p>{% endfor %}</div>
   <p class="empty-state" data-task-search-empty hidden>{% translate "No tasks match your search." %}</p>
 </section>
 
 <section id="prizai" class="content-section">
   <div class="section-heading"><p class="eyebrow">{% translate "Choose a reward" %}</p><h2>{{ child.theme|theme_text:"nav_rewards" }}</h2></div>
-  {% if assigned_tasks_block_rewards %}<div class="credit-warning assigned-task-warning"><svg class="action-icon"><use href="#icon-circle-info"></use></svg><p>{{ child.theme|theme_text:"assigned_reward_block" }}</p></div>{% elif credit_reward_requests_blocked %}<div class="credit-warning"><svg class="action-icon"><use href="#icon-circle-info"></use></svg><p>{% translate "New reward requests are paused because half of the available credit has been used. Earn more points to unlock them." %}</p></div>{% endif %}
+  {% if assigned_tasks_block_rewards %}<div class="credit-warning notice-block notice-info"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg><p>{{ child.theme|theme_text:"assigned_reward_block" }}</p></div>{% elif credit_reward_requests_blocked %}<div class="credit-warning notice-block notice-info"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg><p>{% translate "New reward requests are paused because half of the available credit has been used. Earn more points to unlock them." %}</p></div>{% endif %}
   {% if lottery.is_visible %}
   <article class="system-lottery-card" data-lottery-card>
     <div class="lottery-card-art" aria-hidden="true"><span>?</span><span>?</span><span>?</span></div>
@@ -175,7 +175,7 @@
     <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
     <p class="lottery-system-label">{% translate "Surprise cards" %}</p>
     <h2>{{ child.theme|theme_text:"lottery_title" }}</h2>
-    <div class="lottery-risk-warning">
+    <div class="lottery-risk-warning notice-block notice-danger">
       <strong>{% translate "This is a surprise — the result is unknown until all fields are open." %}</strong>
       <p>{% blocktranslate with cost=lottery.ticket_cost unit=lottery.ticket_cost|currency_unit:child.theme %}It costs {{ cost }} earned {{ unit }}. Your points may go up by up to 150, stay the same, or go down by up to 50. The result cannot reduce your balance below your credit limit.{% endblocktranslate %}</p>
     </div>
@@ -225,7 +225,7 @@
   {% endif %}
   {% endif %}
   <div class="item-grid">{% for reward in rewards %}<article id="reward-card-{{ reward.pk }}" class="item-card reward-card"><span class="item-icon">{{ reward.icon|icon_symbol }}</span><div><h3>{{ reward.title }}</h3><p class="amount negative">−{{ reward.cost }} {{ reward.cost|currency_unit:child.theme }}</p></div>
-  {% if reward.pk in pending_reward_ids %}<span class="status-pill">{% if child.theme == "blockville" %}{{ child.theme|theme_text:"reward_pending" }}{% else %}{% translate "Awaiting approval" %}{% endif %}</span>{% elif reward_requests_blocked %}<span class="status-pill">{{ child.theme|theme_text:"reward" }}</span>{% elif not reward.is_affordable %}<span class="status-pill" title="{% translate "Not enough points" %}">{% blocktranslate with amount=reward.missing_amount unit=reward.missing_amount|currency_unit:child.theme %}Need {{ amount }} {{ unit }} more{% endblocktranslate %}</span>{% else %}<form class="workflow-card-action" method="post" action="{% url 'child_request_reward' reward.pk %}" data-success-effect="reward">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{{ child.theme|theme_text:'reward' }}" title="{{ child.theme|theme_text:'reward' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>{% endif %}</article>{% empty %}<p>{% translate "The rewards catalog is empty." %}</p>{% endfor %}</div>
+  {% if reward.pk in pending_reward_ids %}<span class="status-pill">{% if child.theme == "blockville" %}{{ child.theme|theme_text:"reward_pending" }}{% else %}{% translate "Awaiting approval" %}{% endif %}</span>{% elif reward_requests_blocked %}<span class="status-pill">{{ child.theme|theme_text:"reward" }}</span>{% elif not reward.is_affordable %}<span class="status-pill" title="{% translate "Not enough points" %}">{% blocktranslate with amount=reward.missing_amount unit=reward.missing_amount|currency_unit:child.theme %}Need {{ amount }} {{ unit }} more{% endblocktranslate %}</span>{% else %}<form class="workflow-card-action" method="post" action="{% url 'child_request_reward' reward.pk %}" data-success-effect="reward">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{{ child.theme|theme_text:'reward' }}" title="{{ child.theme|theme_text:'reward' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>{% endif %}</article>{% empty %}<p class="empty-state">{% translate "The rewards catalog is empty." %}</p>{% endfor %}</div>
   {% if pending_requests %}<div class="pending-list"><h3>{% translate "Pending requests" %}</h3>{% for reward_request in pending_requests %}<div class="list-row"><span>{{ reward_request.reward_title }}</span><form method="post" action="{% url 'child_cancel_reward' reward_request.pk %}">{% csrf_token %}<button class="decision-icon-button decision-reject compact-decision-button" type="submit" aria-label="{% translate "Cancel" %}" title="{% translate "Cancel" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form></div>{% endfor %}</div>{% endif %}
 </section>
 
@@ -334,46 +334,158 @@
   </div>
 </section>
 
-<section class="content-section"><div class="section-heading"><p class="eyebrow">{% translate "Your profile" %}</p><h2>{% translate "Settings" %}</h2></div><div class="settings-grid">
-<article class="panel profile-appearance-panel" data-profile-appearance-panel>
-  <section class="profile-setting-part">
-    <h3>{% translate "Appearance" %}</h3>
-    <form method="post" action="{% url 'child_set_theme' %}" class="stack-form">
-      {% csrf_token %}
-      <p>{{ theme_form.theme.label_tag }}{{ theme_form.theme }}</p>
-      <p class="checkbox-field">
-        {{ theme_form.randomize_theme_daily }}
-        {{ theme_form.randomize_theme_daily.label_tag }}
-        <small class="helptext">{{ theme_form.randomize_theme_daily.help_text }}</small>
-      </p>
-      <button class="button button-secondary" type="submit">{% translate "Change theme" %}</button>
-    </form>
-  </section>
-  <section class="profile-setting-part">
-    <h3>{% translate "Avatar" %}</h3>
-    <form method="post" action="{% url 'child_set_avatar' %}" enctype="multipart/form-data" class="stack-form">{% csrf_token %}{{ avatar_form.as_p }}<small class="help-text">{% translate "JPEG, PNG, WebP, HEIC, or HEIF, up to 5 MB. The image will be cropped to a square." %}</small><button class="button button-secondary" type="submit">{% translate "Upload avatar" %}</button></form>
-  </section>
-</article>
-<article id="gimtadienis" class="panel">
-  <h3>{% translate "Birthday" %}</h3>
-  {% if pending_birth_date_request %}
-    <div class="birthday-change-pending">
-      <span class="status-pill">{% translate "Awaiting parent approval" %}</span>
-      <p>
-        {% blocktranslate with current=pending_birth_date_request.previous_birth_date|date:"Y-m-d"|default:"–" requested=pending_birth_date_request.requested_birth_date|date:"Y-m-d"|default:"–" %}
-          Requested birthday change: {{ current }} → {{ requested }}.
-        {% endblocktranslate %}
-      </p>
-    </div>
-  {% else %}
-    <form method="post" action="{% url 'child_set_birth_date' %}" class="stack-form">
-      {% csrf_token %}{{ birth_date_form.as_p }}
-      <button class="button button-secondary" type="submit">{% translate "Save birthday" %}</button>
-    </form>
-  {% endif %}
-</article>
-<article class="panel"><h3>{% translate "Change PIN" %}</h3><form method="post" action="{% url 'child_change_pin' %}" class="stack-form">{% csrf_token %}{{ change_pin_form.as_p }}<button class="button button-primary" type="submit">{% translate "Save new PIN" %}</button></form></article>
-</div></section>
+<section id="nustatymai" class="content-section child-settings">
+  <div class="section-heading">
+    <p class="eyebrow">{{ child.theme|theme_text:"settings_eyebrow" }}</p>
+    <h2>{{ child.theme|theme_text:"settings_title" }}</h2>
+  </div>
+  <div class="child-settings-accordion" data-child-settings-accordion>
+    <details class="child-settings-acc" name="child-settings" data-settings-panel="world">
+      <summary>
+        <span class="child-settings-acc-icon" aria-hidden="true">🌍</span>
+        <span class="child-settings-acc-title">{{ child.theme|theme_text:"settings_world_title" }}</span>
+        <span class="child-settings-acc-chevron" aria-hidden="true">▾</span>
+      </summary>
+      <div class="child-settings-acc-body">
+        <p class="child-settings-hint">{{ child.theme|theme_text:"settings_world_hint" }}</p>
+        <form method="post" action="{% url 'child_set_theme' %}" class="stack-form child-theme-form" data-success-effect="theme">
+          {% csrf_token %}
+          <fieldset class="theme-choice-fieldset">
+            <legend class="sr-only">{{ theme_form.theme.label }}</legend>
+            <div class="theme-choice-grid child-settings-theme-grid">
+              {% for choice in theme_form.theme %}
+                <label class="theme-choice theme-{{ choice.data.value }}" for="{{ choice.id_for_label }}">
+                  {{ choice.tag }}
+                  <span class="theme-choice-preview item-card">
+                    <strong>{{ choice.choice_label }}</strong>
+                    <small class="theme-choice-sub">{{ choice.data.value|theme_text:"settings_world_sub" }}</small>
+                    <span class="theme-choice-check" aria-hidden="true"><svg class="action-icon"><use href="#icon-circle-check"></use></svg></span>
+                  </span>
+                </label>
+              {% endfor %}
+              <label class="theme-choice theme-daily" for="{{ theme_form.randomize_theme_daily.id_for_label }}">
+                {{ theme_form.randomize_theme_daily }}
+                <span class="theme-choice-preview item-card theme-daily-preview">
+                  <span class="theme-daily-emoji" aria-hidden="true">🎲</span>
+                  <strong>{{ child.theme|theme_text:"settings_daily_title" }}</strong>
+                  <small class="theme-choice-sub">{{ child.theme|theme_text:"settings_daily_sub" }}</small>
+                  <span class="theme-choice-check" aria-hidden="true"><svg class="action-icon"><use href="#icon-circle-check"></use></svg></span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+          {{ theme_form.theme.errors }}
+          {{ theme_form.randomize_theme_daily.errors }}
+          <button class="button button-primary" type="submit">{{ child.theme|theme_text:"settings_cta_theme" }}</button>
+        </form>
+      </div>
+    </details>
+
+    <details class="child-settings-acc" name="child-settings" data-settings-panel="avatar">
+      <summary>
+        <span class="child-settings-acc-icon" aria-hidden="true">{% if child.avatar %}🖼️{% else %}📷{% endif %}</span>
+        <span class="child-settings-acc-title">{{ child.theme|theme_text:"settings_avatar_title" }}</span>
+        <span class="child-settings-acc-chevron" aria-hidden="true">▾</span>
+      </summary>
+      <div class="child-settings-acc-body">
+        <form method="post" action="{% url 'child_set_avatar' %}" enctype="multipart/form-data" class="stack-form evidence-form child-avatar-form" data-success-effect="theme">
+          {% csrf_token %}
+          <div class="child-avatar-row">
+            {% if child.avatar %}
+              <img class="child-avatar-preview" src="{% url 'child_avatar' child.pk %}" alt="" data-evidence-preview>
+            {% else %}
+              <img class="child-avatar-preview" alt="" data-evidence-preview hidden>
+            {% endif %}
+            <div class="avatar-actions evidence-actions">
+              <input type="file" name="avatar" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" data-evidence-input hidden required>
+              <button type="button" class="button button-primary" data-evidence-camera>{{ child.theme|theme_text:"settings_cam" }}</button>
+              <button type="button" class="button button-secondary" data-evidence-gallery>{{ child.theme|theme_text:"settings_gal" }}</button>
+            </div>
+          </div>
+          {{ avatar_form.avatar.errors }}
+          <button class="button button-secondary" type="submit">{% translate "Save" %}</button>
+        </form>
+      </div>
+    </details>
+
+    <details class="child-settings-acc" name="child-settings" id="gimtadienis" data-settings-panel="birthday">
+      <summary>
+        <span class="child-settings-acc-icon" aria-hidden="true">🎂</span>
+        <span class="child-settings-acc-title">{{ child.theme|theme_text:"settings_bday_title" }}</span>
+        <span class="child-settings-acc-chevron" aria-hidden="true">▾</span>
+      </summary>
+      <div class="child-settings-acc-body">
+        {% if pending_birth_date_request %}
+          <div class="birthday-change-pending">
+            <span class="status-pill">{% translate "Awaiting parent approval" %}</span>
+            <p>
+              {% blocktranslate with current=pending_birth_date_request.previous_birth_date|date:"Y-m-d"|default:"–" requested=pending_birth_date_request.requested_birth_date|date:"Y-m-d"|default:"–" %}
+                Requested birthday change: {{ current }} → {{ requested }}.
+              {% endblocktranslate %}
+            </p>
+          </div>
+        {% else %}
+          <form method="post" action="{% url 'child_set_birth_date' %}" class="stack-form">
+            {% csrf_token %}
+            {{ birth_date_form.as_p }}
+            <button class="button button-secondary" type="submit">{% translate "Save" %}</button>
+          </form>
+        {% endif %}
+      </div>
+    </details>
+
+    <details class="child-settings-acc" name="child-settings" id="pinas" data-settings-panel="pin" data-pin-change>
+      <summary>
+        <span class="child-settings-acc-icon" aria-hidden="true">🔒</span>
+        <span class="child-settings-acc-title">{{ child.theme|theme_text:"settings_pin_title" }}</span>
+        <span class="child-settings-acc-chevron" aria-hidden="true">▾</span>
+      </summary>
+      <div class="child-settings-acc-body">
+        <form
+          method="post"
+          action="{% url 'child_change_pin' %}"
+          class="stack-form child-pin-form"
+          data-pin-form
+          data-pin-mismatch="{% translate 'New codes didn’t match — try again' %}"
+          data-pin-ready="{% translate 'Ready to save' %}"
+        >
+          {% csrf_token %}
+          <input type="hidden" name="current_pin" value="" data-pin-field="current_pin" autocomplete="off">
+          <input type="hidden" name="new_pin" value="" data-pin-field="new_pin" autocomplete="off">
+          <input type="hidden" name="confirm_pin" value="" data-pin-field="confirm_pin" autocomplete="off">
+          <ol class="pin-guide" aria-label="{% translate 'PIN change steps' %}">
+            <li class="is-active" data-pin-step="0"><span class="step-num">1</span><span data-pin-step-text>{{ child.theme|theme_text:"settings_pin_step_old" }}</span></li>
+            <li data-pin-step="1"><span class="step-num">2</span><span data-pin-step-text>{{ child.theme|theme_text:"settings_pin_step_new" }}</span></li>
+            <li data-pin-step="2"><span class="step-num">3</span><span data-pin-step-text>{{ child.theme|theme_text:"settings_pin_step_repeat" }}</span></li>
+          </ol>
+          <p class="pin-step-label" data-pin-step-label>{{ child.theme|theme_text:"settings_pin_step_old" }}</p>
+          <div class="pin-dots" aria-hidden="true" data-pin-dots>
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="pin-pad" role="group" aria-label="{% translate 'PIN keypad' %}" data-pin-pad>
+            <button type="button" data-pin-key="1">1</button>
+            <button type="button" data-pin-key="2">2</button>
+            <button type="button" data-pin-key="3">3</button>
+            <button type="button" data-pin-key="4">4</button>
+            <button type="button" data-pin-key="5">5</button>
+            <button type="button" data-pin-key="6">6</button>
+            <button type="button" data-pin-key="7">7</button>
+            <button type="button" data-pin-key="8">8</button>
+            <button type="button" data-pin-key="9">9</button>
+            <span></span>
+            <button type="button" data-pin-key="0">0</button>
+            <button type="button" class="pin-pad-back" data-pin-key="back" aria-label="{% translate 'Delete' %}">
+              <svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg>
+            </button>
+          </div>
+          <div class="pin-save-row" data-pin-save hidden>
+            <button class="button button-primary" type="submit">{{ child.theme|theme_text:"settings_pin_save" }}</button>
+          </div>
+        </form>
+      </div>
+    </details>
+  </div>
+</section>
 {% if gift_recipients_available %}
 <dialog id="gift-dialog" class="action-dialog">
   <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">

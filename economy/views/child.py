@@ -2,7 +2,6 @@ import hashlib
 import json
 from uuid import uuid4
 
-from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
@@ -17,7 +16,11 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 
-from economy.auth import child_object_or_404, child_required, current_child, current_device
+from economy.auth import (
+    child_object_or_404,
+    child_required,
+    ensure_media_accessible,
+)
 from economy.forms import (
     AvatarForm,
     BirthDateForm,
@@ -658,7 +661,7 @@ def child_set_theme(request):
             update_fields=["theme", "theme_selected", "randomize_theme_daily"]
         )
         messages.success(request, _("Theme changed."))
-    return redirect("child_dashboard")
+    return redirect(f"{reverse('child_dashboard')}#nustatymai")
 
 @child_required
 @require_POST
@@ -699,7 +702,7 @@ def child_set_birth_date(request):
             )
     else:
         messages.error(request, _("Check the birthday date."))
-    return redirect("child_dashboard")
+    return redirect(f"{reverse('child_dashboard')}#gimtadienis")
 
 def _status_counts(queryset, field="status"):
     return list(
@@ -908,21 +911,21 @@ def child_change_pin(request):
     form = ChangePinForm(request.POST)
     if not form.is_valid():
         messages.error(request, _("Check the PIN fields."))
-        return redirect("child_dashboard")
+        return redirect(f"{reverse('child_dashboard')}#pinas")
     child = request.child
     if child.is_locked:
         messages.error(
             request,
             _("The profile is temporarily locked. Try again later."),
         )
-        return redirect("child_dashboard")
+        return redirect(f"{reverse('child_dashboard')}#pinas")
     if not child.verify_pin(form.cleaned_data["current_pin"]):
         messages.error(request, _("The current PIN is incorrect."))
-        return redirect("child_dashboard")
+        return redirect(f"{reverse('child_dashboard')}#pinas")
     child.set_pin(form.cleaned_data["new_pin"])
     child.save(update_fields=["pin_hash"])
     messages.success(request, _("PIN changed."))
-    return redirect("child_dashboard")
+    return redirect(f"{reverse('child_dashboard')}#pinas")
 
 @child_required
 @require_POST
@@ -931,14 +934,14 @@ def child_set_avatar(request):
     if not form.is_valid():
         error = next(iter(form.errors.values()))[0]
         messages.error(request, str(error))
-        return redirect("child_dashboard")
+        return redirect(f"{reverse('child_dashboard')}#nustatymai")
 
     upload = form.cleaned_data["avatar"]
     try:
         avatar_bytes = process_avatar(upload)
     except ImageProcessingError:
         messages.error(request, _("The image could not be processed. Choose another file."))
-        return redirect("child_dashboard")
+        return redirect(f"{reverse('child_dashboard')}#nustatymai")
 
     child = request.child
     old_name = child.avatar.name
@@ -948,7 +951,7 @@ def child_set_avatar(request):
     if old_name:
         child.avatar.storage.delete(old_name)
     messages.success(request, _("Avatar changed."))
-    return redirect("child_dashboard")
+    return redirect(f"{reverse('child_dashboard')}#nustatymai")
 
 def _delete_task_evidence(claim, *, mark_purged=False):
     names = [
@@ -1011,13 +1014,8 @@ def _replace_task_evidence(claim, processed):
             storage.delete(name)
 
 def child_avatar(request, child_id):
-    if (
-        not request.user.is_authenticated
-        and settings.DEVICE_PAIRING_REQUIRED
-        and current_device(request) is None
-    ):
-        raise Http404
     child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    ensure_media_accessible(request, child)
     if not child.avatar:
         raise Http404
     response = FileResponse(child.avatar.open("rb"), content_type="image/webp")
@@ -1027,9 +1025,7 @@ def child_avatar(request, child_id):
 
 def task_evidence(request, claim_id, size):
     claim = get_object_or_404(TaskClaim.objects.select_related("child"), pk=claim_id)
-    child = current_child(request)
-    if not request.user.is_authenticated and (child is None or child.pk != claim.child_id):
-        raise Http404
+    ensure_media_accessible(request, claim.child, require_child_session=True)
     field = claim.evidence_thumbnail if size == "thumbnail" else claim.evidence_image
     if size not in {"thumbnail", "full"} or not field:
         raise Http404

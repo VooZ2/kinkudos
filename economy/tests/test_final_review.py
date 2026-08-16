@@ -63,8 +63,9 @@ class FinalReviewTests(TestCase):
 
     def test_parent_accordions_and_settings_use_shared_compact_surface(self):
         response = self.parent_response()
-        self.assertContains(response, "parent-accordion", count=10)
-        self.assertContains(response, 'class="settings-section parent-accordion"', count=10, html=False)
+        content = response.content.decode()
+        self.assertContains(response, "parent-accordion", count=11)
+        self.assertContains(response, 'class="settings-section parent-accordion"', count=11, html=False)
         self.assertNotContains(
             response,
             "settings-section-standalone",
@@ -79,6 +80,11 @@ class FinalReviewTests(TestCase):
         self.assertIn("min-height: 60px", css)
         self.assertIn(".settings-block-heading", css)
         self.assertNotIn("position: sticky; bottom: 0", css.split(".settings-save-actions")[1].split("}")[0])
+        self.assertIn("Manage the family name and default language.", content)
+        self.assertIn("Protect the family database and uploaded photos.", content)
+        self.assertIn("settings-add-divider", content)
+        people = content[content.index('id="settings-people-heading"') : content.index('id="settings-server-heading"')]
+        self.assertNotIn("settings-description", people)
 
     def test_manage_uses_tabbed_sections_with_edit_and_hidden_states(self):
         Task.objects.create(title="Review chore", reward=10, icon="🧹", is_active=False)
@@ -95,7 +101,7 @@ class FinalReviewTests(TestCase):
         self.assertIn("catalog-row is-inactive", manage)
         self.assertIn("Hidden", manage)
         self.assertIn("manage-empty", manage)
-        self.assertIn(
+        self.assertNotIn(
             "Children can propose goals from their area. Approved goals appear here.",
             manage,
         )
@@ -103,13 +109,80 @@ class FinalReviewTests(TestCase):
         self.assertIn(".manage-tabs a.is-active", css)
         self.assertIn(".catalog-row.is-inactive", css)
         self.assertIn(".manage-empty", css)
-        self.assertIn("text-align: center", css.split(".manage-empty {")[1].split("}")[0])
+        self.assertIn("text-align: left", css.split(".manage-empty {")[1].split("}")[0])
         self.assertIn("min-height: 44px", css.split(".manage-tabs a {")[1].split("}")[0])
         self.assertIn(".catalog-edit-actions", css)
         js = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
         self.assertIn("[data-manage-section]", js)
         self.assertIn("data-cancel-edit", js)
         self.assertIn("closeCatalogEdit", js)
+
+    def test_empty_states_share_the_left_aligned_spacing_and_copy(self):
+        child_template = (ROOT / "templates/economy/child_dashboard.html").read_text(
+            encoding="utf-8"
+        )
+        select_template = (ROOT / "templates/economy/child_select.html").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('class="empty-state">{% translate "The rewards catalog is empty." %}', child_template)
+        self.assertIn('class="empty-state">{% translate "No child profiles have been created yet." %}', select_template)
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        empty_start = css.index("\n.empty-state {") + 1
+        empty_css = css[empty_start : css.index("}", empty_start)]
+        self.assertIn("padding: 18px", empty_css)
+        self.assertIn("line-height: 1.4", empty_css)
+        self.assertIn("text-align: left", empty_css)
+
+    def test_mobile_feedback_summary_is_compact_and_left_aligned(self):
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        mobile_feedback = css[css.index(".feedback-summary {", css.index("@media (max-width: 720px)")) :]
+        mobile_feedback = mobile_feedback[: mobile_feedback.index(".feedback-actions {", mobile_feedback.index(".feedback-summary {"))]
+        self.assertIn("display: grid", mobile_feedback)
+        self.assertIn("padding: 14px 16px", mobile_feedback)
+        self.assertIn("text-align: left", mobile_feedback)
+
+    def test_notice_blocks_tabs_and_requested_action_icons_share_patterns(self):
+        response = self.parent_response()
+        content = response.content.decode()
+        template = (ROOT / "templates/economy/parent_dashboard.html").read_text(encoding="utf-8")
+        child_template = (ROOT / "templates/economy/child_dashboard.html").read_text(encoding="utf-8")
+        setup_template = (ROOT / "templates/economy/setup_complete.html").read_text(encoding="utf-8")
+        self.assertIn("notice-block notice-danger", template)
+        self.assertIn("notice-block notice-warning", template)
+        self.assertIn("notice-block notice-warning", child_template)
+        self.assertIn("notice-block notice-info", child_template)
+        self.assertIn('href="#icon-copy"', template)
+        self.assertIn('href="#icon-trash"', template)
+        self.assertIn('href="#icon-filter"', template)
+        self.assertNotIn('button-with-icon', template)
+        self.assertNotIn('href="#icon-user-plus"', template)
+        self.assertIn('>{% translate "Create invite" %}</button>', template)
+        self.assertIn('>{% translate "Create invite link" %}</button>', template)
+        self.assertIn("notice-block", content)
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn(".notice-block.notice-info", css)
+        self.assertIn(".notice-block.notice-warning", css)
+        self.assertIn(".notice-block.notice-danger", css)
+        pending_css = css[css.index(".pending-empty-state") : css.index(".empty-panel")]
+        self.assertIn("color: var(--success)", pending_css)
+        self.assertIn(".pending-empty-state .action-icon", pending_css)
+        self.assertIn(".required-marker-star", css)
+        self.assertIn(".required-marker-colon", css)
+        self.assertIn(".settings-summary-description", css)
+        self.assertIn(".settings-add-divider", css)
+        self.assertIn(".tabbar.is-scrollable:not(.is-at-start)", css)
+        self.assertIn(".recovery-code-row", css)
+        self.assertIn(".account-create-form { grid-template-columns: repeat(2, minmax(0, 1fr));", css)
+        self.assertIn(".child-hero.has-avatar .balance-orb", css)
+        self.assertNotIn("--viewport-bottom-offset", css)
+        self.assertIn('data-copy-from="recovery-code-value"', setup_template)
+        self.assertIn("setup-open-parent", setup_template)
+        js = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
+        self.assertIn("syncHorizontalTabbar", js)
+        self.assertIn("revealActiveTab", js)
+        self.assertIn("scrollIntoView", js)
+        self.assertIn("decorateRequiredLabels", js)
+        self.assertIn("data-copy-from", setup_template)
 
     def test_child_card_metadata_keeps_credit_and_ticket_controls_together(self):
         response = self.parent_response()
@@ -249,6 +322,54 @@ class FinalReviewTests(TestCase):
         self.assertIsInstance(goal, SavingsGoal)
         self.assertEqual(goal.mode, GoalMode.SAVED)
 
+    def test_safari_mobile_first_tap_reaches_settings_and_dialogs(self):
+        response = self.parent_response()
+        self.assertContains(
+            response,
+            'name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"',
+            html=False,
+        )
+        self.assertContains(response, "r=responsive-controls", html=False)
+
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn("--safe-area-bottom: env(safe-area-inset-bottom, 0px);", css)
+        self.assertNotIn("--viewport-bottom-offset", css)
+        self.assertNotIn(
+            "@media (display-mode: browser) and (hover: none) and (pointer: coarse)",
+            css,
+        )
+        self.assertNotIn(
+            "--browser-bottom-gap",
+            css,
+        )
+        self.assertIn("@media (hover: none)", css)
+        self.assertIn("touch-action: manipulation", css)
+        self.assertIn("inset: auto 0 0;", css)
+        self.assertIn(
+            "padding: 7px 0 calc(7px + var(--safe-area-bottom))",
+            css,
+        )
+        self.assertIn(
+            "padding: 22px 18px calc(16px + var(--safe-area-bottom))",
+            css,
+        )
+        self.assertIn(
+            "--fab-inset-block: calc(88px + var(--safe-area-bottom));",
+            css,
+        )
+
+        js = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
+        self.assertNotIn("function bindPrimaryTap(", js)
+        self.assertIn('document.addEventListener("click", event => {', js)
+        self.assertIn(
+            'const closeButton = event.target.closest?.("[data-close-dialog]");',
+            js,
+        )
+        self.assertIn(
+            'links.forEach(link => link.addEventListener("click", event => {',
+            js,
+        )
+
     def test_frontend_source_covers_date_goal_language_and_balance_behaviour(self):
         response = self.parent_response()
         self.assertContains(response, 'name="language" value="en" type="submit"', html=False)
@@ -286,7 +407,7 @@ class FinalReviewTests(TestCase):
     def test_mobile_footer_has_compact_labels_and_dynamic_version(self):
         response = self.parent_response()
         self.assertContains(response, 'class="footer-release"', html=False)
-        self.assertContains(response, "v26.7.3")
+        self.assertContains(response, "v26.8.0")
         self.assertContains(response, 'class="footer-docs-short">Docs', html=False)
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".footer-product, .footer-docs-long { display: none; }", css)

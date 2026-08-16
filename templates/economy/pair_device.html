@@ -6,7 +6,7 @@
 <section class="narrow-card">
   <p class="eyebrow">{% translate "Child access" %}</p>
   <h1>{% translate "Pair this device" %}</h1>
-  <p data-pairing-status>{% translate "Checking the private pairing link…" %}</p>
+  <p data-pairing-status data-invalid-message="{% translate 'This pairing link is invalid or has expired.' %}" data-ready-message="{% translate 'A parent created this private link. Continue to allow child access on this device.' %}">{% translate "Checking the private pairing link…" %}</p>
   <form method="post" class="stack-form" data-pairing-form hidden>
     {% csrf_token %}
     <input type="hidden" name="token" data-pairing-token>
@@ -21,12 +21,12 @@
   const status = document.querySelector("[data-pairing-status]");
   window.history.replaceState(null, "", window.location.pathname);
   if (!token) {
-    status.textContent = "{% translate 'This pairing link is invalid or has expired.' %}";
+    status.textContent = status.dataset.invalidMessage;
     return;
   }
   form.querySelector("[data-pairing-token]").value = token;
   form.hidden = false;
-  status.textContent = "{% translate 'A parent created this private link. Continue to allow child access on this device.' %}";
+  status.textContent = status.dataset.readyMessage;
 })();
 </script>
 {% endblock %}

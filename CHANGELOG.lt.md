@@ -11,6 +11,45 @@ schema.
 
 - Kol kas nieko.
 
+## [26.8.0] - 2026-08-16
+
+### Pridėta
+
+- Tėvai gali pasidalyti laikina prižiūrėtojo prieiga privačia kvietimo ir
+  prisijungimo nuoroda bei prižiūrėtojo PIN; prieiga apribojama pasirinktais
+  vaikais.
+- Vaiko Nustatymuose dabar yra akordeono išdėstymas, aštuonių temų tinklelis,
+  kasdienio atsitiktinio temos parinkimo palaikymas, garso valdikliai ir per
+  visą skydelį ištemptas PIN skydelis.
+- Prižiūrėtojo kvietimai ir vaiko įrenginio susiejimo nuorodos turi aiškesnius
+  „Dalintis“ ir „Kopijuoti“ dialogus.
+
+### Pakeista
+
+- Prižiūrėtojai gali naudoti numatytus šeimos veiksmus priskirtiems vaikams,
+  įskaitant darbus, prizus, nuobaudas, apdovanojimus ir atrakinimą; oficiali
+  dokumentacija dabar aprašo platesnę Pradžios lango apimtį.
+- Nenaudojami susieti vaikų įrenginiai lieka sąraše, kol tėvai juos atšaukia,
+  kad vis dar galiojančią prieigą būtų galima peržiūrėti ir panaikinti.
+- Mobilieji valdikliai, dalijimosi dialogai, datos laukai ir atsiliepimų bei
+  nustatymų paaiškinimų blokai sutvarkyti mažiems ekranams.
+
+### Pataisyta
+
+- Nustatymų ir iškylančių langų veiksmai mobiliajame „Safari“ dabar reaguoja į
+  pirmą bakstelėjimą, taip pat kai „Safari“ praryja pradinį pointer įvykį.
+- Vaiko temų valdikliai ir Nustatymų skiltys mobiliuosiuose išdėstymuose
+  išlieka stabilūs ir patogūs.
+
+### Saugumas
+
+- Pasibaigusi arba atšaukta prižiūrėtojo prieiga nebegali tapti tėvų prieiga,
+  o prižiūrėtojo veiksmai ir toliau apriboti priskirtais vaikais.
+- Vaikų avatarai, darbų įrodymai ir atsiliepimų ekrano nuotraukos taiko tą
+  pačią vaikų apimties kontrolę, o valdymo keliai reikalauja tėvų paskyros.
+- Prižiūrėtojo kvietimo srautas ir jo lietuviški vertimai apima visą svečio
+  naudojimo kelią.
+
 ## [26.7.3] - 2026-08-14
 
 ### Pataisyta

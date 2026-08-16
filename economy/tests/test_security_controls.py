@@ -186,7 +186,7 @@ class ContentSecurityPolicyTests(TestCase):
         ]
         self.client.force_login(self.parent)
         responses.append(
-            self.client.post(reverse("parent_generate_pairing_link"))
+            self.client.post(reverse("parent_generate_pairing_link"), follow=True)
         )
 
         for response in responses:

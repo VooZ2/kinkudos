@@ -6,7 +6,12 @@
 <section class="narrow-card setup-card">
   <p class="eyebrow">{{ project_name }}</p><h1>{% translate "Setup complete" %}</h1>
   <p>{% translate "Save this recovery code in your password manager. It will not be shown again." %}</p>
-  <p class="recovery-code"><code>{{ recovery_code }}</code></p>
-  <a class="button button-primary button-large" href="{% url 'parent_dashboard' %}">{% translate "Open parent area" %}</a>
+  <div class="recovery-code-row">
+    <p class="recovery-code" id="recovery-code-value"><code>{{ recovery_code }}</code></p>
+    <button class="share-copy-button" type="button" data-copy-from="recovery-code-value" data-copied-label="{% translate 'Copied' %}" aria-label="{% translate 'Copy' %}" title="{% translate 'Copy' %}">
+      <svg class="action-icon" aria-hidden="true"><use href="#icon-copy"></use></svg>
+    </button>
+  </div>
+  <a class="button button-primary button-large setup-open-parent" href="{% url 'parent_dashboard' %}">{% translate "Open parent area" %}</a>
 </section>
 {% endblock %}

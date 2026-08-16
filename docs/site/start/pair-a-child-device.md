@@ -13,8 +13,8 @@ A child profile and a child device are different. The profile holds the child’
 ## Pair another device with a private link
 
 1. On any signed-in parent device, open **Parents → Settings → Child devices**.
-2. Select **Send a link**.
-3. Transfer the link privately to the intended device and open it there. Do not post it in a group chat or leave it in a shared note.
+2. Select **Send a link**. KinKudos opens a share dialog with the private URL.
+3. Use **Copy** or **Share…**, then open the link on the intended device. Do not post it in a group chat or leave it in a shared note.
 4. The link pairs that device once, then expires after **10 minutes**. The child can select their profile and enter their PIN.
 
 After pairing, KinKudos shows a confirmation such as **This device is paired as
@@ -31,7 +31,8 @@ The device list shows a broad device icon, an optional custom name, a summary
 such as **iPhone · Safari** or **Android tablet · Chrome**, a stable six-character
 ID, and when the device was last used. The classification covers phone, tablet,
 computer, and unknown device categories; it does not promise an exact model.
-After 30 days without use, the entry also shows **Not used recently**.
+Devices remain in this list until revoked, even when they have not been used for
+30 days. **Revoke all child devices** covers every non-revoked pairing.
 
 Rename entries so you can recognise them. On mobile, **Revoke** is shown as a
 compact trash-can icon. Select it immediately if a device is lost, sold, lent

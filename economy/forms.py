@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model, password_validation
 from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm, UserCreationForm
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.utils.html import format_html
 from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 from pillow_heif import register_heif_opener
@@ -39,11 +40,44 @@ PASSWORD_HELP = (
 )
 
 
+CONSTRAINED_DATE_INPUT_TYPES = {"date", "datetime-local", "time"}
+
+
+class ConstrainedDateInput(forms.DateInput):
+    """Keep native date controls inside stacked forms on narrow screens."""
+
+    def render(self, name, value, attrs=None, renderer=None):
+        return format_html(
+            '<span class="date-input-shell">{}</span>',
+            super().render(name, value, attrs, renderer),
+        )
+
+
+def _constrain_date_widget(widget):
+    widget_type = str(widget.attrs.get("type") or getattr(widget, "input_type", ""))
+    if widget_type not in CONSTRAINED_DATE_INPUT_TYPES:
+        return
+    if isinstance(widget, ConstrainedDateInput):
+        return
+    original_render = widget.render
+
+    def render(name, value, attrs=None, renderer=None):
+        return format_html(
+            '<span class="date-input-shell">{}</span>',
+            original_render(name, value, attrs, renderer),
+        )
+
+    widget.render = render
+
+
 class StyledFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.label_suffix = ""
+        self.required_css_class = "field-required"
         for field in self.fields.values():
             field.widget.attrs.setdefault("class", "field-control")
+            _constrain_date_widget(field.widget)
             if isinstance(field, forms.IntegerField) and not isinstance(
                 field.widget, forms.HiddenInput
             ):
@@ -480,6 +514,7 @@ class ThemeForm(StyledFormMixin, forms.Form):
     theme = forms.ChoiceField(
         label=_("Theme"),
         choices=Theme.choices,
+        widget=forms.RadioSelect,
     )
     randomize_theme_daily = forms.BooleanField(
         label=_("Change my theme randomly every day"),
@@ -838,7 +873,7 @@ class BirthDateForm(StyledFormMixin, forms.ModelForm):
         fields = ["birth_date"]
         labels = {"birth_date": _("Birthday")}
         widgets = {
-            "birth_date": forms.DateInput(
+            "birth_date": ConstrainedDateInput(
                 format="%Y-%m-%d", attrs={"type": "date"}
             )
         }
@@ -1116,7 +1151,7 @@ class ChildEditForm(StyledFormMixin, forms.Form):
     birth_date = forms.DateField(
         label=_("Birthday"),
         required=False,
-        widget=forms.DateInput(format="%Y-%m-%d", attrs={"type": "date"}),
+        widget=ConstrainedDateInput(format="%Y-%m-%d", attrs={"type": "date"}),
         help_text=_("Parents may change this date without an additional approval."),
     )
     new_pin = forms.CharField(
@@ -1198,3 +1233,99 @@ class ChildEditForm(StyledFormMixin, forms.Form):
                 decided_at=timezone.now(),
             )
         return self.child
+
+
+class CaregiverInviteForm(StyledFormMixin, forms.Form):
+    label = forms.CharField(label=_("Guest name"), max_length=80)
+    children = forms.ModelMultipleChoiceField(
+        label=_("Children"),
+        queryset=ChildProfile.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+    )
+    access_until = forms.DateField(
+        label=_("Access valid until"),
+        widget=ConstrainedDateInput(format="%Y-%m-%d", attrs={"type": "date"}),
+    )
+    email = forms.EmailField(
+        label=_("Email"),
+        required=False,
+        help_text=_("Optional. Used only when email sending is enabled."),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["children"].queryset = ChildProfile.objects.filter(is_active=True)
+
+    def clean_access_until(self):
+        access_until = self.cleaned_data["access_until"]
+        if access_until < timezone.localdate():
+            raise forms.ValidationError(_("Choose today or a future date."))
+        return access_until
+
+    def clean_children(self):
+        children = self.cleaned_data["children"]
+        if not children:
+            raise forms.ValidationError(_("Select at least one child."))
+        return children
+
+
+class CaregiverCreatePinForm(StyledFormMixin, forms.Form):
+    pin = forms.CharField(
+        label=_("Create PIN"),
+        min_length=4,
+        max_length=4,
+        widget=forms.PasswordInput(
+            attrs={
+                "inputmode": "numeric",
+                "pattern": "[0-9]*",
+                "autocomplete": "new-password",
+            }
+        ),
+    )
+    confirm_pin = forms.CharField(
+        label=_("Repeat PIN"),
+        min_length=4,
+        max_length=4,
+        widget=forms.PasswordInput(
+            attrs={
+                "inputmode": "numeric",
+                "pattern": "[0-9]*",
+                "autocomplete": "new-password",
+            }
+        ),
+    )
+
+    def clean_pin(self):
+        pin = self.cleaned_data["pin"]
+        if not pin.isdigit():
+            raise forms.ValidationError(_("The PIN must contain digits only."))
+        return pin
+
+    def clean(self):
+        cleaned = super().clean()
+        pin = cleaned.get("pin")
+        confirm = cleaned.get("confirm_pin")
+        if pin and confirm and pin != confirm:
+            self.add_error("confirm_pin", _("The PINs do not match."))
+        return cleaned
+
+
+class CaregiverPinForm(StyledFormMixin, forms.Form):
+    pin = forms.CharField(
+        label="PIN",
+        min_length=4,
+        max_length=4,
+        widget=forms.PasswordInput(
+            attrs={
+                "inputmode": "numeric",
+                "pattern": "[0-9]*",
+                "autocomplete": "one-time-code",
+            }
+        ),
+    )
+
+    def clean_pin(self):
+        pin = self.cleaned_data["pin"]
+        if not pin.isdigit():
+            raise forms.ValidationError(_("The PIN must contain digits only."))
+        return pin

@@ -13,7 +13,12 @@ from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_POST
 
-from economy.auth import parent_required
+from economy.auth import (
+    ensure_child_accessible,
+    get_accessible_child_or_404,
+    parent_account_required,
+    parent_required,
+)
 from economy.forms import (
     AdjustmentForm,
     ApplyPenaltyForm,
@@ -40,7 +45,6 @@ from economy.models import (
     AssignedTaskBatch,
     AssignmentPreset,
     BirthDateChangeRequest,
-    ChildProfile,
     GoalCompletionRequest,
     GoalStatus,
     LedgerKind,
@@ -88,7 +92,7 @@ from economy.services import (
 )
 
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_create_catalog(request, kind):
     forms = {"task": TaskForm, "penalty": PenaltyForm, "reward": RewardForm}
@@ -103,7 +107,7 @@ def parent_create_catalog(request, kind):
         messages.error(request, _("Check the entered data."))
     return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_create_parent_account(request):
     form = ParentAccountForm(request.POST)
@@ -114,7 +118,7 @@ def parent_create_parent_account(request):
         messages.error(request, _("Check the new parent account details."))
     return redirect("parent_dashboard")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_create_child_account(request):
     form = ChildAccountForm(request.POST)
@@ -125,7 +129,7 @@ def parent_create_child_account(request):
         messages.error(request, _("Check the new child profile details."))
     return redirect("parent_dashboard")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_edit_parent_account(request, account_id):
     account = get_object_or_404(get_user_model(), pk=account_id, is_active=True)
@@ -145,7 +149,7 @@ def parent_edit_parent_account(request, account_id):
         messages.error(request, _("Check the parent account details."))
     return redirect("parent_dashboard")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_remove_parent_account(request, account_id):
     account = get_object_or_404(get_user_model(), pk=account_id, is_active=True)
@@ -165,10 +169,10 @@ def parent_remove_parent_account(request, account_id):
             )
     return redirect("parent_dashboard")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_edit_child_account(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    child = get_accessible_child_or_404(request, child_id)
     form = ChildEditForm(request.POST, child=child)
     if form.is_valid():
         form.save(actor=request.user)
@@ -187,6 +191,7 @@ def parent_decide_birth_date(request, request_id, decision):
                 .select_related("child")
                 .get(pk=request_id)
             )
+            ensure_child_accessible(request, change.child)
             if change.status != RequestStatus.PENDING:
                 raise ValidationError(_("This request has already been resolved."))
             if decision == "approve":
@@ -213,16 +218,16 @@ def parent_decide_birth_date(request, request_id, decision):
         messages.error(request, exc.messages[0])
     return redirect("parent_dashboard")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_remove_child_account(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    child = get_accessible_child_or_404(request, child_id)
     child.is_active = False
     child.save(update_fields=["is_active"])
     messages.success(request, _("Child profile “%(name)s” removed.") % {"name": child.name})
     return redirect("parent_dashboard")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_edit_catalog(request, kind, item_id):
     forms = {"task": TaskForm, "penalty": PenaltyForm, "reward": RewardForm}
@@ -240,7 +245,7 @@ def parent_edit_catalog(request, kind, item_id):
         messages.error(request, _("Check the edited data."))
     return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_toggle_catalog(request, kind, item_id):
     models = {"task": Task, "penalty": PenaltyTemplate, "reward": Reward}
@@ -257,7 +262,7 @@ def parent_toggle_catalog(request, kind, item_id):
     )
     return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_delete_catalog(request, kind, item_id):
     models = {"task": Task, "penalty": PenaltyTemplate, "reward": Reward}
@@ -274,7 +279,8 @@ def parent_delete_catalog(request, kind, item_id):
 @parent_required
 @require_POST
 def parent_decide_task(request, claim_id, decision):
-    claim = get_object_or_404(TaskClaim, pk=claim_id)
+    claim = get_object_or_404(TaskClaim.objects.select_related("child"), pk=claim_id)
+    ensure_child_accessible(request, claim.child)
     try:
         if decision == "approve":
             approve_task_claim(claim=claim, actor=request.user)
@@ -313,7 +319,10 @@ def parent_decide_task(request, claim_id, decision):
 @parent_required
 @require_POST
 def parent_decide_reward(request, request_id, decision):
-    reward_request = get_object_or_404(RewardRequest, pk=request_id)
+    reward_request = get_object_or_404(
+        RewardRequest.objects.select_related("child"), pk=request_id
+    )
+    ensure_child_accessible(request, reward_request.child)
     try:
         if decision == "approve":
             approve_reward_request(request=reward_request, actor=request.user)
@@ -340,7 +349,8 @@ def parent_decide_reward(request, request_id, decision):
 @parent_required
 @require_POST
 def parent_decide_proposal(request, proposal_id, decision):
-    proposal = get_object_or_404(Proposal, pk=proposal_id)
+    proposal = get_object_or_404(Proposal.objects.select_related("child"), pk=proposal_id)
+    ensure_child_accessible(request, proposal.child)
     try:
         if decision == "approve":
             form = ApprovalCostForm(request.POST)
@@ -376,10 +386,11 @@ def parent_decide_proposal(request, proposal_id, decision):
 @require_POST
 def parent_decide_goal_completion(request, request_id, decision):
     completion_request = get_object_or_404(
-        GoalCompletionRequest,
+        GoalCompletionRequest.objects.select_related("goal", "goal__child"),
         pk=request_id,
         goal__child__is_active=True,
     )
+    ensure_child_accessible(request, completion_request.goal.child)
     try:
         if decision == "complete":
             approve_goal_completion(
@@ -399,15 +410,16 @@ def parent_decide_goal_completion(request, request_id, decision):
         messages.error(request, exc.messages[0])
     return redirect(f"{reverse('parent_dashboard')}#parent-home")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_add_goal_points(request, goal_id):
     goal = get_object_or_404(
-        SavingsGoal,
+        SavingsGoal.objects.select_related("child"),
         pk=goal_id,
         child__is_active=True,
         status=GoalStatus.ACTIVE,
     )
+    ensure_child_accessible(request, goal.child)
     form = GoalAmountForm(request.POST)
     try:
         if not form.is_valid():
@@ -423,15 +435,16 @@ def parent_add_goal_points(request, goal_id):
         messages.error(request, exc.messages[0])
     return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_return_goal_points(request, goal_id):
     goal = get_object_or_404(
-        SavingsGoal,
+        SavingsGoal.objects.select_related("child"),
         pk=goal_id,
         child__is_active=True,
         status=GoalStatus.ACTIVE,
     )
+    ensure_child_accessible(request, goal.child)
     try:
         amount = return_saved_points(goal=goal, actor=request.user)
         messages.success(
@@ -442,15 +455,16 @@ def parent_return_goal_points(request, goal_id):
         messages.error(request, exc.messages[0])
     return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_edit_goal(request, goal_id):
     goal = get_object_or_404(
-        SavingsGoal,
+        SavingsGoal.objects.select_related("child"),
         pk=goal_id,
         child__is_active=True,
         status=GoalStatus.ACTIVE,
     )
+    ensure_child_accessible(request, goal.child)
     form = SavingsGoalForm(request.POST, instance=goal)
     try:
         if not form.is_valid():
@@ -467,15 +481,16 @@ def parent_edit_goal(request, goal_id):
         messages.error(request, exc.messages[0])
     return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_close_goal(request, goal_id):
     goal = get_object_or_404(
-        SavingsGoal,
+        SavingsGoal.objects.select_related("child"),
         pk=goal_id,
         child__is_active=True,
         status=GoalStatus.ACTIVE,
     )
+    ensure_child_accessible(request, goal.child)
     try:
         close_savings_goal(goal=goal, actor=request.user)
         messages.success(request, _("Goal closed."))
@@ -483,15 +498,16 @@ def parent_close_goal(request, goal_id):
         messages.error(request, exc.messages[0])
     return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_delete_goal(request, goal_id):
     goal = get_object_or_404(
-        SavingsGoal,
+        SavingsGoal.objects.select_related("child"),
         pk=goal_id,
         child__is_active=True,
         status=GoalStatus.ACTIVE,
     )
+    ensure_child_accessible(request, goal.child)
     try:
         _deleted_goal, returned_amount = delete_savings_goal(
             goal=goal,
@@ -512,7 +528,7 @@ def parent_delete_goal(request, goal_id):
 @parent_required
 @require_POST
 def parent_adjust_balance(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    child = get_accessible_child_or_404(request, child_id)
     form = AdjustmentForm(request.POST)
     if form.is_valid():
         post_ledger_entry(
@@ -530,7 +546,7 @@ def parent_adjust_balance(request, child_id):
 @parent_required
 @require_POST
 def parent_apply_penalty(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    child = get_accessible_child_or_404(request, child_id)
     form = ApplyPenaltyForm(request.POST)
     if form.is_valid():
         penalty = get_object_or_404(
@@ -554,7 +570,7 @@ def parent_apply_penalty(request, child_id):
 @parent_required
 @require_POST
 def parent_award_task(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    child = get_accessible_child_or_404(request, child_id)
     form = AwardTasksForm(request.POST)
     if not form.is_valid():
         messages.error(request, _("Choose at least one active task."))
@@ -602,7 +618,7 @@ def parent_award_task(request, child_id):
 @parent_required
 @require_POST
 def parent_assign_tasks(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    child = get_accessible_child_or_404(request, child_id)
     form = AssignTasksForm(request.POST)
     if not form.is_valid():
         error = next(iter(form.errors.values()))[0]
@@ -629,10 +645,10 @@ def parent_assign_tasks(request, child_id):
         messages.error(request, exc.messages[0])
     return redirect("parent_dashboard")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_save_assignment_preset(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    child = get_accessible_child_or_404(request, child_id)
     form = SaveAssignmentPresetForm(request.POST)
     if not form.is_valid():
         error = next(iter(form.errors.values()))[0]
@@ -670,6 +686,7 @@ def parent_apply_assignment_preset(request, preset_id):
         pk=preset_id,
         child__is_active=True,
     )
+    ensure_child_accessible(request, preset.child)
     try:
         batch = apply_assignment_preset(preset=preset, actor=request.user)
         if batch is None:
@@ -688,7 +705,7 @@ def parent_apply_assignment_preset(request, preset_id):
         messages.error(request, exc.messages[0])
     return redirect("parent_dashboard")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_toggle_assignment_preset(request, preset_id):
     preset = get_object_or_404(
@@ -704,7 +721,7 @@ def parent_toggle_assignment_preset(request, preset_id):
         messages.success(request, _('Resumed "%(name)s".') % {"name": preset.name})
     return redirect("parent_dashboard")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_delete_assignment_preset(request, preset_id):
     preset = get_object_or_404(
@@ -721,10 +738,11 @@ def parent_delete_assignment_preset(request, preset_id):
 @require_POST
 def parent_cancel_assigned_task(request, assigned_task_id):
     assigned_task = get_object_or_404(
-        AssignedTask.objects.select_related("batch"),
+        AssignedTask.objects.select_related("batch", "batch__child"),
         pk=assigned_task_id,
         batch__child__is_active=True,
     )
+    ensure_child_accessible(request, assigned_task.batch.child)
     try:
         cancel_assigned_task(assigned_task=assigned_task, actor=request.user)
         messages.success(request, _("The assigned task was cancelled."))
@@ -736,10 +754,11 @@ def parent_cancel_assigned_task(request, assigned_task_id):
 @require_POST
 def parent_cancel_assigned_task_batch(request, batch_id):
     batch = get_object_or_404(
-        AssignedTaskBatch,
+        AssignedTaskBatch.objects.select_related("child"),
         pk=batch_id,
         child__is_active=True,
     )
+    ensure_child_accessible(request, batch.child)
     cancelled = cancel_assigned_task_batch(batch=batch, actor=request.user)
     if cancelled:
         messages.success(request, _("The remaining assigned tasks were cancelled."))
@@ -750,7 +769,7 @@ def parent_cancel_assigned_task_batch(request, batch_id):
 @parent_required
 @require_POST
 def parent_assign_child_penalty(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    child = get_accessible_child_or_404(request, child_id)
     form = AssignPenaltiesForm(request.POST)
     if not form.is_valid():
         messages.error(request, _("Choose at least one active penalty."))
@@ -781,11 +800,7 @@ def parent_assign_child_penalty(request, child_id):
 @require_POST
 def parent_assign_penalty(request, penalty_id):
     penalty = get_object_or_404(PenaltyTemplate, pk=penalty_id, is_active=True)
-    child = get_object_or_404(
-        ChildProfile,
-        pk=request.POST.get("child_id"),
-        is_active=True,
-    )
+    child = get_accessible_child_or_404(request, request.POST.get("child_id"))
     reason = request.POST.get("reason", "").strip()
     if not reason:
         messages.error(request, _("A reason is required."))
@@ -808,7 +823,7 @@ def parent_assign_penalty(request, penalty_id):
 @parent_required
 @require_POST
 def parent_set_min_balance(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    child = get_accessible_child_or_404(request, child_id)
     form = MinBalanceForm(request.POST)
     if form.is_valid():
         child.min_balance = form.cleaned_data["min_balance"]
@@ -819,7 +834,7 @@ def parent_set_min_balance(request, child_id):
 @parent_required
 @require_POST
 def parent_unlock_child(request, child_id):
-    child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    child = get_accessible_child_or_404(request, child_id)
     child.failed_pin_attempts = 0
     child.locked_until = None
     child.save(update_fields=["failed_pin_attempts", "locked_until"])

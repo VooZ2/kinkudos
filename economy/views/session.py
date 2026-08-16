@@ -22,7 +22,7 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 
-from economy.auth import current_device
+from economy.auth import current_device, is_caregiver_user
 from economy.email_config import smtp_config
 from economy.forms import (
     ChildPinForm,
@@ -71,13 +71,20 @@ class ParentLoginView(LoginView):
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
+        user = form.get_user()
+        if is_caregiver_user(user):
+            form.add_error(
+                None,
+                _("Guest accounts sign in with a PIN link, not a parent password."),
+            )
+            return self.form_invalid(form)
         reset_attempts(
             AttemptCounter.Scope.PARENT_LOGIN_IP,
             client_ip(self.request),
         )
         reset_attempts(
             AttemptCounter.Scope.PARENT_LOGIN_ACCOUNT,
-            form.get_user().get_username().strip().casefold(),
+            user.get_username().strip().casefold(),
         )
         self.request.session.flush()
         response = super().form_valid(form)

@@ -2,12 +2,13 @@ from datetime import timedelta
 from functools import wraps
 
 from django.conf import settings
+from django.contrib.auth import logout
 from django.contrib.auth.views import redirect_to_login
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 
-from .models import ChildProfile, DeviceToken
+from .models import CaregiverProfile, ChildProfile, DeviceToken
 
 
 def current_device(request):
@@ -50,11 +51,123 @@ def current_child(request):
         return None
 
 
+def current_caregiver(request):
+    if hasattr(request, "_kinkudos_caregiver"):
+        return request._kinkudos_caregiver
+    caregiver = None
+    user = getattr(request, "user", None)
+    if user is not None and user.is_authenticated:
+        caregiver = (
+            CaregiverProfile.objects.filter(user_id=user.pk)
+            .prefetch_related("children")
+            .first()
+        )
+        if caregiver is not None and not caregiver.has_access:
+            request._kinkudos_caregiver_expired = True
+            caregiver.deactivate()
+            logout(request)
+            caregiver = None
+    request._kinkudos_caregiver = caregiver
+    return caregiver
+
+
+def caregiver_session_expired(request):
+    """Return whether this request carried an expired caregiver session."""
+
+    return bool(getattr(request, "_kinkudos_caregiver_expired", False))
+
+
+def is_caregiver_user(user):
+    if user is None or not getattr(user, "is_authenticated", False):
+        return False
+    return CaregiverProfile.objects.filter(user_id=user.pk).exists()
+
+
+def accessible_children_qs(request):
+    qs = ChildProfile.objects.filter(is_active=True)
+    caregiver = current_caregiver(request)
+    if caregiver_session_expired(request):
+        return qs.none()
+    if caregiver is None:
+        return qs
+    return qs.filter(pk__in=caregiver.children.values_list("pk", flat=True))
+
+
+def get_accessible_child_or_404(request, child_id):
+    return get_object_or_404(accessible_children_qs(request), pk=child_id)
+
+
+def ensure_child_accessible(request, child):
+    if child is None or not child.is_active:
+        raise Http404
+    caregiver = current_caregiver(request)
+    if caregiver_session_expired(request):
+        raise Http404
+    if caregiver is None:
+        return child
+    if not caregiver.children.filter(pk=child.pk).exists():
+        raise Http404
+    return child
+
+
+def ensure_media_accessible(request, child, *, require_child_session=False):
+    """Enforce parent, caregiver-child, and child-session media boundaries."""
+
+    if request.user.is_authenticated:
+        caregiver = current_caregiver(request)
+        if caregiver_session_expired(request):
+            raise Http404
+        if caregiver is None:
+            if is_caregiver_user(request.user):
+                raise Http404
+            return child
+        if child is None or not caregiver.children.filter(pk=child.pk).exists():
+            raise Http404
+        return child
+
+    selected_child = current_child(request)
+    if selected_child is not None:
+        if child is None or selected_child.pk != child.pk:
+            raise Http404
+        return child
+    if require_child_session or (
+        settings.DEVICE_PAIRING_REQUIRED and current_device(request) is None
+    ):
+        raise Http404
+    return child
+
+
 def parent_required(view):
     @wraps(view)
     def wrapped(request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect_to_login(request.get_full_path())
+        caregiver = current_caregiver(request)
+        if caregiver_session_expired(request):
+            return redirect("home")
+        if caregiver is None and is_caregiver_user(request.user):
+            logout(request)
+            return redirect_to_login(request.get_full_path())
+        request.caregiver = caregiver
+        return view(request, *args, **kwargs)
+
+    return wrapped
+
+
+def parent_account_required(view):
+    """Full parent account only — caregivers are redirected away."""
+
+    @wraps(view)
+    def wrapped(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect_to_login(request.get_full_path())
+        if current_caregiver(request) is not None:
+            return redirect("parent_dashboard")
+        if caregiver_session_expired(request):
+            return redirect("home")
+        if is_caregiver_user(request.user):
+            return redirect("parent_dashboard")
+        request.caregiver = None
         return view(request, *args, **kwargs)
 
     return wrapped

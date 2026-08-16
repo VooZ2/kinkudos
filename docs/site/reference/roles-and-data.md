@@ -21,7 +21,9 @@ The public documentation has separate cookie-free analytics only.
 | Rule | Value or behavior |
 | --- | --- |
 | Child-device pairing link | Single use; expires after 10 minutes. |
-| Paired-device profile | Broad phone, tablet, computer, or unknown-device classification; short stable six-character ID; browser summary; and last-used time. The list marks a device **Not used recently** after 30 days. |
+| Guest invite link | Single use when the guest creates a PIN; expires after 6 hours. |
+| Guest access | Limited to the selected children and the access end date; guests use Home only and do not receive notifications. |
+| Paired-device profile | Broad phone, tablet, computer, or unknown-device classification; short stable six-character ID; browser summary; and last-used time. Unused, unrevoked devices remain visible in the settings list, including after 30 days. |
 | Active paired-device access | The access cookie is renewed while the device is actively used. Revoking the device invalidates child access and notifications immediately. |
 | Child PIN | Four digits; a child profile needs a paired device first. |
 | Task/feedback image upload | JPEG, PNG, WebP, HEIC, or HEIF up to 12 MB. |
@@ -29,7 +31,7 @@ The public documentation has separate cookie-free analytics only.
 | Assigned task deadline | Midnight in the server’s local time. Pending items then leave today’s lists; incomplete items do not create ledger entries. |
 | Saved assignment sets | Up to five named sets per child. |
 | Assigned-task reminder | Soft child notification about three hours after a batch, if any item is still waiting. |
-| Scratch-ticket week | Monday through Sunday. |
+| Surprise-card week | Monday through Sunday. |
 | Completed task-photo retention | Family choice: indefinitely, 7, 30, or 90 days. |
 | Resolved-feedback image retention | Family choice: indefinitely, 7, 30, or 90 days. |
 

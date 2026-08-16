@@ -99,7 +99,7 @@ class FeedbackWorkflowTests(TestCase):
         self.assertEqual(report.reporter_role, "parent")
         self.assertEqual(report.family_name, "Aurora")
         self.assertEqual(report.page_path, reverse("parent_dashboard"))
-        self.assertEqual(report.app_version, "26.7.3")
+        self.assertEqual(report.app_version, "26.8.0")
         self.assertEqual(report.user_agent, "Feedback Browser")
         self.assertIsNotNone(report.email_notified_at)
         self.assertEqual(len(mail.outbox), 1)
@@ -378,15 +378,14 @@ class FeedbackWorkflowTests(TestCase):
             css,
         )
         self.assertIn(
-            "--fab-inset-block: calc(88px + env(safe-area-inset-bottom));",
+            "--fab-inset-block: calc(88px + var(--safe-area-bottom));",
             css,
         )
+        self.assertNotIn("--viewport-bottom-offset", css)
+        self.assertIn("--fab-inset-block: calc(12px + var(--safe-area-bottom));", css)
         self.assertIn("max-height: calc(100dvh - 24px)", css)
         self.assertIn(".feedback-admin { padding: 22px; }", css)
-        self.assertIn(
-            ".feedback-admin .feedback-description { margin-bottom: 20px; }",
-            css,
-        )
+        self.assertIn(".notice-block.notice-warning", css)
         self.assertIn('input[type="file"]::file-selector-button', css)
         self.assertIn("font: inherit", css)
-        self.assertIn(".feedback-admin .danger-warning", css)
+        self.assertIn(".notice-block.notice-danger", css)

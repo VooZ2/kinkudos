@@ -11,7 +11,7 @@ Panaikinus tėvą paskyra išjungiama, bet jos istorija išlieka. Paskutinės ak
 ## Vaikų profiliai
 
 Vaiko profilis saugo vardą, PIN maišą, išleidžiamą balansą, kreditą, individualų
-nutrinamų bilietų leidimą, gimtadienį, avatarą, temą ir Istoriją. Vaikas mato tik
+staigmenų kortelių leidimą, gimtadienį, avatarą, temą ir Istoriją. Vaikas mato tik
 savo privačius duomenis. Esamų paskyrų sąraše **Tėvų paskyros** ir **Vaikų
 profiliai** rodomi po atskiromis antraštėmis.
 
@@ -22,9 +22,24 @@ ir dialogai telefone pritaikyti mažam ekranui.
 
 Panaikinus vaiką profilis išjungiamas, o istorija lieka. Ji neištrinama ir neperduodama kitam vaikui.
 
+## Svečių prieiga
+
+Laikina svečių prieiga skirta seneliams, giminaičiams ar auklėms. **Tėvai →
+Nustatymai → Svečių prieiga** sukurkite kvietimą, pasirinkite vaikus ir prieigos
+pabaigos datą. Privatią nuorodą dalinkitės dialoge (nukopijuoti, įrenginio
+dalinimosi meniu arba el. paštu, jei SMTP įjungtas). Kvietimo nuoroda galioja
+**6 valandas** ir sudega, kai svečias sukuria PIN.
+
+Svečiai jungiasi tuo PIN per stabilią svečio nuorodą. Jie gali naudoti Pradžios
+lange prieinamus šeimos veiksmus pasirinktiems vaikams, įskaitant įprastų
+prašymų peržiūrą bei sprendimą ir dienos darbų skyrimą, bet nemato „Tvarkyti“ ir
+„Nustatymai“ skilčių bei negauna pranešimų. Tėvai bet kada gali atrakinti
+užblokuotą svečio PIN arba pašalinti prieigą. Pasibaigę kvietimai ir
+nebegaliojanti svečio prieiga iš nustatymų sąrašų dingsta automatiškai.
+
 ## Susieti įrenginiai
 
-Susiejimas yra pirmas vaikų saugumo vartas. Kol naršyklė ar PWA nesusieta, ji negali nei rodyti vaikų vardų, nei priimti PIN. Kiekvienas įrenginys rodomas su bendra telefono, planšetės, kompiuterio arba nežinomo įrenginio kategorija, naršyklės aprašu, stabiliu šešių simbolių ID ir paskutinio naudojimo laiku. Tai patogumo klasifikavimas, nenustatantis tikslaus modelio. Nenaudojus 30 dienų rodoma **Ilgai nenaudotas**. Įrenginius aiškiai pavadinkite, peržiūrėkite paskutinio naudojimo laiką ir iškart atšaukite prarastą ar nebe šeimos valdomą įrenginį.
+Susiejimas yra pirmas vaikų saugumo vartas. Kol naršyklė ar PWA nesusieta, ji negali nei rodyti vaikų vardų, nei priimti PIN. Kiekvienas įrenginys rodomas su bendra telefono, planšetės, kompiuterio arba nežinomo įrenginio kategorija, naršyklės aprašu, stabiliu šešių simbolių ID ir paskutinio naudojimo laiku. Tai patogumo klasifikavimas, nenustatantis tikslaus modelio. Nenaudojami neatšaukti įrenginiai lieka nustatymų sąraše, taip pat ir po 30 dienų nenaudojimo. Įrenginius aiškiai pavadinkite, peržiūrėkite paskutinio naudojimo laiką ir iškart atšaukite prarastą ar nebe šeimos valdomą įrenginį.
 
 Aktyviai naudojamo susieto įrenginio prieigos slapukas pratęsiamas, todėl aktyvus
 susiejimas neturėtų tyliai nustoti galioti. Atšaukus įrenginį jo vaiko prieiga ir

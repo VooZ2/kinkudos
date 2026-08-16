@@ -42,7 +42,11 @@ class ParentWorkflowTests(TestCase):
             reverse("child_set_birth_date"),
             {"birth_date": "2018-07-29"},
         )
-        self.assertRedirects(response, reverse("child_dashboard"))
+        self.assertRedirects(
+            response,
+            f"{reverse('child_dashboard')}#gimtadienis",
+            fetch_redirect_response=False,
+        )
         self.child.refresh_from_db()
         self.assertEqual(self.child.birth_date, date(2018, 7, 29))
         self.assertTrue(self.child.birth_date_initialized)
@@ -135,7 +139,7 @@ class ParentWorkflowTests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, 'class="brand-mark brand-logo"', html=False)
         self.assertContains(response, 'class="footer-product">KinKudos · ', html=False)
-        self.assertContains(response, "v26.7.3")
+        self.assertContains(response, "v26.8.0")
         self.assertNotContains(response, 'class="app-version"', html=False)
 
     def test_reward_approval_uses_task_decision_icons(self):
