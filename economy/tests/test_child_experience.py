@@ -123,6 +123,7 @@ class ChildExperienceTests(TestCase):
         self.assertContains(response, reverse("child_set_theme"))
         self.assertContains(response, reverse("child_set_avatar"))
         self.assertEqual(content.count('class="child-settings-acc"'), 4)
+        self.assertEqual(content.count('class="theme-choice-check"'), 8)
         self.assertIsNone(
             re.search(r'<details class="child-settings-acc"[^>]*\sopen(?:\s|>)', content)
         )

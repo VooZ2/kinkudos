@@ -1205,11 +1205,22 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .theme-choice-fieldset > legend { margin-bottom: 14px; font-size: 1.1rem; font-weight: 800; }
 .theme-choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
 .theme-choice { position: relative; display: block; min-width: 0; cursor: pointer; }
-.theme-choice > input { position: absolute; width: 1px; height: 1px; margin: -1px; opacity: 0; }
+.theme-choice > input[type="radio"], .theme-choice > input[type="checkbox"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-width: 1px;
+  min-height: 1px;
+  margin: -1px;
+  padding: 0;
+  opacity: 0;
+}
 .theme-choice-preview { position: relative; min-height: 174px; display: flex; flex-direction: column; justify-content: center; overflow: hidden; padding: 22px 56px 22px 22px; color: var(--text); background-color: var(--bg); isolation: isolate; transition: transform .16s, border-color .16s, box-shadow .16s; }
 .theme-choice-preview::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 7px; background: var(--primary); }
 .theme-choice-preview strong { position: relative; z-index: 1; font-size: clamp(1.3rem, 3vw, 1.75rem); line-height: 1.08; text-align: center; text-wrap: balance; }
-.theme-choice:hover .theme-choice-preview { transform: translateY(-2px); }
+@media (hover: hover) and (pointer: fine) {
+  .theme-choice:hover .theme-choice-preview { transform: translateY(-2px); }
+}
 .theme-choice > input:focus-visible + .theme-choice-preview { outline: 4px solid color-mix(in srgb, var(--primary) 42%, transparent); outline-offset: 4px; }
 .theme-choice > input:checked + .theme-choice-preview { border-color: var(--primary); box-shadow: 0 0 0 5px color-mix(in srgb, var(--primary) 22%, transparent), var(--shadow); }
 .theme-choice-check { position: absolute; top: 16px; right: 16px; display: grid; place-items: center; width: 30px; height: 30px; border: 2px solid color-mix(in srgb, var(--text) 25%, transparent); border-radius: 50%; color: transparent; background: var(--surface-solid); }
