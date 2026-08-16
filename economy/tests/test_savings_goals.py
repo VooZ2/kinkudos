@@ -445,7 +445,9 @@ class SavingsGoalServiceTests(TestCase):
         form_start = html.index(f'id="edit-goal-{goal.pk}"')
         form_end = html.index("</form>", form_start)
         editor_html = html[form_start:form_end]
-        self.assertIn(">Delete</button>", editor_html)
+        self.assertIn('aria-label="Delete"', editor_html)
+        self.assertIn('title="Delete"', editor_html)
+        self.assertIn('href="#icon-trash"', editor_html)
         self.assertNotIn("icon-trash-can", editor_html)
 
     def test_parent_goal_info_button_sits_in_the_heading_not_the_status_row(self):
