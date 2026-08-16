@@ -384,7 +384,7 @@ class FeedbackWorkflowTests(TestCase):
         self.assertIn("max-height: calc(100dvh - 24px)", css)
         self.assertIn(".feedback-admin { padding: 22px; }", css)
         self.assertIn(
-            ".feedback-admin .feedback-description { margin-bottom: 20px; }",
+            ".feedback-admin .feedback-description { margin-bottom: 12px; }",
             css,
         )
         self.assertIn('input[type="file"]::file-selector-button', css)
