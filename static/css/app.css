@@ -185,7 +185,7 @@ a { color: inherit; }
 .stack-form p > label { display: block; }
 .stack-form p > label::after { content: ":"; }
 .stack-form p.field-required > label::after, .stack-form p > label.field-required::after { content: " *:"; color: var(--danger); font-weight: 900; }
-.stack-form p.field-required > label.required-label-decorated::after, .stack-form p > label.field-required.required-label-decorated::after { content: ""; }
+.stack-form p > label.required-label-decorated::after { content: ""; }
 .required-marker-star { color: var(--danger); font-weight: 900; }
 .required-marker-colon { color: inherit; }
 .field-label-text { display: inline; }

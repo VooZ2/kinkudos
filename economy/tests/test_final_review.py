@@ -168,6 +168,7 @@ class FinalReviewTests(TestCase):
         self.assertIn(".pending-empty-state .action-icon", pending_css)
         self.assertIn(".required-marker-star", css)
         self.assertIn(".required-marker-colon", css)
+        self.assertIn(".stack-form p > label.required-label-decorated::after", css)
         self.assertIn(".settings-summary-description", css)
         self.assertIn(".settings-add-divider", css)
         self.assertIn(".tabbar.is-scrollable:not(.is-at-start)", css)
