@@ -113,8 +113,9 @@ class CaregiverGuestAccessTests(TestCase):
         start = html.index("data-copy-caregiver-login")
         snippet = html[max(0, start - 280) : start + 420]
         self.assertIn('class="share-copy-button"', snippet)
-        self.assertIn('data-copy-label>Copy</span>', snippet)
-        self.assertIn("icon-clipboard-check", snippet)
+        self.assertIn('aria-label="Copy"', snippet)
+        self.assertIn("icon-copy", snippet)
+        self.assertNotIn("data-copy-label", snippet)
         self.assertNotIn("Copy sign-in link", snippet)
 
     def test_create_invite_opens_share_dialog_via_session(self):
@@ -132,7 +133,7 @@ class CaregiverGuestAccessTests(TestCase):
         self.assertContains(response, "Private sign-in link")
         self.assertContains(response, "caregiver-invite-share-dialog")
         self.assertContains(response, "Share…")
-        self.assertContains(response, 'data-copy-label>Copy</span>', html=False)
+        self.assertContains(response, 'aria-label="Copy"', html=False)
         self.assertContains(response, 'href="#icon-share-nodes"', html=False)
         self.assertNotContains(response, "is ready to share")
         self.assertNotContains(response, 'data-share-caregiver-invite hidden')
@@ -145,8 +146,9 @@ class CaregiverGuestAccessTests(TestCase):
             )
         ]
         self.assertIn("<span>Invite link:</span>", dialog_html)
-        self.assertIn("data-copy-label>Copy</span>", dialog_html)
-        self.assertIn("#icon-clipboard-check", dialog_html)
+        self.assertIn('aria-label="Copy"', dialog_html)
+        self.assertIn("#icon-copy", dialog_html)
+        self.assertNotIn("data-copy-label", dialog_html)
         self.assertNotIn("Copy link", dialog_html)
         self.assertLess(
             dialog_html.index("share-dialog-toolbar"),

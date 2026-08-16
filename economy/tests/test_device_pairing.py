@@ -163,7 +163,7 @@ class DevicePairingTests(TestCase):
         self.assertContains(response, "Private pairing link")
         self.assertContains(response, reverse("pair_device_via_link"), html=False)
         self.assertContains(response, "Share…")
-        self.assertContains(response, 'data-copy-label>Copy</span>', html=False)
+        self.assertContains(response, 'aria-label="Copy"', html=False)
         self.assertContains(response, 'href="#icon-share-nodes"', html=False)
         self.assertNotContains(response, "is ready to share")
         self.assertNotContains(response, 'data-share-device-pairing hidden')
@@ -179,8 +179,9 @@ class DevicePairingTests(TestCase):
             )
         ]
         self.assertIn("<span>Pairing link:</span>", dialog_html)
-        self.assertIn("data-copy-label>Copy</span>", dialog_html)
-        self.assertIn("#icon-clipboard-check", dialog_html)
+        self.assertIn('aria-label="Copy"', dialog_html)
+        self.assertIn("#icon-copy", dialog_html)
+        self.assertNotIn("data-copy-label", dialog_html)
         self.assertNotIn("Copy link", dialog_html)
         self.assertLess(
             dialog_html.index("share-dialog-toolbar"),

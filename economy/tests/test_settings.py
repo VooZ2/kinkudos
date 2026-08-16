@@ -394,6 +394,13 @@ class ParentSettingsTests(TestCase):
                 f'class="settings-summary-label">{heading}</span>',
                 settings,
             )
+        for description in (
+            "Control which devices can access child profiles.",
+            "Manage parent, child, and guest accounts.",
+            "Create and manage temporary guest access.",
+            "Review feedback submitted by family members.",
+        ):
+            self.assertIn(description, settings)
         self.assertEqual(settings.count("settings-summary-status"), 3)
         self.assertNotContains(response, ">Rewards and goals<", html=False)
         stylesheet = (ROOT / "static" / "css" / "app.css").read_text(encoding="utf-8")

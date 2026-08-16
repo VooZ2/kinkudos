@@ -2,23 +2,42 @@ const t = key => window.KINKUDOS?.i18n?.[key] || key;
 
 function decorateRequiredLabels() {
   document.querySelectorAll("label").forEach(label => {
-    if (label.dataset.requiredDecorated === "true") return;
     const control = label.htmlFor
       ? document.getElementById(label.htmlFor)
       : label.querySelector("input[required], select[required], textarea[required]");
     const required = Boolean(control?.required || label.closest(".field-required"));
-    if (!required || label.closest(".field-required")) return;
+    const marker = label.querySelector(":scope > .field-label-text");
+    if (!required) {
+      if (label.dataset.requiredDecorated !== "true" || !marker) return;
+      marker.replaceWith(document.createTextNode(label.dataset.requiredOriginalText || ""));
+      label.classList.remove("required-label-decorated");
+      delete label.dataset.requiredDecorated;
+      delete label.dataset.requiredOriginalText;
+      return;
+    }
+    if (label.dataset.requiredDecorated === "true") return;
     const textNode = [...label.childNodes].find(
       node => node.nodeType === Node.TEXT_NODE && node.textContent.trim(),
     );
     if (!textNode) return;
-    const text = textNode.textContent;
-    const trimmed = text.trimEnd();
-    const stackParagraphLabel = label.parentElement?.matches(".stack-form > p");
-    const marker = stackParagraphLabel ? " *" : " *:";
-    textNode.textContent = trimmed.endsWith(":")
-      ? `${trimmed.slice(0, -1)}${marker}${text.slice(trimmed.length)}`
-      : `${text}${marker}`;
+    const originalText = textNode.textContent;
+    const labelText = originalText.trim().replace(/:\s*$/, "");
+    if (!labelText) return;
+    const labelTextWrapper = document.createElement("span");
+    labelTextWrapper.className = "field-label-text";
+    labelTextWrapper.append(document.createTextNode(labelText));
+    const star = document.createElement("span");
+    star.className = "required-marker-star";
+    star.setAttribute("aria-hidden", "true");
+    star.textContent = " *";
+    const colon = document.createElement("span");
+    colon.className = "required-marker-colon";
+    colon.setAttribute("aria-hidden", "true");
+    colon.textContent = ":";
+    labelTextWrapper.append(star, colon);
+    textNode.replaceWith(labelTextWrapper);
+    label.classList.add("required-label-decorated");
+    label.dataset.requiredOriginalText = originalText;
     label.dataset.requiredDecorated = "true";
   });
 }
@@ -28,8 +47,11 @@ document.querySelectorAll("[data-copy-from]").forEach(button => {
     const source = document.getElementById(button.dataset.copyFrom);
     if (!source || !navigator.clipboard) return;
     await navigator.clipboard.writeText(source.textContent.trim());
-    const label = button.querySelector("[data-copy-label]");
-    if (label) label.textContent = button.dataset.copiedLabel || label.textContent;
+    const copiedLabel = button.dataset.copiedLabel;
+    if (copiedLabel) {
+      button.setAttribute("aria-label", copiedLabel);
+      button.setAttribute("title", copiedLabel);
+    }
   });
 });
 

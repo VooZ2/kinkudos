@@ -913,6 +913,9 @@ msgstr "Valdykite tinklo ribojimus ir įrenginių prieigą."
 msgid "Control points, balances, and task assignment."
 msgstr "Valdykite taškus, likučius ir užduočių skyrimą."
 
+msgid "Control which devices can access child profiles."
+msgstr "Valdykite, kurie įrenginiai gali pasiekti vaikų profilius."
+
 msgid "Copied"
 msgstr "Nukopijuota"
 
@@ -948,6 +951,9 @@ msgstr "Sukurti prizo idėją"
 
 msgid "Create account"
 msgstr "Kurti paskyrą"
+
+msgid "Create and manage temporary guest access."
+msgstr "Kurkite ir tvarkykite laikiną svečių prieigą."
 
 msgid "Create guest PIN"
 msgstr "Sukurti svečio PIN"
@@ -1785,6 +1791,9 @@ msgstr "Pritaikyti sau"
 
 msgid "Manage"
 msgstr "Tvarkyti"
+
+msgid "Manage parent, child, and guest accounts."
+msgstr "Tvarkykite tėvų, vaikų ir svečių paskyras."
 
 msgid "Manage sections"
 msgstr "Valdymo skiltys"
@@ -2682,6 +2691,9 @@ msgstr "Grąžinta iš tikslo"
 
 msgid "Revealed"
 msgstr "Atidengtas"
+
+msgid "Review feedback submitted by family members."
+msgstr "Peržiūrėkite šeimos narių pateiktus atsiliepimus."
 
 msgid "Reviewed"
 msgstr "Peržiūrėtas"
