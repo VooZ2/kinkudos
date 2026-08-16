@@ -1425,7 +1425,9 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
 .backup-warning {
   display: flex;
   align-items: center;
+  justify-content: center;
   box-sizing: border-box;
+  text-align: center;
   line-height: 1.35;
 }
 .backup-panel .backup-warning { margin: 12px 0 0; padding: 12px 14px; background: color-mix(in srgb, var(--danger) 7%, var(--surface-solid)); overflow-wrap: anywhere; }
