@@ -185,6 +185,7 @@ a { color: inherit; }
 .narrow-card { width: min(460px, 100%); margin: 8vh auto; padding: clamp(24px, 5vw, 44px); }
 .narrow-card h1 { margin-top: 0; }
 .stack-form { display: grid; gap: 16px; }
+.stack-form[hidden] { display: none !important; }
 .stack-form p, .stack-form label { margin: 0; display: grid; gap: 7px; min-width: 0; color: var(--text); font-weight: 750; }
 .field-control, .stack-form input, .stack-form select, .stack-form textarea, .pin-input { width: 100%; min-height: 48px; color: var(--text); background-color: var(--surface-solid); border: 1px solid var(--border); border-radius: 13px; padding: 12px 13px; outline: none; font-weight: 650; line-height: 1.35; }
 .date-input-shell {
@@ -1375,6 +1376,7 @@ textarea.child-claim-note { min-height: 72px; resize: none; font-size: 1rem; }
   gap: var(--fab-gap);
   pointer-events: none;
 }
+body:has(.onboarding-panel) .floating-actions { display: none; }
 .floating-actions > * { pointer-events: auto; }
 .feedback-launcher {
   display: inline-flex;
