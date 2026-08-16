@@ -26,7 +26,7 @@
   </label>
   <div class="share-dialog-toolbar">
     <button class="icon-button" type="button" data-share-caregiver-invite aria-label="{% translate "Share…" %}" title="{% translate "Share…" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-share-nodes"></use></svg></button>
-    <button class="share-copy-button" type="button" data-copy-caregiver-invite>{% translate "Copy" %}</button>
+    <button class="share-copy-button" type="button" data-copy-caregiver-invite data-copied-label="{% translate 'Copied' %}">{% translate "Copy" %}</button>
   </div>
   <p class="danger-warning">{% translate "Anyone with this link can activate guest access until it expires. Send it privately." %}</p>
   {% if caregiver_invite_share.email_sent %}
@@ -49,7 +49,7 @@
   const inviteUrl = linkEl.value;
   copyButton.addEventListener("click", async () => {
     await navigator.clipboard.writeText(inviteUrl);
-    copyButton.textContent = "{% translate 'Copied' %}";
+    copyButton.textContent = copyButton.dataset.copiedLabel;
   });
   shareButton.addEventListener("click", async () => {
     if (navigator.share) {
@@ -74,13 +74,14 @@
   <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate "Close" %}" title="{% translate "Close" %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
   <h2>{% translate "Private pairing link" %}</h2>
   <p>{% translate "Open this link on the child's device. It can be used once and expires in 10 minutes." %}</p>
+  <span hidden data-device-pairing-share-title="{% translate 'KinKudos child device pairing' %}" data-device-pairing-share-text="{% translate "A secret one-time key. Open it on the child's device — then it vanishes." %}"></span>
   <label>
     <span>{% translate "Pairing link:" %}</span>
     <textarea class="field-control" rows="3" readonly data-device-pairing-link>{{ device_pairing_share.pairing_url }}</textarea>
   </label>
   <div class="share-dialog-toolbar">
     <button class="icon-button" type="button" data-share-device-pairing aria-label="{% translate "Share…" %}" title="{% translate "Share…" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-share-nodes"></use></svg></button>
-    <button class="share-copy-button" type="button" data-copy-device-pairing>{% translate "Copy" %}</button>
+    <button class="share-copy-button" type="button" data-copy-device-pairing data-copied-label="{% translate 'Copied' %}">{% translate "Copy" %}</button>
   </div>
   <p class="danger-warning">{% translate "Anyone with this link can pair one device until it expires. Send it privately." %}</p>
   <div class="dialog-actions">
@@ -93,12 +94,12 @@
   const linkEl = document.querySelector("[data-device-pairing-link]");
   const copyButton = document.querySelector("[data-copy-device-pairing]");
   const shareButton = document.querySelector("[data-share-device-pairing]");
-  const shareTitle = "{% translate 'KinKudos child device pairing' %}";
-  const shareText = "{% translate "A secret one-time key. Open it on the child's device — then it vanishes." %}";
+  const shareTitle = document.querySelector("[data-device-pairing-share-title]").dataset.devicePairingShareTitle;
+  const shareText = document.querySelector("[data-device-pairing-share-text]").dataset.devicePairingShareText;
   const pairingUrl = linkEl.value;
   copyButton.addEventListener("click", async () => {
     await navigator.clipboard.writeText(pairingUrl);
-    copyButton.textContent = "{% translate 'Copied' %}";
+    copyButton.textContent = copyButton.dataset.copiedLabel;
   });
   shareButton.addEventListener("click", async () => {
     if (navigator.share) {
@@ -198,7 +199,9 @@
         </p>
       {% endif %}
     </div>
-    {% if child.goal_summary %}<a class="parent-goal-summary" href="#parent-catalogs" data-parent-goal-target="{{ child.goal_summary.pk }}"><span class="goal-summary-title"><span>{{ child.goal_summary.icon|icon_symbol }}</span> {{ child.goal_summary.title }}</span><span class="goal-summary-progress">{{ child.goal_summary.progress_amount }}/{{ child.goal_summary.target_amount }} {% translate "Points" %}</span><span class="progress"><span style="width: {{ child.goal_summary.progress_percent }}%"></span></span><small class="goal-summary-status">{% if child.goal_summary.has_pending_completion %}{% translate "Reached goal" %}{% elif child.goal_summary.mode == "available" %}{% translate "Current goal" %}{% else %}{% translate "Saved" %}{% endif %}</small>{% if child.additional_goal_count %}<small>+{{ child.additional_goal_count }}</small>{% endif %}</a>{% endif %}
+    {% if child.goal_summary %}
+      {% if is_caregiver %}<div class="parent-goal-summary">{% else %}<a class="parent-goal-summary" href="#parent-catalogs" data-parent-goal-target="{{ child.goal_summary.pk }}">{% endif %}<span class="goal-summary-title"><span>{{ child.goal_summary.icon|icon_symbol }}</span> {{ child.goal_summary.title }}</span><span class="goal-summary-progress">{{ child.goal_summary.progress_amount }}/{{ child.goal_summary.target_amount }} {% translate "Points" %}</span><span class="progress"><span style="width: {{ child.goal_summary.progress_percent }}%"></span></span><small class="goal-summary-status">{% if child.goal_summary.has_pending_completion %}{% translate "Reached goal" %}{% elif child.goal_summary.mode == "available" %}{% translate "Current goal" %}{% else %}{% translate "Saved" %}{% endif %}</small>{% if child.additional_goal_count %}<small>+{{ child.additional_goal_count }}</small>{% endif %}{% if is_caregiver %}</div>{% else %}</a>{% endif %}
+    {% endif %}
     <div class="child-quick-actions" aria-label="{{ child.name }} {% translate "actions" %}">
       <button class="quick-action" type="button" data-open-dialog="task-{{ child.pk }}" aria-label="{% translate "Add completed task" %}" title="{% translate "Add completed task" %}">
         <svg class="action-icon" aria-hidden="true"><use href="#icon-clipboard-check"></use></svg>
@@ -898,6 +901,7 @@
               class="share-copy-button"
               type="button"
               data-copy-caregiver-login
+              data-copied-label="{% translate 'Copied' %}"
               data-login-url="{{ request.scheme }}://{{ request.get_host }}{% url 'caregiver_login' guest.login_code %}"
             >{% translate "Copy" %}</button>
             {% if guest.is_locked %}
@@ -954,7 +958,7 @@
   document.querySelectorAll("[data-copy-caregiver-login]").forEach((button) => {
     button.addEventListener("click", async () => {
       await navigator.clipboard.writeText(button.dataset.loginUrl);
-      button.textContent = "{% translate 'Copied' %}";
+      button.textContent = button.dataset.copiedLabel;
     });
   });
   </script>

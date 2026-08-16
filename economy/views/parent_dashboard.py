@@ -466,6 +466,8 @@ def parent_dashboard(request):
     feedback_status = request.GET.get("feedback_status", "active").strip()
     feedback_type = request.GET.get("feedback_type", "").strip()
     feedback_query = FeedbackReport.objects.select_related("parent", "child")
+    if is_caregiver:
+        feedback_query = feedback_query.filter(child_id__in=child_ids or [-1])
     if feedback_status == "active":
         feedback_query = feedback_query.exclude(status=FeedbackStatus.RESOLVED)
     elif feedback_status in FeedbackStatus.values:
@@ -786,7 +788,12 @@ def parent_dashboard(request):
                 auto_id="id_network_access_%s",
             ),
             "current_client_ip": client_ip(request),
-            "paired_devices": list(DeviceToken.recently_active()),
+            # Keep inactive-but-unrevoked devices visible so every parent can
+            # review and revoke a token that still grants child access.
+            "paired_devices": list(
+                DeviceToken.objects.filter(revoked_at__isnull=True)
+                .select_related("created_by")
+            ),
             "has_paired_devices": DeviceToken.objects.filter(
                 revoked_at__isnull=True
             ).exists(),

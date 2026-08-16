@@ -55,6 +55,28 @@ child. Removing a child profile deactivates it, same as parent accounts.
 A child may access only their own private data and shared catalogs (tasks,
 rewards, themes). Cross-child access is forbidden.
 
+**Caregivers / guest accounts** — a parent can create a temporary caregiver
+profile for selected children and an explicit access-until date. The invitation
+contains a short-lived bootstrap secret in the URL fragment, so it is not
+written to ordinary HTTP access logs. The guest opens that link, creates a
+four-digit PIN, and then uses the caregiver sign-in link and PIN until the
+configured access date, a parent revokes access, or the profile is locked.
+The original invite remains the entry point after PIN creation and redirects to
+the same caregiver sign-in route; there is no separate guest portal or parent
+password flow. A caregiver account has an unusable Django password and cannot
+be used as a parent account.
+
+Caregivers are scoped to the children selected by the parent. Their Home area
+may review and decide child requests, assign or cancel daily tasks, award
+completed tasks, adjust balances, assign penalties, change a child's credit
+floor, and unlock a child's PIN. Manage and Settings remain parent-only:
+caregivers cannot edit catalogues or savings-goal definitions, manage parent or
+child accounts, configure family/server settings, manage devices or guest
+profiles, or update family feedback. Caregiver media URLs are independently
+scoped to assigned children. Caregiver sessions are invalidated when access
+expires; the profile and its user account are then deactivated, so an expired
+guest cannot fall through to the full-parent scope.
+
 ## Core data
 **FamilySettings** — singleton: family display name, currency name, default
 per-child negative balance floor, photo-bonus points, birthday points,
@@ -298,6 +320,13 @@ the shared parent palette.
 - Child profiles are hidden until a parent pairs the device. Pairing links are
   single-use, expire after ten minutes, and pass their secret in the URL
   fragment so it is not written to normal HTTP access logs.
+- Caregiver invitation and login access is scoped to the explicitly selected
+  children and the configured access-until date. Expired or revoked caregiver
+  sessions are invalidated before authorization scope is calculated. Child
+  avatars, task evidence, and feedback screenshots enforce the same child
+  scope at their media endpoints. Non-revoked child-device tokens remain
+  visible in Settings until a parent revokes them, including tokens idle for
+  more than 30 days.
 - An optional Django-level IPv4/IPv6 allowlist can restrict child routes or
   the whole application independently of the chosen proxy. In child-only
   mode, an active child session is restricted even on shared routes such as

@@ -2,7 +2,6 @@ import hashlib
 import json
 from uuid import uuid4
 
-from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
@@ -17,7 +16,11 @@ from django.utils.translation import gettext as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_POST
 
-from economy.auth import child_object_or_404, child_required, current_child, current_device
+from economy.auth import (
+    child_object_or_404,
+    child_required,
+    ensure_media_accessible,
+)
 from economy.forms import (
     AvatarForm,
     BirthDateForm,
@@ -1011,13 +1014,8 @@ def _replace_task_evidence(claim, processed):
             storage.delete(name)
 
 def child_avatar(request, child_id):
-    if (
-        not request.user.is_authenticated
-        and settings.DEVICE_PAIRING_REQUIRED
-        and current_device(request) is None
-    ):
-        raise Http404
     child = get_object_or_404(ChildProfile, pk=child_id, is_active=True)
+    ensure_media_accessible(request, child)
     if not child.avatar:
         raise Http404
     response = FileResponse(child.avatar.open("rb"), content_type="image/webp")
@@ -1027,9 +1025,7 @@ def child_avatar(request, child_id):
 
 def task_evidence(request, claim_id, size):
     claim = get_object_or_404(TaskClaim.objects.select_related("child"), pk=claim_id)
-    child = current_child(request)
-    if not request.user.is_authenticated and (child is None or child.pk != claim.child_id):
-        raise Http404
+    ensure_media_accessible(request, claim.child, require_child_session=True)
     field = claim.evidence_thumbnail if size == "thumbnail" else claim.evidence_image
     if size not in {"thumbnail", "full"} or not field:
         raise Http404

@@ -192,7 +192,7 @@ class DevicePairingTests(TestCase):
         )
         self.assertTrue(DevicePairingLink.objects.exists())
 
-    def test_inactive_devices_are_hidden_from_settings_list(self):
+    def test_inactive_devices_remain_visible_until_revoked(self):
         active, _ = DeviceToken.issue(created_by=self.parent, label="Active tablet")
         inactive, _ = DeviceToken.issue(created_by=self.parent, label="Stale phone")
         DeviceToken.objects.filter(pk=inactive.pk).update(
@@ -204,10 +204,15 @@ class DevicePairingTests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
 
         self.assertContains(response, "Active tablet")
-        self.assertNotContains(response, "Stale phone")
+        self.assertContains(response, "Stale phone")
         self.assertContains(response, "Revoke all child devices")
+        response = self.client.post(
+            reverse("parent_revoke_device", args=[inactive.pk])
+        )
+        self.assertRedirects(response, f"{reverse('parent_dashboard')}#parent-settings")
         inactive.refresh_from_db()
         self.assertTrue(inactive.is_inactive)
+        self.assertIsNotNone(inactive.revoked_at)
         self.assertFalse(active.is_inactive)
 
     def test_pairing_link_is_single_use_and_expires(self):

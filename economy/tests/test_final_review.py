@@ -158,7 +158,7 @@ class FinalReviewTests(TestCase):
             css,
         )
         self.assertIn("border-radius: 24px 24px 0 0;", css)
-        self.assertIn("inset: auto 0 0;", css)
+        self.assertIn("inset: auto 0 var(--viewport-bottom-offset);", css)
         self.assertIn(".history-filter-dialog .dialog-actions", css)
         self.assertIn("position: sticky;", css)
         self.assertIn(".history-photo-button", css)
@@ -256,42 +256,52 @@ class FinalReviewTests(TestCase):
             'name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"',
             html=False,
         )
-        self.assertContains(response, "r=callout-align", html=False)
+        self.assertContains(response, "r=responsive-controls", html=False)
 
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
-        self.assertIn("--browser-bottom-gap: env(safe-area-inset-bottom, 0px);", css)
+        self.assertIn("--safe-area-bottom: env(safe-area-inset-bottom, 0px);", css)
+        self.assertIn(
+            "--viewport-bottom-offset: max(0px, calc(100lvh - 100dvh));",
+            css,
+        )
         self.assertNotIn(
             "@media (display-mode: browser) and (hover: none) and (pointer: coarse)",
             css,
         )
         self.assertNotIn(
-            "--browser-bottom-gap: calc(env(safe-area-inset-bottom, 0px) + 44px);",
+            "--browser-bottom-gap",
             css,
         )
-        self.assertIn("@media (hover: none), (pointer: coarse)", css)
+        self.assertIn("@media (hover: none)", css)
         self.assertIn("touch-action: manipulation", css)
         self.assertIn(
-            "padding: 7px 0 calc(8px + var(--browser-bottom-gap))",
+            "inset: auto 0 var(--viewport-bottom-offset)",
             css,
         )
         self.assertIn(
-            "padding: 22px 18px calc(16px + var(--browser-bottom-gap))",
+            "padding: 7px 0 calc(7px + var(--safe-area-bottom))",
             css,
         )
         self.assertIn(
-            "--fab-inset-block: calc(88px + var(--browser-bottom-gap));",
+            "padding: 22px 18px calc(16px + var(--safe-area-bottom))",
+            css,
+        )
+        self.assertIn(
+            "--fab-inset-block: calc(88px + var(--safe-area-bottom) + var(--viewport-bottom-offset));",
             css,
         )
 
         js = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
-        self.assertIn("function bindPrimaryTap(", js)
-        self.assertIn('if (event.pointerType === "mouse") return;', js)
-        self.assertIn("const dragged = armed && Math.hypot(", js)
+        self.assertNotIn("function bindPrimaryTap(", js)
+        self.assertIn('document.addEventListener("click", event => {', js)
         self.assertIn(
-            'bindPrimaryTap(document, "[data-close-dialog], [data-open-dialog]"',
+            'const closeButton = event.target.closest?.("[data-close-dialog]");',
             js,
         )
-        self.assertIn('bindPrimaryTap(parentShell, "[data-parent-nav]"', js)
+        self.assertIn(
+            'links.forEach(link => link.addEventListener("click", event => {',
+            js,
+        )
 
     def test_frontend_source_covers_date_goal_language_and_balance_behaviour(self):
         response = self.parent_response()

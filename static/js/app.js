@@ -1,43 +1,5 @@
 const t = key => window.KINKUDOS?.i18n?.[key] || key;
 
-function bindPrimaryTap(target, selector, handler) {
-  let startX = 0;
-  let startY = 0;
-  let last = 0;
-  let armed = false;
-  const match = event => event.target.closest?.(selector);
-  const run = (event, node) => {
-    const now = Date.now();
-    if (now - last < 450) {
-      event.preventDefault();
-      return;
-    }
-    last = now;
-    handler(event, node);
-  };
-  target.addEventListener("pointerdown", event => {
-    if (!match(event)) return;
-    armed = true;
-    startX = event.clientX;
-    startY = event.clientY;
-  }, { passive: true });
-  target.addEventListener("pointerup", event => {
-    if (event.pointerType === "mouse") return;
-    const node = match(event);
-    if (!node) return;
-    const dragged = armed && Math.hypot(event.clientX - startX, event.clientY - startY) > 14;
-    armed = false;
-    if (dragged) return;
-    run(event, node);
-  });
-  target.addEventListener("pointercancel", () => { armed = false; });
-  target.addEventListener("click", event => {
-    const node = match(event);
-    if (!node) return;
-    run(event, node);
-  });
-}
-
 document.querySelectorAll('input[type="number"]').forEach(input => {
   const min = Number(input.getAttribute("min"));
   const max = Number(input.getAttribute("max"));
@@ -66,13 +28,17 @@ function openPinDialog(childId) {
 document.querySelectorAll("[data-open-pin]").forEach(button => {
   button.addEventListener("click", () => openPinDialog(button.dataset.openPin));
 });
-bindPrimaryTap(document, "[data-close-dialog], [data-open-dialog]", (_event, button) => {
-  if (button.matches("[data-close-dialog]")) {
-    button.closest("dialog")?.close();
+document.addEventListener("click", event => {
+  const closeButton = event.target.closest?.("[data-close-dialog]");
+  if (closeButton) {
+    closeButton.closest("dialog")?.close();
     return;
   }
-  button.closest("dialog")?.close();
-  document.getElementById(button.dataset.openDialog)?.showModal();
+  const openButton = event.target.closest?.("[data-open-dialog]");
+  if (openButton) {
+    openButton.closest("dialog")?.close();
+    document.getElementById(openButton.dataset.openDialog)?.showModal();
+  }
 });
 document.querySelectorAll("[data-confirm]").forEach(button => {
   button.addEventListener("click", event => {
@@ -294,13 +260,13 @@ if (parentShell) {
     if (parentPanelForHash(id) === "parent-catalogs") return openManageSection("manage-tasks");
     return false;
   };
-  bindPrimaryTap(parentShell, "[data-parent-nav]", (event, link) => {
+  links.forEach(link => link.addEventListener("click", event => {
     event.preventDefault();
     const id = link.hash.slice(1);
     window.history.replaceState(window.history.state, "", `#${id}`);
     showRoute(id);
     if (!manageSectionForHash(id)) scrollWorkspaceToTop();
-  });
+  }));
   const initialHash = window.location.hash.slice(1);
   const initialNestedRoute = showRoute(initialHash || panels[0]?.id);
   if (window.location.hash && !initialNestedRoute) scrollWorkspaceToTop();

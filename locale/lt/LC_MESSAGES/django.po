@@ -7,6 +7,9 @@ msgstr "Prizams vėl prieinami taškai: %(amount)s."
 msgid "%(amount)s saved points will be returned to %(child_name)s’s available balance before this goal is removed."
 msgstr "Prieš pašalinant šį tikslą, %(amount)s išsaugotų taškų bus grąžinta vaikui %(child_name)s į pasiekiamą balansą."
 
+msgid "%(family)s – guest access"
+msgstr "%(family)s – svečio prieiga"
+
 msgid "%(family_display_name)s – password reset"
 msgstr "%(family_display_name)s – slaptažodžio atkūrimas"
 
@@ -67,6 +70,9 @@ msgstr "Naujas darbas laukia patvirtinimo"
 msgid "A parent created this private link. Continue to allow child access on this device."
 msgstr "Tėvai sukūrė šią privačią nuorodą. Tęskite, kad šiame įrenginyje leistumėte vaikų prieigą."
 
+msgid "A parent shared temporary guest access with you. Continue to create your PIN."
+msgstr "Tėvai pasidalijo laikina svečio prieiga. Tęskite, kad susikurtumėte PIN."
+
 msgid "A reason is required."
 msgstr "Paaiškinimas privalomas."
 
@@ -97,6 +103,9 @@ msgstr "Apie staigmenų korteles"
 msgid "Access"
 msgstr "Prisijungimai"
 
+msgid "Access for %(name)s. Choose a 4-digit PIN you will use to sign in."
+msgstr "Prieiga: %(name)s. Pasirinkite 4 skaitmenų PIN, kurį naudosite prisijungdami."
+
 msgid "Access is not allowed from this network"
 msgstr "Prieiga iš šio tinklo neleidžiama"
 
@@ -114,6 +123,9 @@ msgstr "Aktyvuoti misiją"
 
 msgid "Active"
 msgstr "Aktyvus"
+
+msgid "Active guests"
+msgstr "Aktyvūs svečiai"
 
 msgid "Activity Log"
 msgstr "Darbų žurnalas"
@@ -213,6 +225,9 @@ msgstr "Metinė Blockville dovana!"
 
 msgid "Any time"
 msgstr "Bet kada"
+
+msgid "Anyone with this link can activate guest access until it expires. Send it privately."
+msgstr "Šią nuorodą turintis asmuo gali aktyvuoti svečio prieigą, kol ji galioja. Siųskite ją privačiai."
 
 msgid "Anyone with this link can pair one device until it expires. Send it privately."
 msgstr "Iki nuorodai nustojant galioti ją turintis asmuo gali susieti vieną įrenginį. Siųskite ją privačiai."
@@ -436,6 +451,9 @@ msgstr "Atšaukti"
 msgid "Cancel remaining"
 msgstr "Atšaukti likusius"
 
+msgid "Cancel this invite link?"
+msgstr "Atšaukti šią kvietimo nuorodą?"
+
 msgid "Cancelled"
 msgstr "Atšaukta"
 
@@ -511,6 +529,9 @@ msgstr "Patikrinkite atsiliepimo aprašymą ir ekrano nuotrauką."
 msgid "Check the goal details."
 msgstr "Patikrinkite tikslo duomenis."
 
+msgid "Check the guest invite form."
+msgstr "Patikrinkite svečio kvietimo formą."
+
 msgid "Check the network access settings."
 msgstr "Patikrinkite tinklo prieigos nustatymus."
 
@@ -534,6 +555,9 @@ msgstr "Patikrinkite prisijungimo duomenis."
 
 msgid "Checking notifications"
 msgstr "Tikrinami pranešimai"
+
+msgid "Checking the private invite link…"
+msgstr "Tikrinama privati svečio kvietimo nuoroda…"
 
 msgid "Checking the private pairing link…"
 msgstr "Tikrinama privati susiejimo nuoroda…"
@@ -799,6 +823,9 @@ msgstr "Prisijunkite per leidžiamą namų arba VPN tinklą ir bandykite dar kar
 msgid "Connect to your home network or VPN and try again."
 msgstr "Prisijunkite prie namų tinklo arba VPN ir bandykite dar kartą."
 
+msgid "Continue"
+msgstr "Tęsti"
+
 msgid "Continue uncovering"
 msgstr "Tęsti atidengimą"
 
@@ -820,6 +847,9 @@ msgstr "Kaina"
 msgid "Could not change the notification setting."
 msgstr "Nepavyko pakeisti pranešimų nustatymo."
 
+msgid "Could not create a guest sign-in link."
+msgstr "Nepavyko sukurti svečio prisijungimo nuorodos."
+
 msgid "Cover surface"
 msgstr "Dangos paviršius"
 
@@ -831,6 +861,15 @@ msgstr "Sukurti prizo idėją"
 
 msgid "Create account"
 msgstr "Kurti paskyrą"
+
+msgid "Create guest PIN"
+msgstr "Sukurti svečio PIN"
+
+msgid "Create guest invite"
+msgstr "Sukurti svečio kvietimą"
+
+msgid "Create invite link"
+msgstr "Sukurti kvietimo nuorodą"
 
 msgid "Create new accounts"
 msgstr "Kurti naujas paskyras"
@@ -852,6 +891,9 @@ msgstr "Sukurti darbą"
 
 msgid "Create the first parent administrator account. Email setup is optional and can be configured later in Settings."
 msgstr "Sukurkite pirmą tėvų administratoriaus paskyrą. El. pašto nustatymas yra pasirinktinis ir vėliau keičiamas nustatymuose."
+
+msgid "Create your PIN"
+msgstr "Susikurkite PIN"
 
 msgid "Creative Journal"
 msgstr "Kūrybos dienoraštis"
@@ -1354,6 +1396,27 @@ msgstr "Tikslai"
 msgid "Got it"
 msgstr "Supratau"
 
+msgid "Guest access"
+msgstr "Svečio prieiga"
+
+msgid "Guest access for “%(name)s” was removed."
+msgstr "Svečio prieiga „%(name)s“ pašalinta."
+
+msgid "Guest access unavailable"
+msgstr "Svečio prieiga nepasiekiama"
+
+msgid "Guest area"
+msgstr "Svečio erdvė"
+
+msgid "Guest area sections"
+msgstr "Svečio erdvės skyriai"
+
+msgid "Guest invite cancelled."
+msgstr "Svečio kvietimas atšauktas."
+
+msgid "Guest sign-in"
+msgstr "Svečio prisijungimas"
+
 msgid "HQ"
 msgstr "Būstinė"
 
@@ -1380,6 +1443,9 @@ msgstr "Padėk pandai atlikti visus darbus iki miego vidurnaktį."
 
 msgid "Hero Missions"
 msgstr "Herojaus misijos"
+
+msgid "Hi! I'm sharing temporary access to our family space. This is a temporary sign-in link — keep it private. After you open it, create your own PIN so you can approve requests and assign day-to-day tasks."
+msgstr "Labas! Dalinuosi laikina prieiga prie mūsų šeimos erdvės. Tai laikina prisijungimo nuoroda — saugokite ją privačiai. Atidarę ją susikurkite savo PIN, kad galėtumėte tvirtinti prašymus ir priskirti kasdienes užduotis."
 
 msgid "Hidden"
 msgstr "Paslėpta"
@@ -1477,6 +1543,9 @@ msgstr "Ji kainuoja %(cost)s uždirbtų %(unit)s. Tavo taškai gali padidėti ik
 msgid "JPEG, PNG, WebP, HEIC, or HEIF, up to 5 MB. The image will be cropped to a square."
 msgstr "JPEG, PNG, WebP, HEIC arba HEIF, iki 5 MB. Nuotrauka bus apkirpta kvadratu."
 
+msgid "JavaScript is required to use the private invite link."
+msgstr "Privačiai svečio kvietimo nuorodai naudoti reikalingas „JavaScript“."
+
 msgid "JavaScript is required to use the private pairing link."
 msgstr "Privačiai susiejimo nuorodai naudoti reikalingas „JavaScript“."
 
@@ -1497,6 +1566,9 @@ msgstr "Išsaugok pasirinkimą aukščiau ir siųsk jį automatiškai pagal graf
 
 msgid "Keep the tasks above. Choose when to send them automatically."
 msgstr "Išsaugok darbus aukščiau. Pasirink, kada juos siųsti automatiškai."
+
+msgid "KinKudos child device pairing"
+msgstr "KinKudos vaiko įrenginio susiejimas"
 
 msgid "KinKudos feedback #%(report_id)s: %(report_type)s"
 msgstr "KinKudos atsiliepimas #%(report_id)s: %(report_type)s"
@@ -1521,6 +1593,9 @@ msgstr "Palikite tuščią, jei PIN nekeičiate."
 
 msgid "Leave blank to keep the current password."
 msgstr "Palikite tuščią, jei slaptažodžio nekeičiate."
+
+msgid "Link expires"
+msgstr "Nuoroda galioja iki"
 
 msgid "Linux PC"
 msgstr "Linux kompiuteris"
@@ -1693,6 +1768,9 @@ msgstr "Kitas"
 msgid "No IP addresses are blocked. Device pairing and sign-in protections remain active."
 msgstr "Jokie IP adresai neblokuojami. Įrenginių susiejimo ir prisijungimo apsaugos lieka aktyvios."
 
+msgid "No active guest access."
+msgstr "Aktyvių svečių prieigų nėra."
+
 msgid "No activity matches these filters."
 msgstr "Nė vienas istorijos įrašas neatitinka pasirinktų filtrų."
 
@@ -1828,6 +1906,9 @@ msgstr "Atidaryti vaiko pastabą"
 msgid "Open feedback"
 msgstr "Neišspręsti atsiliepimai"
 
+msgid "Open guest invite"
+msgstr "Atidaryti svečio kvietimą"
+
 msgid "Open parent area"
 msgstr "Atidaryti tėvų sritį"
 
@@ -1863,6 +1944,9 @@ msgstr "Pelėdos patarimas"
 
 msgid "PIN changed."
 msgstr "PIN pakeistas."
+
+msgid "PIN locked"
+msgstr "PIN užrakintas"
 
 msgid "Page"
 msgstr "Puslapis"
@@ -1989,6 +2073,9 @@ msgstr "Laukiama tėvų patvirtinimo..."
 
 msgid "Pending and revision-requested task photos are never removed."
 msgstr "Laukiančių ir grąžintų pataisyti darbų nuotraukos nešalinamos."
+
+msgid "Pending invites"
+msgstr "Laukiantys kvietimai"
 
 msgid "Pending requests"
 msgstr "Laukiantys prašymai"
@@ -2160,6 +2247,9 @@ msgstr "Pašalinti"
 
 msgid "Remove child profile “%(name)s”? History will be preserved."
 msgstr "Pašalinti vaiko profilį „%(name)s“? Istorija bus išsaugota."
+
+msgid "Remove guest access “%(name)s”?"
+msgstr "Pašalinti svečio prieigą „%(name)s“?"
 
 msgid "Remove names, PINs, screenshots, email addresses, server details, and other family information before posting publicly."
 msgstr "Prieš skelbdami viešai pašalinkite vardus, PIN, ekrano nuotraukas, el. pašto adresus, serverio informaciją ir kitus šeimos duomenis."
@@ -2365,6 +2455,9 @@ msgstr "Šeštadienį ir sekmadienį"
 msgid "Save"
 msgstr "Išsaugoti"
 
+msgid "Save PIN"
+msgstr "Išsaugoti PIN"
+
 msgid "Save account"
 msgstr "Išsaugoti paskyrą"
 
@@ -2505,6 +2598,9 @@ msgstr "Ar dovanoti {amount} taškų vaikui {recipient}?"
 
 msgid "Sender email address"
 msgstr "Siuntėjo el. pašto adresas"
+
+msgid "Sent to %(email)s."
+msgstr "Išsiųsta adresu %(email)s."
 
 msgid "Server"
 msgstr "Serveris"
@@ -2719,6 +2815,9 @@ msgstr "Parašykite, kas neveikia ar ką norite pridėti."
 msgid "Temporarily locked"
 msgstr "Laikinai užrakinta"
 
+msgid "Temporary access for grandparents, relatives, or babysitters. They sign in with a PIN. They do not receive notifications."
+msgstr "Laikina prieiga seneliams, giminaičiams ar auklėms. Jie prisijungia PIN kodu. Pranešimų jie negaus."
+
 msgid "Thank you. Your feedback was sent."
 msgstr "Ačiū. Jūsų atsiliepimas išsiųstas."
 
@@ -2812,8 +2911,14 @@ msgstr "Nuotraukos apdoroti nepavyko. Pasirinkite kitą failą."
 msgid "The inspiration shop opens after today's commissioned projects are finished."
 msgstr "Įkvėpimo parduotuvė atsivers užbaigus šiandien užsakytus projektus."
 
+msgid "The invite was created, but the email could not be sent."
+msgstr "Kvietimas sukurtas, bet el. laiško išsiųsti nepavyko."
+
 msgid "The limit resets every Monday for each child. The default is 3."
 msgstr "Limitas atnaujinamas kiekvieną pirmadienį, kiekvienam vaikui. Numatytoji reikšmė – 3."
+
+msgid "The link is valid for 6 hours or until a PIN is created."
+msgstr "Nuoroda galioja 6 valandas arba iki PIN sukūrimo."
 
 msgid "The link is valid for one hour and can only be used once."
 msgstr "Nuoroda galioja vieną valandą ir gali būti panaudota tik vieną kartą."
@@ -2856,6 +2961,9 @@ msgstr "Taškų istorija dar tuščia."
 
 msgid "The prize shop unlocks after today's assigned quests are complete."
 msgstr "Prizų parduotuvė atsivers atlikus šiandien paskirtas užduotis."
+
+msgid "The profile is temporarily locked. Ask a parent to unlock it."
+msgstr "Profilis laikinai užrakintas. Paprašykite tėvų jį atrakinti."
 
 msgid "The profile is temporarily locked. Try again later."
 msgstr "Profilis trumpam užrakintas. Pabandykite vėliau."
@@ -3016,6 +3124,9 @@ msgstr "Šio tikslo prašymas jau išspręstas."
 msgid "This goal will be removed. This action cannot be undone."
 msgstr "Šis tikslas bus pašalintas. Šio veiksmo atšaukti negalima."
 
+msgid "This guest access is no longer available."
+msgstr "Ši svečio prieiga nebegalima."
+
 msgid "This is a surprise — the result is unknown until all fields are open."
 msgstr "Tai staigmena — rezultatas nežinomas, kol neatidengsi visų langelių."
 
@@ -3048,6 +3159,9 @@ msgstr "Šis prizas jau laukia patvirtinimo."
 
 msgid "This reward is no longer active."
 msgstr "Šis prizas nebeaktyvus."
+
+msgid "This sign-in link is invalid or has expired."
+msgstr "Ši prisijungimo nuoroda netinkama arba nebegalioja."
 
 msgid "This task is already awaiting approval."
 msgstr "Šis darbas jau laukia patvirtinimo."
@@ -3130,6 +3244,12 @@ msgstr "Tokenai"
 msgid "Too many PIN attempts. Try again later."
 msgstr "Per daug PIN bandymų. Bandyk vėliau."
 
+msgid "Too many guest invites. Try again later."
+msgstr "Per daug svečių kvietimų. Pabandykite vėliau."
+
+msgid "Too many incorrect PINs. Ask a parent to unlock this access."
+msgstr "Per daug neteisingų PIN. Paprašykite tėvų atrakinti šią prieigą."
+
 msgid "Too many pairing attempts. Try again later."
 msgstr "Per daug įrenginio susiejimo bandymų. Bandykite vėliau."
 
@@ -3180,6 +3300,9 @@ msgstr "Nežinomas įrenginys"
 
 msgid "Unlock profile"
 msgstr "Atrakinti profilį"
+
+msgid "Until"
+msgstr "Iki"
 
 msgid "Up to 150 characters. Letters, numbers, and @ . + - _ are allowed."
 msgstr "Iki 150 simbolių. Galima naudoti raides, skaičius ir ženklus @ . + - _."
@@ -3400,6 +3523,9 @@ msgstr "Kredito limitas apsaugojo dalį taškų."
 msgid "Your enchanted duties are waiting"
 msgstr "Tavo užburti darbai dar laukia"
 
+msgid "Your guest PIN is ready. Sign in to continue."
+msgstr "Jūsų svečio PIN paruoštas. Prisijunkite, kad tęstumėte."
+
 msgid "Your missions are still waiting"
 msgstr "Tavo misijos dar laukia"
 
@@ -3522,336 +3648,3 @@ msgstr "„%(title)s“ dabar %(state)s."
 
 msgid "“%(title)s” updated."
 msgstr "„%(title)s“ atnaujinta."
-
-msgid "%(family)s – guest access"
-msgstr "%(family)s – svečio prieiga"
-
-msgid "Guest access"
-msgstr "Svečių prieiga"
-
-msgid "Create invite"
-msgstr "Sukurti kvietimą"
-
-msgid "Private sign-in link"
-msgstr "Privati prisijungimo nuoroda"
-
-msgid "Share…"
-msgstr "Dalintis…"
-
-msgid "Guest area"
-msgstr "Svečio zona"
-
-msgid "Copy sign-in link"
-msgstr "Nukopijuoti prisijungimo nuorodą"
-
-msgid "The pairing link is ready to share."
-msgstr "Susiejimo nuoroda paruošta dalintis."
-
-msgid "KinKudos child device pairing"
-msgstr "KinKudos vaiko įrenginio susiejimas"
-
-msgid "Your spellbook"
-msgstr "Tavo užkeikimų knyga"
-
-msgid "My magic"
-msgstr "Mano magija"
-
-msgid "Choose a world"
-msgstr "Pasirink pasaulį"
-
-msgid "Tap a world. It changes colours, words, and sounds."
-msgstr "Paliesk pasaulį. Keisis spalvos, žodžiai ir garsai."
-
-msgid "Owls & galleons"
-msgstr "Pelėdos ir galeonai"
-
-msgid "Surprise world"
-msgstr "Staigmenos pasaulis"
-
-msgid "New every day"
-msgstr "Naujas kasdien"
-
-msgid "My portrait"
-msgstr "Mano portretas"
-
-msgid "From gallery"
-msgstr "Iš galerijos"
-
-msgid "Birthday feast"
-msgstr "Gimtadienio šventė"
-
-msgid "Secret code"
-msgstr "Slaptas kodas"
-
-msgid "Old code"
-msgstr "Senas kodas"
-
-msgid "New code"
-msgstr "Naujas kodas"
-
-msgid "Repeat new code"
-msgstr "Pakartok naują"
-
-msgid "Save secret code"
-msgstr "Išsaugoti slaptą kodą"
-
-msgid "Enter this world"
-msgstr "Įeiti į šį pasaulį"
-
-msgid "Your base"
-msgstr "Tavo bazė"
-
-msgid "Build my look"
-msgstr "Kuriu savo išvaizdą"
-
-msgid "Pick a biome"
-msgstr "Pasirink biomą"
-
-msgid "Square buttons. Big taps."
-msgstr "Kvadratiniai mygtukai. Dideli bakstelėjimai."
-
-msgid "Emeralds"
-msgstr "Smaragdai"
-
-msgid "Surprise biome"
-msgstr "Staigmenos biomas"
-
-msgid "My skin"
-msgstr "Mano skin’as"
-
-msgid "Camera"
-msgstr "Kamera"
-
-msgid "Gallery"
-msgstr "Galerija"
-
-msgid "Spawn day"
-msgstr "Spawn diena"
-
-msgid "Passcode"
-msgstr "Praėjimo kodas"
-
-msgid "Old passcode"
-msgstr "Senas kodas"
-
-msgid "New passcode"
-msgstr "Naujas kodas"
-
-msgid "Repeat new"
-msgstr "Pakartok naują"
-
-msgid "Save passcode"
-msgstr "Išsaugoti praėjimo kodą"
-
-msgid "Build this world"
-msgstr "Pastatyti šį pasaulį"
-
-msgid "My space"
-msgstr "Mano erdvė"
-
-msgid "You can switch whenever you want."
-msgstr "Gali keisti kada nori."
-
-msgid "My photo"
-msgstr "Mano nuotrauka"
-
-msgid "Choose photo"
-msgstr "Pasirinkti nuotrauką"
-
-msgid "My PIN"
-msgstr "Mano PIN"
-
-msgid "Old PIN"
-msgstr "Senas PIN"
-
-msgid "Use this world"
-msgstr "Naudoti šį pasaulį"
-
-msgid "Hero profile"
-msgstr "Herojaus profilis"
-
-msgid "HQ setup"
-msgstr "Herojaus pultas"
-
-msgid "Select HQ theme"
-msgstr "Pasirink būstinės temą"
-
-msgid "Big comic cards. One tap."
-msgstr "Didelės komiksų kortelės. Vienas bakstelėjimas."
-
-msgid "Badges"
-msgstr "Ženkleliai"
-
-msgid "Surprise HQ"
-msgstr "Staigmenos būstinė"
-
-msgid "New each day"
-msgstr "Nauja kasdien"
-
-msgid "Hero portrait"
-msgstr "Herojaus portretas"
-
-msgid "Snap"
-msgstr "Snap"
-
-msgid "Files"
-msgstr "Failai"
-
-msgid "Origin day"
-msgstr "Kilmės diena"
-
-msgid "Access code"
-msgstr "Prieigos kodas"
-
-msgid "Current code"
-msgstr "Dabartinis kodas"
-
-msgid "Save code"
-msgstr "Išsaugoti kodą"
-
-msgid "Activate"
-msgstr "Aktyvuoti"
-
-msgid "My studio"
-msgstr "Mano studija"
-
-msgid "Make it mine"
-msgstr "Padaryk sava"
-
-msgid "Pick a mood"
-msgstr "Pasirink nuotaiką"
-
-msgid "Organic cards — like paint swatches."
-msgstr "Organinės kortelės — kaip dažų mėginiai."
-
-msgid "Pearls"
-msgstr "Perlai"
-
-msgid "Surprise mood"
-msgstr "Staigmenos nuotaika"
-
-msgid "New each morning"
-msgstr "Nauja kiekvieną rytą"
-
-msgid "Self-portrait"
-msgstr "Autoportretas"
-
-msgid "Photos"
-msgstr "Nuotraukos"
-
-msgid "Celebration day"
-msgstr "Šventės diena"
-
-msgid "Private sketch code"
-msgstr "Privatus eskizo kodas"
-
-msgid "Save sketch code"
-msgstr "Išsaugoti eskizo kodą"
-
-msgid "Paint this world"
-msgstr "Nutapyti šį pasaulį"
-
-msgid "Panda den"
-msgstr "Pandos urvas"
-
-msgid "My cozy den"
-msgstr "Mano jaukus urvas"
-
-msgid "Visit a world"
-msgstr "Aplankyk pasaulį"
-
-msgid "Round cards — easy for little fingers."
-msgstr "Apvalios kortelės — patogu mažiems pirštukams."
-
-msgid "Bamboo"
-msgstr "Bambukas"
-
-msgid "Wake up new"
-msgstr "Pabusk naujai"
-
-msgid "My panda face"
-msgstr "Mano pandos veidas"
-
-msgid "Say cheese"
-msgstr "Sakyk sūris"
-
-msgid "Pick photo"
-msgstr "Pasirink nuotrauką"
-
-msgid "Cake day"
-msgstr "Tortuko diena"
-
-msgid "Secret bamboo code"
-msgstr "Slaptas bambuko kodas"
-
-msgid "Say it again"
-msgstr "Sakyk dar kartą"
-
-msgid "Save bamboo code"
-msgstr "Išsaugoti bambuko kodą"
-
-msgid "Go to this world"
-msgstr "Eiti į šį pasaulį"
-
-msgid "Player pad"
-msgstr "Žaidėjo pultas"
-
-msgid "Customize"
-msgstr "Priderinti"
-
-msgid "Select skin pack"
-msgstr "Pasirink skin paketą"
-
-msgid "Dark UI + glow — like a game menu."
-msgstr "Tamsus UI + švytėjimas — kaip žaidimo meniu."
-
-msgid "Cubes"
-msgstr "Kubeliai"
-
-msgid "Random skin"
-msgstr "Atsitiktinis skin’as"
-
-msgid "Daily roll"
-msgstr "Kasdienis roll’as"
-
-msgid "Player icon"
-msgstr "Žaidėjo ikona"
-
-msgid "Capture"
-msgstr "Užfiksuoti"
-
-msgid "Inventory"
-msgstr "Inventorius"
-
-msgid "Player birthday"
-msgstr "Žaidėjo gimtadienis"
-
-msgid "Lock code"
-msgstr "Užrakto kodas"
-
-msgid "Old lock"
-msgstr "Senas užraktas"
-
-msgid "New lock"
-msgstr "Naujas užraktas"
-
-msgid "Confirm lock"
-msgstr "Patvirtink"
-
-msgid "Save lock code"
-msgstr "Išsaugoti užrakto kodą"
-
-msgid "Equip world"
-msgstr "Uždėti pasaulį"
-
-msgid "PIN change steps"
-msgstr "PIN keitimo žingsniai"
-
-msgid "PIN keypad"
-msgstr "PIN klaviatūra"
-
-msgid "New codes didn’t match — try again"
-msgstr "Nauji kodai nesutapo — bandyk dar kartą"
-
-msgid "Ready to save"
-msgstr "Galima išsaugoti"

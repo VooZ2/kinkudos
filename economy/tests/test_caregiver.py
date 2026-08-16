@@ -1,8 +1,10 @@
+import tempfile
 from datetime import timedelta
 from pathlib import Path
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
@@ -12,7 +14,10 @@ from economy.models import (
     CaregiverProfile,
     ChildProfile,
     FamilySettings,
+    FeedbackReport,
+    GoalMode,
     RequestStatus,
+    SavingsGoal,
     Task,
     TaskClaim,
 )
@@ -274,6 +279,173 @@ class CaregiverGuestAccessTests(TestCase):
             reverse("parent_unlock_child", args=[self.other_child.pk])
         )
         self.assertEqual(unlock_other.status_code, 404)
+
+    def test_expired_caregiver_cannot_fall_back_to_parent_scope(self):
+        invite, _raw = CaregiverInvite.issue(
+            created_by=self.parent,
+            label="Pasibaigė",
+            access_until=timezone.localdate() - timedelta(days=1),
+            children=[self.child],
+        )
+        caregiver = CaregiverProfile.create_from_invite(invite=invite, raw_pin="9999")
+        self.client.force_login(caregiver.user)
+
+        response = self.client.post(
+            reverse("parent_remove_child_account", args=[self.other_child.pk])
+        )
+
+        self.assertRedirects(response, reverse("home"), fetch_redirect_response=False)
+        self.child.refresh_from_db()
+        self.other_child.refresh_from_db()
+        caregiver.refresh_from_db()
+        caregiver.user.refresh_from_db()
+        self.assertTrue(self.child.is_active)
+        self.assertTrue(self.other_child.is_active)
+        self.assertFalse(caregiver.is_active)
+        self.assertFalse(caregiver.user.is_active)
+
+    def test_caregiver_media_is_limited_to_assigned_children(self):
+        invite, _raw = CaregiverInvite.issue(
+            created_by=self.parent,
+            label="Auklė",
+            access_until=timezone.localdate() + timedelta(days=5),
+            children=[self.child],
+        )
+        caregiver = CaregiverProfile.create_from_invite(invite=invite, raw_pin="9999")
+        task = Task.objects.create(title="Photo task", reward=5)
+        own_claim = TaskClaim.objects.create(
+            child=self.child,
+            task=task,
+            task_title=task.title,
+            reward_snapshot=task.reward,
+            status=RequestStatus.PENDING,
+        )
+        other_claim = TaskClaim.objects.create(
+            child=self.other_child,
+            task=task,
+            task_title=task.title,
+            reward_snapshot=task.reward,
+            status=RequestStatus.PENDING,
+        )
+        own_report = FeedbackReport.objects.create(
+            child=self.child,
+            description="Own screenshot",
+            reporter_name=self.child.name,
+            reporter_role="child",
+            app_version="26.8.0",
+        )
+        other_report = FeedbackReport.objects.create(
+            child=self.other_child,
+            description="Other screenshot",
+            reporter_name=self.other_child.name,
+            reporter_role="child",
+            app_version="26.8.0",
+        )
+        parent_report = FeedbackReport.objects.create(
+            parent=self.parent,
+            description="Parent screenshot",
+            reporter_name=self.parent.username,
+            reporter_role="parent",
+            app_version="26.8.0",
+        )
+
+        with tempfile.TemporaryDirectory() as media_root:
+            with override_settings(MEDIA_ROOT=media_root):
+                self.child.avatar = SimpleUploadedFile(
+                    "own.webp", b"own-avatar", content_type="image/webp"
+                )
+                self.other_child.avatar = SimpleUploadedFile(
+                    "other.webp", b"other-avatar", content_type="image/webp"
+                )
+                self.child.save(update_fields=["avatar"])
+                self.other_child.save(update_fields=["avatar"])
+                own_claim.evidence_image = SimpleUploadedFile(
+                    "own-evidence.webp", b"own-evidence", content_type="image/webp"
+                )
+                other_claim.evidence_image = SimpleUploadedFile(
+                    "other-evidence.webp", b"other-evidence", content_type="image/webp"
+                )
+                own_claim.save(update_fields=["evidence_image"])
+                other_claim.save(update_fields=["evidence_image"])
+                own_report.screenshot = SimpleUploadedFile(
+                    "own-feedback.webp", b"own-feedback", content_type="image/webp"
+                )
+                other_report.screenshot = SimpleUploadedFile(
+                    "other-feedback.webp", b"other-feedback", content_type="image/webp"
+                )
+                parent_report.screenshot = SimpleUploadedFile(
+                    "parent-feedback.webp", b"parent-feedback", content_type="image/webp"
+                )
+                own_report.save(update_fields=["screenshot"])
+                other_report.save(update_fields=["screenshot"])
+                parent_report.save(update_fields=["screenshot"])
+
+                self.client.force_login(caregiver.user)
+                dashboard = self.client.get(reverse("parent_dashboard"))
+                self.assertEqual(
+                    [report.pk for report in dashboard.context["feedback_page"].object_list],
+                    [own_report.pk],
+                )
+                allowed_urls = [
+                    reverse("child_avatar", args=[self.child.pk]),
+                    reverse("task_evidence", args=[own_claim.pk, "full"]),
+                    reverse("feedback_screenshot", args=[own_report.pk]),
+                ]
+                denied_urls = [
+                    reverse("child_avatar", args=[self.other_child.pk]),
+                    reverse("task_evidence", args=[other_claim.pk, "full"]),
+                    reverse("feedback_screenshot", args=[other_report.pk]),
+                    reverse("feedback_screenshot", args=[parent_report.pk]),
+                ]
+                for url in allowed_urls:
+                    with self.subTest(url=url, access="allowed"):
+                        self.assertEqual(self.client.get(url).status_code, 200)
+                for url in denied_urls:
+                    with self.subTest(url=url, access="denied"):
+                        self.assertEqual(self.client.get(url).status_code, 404)
+
+    def test_caregiver_cannot_post_manage_goal_actions(self):
+        invite, _raw = CaregiverInvite.issue(
+            created_by=self.parent,
+            label="Senelis",
+            access_until=timezone.localdate() + timedelta(days=5),
+            children=[self.child],
+        )
+        caregiver = CaregiverProfile.create_from_invite(invite=invite, raw_pin="9999")
+        goal = SavingsGoal.objects.create(
+            child=self.child,
+            title="Bicycle",
+            target_amount=100,
+            mode=GoalMode.SAVED,
+        )
+        self.client.force_login(caregiver.user)
+        actions = [
+            ("parent_add_goal_points", {},),
+            ("parent_return_goal_points", {},),
+            (
+                "parent_edit_goal",
+                {"title": "Changed", "target_amount": "200", "icon": "⭐"},
+            ),
+            ("parent_close_goal", {},),
+            ("parent_delete_goal", {},),
+        ]
+
+        for name, data in actions:
+            with self.subTest(action=name):
+                response = self.client.post(
+                    reverse(name, args=[goal.pk]),
+                    data,
+                )
+                self.assertRedirects(
+                    response,
+                    reverse("parent_dashboard"),
+                    fetch_redirect_response=False,
+                )
+
+        goal.refresh_from_db()
+        self.assertEqual(goal.title, "Bicycle")
+        self.assertEqual(goal.target_amount, 100)
+        self.assertEqual(goal.status, "active")
 
     def test_caregiver_can_decide_task_for_assigned_child(self):
         invite, _raw = CaregiverInvite.issue(

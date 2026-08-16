@@ -410,7 +410,7 @@ def parent_decide_goal_completion(request, request_id, decision):
         messages.error(request, exc.messages[0])
     return redirect(f"{reverse('parent_dashboard')}#parent-home")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_add_goal_points(request, goal_id):
     goal = get_object_or_404(
@@ -435,7 +435,7 @@ def parent_add_goal_points(request, goal_id):
         messages.error(request, exc.messages[0])
     return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_return_goal_points(request, goal_id):
     goal = get_object_or_404(
@@ -455,7 +455,7 @@ def parent_return_goal_points(request, goal_id):
         messages.error(request, exc.messages[0])
     return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_edit_goal(request, goal_id):
     goal = get_object_or_404(
@@ -481,7 +481,7 @@ def parent_edit_goal(request, goal_id):
         messages.error(request, exc.messages[0])
     return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_close_goal(request, goal_id):
     goal = get_object_or_404(
@@ -498,7 +498,7 @@ def parent_close_goal(request, goal_id):
         messages.error(request, exc.messages[0])
     return redirect(f"{reverse('parent_dashboard')}#parent-catalogs")
 
-@parent_required
+@parent_account_required
 @require_POST
 def parent_delete_goal(request, goal_id):
     goal = get_object_or_404(
