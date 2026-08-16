@@ -138,7 +138,7 @@
 
 <section id="prizai" class="content-section">
   <div class="section-heading"><p class="eyebrow">{% translate "Choose a reward" %}</p><h2>{{ child.theme|theme_text:"nav_rewards" }}</h2></div>
-  {% if assigned_tasks_block_rewards %}<div class="credit-warning notice-block notice-info assigned-task-warning"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg><p>{{ child.theme|theme_text:"assigned_reward_block" }}</p></div>{% elif credit_reward_requests_blocked %}<div class="credit-warning notice-block notice-info"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg><p>{% translate "New reward requests are paused because half of the available credit has been used. Earn more points to unlock them." %}</p></div>{% endif %}
+  {% if assigned_tasks_block_rewards %}<div class="credit-warning notice-block notice-info"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg><p>{{ child.theme|theme_text:"assigned_reward_block" }}</p></div>{% elif credit_reward_requests_blocked %}<div class="credit-warning notice-block notice-info"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg><p>{% translate "New reward requests are paused because half of the available credit has been used. Earn more points to unlock them." %}</p></div>{% endif %}
   {% if lottery.is_visible %}
   <article class="system-lottery-card" data-lottery-card>
     <div class="lottery-card-art" aria-hidden="true"><span>?</span><span>?</span><span>?</span></div>
