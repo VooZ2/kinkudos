@@ -29,6 +29,8 @@ schema.
 - Prižiūrėtojai gali naudoti numatytus šeimos veiksmus priskirtiems vaikams,
   įskaitant darbus, prizus, nuobaudas, apdovanojimus ir atrakinimą; oficiali
   dokumentacija dabar aprašo platesnę Pradžios lango apimtį.
+- Nenaudojami susieti vaikų įrenginiai lieka sąraše, kol tėvai juos atšaukia,
+  kad vis dar galiojančią prieigą būtų galima peržiūrėti ir panaikinti.
 - Mobilieji valdikliai, dalijimosi dialogai, datos laukai ir atsiliepimų bei
   nustatymų paaiškinimų blokai sutvarkyti mažiems ekranams.
 

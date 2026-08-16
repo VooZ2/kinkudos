@@ -25,6 +25,8 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 - Caregivers can use the intended family actions for their assigned children,
   including task, reward, penalty, award, and unlock actions; the official
   documentation now describes this broader Home scope.
+- Unused paired child devices stay listed until a parent revokes them, so a
+  token that still grants access can still be reviewed.
 - Mobile controls, share dialogs, date fields, and feedback/settings callouts
   were tightened for small screens.
 
