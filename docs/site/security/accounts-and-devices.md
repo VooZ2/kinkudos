@@ -11,7 +11,7 @@ Removing a parent deactivates the account while preserving its history. The last
 ## Child profiles
 
 A child profile stores the child’s name, PIN hash, spendable balance, credit,
-individual scratch-ticket setting, birthday, avatar, theme preference, and
+individual surprise-card setting, birthday, avatar, theme preference, and
 History. Children see only their own private data. The existing-account list
 keeps **Parent accounts** and **Child profiles** under separate headings.
 
@@ -30,15 +30,16 @@ the guest may see, and set an access end date. Share the private link from the
 dialog (copy, device share sheet, or email when SMTP is enabled). The invite
 link is valid for **6 hours** and is consumed when the guest creates a PIN.
 
-Guests sign in with that PIN on a stable guest URL. They can approve day-to-day
-requests and assign tasks for their selected children, but they cannot open
+Guests sign in with that PIN on a stable guest URL. They can use the family
+actions available on Home for their selected children, including reviewing and
+deciding ordinary requests and assigning day-to-day tasks, but they cannot open
 Manage or Settings, and they do not receive notifications. Parents can unlock a
 locked guest PIN or remove guest access at any time. Expired invites and expired
 guest access disappear from the settings lists automatically.
 
 ## Paired devices
 
-Pairing is the first security gate for children. Until a browser/PWA is paired, it cannot list child names or present the PIN screen. Each device is shown with a broad phone, tablet, computer, or unknown-device classification, a browser summary, a stable six-character ID, and a last-used time. The classification is a convenience label and does not identify an exact model. Devices unused for 30 days are hidden from the settings list (pairing is not revoked) and reappear when used again. Name devices clearly, review the last-used time, and revoke a device as soon as it is lost or no longer family-controlled.
+Pairing is the first security gate for children. Until a browser/PWA is paired, it cannot list child names or present the PIN screen. Each device is shown with a broad phone, tablet, computer, or unknown-device classification, a browser summary, a stable six-character ID, and a last-used time. The classification is a convenience label and does not identify an exact model. Unused, unrevoked devices remain visible in the settings list, including after 30 days without use. Name devices clearly, review the last-used time, and revoke a device as soon as it is lost or no longer family-controlled.
 
 An actively used paired device has its access cookie renewed, so an active
 pairing should not quietly expire. Revocation removes the device’s child access

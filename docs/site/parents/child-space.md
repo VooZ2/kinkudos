@@ -12,7 +12,7 @@ information, PIN, balance, or requests.
 | **Today’s assigned tasks** | Complete tasks sent by a parent. Each completion awards its points immediately and the task disappears from today’s list. There is no child note on that check. If the parent added a note in **Assign tasks for today**, it appears clearly under the title in the child’s current theme. |
 | **Rewards** | Request an available reward when the spendable balance and credit rule allow it. A child may cancel their own request while it is pending. |
 | **Goals and suggestions** | Suggest a reward or savings goal. After a parent approves a goal suggestion, choose **Use available points** or **Save separately** from the goal card. |
-| **Scratch tickets** | Buy an optional ticket only when enabled for both the family and the child, the child has enough spendable points, and the weekly limit allows it. An open ticket must be finished before buying another. |
+| **Surprise cards** | Buy an optional card only when enabled for both the family and the child, the child has enough spendable points, and the weekly limit allows it. An open card must be finished before buying another. |
 | **Give points** | If another active child exists, send only points already earned to them. Open the floating **Gift** control on the child dashboard. A child cannot transfer credit or points they do not have. |
 | **Feedback** | Send a private idea or problem report to the parents from the floating **Feedback** control, optionally with a screenshot. |
 
@@ -70,19 +70,27 @@ the resulting records.
 
 At the bottom of the child dashboard, open **Settings**.
 
-### Appearance and themes
+Settings is an accordion: open one panel at a time for **Choose a world**,
+**My photo**, **Birthday**, or **My PIN**. The panels keep the page compact on a
+phone and do not change the child’s data or permissions.
 
-The child can choose one of the built-in worlds: Neutral, Magic Academy, Block
-World, Superhero HQ, Art Studio, Panda World, or Blockville World. A theme
-changes the point-unit names, colours, fonts, cards, buttons, progress bars,
-wording, and small sounds; it does not change balances, saving rules, or which
-rewards are available.
+### Appearance, themes, and sound
+
+The **Choose a world** panel presents a theme grid with seven built-in worlds:
+Neutral, Magic Academy, Block World, Superhero HQ, Art Studio, Panda World, and
+Blockville World. It also includes a daily-random choice, making eight choices
+in the grid. A theme changes the point-unit names, colours, fonts, cards,
+buttons, progress bars, wording, and small sounds; it does not change balances,
+saving rules, or which rewards are available.
 
 **Change my theme randomly every day** chooses a different theme automatically
 once each day. Turn it off to keep the selected theme.
 
 The global green, red, and charcoal point-change colors belong to History and
 other logs. They do not replace the main themed child balance colors.
+
+The sound control in the child-page header turns theme sounds on or off. This is
+a local browser preference and does not change the selected theme.
 
 ### Avatar
 
@@ -98,9 +106,11 @@ rule.
 
 ### Change PIN
 
-The child can change their own four-digit PIN by entering the current PIN, the
-new PIN, and the new PIN again. A parent can also reset a child PIN from
-**Parents → Settings → Accounts**, under **Child profiles**.
+The **My PIN** panel uses a full-width PIN pad and three steps: enter the
+current four-digit PIN, enter the new PIN, and repeat the new PIN. A delete
+control removes the last digit, and the save control appears after the two new
+codes match. A parent can also reset a child PIN from **Parents → Settings →
+Accounts**, under **Child profiles**.
 
 ## What still needs a parent
 

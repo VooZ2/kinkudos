@@ -29,10 +29,9 @@ Ekrano nuotraukoje naudojami tik išgalvoti demonstraciniai duomenys.
 pvz., **iPhone · Safari** arba **Android planšetė · Chrome**, stabilų šešių
 simbolių ID ir paskutinio naudojimo laiką. Klasifikavimas apima telefono,
 planšetės, kompiuterio ir nežinomo įrenginio kategorijas; tikslus modelis
-nenustatomas. 30 dienų nenaudoti įrenginiai iš šio sąrašo automatiškai
-paslepiami (susiejimas neatšaukiamas). Jie vėl pasirodo, kai įrenginys
-panaudojamas. **Atšaukti visus vaikų įrenginius** vis tiek apima visus
-neatšauktus susiejimus, įskaitant paslėptuosius.
+nenustatomas. Įrenginiai lieka šiame sąraše, kol juos atšaukiate, net jei jie
+nenaudojami 30 dienų. **Atšaukti visus vaikų įrenginius** apima visus
+neatšauktus susiejimus.
 
 Įrenginio pavadinimą galima pakeisti, kad jį būtų lengva atpažinti. Telefone
 **Atšaukti** rodoma kompaktiška šiukšliadėžės ikona. Pamestą, parduotą, ilgam

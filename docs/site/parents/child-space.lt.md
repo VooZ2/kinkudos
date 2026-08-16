@@ -12,7 +12,7 @@ vaiko privačios informacijos, PIN, balanso ar prašymų.
 | **Šiandien paskirti darbai** | Užbaigti tėvų atsiųstus darbus. Kiekvienas užbaigtas darbas iškart prideda taškus ir dingsta iš dienos sąrašo. Prie to užbaigimo vaiko pastabos nėra. Jei tėvai dialoge **Paskirti darbus šiandienai** įrašė pastabą, ji aiškiai rodoma po pavadinimu, vaiko temos spalvomis ir žodžiais. |
 | **Prizai** | Prašyti galimo prizo, jei tai leidžia išleidžiamas balansas ir kredito taisyklė. Kol prašymas laukia, vaikas gali jį atšaukti. |
 | **Tikslai ir pasiūlymai** | Pasirinkti **Pasiūlyk prizą ar tikslą** ir pasiūlyti prizą ar taupymo tikslą. Tėvams patvirtinus tikslo pasiūlymą, tikslo kortelėje pasirinkti **Naudoti turimus taškus** arba **Taupyti atskirai**. |
-| **Nutrinami bilietai** | Pirkti pasirenkamą bilietą tik jei jis įjungtas šeimai ir vaikui, pakanka išleidžiamų taškų bei leidžia savaitės limitas. Prieš kitą pirkimą reikia užbaigti atidarytą bilietą. |
+| **Staigmenų kortelės** | Pirkti pasirenkamą kortelę tik jei ji įjungta šeimai ir vaikui, pakanka išleidžiamų taškų bei leidžia savaitės limitas. Prieš kitą pirkimą reikia užbaigti atidarytą kortelę. |
 | **Dovanoti taškus** | Jei yra kitas aktyvus vaikas, perduoti jam tik jau uždirbtus taškus. Atidarykite plaukiojantį **Dovana** valdiklį vaiko pradžios lange. Kredito ar neturimų taškų perduoti negalima. |
 | **Atsiliepimai** | Nusiųsti tėvams privatų pasiūlymą ar problemos pranešimą iš plaukiojančio **Atsiliepimai** valdiklio, prireikus pridėjus ekrano nuotrauką. |
 
@@ -70,13 +70,18 @@ vadove](savings-goals.lt.md), o įrašus – [Veiksmų istorijoje ir filtruose](
 
 Vaiko skydelio apačioje atidarykite **Nustatymai**.
 
-### Išvaizda ir temos
+Nustatymai pateikiami kaip akordeonas: vienu metu atidarykite vieną skiltį —
+**Pasirinkti pasaulį**, **Mano nuotrauka**, **Gimtadienis** arba **Mano PIN**.
+Skiltys telefone išlaiko puslapį kompaktišką ir nekeičia vaiko duomenų ar teisių.
 
-Vaikas gali rinktis vieną iš įdiegtų pasaulių: Neutral, Magic Academy, Block
-World, Superhero HQ, Art Studio, Panda World arba Blockville World. Tema keičia
-taškų vienetų pavadinimus, spalvas, šriftus, korteles, mygtukus, pažangos
-juostas, tekstus ir mažus garsus; ji nekeičia balanso, taupymo taisyklių ar
-prieinamų prizų.
+### Išvaizda, temos ir garsas
+
+Skiltyje **Pasirinkti pasaulį** rodomas temų tinklelis su septyniais įdiegtais
+pasauliais: Neutral, Magic Academy, Block World, Superhero HQ, Art Studio, Panda
+World ir Blockville World. Jame taip pat yra kasdienio atsitiktinio pasirinkimo
+variantas — iš viso tinklelyje aštuoni pasirinkimai. Tema keičia taškų vienetų
+pavadinimus, spalvas, šriftus, korteles, mygtukus, pažangos juostas, tekstus ir
+mažus garsus; ji nekeičia balanso, taupymo taisyklių ar prieinamų prizų.
 
 **Kasdien atsitiktinai keisti mano temą** automatiškai parenka kitą temą vieną
 kartą per dieną. Išjunkite, jei norite išlaikyti pasirinktą temą.
@@ -84,6 +89,9 @@ kartą per dieną. Išjunkite, jei norite išlaikyti pasirinktą temą.
 Visuotinės žalios, raudonos ir anglies spalvos taškų pokyčiams priklauso
 Istorijai ir kitiems žurnalams. Jos nepakeičia pagrindinio teminio vaiko
 balanso spalvų.
+
+Garso valdiklis vaiko puslapio antraštėje įjungia arba išjungia temos garsus.
+Tai vietinė naršyklės nuostata, kuri nekeičia pasirinktos temos.
 
 ### Avataras
 
@@ -99,9 +107,11 @@ taisyklei.
 
 ### Keisti PIN
 
-Vaikas gali pasikeisti savo keturių skaitmenų PIN įvesdamas dabartinį PIN, naują
-PIN ir pakartotą naują PIN. Tėvai PIN taip pat gali nustatyti iš naujo per
-**Tėvai → Nustatymai → Paskyros**, po antrašte **Vaikų profiliai**.
+Skiltyje **Mano PIN** naudojamas per visą plotį išdėstytas PIN skydelis ir trys
+žingsniai: įvesti dabartinį keturių skaitmenų PIN, naują PIN ir pakartoti naują
+PIN. Trinimo valdiklis pašalina paskutinį skaitmenį, o išsaugojimo valdiklis
+atsiranda, kai abu nauji kodai sutampa. Tėvai PIN taip pat gali nustatyti iš
+naujo per **Tėvai → Nustatymai → Paskyros**, po antrašte **Vaikų profiliai**.
 
 ## Kam vis dar reikia tėvų
 

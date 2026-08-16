@@ -3,9 +3,10 @@
 Kelias: **Tėvai → Nustatymai**. Puslapis suskirstytas į tris pagrindines grupes,
 atitinkančias programą:
 
-1. **Kasdieniai** — Šeima, Taškai ir darbai, Nutrinami bilietai ir Duomenys ir
+1. **Kasdieniai** — Šeima, Taškai ir darbai, Staigmenų kortelės ir Duomenys ir
    saugojimas.
-2. **Žmonės ir įrenginiai** — Vaikų įrenginiai, Paskyros ir Šeimos atsiliepimai.
+2. **Žmonės ir įrenginiai** — Vaikų įrenginiai, Paskyros, Svečių prieiga ir
+   Šeimos atsiliepimai.
 3. **Serveris** — Tinklas ir saugumas, El. paštas ir pranešimai ir Kopijos.
 
 Šiose grupėse temos pateikiamos kompaktiškomis išskleidžiamomis skiltimis:
@@ -13,7 +14,8 @@ pasirinkus atsiveria laukai, o tuščios skiltys nerodomos. Kasdienių skiltyje
 **Išsaugoti** išsaugo tik šeimos nuostatas; jis nekeičia įrenginių, paskyrų,
 tinklo, el. pašto ar kopijų nustatymų. Skiltyje **Paskyros** yra vienas
 paskyros kūrimo blokas ir vienas esamų paskyrų sąrašas; redagavimo formos
-atsidaro dialoguose, pritaikytuose ir mažam ekranui. Tinklo, el. pašto ir kopijų
+atsidaro dialoguose, pritaikytuose ir mažam ekranui. **Svečių prieiga** yra atskira
+skiltis laikinoms prižiūrėtojų prieigoms kurti. Tinklo, el. pašto ir kopijų
 santraukos antraštėje gali rodyti būsenos žymę.
 
 > **Kas gali ką keisti?** Visi tėvai gali naudoti įprastus šeimos nustatymus ir
@@ -66,18 +68,18 @@ esamų **Istorijos** įrašų.
 | **Taškai už darbo nuotrauką** | Papildomi taškai, kai vaikas pateikia darbą su nuotrauka. `0` išjungia priedą. Reikšmė užfiksuojama pateikimo metu. |
 | **Gimtadienio taškai** | Kartą per metus skiriama dovana pagal išsaugotą vaiko gimtadienį. `0` išjungia. Tais pačiais kalendoriniais metais tas pats vaikas neapdovanojamas du kartus. |
 
-### Nutrinami bilietai
+### Staigmenų kortelės
 
 Šie šeimos valdikliai veikia kartu su individualiu jungikliu skiltyje
 **Tėvai → Nustatymai → Paskyros**, po antrašte **Vaikų profiliai**:
 
 | Laukelis | Reikšmė |
 | --- | --- |
-| **Įjungti nutrinamus bilietus** | Bendras jungiklis. Išjungus sustoja nauji pirkimai ir priminimai, bet pradėtą bilietą galima baigti. |
-| **Nutrinamo bilieto kaina** | Būsimų bilietų kaina taškais. Jau nupirktas bilietas išlaiko užrašytą kainą. |
-| **Savaitinis bilietų limitas** | Kiek vienas vaikas gali pirkti nuo pirmadienio iki sekmadienio. Skaitiklis atsinaujina pirmadienį. |
+| **Įjungti staigmenų korteles** | Bendras jungiklis. Išjungus sustoja nauji pirkimai ir priminimai, bet pradėtą kortelę galima baigti. |
+| **Staigmenų kortelės kaina** | Būsimų kortelių kaina taškais. Jau nupirkta kortelė išlaiko užrašytą kainą. |
+| **Kortelių limitas per savaitę** | Kiek vienas vaikas gali pirkti nuo pirmadienio iki sekmadienio. Skaitiklis atsinaujina pirmadienį. |
 
-Nutrinami bilietai pasirenkami; jie nebūtini įprastiems darbams ar prizams.
+Staigmenų kortelės pasirenkamos; jos nebūtinos įprastiems darbams ar prizams.
 
 ### Duomenys ir saugojimas
 
@@ -110,16 +112,17 @@ ar piršto atspaudo nustatymas.
 | **Siųsti nuorodą** | Atidaro dalijimosi dialogą su vienkartine privačia nuoroda, galiojančia **10 minučių**. Atidarykite tik numatytame įrenginyje. |
 | **Įrenginio aprašas** | Rodo bendrą ikoną ir aprašą, pvz., **iPhone · Safari**, **Android telefonas · Chrome**, **iPad · Safari**, **Android planšetė · Chrome**, **Mac**, **Windows kompiuteris** arba **Linux kompiuteris**. Nežinomi įrenginiai taip ir pažymimi. |
 | **ID** | Trumpas stabilus šešių simbolių identifikatorius, padedantis atskirti įrašus. Tai nėra susiejimo prisijungimo duomuo. |
-| **Naudotas paskutinį kartą** | Rodo, kada įrenginys paskutinį kartą buvo aktyvus. 30 dienų nenaudoti įrenginiai iš šio sąrašo paslepiami iki kito panaudojimo. |
+| **Naudotas paskutinį kartą** | Rodo, kada įrenginys paskutinį kartą buvo aktyvus. Nenaudojamas įrenginys lieka sąraše, kol jį atšaukiate, taip pat ir po 30 dienų nenaudojimo. |
 | **Pervadinti** | Atveria įrenginio pavadinimo keitimo formą; prieiga nenutraukiama. |
 | **Atšaukti** | Pašalina vaiko prieigą ir pranešimus iš vieno prarasto ar nebenaudojamo įrenginio. Telefone tai rodoma kompaktiška šiukšliadėžės ikona. Norint prisijungti reikės susieti iš naujo. |
 | **Atšaukti visus vaikų įrenginius** | Tik administratoriui. Reikia jo slaptažodžio ir visus įrenginius teks susieti iš naujo. |
 
 Prieš naudodami privačią nuorodą perskaitykite [vaiko įrenginio susiejimo
-vadovą](../start/pair-a-child-device.lt.md). Aktyviai naudojant susietą
-įrenginį jo prieigos slapukas pratęsiamas, todėl aktyvus susiejimas neturėtų
-tyliai nustoti galioti. Atšaukus įrenginį prieiga iškart panaikinama ir jį
-reikia susieti iš naujo.
+vadovą](../start/pair-a-child-device.lt.md). Neaktyvūs įrenginiai lieka matomi,
+kad tėvai galėtų peržiūrėti ir atšaukti susiejimą, kuris vis dar suteikia vaiko
+prieigą. Aktyviai naudojant susietą įrenginį jo prieigos slapukas pratęsiamas,
+todėl aktyvus susiejimas neturėtų tyliai nustoti galioti. Atšaukus įrenginį
+prieiga iškart panaikinama ir jį reikia susieti iš naujo.
 
 ### Paskyros
 
@@ -132,8 +135,8 @@ Skiltyje **Paskyros** yra du blokai:
 
 Kiekvienam suaugusiajam sukurkite atskirą tėvų paskyrą su naudotojo vardu, el.
 paštu ir stipriu slaptažodžiu. Kurdami vaiko profilį nustatykite vaiko vardą,
-pasirenkamą lietuvišką kreipinį, pradinį PIN, kreditą, individualų nutrinamų
-bilietų jungiklį ir gimtadienį. Pirmą kartą prisijungęs vaikas pasirenka temą.
+pasirenkamą lietuvišką kreipinį, pradinį PIN, kreditą, individualų staigmenų
+kortelių jungiklį ir gimtadienį. Pirmą kartą prisijungęs vaikas pasirenka temą.
 
 Prie esamos paskyros pasirinkus redagavimo ikoną atsidaro dialogas. Jį galima
 uždaryti per **X**, **Atšaukti** arba **Escape**, o pakeitimus išsaugoti per
@@ -151,12 +154,36 @@ tėvų paskyrą panaikinamos ir jos „push“ prenumeratos.
 | **Vaiko vardas** | Rodomas vardas; vardai turi būti unikalūs. |
 | **Kreipinys** | Pasirenkamas lietuviškas pasisveikinimo variantas. |
 | **Kreditas** | Žemiausias leidžiamas balansas, pvz., `-100`; ta pati taisyklė rodoma vaiko kortelėje. |
-| **Įjungti nutrinamus bilietus šiam vaikui** | Individualus leidimas; bendras šeimos jungiklis taip pat turi būti įjungtas. |
+| **Įjungti staigmenų korteles šiam vaikui** | Individualus leidimas; bendras šeimos jungiklis taip pat turi būti įjungtas. |
 | **Gimtadienis** | Kasmetinių gimtadienio taškų taisyklė. Tėvai gali redaguoti tiesiogiai, o vaiko prašymui reikia patvirtinimo. |
 | **Naujas PIN / Pakartokite naują PIN** | Iš naujo nustato keturių skaitmenų PIN. Abu tušti laukai jo nekeičia. |
 
 Pašalinus vaiką profilis išjungiamas, o jo Istorija lieka. Duomenys kitam vaikui
 neperduodami.
+
+### Svečių prieiga
+
+Svečių prieiga skirta seneliui, giminaičiui, auklei ar kitam laikinam
+prižiūrėtojui. Atidarykite **Tėvai → Nustatymai → Svečių prieiga**, pasirinkite
+**Sukurti kvietimą**, nurodykite vaikus, kuriuos svečias galės pasiekti, ir datą,
+iki kurios prieiga galios. Jei įjungtas SMTP, galima papildomai įrašyti el. pašto
+adresą.
+
+Sukūrus kvietimą KinKudos atidaro privačios prisijungimo nuorodos dialogą.
+Naudokite **Kopijuoti** arba **Dalintis…**, arba leiskite sukonfigūruotam el.
+paštui išsiųsti nuorodą. Kvietimo nuoroda galioja **6 valandas** ir panaudojama,
+kai svečias susikuria keturių skaitmenų PIN. Nuorodą siųskite tik numatytam
+asmeniui.
+
+Svečias jungiasi stabilia svečio nuoroda naudodamas šį PIN. Svečio prieiga
+apribota pasirinktais vaikais ir Pradžios lange prieinamais šeimos veiksmais,
+įskaitant įprastų prašymų peržiūrą bei sprendimą ir dienos darbų skyrimą.
+Svečias negali atidaryti **Tvarkyti** ar **Nustatymai** ir negauna pranešimų.
+
+Skiltyje **Aktyvūs svečiai** rodomi kiekvieno svečio pasirinkti vaikai ir
+prieigos pabaigos data. Tėvai gali nukopijuoti svečio prisijungimo nuorodą,
+atrakinti užblokuotą PIN arba pašalinti svečio prieigą. Laukiantį kvietimą galima
+atšaukti. Pasibaigusi ar pašalinta svečio prieiga nebeveikia.
 
 ### Šeimos atsiliepimai
 
@@ -266,7 +293,7 @@ arba HEIF iki **12 MB**. Avatarai priima tuos pačius formatus iki **5 MB** ir
 apkerpami į kvadratą.
 
 Paskirti dienos darbai baigiasi vidurnaktį pagal **vietinį serverio laiką**.
-Nutrinamų bilietų limitai atsinaujina kiekvieną pirmadienį tame pačiame
+Staigmenų kortelių limitai atsinaujina kiekvieną pirmadienį tame pačiame
 kalendoriniame kontekste.
 
 [Tinklo prieiga →](../security/network-access.lt.md) · [Atsarginės kopijos →](../backups.lt.md) · [Šeimos administravimas →](../family-administration.lt.md) · [English](settings.md)

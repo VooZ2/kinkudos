@@ -21,7 +21,9 @@ Slapukų nenaudojanti analitika naudojama tik viešoje dokumentacijoje.
 | Taisyklė | Reikšmė ar elgsena |
 | --- | --- |
 | Vaiko įrenginio susiejimo nuoroda | Vienkartinė; baigiasi po 10 minučių. |
-| Susieto įrenginio profilis | Bendra telefono, planšetės, kompiuterio arba nežinomo įrenginio kategorija, trumpas stabilus šešių simbolių ID, naršyklės aprašas ir paskutinio naudojimo laikas. 30 dienų nenaudoti įrenginiai iš nustatymų sąrašo paslepiami iki kito panaudojimo. |
+| Svečio kvietimo nuoroda | Vienkartinė, kai svečias susikuria PIN; baigiasi po 6 valandų. |
+| Svečio prieiga | Apribota pasirinktais vaikais ir prieigos pabaigos data; svečias naudojasi tik Pradžios langu ir negauna pranešimų. |
+| Susieto įrenginio profilis | Bendra telefono, planšetės, kompiuterio arba nežinomo įrenginio kategorija, trumpas stabilus šešių simbolių ID, naršyklės aprašas ir paskutinio naudojimo laikas. Nenaudojami neatšaukti įrenginiai lieka nustatymų sąraše, taip pat ir po 30 dienų. |
 | Aktyvi susieto įrenginio prieiga | Aktyviai naudojant prieigos slapukas pratęsiamas. Atšaukus įrenginį vaiko prieiga ir pranešimai iškart panaikinami. |
 | Vaiko PIN | Keturi skaitmenys; profiliui pirmiausia reikia susieto įrenginio. |
 | Darbo / atsiliepimo vaizdo įkėlimas | JPEG, PNG, WebP, HEIC arba HEIF iki 12 MB. |
@@ -29,7 +31,7 @@ Slapukų nenaudojanti analitika naudojama tik viešoje dokumentacijoje.
 | Paskirto darbo terminas | Vidurnaktis pagal serverio vietinį laiką. Tada laukiantys punktai dingsta iš šios dienos sąrašų; nebaigti punktai žurnalo įrašų nesukuria. |
 | Išsaugoti paskyrimo rinkiniai | Iki penkių pavadintų rinkinių vienam vaikui. |
 | Paskirto darbo priminimas | Švelnus pranešimas vaikui apie tris valandas po rinkinio, jei bent vienas punktas vis dar laukia. |
-| Nutrinamų bilietų savaitė | Nuo pirmadienio iki sekmadienio. |
+| Staigmenų kortelių savaitė | Nuo pirmadienio iki sekmadienio. |
 | Užbaigtų darbų nuotraukų saugojimas | Šeimos pasirinkimas: neribotai, 7, 30 arba 90 dienų. |
 | Išspręsto atsiliepimo nuotraukų saugojimas | Šeimos pasirinkimas: neribotai, 7, 30 arba 90 dienų. |
 

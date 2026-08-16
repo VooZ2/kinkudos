@@ -31,9 +31,8 @@ The device list shows a broad device icon, an optional custom name, a summary
 such as **iPhone · Safari** or **Android tablet · Chrome**, a stable six-character
 ID, and when the device was last used. The classification covers phone, tablet,
 computer, and unknown device categories; it does not promise an exact model.
-Devices unused for 30 days are hidden from this list automatically (pairing is
-not revoked). They reappear when the device is used again. **Revoke all child
-devices** still covers every non-revoked pairing, including hidden ones.
+Devices remain in this list until revoked, even when they have not been used for
+30 days. **Revoke all child devices** covers every non-revoked pairing.
 
 Rename entries so you can recognise them. On mobile, **Revoke** is shown as a
 compact trash-can icon. Select it immediately if a device is lost, sold, lent
