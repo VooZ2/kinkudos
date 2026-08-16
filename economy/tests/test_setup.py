@@ -54,6 +54,7 @@ class BrowserSetupTests(TestCase):
     def test_setup_email_checkbox_is_kept_after_its_inline_label(self):
         response = self.client.get(reverse("setup"))
         self.assertContains(response, 'id="id_configure_smtp"')
+        self.assertContains(response, 'class="field-required"', count=16, html=False)
         stylesheet = (Path(settings.BASE_DIR) / "static" / "css" / "app.css").read_text(
             encoding="utf-8"
         )
@@ -71,6 +72,8 @@ class BrowserSetupTests(TestCase):
         )
         self.assertIn('getElementById("id_configure_smtp")', script)
         self.assertIn("field.disabled = disabled;", script)
+        self.assertIn("field.required = enabled;", script)
+        self.assertIn('classList.toggle("field-required", enabled)', script)
         self.assertIn(
             'setupEmailToggle?.addEventListener("change", syncSetupEmailFields);',
             script,
@@ -85,7 +88,7 @@ class BrowserSetupTests(TestCase):
         )
         self.assertIn(".auth-page .setup-card { width: min(860px, 100%); }", stylesheet)
         self.assertIn(
-            ".setup-card .auth-help { max-width: 720px; margin: 28px auto 32px;",
+            ".setup-card .auth-help { max-width: 720px; margin: 28px 0 32px;",
             stylesheet,
         )
         self.assertIn(

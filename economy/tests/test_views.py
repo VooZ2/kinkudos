@@ -1710,6 +1710,13 @@ class AccessAndWorkflowTests(TestCase):
         ]
         self.assertIn("var(--control-hover-lift)", pending_hover)
         self.assertIn("var(--icon-hover-fill)", pending_hover)
+        share_hover = css[
+            css.index(".share-copy-button:hover, .share-copy-button:focus-visible {") :
+            css.index("}", css.index(".share-copy-button:hover, .share-copy-button:focus-visible {"))
+        ]
+        self.assertIn("var(--control-hover-lift)", share_hover)
+        self.assertNotIn("var(--icon-hover-fill)", share_hover)
+        self.assertNotIn("var(--icon-hover-shadow)", share_hover)
 
     def test_pending_requests_are_one_shared_chronological_list(self):
         older = self.child_one.task_claims.create(

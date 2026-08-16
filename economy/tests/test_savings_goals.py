@@ -433,7 +433,7 @@ class SavingsGoalServiceTests(TestCase):
 
         self.assertContains(response, 'href="#icon-pen-to-square"', html=False)
         self.assertNotContains(response, "icon-button--edit", html=False)
-        self.assertContains(response, 'href="#icon-trash-can"', html=False)
+        self.assertContains(response, 'href="#icon-trash"', html=False)
         self.assertContains(response, 'data-open-dialog="delete-goal-', html=False)
         self.assertContains(response, "Delete goal?", html=False)
         self.assertContains(

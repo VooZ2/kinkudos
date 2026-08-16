@@ -69,7 +69,7 @@
   {% endif %}
   <div class="section-heading"><p class="eyebrow">{% translate "Choose a task" %}</p><h2>{{ child.theme|theme_text:"nav_tasks" }}</h2></div>
   {% if revision_claims %}<div class="revision-list"><h3>{% if child.theme == "blockville" %}{{ child.theme|theme_text:"revision" }}{% else %}{% translate "Needs improvement" %}{% endif %}</h3>{% for claim in revision_claims %}
-    <article id="revision-claim-{{ claim.pk }}" class="revision-card"><div><strong>{{ claim.task_title }}</strong>{% if claim.revision_note %}<p>{{ claim.revision_note }}</p>{% endif %}</div><button class="decision-icon-button decision-revise" type="button" data-open-dialog="resubmit-task-{{ claim.pk }}" aria-label="{% translate "Fix and resubmit" %}" title="{% translate "Fix and resubmit" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-rotate-left"></use></svg></button></article>
+    <article id="revision-claim-{{ claim.pk }}" class="revision-card notice-block notice-warning"><div><strong>{{ claim.task_title }}</strong>{% if claim.revision_note %}<p>{{ claim.revision_note }}</p>{% endif %}</div><button class="decision-icon-button decision-revise" type="button" data-open-dialog="resubmit-task-{{ claim.pk }}" aria-label="{% translate "Fix and resubmit" %}" title="{% translate "Fix and resubmit" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-rotate-left"></use></svg></button></article>
     <dialog id="resubmit-task-{{ claim.pk }}" class="action-dialog evidence-dialog"><button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}">
         <svg class="action-icon" aria-hidden="true"><use href="#icon-xmark"></use></svg>
       </button><h2>{{ claim.task_title }}</h2><p class="revision-note">{{ claim.revision_note }}</p>
@@ -132,13 +132,13 @@
         <button class="decision-icon-button decision-approve dialog-decision-action" type="submit" aria-label="{{ child.theme|theme_text:'task_modal_submit' }}" title="{{ child.theme|theme_text:'task_modal_submit' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>
       </form>
     </dialog>
-  {% empty %}<p>{% translate "There are no tasks yet." %}</p>{% endfor %}</div>
+  {% empty %}<p class="empty-state">{% translate "There are no tasks yet." %}</p>{% endfor %}</div>
   <p class="empty-state" data-task-search-empty hidden>{% translate "No tasks match your search." %}</p>
 </section>
 
 <section id="prizai" class="content-section">
   <div class="section-heading"><p class="eyebrow">{% translate "Choose a reward" %}</p><h2>{{ child.theme|theme_text:"nav_rewards" }}</h2></div>
-  {% if assigned_tasks_block_rewards %}<div class="credit-warning assigned-task-warning"><svg class="action-icon"><use href="#icon-circle-info"></use></svg><p>{{ child.theme|theme_text:"assigned_reward_block" }}</p></div>{% elif credit_reward_requests_blocked %}<div class="credit-warning"><svg class="action-icon"><use href="#icon-circle-info"></use></svg><p>{% translate "New reward requests are paused because half of the available credit has been used. Earn more points to unlock them." %}</p></div>{% endif %}
+  {% if assigned_tasks_block_rewards %}<div class="credit-warning notice-block notice-info assigned-task-warning"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg><p>{{ child.theme|theme_text:"assigned_reward_block" }}</p></div>{% elif credit_reward_requests_blocked %}<div class="credit-warning notice-block notice-info"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg><p>{% translate "New reward requests are paused because half of the available credit has been used. Earn more points to unlock them." %}</p></div>{% endif %}
   {% if lottery.is_visible %}
   <article class="system-lottery-card" data-lottery-card>
     <div class="lottery-card-art" aria-hidden="true"><span>?</span><span>?</span><span>?</span></div>
@@ -175,7 +175,7 @@
     <button class="dialog-close" type="button" data-close-dialog aria-label="{% translate 'Close' %}" title="{% translate 'Close' %}"><svg class="action-icon"><use href="#icon-xmark"></use></svg></button>
     <p class="lottery-system-label">{% translate "Surprise cards" %}</p>
     <h2>{{ child.theme|theme_text:"lottery_title" }}</h2>
-    <div class="lottery-risk-warning">
+    <div class="lottery-risk-warning notice-block notice-danger">
       <strong>{% translate "This is a surprise — the result is unknown until all fields are open." %}</strong>
       <p>{% blocktranslate with cost=lottery.ticket_cost unit=lottery.ticket_cost|currency_unit:child.theme %}It costs {{ cost }} earned {{ unit }}. Your points may go up by up to 150, stay the same, or go down by up to 50. The result cannot reduce your balance below your credit limit.{% endblocktranslate %}</p>
     </div>
@@ -225,7 +225,7 @@
   {% endif %}
   {% endif %}
   <div class="item-grid">{% for reward in rewards %}<article id="reward-card-{{ reward.pk }}" class="item-card reward-card"><span class="item-icon">{{ reward.icon|icon_symbol }}</span><div><h3>{{ reward.title }}</h3><p class="amount negative">−{{ reward.cost }} {{ reward.cost|currency_unit:child.theme }}</p></div>
-  {% if reward.pk in pending_reward_ids %}<span class="status-pill">{% if child.theme == "blockville" %}{{ child.theme|theme_text:"reward_pending" }}{% else %}{% translate "Awaiting approval" %}{% endif %}</span>{% elif reward_requests_blocked %}<span class="status-pill">{{ child.theme|theme_text:"reward" }}</span>{% elif not reward.is_affordable %}<span class="status-pill" title="{% translate "Not enough points" %}">{% blocktranslate with amount=reward.missing_amount unit=reward.missing_amount|currency_unit:child.theme %}Need {{ amount }} {{ unit }} more{% endblocktranslate %}</span>{% else %}<form class="workflow-card-action" method="post" action="{% url 'child_request_reward' reward.pk %}" data-success-effect="reward">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{{ child.theme|theme_text:'reward' }}" title="{{ child.theme|theme_text:'reward' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>{% endif %}</article>{% empty %}<p>{% translate "The rewards catalog is empty." %}</p>{% endfor %}</div>
+  {% if reward.pk in pending_reward_ids %}<span class="status-pill">{% if child.theme == "blockville" %}{{ child.theme|theme_text:"reward_pending" }}{% else %}{% translate "Awaiting approval" %}{% endif %}</span>{% elif reward_requests_blocked %}<span class="status-pill">{{ child.theme|theme_text:"reward" }}</span>{% elif not reward.is_affordable %}<span class="status-pill" title="{% translate "Not enough points" %}">{% blocktranslate with amount=reward.missing_amount unit=reward.missing_amount|currency_unit:child.theme %}Need {{ amount }} {{ unit }} more{% endblocktranslate %}</span>{% else %}<form class="workflow-card-action" method="post" action="{% url 'child_request_reward' reward.pk %}" data-success-effect="reward">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{{ child.theme|theme_text:'reward' }}" title="{{ child.theme|theme_text:'reward' }}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>{% endif %}</article>{% empty %}<p class="empty-state">{% translate "The rewards catalog is empty." %}</p>{% endfor %}</div>
   {% if pending_requests %}<div class="pending-list"><h3>{% translate "Pending requests" %}</h3>{% for reward_request in pending_requests %}<div class="list-row"><span>{{ reward_request.reward_title }}</span><form method="post" action="{% url 'child_cancel_reward' reward_request.pk %}">{% csrf_token %}<button class="decision-icon-button decision-reject compact-decision-button" type="submit" aria-label="{% translate "Cancel" %}" title="{% translate "Cancel" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button></form></div>{% endfor %}</div>{% endif %}
 </section>
 

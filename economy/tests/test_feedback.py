@@ -383,10 +383,7 @@ class FeedbackWorkflowTests(TestCase):
         )
         self.assertIn("max-height: calc(100dvh - 24px)", css)
         self.assertIn(".feedback-admin { padding: 22px; }", css)
-        self.assertIn(
-            ".feedback-admin .feedback-description { margin-bottom: 12px; }",
-            css,
-        )
+        self.assertIn(".notice-block.notice-warning", css)
         self.assertIn('input[type="file"]::file-selector-button', css)
         self.assertIn("font: inherit", css)
-        self.assertIn(".feedback-admin .danger-warning", css)
+        self.assertIn(".notice-block.notice-danger", css)

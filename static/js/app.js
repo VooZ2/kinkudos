@@ -51,10 +51,15 @@ const setupEmailFields = [...document.querySelectorAll('[id^="id_smtp_"]')];
 
 function syncSetupEmailFields() {
   if (!setupEmailToggle) return;
-  const disabled = !setupEmailToggle.checked;
+  const enabled = setupEmailToggle.checked;
+  const disabled = !enabled;
   setupEmailFields.forEach(field => {
     field.disabled = disabled;
-    field.closest("p")?.classList.toggle("is-disabled", disabled);
+    field.required = enabled;
+    const fieldWrapper = field.closest("p");
+    fieldWrapper?.classList.toggle("field-required", enabled);
+    fieldWrapper?.querySelector("label")?.classList.toggle("field-required", enabled);
+    fieldWrapper?.classList.toggle("is-disabled", disabled);
   });
 }
 
@@ -201,6 +206,32 @@ document.addEventListener("click", event => {
   lightbox.showModal();
 });
 
+const horizontalTabbars = [...document.querySelectorAll(".tabbar, .manage-tabs")];
+const syncHorizontalTabbar = tabbar => {
+  const scrollable = tabbar.scrollWidth > tabbar.clientWidth + 1;
+  const atStart = !scrollable || tabbar.scrollLeft <= 1;
+  const atEnd = !scrollable || tabbar.scrollLeft + tabbar.clientWidth >= tabbar.scrollWidth - 1;
+  tabbar.classList.toggle("is-scrollable", scrollable);
+  tabbar.classList.toggle("is-at-start", atStart);
+  tabbar.classList.toggle("is-at-end", atEnd);
+};
+const revealActiveTab = tabbar => {
+  const activeLink = tabbar?.querySelector("a.is-active");
+  if (!activeLink) return;
+  activeLink.scrollIntoView({
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+    block: "nearest",
+    inline: "nearest",
+  });
+  window.requestAnimationFrame(() => syncHorizontalTabbar(tabbar));
+};
+horizontalTabbars.forEach(tabbar => {
+  syncHorizontalTabbar(tabbar);
+  tabbar.addEventListener("scroll", () => syncHorizontalTabbar(tabbar), { passive: true });
+  if (window.ResizeObserver) new ResizeObserver(() => syncHorizontalTabbar(tabbar)).observe(tabbar);
+});
+window.addEventListener("resize", () => horizontalTabbars.forEach(syncHorizontalTabbar));
+
 const parentShell = document.querySelector("[data-parent-shell]");
 if (parentShell) {
   const panels = [...parentShell.querySelectorAll("[data-parent-panel]")];
@@ -235,12 +266,14 @@ if (parentShell) {
     });
   };
   const syncManageTabs = sectionId => {
-    parentShell.querySelectorAll(".manage-tabs a").forEach(link => {
+    const manageTabs = parentShell.querySelector(".manage-tabs");
+    manageTabs?.querySelectorAll("a").forEach(link => {
       const active = manageSectionForHash(link.hash.slice(1)) === sectionId;
       link.classList.toggle("is-active", active);
       if (active) link.setAttribute("aria-current", "true");
       else link.removeAttribute("aria-current");
     });
+    revealActiveTab(manageTabs);
   };
   const openManageSection = id => {
     const sectionId = manageSectionForHash(id) || (id === "parent-catalogs" ? "manage-tasks" : "");
@@ -1591,14 +1624,14 @@ async function loadBackupStatus() {
     if (summaryLabel) summaryLabel.textContent = status.summary_label;
     if (details) {
       if (status.unavailable_message) {
-        details.innerHTML = `<p class="danger-warning backup-warning">${escapeBackupText(status.unavailable_message)}</p>`;
+        details.innerHTML = `<p class="danger-warning notice-block notice-danger backup-warning">${escapeBackupText(status.unavailable_message)}</p>`;
       } else {
         const provider = escapeBackupText(status.provider || "—");
         const target = escapeBackupText(status.target || "—");
         const lastSuccess = escapeBackupText(status.last_success_display);
         const lastCheck = escapeBackupText(status.last_check_display);
         const error = status.error
-          ? `<p class="danger-warning backup-warning">${escapeBackupText(status.error)}</p>`
+          ? `<p class="danger-warning notice-block notice-danger backup-warning">${escapeBackupText(status.error)}</p>`
           : "";
         details.innerHTML = `
           <dl class="service-details">

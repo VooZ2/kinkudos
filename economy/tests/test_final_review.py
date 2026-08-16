@@ -63,6 +63,7 @@ class FinalReviewTests(TestCase):
 
     def test_parent_accordions_and_settings_use_shared_compact_surface(self):
         response = self.parent_response()
+        content = response.content.decode()
         self.assertContains(response, "parent-accordion", count=11)
         self.assertContains(response, 'class="settings-section parent-accordion"', count=11, html=False)
         self.assertNotContains(
@@ -79,6 +80,11 @@ class FinalReviewTests(TestCase):
         self.assertIn("min-height: 60px", css)
         self.assertIn(".settings-block-heading", css)
         self.assertNotIn("position: sticky; bottom: 0", css.split(".settings-save-actions")[1].split("}")[0])
+        self.assertIn("Manage the family name and default language.", content)
+        self.assertIn("Protect the family database and uploaded photos.", content)
+        self.assertIn("settings-add-divider", content)
+        people = content[content.index('id="settings-people-heading"') : content.index('id="settings-server-heading"')]
+        self.assertNotIn("settings-description", people)
 
     def test_manage_uses_tabbed_sections_with_edit_and_hidden_states(self):
         Task.objects.create(title="Review chore", reward=10, icon="🧹", is_active=False)
@@ -95,7 +101,7 @@ class FinalReviewTests(TestCase):
         self.assertIn("catalog-row is-inactive", manage)
         self.assertIn("Hidden", manage)
         self.assertIn("manage-empty", manage)
-        self.assertIn(
+        self.assertNotIn(
             "Children can propose goals from their area. Approved goals appear here.",
             manage,
         )
@@ -103,13 +109,63 @@ class FinalReviewTests(TestCase):
         self.assertIn(".manage-tabs a.is-active", css)
         self.assertIn(".catalog-row.is-inactive", css)
         self.assertIn(".manage-empty", css)
-        self.assertIn("text-align: center", css.split(".manage-empty {")[1].split("}")[0])
+        self.assertIn("text-align: left", css.split(".manage-empty {")[1].split("}")[0])
         self.assertIn("min-height: 44px", css.split(".manage-tabs a {")[1].split("}")[0])
         self.assertIn(".catalog-edit-actions", css)
         js = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
         self.assertIn("[data-manage-section]", js)
         self.assertIn("data-cancel-edit", js)
         self.assertIn("closeCatalogEdit", js)
+
+    def test_empty_states_share_the_left_aligned_spacing_and_copy(self):
+        child_template = (ROOT / "templates/economy/child_dashboard.html").read_text(
+            encoding="utf-8"
+        )
+        select_template = (ROOT / "templates/economy/child_select.html").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn('class="empty-state">{% translate "The rewards catalog is empty." %}', child_template)
+        self.assertIn('class="empty-state">{% translate "No child profiles have been created yet." %}', select_template)
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        empty_start = css.index("\n.empty-state {") + 1
+        empty_css = css[empty_start : css.index("}", empty_start)]
+        self.assertIn("padding: 18px", empty_css)
+        self.assertIn("line-height: 1.4", empty_css)
+        self.assertIn("text-align: left", empty_css)
+
+    def test_mobile_feedback_summary_is_compact_and_left_aligned(self):
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        mobile_feedback = css[css.index(".feedback-summary {", css.index("@media (max-width: 720px)")) :]
+        mobile_feedback = mobile_feedback[: mobile_feedback.index(".feedback-actions {", mobile_feedback.index(".feedback-summary {"))]
+        self.assertIn("display: grid", mobile_feedback)
+        self.assertIn("padding: 14px 16px", mobile_feedback)
+        self.assertIn("text-align: left", mobile_feedback)
+
+    def test_notice_blocks_tabs_and_requested_action_icons_share_patterns(self):
+        response = self.parent_response()
+        content = response.content.decode()
+        template = (ROOT / "templates/economy/parent_dashboard.html").read_text(encoding="utf-8")
+        child_template = (ROOT / "templates/economy/child_dashboard.html").read_text(encoding="utf-8")
+        self.assertIn("notice-block notice-danger", template)
+        self.assertIn("notice-block notice-warning", template)
+        self.assertIn("notice-block notice-warning", child_template)
+        self.assertIn("notice-block notice-info", child_template)
+        self.assertIn('href="#icon-clipboard-check"', template)
+        self.assertIn('href="#icon-trash"', template)
+        self.assertIn('href="#icon-user-plus"', template)
+        self.assertIn('href="#icon-filter"', template)
+        self.assertIn("notice-block", content)
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        self.assertIn(".notice-block.notice-info", css)
+        self.assertIn(".notice-block.notice-warning", css)
+        self.assertIn(".notice-block.notice-danger", css)
+        self.assertIn(".settings-summary-description", css)
+        self.assertIn(".settings-add-divider", css)
+        self.assertIn(".tabbar.is-scrollable:not(.is-at-start)", css)
+        js = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
+        self.assertIn("syncHorizontalTabbar", js)
+        self.assertIn("revealActiveTab", js)
+        self.assertIn("scrollIntoView", js)
 
     def test_child_card_metadata_keeps_credit_and_ticket_controls_together(self):
         response = self.parent_response()

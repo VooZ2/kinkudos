@@ -46,7 +46,7 @@ class CaregiverGuestAccessTests(TestCase):
         self.client.force_login(self.parent)
         response = self.client.get(reverse("parent_dashboard"))
         self.assertContains(response, "Guest access")
-        self.assertContains(
+        self.assertNotContains(
             response,
             "Temporary access for grandparents, relatives, or babysitters",
         )
@@ -111,10 +111,10 @@ class CaregiverGuestAccessTests(TestCase):
         response = self.client.get(reverse("parent_dashboard"))
         html = response.content.decode()
         start = html.index("data-copy-caregiver-login")
-        snippet = html[max(0, start - 280) : start + 220]
+        snippet = html[max(0, start - 280) : start + 420]
         self.assertIn('class="share-copy-button"', snippet)
-        self.assertIn(">Copy<", snippet)
-        self.assertNotIn("icon-clipboard-check", snippet)
+        self.assertIn('data-copy-label>Copy</span>', snippet)
+        self.assertIn("icon-clipboard-check", snippet)
         self.assertNotIn("Copy sign-in link", snippet)
 
     def test_create_invite_opens_share_dialog_via_session(self):
@@ -132,7 +132,7 @@ class CaregiverGuestAccessTests(TestCase):
         self.assertContains(response, "Private sign-in link")
         self.assertContains(response, "caregiver-invite-share-dialog")
         self.assertContains(response, "Share…")
-        self.assertContains(response, ">Copy<", html=False)
+        self.assertContains(response, 'data-copy-label>Copy</span>', html=False)
         self.assertContains(response, 'href="#icon-share-nodes"', html=False)
         self.assertNotContains(response, "is ready to share")
         self.assertNotContains(response, 'data-share-caregiver-invite hidden')
@@ -145,8 +145,8 @@ class CaregiverGuestAccessTests(TestCase):
             )
         ]
         self.assertIn("<span>Invite link:</span>", dialog_html)
-        self.assertIn(">Copy<", dialog_html)
-        self.assertNotIn("#icon-clipboard-check", dialog_html)
+        self.assertIn("data-copy-label>Copy</span>", dialog_html)
+        self.assertIn("#icon-clipboard-check", dialog_html)
         self.assertNotIn("Copy link", dialog_html)
         self.assertLess(
             dialog_html.index("share-dialog-toolbar"),
