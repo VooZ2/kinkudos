@@ -11,6 +11,13 @@ schema.
 
 - Kol kas nieko.
 
+## [26.8.1] - 2026-08-16
+
+### Pataisyta
+
+- Privalomų laukų etiketės stack formose neberodo antro dvitaškio po
+  privalomo lauko žymens.
+
 ## [26.8.0] - 2026-08-16
 
 ### Pridėta

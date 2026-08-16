@@ -168,6 +168,7 @@ class FinalReviewTests(TestCase):
         self.assertIn(".pending-empty-state .action-icon", pending_css)
         self.assertIn(".required-marker-star", css)
         self.assertIn(".required-marker-colon", css)
+        self.assertIn(".stack-form p > label.required-label-decorated::after", css)
         self.assertIn(".settings-summary-description", css)
         self.assertIn(".settings-add-divider", css)
         self.assertIn(".tabbar.is-scrollable:not(.is-at-start)", css)
@@ -407,7 +408,7 @@ class FinalReviewTests(TestCase):
     def test_mobile_footer_has_compact_labels_and_dynamic_version(self):
         response = self.parent_response()
         self.assertContains(response, 'class="footer-release"', html=False)
-        self.assertContains(response, "v26.8.0")
+        self.assertContains(response, "v26.8.1")
         self.assertContains(response, 'class="footer-docs-short">Docs', html=False)
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".footer-product, .footer-docs-long { display: none; }", css)
