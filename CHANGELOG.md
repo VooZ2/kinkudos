@@ -9,6 +9,41 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Nothing yet.
 
+## [26.8.0] - 2026-08-16
+
+### Added
+
+- Parents can share time-limited caregiver access with a private invite/login
+  link and a caregiver PIN, with access limited to selected children.
+- Child Settings now provide an accordion layout, an eight-theme grid, daily
+  randomized theme support, sound controls, and a full-width PIN pad.
+- Caregiver invites and child-device pairing links have clearer Share and Copy
+  dialogs.
+
+### Changed
+
+- Caregivers can use the intended family actions for their assigned children,
+  including task, reward, penalty, award, and unlock actions; the official
+  documentation now describes this broader Home scope.
+- Mobile controls, share dialogs, date fields, and feedback/settings callouts
+  were tightened for small screens.
+
+### Fixed
+
+- Settings and popup actions now respond on the first tap in mobile Safari,
+  including when Safari swallows the initial pointer event.
+- Child theme controls and Settings sections remain stable and usable across
+  mobile layouts.
+
+### Security
+
+- Expired or revoked caregiver access no longer falls through to parent
+  privileges, and caregiver actions remain scoped to assigned children.
+- Child avatars, task evidence, and feedback screenshots enforce the same
+  child scope, while management endpoints require a parent account.
+- Caregiver invite flows and their Lithuanian translations cover the complete
+  guest journey.
+
 ## [26.7.3] - 2026-08-14
 
 ### Fixed

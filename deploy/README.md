@@ -268,7 +268,7 @@ release updater and pass them again to every later Compose command that resolves
 or recreates images, for example:
 
 ```bash
-candidate_tag=26.7.3-rc.<short-sha>
+candidate_tag=26.8.0-rc.<short-sha>
 sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
   KINKUDOS_IMAGE_TAG="$candidate_tag" docker compose pull
 sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
@@ -276,9 +276,9 @@ sudo env KINKUDOS_IMAGE_REPOSITORY=vooz2/kinkudos-rc \
 ```
 
 The overrides are intentionally not persisted in the production `.env`. This is
-not the normal stable-user update workflow. For a stable `26.7.3` update, use
+not the normal stable-user update workflow. For a stable `26.8.0` update, use
 the procedure above without either override; the Compose defaults are the
-production `vooz2/kinkudos` package and `26.7.3`.
+production `vooz2/kinkudos` package and `26.8.0`.
 
 The updater validates the checksum and release metadata, pulls and smoke-tests
 the published image, checks host-directory ownership, backs up the live
