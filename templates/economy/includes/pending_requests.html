@@ -8,7 +8,7 @@
     {% if pending_requests %}
       <div class="pending-request-list" data-pending-request-list role="list">
         {% for pending_item in pending_requests %}
-          <article class="pending-request-row{% if pending_item.kind == 'task' and pending_item.claim.has_evidence %} has-evidence{% endif %}" data-pending-request-row data-pending-kind="{{ pending_item.kind }}" data-pending-id="{% if pending_item.kind == 'task' %}{{ pending_item.claim.pk }}{% elif pending_item.kind == 'reward' %}{{ pending_item.reward_request.pk }}{% elif pending_item.kind == 'proposal' %}{{ pending_item.proposal.pk }}{% elif pending_item.kind == 'goal' %}{{ pending_item.completion.pk }}{% else %}{{ pending_item.change.pk }}{% endif %}" role="listitem">
+          <article class="pending-request-row{% if pending_item.kind == 'task' and pending_item.claim.has_evidence %} has-evidence{% endif %}" data-pending-request-row role="listitem">
             <div class="pending-request-avatar">
               {% if pending_item.child.avatar %}
                 <img class="profile-mini profile-photo" src="{% url 'child_avatar' pending_item.child.pk %}" alt="">
