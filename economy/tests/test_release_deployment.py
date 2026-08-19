@@ -21,7 +21,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
         self.assertNotIn("traefik.", app_service)
         self.assertNotIn("ports:", app_service)
         self.assertIn(
-            "image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.8.1}",
+            "image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.8.2}",
             app_service,
         )
         self.assertIn("      - app-egress", app_service)
@@ -299,7 +299,7 @@ class ReleaseDeploymentTests(SimpleTestCase):
         )
 
         self.assertIn(
-            "image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.8.1}",
+            "image: ${KINKUDOS_IMAGE_REPOSITORY:-vooz2/kinkudos}:${KINKUDOS_IMAGE_TAG:-26.8.2}",
             compose,
         )
         self.assertIn("kinkudos-data:/app/data", compose)

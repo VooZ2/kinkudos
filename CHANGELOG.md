@@ -9,6 +9,24 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Nothing yet.
 
+## [26.8.2] - 2026-08-19
+
+### Changed
+
+- Parent task and reward approvals now update the pending list and child
+  balance in place on mobile, with immediate busy feedback that prevents
+  duplicate taps.
+
+### Fixed
+
+- Removed duplicated mobile footer spacing in Parent Home, reducing unnecessary
+  empty space above the bottom navigation.
+
+### Security
+
+- Updated `sqlparse` to 0.6.0 to address four known vulnerabilities reported by
+  `pip-audit`.
+
 ## [26.8.1] - 2026-08-16
 
 ### Fixed

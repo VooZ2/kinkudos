@@ -11,6 +11,24 @@ schema.
 
 - Kol kas nieko.
 
+## [26.8.2] - 2026-08-19
+
+### Pakeista
+
+- Tėvų darbų ir prizų patvirtinimai telefone dabar vietoje atnaujina laukiančių
+  prašymų sąrašą ir vaiko balansą; iškart rodoma užimtumo būsena, neleidžianti
+  patvirtinti du kartus.
+
+### Pataisyta
+
+- Pašalintas dvigubas mobiliosios Tėvų Pradžios poraštės tarpas, todėl virš
+  apatinės navigacijos nebelieka nereikalingos tuščios vietos.
+
+### Saugumas
+
+- `sqlparse` atnaujintas iki 0.6.0, kad būtų pašalinti keturi `pip-audit`
+  nurodyti žinomi pažeidžiamumai.
+
 ## [26.8.1] - 2026-08-16
 
 ### Pataisyta
