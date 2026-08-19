@@ -454,6 +454,69 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Veiksmų istorija")
         self.assertContains(response, "Child One · Testas")
 
+    def test_task_approval_json_response_supports_local_parent_update(self):
+        self.client.force_login(self.parent)
+        claim = self.child_one.task_claims.create(
+            task=self.task,
+            task_title=self.task.title,
+            reward_snapshot=self.task.reward,
+        )
+
+        response = self.client.post(
+            reverse("parent_decide_task", args=[claim.pk, "approve"]),
+            HTTP_ACCEPT="application/json",
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertTrue(payload["ok"])
+        self.assertEqual(payload["effect"], "task")
+        self.assertEqual(payload["child_id"], self.child_one.pk)
+        self.assertEqual(payload["balance"], 50)
+        self.assertEqual(payload["redirect_url"], reverse("parent_dashboard"))
+        claim.refresh_from_db()
+        self.assertEqual(claim.status, RequestStatus.APPROVED)
+
+        duplicate = self.client.post(
+            reverse("parent_decide_task", args=[claim.pk, "approve"]),
+            HTTP_ACCEPT="application/json",
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+        self.assertEqual(duplicate.status_code, 400)
+        self.assertFalse(duplicate.json()["ok"])
+
+    def test_reward_approval_json_response_includes_new_balance(self):
+        post_ledger_entry(
+            child=self.child_one,
+            delta=300,
+            kind=LedgerKind.ADJUSTMENT,
+            description="Pradinis balansas",
+            actor=self.parent,
+        )
+        reward_request = RewardRequest.objects.create(
+            child=self.child_one,
+            reward=self.reward,
+            reward_title=self.reward.title,
+            cost_snapshot=self.reward.cost,
+        )
+        self.client.force_login(self.parent)
+
+        response = self.client.post(
+            reverse("parent_decide_reward", args=[reward_request.pk, "approve"]),
+            HTTP_ACCEPT="application/json",
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertTrue(payload["ok"])
+        self.assertEqual(payload["effect"], "reward")
+        self.assertEqual(payload["child_id"], self.child_one.pk)
+        self.assertEqual(payload["balance"], 200)
+        reward_request.refresh_from_db()
+        self.assertEqual(reward_request.status, RequestStatus.APPROVED)
+
     @patch("economy.views.parent_actions.notify_task_decision")
     def test_task_approval_and_rejection_notify_the_affected_child(self, notify):
         self.client.login(username="tevai", password=self.parent_password)

@@ -960,6 +960,25 @@ function dismissMessage(message) {
   window.setTimeout(() => message.remove(), 220);
 }
 
+function showTransientMessage(text, level = "success") {
+  if (!text) return;
+  let container = document.querySelector(".messages");
+  if (!container) {
+    container = document.createElement("div");
+    container.className = "messages";
+    container.setAttribute("aria-live", "polite");
+    document.body.append(container);
+  }
+  const message = document.createElement("div");
+  message.className = `message message-${level}`;
+  message.dataset.message = "";
+  const content = document.createElement("span");
+  content.textContent = text;
+  message.append(content);
+  container.append(message);
+  window.setTimeout(() => dismissMessage(message), 5000);
+}
+
 document.querySelectorAll("[data-message]").forEach(message => {
   message.querySelector("[data-dismiss-message]")?.addEventListener(
     "click",
@@ -1647,6 +1666,93 @@ if (parentStateUrl) {
   });
   scheduleParentStateCheck();
 }
+
+function updateParentChildBalance(childId, balance) {
+  document.querySelectorAll("[data-parent-child-balance]").forEach(element => {
+    if (element.dataset.parentChildBalance !== String(childId)) return;
+    const value = element.querySelector("[data-parent-child-balance-value]");
+    if (value) value.textContent = String(balance);
+    element.classList.toggle("balance-positive", balance > 0);
+    element.classList.toggle("balance-negative", balance < 0);
+    element.classList.toggle("balance-zero", balance === 0);
+  });
+}
+
+function removeApprovedPendingRequest(row) {
+  const fragment = row?.closest("[data-pending-requests-fragment]");
+  row?.remove();
+  if (!fragment) return;
+
+  const count = fragment.querySelectorAll("[data-pending-request-row]").length;
+  fragment.dataset.pendingCount = String(count);
+  const list = fragment.querySelector("[data-pending-request-list]");
+  if (list) list.hidden = count === 0;
+  const emptyState = fragment.querySelector("[data-pending-empty-state]");
+  if (emptyState) emptyState.hidden = count !== 0;
+  const badge = fragment.querySelector("[data-pending-count-badge]");
+  if (badge) {
+    badge.textContent = String(count);
+    badge.hidden = count === 0;
+  }
+  parentStateCount = count;
+  updatePendingNavigationCount(count);
+}
+
+async function submitParentApproval(form, event) {
+  if (form.dataset.submitting === "true") {
+    event.preventDefault();
+    return;
+  }
+  if (!window.fetch) return;
+  if (!form.checkValidity()) {
+    event.preventDefault();
+    form.reportValidity();
+    return;
+  }
+
+  event.preventDefault();
+  form.dataset.submitting = "true";
+  form.setAttribute("aria-busy", "true");
+  const button = form.querySelector("[data-approval-submit]");
+  button?.setAttribute("aria-busy", "true");
+  if (button) button.disabled = true;
+  const row = form.closest("[data-pending-request-row]");
+  row?.setAttribute("data-approval-processing", "true");
+  const soundContext = prepareThemeSound();
+
+  try {
+    const response = await fetch(form.action, {
+      method: "POST",
+      body: new FormData(form),
+      credentials: "same-origin",
+      headers: {
+        Accept: "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    });
+    const payload = await response.json();
+    if (!response.ok || !payload.ok) {
+      soundContext?.close();
+      window.location.assign(payload.redirect_url || window.location.href);
+      return;
+    }
+
+    removeApprovedPendingRequest(row);
+    updateParentChildBalance(payload.child_id, Number(payload.balance));
+    showTransientMessage(payload.message);
+    celebrate();
+    playThemeSound(payload.effect || "task", soundContext);
+    forceParentStateCheck();
+  } catch (_) {
+    soundContext?.close();
+    HTMLFormElement.prototype.submit.call(form);
+  }
+}
+
+document.addEventListener("submit", event => {
+  const form = event.target.closest?.("form[data-parent-approval-form]");
+  if (form) submitParentApproval(form, event);
+});
 
 function escapeBackupText(value) {
   return String(value ?? "")

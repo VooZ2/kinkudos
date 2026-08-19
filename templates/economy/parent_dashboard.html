@@ -177,8 +177,8 @@
       <h2>{{ child.name }}</h2>
     </div>
     <div class="child-balance-row">
-      <p class="stat-value {% if child.balance > 0 %}balance-positive{% elif child.balance < 0 %}balance-negative{% else %}balance-zero{% endif %}">
-        {{ child.balance }} <small>{{ child.balance|currency_unit:"neutral" }}</small>
+      <p class="stat-value {% if child.balance > 0 %}balance-positive{% elif child.balance < 0 %}balance-negative{% else %}balance-zero{% endif %}" data-parent-child-balance="{{ child.pk }}">
+        <span data-parent-child-balance-value>{{ child.balance }}</span> <small>{{ child.balance|currency_unit:"neutral" }}</small>
       </p>
       {% if child.saved_total %}<p class="saved-total"><span>{{ child.saved_total }} {% translate "saved" %}</span><button class="info-button" type="button" data-open-dialog="saved-info-{{ child.pk }}" aria-label="{% translate 'More information' %}" title="{% translate 'More information' %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-info"></use></svg></button></p>{% endif %}
     </div>

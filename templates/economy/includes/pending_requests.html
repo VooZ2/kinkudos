@@ -3,12 +3,12 @@
   <div class="pending-requests-panel">
     <header class="pending-panel-heading">
       <h2>{% translate "Pending requests" %}</h2>
-      {% if pending_count %}<span class="pending-count-badge">{{ pending_count }}</span>{% endif %}
+      {% if pending_count %}<span class="pending-count-badge" data-pending-count-badge>{{ pending_count }}</span>{% endif %}
     </header>
     {% if pending_requests %}
-      <div class="pending-request-list" role="list">
+      <div class="pending-request-list" data-pending-request-list role="list">
         {% for pending_item in pending_requests %}
-          <article class="pending-request-row{% if pending_item.kind == 'task' and pending_item.claim.has_evidence %} has-evidence{% endif %}" role="listitem">
+          <article class="pending-request-row{% if pending_item.kind == 'task' and pending_item.claim.has_evidence %} has-evidence{% endif %}" data-pending-request-row data-pending-kind="{{ pending_item.kind }}" data-pending-id="{% if pending_item.kind == 'task' %}{{ pending_item.claim.pk }}{% elif pending_item.kind == 'reward' %}{{ pending_item.reward_request.pk }}{% elif pending_item.kind == 'proposal' %}{{ pending_item.proposal.pk }}{% elif pending_item.kind == 'goal' %}{{ pending_item.completion.pk }}{% else %}{{ pending_item.change.pk }}{% endif %}" role="listitem">
             <div class="pending-request-avatar">
               {% if pending_item.child.avatar %}
                 <img class="profile-mini profile-photo" src="{% url 'child_avatar' pending_item.child.pk %}" alt="">
@@ -47,11 +47,11 @@
                   {% if pending_item.claim.has_evidence %}<button class="evidence-thumb-button" type="button" data-evidence-full="{% url 'task_evidence' pending_item.claim.pk 'full' %}" aria-label="{% translate "Open task photo" %}"><img src="{% url 'task_evidence' pending_item.claim.pk 'thumbnail' %}" alt="{% blocktranslate with task=pending_item.claim.task_title %}Photo for {{ task }}{% endblocktranslate %}"></button>{% endif %}
                 </div>
                 {% endif %}
-                <form method="post" action="{% url 'parent_decide_task' pending_item.claim.pk 'approve' %}">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>
+                <form method="post" action="{% url 'parent_decide_task' pending_item.claim.pk 'approve' %}" data-parent-approval-form>{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" data-approval-submit aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>
                 <button class="decision-icon-button decision-revise" type="button" data-open-dialog="revise-task-{{ pending_item.claim.pk }}" aria-label="{% translate "Ask to improve" %}" title="{% translate "Ask to improve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-rotate-left"></use></svg></button>
                 <button class="decision-icon-button decision-reject" type="button" data-open-dialog="reject-task-{{ pending_item.claim.pk }}" aria-label="{% translate "Reject" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button>
               {% elif pending_item.kind == "reward" %}
-                <form method="post" action="{% url 'parent_decide_reward' pending_item.reward_request.pk 'approve' %}">{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>
+                <form method="post" action="{% url 'parent_decide_reward' pending_item.reward_request.pk 'approve' %}" data-parent-approval-form>{% csrf_token %}<button class="decision-icon-button decision-approve" type="submit" data-approval-submit aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button></form>
                 <button class="decision-icon-button decision-reject" type="button" data-open-dialog="reject-reward-{{ pending_item.reward_request.pk }}" aria-label="{% translate "Reject" %}" title="{% translate "Reject" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-xmark"></use></svg></button>
               {% elif pending_item.kind == "proposal" %}
                 <button class="decision-icon-button decision-approve" type="button" data-open-dialog="approve-proposal-{{ pending_item.proposal.pk }}" aria-label="{% translate "Approve" %}" title="{% translate "Approve" %}"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg></button>
@@ -101,7 +101,8 @@
         {% endfor %}
       </div>
     {% else %}
-      <div class="pending-empty-state"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg><p>{% translate "No pending requests." %}</p></div>
+      <div class="pending-request-list" data-pending-request-list role="list" hidden></div>
     {% endif %}
+    <div class="pending-empty-state" data-pending-empty-state{% if pending_requests %} hidden{% endif %}><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-check"></use></svg><p>{% translate "No pending requests." %}</p></div>
   </div>
 </div>
