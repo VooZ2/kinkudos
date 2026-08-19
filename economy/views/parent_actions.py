@@ -90,31 +90,6 @@ from economy.services import (
     save_assignment_preset,
     update_savings_goal,
 )
-import json
-import os
-import time
-
-
-def _debug_log(*, hypothesis_id, location, message, data):
-    # region agent log
-    open(
-        os.path.expanduser("/opt/cursor/logs/debug.log"),
-        "a",
-    ).write(
-        json.dumps(
-            {
-                "hypothesisId": hypothesis_id,
-                "location": location,
-                "message": message,
-                "data": data,
-                "timestamp": int(time.time() * 1000),
-            }
-        )
-        + "\n"
-    )
-    # endregion
-
-
 @parent_account_required
 @require_POST
 def parent_create_catalog(request, kind):
@@ -302,33 +277,13 @@ def parent_delete_catalog(request, kind, item_id):
 @parent_required
 @require_POST
 def parent_decide_task(request, claim_id, decision):
-    _debug_log(
-        hypothesis_id="H1",
-        location="economy/views/parent_actions.py:parent_decide_task",
-        message="entry",
-        data={"claimId": claim_id, "decision": decision},
-    )
     claim = get_object_or_404(TaskClaim.objects.select_related("child"), pk=claim_id)
     ensure_child_accessible(request, claim.child)
     try:
         if decision == "approve":
-            approve_started = time.perf_counter()
             approve_task_claim(claim=claim, actor=request.user)
-            approve_ms = round((time.perf_counter() - approve_started) * 1000, 2)
             claim.refresh_from_db()
-            notify_started = time.perf_counter()
             notify_task_decision(claim, approved=True)
-            notify_ms = round((time.perf_counter() - notify_started) * 1000, 2)
-            _debug_log(
-                hypothesis_id="H2",
-                location="economy/views/parent_actions.py:parent_decide_task",
-                message="approve branch timings",
-                data={
-                    "approve_service_ms": approve_ms,
-                    "refresh_and_notify_ms": notify_ms,
-                    "claimStatus": claim.status,
-                },
-            )
             messages.success(request, _("Task approved."))
         elif decision == "reject":
             form = TaskDecisionCommentForm(request.POST)

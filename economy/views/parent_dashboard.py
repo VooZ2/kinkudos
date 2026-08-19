@@ -1,7 +1,4 @@
 import hashlib
-import json
-import os
-import time
 from datetime import date, datetime, time, timedelta
 from urllib.parse import urlencode
 
@@ -74,26 +71,6 @@ from economy.services import (
     unavailable_assignment_task_ids,
 )
 from economy.views.caregiver import caregiver_settings_context
-
-
-def _debug_log(*, hypothesis_id, location, message, data):
-    # region agent log
-    open(
-        os.path.expanduser("/opt/cursor/logs/debug.log"),
-        "a",
-    ).write(
-        json.dumps(
-            {
-                "hypothesisId": hypothesis_id,
-                "location": location,
-                "message": message,
-                "data": data,
-                "timestamp": int(time.time() * 1000),
-            }
-        )
-        + "\n"
-    )
-    # endregion
 
 
 def _pending_request_items(goals_by_child, *, child_ids=None):
@@ -364,7 +341,6 @@ def parent_pending_state(request):
 
 @parent_required
 def parent_dashboard(request):
-    started_at = time.perf_counter()
     caregiver = current_caregiver(request)
     is_caregiver = caregiver is not None
     children = list(accessible_children_qs(request))
@@ -858,17 +834,6 @@ def parent_dashboard(request):
         }
     if not is_caregiver:
         context.update(caregiver_settings_context(request))
-    _debug_log(
-        hypothesis_id="H5",
-        location="economy/views/parent_dashboard.py:parent_dashboard",
-        message="render context built",
-        data={
-            "children_count": len(children),
-            "pending_count": len(pending_requests),
-            "history_count": len(history_entries),
-            "total_ms": round((time.perf_counter() - started_at) * 1000, 2),
-        },
-    )
     return render(
         request,
         "economy/parent_dashboard.html",
