@@ -90,6 +90,8 @@ from economy.services import (
     save_assignment_preset,
     update_savings_goal,
 )
+
+
 @parent_account_required
 @require_POST
 def parent_create_catalog(request, kind):
