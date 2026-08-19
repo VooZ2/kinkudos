@@ -1,4 +1,5 @@
 import hashlib
+import json
 from datetime import date, datetime, time, timedelta
 from urllib.parse import urlencode
 
@@ -455,7 +456,7 @@ def parent_dashboard(request):
                 item.status == AssignedTaskStatus.PENDING
                 for item in batch.items.all()
             )
-    history_children = list(accessible_children_qs(request).order_by("name"))
+    history_children = sorted(children, key=lambda child: child.name.lower())
     if child_ids:
         ledger_child_filter = {"child_id__in": child_ids}
         goal_child_filter = {"goal__child_id__in": child_ids}
@@ -727,6 +728,8 @@ def parent_dashboard(request):
         .order_by("username")
     )
 
+    family_settings = FamilySettings.load()
+    current_ip = client_ip(request)
     context = {
             "children": children,
             "is_caregiver": is_caregiver,
@@ -778,15 +781,15 @@ def parent_dashboard(request):
             "parent_account_form": ParentAccountForm(auto_id="id_new_parent_%s"),
             "child_account_form": ChildAccountForm(auto_id="id_new_child_%s"),
             "family_preferences_form": FamilyPreferencesForm(
-                instance=FamilySettings.load(),
+                instance=family_settings,
                 auto_id="id_family_preferences_%s",
             ),
             "network_access_form": NetworkAccessForm(
-                instance=FamilySettings.load(),
-                current_ip=client_ip(request),
+                instance=family_settings,
+                current_ip=current_ip,
                 auto_id="id_network_access_%s",
             ),
-            "current_client_ip": client_ip(request),
+            "current_client_ip": current_ip,
             # Keep inactive-but-unrevoked devices visible so every parent can
             # review and revoke a token that still grants child access.
             "paired_devices": list(
