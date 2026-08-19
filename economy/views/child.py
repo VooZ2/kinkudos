@@ -1,5 +1,7 @@
 import hashlib
 import json
+import os
+import time
 from uuid import uuid4
 
 from django.contrib import messages
@@ -83,6 +85,26 @@ from economy.services import (
     submit_task,
     transfer_points,
 )
+
+
+def _debug_log(*, hypothesis_id, location, message, data):
+    # region agent log
+    open(
+        os.path.expanduser("/opt/cursor/logs/debug.log"),
+        "a",
+    ).write(
+        json.dumps(
+            {
+                "hypothesisId": hypothesis_id,
+                "location": location,
+                "message": message,
+                "data": data,
+                "timestamp": int(time.time() * 1000),
+            }
+        )
+        + "\n"
+    )
+    # endregion
 
 
 @child_required
@@ -1038,6 +1060,13 @@ def task_evidence(request, claim_id, size):
 @child_required
 @require_POST
 def child_complete_assigned_task(request, assigned_task_id):
+    started_at = time.perf_counter()
+    _debug_log(
+        hypothesis_id="H3",
+        location="economy/views/child.py:child_complete_assigned_task",
+        message="entry",
+        data={"assignedTaskId": assigned_task_id, "childId": request.child.pk},
+    )
     assigned_task = get_object_or_404(
         AssignedTask,
         pk=assigned_task_id,
@@ -1045,9 +1074,18 @@ def child_complete_assigned_task(request, assigned_task_id):
     )
     completed = False
     try:
+        service_started = time.perf_counter()
         complete_assigned_task(
             assigned_task=assigned_task,
             child=request.child,
+        )
+        _debug_log(
+            hypothesis_id="H3",
+            location="economy/views/child.py:child_complete_assigned_task",
+            message="service complete",
+            data={
+                "service_ms": round((time.perf_counter() - service_started) * 1000, 2),
+            },
         )
         messages.success(
             request,
@@ -1057,6 +1095,15 @@ def child_complete_assigned_task(request, assigned_task_id):
         completed = True
     except ValidationError as exc:
         messages.error(request, exc.messages[0])
+    _debug_log(
+        hypothesis_id="H5",
+        location="economy/views/child.py:child_complete_assigned_task",
+        message="exit",
+        data={
+            "completed": completed,
+            "total_ms": round((time.perf_counter() - started_at) * 1000, 2),
+        },
+    )
     return _child_action_response(
         request,
         ok=completed,

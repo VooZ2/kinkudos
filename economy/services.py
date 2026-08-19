@@ -1,4 +1,7 @@
 import random
+import json
+import os
+import time
 from datetime import timedelta
 
 from django.contrib.auth import get_user_model
@@ -42,6 +45,26 @@ from .models import (
 )
 
 ASSIGNMENT_PRESET_LIMIT = 5
+
+
+def _debug_log(*, hypothesis_id, location, message, data):
+    # region agent log
+    open(
+        os.path.expanduser("/opt/cursor/logs/debug.log"),
+        "a",
+    ).write(
+        json.dumps(
+            {
+                "hypothesisId": hypothesis_id,
+                "location": location,
+                "message": message,
+                "data": data,
+                "timestamp": int(time.time() * 1000),
+            }
+        )
+        + "\n"
+    )
+    # endregion
 
 
 def deactivate_parent_account(account):
@@ -242,6 +265,7 @@ def submit_task(*, child, task, photo_bonus_snapshot=0, child_note=""):
 
 @transaction.atomic
 def approve_task_claim(*, claim, actor):
+    started_at = time.perf_counter()
     locked = TaskClaim.objects.select_related("child").get(pk=claim.pk)
     if locked.status != RequestStatus.PENDING:
         raise ValidationError(_("This request has already been resolved."))
@@ -264,7 +288,23 @@ def approve_task_claim(*, claim, actor):
         actor=actor,
         source_id=locked.pk,
     )
+    before_completion = time.perf_counter()
     ensure_task_completion(child=locked.child, task=locked.task)
+    _debug_log(
+        hypothesis_id="H1",
+        location="economy/services.py:approve_task_claim",
+        message="service segments",
+        data={
+            "claimId": locked.pk,
+            "post_ledger_and_update_ms": round(
+                (before_completion - started_at) * 1000, 2
+            ),
+            "ensure_task_completion_ms": round(
+                (time.perf_counter() - before_completion) * 1000, 2
+            ),
+            "total_ms": round((time.perf_counter() - started_at) * 1000, 2),
+        },
+    )
     return entry
 
 
@@ -699,6 +739,7 @@ def send_due_assigned_task_nudges(*, current_time=None):
 
 @transaction.atomic
 def complete_assigned_task(*, assigned_task, child):
+    started_at = time.perf_counter()
     today = timezone.localdate()
     completed_at = timezone.now()
     claimed = AssignedTask.objects.filter(
@@ -729,12 +770,28 @@ def complete_assigned_task(*, assigned_task, child):
         description=locked.title_snapshot,
         source_id=locked.pk,
     )
+    before_completion = time.perf_counter()
     AssignedTask.objects.filter(pk=locked.pk).update(ledger_entry=entry)
     if locked.task_id:
         ensure_task_completion(child=child, task=locked.task)
     from .push import notify_assigned_task_completed
 
+    before_notify = time.perf_counter()
     notify_assigned_task_completed(locked)
+    _debug_log(
+        hypothesis_id="H4",
+        location="economy/services.py:complete_assigned_task",
+        message="service segments",
+        data={
+            "assignedTaskId": locked.pk,
+            "claim_and_ledger_ms": round((before_completion - started_at) * 1000, 2),
+            "completion_and_link_ms": round(
+                (before_notify - before_completion) * 1000, 2
+            ),
+            "notify_ms": round((time.perf_counter() - before_notify) * 1000, 2),
+            "total_ms": round((time.perf_counter() - started_at) * 1000, 2),
+        },
+    )
     return entry
 
 
