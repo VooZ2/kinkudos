@@ -23,7 +23,7 @@ py-vapid==1.9.4
 pycparser==3.0
 pywebpush==2.4.0
 requests==2.34.2
-sqlparse==0.5.5
+sqlparse==0.6.0
 typing_extensions==4.16.0
 urllib3==2.7.0
 whitenoise==6.12.0

@@ -207,8 +207,8 @@ For fresh-install acceptance testing, use the installer from the exact source
 commit and point it at the candidate assets:
 
 ```sh
-version=26.8.1
-candidate_tag=26.8.1-rc.<short-sha>
+version=26.8.2
+candidate_tag=26.8.2-rc.<short-sha>
 source_sha=<full-source-sha>
 curl -fsSL "https://raw.githubusercontent.com/VooZ2/kinkudos/$source_sha/deploy/install.sh" \
   -o /tmp/kinkudos-install.sh
@@ -224,8 +224,8 @@ prerelease, then pass the candidate image tag through `sudo` so the extracted
 Compose files pull the RC image:
 
 ```sh
-version=26.8.1
-candidate_tag=26.8.1-rc.<short-sha>
+version=26.8.2
+candidate_tag=26.8.2-rc.<short-sha>
 gh release download "v$candidate_tag" --repo VooZ2/kinkudos \
   --pattern "kinkudos-$version.tar.gz" \
   --pattern "kinkudos-$version.tar.gz.sha256"
@@ -252,9 +252,9 @@ sudo env KINKUDOS_IMAGE_REPOSITORY="vooz2/kinkudos-rc" \
 ```
 
 These overrides do not need to be persisted in the production `.env`. They are
-not part of the normal stable-user update workflow: after `26.8.1` is
+not part of the normal stable-user update workflow: after `26.8.2` is
 published, the Compose defaults are the production `vooz2/kinkudos` package and
-`26.8.1`, so no RC override is required.
+`26.8.2`, so no RC override is required.
 
 Record the workflow's source SHA, candidate manifest digest, both image
 architectures, prerelease asset URLs, and checksum before beginning VPS tests.

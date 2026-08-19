@@ -454,6 +454,69 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotContains(response, "Veiksmų istorija")
         self.assertContains(response, "Child One · Testas")
 
+    def test_task_approval_json_response_supports_local_parent_update(self):
+        self.client.force_login(self.parent)
+        claim = self.child_one.task_claims.create(
+            task=self.task,
+            task_title=self.task.title,
+            reward_snapshot=self.task.reward,
+        )
+
+        response = self.client.post(
+            reverse("parent_decide_task", args=[claim.pk, "approve"]),
+            HTTP_ACCEPT="application/json",
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertTrue(payload["ok"])
+        self.assertEqual(payload["effect"], "task")
+        self.assertEqual(payload["child_id"], self.child_one.pk)
+        self.assertEqual(payload["balance"], 50)
+        self.assertEqual(payload["redirect_url"], reverse("parent_dashboard"))
+        claim.refresh_from_db()
+        self.assertEqual(claim.status, RequestStatus.APPROVED)
+
+        duplicate = self.client.post(
+            reverse("parent_decide_task", args=[claim.pk, "approve"]),
+            HTTP_ACCEPT="application/json",
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+        self.assertEqual(duplicate.status_code, 400)
+        self.assertFalse(duplicate.json()["ok"])
+
+    def test_reward_approval_json_response_includes_new_balance(self):
+        post_ledger_entry(
+            child=self.child_one,
+            delta=300,
+            kind=LedgerKind.ADJUSTMENT,
+            description="Pradinis balansas",
+            actor=self.parent,
+        )
+        reward_request = RewardRequest.objects.create(
+            child=self.child_one,
+            reward=self.reward,
+            reward_title=self.reward.title,
+            cost_snapshot=self.reward.cost,
+        )
+        self.client.force_login(self.parent)
+
+        response = self.client.post(
+            reverse("parent_decide_reward", args=[reward_request.pk, "approve"]),
+            HTTP_ACCEPT="application/json",
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertTrue(payload["ok"])
+        self.assertEqual(payload["effect"], "reward")
+        self.assertEqual(payload["child_id"], self.child_one.pk)
+        self.assertEqual(payload["balance"], 200)
+        reward_request.refresh_from_db()
+        self.assertEqual(reward_request.status, RequestStatus.APPROVED)
+
     @patch("economy.views.parent_actions.notify_task_decision")
     def test_task_approval_and_rejection_notify_the_affected_child(self, notify):
         self.client.login(username="tevai", password=self.parent_password)
@@ -838,7 +901,7 @@ class AccessAndWorkflowTests(TestCase):
     def test_parent_dashboard_has_v060_labels_and_collapsed_catalogs(self):
         self.client.login(username="tevai", password=self.parent_password)
         response = self.client.get(reverse("parent_dashboard"))
-        self.assertContains(response, "v26.8.1")
+        self.assertContains(response, "v26.8.2")
         self.assertContains(response, f'href="{reverse("changelog")}"', html=False)
         self.assertContains(response, "taškai")
         self.assertContains(response, "Kreditas -100")
@@ -923,7 +986,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertContains(response, 'class="topbar landing-topbar"', html=False)
         self.assertContains(response, 'class="site-footer"', html=False)
         self.assertContains(response, 'class="footer-product">KinKudos · ', html=False)
-        self.assertContains(response, "v26.8.1")
+        self.assertContains(response, "v26.8.2")
         self.assertContains(response, "Dokumentacija")
         self.assertContains(response, "https://docs.kinkudos.app/index.lt/")
         self.assertContains(response, "https://github.com/VooZ2/kinkudos")
@@ -1336,10 +1399,10 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Kas naujo?")
         self.assertContains(response, "Kas pataisyta?")
-        self.assertContains(response, "v26.8.1")
+        self.assertContains(response, "v26.8.2")
         self.assertContains(response, "Dabartinė versija")
         current_release = response.context["releases"][0]
-        self.assertEqual(current_release["version"], "26.8.1")
+        self.assertEqual(current_release["version"], "26.8.2")
         self.assertEqual(len(response.context["releases"]), 5)
         self.assertEqual(response.context["release_page"].paginator.per_page, 5)
         current_copy = " ".join(current_release["new"] + current_release["fixed"]).lower()
@@ -1347,7 +1410,7 @@ class AccessAndWorkflowTests(TestCase):
         self.assertNotIn("demo", current_copy)
         next_page = self.client.get(reverse("changelog"), {"page": 2})
         self.assertEqual(next_page.status_code, 200)
-        self.assertNotContains(next_page, "<h2>v26.8.1</h2>", html=False)
+        self.assertNotContains(next_page, "<h2>v26.8.2</h2>", html=False)
         self.assertContains(next_page, "Pakeitimų istorijos puslapiai")
 
     def test_parent_can_create_another_parent_account(self):
@@ -2012,10 +2075,10 @@ class AccessAndWorkflowTests(TestCase):
         home = self.client.get(reverse("home"))
         self.assertContains(
             home,
-            '/static/icons/favicon-32.png?v=26.8.1',
+            '/static/icons/favicon-32.png?v=26.8.2',
         )
-        self.assertContains(home, "/static/css/app.css?v=26.8.1")
-        self.assertContains(home, "/static/js/app.js?v=26.8.1")
+        self.assertContains(home, "/static/css/app.css?v=26.8.2")
+        self.assertContains(home, "/static/js/app.js?v=26.8.2")
         manifest = self.client.get(reverse("manifest"))
         self.assertEqual(manifest.status_code, 200)
         self.assertEqual(manifest.json()["display"], "standalone")
@@ -2023,11 +2086,11 @@ class AccessAndWorkflowTests(TestCase):
         self.assertEqual(manifest.json()["theme_color"], "#4C1D95")
         self.assertEqual(
             manifest.json()["icons"][0]["src"],
-            "/static/icons/icon-192.png?v=26.8.1",
+            "/static/icons/icon-192.png?v=26.8.2",
         )
         worker = self.client.get(reverse("service_worker"))
         self.assertEqual(worker.status_code, 200)
-        self.assertContains(worker, "/static/icons/icon-192.png?v=26.8.1")
+        self.assertContains(worker, "/static/icons/icon-192.png?v=26.8.2")
         self.assertContains(worker, 'self.addEventListener("push"', html=False)
         self.assertContains(worker, 'self.addEventListener("notificationclick"', html=False)
         self.assertNotContains(worker, 'self.addEventListener("fetch"', html=False)

@@ -6,7 +6,7 @@ from django.contrib.auth import (
 )
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -90,6 +90,40 @@ from economy.services import (
     save_assignment_preset,
     update_savings_goal,
 )
+
+
+def _parent_decision_wants_json(request):
+    return (
+        request.headers.get("X-Requested-With") == "XMLHttpRequest"
+        or "application/json" in request.headers.get("Accept", "")
+    )
+
+
+def _parent_decision_response(
+    request,
+    *,
+    message,
+    success=True,
+    effect=None,
+    child=None,
+):
+    if _parent_decision_wants_json(request):
+        payload = {
+            "ok": success,
+            "message": str(message),
+            "redirect_url": reverse("parent_dashboard"),
+        }
+        if effect:
+            payload["effect"] = effect
+        if child is not None:
+            payload["child_id"] = child.pk
+            payload["balance"] = child.balance
+        return JsonResponse(payload, status=200 if success else 400)
+    if success:
+        messages.success(request, message)
+    else:
+        messages.error(request, message)
+    return redirect("parent_dashboard")
 
 
 @parent_account_required
@@ -281,12 +315,19 @@ def parent_delete_catalog(request, kind, item_id):
 def parent_decide_task(request, claim_id, decision):
     claim = get_object_or_404(TaskClaim.objects.select_related("child"), pk=claim_id)
     ensure_child_accessible(request, claim.child)
+    message = None
+    success = True
+    effect = None
+    child = None
     try:
         if decision == "approve":
             approve_task_claim(claim=claim, actor=request.user)
             claim.refresh_from_db()
+            claim.child.refresh_from_db(fields=["balance"])
             notify_task_decision(claim, approved=True)
-            messages.success(request, _("Task approved."))
+            message = _("Task approved.")
+            effect = "task"
+            child = claim.child
         elif decision == "reject":
             form = TaskDecisionCommentForm(request.POST)
             if not form.is_valid():
@@ -297,7 +338,7 @@ def parent_decide_task(request, claim_id, decision):
                 reason=form.cleaned_data["reason"],
             )
             notify_task_decision(claim, approved=False)
-            messages.success(request, _("Task rejected."))
+            message = _("Task rejected.")
         elif decision == "revise":
             form = TaskDecisionCommentForm(request.POST)
             if not form.is_valid():
@@ -309,12 +350,19 @@ def parent_decide_task(request, claim_id, decision):
             )
             claim.refresh_from_db()
             notify_task_revision(claim)
-            messages.success(request, _("The task was returned for improvements."))
+            message = _("The task was returned for improvements.")
         else:
             raise Http404
     except ValidationError as exc:
-        messages.error(request, exc.messages[0])
-    return redirect("parent_dashboard")
+        message = exc.messages[0]
+        success = False
+    return _parent_decision_response(
+        request,
+        message=message,
+        success=success,
+        effect=effect,
+        child=child,
+    )
 
 @parent_required
 @require_POST
@@ -323,12 +371,19 @@ def parent_decide_reward(request, request_id, decision):
         RewardRequest.objects.select_related("child"), pk=request_id
     )
     ensure_child_accessible(request, reward_request.child)
+    message = None
+    success = True
+    effect = None
+    child = None
     try:
         if decision == "approve":
             approve_reward_request(request=reward_request, actor=request.user)
             reward_request.refresh_from_db()
+            reward_request.child.refresh_from_db(fields=["balance"])
             notify_reward_decision(reward_request, approved=True)
-            messages.success(request, _("Reward approved."))
+            message = _("Reward approved.")
+            effect = "reward"
+            child = reward_request.child
         elif decision == "reject":
             form = RejectForm(request.POST)
             if not form.is_valid():
@@ -339,12 +394,19 @@ def parent_decide_reward(request, request_id, decision):
                 reason=form.cleaned_data["reason"],
             )
             notify_reward_decision(locked, approved=False)
-            messages.success(request, _("Reward request rejected."))
+            message = _("Reward request rejected.")
         else:
             raise Http404
     except ValidationError as exc:
-        messages.error(request, exc.messages[0])
-    return redirect("parent_dashboard")
+        message = exc.messages[0]
+        success = False
+    return _parent_decision_response(
+        request,
+        message=message,
+        success=success,
+        effect=effect,
+        child=child,
+    )
 
 @parent_required
 @require_POST
