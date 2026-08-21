@@ -9,6 +9,18 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Nothing yet.
 
+## [26.8.3] - 2026-08-21
+
+### Changed
+
+- Parent task and reward approvals are now quiet operational actions; celebration
+  effects and sounds remain limited to the child area.
+
+### Fixed
+
+- Centered the approval spinner over the existing action icon while a parent
+  approval is processing.
+
 ## [26.8.2] - 2026-08-19
 
 ### Changed
