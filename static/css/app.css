@@ -863,7 +863,7 @@ details .stack-form, details .inline-form { margin-top: 14px; }
 .pending-request-row[data-approval-processing] .pending-request-actions { pointer-events: none; }
 [data-approval-submit][aria-busy="true"] { cursor: progress; }
 [data-approval-submit][aria-busy="true"] .action-icon { visibility: hidden; }
-[data-approval-submit][aria-busy="true"]::before { width: 18px; height: 18px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; content: ""; animation: approval-button-spin .7s linear infinite; }
+[data-approval-submit][aria-busy="true"]::before { grid-area: 1 / 1; width: 18px; height: 18px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; content: ""; animation: approval-button-spin .7s linear infinite; }
 @keyframes approval-button-spin { to { transform: rotate(360deg); } }
 .pending-evidence-cluster { display: flex; flex: 0 0 auto; align-items: center; gap: 8px; }
 .pending-empty-state { display: flex; align-items: center; gap: 10px; padding: 18px; color: var(--success); font-size: .94rem; font-weight: 720; line-height: 1.4; }

@@ -500,6 +500,7 @@ if (historyFilterForm) {
 }
 
 function celebrate() {
+  if (!document.body.classList.contains("child-area")) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const layer = document.createElement("div");
   const theme = [...document.body.classList].find(name => name.startsWith("theme-")) || "theme-neutral";
@@ -1718,8 +1719,6 @@ async function submitParentApproval(form, event) {
   if (button) button.disabled = true;
   const row = form.closest("[data-pending-request-row]");
   row?.setAttribute("data-approval-processing", "true");
-  const soundContext = prepareThemeSound();
-
   try {
     const response = await fetch(form.action, {
       method: "POST",
@@ -1732,7 +1731,6 @@ async function submitParentApproval(form, event) {
     });
     const payload = await response.json();
     if (!response.ok || !payload.ok) {
-      soundContext?.close();
       window.location.assign(payload.redirect_url || window.location.href);
       return;
     }
@@ -1740,11 +1738,8 @@ async function submitParentApproval(form, event) {
     removeApprovedPendingRequest(row);
     updateParentChildBalance(payload.child_id, Number(payload.balance));
     showTransientMessage(payload.message);
-    celebrate();
-    playThemeSound(payload.effect || "task", soundContext);
     forceParentStateCheck();
   } catch (_) {
-    soundContext?.close();
     HTMLFormElement.prototype.submit.call(form);
   }
 }

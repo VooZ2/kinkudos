@@ -385,6 +385,30 @@ class FinalReviewTests(TestCase):
         self.assertNotIn("requestSubmit", script)
         self.assertNotIn('button.setAttribute("aria-disabled", "true")', script)
 
+    def test_parent_approval_is_quiet_and_approval_spinner_is_centered(self):
+        script = (ROOT / "static/js/app.js").read_text(encoding="utf-8")
+        parent_approval = script[
+            script.index("async function submitParentApproval") : script.index(
+                "document.addEventListener(\"submit\"", script.index(
+                    "async function submitParentApproval"
+                )
+            )
+        ]
+        self.assertNotIn("celebrate()", parent_approval)
+        self.assertNotIn("playThemeSound", parent_approval)
+        self.assertIn(
+            'if (!document.body.classList.contains("child-area")) return;',
+            script,
+        )
+
+        css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
+        spinner_rule = css[
+            css.index('[data-approval-submit][aria-busy="true"]::before') : css.index(
+                "}", css.index('[data-approval-submit][aria-busy="true"]::before')
+            )
+        ]
+        self.assertIn("grid-area: 1 / 1", spinner_rule)
+
     def test_numeric_point_fields_have_a_five_digit_guard_and_backend_limit(self):
         response = self.parent_response()
         self.assertContains(response, 'name="custom_points" type="number" min="1" max="99999"', html=False)
@@ -408,7 +432,7 @@ class FinalReviewTests(TestCase):
     def test_mobile_footer_has_compact_labels_and_dynamic_version(self):
         response = self.parent_response()
         self.assertContains(response, 'class="footer-release"', html=False)
-        self.assertContains(response, "v26.8.2")
+        self.assertContains(response, "v26.8.3")
         self.assertContains(response, 'class="footer-docs-short">Docs', html=False)
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".footer-product, .footer-docs-long { display: none; }", css)

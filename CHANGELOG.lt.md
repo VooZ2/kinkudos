@@ -11,6 +11,17 @@ schema.
 
 - Kol kas nieko.
 
+## [26.8.3] - 2026-08-21
+
+### Pakeista
+
+- Tėvų darbų ir prizų patvirtinimai dabar yra tylūs veiklos veiksmai; šventiniai
+  efektai ir garsai lieka tik vaiko srityje.
+
+### Pataisyta
+
+- Patvirtinimo metu suktukas centruojamas virš esamos veiksmo piktogramos.
+
 ## [26.8.2] - 2026-08-19
 
 ### Pakeista
