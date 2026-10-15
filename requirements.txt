@@ -3,6 +3,6 @@ argon2-cffi==25.1.0
 cryptography==50.0.0
 gunicorn==26.0.0
 Pillow==12.3.0
-pillow-heif==1.5.0
+pillow-heif==1.8.1
 pywebpush==2.4.0
 whitenoise==6.12.0
