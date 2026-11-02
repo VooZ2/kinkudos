@@ -9,6 +9,13 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Nothing yet.
 
+## [26.8.4] - 2026-11-03
+
+### Changed
+
+- Links can open KinKudos in a chosen language with `?lang=en` or `?lang=lt`;
+  the choice is remembered like the regular language switch.
+
 ## [26.8.3] - 2026-08-21
 
 ### Changed

@@ -11,6 +11,13 @@ schema.
 
 - Kol kas nieko.
 
+## [26.8.4] - 2026-11-03
+
+### Pakeista
+
+- Nuorodos gali atverti KinKudos pasirinkta kalba su `?lang=en` arba `?lang=lt`;
+  pasirinkimas įsimenamas kaip ir įprastu kalbos perjungikliu.
+
 ## [26.8.3] - 2026-08-21
 
 ### Pakeista
