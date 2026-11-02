@@ -18,6 +18,12 @@ schema.
 - Nuorodos gali atverti KinKudos pasirinkta kalba su `?lang=en` arba `?lang=lt`;
   pasirinkimas įsimenamas kaip ir įprastu kalbos perjungikliu.
 
+### Saugumas
+
+- Atnaujinti Pillow iki 13.0.0, urllib3 iki 2.8.0, aiohttp iki 3.14.4,
+  multidict iki 6.9.1, yarl iki 1.25.1 ir certifi iki 2026.10.18, kad būtų
+  ištaisytos paskelbtos saugumo spragos.
+
 ## [26.8.3] - 2026-08-21
 
 ### Pakeista

@@ -16,6 +16,12 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 - Links can open KinKudos in a chosen language with `?lang=en` or `?lang=lt`;
   the choice is remembered like the regular language switch.
 
+### Security
+
+- Updated Pillow to 13.0.0, urllib3 to 2.8.0, aiohttp to 3.14.4, multidict to
+  6.9.1, yarl to 1.25.1, and certifi to 2026.10.18 to resolve published
+  security advisories.
+
 ## [26.8.3] - 2026-08-21
 
 ### Changed
