@@ -45,6 +45,21 @@ class LanguageSwitchFlowTests(TestCase):
         self.assertContains(redirected, '<html lang="en">', html=False)
         self.assertContains(redirected, "Sign in")
 
+    def test_lang_query_parameter_selects_and_remembers_language(self):
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+        response = self.client.get(f"{reverse('parent_login')}?lang=lt")
+        self.assertContains(response, '<html lang="lt">', html=False)
+        self.assertEqual(response.cookies[settings.LANGUAGE_COOKIE_NAME].value, "lt")
+
+        response = self.client.get(reverse("parent_login"))
+        self.assertContains(response, '<html lang="lt">', html=False)
+
+    def test_unsupported_lang_query_parameter_is_ignored(self):
+        self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = "en"
+        response = self.client.get(f"{reverse('parent_login')}?lang=de")
+        self.assertContains(response, '<html lang="en">', html=False)
+        self.assertNotIn(settings.LANGUAGE_COOKIE_NAME, response.cookies)
+
     def test_explicit_language_survives_family_default_and_signed_in_switches(self):
         family = FamilySettings.load()
         family.default_language = "lt"
