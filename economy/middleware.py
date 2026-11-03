@@ -90,11 +90,30 @@ class DefaultLanguageMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if settings.LANGUAGE_COOKIE_NAME not in request.COOKIES:
+        # ?lang= lets links (e.g. from kinkudos.app) open the app in a chosen language.
+        requested = request.GET.get("lang")
+        if requested not in dict(settings.LANGUAGES):
+            requested = None
+        if requested:
+            request.COOKIES[settings.LANGUAGE_COOKIE_NAME] = requested
+        elif settings.LANGUAGE_COOKIE_NAME not in request.COOKIES:
             language = FamilySettings.load().default_language
             if language:
                 request.COOKIES[settings.LANGUAGE_COOKIE_NAME] = language
-        return self.get_response(request)
+        response = self.get_response(request)
+        if requested:
+            # Same cookie attributes as Django's set_language view.
+            response.set_cookie(
+                settings.LANGUAGE_COOKIE_NAME,
+                requested,
+                max_age=settings.LANGUAGE_COOKIE_AGE,
+                path=settings.LANGUAGE_COOKIE_PATH,
+                domain=settings.LANGUAGE_COOKIE_DOMAIN,
+                secure=settings.LANGUAGE_COOKIE_SECURE,
+                httponly=settings.LANGUAGE_COOKIE_HTTPONLY,
+                samesite=settings.LANGUAGE_COOKIE_SAMESITE,
+            )
+        return response
 
 
 class FamilyTimezoneMiddleware:
