@@ -99,7 +99,7 @@ class FeedbackWorkflowTests(TestCase):
         self.assertEqual(report.reporter_role, "parent")
         self.assertEqual(report.family_name, "Aurora")
         self.assertEqual(report.page_path, reverse("parent_dashboard"))
-        self.assertEqual(report.app_version, "26.8.4")
+        self.assertEqual(report.app_version, "26.8.5")
         self.assertEqual(report.user_agent, "Feedback Browser")
         self.assertIsNotNone(report.email_notified_at)
         self.assertEqual(len(mail.outbox), 1)
@@ -352,6 +352,36 @@ class FeedbackWorkflowTests(TestCase):
         self.assertFalse(storage.exists(old_name))
         self.assertTrue(new_report.screenshot)
         self.assertTrue(storage.exists(new_name))
+
+    def test_cleanup_keeps_screenshot_reference_when_storage_delete_fails(self):
+        report = FeedbackReport.objects.create(
+            description="Old resolved report",
+            status=FeedbackStatus.RESOLVED,
+            child=self.child,
+            reporter_name=self.child.name,
+            reporter_role="child",
+            app_version="0.11.0",
+        )
+        report.screenshot.save("old.webp", self.screenshot(), save=True)
+        FeedbackReport.objects.filter(pk=report.pk).update(
+            updated_at=timezone.now() - timedelta(days=31)
+        )
+        report.refresh_from_db()
+        screenshot_name = report.screenshot.name
+        storage = report.screenshot.storage
+
+        with patch.object(storage, "delete", side_effect=OSError("storage unavailable")):
+            with self.assertRaisesMessage(OSError, "storage unavailable"):
+                call_command("purge_task_evidence")
+
+        report.refresh_from_db()
+        self.assertEqual(report.screenshot.name, screenshot_name)
+        self.assertIsNone(report.screenshot_purged_at)
+
+        call_command("purge_task_evidence")
+        report.refresh_from_db()
+        self.assertFalse(report.screenshot)
+        self.assertFalse(storage.exists(screenshot_name))
 
     def test_feedback_button_is_only_visible_in_signed_in_areas(self):
         self.assertNotContains(self.client.get(reverse("home")), "feedback-launcher")

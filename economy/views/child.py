@@ -962,6 +962,10 @@ def _delete_task_evidence(claim, *, mark_purged=False):
         if claim.evidence_thumbnail
         else None,
     ]
+    for item in names:
+        if item:
+            storage, name = item
+            storage.delete(name)
     claim.evidence_image = ""
     claim.evidence_thumbnail = ""
     if mark_purged:
@@ -973,10 +977,6 @@ def _delete_task_evidence(claim, *, mark_purged=False):
             *(["evidence_purged_at"] if mark_purged else []),
         ]
     )
-    for item in names:
-        if item:
-            storage, name = item
-            storage.delete(name)
 
 def _replace_task_evidence(claim, processed):
     old_names = [

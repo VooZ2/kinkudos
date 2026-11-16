@@ -146,6 +146,32 @@ class SavingsGoalServiceTests(TestCase):
         self.assertEqual(second.mode, GoalMode.AVAILABLE)
         self.assertEqual(LedgerEntry.objects.filter(child=self.child).count(), ledger_count)
 
+    def test_pending_completion_keeps_its_goal_mode_until_parent_resolves_it(self):
+        self.fund_child(100)
+        current = self.make_goal(target=80)
+        select_goal_mode(goal=current, child=self.child, mode=GoalMode.AVAILABLE)
+        completion_request = request_goal_completion(goal=current, child=self.child)
+
+        with self.assertRaisesMessage(
+            ValidationError,
+            "Resolve the pending goal request before changing goal modes.",
+        ):
+            select_goal_mode(goal=current, child=self.child, mode=GoalMode.SAVED)
+
+        other = self.make_goal(target=150)
+        with self.assertRaisesMessage(
+            ValidationError,
+            "Resolve the pending goal request before changing goal modes.",
+        ):
+            select_goal_mode(goal=other, child=self.child, mode=GoalMode.AVAILABLE)
+
+        current.refresh_from_db()
+        other.refresh_from_db()
+        completion_request.refresh_from_db()
+        self.assertEqual(current.mode, GoalMode.AVAILABLE)
+        self.assertIsNone(other.mode)
+        self.assertEqual(completion_request.status, RequestStatus.PENDING)
+
     def test_database_allows_only_one_current_goal_per_child(self):
         first = self.make_goal()
         SavingsGoal.objects.create(

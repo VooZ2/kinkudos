@@ -76,6 +76,8 @@ profiles, or update family feedback. Caregiver media URLs are independently
 scoped to assigned children. Caregiver sessions are invalidated when access
 expires; the profile and its user account are then deactivated, so an expired
 guest cannot fall through to the full-parent scope.
+Caregiver accounts do not count toward the last active full-parent account
+guard because their permissions are intentionally narrower.
 
 ## Core data
 **FamilySettings** — singleton: family display name, currency name, default
@@ -117,7 +119,9 @@ per its configured period (`economy/images.py`). A child may also add an
 optional short note (`child_note`, max 200 characters) describing what they
 did. The note is independent of the photo: it does not grant the photo bonus,
 is not purged with evidence files, and is shown to parents as an icon in
-Pending and History rather than inline chat.
+Pending and History rather than inline chat. Scheduled retention and child
+evidence removal delete stored files before clearing their database fields, so
+a storage failure leaves the reference available for a later retry.
 
 **AssignedTaskBatch** / **AssignedTask** / **TaskCompletion** — a parent may
 send one child a list of catalog tasks plus one optional custom task for the
@@ -223,9 +227,10 @@ creates an offsetting ledger entry and resolves the active contributions.
 
 **GoalCompletionRequest** — a child request created after a savings goal
 reaches its target. A parent must approve completion or keep the goal active;
-there can be only one pending request per goal. **SavingsGoalEvent** preserves
-the goal activity history independently of the goal's active, completed, or
-cancelled state.
+there can be only one pending request per goal. The goal's mode cannot change
+while that request is pending, so review remains attached to the goal state the
+child submitted. **SavingsGoalEvent** preserves the goal activity history
+independently of the goal's active, completed, or cancelled state.
 
 **LedgerEntry** — append-only, the single source of truth for balances.
 Existing entries can't be modified or deleted; corrections are new

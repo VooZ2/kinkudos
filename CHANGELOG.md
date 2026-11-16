@@ -9,6 +9,28 @@ Keep a Changelog and versions use `YY.FEATURE.FIX`.
 
 - Nothing yet.
 
+## [26.8.5] - 2026-11-16
+
+### Changed
+
+- Refreshed the parent workspace with consistent typography, clearer navigation,
+  and simpler surfaces while keeping child themes distinct.
+- Updated the Python container base image and application dependencies.
+
+### Fixed
+
+- Kept the parent Home empty state hidden while requests are pending, centered
+  the approval spinner, and improved goal controls on narrow screens.
+- Kept a savings goal's mode unchanged while its completion request awaits a
+  parent decision.
+- Preserved evidence references when storage deletion fails so cleanup can be
+  retried, and excluded caregiver accounts from the last full-parent guard.
+
+### Security
+
+- Updated Django, cryptography, image, and Web Push dependencies; the locked
+  production dependencies pass the vulnerability audit.
+
 ## [26.8.4] - 2026-11-03
 
 ### Changed

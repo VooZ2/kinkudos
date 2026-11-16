@@ -166,6 +166,12 @@ class FinalReviewTests(TestCase):
         pending_css = css[css.index(".pending-empty-state") : css.index(".empty-panel")]
         self.assertIn("color: var(--success)", pending_css)
         self.assertIn(".pending-empty-state .action-icon", pending_css)
+        self.assertIn(".pending-empty-state[hidden] { display: none; }", pending_css)
+        self.assertIn(".goal-manage-heading { grid-column: 1 / -1; }", css)
+        self.assertIn(
+            ".goal-manage-actions { grid-column: 1 / -1; grid-row: auto; justify-content: flex-start; flex-wrap: wrap; }",
+            css,
+        )
         self.assertIn(".required-marker-star", css)
         self.assertIn(".required-marker-colon", css)
         self.assertIn(".stack-form p > label.required-label-decorated::after", css)
@@ -407,7 +413,9 @@ class FinalReviewTests(TestCase):
                 "}", css.index('[data-approval-submit][aria-busy="true"]::before')
             )
         ]
-        self.assertIn("grid-area: 1 / 1", spinner_rule)
+        self.assertIn("position: absolute", spinner_rule)
+        self.assertIn("inset: 0", spinner_rule)
+        self.assertIn("margin: auto", spinner_rule)
 
     def test_numeric_point_fields_have_a_five_digit_guard_and_backend_limit(self):
         response = self.parent_response()
@@ -432,7 +440,7 @@ class FinalReviewTests(TestCase):
     def test_mobile_footer_has_compact_labels_and_dynamic_version(self):
         response = self.parent_response()
         self.assertContains(response, 'class="footer-release"', html=False)
-        self.assertContains(response, "v26.8.4")
+        self.assertContains(response, "v26.8.5")
         self.assertContains(response, 'class="footer-docs-short">Docs', html=False)
         css = (ROOT / "static/css/app.css").read_text(encoding="utf-8")
         self.assertIn(".footer-product, .footer-docs-long { display: none; }", css)
