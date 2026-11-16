@@ -11,6 +11,29 @@ schema.
 
 - Kol kas nieko.
 
+## [26.8.5] - 2026-11-16
+
+### Pakeista
+
+- Atnaujinta tėvų darbo erdvės tipografija, navigacija ir paviršiai; vaikų temos
+  išsaugo savitą stilių.
+- Atnaujintas Python konteinerio pagrindinis atvaizdas ir programos
+  priklausomybės.
+
+### Pataisyta
+
+- Tėvų pradžios puslapyje paslėpta tuščia būsena, kol laukiama prašymų;
+  patvirtinimo suktukas centruojamas, o tikslų veiksmai siauruose ekranuose
+  išdėstomi aiškiau.
+- Tikslo taupymo režimas nekeičiamas, kol tėvai neišsprendžia užbaigimo prašymo.
+- Nepavykus ištrinti įrodymo failo, išsaugoma jo nuoroda ir galima bandyti dar kartą;
+  svečių paskyros neįskaičiuojamos saugant paskutinę tėvų paskyrą.
+
+### Saugumas
+
+- Atnaujintos Django, cryptography, paveikslėlių ir Web Push priklausomybės;
+  užrakintas jų rinkinys sėkmingai patikrintas dėl žinomų spragų.
+
 ## [26.8.4] - 2026-11-03
 
 ### Pakeista
