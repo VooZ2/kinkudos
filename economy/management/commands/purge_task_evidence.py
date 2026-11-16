@@ -62,6 +62,10 @@ class Command(BaseCommand):
                     if claim.evidence_thumbnail
                     else None,
                 ]
+                for file_info in files:
+                    if file_info:
+                        storage, name = file_info
+                        storage.delete(name)
                 claim.evidence_image = ""
                 claim.evidence_thumbnail = ""
                 claim.evidence_purged_at = timezone.now()
@@ -72,10 +76,6 @@ class Command(BaseCommand):
                         "evidence_purged_at",
                     ]
                 )
-                for file_info in files:
-                    if file_info:
-                        storage, name = file_info
-                        storage.delete(name)
                 removed += 1
 
             self.stdout.write(
@@ -99,12 +99,12 @@ class Command(BaseCommand):
         for report in reports.iterator():
             storage = report.screenshot.storage
             name = report.screenshot.name
+            storage.delete(name)
             report.screenshot = ""
             report.screenshot_purged_at = timezone.now()
             report.save(
                 update_fields=["screenshot", "screenshot_purged_at", "updated_at"]
             )
-            storage.delete(name)
             feedback_removed += 1
 
         self.stdout.write(

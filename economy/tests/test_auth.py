@@ -1,8 +1,10 @@
+from datetime import date, timedelta
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
-from economy.models import PushSubscription
+from economy.models import CaregiverProfile, PushSubscription
 from economy.services import deactivate_parent_account
 
 
@@ -102,6 +104,24 @@ class ParentAccountPermissionTests(TestCase):
 
     def test_deactivation_guard_keeps_the_last_active_parent(self):
         self.admin.delete()
+
+        self.assertEqual(deactivate_parent_account(self.parent), 0)
+        self.parent.refresh_from_db()
+        self.assertTrue(self.parent.is_active)
+
+    def test_caregiver_does_not_count_as_a_surviving_parent_account(self):
+        self.admin.delete()
+        caregiver_user = get_user_model().objects.create_user(
+            "caregiver",
+            password="Safe-caregiver-password-123!",
+        )
+        CaregiverProfile.objects.create(
+            user=caregiver_user,
+            label="Guest",
+            login_code="GUEST123",
+            pin_hash="test-hash",
+            access_until=date.today() + timedelta(days=7),
+        )
 
         self.assertEqual(deactivate_parent_account(self.parent), 0)
         self.parent.refresh_from_db()

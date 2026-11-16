@@ -1,6 +1,7 @@
 import io
 import tempfile
 from datetime import timedelta
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -236,6 +237,83 @@ class TaskEvidenceWorkflowTests(TestCase):
         self.assertTrue(TaskClaim.objects.filter(pk=claim.pk).exists())
         self.assertTrue(LedgerEntry.objects.filter(source_id=claim.pk).exists())
         self.assertEqual(claim.child_note, "Under the bed is clean.")
+
+    def test_cleanup_keeps_file_references_when_storage_delete_fails(self):
+        self.client.post(
+            reverse("child_submit_task", args=[self.task.pk]),
+            {"proof": self.photo()},
+        )
+        claim = TaskClaim.objects.get()
+        approve_task_claim(claim=claim, actor=self.parent)
+        TaskClaim.objects.filter(pk=claim.pk).update(
+            decided_at=timezone.now() - timedelta(days=31)
+        )
+        claim.refresh_from_db()
+        full_name = claim.evidence_image.name
+        thumbnail_name = claim.evidence_thumbnail.name
+        storage = claim.evidence_image.storage
+
+        with patch.object(storage, "delete", side_effect=OSError("storage unavailable")):
+            with self.assertRaisesMessage(OSError, "storage unavailable"):
+                call_command("purge_task_evidence")
+
+        claim.refresh_from_db()
+        self.assertEqual(claim.evidence_image.name, full_name)
+        self.assertEqual(claim.evidence_thumbnail.name, thumbnail_name)
+        self.assertIsNone(claim.evidence_purged_at)
+
+        call_command("purge_task_evidence")
+        claim.refresh_from_db()
+        self.assertFalse(claim.evidence_image)
+        self.assertFalse(claim.evidence_thumbnail)
+        self.assertFalse(storage.exists(full_name))
+        self.assertFalse(storage.exists(thumbnail_name))
+
+    def test_remove_evidence_keeps_references_when_storage_delete_fails(self):
+        self.client.post(
+            reverse("child_submit_task", args=[self.task.pk]),
+            {"proof": self.photo()},
+        )
+        claim = TaskClaim.objects.get()
+        full_name = claim.evidence_image.name
+        thumbnail_name = claim.evidence_thumbnail.name
+        storage = claim.evidence_image.storage
+
+        self.client.logout()
+        self.client.login(username="parent", password="Safe-visual-test-123!")
+        self.client.post(
+            reverse("parent_decide_task", args=[claim.pk, "revise"]),
+            {"reason": "Please add a note."},
+        )
+        self.client.logout()
+        session = self.client.session
+        session["child_id"] = self.child.pk
+        session.save()
+
+        with patch.object(storage, "delete", side_effect=OSError("storage unavailable")):
+            with self.assertRaisesMessage(OSError, "storage unavailable"):
+                self.client.post(
+                    reverse("child_resubmit_task", args=[claim.pk]),
+                    {"remove_evidence": "true", "child_note": "Done."},
+                )
+
+        claim.refresh_from_db()
+        self.assertEqual(claim.evidence_image.name, full_name)
+        self.assertEqual(claim.evidence_thumbnail.name, thumbnail_name)
+        self.assertTrue(storage.exists(full_name))
+        self.assertTrue(storage.exists(thumbnail_name))
+
+        response = self.client.post(
+            reverse("child_resubmit_task", args=[claim.pk]),
+            {"remove_evidence": "true", "child_note": "Done."},
+        )
+        claim.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(claim.evidence_image)
+        self.assertFalse(claim.evidence_thumbnail)
+        self.assertEqual(claim.status, RequestStatus.PENDING)
+        self.assertFalse(storage.exists(full_name))
+        self.assertFalse(storage.exists(thumbnail_name))
 
 
 class ChildClaimNoteTests(TestCase):

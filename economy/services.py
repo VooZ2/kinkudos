@@ -50,6 +50,7 @@ def deactivate_parent_account(account):
     user_model = get_user_model()
     other_active_parents = user_model.objects.filter(
         is_active=True,
+        caregiver_profile__isnull=True,
     ).exclude(pk=account.pk)
     deactivation = user_model.objects.filter(
         pk=account.pk,
@@ -841,6 +842,16 @@ def select_goal_mode(*, goal, child, mode, actor=None):
         child=locked_child,
         status=GoalStatus.ACTIVE,
     )
+    if (
+        locked_goal.mode != mode
+        and GoalCompletionRequest.objects.filter(
+            goal=locked_goal,
+            status=RequestStatus.PENDING,
+        ).exists()
+    ):
+        raise ValidationError(
+            _("Resolve the pending goal request before changing goal modes.")
+        )
     if locked_goal.mode == GoalMode.SAVED and mode != GoalMode.SAVED:
         if _active_saved_amount(locked_goal):
             raise ValidationError(
@@ -859,6 +870,13 @@ def select_goal_mode(*, goal, child, mode, actor=None):
             .first()
         )
         if previous_current:
+            if GoalCompletionRequest.objects.filter(
+                goal=previous_current,
+                status=RequestStatus.PENDING,
+            ).exists():
+                raise ValidationError(
+                    _("Resolve the pending goal request before changing goal modes.")
+                )
             previous_current.mode = None
             previous_current.save(update_fields=["mode"])
     if locked_goal.mode == mode and previous_current is None:

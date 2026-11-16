@@ -163,6 +163,7 @@
   </div>
   <div class="parent-workspace">
   <section id="parent-home" class="parent-panel parent-home-panel" data-parent-panel="home">
+<section class="section-heading parent-home-heading"><h1>{% translate "Home" %}</h1></section>
 <section class="content-section parent-children-section">
   <div class="section-heading children-section-heading"><h2>{% translate "Children" %}</h2></div>
   <div class="stats-grid">
@@ -486,7 +487,7 @@
 {% if not is_caregiver %}
 <section id="parent-catalogs" class="parent-panel" data-parent-panel="catalogs" hidden>
 <section class="content-section">
-  <div class="section-heading"><h2>{% translate "Manage" %}</h2></div>
+  <div class="section-heading"><h1>{% translate "Manage" %}</h1></div>
   <nav class="manage-tabs" aria-label="{% translate 'Manage sections' %}">
     <a href="#manage-tasks"><svg class="action-icon" aria-hidden="true"><use href="#icon-list-check"></use></svg>{% translate "Tasks" %}</a>
     <a href="#manage-penalties"><svg class="action-icon" aria-hidden="true"><use href="#icon-circle-minus"></use></svg>{% translate "Penalties" %}</a>
@@ -638,7 +639,7 @@
 {% if not is_caregiver %}
 <section id="parent-settings" class="parent-panel" data-parent-panel="settings" hidden>
 <section class="content-section">
-  <div class="section-heading"><h2>{% translate "Settings" %}</h2></div>
+  <div class="section-heading"><h1>{% translate "Settings" %}</h1></div>
 
   <section class="settings-block" aria-labelledby="settings-everyday-heading">
     <h3 id="settings-everyday-heading" class="settings-block-heading">{% translate "Everyday" %}</h3>

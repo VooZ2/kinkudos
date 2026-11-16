@@ -2638,6 +2638,9 @@ msgstr "Atkūrimo nuoroda"
 msgid "Reset password"
 msgstr "Atkurti slaptažodį"
 
+msgid "Resolve the pending goal request before changing goal modes."
+msgstr "Pirmiausia išspręskite laukiantį tikslo prašymą, tada keiskite taupymo režimą."
+
 msgid "Resolved"
 msgstr "Išspręsta"
 

@@ -1098,6 +1098,7 @@
   "This goal has no saved points to return.": "Šis tikslas neturi grąžintinų išsaugotų taškų.",
   "This goal has not reached its target yet.": "Šis tikslas dar nepasiekė tikslinės sumos.",
   "This goal is already waiting for parent approval.": "Šis tikslas jau laukia tėvų patvirtinimo.",
+  "Resolve the pending goal request before changing goal modes.": "Pirmiausia išspręskite laukiantį tikslo prašymą, tada keiskite taupymo režimą.",
   "This goal request has already been resolved.": "Šio tikslo prašymas jau išspręstas.",
   "This month": "Šį mėnesį",
   "This week": "Šią savaitę",
