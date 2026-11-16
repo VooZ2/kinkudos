@@ -227,9 +227,10 @@ creates an offsetting ledger entry and resolves the active contributions.
 
 **GoalCompletionRequest** — a child request created after a savings goal
 reaches its target. A parent must approve completion or keep the goal active;
-there can be only one pending request per goal. **SavingsGoalEvent** preserves
-the goal activity history independently of the goal's active, completed, or
-cancelled state.
+there can be only one pending request per goal. The goal's mode cannot change
+while that request is pending, so review remains attached to the goal state the
+child submitted. **SavingsGoalEvent** preserves the goal activity history
+independently of the goal's active, completed, or cancelled state.
 
 **LedgerEntry** — append-only, the single source of truth for balances.
 Existing entries can't be modified or deleted; corrections are new
