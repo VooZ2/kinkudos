@@ -1,0 +1,4130 @@
+msgid ""
+msgstr "Project-Id-Version: KinKudos\nLanguage: pt_BR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "%(amount)s points are available for rewards again."
+msgstr "%(amount)s pontos estão disponíveis para recompensas novamente."
+
+msgid "%(amount)s saved points will be returned to %(child_name)s’s available balance before this goal is removed."
+msgstr "%(amount)s pontos guardados serão devolvidos ao saldo disponível de %(child_name)s antes que esta meta seja removido."
+
+msgid "%(family)s – guest access"
+msgstr "%(family)s – acesso aos convidados"
+
+msgid "%(family_display_name)s – password reset"
+msgstr "%(family_display_name)s – reset de senha"
+
+msgid "%(name)s 4-digit PIN: "
+msgstr "PIN de 4 dígitos %(name)s: "
+
+msgid "%(name)s gave you %(currency)s."
+msgstr "%(name)s deu-te %(currency)s."
+
+msgid "%(name)s received %(count)s penalty/penalties (total %(total)s)."
+msgstr "%(name)s recebeu %(count)s penalidade(s), num total de %(total)s pontos."
+
+msgid "%(name)s received %(count)s task(s) (total +%(total)s)."
+msgstr "%(name)s recebeu pontos por %(count)s tarefa(s), num total de +%(total)s pontos."
+
+msgid "%(name)s unlocked."
+msgstr "%(name)s está com o acesso desbloqueado."
+
+msgid "%(name)s's avatar"
+msgstr "Avatar do %(name)s"
+
+msgid "%(task)s: +%(amount)s"
+msgstr "%(task)s: +%(amount)s"
+
+msgid "%(unit)s available"
+msgstr "%(unit)s disponível"
+
+msgid "30 days"
+msgstr "30 dias"
+
+msgid "4 digits"
+msgstr "4 dígitos"
+
+msgid "7 days"
+msgstr "7 dias"
+
+msgid "90 days"
+msgstr "90 dias"
+
+msgid "A birthday change is already waiting for parent approval."
+msgstr "Uma mudança de aniversário já está à espera da aprovação dos responsáveis."
+
+msgid "A birthday change is awaiting approval"
+msgstr "Uma mudança de aniversário está aguardando aprovação"
+
+msgid "A child profile with this name already exists."
+msgstr "Já existe um perfil infantil com este nome."
+
+msgid "A different theme will be selected automatically once a day."
+msgstr "Um tema diferente será selecionado automaticamente uma vez por dia."
+
+msgid "A new suggestion is awaiting approval"
+msgstr "Uma nova sugestão aguarda aprovação"
+
+msgid "A new task is awaiting approval"
+msgstr "Uma nova tarefa está aguardando aprovação"
+
+msgid "A parent created this private link. Continue to allow child access on this device."
+msgstr "Um pai criou esta ligação privada. Continuar a permitir o acesso das crianças neste dispositivo."
+
+msgid "A parent shared temporary guest access with you. Continue to create your PIN."
+msgstr "Um responsável compartilhou com você um acesso temporário de convidado. Continue para criar seu PIN."
+
+msgid "A reason is required."
+msgstr "É necessária uma razão."
+
+msgid "A rejection reason is required."
+msgstr "É necessária uma razão de rejeição."
+
+msgid "A reward is awaiting approval"
+msgstr "Uma recompensa aguarda aprovação"
+
+msgid "A secret one-time key. Open it on the child's device — then it vanishes."
+msgstr "Uma chave secreta única. Abra-o no dispositivo da criança — então ela desaparece."
+
+msgid "A shared family space"
+msgstr "Um espaço familiar compartilhado"
+
+msgid "A surprise card can be bought only with %(cost)s points you have earned."
+msgstr "Um cartão surpresa só pode ser comprado com %(cost)s pontos que você ganhou."
+
+msgid "A task needs a little more work"
+msgstr "Uma tarefa precisa de mais trabalho"
+
+msgid "About credit"
+msgstr "Sobre o crédito"
+
+msgid "About surprise cards"
+msgstr "Sobre cartões surpresa"
+
+msgid "Access"
+msgstr "Acesso"
+
+msgid "Access code"
+msgstr "Código de acesso"
+
+msgid "Access for %(name)s. Choose a 4-digit PIN you will use to sign in."
+msgstr "Acesso para %(name)s. Escolha um PIN de 4 dígitos que você usará para entrar."
+
+msgid "Access is not allowed from this network"
+msgstr "O acesso não é permitido a partir desta rede"
+
+msgid "Access restricted"
+msgstr "Acesso restrito"
+
+msgid "Access valid until"
+msgstr "Acesso válido até"
+
+msgid "Account type"
+msgstr "Tipo de conta"
+
+msgid "Accounts"
+msgstr "Contas"
+
+msgid "Activate"
+msgstr "Ativar"
+
+msgid "Activate mission"
+msgstr "Ativar missão"
+
+msgid "Active"
+msgstr "Ativo"
+
+msgid "Active guests"
+msgstr "Convidados ativos"
+
+msgid "Activity Log"
+msgstr "Registro de Atividade"
+
+msgid "Activity history"
+msgstr "Histórico de atividades"
+
+msgid "Activity history pages"
+msgstr "Páginas de histórico de atividades"
+
+msgid "Activity type"
+msgstr "Tipo de atividade"
+
+msgid "Add"
+msgstr "Adicionar"
+
+msgid "Add at least one allowed IP address or network."
+msgstr "Adicione pelo menos um endereço IP ou rede permitido."
+
+msgid "Add completed task"
+msgstr "Adicionar a tarefa concluída"
+
+msgid "Add new"
+msgstr "Adicionar novo"
+
+msgid "Add points"
+msgstr "Adicionar pontos"
+
+msgid "Add task"
+msgstr "Adicionar tarefa"
+
+msgid "Added by"
+msgstr "Adicionado por"
+
+msgid "Adjust points"
+msgstr "Ajustar os pontos"
+
+msgid "Adjusted by"
+msgstr "Ajustado por"
+
+msgid "Adjustment"
+msgstr "Ajuste"
+
+msgid "Admin login by IP"
+msgstr "Autenticação do administrador por IP"
+
+msgid "After"
+msgstr "Após"
+
+msgid "All"
+msgstr "Tudo"
+
+msgid "All access restricted"
+msgstr "Todos os acessos limitados"
+
+msgid "All activity"
+msgstr "Todas as atividades"
+
+msgid "All child devices revoked"
+msgstr "Todos os dispositivos infantis revogados"
+
+msgid "All child devices were revoked."
+msgstr "Todos os dispositivos infantis foram revogados."
+
+msgid "All children"
+msgstr "Todas as crianças"
+
+msgid "All statuses"
+msgstr "Todos os status"
+
+msgid "All types"
+msgstr "Todos os tipos"
+
+msgid "Allow child access"
+msgstr "Permitir o acesso dos filhos"
+
+msgid "Allow children on this device"
+msgstr "Permitir crianças neste dispositivo"
+
+msgid "Allow on this device"
+msgstr "Permitir neste dispositivo"
+
+msgid "Allowed IP addresses and networks"
+msgstr "Endereços IP e redes permitidas"
+
+msgid "An assigned task was completed"
+msgstr "Uma tarefa atribuída foi concluída"
+
+msgid "Android phone"
+msgstr "Celular Android"
+
+msgid "Android tablet"
+msgstr "Tablet Android"
+
+msgid "Annual Blockville Gift!"
+msgstr "Presente anual de Blockville!"
+
+msgid "Any time"
+msgstr "A qualquer hora."
+
+msgid "Anyone with this link can activate guest access until it expires. Send it privately."
+msgstr "Qualquer pessoa com esta ligação pode ativar o acesso dos convidados até expirar. Manda-o em privado."
+
+msgid "Anyone with this link can pair one device until it expires. Send it privately."
+msgstr "Qualquer pessoa com este link pode parear um dispositivo até que ele expire. Manda-o em privado."
+
+msgid "Appearance"
+msgstr "Aparência"
+
+msgid "Application key"
+msgstr "Chave da aplicação"
+
+msgid "Application key ID"
+msgstr "ID da chave do aplicativo"
+
+msgid "Apply"
+msgstr "Aplicar"
+
+msgid "Approve"
+msgstr "Aprovar"
+
+msgid "Approve birthday change"
+msgstr "Aprovar a mudança de aniversário"
+
+msgid "Approved"
+msgstr "Aprovado"
+
+msgid "Approved by"
+msgstr "Aprovado por"
+
+msgid "Approving this will replace the current goal."
+msgstr "Aprovar isso substituirá a meta atual."
+
+msgid "Art Studio"
+msgstr "Estúdio Art"
+
+msgid "Ask a parent to allow child access on this device or open the private pairing link they created."
+msgstr "Peça a um pai para permitir o acesso dos filhos neste dispositivo ou abra o link de pareamento privado que eles criaram."
+
+msgid "Ask to improve"
+msgstr "Pedir para melhorar"
+
+msgid "Assign"
+msgstr "Atribuir"
+
+msgid "Assign penalty"
+msgstr "Atribuir penalidade"
+
+msgid "Assign selected penalties"
+msgstr "Atribuir penalidades selecionadas"
+
+msgid "Assign tasks for today"
+msgstr "Atribuir tarefas para hoje"
+
+msgid "Assign today"
+msgstr "Atribuir hoje"
+
+msgid "Assigned by"
+msgstr "Atribuído por"
+
+msgid "Assigned task"
+msgstr "Tarefa designada"
+
+msgid "Assigned task completed. You received your points."
+msgstr "Tarefa atribuída concluída. Recebeste seus pontos."
+
+msgid "Assignments"
+msgstr "Atribuição"
+
+msgid "At least 12 characters; cannot be similar to the username, commonly used, or entirely numeric."
+msgstr "Pelo menos 12 caracteres; não pode ser semelhante ao nome de usuário, comumente usado, ou inteiramente numérico."
+
+msgid "Attach Proof"
+msgstr "Anexar Prova"
+
+msgid "Attention needed"
+msgstr "Atenção necessária"
+
+msgid "Available balance: %(balance)s %(unit)s"
+msgstr "Saldo disponível: %(balance)s %(unit)s"
+
+msgid "Available balance: {{ balance }} {{ unit }}"
+msgstr "Saldo disponível: {{ balance }} {{ unit }}"
+
+msgid "Available points count as progress and can still be spent."
+msgstr "Os pontos disponíveis contam como progresso e ainda podem ser gastos."
+
+msgid "Avatar"
+msgstr "Avatar"
+
+msgid "Avatar changed."
+msgstr "O Avatar mudou."
+
+msgid "Awaiting approval"
+msgstr "Aguardando aprovação"
+
+msgid "Awaiting parent approval"
+msgstr "Aguardando aprovação dos responsáveis"
+
+msgid "Award selected tasks"
+msgstr "Dar pontos pelas tarefas selecionadas"
+
+msgid "Back"
+msgstr "Recuar"
+
+msgid "Back to settings"
+msgstr "Voltar para as configurações"
+
+msgid "Back to sign in"
+msgstr "Voltar para a tela de login"
+
+msgid "Back up now"
+msgstr "Para trás agora."
+
+msgid "Backblaze B2 (recommended)"
+msgstr "Backblaze B2 (recomendado)"
+
+msgid "Backup in progress..."
+msgstr "Backup em andamento..."
+
+msgid "Backup settings"
+msgstr "Configuração do backup"
+
+msgid "Backup settings configured"
+msgstr "Configurações de backup configuradas"
+
+msgid "Backup settings were not saved: %(error)s"
+msgstr "As configurações de backup não foram salvas: %(error)s"
+
+msgid "Backup setup"
+msgstr "Configuração do backup"
+
+msgid "Backup setup can be changed only by a parent administrator."
+msgstr "A configuração do backup só pode ser alterada por um responsável com permissão de administrador."
+
+msgid "Backup started. Refresh this page to see its status."
+msgstr "Os reforços começaram. Atualizar esta página para ver seu status."
+
+msgid "Backup storage was verified and saved."
+msgstr "O armazenamento de backup foi verificado e salvo."
+
+msgid "Backups"
+msgstr "Backups"
+
+msgid "Backups not completed"
+msgstr "Backups incompletos"
+
+msgid "Badges"
+msgstr "Distintivos"
+
+msgid "Balance adjusted."
+msgstr "Saldo ajustado."
+
+msgid "Bamboo"
+msgstr "Bambu"
+
+msgid "Bamboo Surprise"
+msgstr "Bambu Surpresa"
+
+msgid "Bamboo is ready!"
+msgstr "O bambu está pronto!"
+
+msgid "Before posting on GitHub, remove names, PINs, screenshots, email addresses, server details, and other family information."
+msgstr "Antes de postar no GitHub, remova nomes, PINs, capturas de tela, endereços de e-mail, detalhes do servidor e outras informações da família."
+
+msgid "Big achievements."
+msgstr "Grandes conquistas."
+
+msgid "Big comic cards. One tap."
+msgstr "Cards grandes no estilo dos quadrinhos. Basta um toque."
+
+msgid "Birthday"
+msgstr "Aniversário"
+
+msgid "Birthday change"
+msgstr "Mudança de aniversário"
+
+msgid "Birthday change approved."
+msgstr "Mudança de aniversário aprovada."
+
+msgid "Birthday change rejected."
+msgstr "Mudança de aniversário rejeitada."
+
+msgid "Birthday feast"
+msgstr "Festa de aniversário"
+
+msgid "Birthday gift"
+msgstr "Presente de aniversário"
+
+msgid "Birthday points"
+msgstr "Pontos de aniversário"
+
+msgid "Birthday saved."
+msgstr "Aniversário salvo."
+
+msgid "Block World"
+msgstr "Mundo dos Blocos"
+
+msgid "Block quests"
+msgstr "Missões de blocos"
+
+msgid "Block reward purchases"
+msgstr "Bloquear compras de recompensas"
+
+msgid "Block reward purchases until these tasks are finished"
+msgstr "Bloquear compras de recompensa até que essas tarefas estejam concluídas"
+
+msgid "Block sent to your parents for approval."
+msgstr "Bloco enviado aos responsáveis para aprovação."
+
+msgid "Blockville World"
+msgstr "Mundo de Blockville"
+
+msgid "Brazilian Portuguese"
+msgstr "Português (Brasil)"
+
+msgid "Bucket name"
+msgstr "Nome do baldeador"
+
+msgid "Build my look"
+msgstr "Montar meu visual"
+
+msgid "Build this world"
+msgstr "Construir este mundo"
+
+msgid "Build tip"
+msgstr "Dica de construção"
+
+msgid "Building Plan"
+msgstr "Plano de Construção"
+
+msgid "Building plans"
+msgstr "Planos de construção"
+
+msgid "Buy card for %(cost)s %(unit)s"
+msgstr "Comprar cartão por %(cost)s %(unit)s"
+
+msgid "Buy for %(cost)s %(unit)s"
+msgstr "Comprar por %(cost)s %(unit)s"
+
+msgid "Cake day"
+msgstr "Dia do bolo"
+
+msgid "Camera"
+msgstr "Câmera"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Cancel remaining"
+msgstr "Cancelar o restante"
+
+msgid "Cancel this invite link?"
+msgstr "Cancelar este link de convite?"
+
+msgid "Cancelled"
+msgstr "Cancelado"
+
+msgid "Capture"
+msgstr "Capturar"
+
+msgid "Cards"
+msgstr "Cartões"
+
+msgid "Cards left this week: %(remaining)s of %(limit)s."
+msgstr "Cartões restantes nesta semana: %(remaining)s de %(limit)s."
+
+msgid "Caregiver PIN by IP"
+msgstr "PIN do cuidador por IP"
+
+msgid "Caregiver PIN by profile"
+msgstr "PIN do cuidador por perfil"
+
+msgid "Caregiver invite by IP"
+msgstr "Convite do cuidador por IP"
+
+msgid "Caregiver invite by parent"
+msgstr "Convite do cuidador criado pelo responsável"
+
+msgid "Catalog item created."
+msgstr "Item de catálogo criado."
+
+msgid "Catalogs"
+msgstr "Catálogos"
+
+msgid "Celebration day"
+msgstr "Dia de celebração"
+
+msgid "Challenge complete! Pending parent verification."
+msgstr "Desafio completo! Na pendência da verificação dos responsáveis."
+
+msgid "Challenge returned: fix issues"
+msgstr "Desafio retornado: corrigir problemas"
+
+msgid "Change"
+msgstr "Alterar"
+
+msgid "Change PIN"
+msgstr "Mudar o PIN"
+
+msgid "Change credit"
+msgstr "Alterar o crédito"
+
+msgid "Change my theme randomly every day"
+msgstr "Mudar o meu tema aleatoriamente todos os dias"
+
+msgid "Change theme"
+msgstr "Mudar o tema"
+
+msgid "Changelog"
+msgstr "Changelog"
+
+msgid "Changelog pages"
+msgstr "Páginas do Changelog"
+
+msgid "Check the PIN fields."
+msgstr "Verifique os campos PIN."
+
+msgid "Check the backup settings."
+msgstr "Verifique as configurações de backup."
+
+msgid "Check the balance adjustment."
+msgstr "Verifique o ajuste de saldo."
+
+msgid "Check the birthday date."
+msgstr "Verifique a data de nascimento."
+
+msgid "Check the child profile details."
+msgstr "Verifique os detalhes do perfil infantil."
+
+msgid "Check the comment."
+msgstr "Verifique o comentário."
+
+msgid "Check the edited data."
+msgstr "Verifique os dados editados."
+
+msgid "Check the email settings."
+msgstr "Verifique as configurações de e-mail."
+
+msgid "Check the entered data."
+msgstr "Verifique os dados inseridos."
+
+msgid "Check the family settings."
+msgstr "Verifique as configurações da família."
+
+msgid "Check the feedback description and screenshot."
+msgstr "Verifique a descrição do feedback e a captura de tela."
+
+msgid "Check the goal details."
+msgstr "Verifique os detalhes da meta."
+
+msgid "Check the guest invite form."
+msgstr "Verifique o formulário de convite do convidado."
+
+msgid "Check the network access settings."
+msgstr "Verifique as configurações de acesso à rede."
+
+msgid "Check the new child profile details."
+msgstr "Verifique os novos detalhes do perfil infantil."
+
+msgid "Check the new parent account details."
+msgstr "Verifique os dados da nova conta de responsável."
+
+msgid "Check the parent account details."
+msgstr "Verifique os dados da conta de responsável."
+
+msgid "Check the suggestion details."
+msgstr "Verifique os detalhes da sugestão."
+
+msgid "Check your email"
+msgstr "Verifique o seu e-mail"
+
+msgid "Check your sign-in details."
+msgstr "Verifique seus dados de acesso."
+
+msgid "Checking notifications"
+msgstr "Verificação das notificações"
+
+msgid "Checking the private invite link…"
+msgstr "Verificando o link de convite privado…"
+
+msgid "Checking the private pairing link…"
+msgstr "Verificando o link de pareamento privado…"
+
+msgid "Checking…"
+msgstr "A verificar…"
+
+msgid "Child"
+msgstr "Criança"
+
+msgid "Child %(number)s name: "
+msgstr "Nome da criança %(number)s: "
+
+msgid "Child PIN by IP"
+msgstr "PIN filho por IP"
+
+msgid "Child PIN by device"
+msgstr "PIN da criança por dispositivo"
+
+msgid "Child PIN by profile"
+msgstr "PIN infantil por perfil"
+
+msgid "Child PIN site-wide"
+msgstr "PIN infantil em todo o local"
+
+msgid "Child access"
+msgstr "Acesso das crianças"
+
+msgid "Child access restricted"
+msgstr "Acesso restrito às crianças"
+
+msgid "Child device"
+msgstr "Dispositivo para crianças"
+
+msgid "Child device paired"
+msgstr "Dispositivo infantil pareado"
+
+msgid "Child device revoked"
+msgstr "Dispositivo infantil revogado"
+
+msgid "Child devices"
+msgstr "Dispositivos para crianças"
+
+msgid "Child pages and the parent area are available only from the allowed IP addresses."
+msgstr "As páginas das crianças e a área dos responsáveis estão disponíveis apenas a partir dos endereços IP permitidos."
+
+msgid "Child pages are available only from the allowed IP addresses. Parent access is not restricted by IP."
+msgstr "Páginas-mãe estão disponíveis apenas a partir dos endereços IP permitidos. O acesso dos responsáveis não é restrito pelo IP."
+
+msgid "Child profile"
+msgstr "Perfil da criança"
+
+msgid "Child profile “%(name)s” created."
+msgstr "Perfil infantil “%(name)s” criado."
+
+msgid "Child profile “%(name)s” removed."
+msgstr "Perfil infantil “%(name)s” removido."
+
+msgid "Child profile “%(name)s” updated."
+msgstr "Perfil infantil “%(name)s” atualizado."
+
+msgid "Child profiles"
+msgstr "Perfis infantis"
+
+msgid "Child's name"
+msgstr "Nome da criança"
+
+msgid "Children"
+msgstr "Crianças"
+
+msgid "Children and access"
+msgstr "Crianças e acesso"
+
+msgid "Children can propose goals from their area. Approved goals appear here."
+msgstr "As crianças podem sugerir metas na área delas. As metas aprovadas aparecem aqui."
+
+msgid "Choose Save separately before adding points."
+msgstr "Escolha Salvar separadamente antes de adicionar pontos."
+
+msgid "Choose a profile"
+msgstr "Escolha um perfil"
+
+msgid "Choose a reward"
+msgstr "Escolha uma recompensa"
+
+msgid "Choose a savings mode before completing this goal."
+msgstr "Escolha um modo de economia antes de completar esta meta."
+
+msgid "Choose a savings mode for this goal."
+msgstr "Escolha um modo de economia para esta meta."
+
+msgid "Choose a task"
+msgstr "Escolha uma tarefa"
+
+msgid "Choose a valid feedback status."
+msgstr "Escolha um status de feedback válido."
+
+msgid "Choose a valid savings mode."
+msgstr "Escolha um modo de poupança válido."
+
+msgid "Choose a valid time zone."
+msgstr "Escolha um fuso horário válido."
+
+msgid "Choose a weekday for the weekly set."
+msgstr "Escolha um dia de semana para o conjunto semanal."
+
+msgid "Choose a world"
+msgstr "Escolher um mundo"
+
+msgid "Choose an emoji or enter one using your device keyboard."
+msgstr "Escolha um emoji ou digite um usando o teclado do dispositivo."
+
+msgid "Choose an icon"
+msgstr "Escolha um ícone"
+
+msgid "Choose at least one active penalty."
+msgstr "Escolha pelo menos uma penalidade ativa."
+
+msgid "Choose at least one active task."
+msgstr "Escolha pelo menos uma tarefa ativa."
+
+msgid "Choose at least one penalty."
+msgstr "Escolha pelo menos uma penalidade."
+
+msgid "Choose at least one task or add a custom task."
+msgstr "Escolha pelo menos uma tarefa ou adicione uma tarefa personalizada."
+
+msgid "Choose at least one task."
+msgstr "Escolha pelo menos uma tarefa."
+
+msgid "Choose at least one weekday."
+msgstr "Escolha pelo menos um dia da semana."
+
+msgid "Choose between 1 and 20 child profiles."
+msgstr "Escolha entre 1 e 20 perfis infantis."
+
+msgid "Choose completed tasks"
+msgstr "Escolha as tarefas concluídas"
+
+msgid "Choose from gallery"
+msgstr "Escolher na galeria"
+
+msgid "Choose how long activity data and photos are kept."
+msgstr "Escolha por quanto tempo os dados de atividades e as fotos serão mantidos."
+
+msgid "Choose how this savings goal should save points."
+msgstr "Escolha como essa meta de economia deve salvar pontos."
+
+msgid "Choose how to save"
+msgstr "Escolha como salvar"
+
+msgid "Choose how to save."
+msgstr "Escolha como salvar."
+
+msgid "Choose inspiration"
+msgstr "Escolha a inspiração"
+
+msgid "Choose mode"
+msgstr "Escolher o modo"
+
+msgid "Choose one short emoji."
+msgstr "Escolha um emoji curto."
+
+msgid "Choose penalties"
+msgstr "Escolha as penalidades"
+
+msgid "Choose photo"
+msgstr "Escolher foto"
+
+msgid "Choose tasks"
+msgstr "Escolher tarefas"
+
+msgid "Choose the world you want to use. You can change it later in Settings."
+msgstr "Escolha o mundo que deseja usar. Você pode alterá-lo mais tarde em Configurações."
+
+msgid "Choose today or a future date."
+msgstr "Escolha hoje ou uma data futura."
+
+msgid "Choose who receives your points and how many to give."
+msgstr "Escolha quem recebe seus pontos e quantos para dar."
+
+msgid "Choose your profile"
+msgstr "Escolha o seu perfil"
+
+msgid "Choose your world"
+msgstr "Escolha o seu mundo"
+
+msgid "Chosen weekdays"
+msgstr "Dias de semana escolhidos"
+
+msgid "Claim prize"
+msgstr "Resgatar prêmio"
+
+msgid "Classified Surprise"
+msgstr "Surpresa secreta"
+
+msgid "Clear all filters"
+msgstr "Limpar todos os filtros"
+
+msgid "Close"
+msgstr "Fechar"
+
+msgid "Close goal"
+msgstr "Encerrar meta"
+
+msgid "Close notification"
+msgstr "Fechar a notificação"
+
+msgid "Close this goal?"
+msgstr "Encerrar esta meta?"
+
+msgid "Comment"
+msgstr "Comentário"
+
+msgid "Comment (optional)"
+msgstr "Comentário (opcional)"
+
+msgid "Complete challenge"
+msgstr "Desafio completo"
+
+msgid "Complete each duty before the magic fades at midnight."
+msgstr "Complete cada dever antes que a magia desapareça à meia-noite."
+
+msgid "Complete each task today. They expire at midnight."
+msgstr "Complete cada tarefa hoje. Expiram à meia-noite."
+
+msgid "Complete every mission before midnight."
+msgstr "Complete todas as missões antes da meia-noite."
+
+msgid "Complete every mission before the world resets at midnight."
+msgstr "Complete todas as missões antes de o mundo reiniciar à meia-noite."
+
+msgid "Complete every quest before the day resets at midnight."
+msgstr "Complete todas as missões antes do dia reiniciar à meia-noite."
+
+msgid "Complete goal"
+msgstr "Concluir meta"
+
+msgid "Complete tasks, earn points, and choose your reward."
+msgstr "Complete tarefas, ganhe pontos e escolha sua recompensa."
+
+msgid "Complete tasks, earn tokens, and choose your reward."
+msgstr "Complete tarefas, ganhe fichas e escolha sua recompensa."
+
+msgid "Complete the assigned tasks before buying a surprise card."
+msgstr "Complete as tarefas atribuídas antes de comprar um cartão surpresa."
+
+msgid "Complete the assigned tasks before requesting a new reward."
+msgstr "Complete as tarefas atribuídas antes de solicitar uma nova recompensa."
+
+msgid "Complete the assigned tasks to unlock new reward requests."
+msgstr "Complete as tarefas atribuídas para desbloquear novos pedidos de recompensa."
+
+msgid "Complete today's priority missions before midnight."
+msgstr "Complete as missões prioritárias de hoje antes da meia-noite."
+
+msgid "Completed"
+msgstr "Concluído"
+
+msgid "Completed goal: %(title)s"
+msgstr "Meta concluída: %(title)s"
+
+msgid "Completed task"
+msgstr "Tarefa concluída"
+
+msgid "Computer"
+msgstr "Computador"
+
+msgid "Configure email delivery and notifications."
+msgstr "Configure a entrega e notificações de email."
+
+msgid "Configure email now"
+msgstr "Configurar o e-mail agora"
+
+msgid "Configure surprise cards and reward limits."
+msgstr "Configure cartões surpresa e limites de recompensa."
+
+msgid "Confirm"
+msgstr "Confirmar"
+
+msgid "Confirm lock"
+msgstr "Confirmar bloqueio"
+
+msgid "Connect through an allowed home or VPN network and try again."
+msgstr "Conecte-se através de uma casa permitida ou rede VPN e tente novamente."
+
+msgid "Connect to your home network or VPN and try again."
+msgstr "Conecte-se à sua rede doméstica ou VPN e tente novamente."
+
+msgid "Continue"
+msgstr "Continuar"
+
+msgid "Continue uncovering"
+msgstr "Continuar a descobrir"
+
+msgid "Control network restrictions and device access."
+msgstr "Controle restrições de rede e acesso ao dispositivo."
+
+msgid "Control points, balances, and task assignment."
+msgstr "Gerencie pontos, saldos e a atribuição de tarefas."
+
+msgid "Control which devices can access child profiles."
+msgstr "Controle quais dispositivos podem acessar perfis de crianças."
+
+msgid "Copied"
+msgstr "Copiado"
+
+msgid "Copy"
+msgstr "Copiar"
+
+msgid "Copy link"
+msgstr "Copiar link"
+
+msgid "Copying"
+msgstr "Copiar"
+
+msgid "Cost"
+msgstr "Custo"
+
+msgid "Could not change the notification setting."
+msgstr "Não foi possível alterar a configuração da notificação."
+
+msgid "Could not create a guest sign-in link."
+msgstr "Não foi possível criar um link de entrada do convidado."
+
+msgid "Cover surface"
+msgstr "Área a revelar"
+
+msgid "Craft a recipe"
+msgstr "Criar uma receita"
+
+msgid "Create PIN"
+msgstr "Criar PIN"
+
+msgid "Create a prize idea"
+msgstr "Criar uma ideia de prêmio"
+
+msgid "Create account"
+msgstr "Criar conta"
+
+msgid "Create and manage temporary guest access."
+msgstr "Crie e gerencie o acesso temporário de convidados."
+
+msgid "Create guest PIN"
+msgstr "Criar PIN de convidado"
+
+msgid "Create guest invite"
+msgstr "Criar convite de acesso"
+
+msgid "Create invite"
+msgstr "Criar convite"
+
+msgid "Create invite link"
+msgstr "Criar um link de convite"
+
+msgid "Create new accounts"
+msgstr "Criar novas contas"
+
+msgid "Create penalty"
+msgstr "Criar penalidade"
+
+msgid "Create private pairing link"
+msgstr "Criar um link de pareamento privado"
+
+msgid "Create profile"
+msgstr "Criar perfil"
+
+msgid "Create reward"
+msgstr "Criar recompensa"
+
+msgid "Create task"
+msgstr "Criar tarefa"
+
+msgid "Create the first parent administrator account. Email setup is optional and can be configured later in Settings."
+msgstr "Crie a primeira conta de responsável com permissão de administrador. Você pode configurar o e-mail depois, em Configurações."
+
+msgid "Create your PIN"
+msgstr "Crie seu PIN"
+
+msgid "Creative Journal"
+msgstr "Diário Criativo"
+
+msgid "Creative Projects"
+msgstr "Projetos Criativos"
+
+msgid "Credit"
+msgstr "Crédito"
+
+msgid "Credit limit"
+msgstr "Limite de crédito"
+
+msgid "Credit limit changed."
+msgstr "O limite de crédito foi alterado."
+
+msgid "Credit:"
+msgstr "Crédito:"
+
+msgid "Cubes"
+msgstr "Cubos"
+
+msgid "Currency name [%(default)s]: "
+msgstr "Denominação da moeda [%(default)s]: "
+
+msgid "Current"
+msgstr "Atual"
+
+msgid "Current IP address"
+msgstr "Endereço IP atual"
+
+msgid "Current PIN"
+msgstr "PIN atual"
+
+msgid "Current code"
+msgstr "Código atual"
+
+msgid "Current goal"
+msgstr "Meta atual"
+
+msgid "Current goal changed"
+msgstr "A meta atual foi alterado"
+
+msgid "Current goal changed to %(title)s"
+msgstr "A meta atual mudou para %(title)s"
+
+msgid "Current version"
+msgstr "Versão atual"
+
+msgid "Currently unavailable"
+msgstr "Atualmente indisponível"
+
+msgid "Custom amount"
+msgstr "Quantidade personalizada"
+
+msgid "Custom range"
+msgstr "Intervalo personalizado"
+
+msgid "Custom task"
+msgstr "Tarefa personalizada"
+
+msgid "Custom task (optional)"
+msgstr "Tarefa personalizada (opcional)"
+
+msgid "Customize"
+msgstr "Personalizar"
+
+msgid "Daily encrypted copies protect the family database and uploaded photos."
+msgstr "Cópias criptografadas diariamente protegem o banco de dados da família e enviam fotos."
+
+msgid "Daily roll"
+msgstr "Jogada diária"
+
+msgid "Dark UI + glow — like a game menu."
+msgstr "Interface escura com brilho, como o menu de um jogo."
+
+msgid "Data and retention"
+msgstr "Dados e retenção"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Default language"
+msgstr "Idioma padrão"
+
+msgid "Delete"
+msgstr "Apagar"
+
+msgid "Delete goal"
+msgstr "Excluir meta"
+
+msgid "Delete goal and return saved points?"
+msgstr "Excluir a meta e retornar pontos guardados?"
+
+msgid "Delete goal?"
+msgstr "Excluir meta?"
+
+msgid "Delete penalty “%(title)s”? Earlier history entries will remain."
+msgstr "Eliminar a penalidade “%(title)s”? Entradas anteriores do histórico permanecerão."
+
+msgid "Delete reward “%(title)s”? Earlier history entries will remain."
+msgstr "Apagar a recompensa “%(title)s”? Entradas anteriores do histórico permanecerão."
+
+msgid "Delete task “%(title)s”? Earlier history entries will remain."
+msgstr "Excluir a tarefa “%(title)s”? Entradas anteriores do histórico permanecerão."
+
+msgid "Delete this saved set?"
+msgstr "Excluir este conjunto salvo?"
+
+msgid "Deleted \"%(name)s\"."
+msgstr "Apagado \"%(name)s\"."
+
+msgid "Deleted by"
+msgstr "Apagado por"
+
+msgid "Describe a problem or suggest an improvement."
+msgstr "Descreva um problema ou sugira uma melhoria."
+
+msgid "Describe the problem or suggestion in a little more detail."
+msgstr "Descreva o problema ou sugestão com um pouco mais de detalhes."
+
+msgid "Description"
+msgstr "Descrição"
+
+msgid "Development device"
+msgstr "Dispositivo de desenvolvimento"
+
+msgid "Device"
+msgstr "Dispositivo"
+
+msgid "Device access revoked."
+msgstr "Acesso ao dispositivo revogado."
+
+msgid "Device name"
+msgstr "Nome do dispositivo"
+
+msgid "Device name saved."
+msgstr "Nome do dispositivo salvo."
+
+msgid "Device pairing"
+msgstr "Pareamento de dispositivos"
+
+msgid "Director's note"
+msgstr "Nota do diretor"
+
+msgid "Disabled"
+msgstr "Desativado"
+
+msgid "Do not include passwords, PINs, or other private information."
+msgstr "Não inclua senhas, PINs ou outras informações privadas."
+
+msgid "Docs"
+msgstr "Docs"
+
+msgid "Documentation"
+msgstr "Documentação"
+
+msgid "Done"
+msgstr "Pronto"
+
+msgid "Dream Enchantments"
+msgstr "Encantadores de Sonhos"
+
+msgid "Each child receives this many points once a year on their birthday. Use 0 to disable birthday gifts."
+msgstr "Cada criança recebe tantos pontos uma vez por ano em seu aniversário. Use 0 para desativar presentes de aniversário."
+
+msgid "Edit"
+msgstr "Editar"
+
+msgid "Edit accounts"
+msgstr "Editar contas"
+
+msgid "Edit child profile"
+msgstr "Editar perfil da criança"
+
+msgid "Edit email settings"
+msgstr "Editar as configurações de e-mail"
+
+msgid "Edit goal"
+msgstr "Editar a meta"
+
+msgid "Edit parent account"
+msgstr "Editar conta de responsável"
+
+msgid "Edit settings"
+msgstr "Editar configurações"
+
+msgid "Email"
+msgstr "E-mail"
+
+msgid "Email address"
+msgstr "Endereço de e-mail"
+
+msgid "Email address not provided"
+msgstr "Endereço de e-mail não fornecido"
+
+msgid "Email and notifications"
+msgstr "E-mail e notificações"
+
+msgid "Email credentials are sensitive. Your parent password is required and the SMTP password is never displayed."
+msgstr "As credenciais de e-mail são sensíveis. Sua senha do responsável é necessária e a senha SMTP nunca é exibida."
+
+msgid "Email notifications"
+msgstr "Notificações por e-mail"
+
+msgid "Email settings"
+msgstr "Configurações de e-mail"
+
+msgid "Email settings were not saved. Check the server details and credentials."
+msgstr "As configurações de e-mail não foram salvas. Verifique os detalhes e credenciais do servidor."
+
+msgid "Email settings were verified and saved."
+msgstr "As configurações de e-mail foram verificadas e salvas."
+
+msgid "Email setup"
+msgstr "Configuração de e-mail"
+
+msgid "Email setup can be changed only by a parent administrator."
+msgstr "A configuração de email só pode ser alterada por um responsável com permissão de administrador."
+
+msgid "Emeralds"
+msgstr "Esmeraldas"
+
+msgid "Enable email"
+msgstr "Ativar o e-mail"
+
+msgid "Enable surprise cards"
+msgstr "Habilitar cartões surpresa"
+
+msgid "Enable surprise cards for this child"
+msgstr "Ativar as cartas surpresas para esta criança"
+
+msgid "Enabled"
+msgstr "Ativado"
+
+msgid "Enchanted Surprise"
+msgstr "Surpresa encantada"
+
+msgid "Encryption"
+msgstr "Criptografia"
+
+msgid "English"
+msgstr "Inglês"
+
+msgid "Enter a device name."
+msgstr "Indique o nome de um dispositivo."
+
+msgid "Enter a name for this saved set."
+msgstr "Digite um nome para este conjunto salvo."
+
+msgid "Enter a positive or negative point amount and its purpose."
+msgstr "Introduza uma quantidade de ponto positiva ou negativa e a sua finalidade."
+
+msgid "Enter a positive or negative token amount and its purpose."
+msgstr "Introduza uma quantidade de símbolo positiva ou negativa e a sua finalidade."
+
+msgid "Enter a positive point amount."
+msgstr "Introduza uma quantidade de ponto positiva."
+
+msgid "Enter a positive token amount."
+msgstr "Digite um valor positivo do símbolo."
+
+msgid "Enter a valid bucket name."
+msgstr "Digite um nome de balde válido."
+
+msgid "Enter a valid date range."
+msgstr "Digite um intervalo de datas válido."
+
+msgid "Enter a valid point amount."
+msgstr "Digite um valor de ponto válido."
+
+msgid "Enter both the custom task name and its point amount."
+msgstr "Indique o nome da tarefa personalizada e a sua quantidade de pontos."
+
+msgid "Enter my world"
+msgstr "Entra no meu mundo"
+
+msgid "Enter one IPv4, IPv6, or CIDR network per line."
+msgstr "Digite uma rede IPv4, IPv6 ou CIDR por linha."
+
+msgid "Enter the SMTP password again whenever you save these settings."
+msgstr "Digite a senha SMTP novamente sempre que você salvar essas configurações."
+
+msgid "Enter the birthday date."
+msgstr "Digite a data do aniversário."
+
+msgid "Enter the email address assigned to the parent account. If the account is active, we will send a link valid for one hour."
+msgstr "Indique o endereço de e-mail atribuído à conta- mãe. Se a conta estiver ativa, enviaremos um link válido por uma hora."
+
+msgid "Enter the final point amount."
+msgstr "Introduza o valor final do ponto."
+
+msgid "Enter the final token amount."
+msgstr "Digite o valor final do símbolo."
+
+msgid "Enter the same password again."
+msgstr "Digite a mesma senha novamente."
+
+msgid "Enter the setup code configured for this installation."
+msgstr "Digite o código de configuração desta instalação."
+
+msgid "Enter this world"
+msgstr "Entre neste mundo"
+
+msgid "Enter your PIN"
+msgstr "Digite seu PIN"
+
+msgid "Equip world"
+msgstr "Usar este mundo"
+
+msgid "Every day"
+msgstr "Todos os dias"
+
+msgid "Everyday"
+msgstr "Todos os dias"
+
+msgid "Everyday Surprise"
+msgstr "Surpresa do dia"
+
+msgid "Exchange galleons"
+msgstr "Galeões de troca"
+
+msgid "Existing accounts"
+msgstr "Contas existentes"
+
+msgid "Expired"
+msgstr "Expirado"
+
+msgid "FIRST SIGN-IN"
+msgstr "PRIMEIRO SINAL"
+
+msgid "Family"
+msgstr "Família"
+
+msgid "Family accounts and application settings"
+msgstr "Contas da família e configurações do aplicativo"
+
+msgid "Family created."
+msgstr "Família criada."
+
+msgid "Family feedback"
+msgstr "Feedback da família"
+
+msgid "Family feedback stays on this server and can be reviewed by parents."
+msgstr "O feedback da família permanece neste servidor e pode ser revisto pelos pais."
+
+msgid "Family name"
+msgstr "Nome da família"
+
+msgid "Family name or nickname: "
+msgstr "Nome ou apelido da família: "
+
+msgid "Family settings"
+msgstr "Configuração da família"
+
+msgid "Family settings saved."
+msgstr "Configurações da família salvas."
+
+msgid "Feed the panda"
+msgstr "Alimente o panda"
+
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid "Feedback is saved in KinKudos, but email notifications are not configured."
+msgstr "O feedback é salvo em KinKudos, mas as notificações de e-mail não são configuradas."
+
+msgid "Feedback pages"
+msgstr "Páginas de feedback"
+
+msgid "Feedback recipient email address"
+msgstr "Endereço de e-mail do destinatário de feedback"
+
+msgid "Feedback status updated."
+msgstr "Status de feedback atualizado."
+
+msgid "Feedback was saved, but the email notification could not be sent."
+msgstr "O feedback foi salvo, mas a notificação por e-mail não pôde ser enviada."
+
+msgid "Files"
+msgstr "Arquivos"
+
+msgid "Filter"
+msgstr "Filtro"
+
+msgid "Filters"
+msgstr "Filtros"
+
+msgid "Final point amount"
+msgstr "Quantidade final de pontos"
+
+msgid "Final token amount"
+msgstr "Quantidade final do símbolo"
+
+msgid "Find a task"
+msgstr "Procurar uma tarefa"
+
+msgid "Finish every project before the studio closes at midnight."
+msgstr "Termine todos os projetos antes que o estúdio feche à meia-noite."
+
+msgid "Finish setup"
+msgstr "Concluir configuração"
+
+msgid "Finish today's assigned missions before midnight."
+msgstr "Termine as missões de hoje antes da meia-noite."
+
+msgid "Finish today's assigned quests before the day resets."
+msgstr "Termine as missões de hoje antes de o dia reiniciar."
+
+msgid "Finish today's assigned tasks before midnight."
+msgstr "Termine as tarefas de hoje antes da meia-noite."
+
+msgid "Finish today's bamboo tasks before bedtime."
+msgstr "Termine as tarefas de bambu de hoje antes de dormir."
+
+msgid "Finish today's commissioned projects before midnight."
+msgstr "Termine os projetos encomendados de hoje antes da meia-noite."
+
+msgid "Finish today's list before the magic fades tonight."
+msgstr "Termine a lista de hoje antes que a magia desapareça à noite."
+
+msgid "Finish your open surprise card before buying another."
+msgstr "Termine de revelar o cartão surpresa aberto antes de comprar outro."
+
+msgid "Fix and resubmit"
+msgstr "Corrigir e reenviar"
+
+msgid "For example, kitchen tablet"
+msgstr "Por exemplo, tablet de cozinha"
+
+msgid "For example: s3.eu-central-003.backblazeb2.com"
+msgstr "Por exemplo: s3.eu-central-003.backblazeb2.com"
+
+msgid "Forgot password"
+msgstr "Esqueceu a senha?"
+
+msgid "Fri"
+msgstr "Sex"
+
+msgid "From"
+msgstr "De"
+
+msgid "From date must not be later than To date."
+msgstr "A data inicial deve ser anterior ou igual à data final."
+
+msgid "From gallery"
+msgstr "Da galeria"
+
+msgid "Gallery"
+msgstr "Galeria"
+
+msgid "General"
+msgstr "Geral"
+
+msgid "Get a new link"
+msgstr "Obter um novo link"
+
+msgid "Gift"
+msgstr "Presente"
+
+msgid "Gift from %(name)s"
+msgstr "Presente de %(name)s"
+
+msgid "Gift to %(name)s"
+msgstr "Presente para %(name)s"
+
+msgid "Gifts"
+msgstr "Presentes"
+
+msgid "Give bamboo"
+msgstr "Dar bambu"
+
+msgid "Give points"
+msgstr "Dar pontos"
+
+msgid "Go to this world"
+msgstr "Ir para este mundo"
+
+msgid "Goal"
+msgstr "Meta"
+
+msgid "Goal child filter"
+msgstr "Filtrar metas por criança"
+
+msgid "Goal closed"
+msgstr "Meta encerrada"
+
+msgid "Goal closed."
+msgstr "Meta encerrada."
+
+msgid "Goal closed: %(title)s"
+msgstr "Meta encerrada: %(title)s"
+
+msgid "Goal completed"
+msgstr "Meta concluída"
+
+msgid "Goal completed."
+msgstr "Meta concluída."
+
+msgid "Goal completed: %(title)s"
+msgstr "Meta concluída: %(title)s"
+
+msgid "Goal completion"
+msgstr "Conclusão da meta"
+
+msgid "Goal created"
+msgstr "Meta criada"
+
+msgid "Goal created: %(title)s"
+msgstr "Meta criada: %(title)s"
+
+msgid "Goal deleted and %(amount)s points returned."
+msgstr "Meta excluído e %(amount)s pontos devolvidos."
+
+msgid "Goal deleted."
+msgstr "Meta excluída."
+
+msgid "Goal deleted: %(title)s"
+msgstr "Meta excluída: %(title)s"
+
+msgid "Goal deleted: %(title)s · %(amount)s points returned"
+msgstr "Meta excluída: %(title)s · %(amount)s pontos devolvidos"
+
+msgid "Goal reached"
+msgstr "Meta alcançada"
+
+msgid "Goal reached: %(title)s"
+msgstr "Meta alcançada: %(title)s"
+
+msgid "Goal title"
+msgstr "Título da meta"
+
+msgid "Goal updated."
+msgstr "Meta atualizada."
+
+msgid "Goals"
+msgstr "Metas"
+
+msgid "Got it"
+msgstr "Entendido."
+
+msgid "Guest access"
+msgstr "Acesso de convidados"
+
+msgid "Guest access for “%(name)s” was removed."
+msgstr "O acesso de convidados para “%(name)s” foi removido."
+
+msgid "Guest access unavailable"
+msgstr "Acesso de convidados indisponível"
+
+msgid "Guest accounts sign in with a PIN link, not a parent password."
+msgstr "O acesso de convidados usa um link e um PIN, sem precisar da senha do responsável."
+
+msgid "Guest area"
+msgstr "Área de convidados"
+
+msgid "Guest area sections"
+msgstr "Seções da área de convidados"
+
+msgid "Guest invite cancelled."
+msgstr "Convite cancelado."
+
+msgid "Guest name"
+msgstr "Nome do convidado"
+
+msgid "Guest sign-in"
+msgstr "Acesso de convidados"
+
+msgid "HQ"
+msgstr "HQ"
+
+msgid "HQ Arsenal"
+msgstr "Arsenal HQ"
+
+msgid "HQ is still waiting"
+msgstr "O QG ainda está à espera"
+
+msgid "HQ setup"
+msgstr "Configuração do QG"
+
+msgid "HQ tip"
+msgstr "Dica do QG"
+
+msgid "Happy birthday!"
+msgstr "Feliz aniversário!"
+
+msgid "Hello!"
+msgstr "Olá!"
+
+msgid "Hello, %(name)s!"
+msgstr "Olá, %(name)s!"
+
+msgid "Help the panda finish every task before bedtime at midnight."
+msgstr "Ajude o panda a terminar todas as tarefas antes de dormir à meia-noite."
+
+msgid "Hero Missions"
+msgstr "Missões Herói"
+
+msgid "Hero portrait"
+msgstr "Retrato de herói"
+
+msgid "Hero profile"
+msgstr "Perfil do herói"
+
+msgid "Hi! I'm sharing temporary access to our family space. This is a temporary sign-in link — keep it private. After you open it, create your own PIN so you can approve requests and assign day-to-day tasks."
+msgstr "Olá! Estou a compartilhar o acesso temporário ao nosso espaço familiar. Este é um link de entrada temporária — mantenha-o privado. Depois de abri-lo, crie seu próprio PIN para que você possa aprovar solicitações e atribuir tarefas diárias."
+
+msgid "Hidden"
+msgstr "Escondida"
+
+msgid "Hidden Emerald Grid"
+msgstr "Grelha Esmeralda Escondida"
+
+msgid "Hide"
+msgstr "Ocultar"
+
+msgid "History"
+msgstr "Histórico"
+
+msgid "Home"
+msgstr "Início"
+
+msgid "How do I enable notifications?"
+msgstr "Como faço para habilitar notificações?"
+
+msgid "How does the credit limit work?"
+msgstr "Como funciona o limite de crédito?"
+
+msgid "How often?"
+msgstr "Quantas vezes?"
+
+msgid "I am a child"
+msgstr "Eu sou uma criança"
+
+msgid "I have an idea"
+msgstr "Tenho uma ideia."
+
+msgid "I understand"
+msgstr "Eu compreendo."
+
+msgid "ID"
+msgstr "ID"
+
+msgid "IP restrictions add an optional security layer on top of device pairing and sign-in limits."
+msgstr "As restrições de IP adicionam uma camada de segurança opcional no topo do pareamento do dispositivo e limites de entrada."
+
+msgid "IP restrictions are optional and add another layer on top of device pairing."
+msgstr "As restrições de IP são opcionais e adicionam outra camada em cima do pareamento do dispositivo."
+
+msgid "IP restrictions disabled"
+msgstr "Restrições de IP desativadas"
+
+msgid "Icon"
+msgstr "Ícone"
+
+msgid "Idea"
+msgstr "Ideia"
+
+msgid "If the address belongs to an active parent account, the reset email has been sent. Check your spam folder too."
+msgstr "Se o endereço pertence a uma conta de responsável ativa, o email de reset foi enviado. Verifique sua pasta de spam também."
+
+msgid "If you did not make this request, ignore this email; your password will not be changed."
+msgstr "Se você não fez esta solicitação, ignore este e-mail; sua senha não será alterada."
+
+msgid "Include your current IP address before restricting all access."
+msgstr "Inclua seu endereço IP atual antes de restringir todo o acesso."
+
+msgid "Incoming HQ orders"
+msgstr "Ordens de QG recebidas"
+
+msgid "Incorrect PIN."
+msgstr "PIN incorreto."
+
+msgid "Incorrect changes can stop future backups. Continue only if you understand the storage credentials and have saved the repository password outside this server."
+msgstr "Alterações incorretas podem parar backups futuros. Continue somente se você entender as credenciais de armazenamento e tiver salvo a senha do repositório fora deste servidor."
+
+msgid "Informational"
+msgstr "Informacional"
+
+msgid "Initial credit"
+msgstr "Crédito inicial"
+
+msgid "Initial setup by IP"
+msgstr "Configuração inicial por IP"
+
+msgid "Inspiration Shop"
+msgstr "Loja de Inspiração"
+
+msgid "Install for notifications"
+msgstr "Instalar para notificações"
+
+msgid "Internet access"
+msgstr "Acesso à Internet"
+
+msgid "Invalid IP address or network: %(value)s"
+msgstr "Endereço IP ou rede inválido: %(value)s"
+
+msgid "Inventory"
+msgstr "Inventário"
+
+msgid "Invite link:"
+msgstr "Ligação para convites:"
+
+msgid "It costs %(cost)s earned %(unit)s. Your points may go up by up to 150, stay the same, or go down by up to 50. The result cannot reduce your balance below your credit limit."
+msgstr "O cartão custa %(cost)s %(unit)s que você ganhou. Você pode ganhar até 150 pontos, perder até 50 pontos ou ficar com o mesmo saldo. O resultado não pode deixar seu saldo abaixo do limite de crédito."
+
+msgid "JPEG, PNG, WebP, HEIC, or HEIF, up to 5 MB. The image will be cropped to a square."
+msgstr "JPEG, PNG, WebP, HEIC, ou HEIF, até 5 MB. A imagem será cortada para um quadrado."
+
+msgid "JavaScript is required to use the private invite link."
+msgstr "O JavaScript é necessário para usar o link de convite privado."
+
+msgid "JavaScript is required to use the private pairing link."
+msgstr "O JavaScript é necessário para usar o link de pareamento privado."
+
+msgid "Keep active"
+msgstr "Manter ativo"
+
+msgid "Keep feedback images for"
+msgstr "Manter imagens de feedback para"
+
+msgid "Keep indefinitely"
+msgstr "Manter indefinidamente"
+
+msgid "Keep task photos for"
+msgstr "Manter as fotos da tarefa para"
+
+msgid "Keep the selection above and send it automatically on a schedule."
+msgstr "Mantenha a seleção acima e envie-a automaticamente em um cronograma."
+
+msgid "Keep the tasks above. Choose when to send them automatically."
+msgstr "Mantenha as tarefas acima. Escolha quando enviá-los automaticamente."
+
+msgid "KinKudos child device pairing"
+msgstr "Pareamento de dispositivo infantil do KinKudos"
+
+msgid "KinKudos feedback #%(report_id)s: %(report_type)s"
+msgstr "KinKudos feedback #%(report_id)s: %(report_type)s"
+
+msgid "Language"
+msgstr "Idioma"
+
+msgid "Last"
+msgstr "Último"
+
+msgid "Last integrity check"
+msgstr "Última verificação de integridade"
+
+msgid "Last successful backup"
+msgstr "Último backup bem-sucedido"
+
+msgid "Last used"
+msgstr "Última utilização"
+
+msgid "Leave blank to keep the current PIN."
+msgstr "Deixe em branco para manter o PIN atual."
+
+msgid "Leave blank to keep the current password."
+msgstr "Deixe em branco para manter a senha atual."
+
+msgid "Link expires"
+msgstr "O link expira"
+
+msgid "Linux PC"
+msgstr "Linux PC"
+
+msgid "Lithuanian"
+msgstr "Lituano"
+
+msgid "Lock code"
+msgstr "Código de bloqueio"
+
+msgid "Log"
+msgstr "Registro"
+
+msgid "Log out"
+msgstr "Sair"
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Mac"
+msgstr "Mac"
+
+msgid "Magic Academy"
+msgstr "Academia Mágica"
+
+msgid "Magic Chronicle"
+msgstr "Crônica Mágica"
+
+msgid "Magic Shop"
+msgstr "Loja de Magia"
+
+msgid "Make a panda wish"
+msgstr "Faz um desejo panda"
+
+msgid "Make it mine"
+msgstr "Personalizar"
+
+msgid "Manage"
+msgstr "Gerenciar"
+
+msgid "Manage parent, child, and guest accounts."
+msgstr "Gerencie contas de pais, filhos e convidados."
+
+msgid "Manage sections"
+msgstr "Gerenciar seções"
+
+msgid "Manage the family name and default language."
+msgstr "Gerencie o nome da família e o idioma padrão."
+
+msgid "Management"
+msgstr "Gestão"
+
+msgid "Manual backup requested"
+msgstr "Backup manual solicitado"
+
+msgid "Message from the owl post"
+msgstr "Mensagem do post da coruja"
+
+msgid "Minimum allowed balance"
+msgstr "Saldo mínimo permitido"
+
+msgid "Minimum balance"
+msgstr "Saldo mínimo"
+
+msgid "Mission Log"
+msgstr "Registro da Missão"
+
+msgid "Mission accomplished"
+msgstr "Missão cumprida"
+
+msgid "Mission complete"
+msgstr "Missão concluída"
+
+msgid "Missions"
+msgstr "Missões"
+
+msgid "Mon"
+msgstr "Seg"
+
+msgid "More"
+msgstr "Mais"
+
+msgid "More actions"
+msgstr "Mais ações"
+
+msgid "More information"
+msgstr "Mais informações"
+
+msgid "Move available points into this goal."
+msgstr "Mova os pontos disponíveis para esta meta."
+
+msgid "Move points back"
+msgstr "Devolver pontos"
+
+msgid "Move points into this goal."
+msgstr "Mova pontos para esta meta."
+
+msgid "Move saved points back"
+msgstr "Devolver pontos guardados"
+
+msgid "My Gallery"
+msgstr "Minha Galeria"
+
+msgid "My PIN"
+msgstr "Meu PIN"
+
+msgid "My cozy den"
+msgstr "Meu cantinho aconchegante"
+
+msgid "My magic"
+msgstr "Minha magia"
+
+msgid "My panda face"
+msgstr "Meu rosto de panda"
+
+msgid "My photo"
+msgstr "Minha foto"
+
+msgid "My portrait"
+msgstr "Meu retrato"
+
+msgid "My skin"
+msgstr "A minha pele"
+
+msgid "My space"
+msgstr "Meu espaço"
+
+msgid "My studio"
+msgstr "Meu estúdio"
+
+msgid "Mystery Crate"
+msgstr "Caixa misteriosa"
+
+msgid "Need %(amount)s %(unit)s more"
+msgstr "Necessidade %(amount)s %(unit)s mais"
+
+msgid "Needs a decision"
+msgstr "Precisa de uma decisão"
+
+msgid "Needs a fix"
+msgstr "Precisa de uma correção"
+
+msgid "Needs changes"
+msgstr "Necessita de alterações"
+
+msgid "Needs improvement"
+msgstr "Precisa de melhorias"
+
+msgid "Negative amount"
+msgstr "Valor negativo"
+
+msgid "Network access"
+msgstr "Acesso à rede"
+
+msgid "Network access can be changed only by a parent administrator."
+msgstr "O acesso à rede só pode ser alterado por um responsável com permissão de administrador."
+
+msgid "Network access changed"
+msgstr "O acesso à rede foi alterado"
+
+msgid "Network access settings saved."
+msgstr "Configurações de acesso à rede salvas."
+
+msgid "Network access setup"
+msgstr "Configuração do acesso à rede"
+
+msgid "Network and security"
+msgstr "Rede e segurança"
+
+msgid "Neutral"
+msgstr "Neutro"
+
+msgid "New"
+msgstr "Novo"
+
+msgid "New PIN"
+msgstr "Novo PIN"
+
+msgid "New avatar"
+msgstr "Novo avatar"
+
+msgid "New balance: {balance}."
+msgstr "Novo saldo: {balance}."
+
+msgid "New child profile"
+msgstr "Novo perfil infantil"
+
+msgid "New code"
+msgstr "Novo código"
+
+msgid "New codes didn’t match — try again"
+msgstr "Novos códigos não coincidem — tente novamente"
+
+msgid "New each day"
+msgstr "Novo a cada dia"
+
+msgid "New each morning"
+msgstr "Novo todas as manhãs"
+
+msgid "New every day"
+msgstr "Novo todos os dias"
+
+msgid "New lock"
+msgstr "Novo bloqueio"
+
+msgid "New parent account"
+msgstr "Nova conta de responsável"
+
+msgid "New parent password: "
+msgstr "Nova senha do responsável: "
+
+msgid "New passcode"
+msgstr "Nova senha"
+
+msgid "New password"
+msgstr "Nova senha"
+
+msgid "New request received"
+msgstr "Novo pedido recebido"
+
+msgid "New reward requests are paused after half of the credit limit is used. They will be available again when the balance improves."
+msgstr "Novas solicitações de recompensa são pausadas após metade do limite de crédito é usado. Estarão novamente disponíveis quando o saldo melhorar."
+
+msgid "New reward requests are paused because half of the available credit has been used. Earn more points to unlock them."
+msgstr "Novas solicitações de recompensa são pausadas porque metade do crédito disponível foi usado. Ganhe mais pontos para destravá-los."
+
+msgid "Next"
+msgstr "Próxima"
+
+msgid "No IP addresses are blocked. Device pairing and sign-in protections remain active."
+msgstr "Nenhum endereço IP está bloqueado. As proteções de pareamento de dispositivos e de login permanecem ativas."
+
+msgid "No active guest access."
+msgstr "Sem acesso ativo aos convidados."
+
+msgid "No activity matches these filters."
+msgstr "Nenhuma atividade corresponde a estes filtros."
+
+msgid "No child devices are paired yet."
+msgstr "Nenhum dispositivo infantil ainda está pareado."
+
+msgid "No child profiles have been created yet."
+msgstr "Ainda não foram criados perfis de filhos."
+
+msgid "No new features in this release."
+msgstr "Nenhuma nova funcionalidade neste lançamento."
+
+msgid "No pending requests"
+msgstr "Sem pedidos pendentes"
+
+msgid "No pending requests."
+msgstr "Não há pedidos pendentes."
+
+msgid "No points were taken away."
+msgstr "Você não perdeu pontos."
+
+msgid "No separate fixes in this release."
+msgstr "Sem correções separadas nesta versão."
+
+msgid "No tasks match your search."
+msgstr "Nenhuma tarefa corresponde à sua pesquisa."
+
+msgid "None"
+msgstr "Nenhum"
+
+msgid "Not configured"
+msgstr "Não configurado"
+
+msgid "Not enabled"
+msgstr "Não habilitado"
+
+msgid "Not enough points"
+msgstr "Pontos insuficientes"
+
+msgid "Not now"
+msgstr "Agora não."
+
+msgid "Not used recently"
+msgstr "Não utilizado recentemente"
+
+msgid "Not used while IP restrictions are disabled"
+msgstr "Não utilizado enquanto as restrições IP estão desativadas"
+
+msgid "Note"
+msgstr "Nota"
+
+msgid "Note (optional)"
+msgstr "Nota (opcional)"
+
+msgid "Note from parents"
+msgstr "Recado dos responsáveis"
+
+msgid "Nothing from this set is available to assign today."
+msgstr "Nada deste conjunto está disponível para atribuir hoje."
+
+msgid "Notifications"
+msgstr "Notificações"
+
+msgid "Notifications are blocked in the device settings. Allow this app's notifications and try again."
+msgstr "As notificações são bloqueadas nas configurações do dispositivo. Permitir notificações deste aplicativo e tentar novamente."
+
+msgid "Notifications blocked"
+msgstr "Notificações bloqueadas"
+
+msgid "Notifications could not be enabled on this device."
+msgstr "Não foi possível ativar as notificações neste dispositivo."
+
+msgid "Notifications off"
+msgstr "Notificações desligadas"
+
+msgid "Notifications on"
+msgstr "Notificações ativadas"
+
+msgid "Notifications unavailable"
+msgstr "Notificações não disponíveis"
+
+msgid "Number of child profiles [1]: "
+msgstr "Número de perfis de filhos [1]: "
+
+msgid "Old PIN"
+msgstr "Antigo PIN"
+
+msgid "Old code"
+msgstr "Código antigo"
+
+msgid "Old lock"
+msgstr "Trava antiga"
+
+msgid "Old passcode"
+msgstr "Código antigo"
+
+msgid "On iPhone and iPad, notifications only work in the installed app. In Safari tap Share, choose Add to Home Screen, enable Open as Web App, then launch the app from its icon."
+msgstr "No iPhone e iPad, as notificações só funcionam no aplicativo instalado. No Safari toque em Comcompartilhar, escolha Adicionar à Tela Inicial, habilite Abrir como Aplicativo da Web e, em seguida, inicie a aplicação a partir do ícone."
+
+msgid "Once a week"
+msgstr "Uma vez por semana"
+
+msgid "One extra hour of screen time"
+msgstr "Uma hora extra de tempo de tela"
+
+msgid "One or more selected tasks are no longer available today."
+msgstr "Uma ou mais tarefas selecionadas não estão mais disponíveis hoje."
+
+msgid "One-time recovery code (save it in your password manager):"
+msgstr "Código de recuperação de uma vez (salve-o em seu gerenciador de senha):"
+
+msgid "Only a parent administrator can change backup settings."
+msgstr "Apenas um responsável com permissão de administrador pode alterar as configurações de backup."
+
+msgid "Only a parent administrator can change email settings."
+msgstr "Apenas um responsável com permissão de administrador pode alterar as configurações de e-mail."
+
+msgid "Only a parent administrator can change network access."
+msgstr "Apenas um responsável com permissão de administrador pode alterar o acesso à rede."
+
+msgid "Only a parent administrator can manage an administrator account."
+msgstr "Apenas um responsável com permissão de administrador pode gerenciar uma conta de administrador."
+
+msgid "Only a parent administrator can revoke all devices."
+msgstr "Apenas um responsável com permissão de administrador pode revogar todos os dispositivos."
+
+msgid "Only a parent administrator can start a backup."
+msgstr "Apenas um responsável com permissão de administrador pode iniciar um backup."
+
+msgid "Only a waiting assigned task can be cancelled."
+msgstr "Apenas uma tarefa atribuída à espera pode ser cancelada."
+
+msgid "Only paired devices can see child profiles or enter a child PIN."
+msgstr "Apenas os dispositivos pareados podem ver os perfis das crianças ou inserir um PIN infantil."
+
+msgid "Only screenshots from resolved feedback are removed automatically."
+msgstr "Apenas as capturas de tela do feedback resolvido são removidas automaticamente."
+
+msgid "Only separately saved points can be returned."
+msgstr "Somente pontos guardados separadamente podem ser devolvidos."
+
+msgid "Only the options for the chosen schedule are used."
+msgstr "Só são utilizadas as opções para o calendário escolhido."
+
+msgid "Open"
+msgstr "Abrir"
+
+msgid "Open child's note"
+msgstr "Abrir a nota da criança"
+
+msgid "Open feedback"
+msgstr "Abrir o feedback"
+
+msgid "Open guest invite"
+msgstr "Abrir convite de acesso"
+
+msgid "Open parent area"
+msgstr "Abrir a área dos responsáveis"
+
+msgid "Open release notes"
+msgstr "Abrir notas de versão"
+
+msgid "Open screenshot"
+msgstr "Abrir imagem"
+
+msgid "Open task photo"
+msgstr "Abrir foto da tarefa"
+
+msgid "Open this link on the child's device. It can be used once and expires in 10 minutes."
+msgstr "Abra este link no dispositivo da criança. Pode ser usado uma vez e expira em 10 minutos."
+
+msgid "Open treat chest"
+msgstr "Caixa de tratamento aberto"
+
+msgid "Optional IP restrictions add another layer on top of device pairing and sign-in limits."
+msgstr "Restrições IP opcionais adicionam outra camada em cima do pareamento do dispositivo e limites de entrada."
+
+msgid "Optional for providers that do not require a region."
+msgstr "Opcional para fornecedores que não necessitam de uma região."
+
+msgid "Optional — a short note for your parents"
+msgstr "Opcional — uma pequena nota para seus responsáveis"
+
+msgid "Optional. Used only when email sending is enabled."
+msgstr "Opcional. Usado apenas quando o envio de e-mail está ativo."
+
+msgid "Order"
+msgstr "Ordem"
+
+msgid "Organic cards — like paint swatches."
+msgstr "Cartões orgânicos — como amostras de tinta."
+
+msgid "Origin day"
+msgstr "Dia de origem"
+
+msgid "Owl tip"
+msgstr "Dica da coruja"
+
+msgid "Owls & galleons"
+msgstr "Corujas e galeões"
+
+msgid "PIN"
+msgstr "PIN"
+
+msgid "PIN change steps"
+msgstr "Passos de alteração do PIN"
+
+msgid "PIN changed."
+msgstr "O PIN mudou."
+
+msgid "PIN keypad"
+msgstr "Teclado PIN"
+
+msgid "PIN locked"
+msgstr "PIN bloqueado"
+
+msgid "Page"
+msgstr "Página"
+
+msgid "Page %(number)s of %(total)s"
+msgstr "Página %(number)s de %(total)s"
+
+msgid "Paint this world"
+msgstr "Pinte este mundo"
+
+msgid "Pair child device"
+msgstr "Parear dispositivo infantil"
+
+msgid "Pair this device"
+msgstr "Parear este dispositivo"
+
+msgid "Paired devices"
+msgstr "Dispositivos pareados"
+
+msgid "Pairing link"
+msgstr "Link de pareamento"
+
+msgid "Pairing link:"
+msgstr "Link de pareamento:"
+
+msgid "Panda Tasks"
+msgstr "Tarefas do Panda"
+
+msgid "Panda Tracks"
+msgstr "Panda Tracks"
+
+msgid "Panda World"
+msgstr "Panda World"
+
+msgid "Panda den"
+msgstr "Toca do panda"
+
+msgid "Panda priority"
+msgstr "Prioridade do panda"
+
+msgid "Panda tip"
+msgstr "Dica do panda"
+
+msgid "Panda's Dream"
+msgstr "Sonho de Panda"
+
+msgid "Parent"
+msgstr "Responsável"
+
+msgid "Parent account"
+msgstr "Conta de responsável"
+
+msgid "Parent account “%(username)s” created."
+msgstr "Conta de responsável “%(username)s” criada."
+
+msgid "Parent account “%(username)s” removed."
+msgstr "Conta de responsável “%(username)s” removida."
+
+msgid "Parent account “%(username)s” updated."
+msgstr "Conta de responsável “%(username)s” atualizada."
+
+msgid "Parent accounts"
+msgstr "Contas de responsáveis"
+
+msgid "Parent area"
+msgstr "Área dos responsáveis"
+
+msgid "Parent area sections"
+msgstr "Seções da área dos responsáveis"
+
+msgid "Parent email address (optional): "
+msgstr "Endereço de e-mail dos responsáveis (opcional): "
+
+msgid "Parent login by IP"
+msgstr "Login de responsável por IP"
+
+msgid "Parent login by account"
+msgstr "Login de responsável por conta"
+
+msgid "Parent response"
+msgstr "Resposta dos responsáveis"
+
+msgid "Parent sign in"
+msgstr "Acesso dos responsáveis"
+
+msgid "Parent username [%(default)s]: "
+msgstr "Nome de usuário do responsável [%(default)s]: "
+
+msgid "Parents may change this date without an additional approval."
+msgstr "Os pais podem alterar esta data sem uma aprovação adicional."
+
+msgid "Passcode"
+msgstr "Código de acesso"
+
+msgid "Password"
+msgstr "Senha"
+
+msgid "Password changed"
+msgstr "Senha alterada"
+
+msgid "Password reset by IP"
+msgstr "Reiniciar senha por IP"
+
+msgid "Password reset by account"
+msgstr "Reiniciar senha por conta"
+
+msgid "Pause"
+msgstr "Pausar"
+
+msgid "Paused"
+msgstr "Pausado"
+
+msgid "Paused \"%(name)s\"."
+msgstr "Pausado \"%(name)s\"."
+
+msgid "Pearls"
+msgstr "Pérolas"
+
+msgid "Penalties"
+msgstr "Penalidades"
+
+msgid "Penalty"
+msgstr "Penalidade"
+
+msgid "Penalty assigned."
+msgstr "Penalidade atribuída."
+
+msgid "Penalty “%(penalty)s” assigned to %(name)s."
+msgstr "Penalidade “%(penalty)s” atribuída a %(name)s."
+
+msgid "Pending"
+msgstr "Pendente"
+
+msgid "Pending Verification..."
+msgstr "Verificação pendente..."
+
+msgid "Pending and revision-requested task photos are never removed."
+msgstr "Fotos de tarefas pendentes e solicitadas por revisão nunca são removidas."
+
+msgid "Pending invites"
+msgstr "Convites pendentes"
+
+msgid "Pending requests"
+msgstr "Pedidos pendentes"
+
+msgid "People and devices"
+msgstr "Pessoas e dispositivos"
+
+msgid "Phone"
+msgstr "Celular"
+
+msgid "Photo for %(task)s"
+msgstr "Foto para %(task)s"
+
+msgid "Photo removed"
+msgstr "Foto removida"
+
+msgid "Photo removed according to the retention setting"
+msgstr "Foto removida de acordo com a configuração de retenção"
+
+msgid "Photo selected"
+msgstr "Foto selecionada"
+
+msgid "Photos"
+msgstr "Fotos"
+
+msgid "Pick a biome"
+msgstr "Escolha um bioma"
+
+msgid "Pick a mood"
+msgstr "Escolher um clima"
+
+msgid "Pick photo"
+msgstr "Escolher uma foto"
+
+msgid "Planned"
+msgstr "Planejado"
+
+msgid "Player birthday"
+msgstr "Aniversário do jogador"
+
+msgid "Player icon"
+msgstr "Ícone do jogador"
+
+msgid "Player pad"
+msgstr "Bloco do jogador"
+
+msgid "Point adjustments"
+msgstr "Ajustes dos pontos"
+
+msgid "Point amount"
+msgstr "Quantidade de pontos"
+
+msgid "Point history"
+msgstr "Histórico de pontos"
+
+msgid "Point history is empty."
+msgstr "O histórico de pontos está vazio."
+
+msgid "Point transactions cannot be changed."
+msgstr "As transações de pontos não podem ser alteradas."
+
+msgid "Point transactions cannot be deleted."
+msgstr "As transações de pontos não podem ser apagadas."
+
+msgid "Points"
+msgstr "Pontos"
+
+msgid "Points and tasks"
+msgstr "Pontos e tarefas"
+
+msgid "Points for a task photo"
+msgstr "Pontos para uma foto de tarefa"
+
+msgid "Points returned from goal"
+msgstr "Pontos devolvidos da meta"
+
+msgid "Points saved separately for goals. They cannot be used for rewards."
+msgstr "Pontos guardados separadamente para metas. Eles não podem ser usados para recompensas."
+
+msgid "Points saved to goal"
+msgstr "Pontos guardados para a meta"
+
+msgid "Points to add"
+msgstr "Pontos a adicionar"
+
+msgid "Points to give"
+msgstr "Pontos a dar"
+
+msgid "Points were saved for this goal."
+msgstr "Pontos foram salvos para esta meta."
+
+msgid "Present artwork"
+msgstr "Apresentar a arte"
+
+msgid "Previous"
+msgstr "Anterior"
+
+msgid "Priority"
+msgstr "Prioridade"
+
+msgid "Priority build"
+msgstr "Prioridade de compilação"
+
+msgid "Priority challenge"
+msgstr "Desafio prioritário"
+
+msgid "Private pairing link"
+msgstr "Link privado de pareamento"
+
+msgid "Private sign-in link"
+msgstr "Link privado de acesso"
+
+msgid "Private sketch code"
+msgstr "Código de desenho privado"
+
+msgid "Privileges"
+msgstr "Privilégios"
+
+msgid "Prize requested!"
+msgstr "Prêmio solicitado!"
+
+msgid "Prize shop"
+msgstr "Loja de prêmios"
+
+msgid "Problem"
+msgstr "Problema"
+
+msgid "Project finished"
+msgstr "Projeto terminado"
+
+msgid "Project ready for review"
+msgstr "Projeto pronto para revisão"
+
+msgid "Project settings"
+msgstr "Configuração do projeto"
+
+msgid "Propose a secret plan"
+msgstr "Propor um plano secreto"
+
+msgid "Protect the family database and uploaded photos."
+msgstr "Proteja o banco de dados da família e as fotos enviadas."
+
+msgid "Provider"
+msgstr "Fornecedor"
+
+msgid "Purchases blocked"
+msgstr "Compras bloqueadas"
+
+msgid "Purpose"
+msgstr "Finalidade"
+
+msgid "Quest complete"
+msgstr "Busca completa"
+
+msgid "Quest tip"
+msgstr "Dica da missão"
+
+msgid "Quick actions"
+msgstr "Ações rápidas"
+
+msgid "Random skin"
+msgstr "Pele aleatória"
+
+msgid "Reached goal"
+msgstr "Meta alcançada"
+
+msgid "Ready for today"
+msgstr "Pronto para hoje"
+
+msgid "Ready for today's tasks?"
+msgstr "Prontos para as tarefas de hoje?"
+
+msgid "Ready to save"
+msgstr "Pronto para salvar"
+
+msgid "Reason"
+msgstr "Motivo"
+
+msgid "Recent backup actions"
+msgstr "Ações de backup recentes"
+
+msgid "Recipient"
+msgstr "Destinatário"
+
+msgid "Refresh requests"
+msgstr "Atualizar os pedidos"
+
+msgid "Region"
+msgstr "Região"
+
+msgid "Reject"
+msgstr "Rejeitar"
+
+msgid "Reject birthday change"
+msgstr "Rejeitar a mudança de aniversário"
+
+msgid "Reject task"
+msgstr "Rejeitar tarefa"
+
+msgid "Rejected"
+msgstr "Rejeitado"
+
+msgid "Rejected by"
+msgstr "Rejeitado por"
+
+msgid "Rejection reason"
+msgstr "Motivo da rejeição"
+
+msgid "Remove"
+msgstr "Remover"
+
+msgid "Remove child profile “%(name)s”? History will be preserved."
+msgstr "Remover perfil infantil “%(name)s”? A história será preservada."
+
+msgid "Remove guest access “%(name)s”?"
+msgstr "Remover o acesso dos convidados “%(name)s”?"
+
+msgid "Remove names, PINs, screenshots, email addresses, server details, and other family information before posting publicly."
+msgstr "Remova nomes, PINs, capturas de tela, endereços de e-mail, detalhes do servidor e outras informações da família antes de postar publicamente."
+
+msgid "Remove parent account “%(username)s”?"
+msgstr "Remover a conta dos responsáveis “%(username)s”?"
+
+msgid "Remove photo"
+msgstr "Remover foto"
+
+msgid "Rename device"
+msgstr "Mudar o nome do dispositivo"
+
+msgid "Repeat"
+msgstr "Repetir"
+
+msgid "Repeat PIN"
+msgstr "Repetir o PIN"
+
+msgid "Repeat new"
+msgstr "Repetir novo"
+
+msgid "Repeat new PIN"
+msgstr "Repetir o novo PIN"
+
+msgid "Repeat new code"
+msgstr "Repetir o novo código"
+
+msgid "Repeat new password"
+msgstr "Repetir a nova senha"
+
+msgid "Repeat password"
+msgstr "Repetir senha"
+
+msgid "Repeat: "
+msgstr "Repito: "
+
+msgid "Report a KinKudos bug"
+msgstr "Reportar um erro KinKudos"
+
+msgid "Report a KinKudos software bug on GitHub"
+msgstr "Reportar um erro de software KinKudos no GitHub"
+
+msgid "Report a bug"
+msgstr "Reportar um erro"
+
+msgid "Repository"
+msgstr "Repositório"
+
+msgid "Request a correction"
+msgstr "Solicitar uma correção"
+
+msgid "Request completion"
+msgstr "Pedido de conclusão"
+
+msgid "Request from arsenal"
+msgstr "Pedido do arsenal"
+
+msgid "Requested birthday change: %(current)s → %(requested)s."
+msgstr "Pedido de mudança de aniversário: %(current)s → %(requested)s."
+
+msgid "Required before changing backup credentials."
+msgstr "Necessário antes de mudar credenciais de backup."
+
+msgid "Required before changing network access."
+msgstr "Necessário antes de alterar o acesso à rede."
+
+msgid "Required before changing sensitive email settings."
+msgstr "Necessário antes de alterar as configurações de email sensíveis."
+
+msgid "Reset"
+msgstr "Reiniciar"
+
+msgid "Reset link"
+msgstr "Link para redefinição de senha"
+
+msgid "Reset password"
+msgstr "Redefinir senha"
+
+msgid "Resolved"
+msgstr "Resolvido"
+
+msgid "Restored"
+msgstr "Restaurado"
+
+msgid "Restrict all access"
+msgstr "Restrinja todo o acesso"
+
+msgid "Restrict child access"
+msgstr "Restrinja o acesso das crianças"
+
+msgid "Resume"
+msgstr "Retomar"
+
+msgid "Resumed \"%(name)s\"."
+msgstr "Resumido \"%(name)s\"."
+
+msgid "Retention"
+msgstr "Retenção"
+
+msgid "Return points and delete"
+msgstr "Devolver os pontos e apagar"
+
+msgid "Return saved points before closing"
+msgstr "Devolver os pontos guardados antes de fechar"
+
+msgid "Return saved points before closing this goal."
+msgstr "Retorna pontos guardados antes de fechar esta meta."
+
+msgid "Return the excess saved points before lowering this target."
+msgstr "Devolve o excesso de pontos guardados antes de baixar este alvo."
+
+msgid "Return the saved points before changing this goal's mode."
+msgstr "Devolve os pontos guardados antes de alterar o modo desta meta."
+
+msgid "Returned"
+msgstr "Retornado"
+
+msgid "Returned %(amount)s points from %(title)s"
+msgstr "Devolveu %(amount)s pontos de %(title)s"
+
+msgid "Returned by"
+msgstr "Retornado por"
+
+msgid "Returned from %(title)s"
+msgstr "Regressado de %(title)s"
+
+msgid "Returned from goal"
+msgstr "Retornado da meta"
+
+msgid "Revealed"
+msgstr "Revogado"
+
+msgid "Review feedback submitted by family members."
+msgstr "Rever comentários apresentados por familiares."
+
+msgid "Reviewed"
+msgstr "Revisado"
+
+msgid "Revoke"
+msgstr "Revogar"
+
+msgid "Revoke all child devices"
+msgstr "Revogar todos os dispositivos infantis"
+
+msgid "Revoke all devices"
+msgstr "Revogar todos os dispositivos"
+
+msgid "Revoke child access for this device?"
+msgstr "Revogar o acesso das crianças a este dispositivo?"
+
+msgid "Reward"
+msgstr "Recompensa"
+
+msgid "Reward Chest"
+msgstr "Baú de Recompensas"
+
+msgid "Reward approved."
+msgstr "Recompensa aprovada."
+
+msgid "Reward request"
+msgstr "Pedido de recompensa"
+
+msgid "Reward request rejected."
+msgstr "Pedido de recompensa rejeitado."
+
+msgid "Rewards"
+msgstr "Recompensas"
+
+msgid "Role"
+msgstr "Papel"
+
+msgid "Round cards — easy for little fingers."
+msgstr "Cards redondos, fáceis de tocar com dedinhos."
+
+msgid "Rub the silver surface with your finger. Three matching numbers reveal the result."
+msgstr "Esfregue a superfície de prata com o dedo. Três números correspondentes revelam o resultado."
+
+msgid "S3 endpoint"
+msgstr "Endpoint S3"
+
+msgid "S3-compatible storage"
+msgstr "Armazenamento compatível com o S3"
+
+msgid "SMTP is used for password recovery and optional feedback notifications."
+msgstr "SMTP é usado para recuperação de senha e notificações de feedback opcionais."
+
+msgid "SMTP password"
+msgstr "Senha do SMTP"
+
+msgid "SMTP port"
+msgstr "Porta SMTP"
+
+msgid "SMTP server"
+msgstr "Servidor SMTP"
+
+msgid "SMTP username"
+msgstr "Usuário SMTP"
+
+msgid "SSL/TLS"
+msgstr "SSL/TLS"
+
+msgid "STARTTLS"
+msgstr "STARTTLS"
+
+msgid "Sat"
+msgstr "Sáb"
+
+msgid "Saturday"
+msgstr "Sábado"
+
+msgid "Saturday and Sunday"
+msgstr "Sábado e Domingo"
+
+msgid "Save"
+msgstr "Salvar"
+
+msgid "Save PIN"
+msgstr "Salvar o PIN"
+
+msgid "Save account"
+msgstr "Salvar conta"
+
+msgid "Save adjustment"
+msgstr "Salvar o ajuste"
+
+msgid "Save as a set"
+msgstr "Salvar como conjunto"
+
+msgid "Save bamboo code"
+msgstr "Salvar código de bambu"
+
+msgid "Save birthday"
+msgstr "Salvar o aniversário"
+
+msgid "Save code"
+msgstr "Salvar código"
+
+msgid "Save credit"
+msgstr "Salvar crédito"
+
+msgid "Save for a dream"
+msgstr "Juntar pontos para um sonho"
+
+msgid "Save lock code"
+msgstr "Salvar o código de bloqueio"
+
+msgid "Save new PIN"
+msgstr "Salvar o novo PIN"
+
+msgid "Save passcode"
+msgstr "Salvar a senha"
+
+msgid "Save password"
+msgstr "Salvar senha"
+
+msgid "Save profile"
+msgstr "Salvar perfil"
+
+msgid "Save secret code"
+msgstr "Salvar o código secreto"
+
+msgid "Save separately"
+msgstr "Salvar separadamente"
+
+msgid "Save set"
+msgstr "Salvar o conjunto"
+
+msgid "Save settings"
+msgstr "Salvar configurações"
+
+msgid "Save sketch code"
+msgstr "Salvar o código de desenho"
+
+msgid "Save this recovery code in your password manager. It will not be shown again."
+msgstr "Salve este código de recuperação em seu gerenciador de senhas. Não voltará a ser mostrado."
+
+msgid "Saved"
+msgstr "Salvo"
+
+msgid "Saved %(amount)s points for %(title)s"
+msgstr "Salvo %(amount)s pontos para %(title)s"
+
+msgid "Saved for %(title)s"
+msgstr "Salvo para %(title)s"
+
+msgid "Saved points"
+msgstr "Pontos guardados"
+
+msgid "Saved points are kept for this goal and cannot be used for rewards."
+msgstr "Os pontos guardados são mantidos para esta meta e não podem ser usados para recompensas."
+
+msgid "Saved separately"
+msgstr "Salvo separadamente"
+
+msgid "Saved set \"%(name)s\"."
+msgstr "Conjunto “%(name)s” salvo."
+
+msgid "Saved sets"
+msgstr "Conjuntos salvos"
+
+msgid "Saved to goal"
+msgstr "Guardado para a meta"
+
+msgid "Saves family preferences only."
+msgstr "Salva apenas as preferências da família."
+
+msgid "Savings goal"
+msgstr "Meta de economia"
+
+msgid "Savings mode saved."
+msgstr "Modo de economia salvo."
+
+msgid "Savings mode selected"
+msgstr "Modo de economia selecionado"
+
+msgid "Savings mode selected for %(title)s"
+msgstr "Modo de economia selecionado para %(title)s"
+
+msgid "Say cheese"
+msgstr "Diga xis"
+
+msgid "Say it again"
+msgstr "Repita"
+
+msgid "Screenshot"
+msgstr "Captura de tela"
+
+msgid "Screenshot (optional)"
+msgstr "Captura de tela (opcional)"
+
+msgid "Screenshot removed"
+msgstr "Captura de tela removida"
+
+msgid "Secret Plan"
+msgstr "Plano Secreto"
+
+msgid "Secret bamboo code"
+msgstr "Código secreto de bambu"
+
+msgid "Secret code"
+msgstr "Código secreto"
+
+msgid "Sections"
+msgstr "Seções"
+
+msgid "See what was added and fixed in every application version."
+msgstr "Veja o que foi adicionado e corrigido em cada versão da aplicação."
+
+msgid "Select HQ theme"
+msgstr "Selecionar o tema do QG"
+
+msgid "Select at least one child."
+msgstr "Selecione pelo menos uma criança."
+
+msgid "Select skin pack"
+msgstr "Selecionar o pacote de pele"
+
+msgid "Self-portrait"
+msgstr "Autorretrato"
+
+msgid "Send a link"
+msgstr "Enviar uma ligação"
+
+msgid "Send a signal to HQ"
+msgstr "Enviar um sinal para o QG"
+
+msgid "Send again"
+msgstr "Enviar novamente"
+
+msgid "Send an owl"
+msgstr "Enviar uma coruja"
+
+msgid "Send at"
+msgstr "Enviar em"
+
+msgid "Send cubes to sibling"
+msgstr "Enviar cubos para o irmão"
+
+msgid "Send family feedback"
+msgstr "Enviar feedback da família"
+
+msgid "Send feedback"
+msgstr "Enviar feedback"
+
+msgid "Send gift"
+msgstr "Enviar presente"
+
+msgid "Send reset link"
+msgstr "Enviar link para redefinir a senha"
+
+msgid "Send signal"
+msgstr "Enviar sinal"
+
+msgid "Send tasks"
+msgstr "Enviar tarefas"
+
+msgid "Send {amount} points to {recipient}?"
+msgstr "Enviar {amount} pontos para {recipient}?"
+
+msgid "Sender email address"
+msgstr "Endereço de e-mail do remetente"
+
+msgid "Sent to %(email)s."
+msgstr "Enviado para %(email)s."
+
+msgid "Server"
+msgstr "Servidor"
+
+msgid "Set a new password here:"
+msgstr "Define aqui uma nova senha:"
+
+msgid "Set credit"
+msgstr "Definir o crédito"
+
+msgid "Set name"
+msgstr "Definir o nome"
+
+msgid "Set the lowest balance this child may spend down to."
+msgstr "Defina o menor saldo que esta criança pode gastar."
+
+msgid "Set up KinKudos"
+msgstr "Configurar KinKudos"
+
+msgid "Set up the system"
+msgstr "Configurar o sistema"
+
+msgid "Set up this device"
+msgstr "Configurar este dispositivo"
+
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "Setup code"
+msgstr "Código de configuração"
+
+msgid "Setup complete"
+msgstr "Configuração concluída"
+
+msgid "Shared reason"
+msgstr "Motivo compartilhado"
+
+msgid "Shared reason (optional)"
+msgstr "Motivo compartilhado (opcional)"
+
+msgid "Share…"
+msgstr "Compartilhar…"
+
+msgid "Show"
+msgstr "Mostrar"
+
+msgid "Shown in family-facing headings and messages."
+msgstr "Mostrado em cabeçalhos e mensagens voltados para a família."
+
+msgid "Sign in"
+msgstr "Entrar"
+
+msgid "Signal received! Mission evidence was delivered to HQ."
+msgstr "Sinal recebido! As provas da missão foram entregues ao QG."
+
+msgid "Silver Mystery Canvas"
+msgstr "Tela Misteriosa de Prata"
+
+msgid "Small tasks."
+msgstr "Pequenas tarefas."
+
+msgid "Snap"
+msgstr "Tirar foto"
+
+msgid "Something is not working"
+msgstr "Algo não está funcionando"
+
+msgid "Spawn day"
+msgstr "Dia do Spawn"
+
+msgid "Spell complete"
+msgstr "Feitiço completo"
+
+msgid "Square buttons. Big taps."
+msgstr "Botões quadrados e grandes, fáceis de tocar."
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Storage provider"
+msgstr "Prestador de armazenamento"
+
+msgid "Studio priority"
+msgstr "Prioridade do estúdio"
+
+msgid "Studio projects are waiting"
+msgstr "Os projetos do estúdio estão esperando por você"
+
+msgid "Submit"
+msgstr "Enviar"
+
+msgid "Submit block"
+msgstr "Enviar bloco"
+
+msgid "Submit project"
+msgstr "Enviar projeto"
+
+msgid "Submit task"
+msgstr "Enviar tarefa"
+
+msgid "Suggest"
+msgstr "Sugerir"
+
+msgid "Suggest a reward or goal"
+msgstr "Sugerir uma recompensa ou meta"
+
+msgid "Suggest an idea"
+msgstr "Sugerir uma ideia"
+
+msgid "Suggested"
+msgstr "Sugerido"
+
+msgid "Suggested point amount"
+msgstr "Quantidade de pontos sugerida"
+
+msgid "Suggested token amount"
+msgstr "Quantidade do token sugerida"
+
+msgid "Suggestion"
+msgstr "Sugestão"
+
+msgid "Suggestion approved."
+msgstr "Sugestão aprovada."
+
+msgid "Suggestion rejected."
+msgstr "Sugestão rejeitada."
+
+msgid "Sun"
+msgstr "Dom"
+
+msgid "Sunday"
+msgstr "Domingo"
+
+msgid "Superhero HQ"
+msgstr "QG do Super- Herói"
+
+msgid "Surprise HQ"
+msgstr "HQ surpresa"
+
+msgid "Surprise biome"
+msgstr "Bioma surpresa"
+
+msgid "Surprise card"
+msgstr "Cartão surpresa"
+
+msgid "Surprise card price"
+msgstr "Preço do cartão surpresa"
+
+msgid "Surprise card result"
+msgstr "Resultado do cartão surpresa"
+
+msgid "Surprise cards"
+msgstr "Cartões surpresa"
+
+msgid "Surprise cards are disabled."
+msgstr "Os cartões surpresa estão desativados."
+
+msgid "Surprise cards are paused until your point balance improves."
+msgstr "Os cartões surpresa ficam indisponíveis até que seu saldo de pontos melhore."
+
+msgid "Surprise cards disabled"
+msgstr "Cartões surpresa desativados"
+
+msgid "Surprise cards this week: %(remaining)s of %(limit)s"
+msgstr "Cartões surpresa esta semana: %(remaining)s de %(limit)s"
+
+msgid "Surprise cards used this week. The limit resets every Monday."
+msgstr "Cartões surpresa usados nesta semana. O limite é renovado toda segunda-feira."
+
+msgid "Surprise mood"
+msgstr "Momento surpresa"
+
+msgid "Surprise world"
+msgstr "Mundo surpresa"
+
+msgid "Switch profile"
+msgstr "Mudar de perfil"
+
+msgid "Tablet"
+msgstr "Tablet"
+
+msgid "Take from the chest"
+msgstr "Retirar do baú"
+
+msgid "Take photo"
+msgstr "Tirar uma foto"
+
+msgid "Tap a world. It changes colours, words, and sounds."
+msgstr "Tocar num mundo. Muda cores, palavras e sons."
+
+msgid "Target amount"
+msgstr "Valor-alvo"
+
+msgid "Task"
+msgstr "Tarefa"
+
+msgid "Task approved."
+msgstr "Tarefa aprovada."
+
+msgid "Task finished"
+msgstr "Tarefa terminada"
+
+msgid "Task name"
+msgstr "Nome da tarefa"
+
+msgid "Task photo"
+msgstr "Foto da tarefa"
+
+msgid "Task photo settings"
+msgstr "Configuração da foto da tarefa"
+
+msgid "Task rejected"
+msgstr "Tarefa rejeitada"
+
+msgid "Task rejected."
+msgstr "Tarefa rejeitada."
+
+msgid "Tasks"
+msgstr "Tarefas"
+
+msgid "Tasks and rewards"
+msgstr "Tarefas e recompensas"
+
+msgid "Tasks from your parents"
+msgstr "Tarefas de seus responsáveis"
+
+msgid "Tasks were assigned to %(name)s for today."
+msgstr "As tarefas foram atribuídas a %(name)s por hoje."
+
+msgid "Tasks, penalties and rewards"
+msgstr "Tarefas, penalidades e recompensas"
+
+msgid "Tell the child what should be improved."
+msgstr "Diga à criança o que deve ser melhorado."
+
+msgid "Tell us what is not working or what you would like to add."
+msgstr "Conte o que não está funcionando ou o que você gostaria de adicionar."
+
+msgid "Temporarily locked"
+msgstr "Bloqueado temporariamente"
+
+msgid "Temporary access for grandparents, relatives, or babysitters. They sign in with a PIN. They do not receive notifications."
+msgstr "Acesso temporário para avós, parentes ou babás. Convidados entram com um PIN e não recebem notificações."
+
+msgid "Thank you. Your feedback was sent."
+msgstr "Obrigado. O seu feedback foi enviado."
+
+msgid "The HQ arsenal unlocks after today's priority missions are complete."
+msgstr "O arsenal do QG desbloqueia-se após as missões prioritárias de hoje estarem completas."
+
+msgid "The PIN must contain digits only."
+msgstr "O PIN deve conter apenas dígitos."
+
+msgid "The PIN must contain exactly 4 digits."
+msgstr "O PIN deve conter exatamente 4 dígitos."
+
+msgid "The PINs do not match."
+msgstr "Os PINs não coincidem."
+
+msgid "The Web Push endpoint is invalid."
+msgstr "O parâmetro de avaliação Web Push é inválido."
+
+msgid "The Web Push key is invalid."
+msgstr "A chave Web Push é inválida."
+
+msgid "The activity history is empty."
+msgstr "O histórico de atividade está vazio."
+
+msgid "The assigned task was cancelled."
+msgstr "A tarefa atribuída foi cancelada."
+
+msgid "The backup could not be started: %(error)s"
+msgstr "O backup não pôde ser iniciado: %(error)s"
+
+msgid "The backup service is unavailable. Ask the server administrator to check the backup container."
+msgstr "O serviço de backup não está disponível. Peça ao administrador do servidor para verificar o recipiente de backup."
+
+msgid "The bamboo was sent to your parents for approval!"
+msgstr "O bambu foi enviado aos seus responsáveis para aprovação!"
+
+msgid "The birthday change was sent to the parents for approval."
+msgstr "A mudança de aniversário foi enviada aos responsáveis para aprovação."
+
+msgid "The birthday date has not changed."
+msgstr "A data do aniversário não mudou."
+
+msgid "The changelog is empty."
+msgstr "O changelog está vazio."
+
+msgid "The child's name is required."
+msgstr "O nome da criança é obrigatório."
+
+msgid "The configured setup code is too short. Ask the server administrator to generate a longer code."
+msgstr "O código de configuração é muito curto. Peça ao administrador do servidor para gerar um código mais longo."
+
+msgid "The corrected task was sent for approval again."
+msgstr "A tarefa corrigida foi novamente enviada para aprovação."
+
+msgid "The cost must be greater than zero."
+msgstr "O custo deve ser maior do que zero."
+
+msgid "The current IP address could not be verified."
+msgstr "O endereço IP atual não pôde ser verificado."
+
+msgid "The current PIN is incorrect."
+msgstr "O PIN atual está incorreto."
+
+msgid "The current parent password is incorrect."
+msgstr "A senha do pai atual está incorreta."
+
+msgid "The family name is required."
+msgstr "O nome da família é obrigatório."
+
+msgid "The family name or nickname is required."
+msgstr "O nome da família ou apelido é necessário."
+
+msgid "The family-wide surprise card switch must also be enabled."
+msgstr "Os cartões surpresa também precisam estar ativados nas configurações da família."
+
+msgid "The gift amount must be greater than zero."
+msgstr "A quantia do presente deve ser maior que zero."
+
+msgid "The goal cannot be completed because the available balance changed."
+msgstr "A meta não pode ser concluído porque o saldo disponível mudou."
+
+msgid "The goal target must be greater than zero."
+msgstr "A quantidade de pontos necessária para a meta deve ser maior que zero."
+
+msgid "The goal was sent to the parents for approval."
+msgstr "A meta foi enviado aos responsáveis para aprovação."
+
+msgid "The goal will stay active."
+msgstr "A meta continuará ativa."
+
+msgid "The image cannot be larger than 12 MB."
+msgstr "A imagem não pode ser maior que 12 MB."
+
+msgid "The image cannot be larger than 5 MB."
+msgstr "A imagem não pode ser maior que 5 MB."
+
+msgid "The image could not be processed. Choose another file."
+msgstr "A imagem não pôde ser processada. Escolha outro arquivo."
+
+msgid "The inspiration shop opens after today's commissioned projects are finished."
+msgstr "A loja de inspiração abre depois que os projetos encomendados de hoje estão concluídos."
+
+msgid "The invite was created, but the email could not be sent."
+msgstr "O convite foi criado, mas o e-mail não pôde ser enviado."
+
+msgid "The limit resets every Monday for each child. The default is 3."
+msgstr "O limite é reiniciado todas as segundas-feiras para cada criança. O padrão é 3."
+
+msgid "The link is valid for 6 hours or until a PIN is created."
+msgstr "O link é válido por 6 horas ou até que um PIN seja criado."
+
+msgid "The link is valid for one hour and can only be used once."
+msgstr "O link é válido por uma hora e só pode ser usado uma vez."
+
+msgid "The magic shop opens after today's enchanted duties are complete."
+msgstr "A loja de magia abre depois que os deveres de hoje encantados estão completos."
+
+msgid "The new PINs do not match."
+msgstr "Os novos PINs não correspondem."
+
+msgid "The new price is used for every future card purchase."
+msgstr "O novo preço é usado para cada compra de cartão futuro."
+
+msgid "The number of child profiles must be a number."
+msgstr "O número de perfis de crianças deve ser um número."
+
+msgid "The owl carried your task to your parents."
+msgstr "A coruja levou a sua tarefa aos seus responsáveis."
+
+msgid "The panda is still waiting"
+msgstr "O panda ainda está esperando."
+
+msgid "The password does not meet the security requirements."
+msgstr "A senha não atende aos requisitos de segurança."
+
+msgid "The password reset link will be sent to this address."
+msgstr "O link para redefinir a senha de senha será enviado para este endereço."
+
+msgid "The passwords do not match."
+msgstr "As senhas não correspondem."
+
+msgid "The penalty amount must be negative."
+msgstr "O valor da penalidade deve ser negativo."
+
+msgid "The point amount cannot be zero."
+msgstr "O valor do ponto não pode ser zero."
+
+msgid "The point history is empty."
+msgstr "O histórico de pontos está vazio."
+
+msgid "The prize shop unlocks after today's assigned quests are complete."
+msgstr "A loja de prêmios desbloqueia depois das missões de hoje estarem completas."
+
+msgid "The profile is temporarily locked. Ask a parent to unlock it."
+msgstr "O perfil está temporariamente bloqueado. Peça a um pai para destravá-lo."
+
+msgid "The profile is temporarily locked. Try again later."
+msgstr "O perfil está temporariamente bloqueado. Tenta outra vez mais tarde."
+
+msgid "The remaining assigned tasks were cancelled."
+msgstr "As restantes tarefas atribuídas foram canceladas."
+
+msgid "The result could not be saved. Reopen the card and try again."
+msgstr "O resultado não pôde ser salvo. Reabra o cartão e tente novamente."
+
+msgid "The reward chest unlocks after today's assigned missions are complete."
+msgstr "O cofre da recompensa abre após as missões de hoje estarem completas."
+
+msgid "The reward request was cancelled."
+msgstr "O pedido de recompensa foi cancelado."
+
+msgid "The reward request was sent to the parents."
+msgstr "O pedido de recompensa foi enviado aos responsáveis."
+
+msgid "The rewards catalog is empty."
+msgstr "O catálogo de recompensas está vazio."
+
+msgid "The saved amount no longer reaches this goal."
+msgstr "A quantidade salva não atinge mais esta meta."
+
+msgid "The selected child profile is not available."
+msgstr "O perfil da criança selecionada não está disponível."
+
+msgid "The setup code is incorrect."
+msgstr "O código de configuração está incorreto."
+
+msgid "The suggestion was sent to the parents."
+msgstr "A sugestão foi enviada aos responsáveis."
+
+msgid "The task and its proof were sent to the parents for approval."
+msgstr "A tarefa e sua prova foram enviadas aos responsáveis para aprovação."
+
+msgid "The task was returned for improvements."
+msgstr "A tarefa foi devolvida para melhorias."
+
+msgid "The task was sent to the parents for approval."
+msgstr "A tarefa foi enviada aos responsáveis para aprovação."
+
+msgid "The tasks expire at midnight. Completed tasks award points immediately."
+msgstr "As tarefas expiram à meia-noite. Ao concluir uma tarefa, os pontos são creditados na hora."
+
+msgid "The token amount cannot be zero."
+msgstr "O valor do token não pode ser zero."
+
+msgid "The token history is empty."
+msgstr "O histórico do símbolo está vazio."
+
+msgid "The treat chest opens after today's bamboo tasks are finished."
+msgstr "O peito de tratamento abre depois que as tarefas de bambu de hoje são concluídas."
+
+msgid "The values do not match."
+msgstr "Os valores não correspondem."
+
+msgid "The way to your treasure is temporarily closed."
+msgstr "O caminho para o seu tesouro está temporariamente fechado."
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "Theme changed."
+msgstr "O tema mudou."
+
+msgid "There are no active goals yet."
+msgstr "Ainda não há metas ativas."
+
+msgid "There are no active penalties."
+msgstr "Não há penalidades ativas."
+
+msgid "There are no active tasks."
+msgstr "Não existem tarefas ativas."
+
+msgid "There are no goals yet."
+msgstr "Ainda não há metas."
+
+msgid "There are no penalties yet."
+msgstr "Ainda não há penalidades."
+
+msgid "There are no pending requests"
+msgstr "Não existem pedidos pendentes"
+
+msgid "There are no requests."
+msgstr "Não há pedidos."
+
+msgid "There are no rewards yet."
+msgstr "Ainda não há recompensas."
+
+msgid "There are no tasks yet."
+msgstr "Ainda não há tarefas."
+
+msgid "There are no waiting tasks to cancel."
+msgstr "Não há tarefas de espera para cancelar."
+
+msgid "There is an update."
+msgstr "Há uma atualização."
+
+msgid "There is no feedback yet."
+msgstr "Ainda não há feedback."
+
+msgid "These points are reserved for this goal."
+msgstr "Esses pontos estão reservados para esta meta."
+
+msgid "These points will become available for rewards again."
+msgstr "Estes pontos estarão novamente disponíveis para recompensas."
+
+msgid "These points will no longer be available for rewards."
+msgstr "Estes pontos não estarão mais disponíveis para recompensas."
+
+msgid "This assigned task has expired."
+msgstr "Esta tarefa atribuída expirou."
+
+msgid "This assigned task is no longer waiting."
+msgstr "Esta tarefa atribuída já não está à espera."
+
+msgid "This browser or device mode does not support web notifications."
+msgstr "Este modo de navegador ou dispositivo não suporta notificações Web."
+
+msgid "This child can spend points down to %(limit)s."
+msgstr "Esta criança pode gastar pontos até %(limit)s."
+
+msgid "This child can spend points down to {{ limit }}."
+msgstr "Esta criança pode gastar pontos até o limite de {{ limit }}."
+
+msgid "This child may spend points down to %(limit)s. After half of the available credit is used, new reward requests are paused until the balance improves."
+msgstr "Esta criança pode gastar pontos até %(limit)s. Após metade do crédito disponível ser utilizado, novas solicitações de recompensa são pausadas até que o saldo melhore."
+
+msgid "This child name is already in use."
+msgstr "Este nome de criança já está em uso."
+
+msgid "This code will not be shown again."
+msgstr "Este código não será mostrado novamente."
+
+msgid "This device is not set up yet"
+msgstr "Este dispositivo ainda não está configurado"
+
+msgid "This device is paired as %(device)s."
+msgstr "Este dispositivo é pareado como %(device)s."
+
+msgid "This email address is already in use."
+msgstr "Este endereço de e-mail já está em uso."
+
+msgid "This field is required when email is enabled."
+msgstr "Este campo é necessário quando o e-mail está ativo."
+
+msgid "This goal has no saved points to return."
+msgstr "Esta meta não tem pontos guardados para retornar."
+
+msgid "This goal has not reached its target yet."
+msgstr "Esta meta ainda não atingiu o valor necessário."
+
+msgid "This goal is already waiting for parent approval."
+msgstr "Esta meta já está esperando pela aprovação dos responsáveis."
+
+msgid "This goal request has already been resolved."
+msgstr "Este pedido de meta já foi resolvido."
+
+msgid "This goal will be removed. This action cannot be undone."
+msgstr "Esta meta será removido. Esta ação não pode ser desfeita."
+
+msgid "This guest access is no longer available."
+msgstr "Este acesso aos convidados já não está disponível."
+
+msgid "This is a surprise — the result is unknown until all fields are open."
+msgstr "É uma surpresa! Revele todos os campos para descobrir o resultado."
+
+msgid "This message stays on your family server and is reviewed by parents."
+msgstr "Esta mensagem permanece no servidor da sua família e é revista pelos pais."
+
+msgid "This month"
+msgstr "Este mês"
+
+msgid "This operation would exceed the allowed %(limit)s point limit."
+msgstr "Esta operação excederia o limite de %(limit)s pontos permitido."
+
+msgid "This operation would exceed the allowed %(limit)s token limit."
+msgstr "Esta operação excederia o limite permitido de %(limit)s token."
+
+msgid "This pairing link is invalid or has expired."
+msgstr "Este link de pareamento é inválido ou expirou."
+
+msgid "This proposal has already been resolved."
+msgstr "Esta proposta já foi resolvida."
+
+msgid "This request has already been resolved."
+msgstr "Este pedido já foi resolvido."
+
+msgid "This reset link is no longer valid or has already been used."
+msgstr "Este link para redefinir a senha não é mais válido ou já foi usado."
+
+msgid "This reward is already awaiting approval."
+msgstr "Esta recompensa já aguarda aprovação."
+
+msgid "This reward is no longer active."
+msgstr "Esta recompensa já não está ativa."
+
+msgid "This sign-in link is invalid or has expired."
+msgstr "Este link de login é inválido ou expirou."
+
+msgid "This task is already awaiting approval."
+msgstr "Esta tarefa já aguarda aprovação."
+
+msgid "This task is no longer active."
+msgstr "Esta tarefa já não está ativa."
+
+msgid "This task is not awaiting corrections."
+msgstr "Esta tarefa não está à espera de correções."
+
+msgid "This username is already in use."
+msgstr "Este nome de usuário já está em uso."
+
+msgid "This week"
+msgstr "Esta semana"
+
+msgid "Those tasks were already credited to this child today."
+msgstr "Essas tarefas já foram creditadas a esta criança hoje."
+
+msgid "Thu"
+msgstr "Qui"
+
+msgid "Tickets %(used)s/%(limit)s"
+msgstr "Bilhetes %(used)s/%(limit)s"
+
+msgid "Tickets {{ used }}/{{ limit }}"
+msgstr "Vales {{ used }}/{{ limit }}"
+
+msgid "Tidy your room"
+msgstr "Arruma seu quarto."
+
+msgid "Time zone"
+msgstr "Fuso horário"
+
+msgid "Title"
+msgstr "Título"
+
+msgid "To"
+msgstr "Para"
+
+msgid "Today's assigned missions"
+msgstr "As missões de hoje"
+
+msgid "Today's assigned quests"
+msgstr "As missões de hoje"
+
+msgid "Today's assigned tasks"
+msgstr "Tarefas atribuídas hoje"
+
+msgid "Today's bamboo tasks"
+msgstr "As tarefas de bambu de hoje"
+
+msgid "Today's commissioned projects"
+msgstr "Os projetos encomendados de hoje"
+
+msgid "Today's enchanted duties"
+msgstr "Os deveres encantados de hoje"
+
+msgid "Today's priority missions"
+msgstr "As missões prioritárias de hoje"
+
+msgid "Token amount"
+msgstr "Quantidade do item"
+
+msgid "Token history"
+msgstr "Histórico do 'Token'"
+
+msgid "Token history is empty."
+msgstr "A história do 'token' está vazia."
+
+msgid "Token shop"
+msgstr "Loja Token"
+
+msgid "Token transactions cannot be changed."
+msgstr "As transações de 'Token' não podem ser alteradas."
+
+msgid "Token transactions cannot be deleted."
+msgstr "As transações de 'Token' não podem ser apagadas."
+
+msgid "Tokens"
+msgstr "Tokens"
+
+msgid "Too many PIN attempts. Try again later."
+msgstr "Muitas tentativas de PIN. Tenta outra vez mais tarde."
+
+msgid "Too many attempts. Try again later."
+msgstr "Muitas tentativas. Tente novamente mais tarde."
+
+msgid "Too many guest invites. Try again later."
+msgstr "Muitos convites para convidados. Tenta outra vez mais tarde."
+
+msgid "Too many incorrect PINs. Ask a parent to unlock this access."
+msgstr "Demasiados PINs incorrectos. Peça a um pai para desbloquear este acesso."
+
+msgid "Too many pairing attempts. Try again later."
+msgstr "Muitas tentativas de pareamento. Tenta outra vez mais tarde."
+
+msgid "Too many reports were sent. Wait a minute and try again."
+msgstr "Foram enviados muitos relatórios. Espera um minuto e tenta outra vez."
+
+msgid "Too many requests. Try again later."
+msgstr "Demasiados pedidos. Tenta outra vez mais tarde."
+
+msgid "Too many setup attempts. Try again later."
+msgstr "Muitas tentativas de configuração. Tente novamente mais tarde."
+
+msgid "Too many sign-in attempts. Try again later."
+msgstr "Muitas tentativas de assinar. Tenta outra vez mais tarde."
+
+msgid "Treat Chest"
+msgstr "Tratar o tórax"
+
+msgid "Tue"
+msgstr "Ter"
+
+msgid "Turn sounds off"
+msgstr "Desligar os sons"
+
+msgid "Turn sounds on"
+msgstr "Ligar os sons"
+
+msgid "Turn surprise cards on or off for every child."
+msgstr "Ative ou desative os cartões surpresa para todas as crianças."
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Type a task name"
+msgstr "Digite um nome de tarefa"
+
+msgid "Unavailable today"
+msgstr "Indisponível hoje"
+
+msgid "Uncover all nine fields"
+msgstr "Revele os nove campos"
+
+msgid "Uncover every field to see the result."
+msgstr "Revele todos os campos para ver o resultado."
+
+msgid "Unknown device"
+msgstr "Dispositivo desconhecido"
+
+msgid "Unlock"
+msgstr "Desbloquear"
+
+msgid "Unlock profile"
+msgstr "Desbloquear o perfil"
+
+msgid "Until"
+msgstr "Até"
+
+msgid "Up to 150 characters. Letters, numbers, and @ . + - _ are allowed."
+msgstr "Até 150 caracteres. Cartas, números e @ . + - _ são permitidas."
+
+msgid "Upload avatar"
+msgstr "Enviar o avatar"
+
+msgid "Use 0 to disable the photo bonus. The value is captured when a task is submitted."
+msgstr "Use 0 para desativar o bônus da foto. O valor é capturado quando uma tarefa é enviada."
+
+msgid "Use a JPEG, PNG, WebP, HEIC, or HEIF image."
+msgstr "Use uma imagem JPEG, PNG, WebP, HEIC ou HEIF."
+
+msgid "Use available"
+msgstr "Utilização disponível"
+
+msgid "Use available points"
+msgstr "Usar os pontos disponíveis"
+
+msgid "Use this world"
+msgstr "Use este mundo"
+
+msgid "Used"
+msgstr "Usado"
+
+msgid "Used in Lithuanian greetings. Leave blank to generate it automatically."
+msgstr "Usado em saudações lituanas. Deixe em branco para gerá-lo automaticamente."
+
+msgid "Used only to award the yearly birthday gift."
+msgstr "Usado apenas para premiar o presente de aniversário anual."
+
+msgid "User %(username)s already exists."
+msgstr "O usuário %(username)s já existe."
+
+msgid "Username"
+msgstr "Nome de usuário"
+
+msgid "Uses available points"
+msgstr "Utiliza pontos disponíveis"
+
+msgid "Uses your available points. You can still spend them, so progress may change."
+msgstr "Usa os seus pontos disponíveis. Você ainda pode gastá-los, então o progresso pode mudar."
+
+msgid "VERSIONS"
+msgstr "VERSÕES"
+
+msgid "Verify and save"
+msgstr "Verificar e salvar"
+
+msgid "Version"
+msgstr "Versão"
+
+msgid "Visit a world"
+msgstr "Visitar um mundo"
+
+msgid "Vocative name"
+msgstr "Nome vocativo"
+
+msgid "Waiting"
+msgstr "Aguardando"
+
+msgid "Waiting for HQ"
+msgstr "À espera do QG"
+
+msgid "Waiting for parents"
+msgstr "À espera dos responsáveis"
+
+msgid "Waiting for the builders"
+msgstr "À espera dos construtores"
+
+msgid "Waiting for the director"
+msgstr "À espera do diretor."
+
+msgid "Waiting for the panda keepers"
+msgstr "À espera dos anfitriões"
+
+msgid "Waiting for the professors"
+msgstr "À espera dos professores"
+
+msgid "Waiting for verification"
+msgstr "À espera de verificação"
+
+msgid "Wake up new"
+msgstr "Acordar novo"
+
+msgid "We received a request to reset the password for the %(family_display_name)s parent account."
+msgstr "Recebemos um pedido para redefinir a senha da conta de responsável %(family_display_name)s."
+
+msgid "Wed"
+msgstr "Qua"
+
+msgid "Weekday"
+msgstr "Dia da semana"
+
+msgid "Weekdays"
+msgstr "Dias de semana"
+
+msgid "Weekend"
+msgstr "Fim de semana"
+
+msgid "Weekend days"
+msgstr "Dias de fim de semana"
+
+msgid "Weekly card limit"
+msgstr "Limite semanal das cartas"
+
+msgid "Weekly limit reached"
+msgstr "Limite semanal atingido"
+
+msgid "Welcome – %(family_display_name)s"
+msgstr "Boas-vindas – %(family_display_name)s"
+
+msgid "Welcome, %(family_name)s"
+msgstr "Bem-vindo, %(family_name)s."
+
+msgid "Welcome, %(name)s!"
+msgstr "Bem-vindo, %(name)s!"
+
+msgid "What I did"
+msgstr "O que eu fiz"
+
+msgid "What happened"
+msgstr "O que aconteceu?"
+
+msgid "What happened or what would you like?"
+msgstr "O que aconteceu ou o que gostarias?"
+
+msgid "What should be improved?"
+msgstr "O que deve ser melhorado?"
+
+msgid "What's fixed?"
+msgstr "O que está arranjado?"
+
+msgid "What's new?"
+msgstr "O que há de novo?"
+
+msgid "Who is earning points today?"
+msgstr "Quem ganha pontos hoje?"
+
+msgid "Who is earning tokens today?"
+msgstr "Quem está ganhando fichas hoje?"
+
+msgid "Why was the task rejected?"
+msgstr "Por que a tarefa foi rejeitada?"
+
+msgid "Windows PC"
+msgstr "Windows PC"
+
+msgid "Windows phone"
+msgstr "Telefone com Windows"
+
+msgid "Write in the spellbook"
+msgstr "Escreva no livro de feitiços"
+
+msgid "You can add a photo of the finished task."
+msgstr "Você pode adicionar uma foto da tarefa terminada."
+
+msgid "You can add a photo or a short note about what you did."
+msgstr "Você pode adicionar uma foto ou uma pequena nota sobre o que você fez."
+
+msgid "You can add at most %(amount)s points to reach this goal."
+msgstr "Você pode adicionar no máximo %(amount)s pontos para atingir esta meta."
+
+msgid "You can add at most {max} points."
+msgstr "Você pode adicionar no máximo {max} pontos."
+
+msgid "You can give only points you have already earned."
+msgstr "Você pode dar apenas pontos que você já ganhou."
+
+msgid "You can now sign in with your new password."
+msgstr "Agora você pode entrar com sua nova senha."
+
+msgid "You can save only points you currently have available."
+msgstr "Você pode salvar apenas pontos que você tem atualmente disponíveis."
+
+msgid "You can save up to %(limit)s sets per child."
+msgstr "Você pode economizar até %(limit)s conjuntos por criança."
+
+msgid "You can still spend these points on rewards. Your progress may go down."
+msgstr "Você ainda pode gastar esses pontos em recompensas. Seu progresso pode descer."
+
+msgid "You can switch whenever you want."
+msgstr "Você pode mudar quando quiser."
+
+msgid "You cannot give points to yourself."
+msgstr "Você não pode presentear a si mesmo com pontos."
+
+msgid "You cannot remove the account you are currently using."
+msgstr "Não é possível remover a conta que está a usar de momento."
+
+msgid "You cannot remove the last active parent account."
+msgstr "Você não pode remover a última conta de responsável ativa."
+
+msgid "You cannot remove the last active parent administrator."
+msgstr "Você não pode remover o último responsável com permissão de administrador ativo."
+
+msgid "You do not have enough points for this reward."
+msgstr "Não tem pontos suficientes para esta recompensa."
+
+msgid "You have already used all %(limit)s surprise cards this week."
+msgstr "Você já usou todos os %(limit)s cartões surpresa esta semana."
+
+msgid "You have not bought a surprise card this week. It costs %(cost)s. Your points may go up, stay the same, or go down."
+msgstr "Você ainda não comprou um cartão surpresa nesta semana. Ele custa %(cost)s. Você pode ganhar pontos, perder pontos ou ficar com o mesmo saldo."
+
+msgid "You may add a comment that the child will see."
+msgstr "Você pode adicionar um comentário que a criança verá."
+
+msgid "You need %(cost)s earned %(unit)s"
+msgstr "Você precisa %(cost)s ganhou %(unit)s"
+
+msgid "You received %(amount)s for your birthday"
+msgstr "Recebeste %(amount)s nseu aniversário."
+
+msgid "You received a gift!"
+msgstr "Você recebeu um presente!"
+
+msgid "Your account password"
+msgstr "Senha da sua conta"
+
+msgid "Your artwork was sent to the review gallery!"
+msgstr "A sua obra de arte foi enviada para a galeria de críticas!"
+
+msgid "Your available balance counts as progress."
+msgstr "Seu saldo disponível conta como progresso."
+
+msgid "Your base"
+msgstr "Sua base"
+
+msgid "Your birthday change was approved"
+msgstr "A sua mudança de aniversário foi aprovada"
+
+msgid "Your birthday change was rejected"
+msgstr "Sua mudança de aniversário foi rejeitada."
+
+msgid "Your credit limit kept some points safe."
+msgstr "Seu limite de crédito protegeu parte dos seus pontos."
+
+msgid "Your enchanted duties are waiting"
+msgstr "Seus deveres encantados estão à espera"
+
+msgid "Your guest PIN is ready. Sign in to continue."
+msgstr "Seu PIN de convidado está pronto. Entre para continuar."
+
+msgid "Your missions are still waiting"
+msgstr "As suas missões ainda estão à espera."
+
+msgid "Your point gift was sent."
+msgstr "Seu presente em pontos foi enviado."
+
+msgid "Your points may go up by up to 150, stay the same, or go down by up to 50."
+msgstr "Você pode ganhar até 150 pontos, perder até 50 pontos ou ficar com o mesmo saldo."
+
+msgid "Your points stayed the same."
+msgstr "Seu saldo de pontos continua igual."
+
+msgid "Your points went down by {amount}."
+msgstr "Você perdeu {amount} pontos."
+
+msgid "Your points went up by {amount}!"
+msgstr "Você ganhou {amount} pontos!"
+
+msgid "Your profile"
+msgstr "O seu perfil"
+
+msgid "Your quests are still waiting"
+msgstr "Suas missões ainda estão à espera."
+
+msgid "Your reward request was rejected"
+msgstr "Seu pedido de recompensa foi rejeitado"
+
+msgid "Your reward was approved"
+msgstr "A sua recompensa foi aprovada"
+
+msgid "Your spellbook"
+msgstr "Seu livro de feitiços"
+
+msgid "Your suggestion was approved"
+msgstr "A sua sugestão foi aprovada"
+
+msgid "Your suggestion was rejected"
+msgstr "A sua sugestão foi rejeitada."
+
+msgid "Your surprise card is ready."
+msgstr "Seu cartão surpresa está pronto."
+
+msgid "Your task was approved"
+msgstr "Sua tarefa foi aprovada"
+
+msgid "Your task was rejected"
+msgstr "Sua tarefa foi rejeitada"
+
+msgid "Your tasks are still waiting"
+msgstr "Suas tarefas continuam pendentes"
+
+msgid "Your world is ready."
+msgstr "Seu mundo está pronto."
+
+msgid "actions"
+msgstr "ações"
+
+msgid "adjust points"
+msgstr "pontos de ajuste"
+
+msgid "assign penalties"
+msgstr "Atribuir penalidades"
+
+msgid "assign tasks for today"
+msgstr "atribuir tarefas para hoje"
+
+msgid "badge"
+msgstr "distintivo"
+
+msgid "badges"
+msgstr "distintivos"
+
+msgid "bamboo"
+msgstr "bambu"
+
+msgid "completed task"
+msgstr "tarefa completada"
+
+msgid "credit"
+msgstr "crédito"
+
+msgid "cube"
+msgstr "cubo"
+
+msgid "cubes"
+msgstr "cubos"
+
+msgid "emerald"
+msgstr "esmeralda"
+
+msgid "emeralds"
+msgstr "esmeraldas"
+
+msgid "family"
+msgstr "família"
+
+msgid "family settings"
+msgstr "configurações da família"
+
+msgid "for a photo"
+msgstr "para uma foto"
+
+msgid "galleon"
+msgstr "galeão"
+
+msgid "galleons"
+msgstr "galeões"
+
+msgid "hidden"
+msgstr "oculto"
+
+msgid "iPad"
+msgstr "iPad"
+
+msgid "iPhone"
+msgstr "iPhone"
+
+msgid "one card is unfinished"
+msgstr "há um cartão a revelar"
+
+msgid "pearl"
+msgstr "pérola"
+
+msgid "pearls"
+msgstr "pérolas"
+
+msgid "pending request"
+msgstr "pedido pendente"
+
+msgid "pending requests"
+msgstr "Pedidos pendentes"
+
+msgid "photo bonus"
+msgstr "bônus de foto"
+
+msgid "point"
+msgstr "ponto"
+
+msgid "points"
+msgstr "pontos"
+
+msgid "saved"
+msgstr "salvo"
+
+msgid "this device"
+msgstr "este dispositivo"
+
+msgid "visible"
+msgstr "visível"
+
+msgid "you"
+msgstr "você"
+
+msgid "{count} of 9 fields uncovered."
+msgstr "{count} de 9 campos revelados."
+
+msgid "“%(name)s” unlocked."
+msgstr "“%(name)s” desbloqueado."
+
+msgid "“%(title)s” deleted."
+msgstr "“%(title)s” suprimido."
+
+msgid "“%(title)s” is now %(state)s."
+msgstr "“%(title)s” é agora %(state)s."
+
+msgid "“%(title)s” updated."
+msgstr "“%(title)s” atualizado."

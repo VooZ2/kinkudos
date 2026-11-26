@@ -80,7 +80,7 @@
     <div class="topbar-actions">
       <details class="language-switcher">
         <summary class="language-switcher-face" aria-label="{% translate 'Language' %}">
-          <span aria-hidden="true">{% if LANGUAGE_CODE == "lt" %}🇱🇹{% else %}🇬🇧{% endif %}</span>
+          <span aria-hidden="true">{% if LANGUAGE_CODE == "lt" %}🇱🇹{% elif LANGUAGE_CODE == "pt-br" %}🇧🇷{% else %}🇬🇧{% endif %}</span>
         </summary>
         <form class="language-switcher-menu" action="{% url 'set_language' %}" method="post" role="group" aria-label="{% translate 'Language' %}">
           {% csrf_token %}
@@ -90,6 +90,9 @@
           </button>
           <button class="language-switcher-option" name="language" value="lt" type="submit" aria-label="{% translate 'Lithuanian' %}"{% if LANGUAGE_CODE == "lt" %} aria-current="true"{% endif %}>
             <span aria-hidden="true">🇱🇹</span><span class="sr-only">{% translate "Lithuanian" %}</span>
+          </button>
+          <button class="language-switcher-option" name="language" value="pt-br" type="submit" aria-label="Português (Brasil)" lang="pt-BR"{% if LANGUAGE_CODE == "pt-br" %} aria-current="true"{% endif %}>
+            <span aria-hidden="true">🇧🇷</span><span class="sr-only">Português (Brasil)</span>
           </button>
         </form>
       </details>

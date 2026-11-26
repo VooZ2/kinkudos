@@ -108,7 +108,7 @@ Run KinKudos on your own home server or VPS and decide where your family's data 
 - No public registration, advertising, profiling, or built-in analytics
 - Uploaded task photos are resized, converted to WebP, and stripped of EXIF metadata
 - Optional encrypted remote backups
-- English and Lithuanian interfaces
+- English, Lithuanian, and Brazilian Portuguese interfaces
 
 ## 🏡 Built for family life
 
@@ -290,6 +290,20 @@ Support is provided on a best-effort basis, without a service-level agreement or
 - [KinKudos documentation](https://docs.kinkudos.app/)
 
 ## 🧑‍💻 Local development
+
+To build and run the current checkout with Docker Compose:
+
+```bash
+export KINKUDOS_SETUP_TOKEN="$(openssl rand -hex 32)"
+printf 'Setup code: %s\n' "$KINKUDOS_SETUP_TOKEN"
+docker compose up --build
+```
+
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000) and enter the printed code on
+the initial setup screen. The local Compose starts in Brazilian Portuguese.
+Set `KINKUDOS_DEFAULT_LANGUAGE=en` or `lt` to change the initial language, or
+`KINKUDOS_PORT` to use a different host port. The `app-data` volume keeps the
+SQLite database and uploaded files across restarts.
 
 KinKudos requires Python 3.12. After creating a virtual environment and installing the dependencies from `requirements.txt`:
 

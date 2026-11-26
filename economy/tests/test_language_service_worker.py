@@ -36,6 +36,21 @@ class LanguageSwitchFlowTests(TestCase):
         self.assertContains(redirected, '<html lang="lt">', html=False)
         self.assertContains(redirected, "Prisijungti")
 
+        response = self.switch_language("pt-br", destination)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, destination)
+        self.assertEqual(response.cookies[settings.LANGUAGE_COOKIE_NAME].value, "pt-br")
+        redirected = self.client.get(response.url)
+        self.assertContains(redirected, '<html lang="pt-br">', html=False)
+        self.assertContains(redirected, "Entrar")
+        self.assertContains(
+            redirected,
+            'value="pt-br" type="submit" aria-label="Português (Brasil)" '
+            'lang="pt-BR" aria-current="true"',
+            html=False,
+        )
+
         response = self.switch_language("en", destination)
 
         self.assertEqual(response.status_code, 302)
@@ -119,11 +134,11 @@ class LanguageSwitchFlowTests(TestCase):
             menu = content[content.index('class="language-switcher-menu"'):]
             menu = menu[:menu.index("</form>") + 7]
             self.assertEqual(content.count('class="language-switcher-menu"'), 1)
-            self.assertEqual(menu.count('class="language-switcher-option"'), 2)
-            self.assertEqual(menu.count('type="submit"'), 2)
-            self.assertEqual(menu.count('name="language"'), 2)
-            self.assertIn('value="en"', menu)
-            self.assertIn('value="lt"', menu)
+            self.assertEqual(menu.count('class="language-switcher-option"'), len(settings.LANGUAGES))
+            self.assertEqual(menu.count('type="submit"'), len(settings.LANGUAGES))
+            self.assertEqual(menu.count('name="language"'), len(settings.LANGUAGES))
+            for language, _ in settings.LANGUAGES:
+                self.assertIn(f'value="{language}"', menu)
             self.assertIn('class="language-switcher-menu"', menu)
             self.assertNotIn('aria-disabled="true"', menu)
             self.assertNotIn('disabled="disabled"', menu)

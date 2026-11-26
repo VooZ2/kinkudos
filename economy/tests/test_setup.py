@@ -127,6 +127,19 @@ class BrowserSetupTests(TestCase):
         self.assertIsNotNone(family.setup_completed_at)
         self.assertTrue(family.recovery_code_hash)
 
+    def test_setup_accepts_brazilian_portuguese_as_the_family_default(self):
+        response = self.client.post(
+            reverse("setup"),
+            self.payload(default_language="pt-br", timezone_name="America/Sao_Paulo"),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(FamilySettings.load().default_language, "pt-br")
+        self.assertEqual(response.cookies[settings.LANGUAGE_COOKIE_NAME].value, "pt-br")
+
+        response = Client().get(reverse("parent_login"))
+        self.assertContains(response, '<html lang="pt-br">', html=False)
+        self.assertContains(response, "Entrar")
+
     def test_incorrect_setup_code_creates_nothing(self):
         response = self.client.post(reverse("setup"), self.payload(setup_token="wrong"))
         self.assertContains(response, "The setup code is incorrect.")

@@ -204,7 +204,7 @@ Open `https://family.example.com`, using your real hostname. The installer
 shows container status at the end; `docker compose ps` and
 `docker compose logs --tail=100 app` provide the same checks later.
 
-The installer asks for English or Lithuanian, hostname, and reverse-proxy mode.
+The installer asks for the default app language, hostname, and reverse-proxy mode.
 It generates missing Django, VAPID, backup-agent, restic, and browser-setup
 secrets, creates `.env`, checks host-directory ownership, pulls the published
 application image, and starts the containers. It then prints the application
@@ -217,8 +217,8 @@ For an unattended English installation, set:
 KINKUDOS_DEFAULT_LANGUAGE=en ./bootstrap.sh
 ```
 
-Use `lt` instead of `en` for Lithuanian. Users can still switch language in the
-web interface; their choice is saved on that device.
+Use `lt` for Lithuanian or `pt-br` for Brazilian Portuguese. Users can still
+switch languages in the web interface. Their choice is saved on that device.
 
 The setup code is needed only while no parent account exists. Keep it private;
 after browser setup the server permanently disables the setup route.

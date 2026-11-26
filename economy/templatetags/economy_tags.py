@@ -359,16 +359,16 @@ def currency_unit(value, theme="neutral"):
         return _lithuanian_form(number, *units.get(theme, units["neutral"]))
 
     units = {
-        "neutral": ("point", "points"),
-        "block_world": ("emerald", "emeralds"),
-        "magic_academy": ("galleon", "galleons"),
-        "hero_hq": ("badge", "badges"),
-        "art_studio": ("pearl", "pearls"),
-        "panda_pet": ("bamboo", "bamboo"),
-        "blockville": ("cube", "cubes"),
+        "neutral": (_("point"), _("points")),
+        "block_world": (_("emerald"), _("emeralds")),
+        "magic_academy": (_("galleon"), _("galleons")),
+        "hero_hq": (_("badge"), _("badges")),
+        "art_studio": (_("pearl"), _("pearls")),
+        "panda_pet": (_("bamboo"), _("bamboo")),
+        "blockville": (_("cube"), _("cubes")),
     }
     singular, plural = units.get(theme, units["neutral"])
-    return singular if number == 1 else plural
+    return str(singular if number == 1 else plural)
 
 
 @register.filter

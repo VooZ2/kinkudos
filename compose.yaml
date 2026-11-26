@@ -1,0 +1,30 @@
+name: kinkudos-local
+
+services:
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:${KINKUDOS_PORT:-8000}:8000"
+    environment:
+      KINKUDOS_DEFAULT_LANGUAGE: "${KINKUDOS_DEFAULT_LANGUAGE:-pt-br}"
+      KINKUDOS_SETUP_TOKEN: "${KINKUDOS_SETUP_TOKEN:?Set KINKUDOS_SETUP_TOKEN for local setup}"
+      KINKUDOS_RUNTIME_SECRETS_DIR: /app/data/runtime-secrets
+      KINKUDOS_SECRET_KEY_FILE: /app/data/runtime-secrets/django_secret_key
+      KINKUDOS_VAPID_PRIVATE_KEY_FILE: /app/data/runtime-secrets/vapid_private.pem
+      KINKUDOS_VAPID_PUBLIC_KEY_FILE: /app/data/runtime-secrets/vapid_public.txt
+      KINKUDOS_SMTP_CONFIG_PATH: /app/data/smtp/settings.json
+      KINKUDOS_SECURE_COOKIES: "false"
+      KINKUDOS_SECURE_SSL_REDIRECT: "false"
+      KINKUDOS_HSTS_SECONDS: "0"
+      KINKUDOS_DEVICE_PAIRING_REQUIRED: "false"
+    volumes:
+      - app-data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/', timeout=3).close()"]
+      interval: 5s
+      timeout: 4s
+      retries: 5
+      start_period: 15s
+
+volumes:
+  app-data:
