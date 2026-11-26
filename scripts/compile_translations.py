@@ -6,32 +6,35 @@ import struct
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CATALOG = ROOT / "locale" / "lt" / "messages.json"
-OUTPUT_DIR = ROOT / "locale" / "lt" / "LC_MESSAGES"
+LOCALE_DIR = ROOT / "locale"
+PLURAL_FORMS = {
+    "lt": "nplurals=4; plural=(n%10==1 && (n%100>19 || n%100<11) ? 0 : "
+    "(n%10>=2 && n%10<=9) && (n%100>19 || n%100<11) ? 1 : n%1!=0 ? 2: 3);",
+    "pt_BR": "nplurals=2; plural=(n > 1);",
+}
 
 
 def quote(value):
     return json.dumps(value, ensure_ascii=False)
 
 
-def write_po(messages):
+def write_po(messages, locale, output_dir):
     header = (
         "Project-Id-Version: KinKudos\n"
-        "Language: lt\n"
+        f"Language: {locale}\n"
         "MIME-Version: 1.0\n"
         "Content-Type: text/plain; charset=UTF-8\n"
         "Content-Transfer-Encoding: 8bit\n"
-        "Plural-Forms: nplurals=4; plural=(n%10==1 && (n%100>19 || n%100<11) ? 0 : "
-        "(n%10>=2 && n%10<=9) && (n%100>19 || n%100<11) ? 1 : n%1!=0 ? 2: 3);\n"
+        f"Plural-Forms: {PLURAL_FORMS[locale]}\n"
     )
     lines = ['msgid ""', f"msgstr {quote(header)}", ""]
     for msgid, msgstr in sorted(messages.items()):
         lines.extend((f"msgid {quote(msgid)}", f"msgstr {quote(msgstr)}", ""))
-    (OUTPUT_DIR / "django.po").write_text("\n".join(lines), encoding="utf-8")
+    (output_dir / "django.po").write_text("\n".join(lines), encoding="utf-8")
     return header
 
 
-def write_mo(messages, header):
+def write_mo(messages, header, output_dir):
     catalog = {"": header, **messages}
     ids = sorted(catalog)
     encoded_ids = [key.encode("utf-8") for key in ids]
@@ -58,15 +61,18 @@ def write_mo(messages, header):
     output += b"".join(struct.pack("<2I", *entry) for entry in key_entries)
     output += b"".join(struct.pack("<2I", *entry) for entry in value_entries)
     output += key_blob + value_blob
-    (OUTPUT_DIR / "django.mo").write_bytes(output)
+    (output_dir / "django.mo").write_bytes(output)
 
 
 def main():
-    messages = json.loads(CATALOG.read_text(encoding="utf-8"))
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    header = write_po(messages)
-    write_mo(messages, header)
-    print(f"Compiled {len(messages)} Lithuanian translations.")
+    for locale in PLURAL_FORMS:
+        directory = LOCALE_DIR / locale
+        messages = json.loads((directory / "messages.json").read_text(encoding="utf-8"))
+        output_dir = directory / "LC_MESSAGES"
+        output_dir.mkdir(parents=True, exist_ok=True)
+        header = write_po(messages, locale, output_dir)
+        write_mo(messages, header, output_dir)
+        print(f"Compiled {len(messages)} translations for {locale}.")
 
 
 if __name__ == "__main__":

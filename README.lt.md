@@ -105,7 +105,7 @@ Paleiskite KinKudos savo namų serveryje ar VPS ir nuspręskite, kur saugomi še
 - Nėra viešos registracijos, reklamų, profiliavimo ar integruotos analitikos
 - Įkeltos darbų nuotraukos sumažinamos, konvertuojamos į WebP ir išvalomos nuo EXIF metaduomenų
 - Pasirenkamos šifruotos nuotolinės kopijos
-- Lietuvių ir anglų sąsajos
+- Sąsaja lietuvių, anglų ir Brazilijos portugalų kalbomis
 
 ## 🏡 Sukurta šeimos kasdienybei
 

@@ -1,6 +1,7 @@
 import getpass
 import secrets
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
@@ -17,7 +18,7 @@ class Command(BaseCommand):
     help = "Interactively creates the first parent account and child profiles."
 
     def add_arguments(self, parser):
-        parser.add_argument("--language", choices=("en", "lt"), default="en")
+        parser.add_argument("--language", choices=dict(settings.LANGUAGES), default="en")
         parser.add_argument("--parent-username", default="parents")
 
     def prompt_password(self, label, validator=None):

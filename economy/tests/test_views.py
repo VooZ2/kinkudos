@@ -56,7 +56,9 @@ class LanguageSelectionTests(TestCase):
         )
         self.assertContains(response, ">🇱🇹</span>", html=False)
         self.assertNotContains(response, "🇱🇹 LT</span>", html=False)
-        self.assertContains(response, 'class="language-switcher-option"', count=2, html=False)
+        self.assertContains(
+            response, 'class="language-switcher-option"', count=len(settings.LANGUAGES), html=False
+        )
         self.assertNotContains(response, "🇱🇹 LT", html=False)
         self.assertNotContains(response, "🇬🇧 EN", html=False)
 
@@ -70,6 +72,11 @@ class LanguageSelectionTests(TestCase):
         self.assertEqual(response.cookies[settings.LANGUAGE_COOKIE_NAME].value, "en")
         response = self.client.get(reverse("home"), HTTP_ACCEPT_LANGUAGE="lt")
         self.assertContains(response, "A shared family space")
+
+    def test_browser_brazilian_portuguese_is_used_without_saved_preference(self):
+        response = self.client.get(reverse("home"), HTTP_ACCEPT_LANGUAGE="pt-BR,pt;q=0.9")
+        self.assertContains(response, '<html lang="pt-br">', html=False)
+        self.assertContains(response, "Pequenas tarefas.")
 
     def test_family_name_is_combined_with_localized_family_label(self):
         family = FamilySettings.load()
@@ -914,7 +921,9 @@ class AccessAndWorkflowTests(TestCase):
             "settings-section-standalone",
             html=False,
         )
-        self.assertContains(response, 'class="language-switcher-option"', count=2, html=False)
+        self.assertContains(
+            response, 'class="language-switcher-option"', count=len(settings.LANGUAGES), html=False
+        )
         self.assertContains(response, "🇱🇹", html=False)
         self.assertContains(response, "🇬🇧", html=False)
         self.assertNotContains(response, "🇱🇹 LT", html=False)

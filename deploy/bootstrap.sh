@@ -34,13 +34,13 @@ existing_proxy_network=$(read_env_value KINKUDOS_PROXY_NETWORK)
 # Explicit environment wins; otherwise reuse the existing install; then defaults.
 install_language=${KINKUDOS_DEFAULT_LANGUAGE:-${existing_language:-en}}
 if [ -t 0 ]; then
-  printf 'Installation language / Diegimo kalba [en/lt] (%s): ' "$install_language"
+  printf 'Installation language / Diegimo kalba [en/lt/pt-br] (%s): ' "$install_language"
   read -r selected_language
   install_language=${selected_language:-$install_language}
 fi
 case "$install_language" in
-  en|lt) ;;
-  *) echo "Language must be en or lt / Kalba turi būti en arba lt." >&2; exit 1 ;;
+  en|lt|pt-br) ;;
+  *) echo "Supported languages / Palaikomos kalbos: en, lt, pt-br." >&2; exit 1 ;;
 esac
 
 install_hostname=${KINKUDOS_HOSTNAME:-${existing_hostname:-kinkudos.example.com}}

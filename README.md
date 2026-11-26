@@ -108,7 +108,7 @@ Run KinKudos on your own home server or VPS and decide where your family's data 
 - No public registration, advertising, profiling, or built-in analytics
 - Uploaded task photos are resized, converted to WebP, and stripped of EXIF metadata
 - Optional encrypted remote backups
-- English and Lithuanian interfaces
+- English, Lithuanian, and Brazilian Portuguese interfaces
 
 ## 🏡 Built for family life
 

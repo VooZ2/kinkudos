@@ -940,7 +940,8 @@ class InitialSetupForm(ParentAccountForm):
     )
     family_name = forms.CharField(label=_("Family name"), max_length=80)
     default_language = forms.ChoiceField(
-        label=_("Default language"), choices=[("en", "English"), ("lt", "Lietuvių")]
+        label=_("Default language"),
+        choices=[("en", "English"), ("lt", "Lietuvių"), ("pt-br", "Português (Brasil)")],
     )
     timezone_name = forms.ChoiceField(label=_("Time zone"))
     configure_smtp = forms.BooleanField(label=_("Configure email now"), required=False)
